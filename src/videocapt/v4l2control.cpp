@@ -65,8 +65,9 @@ void V4L2Control::updateHardware()
   if(v4l2_ioctl(fd, VIDIOC_S_CTRL, &c) == -1)
     {
       QString msg;
-      msg=QString("Unable to set %1\n%2").arg(name,strerror(errno));
-      QMessageBox::warning(this, "Unable to set control", msg, QMessageBox::Ok);
+      msg=QString("Unable to set %1\n%2").arg(name).arg(strerror(errno));
+      (void)QMessageBox::warning(this, "Unable to set control", msg,
+                                 QMessageBox::Ok, QMessageBox::Ok);
     }
   updateStatus();
 }
@@ -78,8 +79,9 @@ void V4L2Control::updateStatus()
   if(v4l2_ioctl(fd, VIDIOC_G_CTRL, &c) == -1)
     {
       QString msg;
-      msg=QString("Unable to get %1\n%2").arg(name,strerror(errno));
-      QMessageBox::warning(this, "Unable to get control", msg, QMessageBox::Ok);
+      msg=QString("Unable to get %1\n%2").arg(name).arg(strerror(errno));
+      (void)QMessageBox::warning(this, "Unable to get control", msg,
+                                 QMessageBox::Ok, QMessageBox::Ok);
     }
   else
     {
@@ -91,8 +93,9 @@ void V4L2Control::updateStatus()
   if(v4l2_ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == -1)
     {
       QString msg;
-      msg=QString("Unable to get %1\n%2").arg(name,strerror(errno));
-      QMessageBox::warning(this, "Unable to get control status", msg, QMessageBox::Ok);
+      msg=QString("Unable to get %1\n%2").arg(name).arg(strerror(errno));
+      (void)QMessageBox::warning(this, "Unable to get control status", msg,
+                                 QMessageBox::Ok, QMessageBox::Ok);
     }
   else
     {
@@ -289,8 +292,9 @@ void V4L2ButtonControl::updateStatus()
   ctrl.id = cid;
   if(v4l2_ioctl(fd, VIDIOC_QUERYCTRL, &ctrl) == -1) {
       QString msg;
-      msg=QString("Unable to get the status of %1\n%2").arg(name,strerror(errno));
-      QMessageBox::warning(this, "Unable to get control status", msg, QMessageBox::Ok);
+      msg=QString("Unable to get the status of %1\n%2").arg(name).arg(strerror(errno));
+      (void)QMessageBox::warning(this, "Unable to get control status", msg,
+                                 QMessageBox::Ok, QMessageBox::Ok);
     } else {
       setEnabled((ctrl.flags &( V4L2_CTRL_FLAG_DISABLED | V4L2_CTRL_FLAG_GRABBED)) == 0);
     }
