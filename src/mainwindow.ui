@@ -211,6 +211,7 @@
     <addaction name="actionAboutQSSTV"/>
     <addaction name="actionAboutQt"/>
     <addaction name="actionUsersGuide"/>
+    <addaction name="actionSstvHandbook"/>
    </widget>
    <widget class="QMenu" name="menuScope">
     <property name="title">
@@ -288,7 +289,12 @@
   </action>
   <action name="actionUsersGuide">
    <property name="text">
-    <string>Users Guide</string>
+	<string>Users Guide</string>
+   </property>
+  </action>
+  <action name="actionSstvHandbook">
+   <property name="text">
+	<string>SSTV handbook</string>
    </property>
   </action>
   <action name="actionShowSyncScopeNarrow">

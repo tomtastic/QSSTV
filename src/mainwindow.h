@@ -38,6 +38,7 @@ private slots:
   void slotAboutQSSTV();
   void slotFullScreen();
   void slotDocumentation();
+  void slotSstvHandbook();
   void slotCalibrate();
   void slotModeChange(int);
   void slotSendWFID();

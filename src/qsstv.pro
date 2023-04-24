@@ -46,7 +46,6 @@ SOURCES += main.cpp\
     config/directoriesconfig.cpp \
     config/configdialog.cpp \
     sound/soundbase.cpp \
-    sound/soundpulse.cpp \
     widgets/spectrumwidget.cpp \
     widgets/vumeter.cpp \
     widgets/fftdisplay.cpp \
@@ -194,10 +193,14 @@ SOURCES += main.cpp\
     editor/templateviewer.cpp
 
 !macx: SOURCES += sound/soundalsa.cpp \
+    sound/soundpulse.cpp \
     videocapt/cameradialog.cpp \
     videocapt/imagesettings.cpp \
     videocapt/v4l2control.cpp \
     videocapt/videocapture.cpp
+
+macx: SOURCES += macos/soundmacos.cpp \
+    macos/CaptureDeviceAuthorization.m
 
 HEADERS  += mainwindow.h \
     config/baseconfig.h \
@@ -590,16 +593,20 @@ DISTFILES += \
 
 INSTALLS += target
 
-LIBS +=  -lpulse \
-         -lpulse-simple \
-         -lfftw3f \
+LIBS +=  -lfftw3f \
          -lfftw3 \
          -lhamlib
 
-!macx: LIBS +=  -lasound \
+!macx: LIBS += -lpulse \
+         -lpulse-simple \
+         -lasound \
          -lv4l2 \
          -lv4lconvert \
          -lrt
+macx: LIBS += -framework AudioToolbox \
+         -framework CoreAudio \
+         -framework AVFoundation
+
 CONFIG(debug ,debug|release){
 
 SOURCES +=      scope/scopeoffset.cpp \
