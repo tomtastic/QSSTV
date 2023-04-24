@@ -937,13 +937,13 @@
           <widget class="QComboBox" name="drmTxModeComboBox">
            <property name="minimumSize">
             <size>
-             <width>40</width>
+             <width>50</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>40</width>
+             <width>50</width>
              <height>25</height>
             </size>
            </property>
@@ -987,7 +987,7 @@
           <widget class="QComboBox" name="drmTxQAMComboBox">
            <property name="minimumSize">
             <size>
-             <width>45</width>
+             <width>55</width>
              <height>0</height>
             </size>
            </property>
@@ -1115,13 +1115,13 @@
           <widget class="QComboBox" name="drmTxProtectionComboBox">
            <property name="minimumSize">
             <size>
-             <width>65</width>
+             <width>70</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>65</width>
+             <width>70</width>
              <height>25</height>
             </size>
            </property>
@@ -1180,13 +1180,13 @@
           <widget class="QComboBox" name="drmTxReedSolomonComboBox">
            <property name="minimumSize">
             <size>
-             <width>65</width>
+             <width>70</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>65</width>
+             <width>70</width>
              <height>16777215</height>
             </size>
            </property>
