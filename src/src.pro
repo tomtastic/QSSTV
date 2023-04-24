@@ -45,7 +45,6 @@ SOURCES += main.cpp\
     config/directoriesconfig.cpp \
     config/configdialog.cpp \
     sound/soundbase.cpp \
-    sound/soundpulse.cpp \
     widgets/spectrumwidget.cpp \
     widgets/vumeter.cpp \
     widgets/fftdisplay.cpp \
@@ -195,6 +194,15 @@ SOURCES += main.cpp\
     editor/basegraphicitem.cpp \
     editor/templateviewer.cpp
 
+!macx: SOURCES += sound/soundalsa.cpp \
+    sound/soundpulse.cpp \
+    videocapt/cameradialog.cpp \
+    videocapt/imagesettings.cpp \
+    videocapt/v4l2control.cpp \
+    videocapt/videocapture.cpp
+
+macx: SOURCES += macos/soundmacos.cpp \
+    macos/CaptureDeviceAuthorization.m
 
 HEADERS  += mainwindow.h \
     config/baseconfig.h \
@@ -469,33 +477,21 @@ RESOURCES += \
 
 INSTALLS += target
 
-LIBS +=  -lasound \
-         -lpulse \
-         -lpulse-simple \
-         -lfftw3f \
+LIBS +=  -lfftw3f \
          -lfftw3 \
-         -lhamlib \
+         -lhamlib
+
+!macx: LIBS += -lpulse \
+         -lpulse-simple \
+         -lasound \
          -lv4l2 \
          -lv4lconvert \
          -lrt
+macx: LIBS += -framework AudioToolbox \
+         -framework CoreAudio \
+         -framework AVFoundation
 
-
-if(CONFIG(debug,debug|release)|CONFIG(enablescope)){
-message(including scope)
-greaterThan(QT_MAJOR_VERSION,5){
-message(QT6)
-INCLUDEPATH += /usr/local/qwt-qt6/include
-LIBS += -L/usr/local/qwt-qt6/lib -lqwt
-}
-else{
-message(QT5)
-INCLUDEPATH += /usr/local/qwt-qt5/include
-LIBS += -L/usr/local/qwt-qt5/lib -lqwt
-}
-
-
-
-DEFINES +=ENABLESCOPE
+CONFIG(debug ,debug|release){
 
 SOURCES +=      scope/scopeoffset.cpp \
                 scope/scopeview.cpp \

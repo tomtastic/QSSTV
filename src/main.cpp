@@ -28,12 +28,17 @@
 #include <QSplashScreen>
 #include <QTimer>
 #include "dispatcher.h"
-
+#ifdef __APPLE__
+#include "macos/soundmacos.h"
+#endif
 
 QSplashScreen *splash;
 
 int main( int argc, char ** argv )
 {
+#ifdef __APPLE__
+  soundMacos::EnableAudioInput();
+#endif
 
   int result;
   QTimer tm;

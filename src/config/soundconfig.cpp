@@ -24,8 +24,9 @@
 #include "configparams.h"
 #include "supportfunctions.h"
 #ifdef __APPLE__
-#  include "soundbase.h"
+#  include "macos/soundmacos.h"
 #else
+#  include "soundpulse.h"
 #  include "soundalsa.h"
 #endif
 
@@ -54,12 +55,24 @@ soundConfig::soundConfig(QWidget *parent) :  baseConfig(parent), ui(new Ui::soun
   QStringList inputPCMList, outputPCMList;
   ui->setupUi(this);
 #ifdef __APPLE__
-  ui->alsaRadioButton->setCheckable(false);
+  ui->alsaRadioButton->setVisible(false);
+  ui->pulseRadioButton->setVisible(false);
+  for (const auto &device:soundMacos::getCardList())
+  {
+    if (device.SupportsInput)
+      ui->inputPCMNameComboBox->insertItem(INT_MAX,
+                                           QString::fromStdString(device.Label),
+                                           QString::fromStdString(device.UID));
+    if (device.SupportsOutput)
+      ui->outputPCMNameComboBox->insertItem(INT_MAX,
+                                            QString::fromStdString(device.Label),
+                                            QString::fromStdString(device.UID));
+  }
 #else
   getCardList(inputPCMList, outputPCMList);
-#endif
   ui->inputPCMNameComboBox->addItems(inputPCMList);
   ui->outputPCMNameComboBox->addItems(outputPCMList);
+#endif
 }
 
 
@@ -114,8 +127,16 @@ void soundConfig::setParams()
 {
   setValue(rxClock,ui->inputClockLineEdit,9);
   setValue(txClock,ui->outputClockLineEdit,9);
+#ifdef __APPLE__
+  int i;
+  i = ui->inputPCMNameComboBox->findData(inputAudioDevice);
+    if ( i >= 0 ) ui->inputPCMNameComboBox->setCurrentIndex(i);
+  i = ui->outputPCMNameComboBox->findData(outputAudioDevice);
+    if ( i >= 0 ) ui->outputPCMNameComboBox->setCurrentIndex(i);
+#else
   setValue(inputAudioDevice,ui->inputPCMNameComboBox);
   setValue(outputAudioDevice,ui->outputPCMNameComboBox);
+#endif
   setValue(alsaSelected,ui->alsaRadioButton);
   setValue(pulseSelected,ui->pulseRadioButton);
   setValue(swapChannel,ui->swapChannelCheckBox);
@@ -141,8 +162,13 @@ void soundConfig::getParams()
 
   getValue(rxClock,ui->inputClockLineEdit);
   getValue(txClock,ui->inputClockLineEdit);
+#ifdef __APPLE__
+  inputAudioDevice  = ui->inputPCMNameComboBox->currentData().toString();
+  outputAudioDevice = ui->outputPCMNameComboBox->currentData().toString();
+#else
   getValue(inputAudioDevice,ui->inputPCMNameComboBox);
   getValue(outputAudioDevice,ui->outputPCMNameComboBox);
+#endif
   getValue(alsaSelected,ui->alsaRadioButton);
   getValue(pulseSelected,ui->pulseRadioButton);
   getValue(swapChannel,ui->swapChannelCheckBox);
