@@ -36,7 +36,7 @@ jobs:
         run: >-
           mkdir src/build;
           cd src/build;
-          qmake ../qsstv.pro
+          qmake --qt=qt6 ../qsstv.pro
       - name: Build
         run: >-
           cd src/build;
