@@ -46,3 +46,18 @@ jobs:
         run: >-
           cd src/build;
           make
+      - name: Archive build artifacts
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-linux-x86_64
+          path: |
+            src/build/
+            !**/*.d
+            !**/*.o
+      - name: Archive executables
+        uses: actions/upload-artifact@v2
+        with:
+          name: qsstv-linux-x86_64
+          path: |
+            src/build/qsstv
