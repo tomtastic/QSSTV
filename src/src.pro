@@ -471,6 +471,8 @@ shortcutfiles.path = $$PREFIX/share/applications/
 data.files += icons/qsstv.png
 data.path=$$PREFIX/share/icons/hicolor/128x128/apps/
 
+
+
 RESOURCES += \
     qsstv.qrc
 
