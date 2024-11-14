@@ -86,6 +86,7 @@ public:
 	void setSamplingrate(int sr) {samplingrate=sr;}
   int getNumberOfChannels(){return numberOfChannels;}
   void closeFile();
+  void reset();
 
 	/** return the number of samples in the opened file */
 	unsigned int getNumberOfSamples()

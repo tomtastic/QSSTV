@@ -72,6 +72,7 @@ rigControl::~rigControl()
 
 bool rigControl::init()
 {
+  qDebug() << "Rig Controller starting";
   int retcode;
   if(!catParams.enableCAT) return false;
 
@@ -152,9 +153,9 @@ bool rigControl::getFrequency(double &frequency)
   retcode = rig_get_freq(my_rig, RIG_VFO_CURR, &frequency);
   for(int i=0;i<RIGCMDTRIES;i++)
     {
-      qDebug() << "getFreq";
+      //qDebug() << "getFreq";
       retcode = rig_get_freq(my_rig, RIG_VFO_CURR, &frequency);
-      qDebug() << "got Freq";
+      //qDebug() << "got Freq";
       if (retcode==RIG_OK)
         {
           return true;
@@ -312,14 +313,23 @@ bool rigControl::setPTT(bool on)
 
 
 
-void  rigControl::errorMessage(int errorCode,QString command)
+void rigControl::errorMessage(int errorCode, QString command)
 {
-  displayMBoxEvent *stmb;
-  stmb= new displayMBoxEvent("Cat interface",QString("Error in connection: %1\n%2").arg(QString(rigerror(errorCode))).arg(command));
-  QApplication::postEvent( dispatcherPtr, stmb );
-
-  //  QMessageBox::information(0,"Cat interface",QString("Error in connection: %1\n%2").arg(QString(rigerror(errorCode))).arg(command));
+    if (mainWindowPtr && mainWindowPtr->isDispatcherRunning()) {
+        displayMBoxEvent *stmb = new displayMBoxEvent(
+            "Cat interface", 
+            QString("Error in connection: %1\n%2")
+                .arg(QString(rigerror(errorCode)))
+                .arg(command)
+        );
+        QApplication::postEvent(dispatcherPtr, stmb);
+    } else {
+        // Optionally use qDebug if dispatcher is not running
+        qDebug() << "Error in connection:" << rigerror(errorCode) << command;
+    }
 }
+
+
 
 void rigControl::getRadioList()
 {
@@ -444,13 +454,12 @@ void rigControl::activatePTT(bool b)
     }
   else setPTT(b); // does nothing if rigController is disabled
   mainWindowPtr->setPTT(b);
-  if(b)
-    {
-      addToLog("dispatcher: PTT activated",LOGDISPATCH);
-    }
-  else
-    {
-      addToLog("dispatcher: PTT deactivated",LOGDISPATCH);
+  // Log message based on dispatcher status
+    if (mainWindowPtr && mainWindowPtr->isDispatcherRunning()) {
+        QString logMessage = b ? "dispatcher: PTT activated" : "dispatcher: PTT deactivated";
+        addToLog(logMessage, LOGDISPATCH);
+    } else {
+        qDebug() << (b ? "PTT activated" : "PTT deactivated");
     }
 }
 

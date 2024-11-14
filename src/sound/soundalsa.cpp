@@ -11,73 +11,37 @@ soundAlsa::soundAlsa()
 
 soundAlsa::~soundAlsa()
 {
-
+  
 }
 
-void soundAlsa::closeDevices() {
-    // Close the capture handle if open
-    if (captureHandle != NULL) {
-        snd_pcm_state_t captureState = snd_pcm_state(captureHandle);
-
-        // Drain if in a running or prepared state
-        if (captureState == SND_PCM_STATE_RUNNING || captureState == SND_PCM_STATE_PREPARED) {
-            snd_pcm_drain(captureHandle);
-        }
-
-        snd_pcm_reset(captureHandle);
-        snd_pcm_drop(captureHandle);
-        snd_pcm_unlink(captureHandle);
-
-        if (snd_pcm_close(captureHandle) == 0) {
-            qDebug() << "captureHandle successfully closed";
-        } else {
-            qDebug() << "Error closing captureHandle";
-        }
-        captureHandle = NULL;
-    }
-
-    // Close the playback handle if open
-    if (playbackHandle != NULL) {
-        snd_pcm_state_t playbackState = snd_pcm_state(playbackHandle);
-
-        // Drain if in a running or prepared state
-        if (playbackState == SND_PCM_STATE_RUNNING || playbackState == SND_PCM_STATE_PREPARED) {
-            snd_pcm_drain(playbackHandle);
-        }
-
-        snd_pcm_reset(playbackHandle);
-        snd_pcm_drop(playbackHandle);
-        snd_pcm_unlink(playbackHandle);
-
-        if (snd_pcm_close(playbackHandle) == 0) {
-            qDebug() << "playbackHandle successfully closed";
-        } else {
-            qDebug() << "Error closing playbackHandle";
-        }
-        playbackHandle = NULL;
-    }
-
-    // Free hwparams and swparams if they were allocated
-    if (hwparams) {
-        snd_pcm_hw_params_free(hwparams);
-        hwparams = nullptr;
-        qDebug() << "hwparams successfully freed";
-    }
-
-    if (swparams) {
-        snd_pcm_sw_params_free(swparams);
-        swparams = nullptr;
-        qDebug() << "swparams successfully freed";
-    }
-
-    // Optional delay to ensure the system has time to release resources
-    QThread::msleep(200);
-
-    // Optional: Clear ALSA global configuration to ensure complete release
-    snd_config_update_free_global();
-
-    qDebug() << "All ALSA devices and parameters fully released";
+void soundAlsa::closePlayback() {
+    snd_pcm_pause(playbackHandle, 1);
+    qDebug() << "Playback paused";
 }
+
+void soundAlsa::resumePlayback() {
+    int err;
+    qDebug() << "Trying to resume";
+    err = snd_pcm_pause(playbackHandle, 0);
+    if (err < 0) {
+        alsaErrorHandler(err, "Unable to resume playback device in blocking mode");
+        qDebug() << "Unable to resume playback device in blocking mode";
+    }
+    else {
+      qDebug() << "Resumed playback device in blocking mode";
+    }
+}
+
+void soundAlsa::closeDevices()
+{
+  if(captureHandle!=NULL) snd_pcm_close(captureHandle);
+  captureHandle=NULL;
+  if(playbackHandle!=NULL) snd_pcm_close(playbackHandle);
+  playbackHandle=NULL;
+  qDebug() << "Audio Handles Released";
+}
+    
+
 
 
 
@@ -100,6 +64,7 @@ bool soundAlsa::init(int samplerate)
 
     // Process the output device
     QString tempDevice = outputAudioDevice.left(outputAudioDevice.indexOf(" "));
+    playbackDevice = tempDevice;
     for (iteration = 0; iteration < 20; iteration++)
     {
         qDebug() << "Attempting to open playback device: " << tempDevice.toLatin1().data();

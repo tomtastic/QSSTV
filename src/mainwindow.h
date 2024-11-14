@@ -27,7 +27,8 @@ public:
   void setPTT(bool p);
   void setSSTVDRMPushButton(bool inDRM);
   spectrumWidget *spectrumFramePtr;
-
+  bool isDispatcherRunning() const { return dispatcherRunning; }
+  
 private slots:
   void slotConfigure();
   void slotSaveWaterfallImage();
@@ -45,6 +46,8 @@ private slots:
   void slotSendBSR();
   void slotSendWfText();
   void slotSetFrequency(int freqIndex);
+  void startComponents();
+  void stopComponents();
 
 
 
@@ -66,6 +69,9 @@ private:
   void writeSettings();
   void restartSound(bool inStartUp);
   void cleanUpCache(QString dirPath);
+  void stopDispatcher();
+  void startDispatcher();
+
 //  void setupFtp(ftpThread *&ptr, QString idName);
   QComboBox *transmissionModeComboBox;
   QPushButton *wfTextPushButton;
@@ -80,6 +86,8 @@ private:
   void timerEvent(QTimerEvent *);
   QStringList modModeList;
   QStringList modPassBandList;
+  bool audioActive = false;
+  bool dispatcherRunning = false;
 };
 
 #endif // MAINWINDOW_H

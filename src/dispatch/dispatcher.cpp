@@ -291,6 +291,40 @@ void dispatcher::customEvent( QEvent * e )
   ((baseEvent *)e)->setDone();
 }
 
+void dispatcher::stop()
+{
+    // Stop any active timers
+    if (prTimerIndex >= 0) {
+        killTimer(prTimerIndex);
+        prTimerIndex = -1;
+    }
+
+    // Set threads to idle
+    idleAll();  // This stops RX, TX, and sets the dispatcher to idle mode
+
+    // Release dynamically allocated resources
+    if (progressFTP) {
+        delete progressFTP;
+        progressFTP = nullptr;
+    }
+
+    if (infoTextPtr) {
+        delete infoTextPtr;
+        infoTextPtr = nullptr;
+    }
+
+    if (mbox) {
+        delete mbox;
+        mbox = nullptr;
+    }
+
+    // Disconnect any connected signals to prevent future events
+    disconnect();
+
+    // Additional cleanup (if necessary) based on dispatcher responsibilities
+    // For example, clean up any lists or temporary data
+    lastFileName.clear();
+}
 
 void dispatcher::idleAll()
 {

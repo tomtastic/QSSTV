@@ -19,6 +19,9 @@ public:
   int read(int &countAvailable);
   int write(uint numFrames);
   void closeDevices();
+  void closePlayback();
+  void resumePlayback();
+  
 
 protected:
   void flushCapture();
@@ -42,6 +45,7 @@ private:
   unsigned int minChannelsPlayback;
   unsigned int maxChannelsPlayback;
   bool is32bit;
+  QString playbackDevice;
 };
 
 #endif // SOUNDALSA_H

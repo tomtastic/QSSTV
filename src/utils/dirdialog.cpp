@@ -4,139 +4,129 @@
 
 static QString lastPath;
 
-dirDialog::dirDialog(QWidget * parent,QString title)
+dirDialog::dirDialog(QWidget * parent, QString title)
 {
-  parentPtr=parent;
-  dialogTitle=title;
+  parentPtr = parent;
+  dialogTitle = title;
 }
 
 dirDialog::~dirDialog()
 {
 }
 
-
-/*!
-    \fn dirDialog::openFileName(const QString &path, const QString &filter)
-    \brief selection of a file
-
-    \param path  directory to open (preselected) if empty, the last accessed directory will be used
-    \param filter  types to select from (e.g. mydirs*)
-    \return if canceled or no selection then returns an empty string else return string containing absolute filename
-*/
-
-
 QString dirDialog::openFileName(const QString &path, const QString &filter)
 {
   QString fn;
   if (path.isEmpty() && lastPath.isEmpty())
-    {
-      lastPath=QDir::homePath();
-    }
+  {
+    lastPath = QDir::homePath();
+  }
   else if (!path.isEmpty())
-    {
-      lastPath=path;
-    }
+  {
+    lastPath = path;
+  }
 
-  fn=QFileDialog::getOpenFileName(parentPtr,dialogTitle,lastPath,filter);
-  if(!fn.isEmpty())
+  QFileDialog dialog(parentPtr, dialogTitle, lastPath, filter);
+  dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+
+  
+  if (dialog.exec() == QDialog::Accepted)
+  {
+    fn = dialog.selectedFiles().first();
+    if (!fn.isEmpty())
     {
-      QFileInfo  fi(fn);
-      lastPath=fi.absolutePath();
+      QFileInfo fi(fn);
+      lastPath = fi.absolutePath();
     }
+  }
   return fn;
 }
-
-/*!
-    \fn dirDialog::openDirName(const QString &path)
-    \brief selection of a directory
-
-    \param path directory to open (preselected)
-    \return if canceled or no selection then return an empty string else return string containing absolute dirname
-*/
 
 QStringList dirDialog::openFileNames(const QString &path, const QString &filter)
 {
   QStringList fl;
   if (path.isEmpty() && lastPath.isEmpty())
-    {
-      lastPath=QDir::homePath();
-    }
+  {
+    lastPath = QDir::homePath();
+  }
   else if (!path.isEmpty())
-    {
-      lastPath=path;
-    }
+  {
+    lastPath = path;
+  }
 
-  fl=QFileDialog::getOpenFileNames(parentPtr,dialogTitle,lastPath,filter);
-  if(fl.count()>0)
+  QFileDialog dialog(parentPtr, dialogTitle, lastPath, filter);
+  dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+
+
+  if (dialog.exec() == QDialog::Accepted)
+  {
+    fl = dialog.selectedFiles();
+    if (!fl.isEmpty())
     {
-      QFileInfo  fi(fl.at(0));
-      lastPath=fi.absolutePath();
+      QFileInfo fi(fl.first());
+      lastPath = fi.absolutePath();
     }
+  }
   return fl;
 }
-
-
-
-/*!
-    \fn dirDialog::openDirName(const QString &path)
-    \brief selection of a directory
-
-    \param path directory to open (preselected)
-    \return if canceled or no selection then return an empty string else return string containing absolute dirname
-*/
 
 QString dirDialog::openDirName(const QString &path)
 {
   QString fn;
-  if ((path.isEmpty()) && lastPath.isEmpty())
-    {
-      lastPath=QDir::homePath();
-    }
+  if (path.isEmpty() && lastPath.isEmpty())
+  {
+    lastPath = QDir::homePath();
+  }
   else if (!path.isEmpty())
+  {
+    lastPath = path;
+  }
+
+  QFileDialog dialog(parentPtr, dialogTitle, lastPath);
+  dialog.setFileMode(QFileDialog::Directory);
+  dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+
+
+  if (dialog.exec() == QDialog::Accepted)
+  {
+    fn = dialog.selectedFiles().first();
+    if (!fn.isEmpty())
     {
-      lastPath=path;
+      lastPath = fn;
     }
-  fn=QFileDialog::getExistingDirectory(parentPtr,dialogTitle,lastPath);
-  if(!fn.isEmpty())
-    {
-      lastPath=fn;
-    }
+  }
   return fn;
 }
-
-/*!
-    \fn dirDialog::saveFileName(const QString &path, const QString &filter,QString extension)
-    \brief Save a file to disk
-
-    Saves a file to disk. A dialogbox is opened with \a startWith directory (or /dir/subdir/..../filename) preselected
-    \param path directory to open (can include filename to preselect)
-    \param filter    file types to select from (e.g. *.txt *.doc)
-    \param extension if extension is not empty or NULL, thenn this string will be appended to the filename. A dot will automatically be insterted (i.e specify "txt" not ".txt").
-    \return if canceled or no selection then return an empty string else return string containing absolute filename.
-*/
 
 QString dirDialog::saveFileName(const QString &path, const QString &filter, QString extension)
 {
   QString fn;
-  if ((path.isEmpty()) && lastPath.isEmpty())
-    {
-      lastPath=QDir::currentPath();
-    }
+  if (path.isEmpty() && lastPath.isEmpty())
+  {
+    lastPath = QDir::currentPath();
+  }
   else if (!path.isEmpty())
+  {
+    lastPath = path;
+  }
+
+  QFileDialog dialog(parentPtr, dialogTitle, lastPath, filter);
+  dialog.setAcceptMode(QFileDialog::AcceptSave);
+  dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+
+
+  if (dialog.exec() == QDialog::Accepted)
+  {
+    fn = dialog.selectedFiles().first();
+    if (!fn.isEmpty())
     {
-      lastPath=path;
+      QFileInfo fi(fn);
+      if (!extension.isEmpty() && fi.suffix().isEmpty())
+      {
+        fn += "." + extension;
+      }
+      lastPath = fi.absolutePath();
     }
-  QString exten(extension);
-  fn=QFileDialog::getSaveFileName(parentPtr,dialogTitle,lastPath,filter);
-  if(fn.isEmpty()) return fn;
-  QFileInfo  fi(fn);
-  if(!exten.isEmpty())
-    {
-      if(fi.suffix()=="")
-        {
-          fi.setFile(fi.absoluteFilePath()+"."+exten);
-        }
-    }
-  lastPath=fi.absolutePath();
-  return fi.absoluteFilePath();
+  }
+  return fn;
 }

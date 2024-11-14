@@ -321,20 +321,16 @@ bool soundBase::calibrationCount(unsigned int &frames, double &elapsedTime)
 
 void soundBase::idleTX()
 {
-  waveOut.closeFile();
-  waveIn.closeFile();
-  playbackState=PBINIT;
+    waveOut.reset();  // Ensure all resources associated with waveOut are released
 }
 
 void soundBase::idleRX()
 {
-  captureState=CPINIT;
-
-
-  waveOut.closeFile();
-  waveIn.closeFile();
-
+    waveIn.reset();  // Ensure all resources associated with waveIn are released
 }
+
+
+
 
 
 void soundBase::stopSoundThread() {

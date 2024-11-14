@@ -66,18 +66,23 @@ int main( int argc, char ** argv )
     if(!tm.isActive()) break;
    }
   mainWindowPtr->init(); // this must follow show() because window has to be drawn first to determine fftframe window size
+  qDebug() << "Init Success";
   mainWindowPtr->hide();
   tm.start(100);
+  qDebug() << "Starting proccess Events!";
   while(1)
   {
     app.processEvents();
     if(!tm.isActive()) break;
    }
+   qDebug() << "Finished proccess Events!";
   splash.finish(mainWindowPtr);
   mainWindowPtr->show();
   mainWindowPtr->startRunning();
   result=app.exec();
+  qDebug() << "Starting GlobalEnd!";
   globalEnd();
+  qDebug() << "Finished GlobalEnd!";
   return result;
 }
 

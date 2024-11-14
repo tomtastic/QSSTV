@@ -1,32 +1,32 @@
 /**************************************************************************
-*   Copyright (C) 2000-2019 by Johan Maes                                 *
-*   on4qz@telenet.be                                                      *
-*   http://users.telenet.be/on4qz                                         *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
-***************************************************************************/
+ *   Copyright (C) 2000-2019 by Johan Maes                                 *
+ *   on4qz@telenet.be                                                      *
+ *   http://users.telenet.be/on4qz                                         *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 
 #include "mainwindow.h"
 #include "appglobal.h"
 #include "logging.h"
 #include "dispatch/dispatcher.h"
 #include "ui_mainwindow.h"
-//#include "soundpulse.h"
+// #include "soundpulse.h"
 #ifndef __APPLE__
-#  include "soundalsa.h"
+#include "soundalsa.h"
 #endif
 #include "configdialog.h"
 #include "configparams.h"
@@ -53,22 +53,22 @@
 #include <QFile>
 #include <QApplication>
 
-
 /**
  * @brief
  *
  * @param parent
  */
-mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainWindow)
+mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
-  inStartup=true;
+  inStartup = true;
+
   QApplication::instance()->thread()->setObjectName("qsstv_main");
-  wfTextPushButton=new QPushButton("WF Text",this);
-  bsrPushButton=new QPushButton("BSR",this);
+  wfTextPushButton = new QPushButton("WF Text", this);
+  bsrPushButton = new QPushButton("BSR", this);
   setObjectName("mainThread");
-  freqComboBox=new QComboBox(this);
-  idPushButton=new QPushButton("WF ID",this);
-  cwPushButton=new QPushButton("CW ID",this);
+  freqComboBox = new QComboBox(this);
+  idPushButton = new QPushButton("WF ID", this);
+  cwPushButton = new QPushButton("CW ID", this);
   QFont f;
 
   freqDisplay = new QLabel(this);
@@ -82,24 +82,27 @@ mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
   freqDisplay->setFrameShadow(QFrame::Raised);
   freqDisplay->setLineWidth(2);
   pttText.setText("   PTT");
-  pttIcon=new QLabel(this);
-  pttIcon->setFixedSize(16,16);
+  pttIcon = new QLabel(this);
+  pttIcon->setFixedSize(16, 16);
   pttIcon->setPixmap(*greenPXMPtr);
   pttIcon->setFrameShape(QFrame::Panel);
   pttIcon->setFrameShadow(QFrame::Raised);
   pttIcon->setLineWidth(2);
-  rigControllerPtr=new rigControl(1); // must preceed configDialog construction
-  configDialogPtr=new configDialog(this);
+  rigControllerPtr = new rigControl(1); // must preceed configDialog construction
+  configDialogPtr = new configDialog(this);
   configDialogPtr->readSettings();
 
   ui->setupUi(this);
-  QFile file("../ElegantDark.qss");  // Replace with the actual path
-  if (file.open(QFile::ReadOnly)) {
-      QString styleSheet = QLatin1String(file.readAll());
-      qApp->setStyleSheet(styleSheet);
-      file.close();
-  } else {
-      qWarning("Could not open QSS file");
+  QFile file("../ElegantDark.qss"); // Replace with the actual path
+  if (file.open(QFile::ReadOnly))
+  {
+    QString styleSheet = QLatin1String(file.readAll());
+    qApp->setStyleSheet(styleSheet);
+    file.close();
+  }
+  else
+  {
+    qWarning("Could not open QSS file");
   }
   setWindowTitle(qsstvVersion);
   setWindowIcon(QPixmap(":/icons/qsstv.png"));
@@ -112,42 +115,40 @@ mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
   ui->statusBar->addPermanentWidget(cwPushButton);
   ui->statusBar->addPermanentWidget(&pttText);
   ui->statusBar->addPermanentWidget(pttIcon);
-  statusBarPtr=statusBar(); // must be after setup UI
-  spectrumFramePtr=ui->spectrumFrame;
-
+  statusBarPtr = statusBar(); // must be after setup UI
+  spectrumFramePtr = ui->spectrumFrame;
 
   // setting up pointers
-  soundIOPtr=nullptr;
-  fileWatcherPtr=nullptr;
+  soundIOPtr = nullptr;
+  fileWatcherPtr = nullptr;
 
-
-  rxWidgetPtr=ui->rxWindow;
-  txWidgetPtr=ui->txWindow;
-  galleryWidgetPtr=ui->galleryWindow;
+  rxWidgetPtr = ui->rxWindow;
+  txWidgetPtr = ui->txWindow;
+  galleryWidgetPtr = ui->galleryWindow;
   readSettings();
-  soundIOPtr=new soundAlsa;
+  soundIOPtr = new soundAlsa;
 
-  dispatcherPtr=new dispatcher;
-  waterfallPtr=new waterfallText;
-  xmlIntfPtr=new xmlInterface;
-  logBookPtr=new logBook;
+  dispatcherPtr = new dispatcher;
+  waterfallPtr = new waterfallText;
+  xmlIntfPtr = new xmlInterface;
+  logBookPtr = new logBook;
 
   // setup connections
 
-  connect(ui->actionSaveWaterfallImage,SIGNAL(triggered()),this, SLOT(slotSaveWaterfallImage()));
-  connect(ui->actionExit,SIGNAL(triggered()),this, SLOT(slotExit()));
-  connect(ui->actionConfigure,SIGNAL(triggered()),this, SLOT(slotConfigure()));
-  connect(ui->actionCalibrate,SIGNAL(triggered()),this, SLOT(slotCalibrate()));
-  connect(ui->actionAboutQSSTV, SIGNAL(triggered()),SLOT(slotAboutQSSTV()));
-  connect(ui->actionAboutQt, SIGNAL(triggered()),SLOT(slotAboutQt()));
-  connect(ui->actionUsersGuide, SIGNAL(triggered()),SLOT(slotDocumentation()));
+  connect(ui->actionSaveWaterfallImage, SIGNAL(triggered()), this, SLOT(slotSaveWaterfallImage()));
+  connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(slotExit()));
+  connect(ui->actionConfigure, SIGNAL(triggered()), this, SLOT(slotConfigure()));
+  connect(ui->actionCalibrate, SIGNAL(triggered()), this, SLOT(slotCalibrate()));
+  connect(ui->actionAboutQSSTV, SIGNAL(triggered()), SLOT(slotAboutQSSTV()));
+  connect(ui->actionAboutQt, SIGNAL(triggered()), SLOT(slotAboutQt()));
+  connect(ui->actionUsersGuide, SIGNAL(triggered()), SLOT(slotDocumentation()));
   connect(idPushButton, SIGNAL(clicked()), this, SLOT(slotSendWFID()));
   connect(cwPushButton, SIGNAL(clicked()), this, SLOT(slotSendCWID()));
   connect(bsrPushButton, SIGNAL(clicked()), this, SLOT(slotSendBSR()));
-  connect(freqComboBox,SIGNAL(activated(int)),SLOT(slotSetFrequency(int)));
+  connect(freqComboBox, SIGNAL(activated(int)), SLOT(slotSetFrequency(int)));
   connect(wfTextPushButton, SIGNAL(clicked()), this, SLOT(slotSendWfText()));
-  connect(rxWidgetPtr,SIGNAL(modeSwitch(int)),this, SLOT(slotModeChange(int)));
-  connect(txWidgetPtr,SIGNAL(modeSwitch(int)),this, SLOT(slotModeChange(int)));
+  connect(rxWidgetPtr, SIGNAL(modeSwitch(int)), this, SLOT(slotModeChange(int)));
+  connect(txWidgetPtr, SIGNAL(modeSwitch(int)), this, SLOT(slotModeChange(int)));
 
   QAction *fs = new QAction(this);
   fs->setShortcut(Qt::Key_F | Qt::CTRL);
@@ -155,21 +156,21 @@ mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
   this->addAction(fs);
 
 #ifdef ENABLELOGGING
-  connect(ui->actionLogSettings, SIGNAL(triggered()),SLOT(slotLogSettings()));
-  connect(ui->actionResetLog, SIGNAL(triggered()),SLOT(slotResetLog()));
+  connect(ui->actionLogSettings, SIGNAL(triggered()), SLOT(slotLogSettings()));
+  connect(ui->actionResetLog, SIGNAL(triggered()), SLOT(slotResetLog()));
 #else
   ui->menuOptions->removeAction(ui->actionLogSettings);
   ui->menuOptions->removeAction(ui->actionResetLog);
 #endif
 #ifndef QT_NO_DEBUG
 
-  connect(ui->actionShowDataScope, SIGNAL(triggered()),SLOT(slotShowDataScope()));
-  connect(ui->actionShowSyncScopeNarrow, SIGNAL(triggered()),SLOT(slotShowSyncScopeNarrow()));
-  connect(ui->actionShowSyncScopeWide, SIGNAL(triggered()),SLOT(slotShowSyncScopeWide()));
-  connect(ui->actionScopeOffset,SIGNAL(triggered()),this, SLOT(slotScopeOffset()));
-  connect(ui->actionClearScope,SIGNAL(triggered()),this, SLOT(slotClearScope()));
-  connect(ui->actionDumpSamplesPerLine,SIGNAL(triggered()),this, SLOT(slotDumpSamplesPerLine()));
-  connect(ui->actionTxTestPattern,SIGNAL(triggered()),this, SLOT(slotTxTestPattern()));
+  connect(ui->actionShowDataScope, SIGNAL(triggered()), SLOT(slotShowDataScope()));
+  connect(ui->actionShowSyncScopeNarrow, SIGNAL(triggered()), SLOT(slotShowSyncScopeNarrow()));
+  connect(ui->actionShowSyncScopeWide, SIGNAL(triggered()), SLOT(slotShowSyncScopeWide()));
+  connect(ui->actionScopeOffset, SIGNAL(triggered()), this, SLOT(slotScopeOffset()));
+  connect(ui->actionClearScope, SIGNAL(triggered()), this, SLOT(slotClearScope()));
+  connect(ui->actionDumpSamplesPerLine, SIGNAL(triggered()), this, SLOT(slotDumpSamplesPerLine()));
+  connect(ui->actionTxTestPattern, SIGNAL(triggered()), this, SLOT(slotTxTestPattern()));
 
 #else
   ui->menuOptions->removeAction(ui->actionDumpSamplesPerLine);
@@ -181,9 +182,6 @@ mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
   ui->menuScope->menuAction()->setVisible(false);
 
 #endif
-
-
-
 }
 
 /**
@@ -195,13 +193,13 @@ mainWindow::~mainWindow()
   delete ui;
 }
 
-
 /**
  * @brief initialize sound device and dispatcher
  *
  */
 void mainWindow::init()
 {
+
   cleanUpCache(rxSSTVImagesPath);
   cleanUpCache(rxDRMImagesPath);
   cleanUpCache(txSSTVImagesPath);
@@ -209,78 +207,82 @@ void mainWindow::init()
   //start rx and tx threads
   rxWidgetPtr->functionsPtr()->start();
   txWidgetPtr->functionsPtr()->start();
-  rigControllerPtr->init();
-  rigControllerPtr->setMode("PKTUSB", "3000");
   restartSound(true);
   dispatcherPtr->init();
   galleryWidgetPtr->init();
   txWidgetPtr->init();
   waterfallPtr->init();
-  
+  rigControllerPtr->init();
   rxWidgetPtr->init();
   if(!rigControllerPtr->initError.isEmpty())
     {
       splashStr+=rigControllerPtr->initError.rightJustified(25,' ')+"\n";
       splashPtr->showMessage(splashStr ,Qt::AlignLeft,Qt::white);
     }
-  startTimer(2000);
+  startTimer(1000);
   if(fileWatcherPtr==nullptr) fileWatcherPtr=new fileWatcher;
   fileWatcherPtr->init();
+}
+
+void mainWindow::startComponents()
+{
+  
+}
+
+void mainWindow::stopComponents()
+{
+  
 }
 
 void mainWindow::restartSound(bool inStartUp)
 {
   qDebug() << "Restarting Sound Triggered!";
-  //first check if sound
-  if(soundIOPtr!=nullptr)
-    {
-      soundIOPtr->stopSoundThread();
-      soundIOPtr->closeDevices();
-      delete soundIOPtr;
-      soundIOPtr=nullptr;
-    }
+  // first check if sound
+  if (soundIOPtr != nullptr)
+  {
+    soundIOPtr->stopSoundThread();
+    delete soundIOPtr;
+    soundIOPtr = nullptr;
+  }
 
-  soundIOPtr=new soundAlsa;
+  soundIOPtr = new soundAlsa;
 
-  if(!soundIOPtr->init(BASESAMPLERATE))
+  if (!soundIOPtr->init(BASESAMPLERATE))
+  {
+    if (inStartUp)
     {
-      if(inStartUp)
-        {
-          splashStr+=QString("Soundcard error: %1").arg(soundIOPtr->getLastError()).rightJustified(25,' ')+"\n";;
-          splashPtr->showMessage(splashStr ,Qt::AlignLeft,Qt::white);
-        }
-      else
-        {
-          QMessageBox::critical(this, tr("Soundcard error"),soundIOPtr->getLastError());
-        }
+      splashStr += QString("Soundcard error: %1").arg(soundIOPtr->getLastError()).rightJustified(25, ' ') + "\n";
+      ;
+      splashPtr->showMessage(splashStr, Qt::AlignLeft, Qt::white);
     }
+    else
+    {
+      QMessageBox::critical(this, tr("Soundcard error"), soundIOPtr->getLastError());
+    }
+  }
   soundIOPtr->start();
 }
 
-
 void mainWindow::startRunning()
 {
-  inStartup=false;
-  dispatcherPtr->startRX();
+  inStartup = false;
 }
-
 
 void mainWindow::readSettings()
 {
 
-
   QSettings qSettings;
   qSettings.beginGroup("MAIN");
-  int windowWidth = qSettings.value("windowWidth", 460 ).toInt();
-  int windowHeight = qSettings.value("windowHeight", 530 ).toInt();
-  int windowX = qSettings.value( "windowX", -1 ).toInt();
-  int windowY = qSettings.value( "windowY", -1 ).toInt();
-  resize( windowWidth, windowHeight );
-  if ( windowX != -1 || windowY != -1 )
-    {
-      move( windowX, windowY );
-    }
-  transmissionModeIndex=static_cast<etransmissionMode>(qSettings.value("transmissionModeIndex",0).toInt());
+  int windowWidth = qSettings.value("windowWidth", 460).toInt();
+  int windowHeight = qSettings.value("windowHeight", 530).toInt();
+  int windowX = qSettings.value("windowX", -1).toInt();
+  int windowY = qSettings.value("windowY", -1).toInt();
+  resize(windowWidth, windowHeight);
+  if (windowX != -1 || windowY != -1)
+  {
+    move(windowX, windowY);
+  }
+  transmissionModeIndex = static_cast<etransmissionMode>(qSettings.value("transmissionModeIndex", 0).toInt());
   qSettings.endGroup();
   ui->spectrumFrame->readSettings();
   //  configDialogPtr->readSettings();
@@ -290,11 +292,11 @@ void mainWindow::writeSettings()
 {
   QSettings qSettings;
   qSettings.beginGroup("MAIN");
-  qSettings.setValue( "windowWidth", width() );
-  qSettings.setValue( "windowHeight", height() );
-  qSettings.setValue( "windowX", x() );
-  qSettings.setValue( "windowY", y() );
-  qSettings.setValue("transmissionModeIndex",static_cast<int>(transmissionModeIndex));
+  qSettings.setValue("windowWidth", width());
+  qSettings.setValue("windowHeight", height());
+  qSettings.setValue("windowX", x());
+  qSettings.setValue("windowY", y());
+  qSettings.setValue("transmissionModeIndex", static_cast<int>(transmissionModeIndex));
   galleryWidgetPtr->writeSettings();
   rxWidgetPtr->writeSettings();
   txWidgetPtr->writeSettings();
@@ -302,7 +304,6 @@ void mainWindow::writeSettings()
   qSettings.endGroup();
   ui->spectrumFrame->writeSettings();
 }
-
 
 /**
  *\todo fontselection
@@ -320,59 +321,62 @@ void mainWindow::setNewFont()
 void mainWindow::slotSaveWaterfallImage()
 {
   QImage *wf = ui->spectrumFrame->getImage();
-  if (wf) {
-      double freq=0;
-      QDateTime now=QDateTime::currentDateTime();
-      QString fn="waterfall-"+now.toString("yyyyMMddhhmmss")+".jpg";
+  if (wf)
+  {
+    double freq = 0;
+    QDateTime now = QDateTime::currentDateTime();
+    QString fn = "waterfall-" + now.toString("yyyyMMddhhmmss") + ".jpg";
 
-      QImage im(wf->width()+2, wf->height()+22, QImage::Format_RGB32);
-      QPainter p(&im);
+    QImage im(wf->width() + 2, wf->height() + 22, QImage::Format_RGB32);
+    QPainter p(&im);
 
-      im.fill(Qt::black);
-      p.setPen(Qt::lightGray);
-      p.drawImage(2,20,*wf);
-      p.drawRect(0,0,wf->width()+1,wf->height()+21);
+    im.fill(Qt::black);
+    p.setPen(Qt::lightGray);
+    p.drawImage(2, 20, *wf);
+    p.drawRect(0, 0, wf->width() + 1, wf->height() + 21);
 
-      //TODO: rig frequency etc
-      rigControllerPtr->getFrequency(freq);
-      if (freq>0)
-        p.drawText(1,15, QString("%1 MHz").arg(freq/1000000.0,1,'f',6));
-      else
-        p.drawText(1,15, "no freq");
+    // TODO: rig frequency etc
+    rigControllerPtr->getFrequency(freq);
+    if (freq > 0)
+      p.drawText(1, 15, QString("%1 MHz").arg(freq / 1000000.0, 1, 'f', 6));
+    else
+      p.drawText(1, 15, "no freq");
 
-      if (im.save(fn, "jpg"))
-        {
-          statusBarPtr->showMessage("Saved "+fn);
-        }
-      else {
-          statusBarPtr->showMessage("Error saving image");
-        }
-      delete wf;
+    if (im.save(fn, "jpg"))
+    {
+      statusBarPtr->showMessage("Saved " + fn);
     }
+    else
+    {
+      statusBarPtr->showMessage("Error saving image");
+    }
+    delete wf;
+  }
 }
 
 void mainWindow::slotExit()
 {
-  int exit=QMessageBox::Ok;
-  if(confirmClose)
-    {
-      exit=QMessageBox::information(nullptr, tr("Quit..."),tr("Do you really want to quit QSSTV?"), QMessageBox::Ok, QMessageBox::Cancel);
-    }
+  int exit = QMessageBox::Ok;
+  if (confirmClose)
+  {
+    exit = QMessageBox::information(nullptr, tr("Quit..."), tr("Do you really want to quit QSSTV?"), QMessageBox::Ok, QMessageBox::Cancel);
+  }
 
-  if(exit==QMessageBox::Ok)
-    {
-      statusBarPtr->showMessage("Cleaning up...");
-      dispatcherPtr->idleAll();
-      rxWidgetPtr->setOnlineStatus(false);
-      rxWidgetPtr->functionsPtr()->stopThread();
-      txWidgetPtr->functionsPtr()->stopThread();
-      if(soundIOPtr) soundIOPtr->stopSoundThread();
-      writeSettings();
-      QApplication::quit();
-    }
+  if (exit == QMessageBox::Ok)
+  {
+    statusBarPtr->showMessage("Cleaning up...");
+    dispatcherPtr->idleAll();
+    rxWidgetPtr->setOnlineStatus(false);
+    rxWidgetPtr->functionsPtr()->stopThread();
+    txWidgetPtr->functionsPtr()->stopThread();
+    if (soundIOPtr)
+      soundIOPtr->stopSoundThread();
+    writeSettings();
+    QApplication::quit();
+  }
 }
 
-void  mainWindow::closeEvent ( QCloseEvent *e )
+void mainWindow::closeEvent(QCloseEvent *e)
 {
   slotExit();
   e->ignore();
@@ -381,21 +385,20 @@ void  mainWindow::closeEvent ( QCloseEvent *e )
 void mainWindow::slotConfigure()
 {
 
-  if(configDialogPtr->exec()==QDialog::Accepted)
+  if (configDialogPtr->exec() == QDialog::Accepted)
+  {
+    if (configDialogPtr->soundNeedsRestart)
     {
-      if(configDialogPtr->soundNeedsRestart)
-        {
-          restartSound(false);
-        }
-      dispatcherPtr->init();
+      restartSound(false);
     }
+    dispatcherPtr->init();
+  }
 }
 
 void mainWindow::slotLogSettings()
 {
   logFilePtr->maskSelect(this);
   logFilePtr->writeSettings();
-
 }
 
 void mainWindow::slotResetLog()
@@ -406,28 +409,25 @@ void mainWindow::slotResetLog()
 void mainWindow::slotDocumentation()
 {
   QDesktopServices::openUrl(docURL);
-
 }
-
-
 
 void mainWindow::slotAboutQSSTV()
 {
-  QString temp=tr("QSSTV\nVersion: ") + MAJORVERSION + MINORVERSION;
+  QString temp = tr("QSSTV\nVersion: ") + MAJORVERSION + MINORVERSION;
   temp += "\n http://users.telenet.be/on4qz \n(c) 2000-2019 -- Johan Maes - ON4QZ\n HAMDRM Software based on RX/TXAMADRM\n from PA0MBO";
-  QMessageBox::about(this,tr("About..."),temp);
-
+  QMessageBox::about(this, tr("About..."), temp);
 }
 
 void mainWindow::slotAboutQt()
 {
-  QMessageBox::aboutQt(this,tr("About..."));
-
+  QMessageBox::aboutQt(this, tr("About..."));
 }
 void mainWindow::setPTT(bool p)
 {
-  if(p) pttIcon->setPixmap(*redPXMPtr);
-  else pttIcon->setPixmap(*greenPXMPtr);
+  if (p)
+    pttIcon->setPixmap(*redPXMPtr);
+  else
+    pttIcon->setPixmap(*greenPXMPtr);
 }
 
 void mainWindow::setSSTVDRMPushButton(bool inDRM)
@@ -436,29 +436,31 @@ void mainWindow::setSSTVDRMPushButton(bool inDRM)
   QString modeStr;
   bsrPushButton->setEnabled(inDRM);
   freqComboBox->clear();
-  if(inDRM) modeStr="DRM";
-  else modeStr="SSTV";
+  if (inDRM)
+    modeStr = "DRM";
+  else
+    modeStr = "SSTV";
   modModeList.clear();
   modPassBandList.clear();
-  for(i=0;i<freqList.count();i++)
+  for (i = 0; i < freqList.count(); i++)
+  {
+    if (modeList.at(i) == modeStr)
     {
-      if(modeList.at(i)==modeStr)
-        {
-          freqComboBox->addItem(freqList.at(i));
-          modModeList.append(sbModeList.at(i));
-          modPassBandList.append(passBandList.at(i));
-        }
+      freqComboBox->addItem(freqList.at(i));
+      modModeList.append(sbModeList.at(i));
+      modPassBandList.append(passBandList.at(i));
     }
+  }
 }
 
 void mainWindow::slotCalibrate()
 {
   calibration calib(this);
-  if(calib.exec()==QDialog::Accepted)
-    {
-      rxClock=calib.getRXClock();
-      txClock=calib.getTXClock();
-    }
+  if (calib.exec() == QDialog::Accepted)
+  {
+    rxClock = calib.getRXClock();
+    txClock = calib.getTXClock();
+  }
   writeSettings();
 }
 
@@ -473,7 +475,6 @@ void mainWindow::slotSendBSR()
 {
   txWidgetPtr->sendBSR();
 }
-
 
 void mainWindow::slotSendWFID()
 {
@@ -492,81 +493,65 @@ void mainWindow::slotSendWfText()
 
 void mainWindow::slotSetFrequency(int freqIndex)
 {
-  soundIOPtr->stopSoundThread();
+
   QByteArray ba;
-  QString freqStr,mode,passBand;
-  freqStr=freqComboBox->itemText(freqIndex);
-  mode=modModeList.at(freqIndex);
-  passBand=modPassBandList.at(freqIndex);
-  if(freqStr.isEmpty()) return;
-  double fr=freqStr.toDouble()*1000000.;
+  QString freqStr, mode, passBand;
+  freqStr = freqComboBox->itemText(freqIndex);
+  mode = modModeList.at(freqIndex);
+  passBand = modPassBandList.at(freqIndex);
+  if (freqStr.isEmpty())
+    return;
+  double fr = freqStr.toDouble() * 1000000.;
   rigControllerPtr->setFrequency(fr);
-  rigControllerPtr->setMode(mode,passBand);
-  QString s=additionalCommand;
-  //FEF7AE01A060101FD
-  if(!s.isEmpty() && !rigControllerPtr->params()->enableXMLRPC)
+  rigControllerPtr->setMode(mode, passBand);
+  QString s = additionalCommand;
+  // FEF7AE01A060101FD
+  if (!s.isEmpty() && !rigControllerPtr->params()->enableXMLRPC)
+  {
+    if (hexFromString(s, ba, additionalCommandHex))
     {
-      if(hexFromString(s,ba,additionalCommandHex))
-        {
-          rigControllerPtr->rawCommand(ba);
-        }
-      else
-        {
-          QMessageBox::critical(this,"Cat Error","Advanced command invalid");
-        }
+      rigControllerPtr->rawCommand(ba);
     }
-  restartSound(true);
-  dispatcherPtr->startRX();
+    else
+    {
+      QMessageBox::critical(this, "Cat Error", "Advanced command invalid");
+    }
+  }
 }
 
+void mainWindow::timerEvent(QTimerEvent *)
+{
+  double fr;
+  QString currentMode;
+  
+  bool hasFrequency = rigControllerPtr->getFrequency(fr);
+  bool hasMode = rigControllerPtr->getMode(currentMode);
+  qDebug() << "Freq:" << fr << " Mode:" << currentMode;
 
+  if (hasFrequency && hasMode)
+  {
+    fr /= 1000000.0; // Convert frequency to MHz for display
 
-void mainWindow::timerEvent(QTimerEvent *) {
-    static bool audioActive = true;  // Track whether audio is active
-    double fr;
-    QString currentMode;
-
-    // Attempt to get frequency and mode
-    bool hasFrequency = rigControllerPtr->getFrequency(fr);
-    bool hasMode = rigControllerPtr->getMode(currentMode);
-
-    // Check if both frequency and mode retrievals are successful
-    if (hasFrequency && hasMode) {
-        fr /= 1000000.0;
-
-        if (currentMode == "PKTUSB") {
-            // Start audio if inactive
-            if (!audioActive) {
-                restartSound(false);
-                audioActive = true;
-            }
-            freqDisplay->setText(fr > 1 ? QString::number(fr, 'f', 6) : "No Rig");
-        } else {
-            // Stop audio if active
-            if (audioActive) {
-                soundIOPtr->forceCloseSound();
-                soundIOPtr->closeDevices();
-                delete soundIOPtr;
-                soundIOPtr = nullptr;
-                audioActive = false;
-            }
-            freqDisplay->setText("Bad Mode");
-        }
-    } else {
-        // Display "No Rig" if frequency or mode retrieval failed
-        freqDisplay->setText("No Rig");
+    if (currentMode == "PKTUSB")
+    {
+      
+      
     }
+    else
+    {
+     
+      freqDisplay->setText("Bad Mode");
+    }
+  }
+  else
+  {
+    freqDisplay->setText("No Rig");
+  }
 }
-
-
-
-
-
-
 
 void mainWindow::cleanUpCache(QString dirPath)
 {
-  int i,j;
+  int i, j;
   bool found;
   QFileInfoList orgFileList;
   QFileInfoList cacheFileList;
@@ -575,73 +560,69 @@ void mainWindow::cleanUpCache(QString dirPath)
   dirOrg.setFilter(QDir::Files | QDir::NoSymLinks);
   orgFileList = dirOrg.entryInfoList();
   // get a orgiriginal filelist
-  QDir dirCache(dirPath+"/cache");
+  QDir dirCache(dirPath + "/cache");
   dirCache.setFilter(QDir::Files | QDir::NoSymLinks);
   cacheFileList = dirCache.entryInfoList();
   // get a orgiriginal filelist
-  for(i=0;i<cacheFileList.count();i++)
+  for (i = 0; i < cacheFileList.count(); i++)
+  {
+    found = false;
+    for (j = 0; j < orgFileList.count(); j++)
     {
-      found=false;
-      for(j=0;j<orgFileList.count();j++)
-        {
-#if (QT_VERSION < QT_VERSION_CHECK(5,10,0))
-          if(cacheFileList.at(i).baseName()==QString(orgFileList.at(j).baseName()+orgFileList.at(j).created().toString()))
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+      if (cacheFileList.at(i).baseName() == QString(orgFileList.at(j).baseName() + orgFileList.at(j).created().toString()))
 #else
-          if(cacheFileList.at(i).baseName()==QString(orgFileList.at(j).baseName()+orgFileList.at(j).birthTime().toString()))
+      if (cacheFileList.at(i).baseName() == QString(orgFileList.at(j).baseName() + orgFileList.at(j).birthTime().toString()))
 #endif
-            {
-              found=true;
-              break;
-            }
-        }
-      if(!found)
-        {
-          removeFileList.append(cacheFileList.at(i));
-        }
+      {
+        found = true;
+        break;
+      }
     }
-  for(i=0;i<removeFileList.count();i++)
+    if (!found)
     {
-      QFile fi(removeFileList.at(i).absoluteFilePath());
-      fi.remove();
+      removeFileList.append(cacheFileList.at(i));
     }
+  }
+  for (i = 0; i < removeFileList.count(); i++)
+  {
+    QFile fi(removeFileList.at(i).absoluteFilePath());
+    fi.remove();
+  }
 }
 
 void mainWindow::slotFullScreen()
 {
-  if(isFullScreen())
-    {
-      this->setWindowState(Qt::WindowMaximized);
-    }
+  if (isFullScreen())
+  {
+    this->setWindowState(Qt::WindowMaximized);
+  }
   else
-    {
-      this->setWindowState(Qt::WindowFullScreen);
-    }
+  {
+    this->setWindowState(Qt::WindowFullScreen);
+  }
 }
-
-
 
 #ifndef QT_NO_DEBUG
 
 void mainWindow::slotShowDataScope()
 {
-  scopeViewerData->show(true,true,true,true);
+  scopeViewerData->show(true, true, true, true);
 }
 void mainWindow::slotShowSyncScopeNarrow()
 {
-  scopeViewerSyncNarrow->show(true,true,true,true);
+  scopeViewerSyncNarrow->show(true, true, true, true);
 }
 
 void mainWindow::slotShowSyncScopeWide()
 {
-  scopeViewerSyncWide->show(true,true,true,true);
+  scopeViewerSyncWide->show(true, true, true, true);
 }
 
 void mainWindow::slotScopeOffset()
 {
-  dataScopeOffset=rxWidgetPtr->functionsPtr()->setOffset(dataScopeOffset,true);
+  dataScopeOffset = rxWidgetPtr->functionsPtr()->setOffset(dataScopeOffset, true);
 }
-
-
 
 void mainWindow::slotDumpSamplesPerLine()
 {
@@ -659,15 +640,11 @@ void mainWindow::slotTxTestPattern()
 {
   etpSelect sel;
   testPatternSelection tpsel;
-  if(tpsel.exec()==QDialog::Accepted)
-    {
-      sel=tpsel.getSelection();
-      txWidgetPtr->txTestPattern(sel);
-    }
+  if (tpsel.exec() == QDialog::Accepted)
+  {
+    sel = tpsel.getSelection();
+    txWidgetPtr->txTestPattern(sel);
+  }
 }
-
-
-
-
 
 #endif

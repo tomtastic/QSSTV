@@ -58,6 +58,13 @@ void wavIO::closeFile()
   writing=false;
 }
 
+void wavIO::reset() {
+    closeFile();  // Ensure any open file is closed
+    reading = false;
+    writing = false;
+    inopf.setFileName("");  // Clear the filename to reset the file object
+}
+
 /**
    opens a wave file for reading
   \param fname the name of the file to open

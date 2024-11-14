@@ -26,6 +26,7 @@ public:
   dispatcher();
   ~dispatcher();
   void init();
+  void stop();
   void idleAll();
   void startRX();
   void startTX(txFunctions::etxState state);

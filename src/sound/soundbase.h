@@ -49,6 +49,8 @@ public:
   void forceCloseSound();
   virtual void getCardList() {;}
   virtual void closeDevices()=0;
+  virtual void closePlayback() {;}
+  virtual void resumePlayback() {;}
 
   bool startCapture();
   bool startPlayback();
