@@ -126,8 +126,11 @@
         <property name="text">
          <string>PulseAudio</string>
         </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
         <property name="checked">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
