@@ -93,7 +93,7 @@ mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   configDialogPtr->readSettings();
 
   ui->setupUi(this);
-  QFile file("../ElegantDark.qss"); // Replace with the actual path
+  QFile file(":/ElegantDark.qss"); // Replace with the actual path
   if (file.open(QFile::ReadOnly))
   {
     QString styleSheet = QLatin1String(file.readAll());
@@ -266,6 +266,7 @@ void mainWindow::restartSound(bool inStartUp)
 void mainWindow::startRunning()
 {
   inStartup = false;
+  dispatcherPtr->startRX();
 }
 
 void mainWindow::readSettings()
