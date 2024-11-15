@@ -522,33 +522,37 @@ void mainWindow::slotSetFrequency(int freqIndex)
 
 void mainWindow::timerEvent(QTimerEvent *)
 {
-  double fr;
-  QString currentMode;
-  
-  bool hasFrequency = rigControllerPtr->getFrequency(fr);
-  bool hasMode = rigControllerPtr->getMode(currentMode);
-  qDebug() << "Freq:" << fr << " Mode:" << currentMode;
+    double fr;
+    QString currentMode;
 
-  if (hasFrequency && hasMode)
-  {
-    fr /= 1000000.0; // Convert frequency to MHz for display
+    // Check if both frequency and mode are available
+    bool hasFrequency = rigControllerPtr->getFrequency(fr);
+    bool hasMode = rigControllerPtr->getMode(currentMode);
 
-    if (currentMode == "PKTUSB")
+    qDebug() << "Freq:" << fr << " Mode:" << currentMode;
+
+    if (hasFrequency && hasMode)
     {
-      
-      
+        fr /= 1000000.0; // Convert frequency to MHz for display
+
+        if (currentMode == "PKTUSB")
+        {
+            // Set frequency in the UI if mode is PKTUSB
+            freqDisplay->setText(QString::number(fr, 'f', 3) + " MHz");
+        }
+        else
+        {
+            // Set to "Bad Mode" if mode is not PKTUSB
+            freqDisplay->setText("Bad Mode");
+        }
     }
     else
     {
-     
-      freqDisplay->setText("Bad Mode");
+        // Set to "No Rig" if frequency or mode is unavailable
+        freqDisplay->setText("No Rig");
     }
-  }
-  else
-  {
-    freqDisplay->setText("No Rig");
-  }
 }
+
 
 void mainWindow::cleanUpCache(QString dirPath)
 {

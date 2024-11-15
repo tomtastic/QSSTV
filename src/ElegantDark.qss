@@ -23,7 +23,7 @@ QPushButton{
 	border-style: solid;
 	color: rgb(255, 255, 255);
 	padding: 2px;
-	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(77, 77, 77, 255), stop:1 rgba(97, 97, 97, 255));
+	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(77, 77, 77, 255), stop:1 rgba(150, 150, 150, 255));
 }
 QPushButton:hover{
 	border-style: outset;
@@ -194,3 +194,14 @@ QCheckBox::indicator:unchecked {
 QStatusBar {
 	color:rgb(240,240,240);
 }
+QMessageBox QLabel {
+    color: black;  /* Change text color to black */
+    font-size: 12px; /* Optional: Adjust font size */
+}
+
+QLabel#freqDisplay {
+    background-color: white;
+    color: black;
+    border: 1px solid gray; /* Optional */
+}
+
