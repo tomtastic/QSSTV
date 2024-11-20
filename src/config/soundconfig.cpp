@@ -44,7 +44,7 @@ QString inputAudioDevice;
 QString outputAudioDevice;
 soundBase::edataSrc soundRoutingInput;
 soundBase::edataDst soundRoutingOutput;
-
+float volumeFactor;
 quint32 recordingSize;
 
 
@@ -86,6 +86,7 @@ void soundConfig::readSettings()
   soundRoutingInput=  (soundBase::edataSrc)qSettings.value("soundRoutingInput",  0 ).toInt();
   soundRoutingOutput= (soundBase::edataDst)qSettings.value("soundRoutingOutput", 0 ).toInt();
   recordingSize= qSettings.value("recordingSize", 100 ).toInt();
+  volumeFactor = qSettings.value("volumeFactor", 1.0).toFloat(); // Load volumeFactor
   qSettings.endGroup();
   setParams();
 }
@@ -106,6 +107,7 @@ void soundConfig::writeSettings()
   qSettings.setValue ("soundRoutingInput", soundRoutingInput );
   qSettings.setValue ("soundRoutingOutput",soundRoutingOutput );
   qSettings.setValue ("recordingSize",recordingSize );
+  qSettings.setValue("volumeFactor", volumeFactor); // Save volumeFactor
   qSettings.endGroup();
 }
 
@@ -120,6 +122,10 @@ void soundConfig::setParams()
   setValue(pulseSelected,ui->pulseRadioButton);
   setValue(swapChannel,ui->swapChannelCheckBox);
   setValue(pttToneOtherChannel,ui->pttToneCheckBox);
+  ui->txVolume->setValue(static_cast<int>(volumeFactor * 100));
+
+
+
   if(soundRoutingInput==soundBase::SNDINCARD) ui->inFromCard->setChecked(true);
   else if (soundRoutingInput==soundBase::SNDINFROMFILE) ui->inFromFile->setChecked(true);
   else ui->inRecordFromCard->setChecked(true);
@@ -155,6 +161,7 @@ void soundConfig::getParams()
   if (ui->outToCard->isChecked()) soundRoutingOutput=soundBase::SNDOUTCARD;
   else soundRoutingOutput=soundBase::SNDOUTTOFILE;
   getValue(recordingSize,ui->mbSpinBox);
+  volumeFactor = static_cast<float>(ui->txVolume->value()) / 100.0;
   changed=false;
   if(inputAudioDeviceCopy!=inputAudioDevice
      || outputAudioDeviceCopy!=outputAudioDevice

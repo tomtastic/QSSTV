@@ -12,6 +12,14 @@
 
 #define FASTCAPTURE
 
+template <typename T>
+T clamp(T value, T min, T max) {
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+}
+
+
 const QString captureStateStr[soundBase::CPEND+1]=
 {
   "Capture Init",
@@ -415,6 +423,14 @@ int soundBase::play()
         }
     }
   txBuffer.copyNoCheck(tempTXBuffer,numFrames);
+  // Apply volume scaling to the buffer
+    for (unsigned int i = 0; i < numFrames; i++) {
+        tempTXBuffer[i] = static_cast<qint16>(tempTXBuffer[i] * volumeFactor);
+
+        // Prevent overflow or underflow
+        tempTXBuffer[i] = clamp(static_cast<qint16>(tempTXBuffer[i]), static_cast<qint16>(-32768), static_cast<qint16>(32767));
+
+    }
   addToLog(QString("frames to write: %1 at %2 buffered:%3").arg(numFrames).arg(txBuffer.getReadIndex()).arg(txBuffer.count()),LOGSOUND);
 
   //  framesWritten=write(numFrames);

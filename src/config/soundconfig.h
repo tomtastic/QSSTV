@@ -16,6 +16,7 @@ extern QString outputAudioDevice;
 extern soundBase::edataSrc soundRoutingInput;
 extern soundBase::edataDst soundRoutingOutput;
 extern quint32 recordingSize;
+extern float volumeFactor;  // Add the global volumeFactor variable
 
 
 namespace Ui {

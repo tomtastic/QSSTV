@@ -248,67 +248,54 @@ bool  wavIO::openFileForWrite(QString fname,bool ask,bool isStereo)
   \return returns true the correct number of samples are written. false otherwise.
 */
 
-bool  wavIO::write(quint16 *dPtr, uint numSamples,bool isStereo)
-{
-  uint i;
-  int len;
-  quint16 *tempBufPtr;
-  len=numSamples*sizeof(quint16)*2; // we're outputting stereo
-  tempBufPtr=0;
-  quint16 *tmpPtr;
+bool wavIO::write(quint16 *dPtr, uint numSamples, bool isStereo) {
+    uint i;
+    int len;
+    quint16 *tempBufPtr = nullptr;
+    quint16 *tmpPtr = dPtr;
+    qDebug() << "TXVolume=" << volumeFactor;
+    len = numSamples * sizeof(quint16) * 2; // we're outputting stereo
 
-  tmpPtr=dPtr;
-
-
-  if((!writing)&&(numSamples!=0))
-    {
-      addToLog("wavio not open during write",LOGALL);
-      return true;
+    if (!writing && numSamples != 0) {
+        addToLog("wavio not open during write", LOGALL);
+        return true;
     }
-  if((!writing)&&(numSamples==0)) return true;
-  if(numSamples==0)
-    {
-      addToLog(QString("wavio write close samples=%1").arg(numberOfSamples),LOGWAVIO);
-      inopf.flush();
-      writeHeader();
-      closeFile();
-      return true;
+    if (!writing && numSamples == 0) return true;
+
+    if (numSamples == 0) {
+        addToLog(QString("wavio write close samples=%1").arg(numberOfSamples), LOGWAVIO);
+        inopf.flush();
+        writeHeader();
+        closeFile();
+        return true;
     }
 
-  // we need stereo output and input is mono
-
-
-  if(!isStereo)
-    {
-      tempBufPtr=new quint16 [numSamples*2];
-      tmpPtr=tempBufPtr;
-      for(i=0;i<numSamples;i++)
-        {
-          tempBufPtr[i*2]=dPtr[i];
-          tempBufPtr[i*2+1]=0;
+    // Create a stereo buffer if input is mono
+    if (!isStereo) {
+        tempBufPtr = new quint16[numSamples * 2];
+        tmpPtr = tempBufPtr;
+        for (i = 0; i < numSamples; i++) {
+            tempBufPtr[i * 2] = static_cast<quint16>(dPtr[i] * volumeFactor); // Apply volume scaling
+            tempBufPtr[i * 2 + 1] = static_cast<quint16>(dPtr[i] * volumeFactor); // Apply volume scaling
         }
-    }
-  else
-    {
-      tempBufPtr=new quint16 [numSamples*2];
-      tmpPtr=tempBufPtr;
-      for(i=0;i<numSamples*2;i++)
-        {
-          tempBufPtr[i]=dPtr[i];
+    } else {
+        tempBufPtr = new quint16[numSamples * 2];
+        tmpPtr = tempBufPtr;
+        for (i = 0; i < numSamples * 2; i++) {
+            tempBufPtr[i] = static_cast<quint16>(dPtr[i] * volumeFactor); // Apply volume scaling
         }
     }
 
-  if(inopf.write((char *)tmpPtr,len)!=len)
-    {
-      addToLog("wavio write error",LOGALL);
-      closeFile();
-      if(tempBufPtr) delete []tempBufPtr;
-      return false;
+    if (inopf.write((char *)tmpPtr, len) != len) {
+        addToLog("wavio write error", LOGALL);
+        closeFile();
+        if (tempBufPtr) delete[] tempBufPtr;
+        return false;
     }
-  numberOfSamples+=numSamples;
-  addToLog(QString("wavio write:%1 total samples=%2").arg(numSamples).arg(numberOfSamples),LOGWAVIO);
-  if(tempBufPtr) delete []tempBufPtr;
-  return true;
+    numberOfSamples += numSamples;
+    addToLog(QString("wavio write:%1 total samples=%2").arg(numSamples).arg(numberOfSamples), LOGWAVIO);
+    if (tempBufPtr) delete[] tempBufPtr;
+    return true;
 }
 
 

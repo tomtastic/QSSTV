@@ -46,6 +46,7 @@ SOURCES += main.cpp\
     config/directoriesconfig.cpp \
     config/configdialog.cpp \
     sound/soundbase.cpp \
+    sound/soundpulse.cpp \
     widgets/spectrumwidget.cpp \
     widgets/vumeter.cpp \
     widgets/fftdisplay.cpp \
@@ -214,6 +215,7 @@ HEADERS  += mainwindow.h \
     appdefs.h \
     config/configdialog.h \
     sound/soundbase.h \
+    sound/soundpulse.h \
     widgets/spectrumwidget.h \
     widgets/vumeter.h \
     widgets/fftdisplay.h \
@@ -588,7 +590,9 @@ DISTFILES += \
 
 INSTALLS += target
 
-LIBS +=  -lfftw3f \
+LIBS +=  -lpulse \
+         -lpulse-simple \
+         -lfftw3f \
          -lfftw3 \
          -lhamlib
 

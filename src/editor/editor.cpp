@@ -269,7 +269,6 @@ void editor::closeEvent(QCloseEvent *e)
       msgBox.setInformativeText("Do you want to save your changes?");
       msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
       msgBox.setDefaultButton(QMessageBox::Save);
-      msgBox.setStyleSheet("QLabel { color: black; }");
       int ret = msgBox.exec();
       switch (ret)
         {
