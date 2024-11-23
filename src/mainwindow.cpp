@@ -529,7 +529,7 @@ void mainWindow::timerEvent(QTimerEvent *)
     bool hasFrequency = rigControllerPtr->getFrequency(fr);
     bool hasMode = rigControllerPtr->getMode(currentMode);
 
-    qDebug() << "Freq:" << fr << " Mode:" << currentMode;
+    //qDebug() << "Freq:" << fr << " Mode:" << currentMode;
 
     if (hasFrequency && hasMode)
     {

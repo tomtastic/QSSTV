@@ -74,8 +74,13 @@ void soundConfig::readSettings()
   qSettings.beginGroup("SOUND");
   rxClock=qSettings.value("rxclock",BASESAMPLERATE).toDouble();
   txClock=qSettings.value("txclock",BASESAMPLERATE).toDouble();
+  qDebug() << "Loaded rxClock:" << rxClock;
+  qDebug() << "Loaded txClock:" << txClock;
+
   if(fabs(1-rxClock/BASESAMPLERATE)>0.002) rxClock=BASESAMPLERATE;
   if(fabs(1-txClock/BASESAMPLERATE)>0.002) txClock=BASESAMPLERATE;
+  
+  qDebug() << "Difference from BASESAMPLERATE (tx):" << fabs(1 - txClock / BASESAMPLERATE);
   samplingrate=BASESAMPLERATE;
   inputAudioDevice=qSettings.value("inputAudioDevice","default").toString();
   outputAudioDevice=qSettings.value("outputAudioDevice","default").toString();
@@ -98,6 +103,8 @@ void soundConfig::writeSettings()
   qSettings.beginGroup("SOUND");
   qSettings.setValue("rxclock",rxClock);
   qSettings.setValue("txclock",txClock);
+  qDebug() << "Saving txClock:" << txClock;
+
   qSettings.setValue("inputAudioDevice",inputAudioDevice);
   qSettings.setValue("outputAudioDevice",outputAudioDevice);
   qSettings.setValue("alsaSelected",alsaSelected);
@@ -116,6 +123,8 @@ void soundConfig::setParams()
 {
   setValue(rxClock,ui->inputClockLineEdit,9);
   setValue(txClock,ui->outputClockLineEdit,9);
+  qDebug() << "Setting txClock in GUI:" << txClock;
+
   setValue(inputAudioDevice,ui->inputPCMNameComboBox);
   setValue(outputAudioDevice,ui->outputPCMNameComboBox);
   setValue(alsaSelected,ui->alsaRadioButton);
@@ -146,7 +155,8 @@ void soundConfig::getParams()
   soundBase::edataDst soundRoutingOutputCopy=soundRoutingOutput;
 
   getValue(rxClock,ui->inputClockLineEdit);
-  getValue(txClock,ui->inputClockLineEdit);
+  getValue(txClock,ui->outputClockLineEdit);
+  qDebug() << "Fetched txClock from GUI:" << txClock;
   getValue(inputAudioDevice,ui->inputPCMNameComboBox);
   getValue(outputAudioDevice,ui->outputPCMNameComboBox);
   getValue(alsaSelected,ui->alsaRadioButton);

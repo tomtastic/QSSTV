@@ -237,6 +237,7 @@ void sstvRx::process()
   switch (SSTVState)
     {
     case HUNTING:
+    {
       if(syncProcPtr==NULL)
         {
           stce= new rxSSTVStatusEvent(QString("No sync"));
@@ -247,11 +248,12 @@ void sstvRx::process()
       stce= new rxSSTVStatusEvent(QString("Receiving ")+getSSTVModeNameLong(syncProcPtr->getMode()));
       lastUsedModeStr=getSSTVModeNameShort(syncProcPtr->getMode());
       QApplication::postEvent( dispatcherPtr, stce );  // Qt will delete it when done
+
       // fallthrough for first processing
       switchState(SLANTADJUST); // for logging
       // clear the call received via fskID
       emit (resetCall());
-
+    }
     case SLANTADJUST:
       sampleCounterLatch=syncProcPtr->sampleCounter; //remember where we've got
 //      ri=bufferVideoDemod.getReadIndex();

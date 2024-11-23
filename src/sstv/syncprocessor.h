@@ -1,6 +1,6 @@
 #ifndef SYNCPROCESSOR_H
 #define SYNCPROCESSOR_H
-
+#include <vector>
 #include <sstvparam.h>
 #include "visfskid.h"
 #include <QObject>
@@ -129,7 +129,11 @@ public:
   void recalculateMatchArray();
   DSPFLOAT getNewClock() {return modifiedClock;}
   void setSyncDetectionEnabled(bool enable) {enableSyncDetection=enable;}
+  // Checks if the prebuffer is ready for processing
+  bool isPrebufferReady() const;
 
+  // Returns the offset contributed by the prebuffer
+  quint32 getPrebufferOffset() const;
 
   quint32 sampleCounter;
   quint32 syncPosition;
@@ -182,7 +186,9 @@ private:
   sslantXY slantXYArray[MAXSYNCENTRIES];
   esstvMode visMode;
 
-  void extractSync();
+  void extractSync(DSPFLOAT* buffer, size_t length);           // Sync detection
+
+
   bool validateSync();
   bool findMatch();
   bool addToMatch(esstvMode mode);

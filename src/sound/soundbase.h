@@ -120,6 +120,13 @@ private:
   quint64 storedFrames;
   bool prebuf;
   unsigned int prevFrames;
+  float agcCurrentGain = 1.0f;        // Current AGC gain factor
+  float agcTargetAmplitude = 22937.6f;   // Target normalized amplitude (70% of full scale)
+  float agcAttackTime = 0.01f;       // Attack time in seconds
+  float agcReleaseTime = 0.1f;       // Release time in seconds
+  float agcMaxGain = 15.0f;          // Maximum allowed gain
+
+  void applyAGC(qint16 *buffer, int count);
 
 
 };

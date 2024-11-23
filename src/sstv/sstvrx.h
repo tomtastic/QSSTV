@@ -53,6 +53,7 @@ private:
   void rewindBuffers(uint rlen);
 
 
+
   //  DSPFLOAT rxHoldingBuffer[RXSTRIPE];
   buffer<quint16,22> bufferVideoDemod;  // 2^22= 4194304, divided by samplingrate 12000 gives 349 seconds buffering
   //  buffer<quint16,22> bufferSyncDemod;  // 2^22= 4194304, divided by samplingrate 12000 gives 349 seconds buffering
