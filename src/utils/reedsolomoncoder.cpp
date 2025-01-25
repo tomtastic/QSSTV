@@ -186,7 +186,7 @@ void reedSolomonCoder::distribute(unsigned char *src, unsigned char *dst, int ro
   rl = reverse ? cols : rows;
 
 
-  for(i=0;i<rc;i+=64) // ON4QZ changed from original- > using union gives problems with allignement
+  for(i=0;i<rc;i+=64) // ON4QZ changed from original- > using union gives problems with alignment
     {
       for(j=0;j<64 && i+j<rc;j++)
         {
