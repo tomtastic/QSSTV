@@ -465,9 +465,9 @@ See also \ref volume
    - To sound card: default
    - Playback: playback a wav-file (use 48000 samples per second recording in mono or stereo)
    - Playback and record: playback the sound and record at the same time.
- - Swap left and right channel
+- Swap left and right channel
     - If selected, audio will be sent on the right audio channel instead of the left channel (e.g. Kenwood transceivers using USB sound interfaces)
- - PTT tone on other audio channel
+- PTT tone on other audio channel
     - A tone will be sent on the right channel to enable PTT. If the above "Swap left and right channel" is selected, it will be sent on the left channel.
 
 Note: To playback an audio file, be sure the format is of type wav and has a samplerate of 48000 samples/second. You can always open the file with audacity and export the file to adapt the type and/or
@@ -634,8 +634,8 @@ See also \ref TXDRM
 \section Frequencies
 
 \image html config12.png
-<br><br>
-- List of selectable frequencies. Click Add to add a new combo frequency/mode/modulation/passband. Enter the frequency and select the mode, modulation and passband type.<br>
+
+- List of selectable frequencies. Click Add to add a new combo frequency/mode/modulation/passband. Enter the frequency and select the mode,modulation and passband type.<br>
 To move a frequency/mode/modulation/passband  up or down the list, click first on the entry in the table and then click on one of the arrow buttons.
 - Filter 1 will be selected if PKTxxx is used on ICOM (hamlib limitation).
 - Hamlib Data Command: (only used with Hamlib)
@@ -931,7 +931,7 @@ For the other icons and actions see also \ref TXSSTV
 <br>
 Mode Selection
 \image html txdrm_options.png
-<br>
+
 - Mode (A, B or E)
 - Bandwidth (2.2 kHz or 2.5 kHz)
 - Interleave (Short or Long)
