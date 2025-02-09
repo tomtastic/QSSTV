@@ -2,17 +2,14 @@
 QSSTV is a program for receiving and transmitting SSTV and HAMDRM (sometimes called DSSTV). It is compatible with most of MMSSTV and EasyPal
 
 ## Installation
-### Dependencies
-* pkg-config
-* g++
-* libfftw3-dev
-* qt5-default
-* hamlib-dev or libhamlib++-dev
-* libasound2-dev
-* libpulse-dev
-* libopenjp2-7
-* libopenjp2-7-dev
-* libv4l-dev
+
+### Dependencies 
+
+For apt based distros you can install dependencies as follows:
+
+```
+apt install pkg-config g++ libfftw3-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools libqt5svg5-dev libhamlib++-dev libasound2-dev libpulse-dev libopenjp2-7 libopenjp2-7-dev libv4l-dev build-essential
+```
 
 ### Compile and Install
 	mkdir src/build
@@ -33,7 +30,7 @@ If you want to be able to debug the program, the simplest way is to install QtCr
 
 `sudo apt-get install doxygen libqwt-qt5-dev`
 
-You can also run qmake with the following atributes:
+You can also run qmake with the following attributes:
 
 `qmake CONFIG+=debug`
 
