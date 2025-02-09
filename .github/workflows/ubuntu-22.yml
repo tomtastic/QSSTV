@@ -48,7 +48,7 @@ jobs:
           make
       - name: Archive build artifacts
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: build-linux-x86_64
           path: |
@@ -56,7 +56,7 @@ jobs:
             !**/*.d
             !**/*.o
       - name: Archive executables
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: qsstv-linux-x86_64
           path: |
