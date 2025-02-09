@@ -1,4 +1,4 @@
-name: Build-Ubuntu-22.04
+name: Build-Ubuntu-24.04
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
       - name: Install prerequisites
