@@ -33,10 +33,6 @@ jobs:
           libopenjp2-7-dev
           libpulse-dev
           libgl-dev
-
-          # see https://askubuntu.com/questions/1460242/ubuntu-22-04-with-qt6-qmake-could-not-find-a-qt-installation-of
-
-          qtchooser -install qt6 $(which qmake6)
       - name: Run Qmake
         run: >-
           mkdir src/build;
