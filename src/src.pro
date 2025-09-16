@@ -1,6 +1,7 @@
 QT       += core gui
+QT       += core5compat
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += svg widgets network xml
+greaterThan(QT_MAJOR_VERSION, 4): QT += svgwidgets widgets network xml
 
 #CONFIG += c++11 enablescope
 CONFIG += c++11 silent
