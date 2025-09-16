@@ -20,11 +20,24 @@ brew install fftw hamlib
 ```
 
 ### Compile and Install
-	mkdir src/build
-	cd src/build
+
+For Linux:
+```
+	mkdir build
+	cd build
 	qmake ..
 	make -j2
 	sudo make install
+
+For MacOS:
+```
+	mkdir build
+	cd build
+	qmake ../qsstv.pro
+	make -j8
+	sudo make install
+    open /usr/local/bin/qsstv.app
+```
 
 Note: make -j2, 2 is the number of cores to be used for parallel compiling. If you have more cores, use a higher number.
 
