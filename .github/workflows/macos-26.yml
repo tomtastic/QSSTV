@@ -1,0 +1,40 @@
+name: Build-Ubuntu-24.04
+
+on:
+  push:
+  pull_request:
+  merge_group:
+  workflow_call:
+
+jobs:
+  macos_build:
+    runs-on: macos-26
+      steps:
+      - name: Update Homebrew
+        run: |
+          brew update --preinstall
+
+      - name: Install Homebrew dependencies
+        run: |
+          env HOMEBREW_NO_AUTO_UPDATE=1 brew install fftw hamlib qt
+
+      - name: Run Qmake
+        run: >-
+          mkdir build;
+          cd build;
+          qmake6  ../qsstv.pro
+
+      - name: Build
+        run: >-
+          cd build;
+          make -j8;
+          cd src;
+          zip -9 -r qsstv_arm64.app.zip qsstv.app
+
+      - name: Upload zip
+      uses: actions/upload-artifact@4
+      with:
+        name: qsstv-app-zip
+        path: |
+          build/src/qsstv.app.zip
+        if-no-files-found: error
