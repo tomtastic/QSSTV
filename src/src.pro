@@ -30,7 +30,7 @@ PKGCONFIG += libopenjp2
 TARGET = qsstv
 
 
-SOURCES += main.cpp\
+SOURCES += main.cpp \
     drmtx/common/CDrmTransmitter.cpp \
     drmtx/common/DRMSignalIO.cpp \
     mainwindow.cpp \
@@ -449,38 +449,29 @@ OTHER_FILES += \
     icons/whatsthis.png \
     icons/binary.png
 
-
-
-contains(QMAKE_HOST.arch, arm.*):{
-        message(Compiling for arm processor -raspberry pi-)
-
-    }
-  else {
-       message(Compiling for x86)
-       CONFIG(debug ,debug|release){
+contains(QMAKE_HOST.arch, arm.*): {
+    message(Compiling for arm processor -raspberry pi-)
+} else {
+   message(Compiling for x86)
+   CONFIG(debug, debug|release) {
        dox.commands = cd $$PWD/documentation/manual ;doxygen  manual.y; cd $$PWD ;doxygen  $$PWD/documentation/api/api.doxy;
        dox.depends= FORCE
        PRE_TARGETDEPS       +=    dox
        message(dox will be generated)
-       }
-
-
+   }
+}
 
 isEmpty(PREFIX) {
         PREFIX = /usr/local
-    }
-target.path = $$PREFIX/bin
+}
 
+target.path = $$PREFIX/bin
 shortcutfiles.files =qsstv.desktop
 shortcutfiles.path = $$PREFIX/share/applications/
 data.files += icons/qsstv.png
 data.path=$$PREFIX/share/icons/hicolor/128x128/apps/
 
-
-
-RESOURCES += \
-    qsstv.qrc
-
+RESOURCES += qsstv.qrc
 
 INSTALLS += target
 
@@ -498,15 +489,13 @@ macx: LIBS += -framework AudioToolbox \
          -framework CoreAudio \
          -framework AVFoundation
 
-CONFIG(debug ,debug|release){
-
-SOURCES +=      scope/scopeoffset.cpp \
-                scope/scopeview.cpp \
-                scope/scopeplot.cpp
-HEADERS  += scope/scopeoffset.h \
-                scope/scopeview.h \
-                scope/scopeplot.h
-FORMS   += scope/scopeoffset.ui \
-                scope/plotform.ui
+CONFIG(debug ,debug|release) {
+    SOURCES +=      scope/scopeoffset.cpp \
+                    scope/scopeview.cpp \
+                    scope/scopeplot.cpp
+    HEADERS  += scope/scopeoffset.h \
+                    scope/scopeview.h \
+                    scope/scopeplot.h
+    FORMS   += scope/scopeoffset.ui \
+                    scope/plotform.ui
 }
-
