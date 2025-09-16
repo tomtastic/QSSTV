@@ -41,7 +41,7 @@ jobs:
           qmake6  ../qsstv.pro
       - name: Build
         run: >-
-          cd src/build;
+          cd build;
           make
       - name: Archive build artifacts
         if: always()
@@ -49,7 +49,7 @@ jobs:
         with:
           name: build-linux-x86_64
           path: |
-            src/build/
+            build/
             !**/*.d
             !**/*.o
       - name: Archive executables
@@ -57,4 +57,4 @@ jobs:
         with:
           name: qsstv-linux-x86_64
           path: |
-            src/build/qsstv
+            build/qsstv
