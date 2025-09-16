@@ -18,12 +18,15 @@ jobs:
           sudo apt-get install -y
           build-essential
           g++
+          qtbase5-dev
           qt6-base-dev
           qt6-l10n-tools
           qt6-multimedia-dev
           qt6-tools-dev-tools
           qt6-tools-dev
           qmake6
+          libqt5core5a
+          libqt5svg5-dev
           libqt6multimedia6
           libqt6serialport6-dev
           libqt6core5compat6
