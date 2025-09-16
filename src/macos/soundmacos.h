@@ -39,7 +39,7 @@ struct soundCard
 	bool SupportsOutput = false;
 };
 
-std::list<const soundCard> getCardList();
+std::list<soundCard> getCardList();
 
 soundBase *Create();
 

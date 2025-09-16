@@ -23,6 +23,12 @@ QMAKE_CXXFLAGS_RELEASE-= -O2
 QMAKE_CXXFLAGS_RELEASE += -O3 -Wno-implicit-fallthrough -Wno-psabi
 
 INCLUDEPATH += config dispatch drmrx drmtx dsp editor logbook mainwidgets  rig scope sound sstv utils widgets xmlrpc videocapt
+
+# Add Homebrew include path on macOS
+macx {
+    INCLUDEPATH += /opt/homebrew/include
+    LIBS += -L/opt/homebrew/lib
+}
 #QMAKE_LIBDIR += $$[QT_SYSROOT]/usr/local/lib
 
 CONFIG += link_pkgconfig
@@ -52,7 +58,6 @@ SOURCES += main.cpp \
     widgets/markerwidget.cpp \
     dsp/downsamplefilter.cpp \
     utils/arraydumper.cpp \
-    sound/soundalsa.cpp \
     sound/calibration.cpp \
     dsp/synthes.cpp \
     dsp/filterparam.cpp \
@@ -232,7 +237,6 @@ HEADERS  += mainwindow.h \
     dsp/nco.h \
     utils/macroexpansion.h \
     utils/arraydumper.h \
-    sound/soundalsa.h \
     sound/calibration.h \
     dsp/synthes.h \
     dsp/filterparam.h \

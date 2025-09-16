@@ -264,9 +264,9 @@ std::string getDeviceUID(AudioObjectID Id)
 	return to_string(DeviceName);
 }
 
-std::list<const soundCard> getCardList()
+std::list<soundCard> getCardList()
 {
-	std::list<const soundCard> ret;
+	std::list<soundCard> ret;
 
 	struct makeSoundCard:public soundCard
 	{
