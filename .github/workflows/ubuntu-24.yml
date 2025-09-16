@@ -26,6 +26,8 @@ jobs:
           qmake6
           libqt6multimedia6
           libqt6serialport6-dev
+          libqt6core5compat6
+          libqt6svgwidgets6
           linguist-qt6
           libhamlib-dev
           libv4l-dev
