@@ -28,6 +28,8 @@ INCLUDEPATH += config dispatch drmrx drmtx dsp editor logbook mainwidgets  rig s
 macx {
     INCLUDEPATH += /opt/homebrew/include
     LIBS += -L/opt/homebrew/lib
+    QMAKE_INFO_PLIST_OUT = $$OUT_PWD/Info.plist
+    QMAKE_POST_LINK += /usr/libexec/PlistBuddy -c \"Add :NSMicrophoneUsageDescription string 'QSSTV needs microphone access to receive and decode SSTV and DRM signals from your radio.'\" $$OUT_PWD/qsstv.app/Contents/Info.plist || true;
 }
 #QMAKE_LIBDIR += $$[QT_SYSROOT]/usr/local/lib
 
