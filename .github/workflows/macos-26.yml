@@ -1,4 +1,5 @@
-name: Build-Ubuntu-24.04
+---
+name: Build-macOS-26
 
 on:
   push:
@@ -9,7 +10,8 @@ on:
 jobs:
   macos_build:
     runs-on: macos-26
-      steps:
+    steps:
+      - uses: actions/checkout@v3
       - name: Update Homebrew
         run: |
           brew update --preinstall
@@ -32,9 +34,9 @@ jobs:
           zip -9 -r qsstv_arm64.app.zip qsstv.app
 
       - name: Upload zip
-      uses: actions/upload-artifact@4
-      with:
-        name: qsstv-app-zip
-        path: |
-          build/src/qsstv.app.zip
-        if-no-files-found: error
+      - uses: actions/upload-artifact@4
+        with:
+          name: qsstv-app-zip
+          path: |
+            build/src/qsstv.app.zip
+          if-no-files-found: error
