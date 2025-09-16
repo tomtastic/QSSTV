@@ -28,6 +28,7 @@ For Linux:
 	qmake ..
 	make -j2
 	sudo make install
+```
 
 For MacOS:
 ```
