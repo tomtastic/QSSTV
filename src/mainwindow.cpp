@@ -24,8 +24,10 @@
 #include "logging.h"
 #include "dispatch/dispatcher.h"
 #include "ui_mainwindow.h"
-#include "soundpulse.h"
-#ifndef __APPLE__
+#ifdef __APPLE__
+#  include "macos/soundmacos.h"
+#else
+#  include "soundpulse.h"
 #  include "soundalsa.h"
 #endif
 #include "configdialog.h"
@@ -114,12 +116,13 @@ mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
   txWidgetPtr=ui->txWindow;
   galleryWidgetPtr=ui->galleryWindow;
   readSettings();
-#ifndef __APPLE__
+#ifdef __APPLE__
+    soundIOPtr=soundMacos::Create();
+#else
   if(pulseSelected)
-#endif
     soundIOPtr=new soundPulse;
-#ifndef __APPLE__
-  else  soundIOPtr=new soundAlsa;
+  else
+    soundIOPtr=new soundAlsa;
 #endif
   dispatcherPtr=new dispatcher;
   waterfallPtr=new waterfallText;
@@ -135,6 +138,7 @@ mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
   connect(ui->actionAboutQSSTV, SIGNAL(triggered()),SLOT(slotAboutQSSTV()));
   connect(ui->actionAboutQt, SIGNAL(triggered()),SLOT(slotAboutQt()));
   connect(ui->actionUsersGuide, SIGNAL(triggered()),SLOT(slotDocumentation()));
+  connect(ui->actionSstvHandbook, SIGNAL(triggered()),SLOT(slotSstvHandbook()));
   connect(idPushButton, SIGNAL(clicked()), this, SLOT(slotSendWFID()));
   connect(cwPushButton, SIGNAL(clicked()), this, SLOT(slotSendCWID()));
   connect(bsrPushButton, SIGNAL(clicked()), this, SLOT(slotSendBSR()));
@@ -229,12 +233,13 @@ void mainWindow::restartSound(bool inStartUp)
       delete soundIOPtr;
       soundIOPtr=nullptr;
     }
-#ifndef __APPLE__
+#ifdef __APPLE__
+    soundIOPtr=soundMacos::Create();
+#else
   if(pulseSelected)
-#endif
     soundIOPtr=new soundPulse;
-#ifndef __APPLE__
-  else soundIOPtr=new soundAlsa;
+  else
+    soundIOPtr=new soundAlsa;
 #endif
   if(!soundIOPtr->init(BASESAMPLERATE))
     {
@@ -400,24 +405,40 @@ void mainWindow::slotResetLog()
 void mainWindow::slotDocumentation()
 {
   QDesktopServices::openUrl(docURL);
+}
 
+void mainWindow::slotSstvHandbook()
+{
+  QDesktopServices::openUrl(QString("https://www.sstv-handbook.com"));
 }
 
 
 
 void mainWindow::slotAboutQSSTV()
 {
-  QString temp=tr("QSSTV\nVersion: ") + MAJORVERSION + MINORVERSION;
-  temp += "\n https://www.qsl.net/o/on4qz \n(c) 2000-2019 -- Johan Maes - ON4QZ\n HAMDRM Software based on RX/TXAMADRM\n from PA0MBO";
+  QString temp=tr("<h1>QSSTV-macos</h1><br/>Version: ") + MAJORVERSION + MINORVERSION;
+  temp += "<br/><a href='https://www.qsl.net/o/on4qz/qsstv'>https://www.qsl.net/o/on4qz/qsstv</a><br/>"
+  "&#xa9; 2000-2019 &#x2014; Johan Maes &#x2013; ON4QZ"
+  "<p>HAMDRM Software based on RX/TXAMADRM from PA0MBO</p>"
+  "<p>MacOS audio support<br/>&#xa9; 2023 &#x2014; Mario Klebsch &#x2013; DG1AM</p>"
+  "<p>This program is free software: you can redistribute it and/or modify "
+  "it under the terms of the <a href='https://www.gnu.org/licenses/gpl-3.0-standalone.html'>GNU General Public License</a> as published by "
+  "the Free Software Foundation, either version 3 of the License, or "
+  "(at your option) any later version.</p>"
+  "<p>This program is distributed in the hope that it will be useful, "
+  "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+  "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the "
+  "GNU General Public License for more details.</p>"
+  "<p>The source code of QSSTV is available on <a href='https://github.com/ON4QZ/QSSTV'>https://github.com/ON4QZ/QSSTV</a>, "
+  "changes for MacOS X on <a href='https://github.com/MarioKlebsch/QSSTV-macos'>https://github.com/MarioKlebsch/QSSTV-macos</a>.</p>";
   QMessageBox::about(this,tr("About..."),temp);
-
 }
 
 void mainWindow::slotAboutQt()
 {
   QMessageBox::aboutQt(this,tr("About..."));
-
 }
+
 void mainWindow::setPTT(bool p)
 {
   if(p) pttIcon->setPixmap(*redPXMPtr);
