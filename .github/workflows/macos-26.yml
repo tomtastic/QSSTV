@@ -34,7 +34,7 @@ jobs:
           zip -9 -r qsstv_arm64.app.zip qsstv.app
 
       - name: Upload zip
-        uses: actions/upload-artifact@4
+        uses: actions/upload-artifact@v4
         with:
           name: qsstv-app-zip
           path: |
