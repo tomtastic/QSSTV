@@ -36,8 +36,8 @@ jobs:
           libgl-dev
       - name: Run Qmake
         run: >-
-          mkdir src/build;
-          cd src/build;
+          mkdir build;
+          cd build;
           qmake6  ../qsstv.pro
       - name: Build
         run: >-
