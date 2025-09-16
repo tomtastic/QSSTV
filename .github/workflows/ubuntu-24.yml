@@ -3,6 +3,7 @@ name: Build-Ubuntu-24.04
 on:
   push:
   pull_request:
+  merge_group:
   workflow_call:
 
 jobs:
