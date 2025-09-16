@@ -32,7 +32,7 @@ jobs:
       - name: Upload zip
         uses: actions/upload-artifact@v4
         with:
-          name: qsstv-app-zip
+          name: qsstv_arm64.app.zip
           path: |
-            build/src/qsstv.app.zip
+            build/src/qsstv_arm64.app.zip
           if-no-files-found: error
