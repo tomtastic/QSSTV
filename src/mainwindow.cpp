@@ -37,10 +37,10 @@
 #include "calibration.h"
 #include "frequencyselectwidget.h"
 #include "hexconvertor.h"
-#ifndef QT_NO_DEBUG
+#ifdef ENABLESCOPE
 #include "scope/scopeview.h"
-#endif
 #include "scope/scopeoffset.h"
+#endif
 #include "rxfunctions.h"
 #include "logbook.h"
 #include "testpatternselection.h"
@@ -159,7 +159,7 @@ mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
   ui->menuOptions->removeAction(ui->actionLogSettings);
   ui->menuOptions->removeAction(ui->actionResetLog);
 #endif
-#ifndef QT_NO_DEBUG
+#ifdef ENABLESCOPE
 
   connect(ui->actionShowDataScope, SIGNAL(triggered()),SLOT(slotShowDataScope()));
   connect(ui->actionShowSyncScopeNarrow, SIGNAL(triggered()),SLOT(slotShowSyncScopeNarrow()));
@@ -174,14 +174,10 @@ mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
   ui->menuScope->removeAction(ui->actionShowDataScope);
   ui->menuScope->removeAction(ui->actionShowSyncScopeNarrow);
   ui->menuScope->removeAction(ui->actionShowSyncScopeWide);
-
   ui->menuScope->removeAction(ui->actionScopeOffset);
   ui->menuScope->menuAction()->setVisible(false);
 
 #endif
-
-
-
 }
 
 /**
@@ -282,7 +278,6 @@ void mainWindow::readSettings()
   transmissionModeIndex=static_cast<etransmissionMode>(qSettings.value("transmissionModeIndex",0).toInt());
   qSettings.endGroup();
   ui->spectrumFrame->readSettings();
-  //  configDialogPtr->readSettings();
 }
 
 void mainWindow::writeSettings()
@@ -604,7 +599,7 @@ void mainWindow::slotFullScreen()
 
 
 
-#ifndef QT_NO_DEBUG
+#ifdef ENABLESCOPE
 
 void mainWindow::slotShowDataScope()
 {
@@ -622,7 +617,8 @@ void mainWindow::slotShowSyncScopeWide()
 
 void mainWindow::slotScopeOffset()
 {
-  dataScopeOffset=rxWidgetPtr->functionsPtr()->setOffset(dataScopeOffset,true);
+  uint dummy=0;
+  rxWidgetPtr->functionsPtr()->setScopeParam(dummy,dummy,true);
 }
 
 

@@ -1,5 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+#include "appglobal.h"
 
 #include <QMainWindow>
 #include <QComboBox>
@@ -49,7 +50,7 @@ private slots:
 
 
 
-#ifndef QT_NO_DEBUG
+#ifdef ENABLESCOPE
   void slotShowDataScope();
   void slotShowSyncScopeNarrow();
   void slotShowSyncScopeWide();
