@@ -178,10 +178,6 @@ SOURCES += main.cpp \
     config/repeaterconfig.cpp \
     config/waterfallconfig.cpp \
     utils/hybridcrypt.cpp \
-    videocapt/cameradialog.cpp \
-    videocapt/imagesettings.cpp \
-    videocapt/v4l2control.cpp \
-    videocapt/videocapture.cpp \
     sstv/visfskid.cpp \
     dsp/filters.cpp \
     dsp/filter.cpp \
@@ -357,10 +353,6 @@ HEADERS  += mainwindow.h \
     config/repeaterconfig.h \
     config/waterfallconfig.h \
     utils/hybridcrypt.h \
-    videocapt/cameradialog.h \
-    videocapt/imagesettings.h \
-    videocapt/v4l2control.h \
-    videocapt/videocapture.h \
     sstv/visfskid.h \
     dsp/filters.h \
     dsp/filter.h \
@@ -412,8 +404,6 @@ FORMS += mainwindow.ui \
     mainwidgets/txwidget.ui \
     widgets/freqform.ui \
     rig/freqdisplay.ui \
-    videocapt/cameradialog.ui \
-    videocapt/imagesettings.ui \
     widgets/drmsegmentsview.ui \
     drmrx/fixform.ui \
     config/frequencyselectwidget.ui \
