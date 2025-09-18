@@ -1,5 +1,7 @@
 ---
 name: Build-macOS-26
+permissions:
+  contents: read
 
 on:
   push:
