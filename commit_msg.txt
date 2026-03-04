@@ -1,16 +1,15 @@
-Fix wavio.cpp dirDialog constructor calls
+Fix build #30: Use reinterpret_cast for mainWindowPtr
 
-Fixes remaining build errors from C-style cast removal in commit a44bee3.
+Build #30 failed because static_cast requires the full type definition
+to verify inheritance relationships, but mainWindow is only forward-declared
+in appglobal.h.
 
-The issue: mainWindowPtr is only forward-declared in appglobal.h, not
-fully defined. When we removed the (QWidget*) cast, the compiler couldn't
-verify that mainWindow* is convertible to QWidget*.
+Changed from static_cast to reinterpret_cast in wavio.cpp:
+- Line 76: dirDialog d(reinterpret_cast<QWidget*>(mainWindowPtr), ...)
+- Line 208: dirDialog d(reinterpret_cast<QWidget*>(mainWindowPtr), ...)
 
-Solution: Use static_cast<QWidget*> instead of removing the cast entirely.
-This provides type safety while still allowing the conversion.
+reinterpret_cast doesn't require the full type definition and is appropriate
+here since we know at runtime that mainWindow inherits from QWidget, even
+though the compiler can't verify it at this point in the translation unit.
 
-Changed in wavio.cpp:
-- Line 76: dirDialog d(static_cast<QWidget*>(mainWindowPtr), "Wave file")
-- Line 208: dirDialog d(static_cast<QWidget*>(mainWindowPtr), "wave IO")
-
-This completes the C-style cast modernization from commit a44bee3.
+This is the correct solution for the forward-declaration scenario.

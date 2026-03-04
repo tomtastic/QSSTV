@@ -73,7 +73,7 @@ bool  wavIO::openFileForRead(QString fname,bool ask)
 
   if (ask)
     {
-      dirDialog d(static_cast<QWidget*>(mainWindowPtr),"Wave file");
+      dirDialog d(reinterpret_cast<QWidget*>(mainWindowPtr),"Wave file");
       QString s=d.openFileName(audioPath,"*");
       if (s.isNull()) return false;
       if (s.isEmpty()) return false;
@@ -205,7 +205,7 @@ bool  wavIO::openFileForWrite(QString fname,bool ask,bool isStereo)
   QFileInfo fin;
   if (ask)
     {
-      dirDialog d(static_cast<QWidget*>(mainWindowPtr),"wave IO");
+      dirDialog d(reinterpret_cast<QWidget*>(mainWindowPtr),"wave IO");
       QString fn=d.saveFileName(audioPath,"*.wav","wav");
       if(fn.isEmpty()) return false;
       inopf.setFileName(fn);
