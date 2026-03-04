@@ -139,9 +139,9 @@ V4L2IntegerControl::V4L2IntegerControl
   le->setValidator(new QIntValidator(minimum, maximum, this));
   this->layout.addWidget(le);
 
-  QObject::connect( sl, SIGNAL(valueChanged(int)),this, SLOT(SetValueFromSlider()) );
-  QObject::connect( sl, SIGNAL(sliderReleased()), this, SLOT(SetValueFromSlider()) );
-  QObject::connect( le, SIGNAL(returnPressed()),  this, SLOT(SetValueFromText()) );
+  QObject::connect(sl, &QSlider::valueChanged, this, &V4L2IntegerControl::SetValueFromSlider);
+  QObject::connect(sl, &QSlider::sliderReleased, this, &V4L2IntegerControl::SetValueFromSlider);
+  QObject::connect(le, &QLineEdit::returnPressed, this, &V4L2IntegerControl::SetValueFromText);
   updateStatus();
 }
 
@@ -213,7 +213,7 @@ V4L2BooleanControl::V4L2BooleanControl
   cb(new QCheckBox(this))
 {
   this->layout.addWidget(cb);
-  QObject::connect( cb, SIGNAL(clicked()), this, SLOT(updateHardware()) );
+  QObject::connect(cb, &QCheckBox::clicked, this, &V4L2BooleanControl::updateHardware);
   updateStatus();
 }
 
@@ -261,8 +261,7 @@ V4L2MenuControl::V4L2MenuControl(int fd, const struct v4l2_queryctrl &ctrl, QWid
     }
 //  cb->setCurrentIndex(defIdx);
   setValue(defIdx);
-  QObject::connect( cb, SIGNAL(activated(int)),
-                    this, SLOT(menuActivated(int)) );
+  QObject::connect(cb, QOverload<int>::of(&QComboBox::activated), this, &V4L2MenuControl::menuActivated);
   updateStatus();
   updateHardware();
 }
@@ -292,7 +291,7 @@ V4L2ButtonControl::V4L2ButtonControl
 {
   QPushButton *pb = new QPushButton((const char *)ctrl.name, this);
   this->layout.addWidget(pb);
-  QObject::connect( pb, SIGNAL(clicked()), this, SLOT(updateHardware()) );
+  QObject::connect(pb, &QPushButton::clicked, this, &V4L2ButtonControl::updateHardware);
 }
 
 void V4L2ButtonControl::updateStatus()

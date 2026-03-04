@@ -77,12 +77,12 @@ syncProcessor::syncProcessor(bool narrow, QObject *parent) :  QObject(parent),st
   //  syncFound=false;
   if(!detectNarrow)
   {
-    connect(streamDecode.getFskDecoderPtr(),SIGNAL(callReceived(QString)),SLOT(slotNewCall(QString)));
-    connect(streamDecode.getVisDecoderPtr(),SIGNAL(visCodeWideDetected(int,uint)),SLOT(slotVisCodeDetected(int,uint)));
+    connect(streamDecode.getFskDecoderPtr(), &fskDecoder::callReceived, this, &syncProcessor::slotNewCall);
+    connect(streamDecode.getVisDecoderPtr(), &visDecoder::visCodeWideDetected, this, &syncProcessor::slotVisCodeDetected);
   }
   else
   {
-    connect(streamDecode.getVisDecoderPtr(),SIGNAL(visCodeNarrowDetected(int,uint)),SLOT(slotVisCodeDetected(int,uint)));
+    connect(streamDecode.getVisDecoderPtr(), &visDecoder::visCodeNarrowDetected, this, &syncProcessor::slotVisCodeDetected);
   }
 }
 

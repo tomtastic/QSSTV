@@ -44,7 +44,7 @@ sourceDecoder::sourceDecoder(QObject *parent) : QObject(parent)
 {
   transportBlockPtrList.clear();
   ff=new ftpFunctions;
-  connect(ff,SIGNAL(downloadDone(bool,QString)),SLOT(slotDownloadDone(bool,QString)));
+  connect(ff, &ftpFunctions::downloadDone, this, &sourceDecoder::slotDownloadDone);
 
 }
 
