@@ -1,24 +1,16 @@
-Fix build failure: Update .cpp implementations to match header signatures
+Fix wavio.cpp dirDialog constructor calls
 
-This fixes build #27 failure caused by mismatched function signatures
-between header and implementation files.
+Fixes remaining build errors from C-style cast removal in commit a44bee3.
 
-When we changed headers to use const QString & parameters, we forgot
-to update the corresponding .cpp implementations, causing compilation
-errors:
-- error: out-of-line definition does not match any declaration
+The issue: mainWindowPtr is only forward-declared in appglobal.h, not
+fully defined. When we removed the (QWidget*) cast, the compiler couldn't
+verify that mainWindow* is convertible to QWidget*.
 
-Fixed implementations in:
-- soundbase.cpp: errorHandler(const QString &, const QString &)
-- vumeter.cpp: setLabelText(const QString &)
-- textdisplay.cpp: append(const QString &)
-- extviewer.cpp: setup(const QString &)
-- waterfalltext.cpp: setText/getDuration(const QString &)
-- imageviewer.cpp: save/setParam(const QString &)
-- rxwidget.cpp: setSSTVStatusText/setOnlineStatus(const QString &)
-- txwidget.cpp: setImage/setPreviewWidget/startNotifyCheck(const QString &)
-- gallerywidget.cpp: putRxImage(const QString &)
-- arraydumper.cpp: All 6 arrayDump overloads(const QString &)
-- supportfunctions.cpp: setValue(const QString &)
+Solution: Use static_cast<QWidget*> instead of removing the cast entirely.
+This provides type safety while still allowing the conversion.
 
-This completes the pass-by-const-reference refactoring from commit d73df5c.
+Changed in wavio.cpp:
+- Line 76: dirDialog d(static_cast<QWidget*>(mainWindowPtr), "Wave file")
+- Line 208: dirDialog d(static_cast<QWidget*>(mainWindowPtr), "wave IO")
+
+This completes the C-style cast modernization from commit a44bee3.
