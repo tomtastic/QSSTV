@@ -28,6 +28,7 @@ public slots:
   void slotEnableCAT();
   void slotEnablePTT();
   void slotEnableXMLRPC();
+  void slotEnableHamlibNet();
   void slotRestart();
   void slotCheckPTT0();
   void slotCheckPTT1();

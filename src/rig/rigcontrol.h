@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <QComboBox>
+#include <QTcpSocket>
 
 extern "C" int write_block(hamlib_port_t *p, const char *txbuffer, size_t count);
 extern "C" int read_block(hamlib_port_t *p, char *rxbuffer, size_t count);
@@ -39,6 +40,11 @@ struct scatParams
   bool enableXMLRPC;
   int XMLRPCPort;
   double txOnDelay;
+
+  // Network control settings
+  bool enableHamlibNetworkControl;
+  QString hamlibHost;
+  int hamlibPort;
 
 };
 
@@ -88,6 +94,13 @@ private:
   bool canGetMode;
   bool canSetPTT;
   bool canGetPTT;
+
+  // Hamlib network control members
+  QTcpSocket *hamlibSocket;
+  
+  bool initHamlibNetwork();
+  bool sendHamlibCommand(const QString &command);
+  QString readHamlibResponse();
 };
 
 

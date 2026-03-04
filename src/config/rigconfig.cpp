@@ -35,6 +35,7 @@ rigConfig::rigConfig(QWidget *parent) : baseConfig(parent),  ui(new Ui::rigConfi
   connect(ui->enableCATCheckBox,SIGNAL(clicked()),SLOT(slotEnableCAT()));
   connect(ui->enablePTTCheckBox,SIGNAL(clicked()),SLOT(slotEnablePTT()));
   connect(ui->enableXMLRPCCheckBox,SIGNAL(clicked()),SLOT(slotEnableXMLRPC()));
+  connect(ui->enableHamlibNetCheckBox,SIGNAL(clicked()),SLOT(slotEnableHamlibNet()));
   connect(ui->restartPushButton,SIGNAL(clicked()),SLOT(slotRestart()));
   connect(ui->RTSCheckBox,SIGNAL(clicked()),SLOT(slotCheckPTT0()));
   connect(ui->DTRCheckBox,SIGNAL(clicked()),SLOT(slotCheckPTT1()));
@@ -79,6 +80,9 @@ void rigConfig::readSettings()
   cp->XMLRPCPort=qSettings.value("XMLRPCPort","7362").toInt();
   cp->txOnDelay=qSettings.value("txOnDelay",0.0).toDouble();
   cp->pttType=(ptt_type_t)qSettings.value("pttType",(int)RIG_PTT_RIG).toInt();
+  cp->enableHamlibNetworkControl=qSettings.value("enableHamlibNetworkControl",0).toBool();
+  cp->hamlibHost=qSettings.value("hamlibHost","localhost").toString();
+  cp->hamlibPort=qSettings.value("hamlibPort",4532).toInt();
   qSettings.endGroup();
   setParams();
 }
@@ -107,6 +111,9 @@ void rigConfig::writeSettings()
   qSettings.setValue("enableXMLRPC",cp->enableXMLRPC);
   qSettings.setValue("XMLRPCPort",cp->XMLRPCPort);
   qSettings.setValue("txOnDelay",cp->txOnDelay);
+  qSettings.setValue("enableHamlibNetworkControl",cp->enableHamlibNetworkControl);
+  qSettings.setValue("hamlibHost",cp->hamlibHost);
+  qSettings.setValue("hamlibPort",cp->hamlibPort);
   qSettings.endGroup();
 }
 
@@ -137,6 +144,9 @@ void rigConfig::getParams()
   getValue(cp->txOnDelay,ui->txOnDelayDoubleSpinBox);
   getValue(cp->enableXMLRPC,ui->enableXMLRPCCheckBox);
   getValue(cp->XMLRPCPort,ui->XMLRPCPortLineEdit);
+  getValue(cp->enableHamlibNetworkControl,ui->enableHamlibNetCheckBox);
+  getValue(cp->hamlibHost,ui->hamlibHostLineEdit);
+  getValue(cp->hamlibPort,ui->hamlibPortLineEdit);
   changed=false;
   if( cpCopy->serialPort!=cp->serialPort
       || cpCopy->radioModel!=cp->radioModel
@@ -155,6 +165,9 @@ void rigConfig::getParams()
       || cpCopy->pttType!=cp->pttType
       || cpCopy->enableXMLRPC!=cp->enableXMLRPC
       || cpCopy->XMLRPCPort!=cp->XMLRPCPort
+      || cpCopy->enableHamlibNetworkControl!=cp->enableHamlibNetworkControl
+      || cpCopy->hamlibHost!=cp->hamlibHost
+      || cpCopy->hamlibPort!=cp->hamlibPort
       )
     changed=true;
   delete cpCopy;
@@ -210,6 +223,9 @@ void rigConfig::setParams()
   setValue(cp->txOnDelay,ui->txOnDelayDoubleSpinBox);
   setValue(cp->enableXMLRPC,ui->enableXMLRPCCheckBox);
   setValue(cp->XMLRPCPort,ui->XMLRPCPortLineEdit);
+  setValue(cp->enableHamlibNetworkControl,ui->enableHamlibNetCheckBox);
+  setValue(cp->hamlibHost,ui->hamlibHostLineEdit);
+  setValue(cp->hamlibPort,ui->hamlibPortLineEdit);
 }
 
 
@@ -264,6 +280,16 @@ void rigConfig::slotEnableXMLRPC()
 {
   ui->enableCATCheckBox->setChecked(false);
   ui->enablePTTCheckBox->setChecked(false);
+}
+
+void rigConfig::slotEnableHamlibNet()
+{
+  if(ui->enableHamlibNetCheckBox->isChecked())
+    {
+      ui->enableCATCheckBox->setChecked(false);
+      ui->enableXMLRPCCheckBox->setChecked(false);
+    }
+  getParams();
 }
 
 void rigConfig::slotRestart()

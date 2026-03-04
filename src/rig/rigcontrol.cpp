@@ -77,10 +77,19 @@ rigControl::rigControl(int radioIndex)
   serialP=0;
   lastFrequency=0.0;
   xmlModes<<"USB"<<"LSB"<<"FM"<<"AM";
+  hamlibSocket=nullptr;
 }
 
 rigControl::~rigControl()
 {
+  if(hamlibSocket)
+  {
+    if(hamlibSocket->isOpen())
+    {
+      hamlibSocket->close();
+    }
+    delete hamlibSocket;
+  }
   rig_close(my_rig); /* close port */
   rig_cleanup(my_rig); /* if you care about memory */
 }
@@ -157,6 +166,29 @@ bool rigControl::init()
 bool rigControl::getFrequency(double &frequency)
 {
   int retcode;
+  
+  // Check for Hamlib network control first
+  if(catParams.enableHamlibNetworkControl)
+  {
+    if(!sendHamlibCommand("f"))  // 'f' command to get frequency
+    {
+      return false;
+    }
+    QString response = readHamlibResponse();
+    if(!response.isEmpty() && response != "RPRT -1")
+    {
+      bool ok;
+      double freq = response.toDouble(&ok);
+      if(ok)
+      {
+        frequency = freq;
+        lastFrequency = freq;
+        return true;
+      }
+    }
+    return false;
+  }
+  
   if(catParams.enableXMLRPC)
     {
       frequency=xmlIntfPtr->getFrequency();
@@ -185,6 +217,23 @@ bool rigControl::getFrequency(double &frequency)
 bool rigControl::setFrequency(double frequency)
 {
   int retcode=-1;
+  
+  // Check for Hamlib network control first
+  if(catParams.enableHamlibNetworkControl)
+  {
+    QString cmd = QString("F %1").arg((qint64)frequency);
+    if(sendHamlibCommand(cmd))
+    {
+      QString response = readHamlibResponse();
+      if(response == "RPRT 0")  // Success response
+      {
+        lastFrequency = frequency;
+        return true;
+      }
+    }
+    return false;
+  }
+  
   if(catParams.enableXMLRPC)
     {
       xmlIntfPtr->setFrequency(frequency);
@@ -219,6 +268,27 @@ void rigControl::disable()
 
 bool rigControl::getMode(QString &mode)
 {
+  // Check for Hamlib network control first
+  if(catParams.enableHamlibNetworkControl)
+  {
+    if(!sendHamlibCommand("m"))  // 'm' command to get mode
+    {
+      return false;
+    }
+    QString response = readHamlibResponse();
+    if(!response.isEmpty() && response != "RPRT -1")
+    {
+      // Response format is "MODE\nPASSBAND" - we only need the mode
+      QStringList parts = response.split('\n');
+      if(!parts.isEmpty())
+      {
+        mode = parts.at(0);
+        return true;
+      }
+    }
+    return false;
+  }
+  
   if(catParams.enableXMLRPC)
     {
       mode =xmlIntfPtr->getMode();
@@ -252,6 +322,29 @@ bool rigControl::setMode(QString mode,QString passBand)
   int pb;
   int i;
   int pos=-1;
+  
+  // Check for Hamlib network control first
+  if(catParams.enableHamlibNetworkControl)
+  {
+    // Convert passband to numeric value (0 for normal)
+    int pbValue = 0;
+    if(passBand == "Narrow")
+      pbValue = 200;  // Narrow passband
+    else if(passBand == "Wide")
+      pbValue = 3000;  // Wide passband
+    
+    QString cmd = QString("M %1 %2").arg(mode).arg(pbValue);
+    if(sendHamlibCommand(cmd))
+    {
+      QString response = readHamlibResponse();
+      if(response == "RPRT 0")  // Success response
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+  
   if(catParams.enableXMLRPC)
     {
       orgMode=xmlIntfPtr->getMode();
@@ -301,6 +394,21 @@ bool rigControl::setMode(QString mode,QString passBand)
 
 bool rigControl::setPTT(bool on)
 {
+  // Check for Hamlib network control first
+  if(catParams.enableHamlibNetworkControl)
+  {
+    QString cmd = QString("T %1").arg(on ? 1 : 0);
+    if(sendHamlibCommand(cmd))
+    {
+      QString response = readHamlibResponse();
+      if(response == "RPRT 0")  // Success response
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+  
   int retcode;
   ptt_t ptt;
   /* Hamlib will fall back to RIG_PTT_ON if RIG_PTT_ON_DATA is not available in current hamlib configuration */
@@ -505,4 +613,59 @@ int  rigControl::rawCommand(QByteArray ba)
   read_block(&rs->rigport,rxBuffer,99);
   return result;
 
+}
+
+
+// Hamlib Network Control Functions
+
+bool rigControl::initHamlibNetwork()
+{
+  // Check if socket is open and close if needed
+  if(hamlibSocket && hamlibSocket->isOpen())
+  {
+    hamlibSocket->close();
+  }
+
+  // Initialize the socket if it doesn't exist
+  if(!hamlibSocket)
+  {
+    hamlibSocket = new QTcpSocket(this);
+  }
+
+  // Connect to the host and port specified in config
+  hamlibSocket->connectToHost(catParams.hamlibHost, catParams.hamlibPort);
+
+  // Check if connected successfully
+  if(!hamlibSocket->waitForConnected(3000))  // 3-second timeout
+  {
+    initError = QString("Failed to connect to Hamlib server at %1:%2").arg(catParams.hamlibHost).arg(catParams.hamlibPort);
+    return false;
+  }
+
+  return true;
+}
+
+bool rigControl::sendHamlibCommand(const QString &command)
+{
+  if(!hamlibSocket || !hamlibSocket->isOpen())
+  {
+    if(!initHamlibNetwork())
+    {
+      return false;
+    }
+  }
+
+  QString fullCommand = command + "\n";  // Hamlib expects commands with newline
+  hamlibSocket->write(fullCommand.toUtf8());
+
+  return hamlibSocket->waitForBytesWritten(1000);  // 1-second timeout for writing
+}
+
+QString rigControl::readHamlibResponse()
+{
+  if(hamlibSocket && hamlibSocket->waitForReadyRead(1000))  // 1-second timeout for reading
+  {
+    return QString::fromUtf8(hamlibSocket->readAll()).trimmed();
+  }
+  return QString();
 }
