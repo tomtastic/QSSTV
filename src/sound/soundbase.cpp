@@ -184,6 +184,8 @@ int soundBase::capture()
           storedFrames+=count;
         }
     }
+  applyAGC(tempRXBuffer, count);
+
   downsampleFilterPtr->downSample4(tempRXBuffer);
   volume=downsampleFilterPtr->avgVolumeDb;
   rxBuffer.putNoCheck(downsampleFilterPtr->filteredDataPtr(),RXSTRIPE);
@@ -448,4 +450,49 @@ void soundBase::switchPlaybackState(eplaybackState ps)
 {
   addToLog(QString("Switching from playbackState %1 to %2").arg(playbackStateStr[playbackState]).arg(playbackStateStr[ps]),LOGSOUND);
   playbackState=ps;
+}
+
+void soundBase::applyAGC(qint16 *buffer, int count)
+{
+  float alphaAttack = 1.0f - exp(-1.0f / (agcAttackTime * sampleRate));
+  float alphaRelease = 1.0f - exp(-1.0f / (agcReleaseTime * sampleRate));
+
+  float peakLevel = 0.0f; // Keep track of the peak level in the buffer
+
+  for (int i = 0; i < count; i++)
+  {
+    // Calculate the absolute value of the current sample
+    float sample = static_cast<float>(buffer[i]);
+    float level = fabs(sample);
+
+    // Update peak level using a simple exponential smoothing
+    peakLevel = (level > peakLevel)
+                    ? level // Immediate rise for strong signals
+                    : peakLevel * (1.0f - alphaRelease);
+
+    // Calculate target gain based on the smoothed peak level
+    float targetGain = agcTargetAmplitude / (peakLevel + 1e-6f); // Prevent division by zero
+    targetGain = std::min(targetGain, agcMaxGain);               // Limit the maximum gain
+
+    // Smooth the gain adjustment
+    if (targetGain > agcCurrentGain)
+    {
+      agcCurrentGain += alphaAttack * (targetGain - agcCurrentGain);
+    }
+    else
+    {
+      agcCurrentGain += alphaRelease * (targetGain - agcCurrentGain);
+    }
+
+    // Apply the calculated gain
+    sample *= agcCurrentGain;
+
+    // Clamp the output to prevent overflow
+    if (sample > 32767.0f)
+      sample = 32767.0f;
+    else if (sample < -32768.0f)
+      sample = -32768.0f;
+
+    buffer[i] = static_cast<qint16>(sample);
+  }
 }
