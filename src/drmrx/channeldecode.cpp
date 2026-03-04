@@ -138,7 +138,6 @@ void channel_decoding(void)
   static double res_iters, calc_variance;
   static double noise_signal[2 * 2959];
   static double squared_noise_signal[2959];
-  double sum2;
   double weighted_noise_power_density[288];
   double samples_resorted[288][15];
   int posrow, poscolumn, totindex;
@@ -795,7 +794,6 @@ void channel_decoding(void)
                          &calc_variance, noise_signal);
           length_decoded_data = n_SPPhard;
           sum1 = 0.0;
-          sum2 = 0.0;
           for (i = 0; i < lMSC; i++)
             {
               squared_noise_signal[i] =
@@ -807,12 +805,6 @@ void channel_decoding(void)
                   1] * transfer_function_MSC[2 * i +
                   1]) *
                   squared_noise_signal[i];
-              sum2 +=
-                  (transfer_function_MSC[2 * i] * transfer_function_MSC[2 * i] +
-                  transfer_function_MSC[2 * i +
-                  1] * transfer_function_MSC[2 * i +
-                  1]) *
-                  mean_energy_of_used_cells;
             }
 
           //	  calc_weighted_variance = sum1 / sum2;

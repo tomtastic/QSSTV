@@ -104,7 +104,7 @@ void CMOTSlideShowEncoder::AddNextPicture ()
       MOTPicture.strName = strCurObjName;
       MOTPicture.strFormat = vecPicFileNames[iPictureCnt].format.toLatin1().data();
       MOTPicture.vecbRawData.Init (0);
-      for(i=0;i<vecPicFileNames[iPictureCnt].arrayPtr->count();i++)
+      for(i=0;i<vecPicFileNames[iPictureCnt].arrayPtr->size();i++)
          {
            byteIn=vecPicFileNames[iPictureCnt].arrayPtr->at(i);
 //            byteIn=0;

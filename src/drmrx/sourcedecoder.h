@@ -70,12 +70,12 @@ struct dataPacket
   unsigned int advance(int numBytes)
   {
     ba.remove(0,numBytes);
-    return ba.count();
+    return ba.size();
   }
   unsigned int chop(int numBytes)
   {
     ba.chop(numBytes);
-    return ba.count();
+    return ba.size();
   }
 
 };
