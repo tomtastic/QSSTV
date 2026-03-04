@@ -306,7 +306,8 @@ QString txWidget::getPreviewFilename()
 void  txWidget::setPreviewWidget(const QString &fn)
 {
   addToLog(QString("previewfile: %1").arg(fn),LOGTXMAIN);
-  ui->previewWidget->openImage(fn,false,false,false,true);
+  QString filename = fn;  // Create non-const copy for openImage
+  ui->previewWidget->openImage(filename,false,false,false,true);
 }
 
 
@@ -613,7 +614,8 @@ void txWidget::updateTxTime()
 void 	txWidget::setImage(const QString &fn)
 {
   addToLog(QString("setImage %1").arg(fn),LOGTXMAIN);
-  imageViewerPtr->openImage(fn,true,true,false,true);
+  QString filename = fn;  // Create non-const copy for openImage
+  imageViewerPtr->openImage(filename,true,true,false,true);
   addToLog(QString("setImage %1 done").arg(fn),LOGTXMAIN);
 
 }
