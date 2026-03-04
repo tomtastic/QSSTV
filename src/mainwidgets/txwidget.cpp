@@ -42,50 +42,50 @@ txWidget::txWidget(QWidget *parent) :  QWidget(parent), ui(new Ui::txWidget)
   ui->sstvResizeComboBox->addItem("Crop");
   ui->sstvResizeComboBox->addItem("Fit");
 
-  connect(ui->sstvModeComboBox,SIGNAL(activated(int)),SLOT(slotModeChanged(int )));
-  connect(ui->sstvResizeComboBox,SIGNAL(activated(int)),SLOT(slotResizeChanged(int)));
+  connect(ui->sstvModeComboBox, QOverload<int>::of(&QComboBox::activated), this, &txWidget::slotModeChanged);
+  connect(ui->sstvResizeComboBox, QOverload<int>::of(&QComboBox::activated), this, &txWidget::slotResizeChanged);
 
-  connect(ui->drmTxBandwidthComboBox,SIGNAL(activated(int)),SLOT(slotGetTXParams()));
-  connect(ui->drmTxInterleaveComboBox,SIGNAL(activated(int)),SLOT(slotGetTXParams()));
-  connect(ui->drmTxProtectionComboBox,SIGNAL(activated(int)),SLOT(slotGetTXParams()));
-  connect(ui->drmTxQAMComboBox,SIGNAL(activated(int)),SLOT(slotGetTXParams()));
-  connect(ui->drmTxModeComboBox,SIGNAL(activated(int)),SLOT(slotGetTXParams()));
-  connect(ui->drmTxReedSolomonComboBox,SIGNAL(activated(int)),SLOT(slotGetTXParams()));
+  connect(ui->drmTxBandwidthComboBox, QOverload<int>::of(&QComboBox::activated), this, &txWidget::slotGetTXParams);
+  connect(ui->drmTxInterleaveComboBox, QOverload<int>::of(&QComboBox::activated), this, &txWidget::slotGetTXParams);
+  connect(ui->drmTxProtectionComboBox, QOverload<int>::of(&QComboBox::activated), this, &txWidget::slotGetTXParams);
+  connect(ui->drmTxQAMComboBox, QOverload<int>::of(&QComboBox::activated), this, &txWidget::slotGetTXParams);
+  connect(ui->drmTxModeComboBox, QOverload<int>::of(&QComboBox::activated), this, &txWidget::slotGetTXParams);
+  connect(ui->drmTxReedSolomonComboBox, QOverload<int>::of(&QComboBox::activated), this, &txWidget::slotGetTXParams);
 
-  connect(ui->templatesComboBox,SIGNAL(currentIndexChanged(int)),SLOT(slotGetParams()));
-  connect(ui->templateCheckBox,SIGNAL(toggled(bool)),SLOT(slotGetParams()));
-  connect(ui->refreshPushButton,SIGNAL(clicked()),SLOT(slotGetParams()));
-  connect(ui->cwCheckBox,SIGNAL(toggled(bool)),SLOT(slotGetTXParams()));
-  connect(ui->voxCheckBox,SIGNAL(toggled(bool)),SLOT(slotGetTXParams()));
-  connect(ui->toCallLineEdit,SIGNAL(editingFinished ()),SLOT(slotGetParams()));
-  connect(ui->operatorLineEdit,SIGNAL(editingFinished ()),SLOT(slotGetParams()));
-  connect(ui->rsvLineEdit,SIGNAL(editingFinished ()),SLOT(slotGetParams()));
-  connect(ui->xPlainTextEdit,SIGNAL(editingFinished()),SLOT(slotGetParams()));
-  connect(ui->yPlainTextEdit,SIGNAL(editingFinished()),SLOT(slotGetParams()));
-  connect(ui->zPlainTextEdit,SIGNAL(editingFinished()),SLOT(slotGetParams()));
+  connect(ui->templatesComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &txWidget::slotGetParams);
+  connect(ui->templateCheckBox, &QCheckBox::toggled, this, QOverload<>::of(&txWidget::slotGetParams));
+  connect(ui->refreshPushButton, &QPushButton::clicked, this, QOverload<>::of(&txWidget::slotGetParams));
+  connect(ui->cwCheckBox, &QCheckBox::toggled, this, &txWidget::slotGetTXParams);
+  connect(ui->voxCheckBox, &QCheckBox::toggled, this, &txWidget::slotGetTXParams);
+  connect(ui->toCallLineEdit, &QLineEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
+  connect(ui->operatorLineEdit, &QLineEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
+  connect(ui->rsvLineEdit, &QLineEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
+  connect(ui->xPlainTextEdit, &QPlainTextEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
+  connect(ui->yPlainTextEdit, &QPlainTextEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
+  connect(ui->zPlainTextEdit, &QPlainTextEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
 
 
-  connect(ui->startToolButton, SIGNAL(clicked()), this, SLOT(slotStart()));
-  connect(ui->stopToolButton, SIGNAL(clicked()), this, SLOT(slotStop()));
-  connect(ui->drmProfileComboBox,SIGNAL(activated(int)),SLOT(slotProfileChanged(int )));
+  connect(ui->startToolButton, &QToolButton::clicked, this, &txWidget::slotStart);
+  connect(ui->stopToolButton, &QToolButton::clicked, this, &txWidget::slotStop);
+  connect(ui->drmProfileComboBox, QOverload<int>::of(&QComboBox::activated), this, &txWidget::slotProfileChanged);
 
-  connect(ui->hybridCheckBox,SIGNAL(toggled(bool)),SLOT(slotHybridToggled()));
-  connect(ui->uploadToolButton, SIGNAL(clicked()), this, SLOT(slotUpload()));
+  connect(ui->hybridCheckBox, &QCheckBox::toggled, this, &txWidget::slotHybridToggled);
+  connect(ui->uploadToolButton, &QToolButton::clicked, this, &txWidget::slotUpload);
 
-  connect(ui->generateToneToolButton, SIGNAL(clicked()), this, SLOT(slotGenerateSignal()));
-  connect(ui->sweepToneToolButton, SIGNAL(clicked()), this, SLOT(slotSweepSignal()));
-  connect(ui->repeaterToneToolButton, SIGNAL(clicked()), this, SLOT(slotGenerateRepeaterTone()));
-  connect(ui->openToolButton, SIGNAL(clicked()), this, SLOT(slotFileOpen()));
-  connect(ui->editToolButton, SIGNAL(clicked()), this, SLOT(slotEdit()));
-  connect(ui->snapshotToolButton, SIGNAL(clicked()), this, SLOT(slotSnapshot()));
-  connect(ui->binaryPushButton,SIGNAL(clicked()),this,SLOT(slotBinary()));
-  connect(ui->sizeSlider,SIGNAL(valueChanged(int)),SLOT(slotSize(int)));
-  connect(ui->settingsTableWidget,SIGNAL(currentChanged(int)),this, SLOT(slotTransmissionMode(int)));
-  connect(imageViewerPtr,SIGNAL(imageChanged()),SLOT(slotImageChanged()));
-  connect(ui->templateCheckBox,SIGNAL(toggled(bool)),SLOT(slotImageChanged()));
-  connect(&notifyTimer,SIGNAL(timeout()),SLOT(slotNotifyTimeout()));
-  connect(&ff,SIGNAL(listingDone(bool)),SLOT(slotListingDone(bool)));
-  connect(&repeaterTxDelayTimer,SIGNAL(timeout()),SLOT(slotRepaterDelay()));
+  connect(ui->generateToneToolButton, &QToolButton::clicked, this, &txWidget::slotGenerateSignal);
+  connect(ui->sweepToneToolButton, &QToolButton::clicked, this, &txWidget::slotSweepSignal);
+  connect(ui->repeaterToneToolButton, &QToolButton::clicked, this, &txWidget::slotGenerateRepeaterTone);
+  connect(ui->openToolButton, &QToolButton::clicked, this, &txWidget::slotFileOpen);
+  connect(ui->editToolButton, &QToolButton::clicked, this, &txWidget::slotEdit);
+  connect(ui->snapshotToolButton, &QToolButton::clicked, this, &txWidget::slotSnapshot);
+  connect(ui->binaryPushButton, &QPushButton::clicked, this, &txWidget::slotBinary);
+  connect(ui->sizeSlider, &QSlider::valueChanged, this, &txWidget::slotSize);
+  connect(ui->settingsTableWidget, &QTableWidget::currentChanged, this, &txWidget::slotTransmissionMode);
+  connect(imageViewerPtr, &imageViewer::imageChanged, this, QOverload<>::of(&txWidget::slotImageChanged));
+  connect(ui->templateCheckBox, &QCheckBox::toggled, this, QOverload<bool>::of(&txWidget::slotImageChanged));
+  connect(&notifyTimer, &QTimer::timeout, this, &txWidget::slotNotifyTimeout);
+  connect(&ff, &ftpFunctions::listingDone, this, &txWidget::slotListingDone);
+  connect(&repeaterTxDelayTimer, &QTimer::timeout, this, &txWidget::slotRepaterDelay);
   maxSize=0;
   notifyTimer.setSingleShot(true);
   notifyTimer.setInterval(NOTIFYCHECKINTERVAL);
@@ -134,7 +134,7 @@ void txWidget::init()
   ed=NULL;
   repeaterIndex=0;
   repeaterTimer=new QTimer(this);
-  connect(repeaterTimer,SIGNAL(timeout()),SLOT(slotRepeaterTimer()));
+  connect(repeaterTimer, &QTimer::timeout, this, &txWidget::slotRepeaterTimer);
   repeaterTimer->start(60000*repeaterImageInterval);
   addToLog("Reapater Timer Started",LOGTXMAIN);
   imageViewerPtr->setType(imageViewer::TXIMG);

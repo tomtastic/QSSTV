@@ -42,11 +42,11 @@ rxWidget::rxWidget(QWidget *parent):QWidget(parent),ui(new Ui::rxWidget)
   QStringList strLst;
   strLst << "Low" << "Normal"  << "High" << "DX";
   ui->sensitivityComboBox->insertItems(0,strLst);
-  connect(&rxFunctionsPtr->sstvRxPtr->syncWideProc,SIGNAL(callReceived(QString)),SLOT(slotNewCall(QString)));
-  connect(rxFunctionsPtr->sstvRxPtr,SIGNAL(resetCall()),SLOT(slotResetCall()));
-  connect(ui->logPushButton,SIGNAL(clicked()),SLOT(slotLogCall()));
-  connect(ui->whoPushButton,SIGNAL(clicked()),SLOT(slotWho()));
-  connect(&ff,SIGNAL(listingDone(bool)),SLOT(slotWhoResult(bool)));
+  connect(&rxFunctionsPtr->sstvRxPtr->syncWideProc, &syncProcessor::callReceived, this, &rxWidget::slotNewCall);
+  connect(rxFunctionsPtr->sstvRxPtr, &sstvRx::resetCall, this, &rxWidget::slotResetCall);
+  connect(ui->logPushButton, &QPushButton::clicked, this, &rxWidget::slotLogCall);
+  connect(ui->whoPushButton, &QPushButton::clicked, this, &rxWidget::slotWho);
+  connect(&ff, &ftpFunctions::listingDone, this, &rxWidget::slotWhoResult);
   doRemove=false;
 }
 
@@ -74,11 +74,11 @@ void rxWidget::init()
 
 
   // make connections after initialization
-  connect(ui->startToolButton, SIGNAL(clicked()),SLOT(slotStart()));
-  connect(ui->stopToolButton, SIGNAL(clicked()),SLOT(slotStop()));
-  connect(ui->resyncToolButton,SIGNAL(clicked()),SLOT(slotResync()));
-  connect(ui->autoSaveCheckBox,SIGNAL(clicked()),SLOT(slotGetParams()));
-  connect(ui->autoSlantAdjustCheckBox,SIGNAL(clicked()),SLOT(slotGetParams()));
+  connect(ui->startToolButton, &QToolButton::clicked, this, &rxWidget::slotStart);
+  connect(ui->stopToolButton, &QToolButton::clicked, this, &rxWidget::slotStop);
+  connect(ui->resyncToolButton, &QToolButton::clicked, this, &rxWidget::slotResync);
+  connect(ui->autoSaveCheckBox, &QCheckBox::clicked, this, &rxWidget::slotGetParams);
+  connect(ui->autoSlantAdjustCheckBox, &QCheckBox::clicked, this, &rxWidget::slotGetParams);
 
 
 
