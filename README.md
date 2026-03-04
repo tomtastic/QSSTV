@@ -17,7 +17,7 @@ apt install pkg-config g++ libfftw3-dev qtbase5-dev qtchooser qt5-qmake qtbase5-
 
 For MacOS:
 ```
-brew install fftw hamlib openjpeg qt
+brew install fftw hamlib openjpeg qt pulseaudio
 ```
 
 ### Compile and Install
