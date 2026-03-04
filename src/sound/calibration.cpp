@@ -107,7 +107,7 @@ void calibration::init()
   ui->txProgress->setValue(0);
   display(BASESAMPLERATE,ui->rxLCD);
   display(BASESAMPLERATE,ui->txLCD);
-  connect(this,SIGNAL(finished(int)),SLOT(hasFinished(int)));
+  connect(this, &QDialog::finished, this, &calibration::hasFinished);
 
 }
 

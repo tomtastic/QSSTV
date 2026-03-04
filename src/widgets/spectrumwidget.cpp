@@ -9,9 +9,9 @@ spectrumWidget::spectrumWidget(QWidget *parent) : QFrame(parent),  ui(new Ui::sp
 {
   ui->setupUi(this);
   readSettings();
-  connect(ui->maxDbSpinbox,SIGNAL(valueChanged(int)),SLOT(slotMaxDbChanged(int)));
-  connect(ui->rangeSpinbox,SIGNAL(valueChanged(int)),SLOT(slotRangeChanged(int)));
-  connect(ui->avgDoubleSpinBox,SIGNAL(valueChanged(double)),SLOT(slotAvgChanged(double)));
+  connect(ui->maxDbSpinbox, QOverload<int>::of(&QSpinBox::valueChanged), this, &spectrumWidget::slotMaxDbChanged);
+  connect(ui->rangeSpinbox, QOverload<int>::of(&QSpinBox::valueChanged), this, &spectrumWidget::slotRangeChanged);
+  connect(ui->avgDoubleSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &spectrumWidget::slotAvgChanged);
 }
 
 spectrumWidget::~spectrumWidget()
