@@ -34,8 +34,7 @@ macx {
 #QMAKE_LIBDIR += $$[QT_SYSROOT]/usr/local/lib
 
 CONFIG += link_pkgconfig
-PKGCONFIG += libopenjp2
-
+PKGCONFIG += libopenjp2 fftw3 libpulse libpulse-simple hamlib
 TARGET = qsstv
 
 
