@@ -92,7 +92,7 @@ protected:
 
   wavIO waveIn;
   wavIO waveOut;
-  void errorHandler(QString title,QString info);
+  void errorHandler(const QString &title, const QString &info);
   void switchCaptureState(ecaptureState cs);
   void switchPlaybackState(eplaybackState ps);
 

@@ -81,7 +81,7 @@ enum egraphType {BASE=QGraphicsItem::UserType+1,RECTANGLE,ELLIPSE,IMAGE,LINE,TEX
   void save(QDataStream &str);
   void setTransform ( int rot,double hs,double vs);
   QRectF rect() {return param.rct;}
-  void setImage(QImage ima) {param.im=ima;}
+  void setImage(const QImage &ima) {param.im=ima;}
   sitemParam getParam();
   void setParam(sitemParam sp);
   QString text() const { return param.txt;}

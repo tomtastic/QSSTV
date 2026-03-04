@@ -34,16 +34,16 @@ public:
   vuMeter *sMeterPtr();
   drmConstellationFrame *mscWdg() {return ui->drmMSCWidget;}
   drmConstellationFrame *facWdg() {return ui->drmFACWidget;}
-  void setDRMStatusText(QString txt)
+  void setDRMStatusText(const QString &txt)
   {
     ui->drmStatusLineEdit->clear();
     ui->drmStatusLineEdit->appendPlainText(txt);
   }
-  void setOnlineStatus(bool online, QString info="");
+  void setOnlineStatus(bool online, const QString &info="");
   drmStatusFrame *statusWdg() {return ui->drmStatusWidget;}
   //  int getFilterIndex();
   void init();
-  void setSSTVStatusText(QString txt);
+  void setSSTVStatusText(const QString &txt);
   void setSettingsTab();
   void changeTransmissionMode(int rxtxMode);
   bool rxBusy();

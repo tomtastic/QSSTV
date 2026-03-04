@@ -24,7 +24,7 @@ public:
   void readSettings();
   void changedMatrix();
   void changedMatrix(imageViewer::thumbType itype);
-  void putRxImage(QString fn);
+  void putRxImage(const QString &fn);
   void txImageChanged ();
   void txStockImageChanged();
   QString getTemplateFileName(int);

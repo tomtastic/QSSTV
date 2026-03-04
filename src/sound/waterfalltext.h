@@ -17,11 +17,11 @@ public:
   waterfallText();
   ~waterfallText();
   void init();
-  void setText(QString txt);
+  void setText(const QString &txt);
   QImage *getImagePtr() {return &image;}
  DSPFLOAT *nextLine();
  int getLength() {return fftLength;}
- double getDuration(QString txt=QString());
+ double getDuration(const QString &txt=QString());
 private:
   int fftLength;
   int samplingrate;

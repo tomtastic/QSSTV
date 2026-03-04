@@ -54,7 +54,7 @@ void setValue(bool val, QCheckBox *input);
 void setValue(int val, QSpinBox *input);
 void setValue(uint val, QSpinBox *input);
 void setValue(double val, QDoubleSpinBox *input);
-void setValue(QString s, QLineEdit *input);
+void setValue(const QString &s, QLineEdit *input);
 void setValue(QString s, QPlainTextEdit *input);
 void setValue(int s, QComboBox *input);
 void setIndex(int s, QComboBox *input);

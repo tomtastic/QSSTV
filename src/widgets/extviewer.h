@@ -15,7 +15,7 @@ class extViewer : public QDialog
 public:
   explicit extViewer(QWidget *parent = 0);
   ~extViewer();
-  void setup(QString fn);
+  void setup(const QString &fn);
   
 private:
   Ui::extViewer *ui;

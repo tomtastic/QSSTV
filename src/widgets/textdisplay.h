@@ -15,7 +15,7 @@ public:
   explicit textDisplay(QWidget *parent = 0);
   ~textDisplay();
   void clear();
-  void append(QString t);
+  void append(const QString &t);
   
 private:
   Ui::textDisplay *ui;

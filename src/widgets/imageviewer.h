@@ -60,7 +60,7 @@ public:
   bool openImage(QString &filename, bool showMessage, bool emitSignal, bool fromCache,bool background);
   bool openImage(QImage im);
   bool openImage(QByteArray *ba);
-  void setParam(QString templateFn,bool usesTemplate,int width=0,int height=0);
+  void setParam(const QString &templateFn,bool usesTemplate,int width=0,int height=0);
   void clear();
   bool reload();
 
@@ -85,7 +85,7 @@ public:
   void displayImage();
   QPoint mapToImage(const QPoint &pos);
   void zoom(QPoint centre, int dlevel);
-  void save(QString fileName, QString fmt, bool convertRGB, bool source);
+  void save(const QString &fileName, const QString &fmt, bool convertRGB, bool source);
   bool copyToBuffer(QByteArray *ba);
   //  int calcSize(int &sizeRatio);
   uint setSize(int tcommpressSize,bool usesCompression);

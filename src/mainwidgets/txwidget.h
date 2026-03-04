@@ -44,22 +44,22 @@ public:
   //  void repeat(QImage *im,esstvMode sm);
   void sendRepeaterImage(esstvMode rxMode=NOTVALID);
   void setImage(QImage *ima);
-  void setImage(QString fn);
+  void setImage(const QString &fn);
   void setProgress(uint prg);
   void setupTemplatesComboBox();
-  void setPreviewWidget(QString fn);
+  void setPreviewWidget(const QString &fn);
   void setSettingsTab();
   txFunctions *functionsPtr() {return txFunctionsPtr;}
   imageViewer *getImageViewerPtr(){ return imageViewerPtr;}
   QString getPreviewFilename();
   void txTestPattern(etpSelect sel);
-  void startNotifyCheck(QString tmask);
+  void startNotifyCheck(const QString &tmask);
 
-  void setDRMNotifyText(QString txt)
+  void setDRMNotifyText(const QString &txt)
   {
     ui->txNotificationList->setPlainText(txt);
   }
-  void appendDRMNotifyText(QString txt)
+  void appendDRMNotifyText(const QString &txt)
   {
     ui->txNotificationList->appendPlainText(txt);
   }
@@ -117,7 +117,7 @@ signals:
 private:
   void initView();
   void setParams();
-  void sendHybrid(QString fn);
+  void sendHybrid(const QString &fn);
   void applyTemplate();
   void updateTxTime();
   void startTxImage();

@@ -46,7 +46,7 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
     void setHorizontal(bool h) {horizontal=h;}
-    void setLabelText(QString t);
+    void setLabelText(const QString &t);
 
 
 signals:
