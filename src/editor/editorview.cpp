@@ -63,41 +63,41 @@ editorView::editorView(QWidget *parent):QWidget(parent), Ui::editorForm()
 
   readSettings();
 
-  connect(imageSizePushButton,SIGNAL(clicked()),SLOT(slotChangeCanvasSize()));
-  connect(scene,SIGNAL(itemSelected(graphItemBase*)),SLOT(slotItemSelected(graphItemBase*)));
-  connect(rectanglePushButton,SIGNAL(clicked()),SLOT(slotRectangle()));
-  connect(circlePushButton,SIGNAL(clicked()),SLOT(slotCircle()));
-  connect(replayPushButton,SIGNAL(clicked()),SLOT(slotReplay()));
-  connect(imagePushButton,SIGNAL(clicked()),SLOT(slotImage()));
-  connect(linePushButton,SIGNAL(clicked()),SLOT(slotLine()));
-  connect(textPushButton,SIGNAL(clicked()),SLOT(slotText()));
+  connect(imageSizePushButton, &QPushButton::clicked, this, &editorView::slotChangeCanvasSize);
+  connect(scene, &editorScene::itemSelected, this, &editorView::slotItemSelected);
+  connect(rectanglePushButton, &QPushButton::clicked, this, &editorView::slotRectangle);
+  connect(circlePushButton, &QPushButton::clicked, this, &editorView::slotCircle);
+  connect(replayPushButton, &QPushButton::clicked, this, &editorView::slotReplay);
+  connect(imagePushButton, &QPushButton::clicked, this, &editorView::slotImage);
+  connect(linePushButton, &QPushButton::clicked, this, &editorView::slotLine);
+  connect(textPushButton, &QPushButton::clicked, this, &editorView::slotText);
 
 
   hshearLCD->display( "0.00" );
   vshearLCD->display( "0.00" );
-  connect(hshearSlider, SIGNAL(valueChanged(int)),SLOT(slotShearChanged(int)) );
-  connect(vshearSlider, SIGNAL(valueChanged(int)),SLOT(slotShearChanged(int)) );
+  connect(hshearSlider, &QSlider::valueChanged, this, &editorView::slotShearChanged);
+  connect(vshearSlider, &QSlider::valueChanged, this, &editorView::slotShearChanged);
 
 
-  connect(fontComboBox,SIGNAL(currentFontChanged(const QFont &)),SLOT(slotFontChanged(const QFont &)));
-  connect(fontSizeSpinBox,SIGNAL( valueChanged (int)),SLOT(slotFontSizeChanged(int)));
-  connect(penWidthSpinBox,SIGNAL( valueChanged (double)),SLOT(slotPenWidthChanged(double)));
-  connect(boldButton,SIGNAL( clicked(bool)),SLOT(slotBold(bool)));
-  connect(italicButton,SIGNAL( clicked(bool)),SLOT(slotItalic(bool)));
-  connect(underlineButton,SIGNAL( clicked(bool)),SLOT(slotUnderline(bool)));
+  connect(fontComboBox, &QFontComboBox::currentFontChanged, this, &editorView::slotFontChanged);
+  connect(fontSizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &editorView::slotFontSizeChanged);
+  connect(penWidthSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &editorView::slotPenWidthChanged);
+  connect(boldButton, &QPushButton::clicked, this, &editorView::slotBold);
+  connect(italicButton, &QPushButton::clicked, this, &editorView::slotItalic);
+  connect(underlineButton, &QPushButton::clicked, this, &editorView::slotUnderline);
 
 
   fillToolButton->setMenu(createColorMenu(SLOT(slotColorDialog()),TBFILL,"Select Color"));
   fillToolButton->setIcon(createColorToolButtonIcon(":/icons/colorfill.png", scene->fillColor));
-  connect(fillToolButton, SIGNAL(clicked()),this, SLOT(slotButtonTriggered()));
+  connect(fillToolButton, &QToolButton::clicked, this, &editorView::slotButtonTriggered);
 
   lineToolButton->setMenu(createColorMenu(SLOT(slotColorDialog()),TBLINE,"Select Color"));
   lineToolButton->setIcon(createColorToolButtonIcon(":/icons/colorline.png", scene->lineColor));
-  connect(lineToolButton, SIGNAL(clicked()),this, SLOT(slotButtonTriggered()));
+  connect(lineToolButton, &QToolButton::clicked, this, &editorView::slotButtonTriggered);
 
   gradientToolButton->setMenu(createColorMenu(SLOT(slotGradientDialog()),TBGRAD,"Select Gradient"));
   gradientToolButton->setIcon(createColorToolButtonIcon(":/icons/gradient.png", scene->gradientColor));
-  connect(gradientToolButton, SIGNAL(clicked()),this, SLOT(slotButtonTriggered()));
+  connect(gradientToolButton, &QToolButton::clicked, this, &editorView::slotButtonTriggered);
 
   // setup the defaults
   setTransform();
@@ -107,7 +107,7 @@ editorView::editorView(QWidget *parent):QWidget(parent), Ui::editorForm()
 #ifdef QT_NO_DEBUG
   dumpPushButton->hide();
 #else
-  connect(dumpPushButton,SIGNAL(clicked()),SLOT(slotDump()));
+  connect(dumpPushButton, &QPushButton::clicked, this, &editorView::slotDump);
 #endif
 
 #if defined(__APPLE__) && QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
@@ -269,7 +269,7 @@ void editorView::slotText()
   t.setupUi(&d);
   t.plainTextEdit->setPlainText(txt);
   textEdit = t.plainTextEdit;
-  connect(t.listWidget, SIGNAL(currentTextChanged(QString)), this, SLOT(slotMacro(QString)));
+  connect(t.listWidget, &QListWidget::currentTextChanged, this, &editorView::slotMacro);
   if(d.exec()==QDialog::Accepted)
     {
       scene->setMode(editorScene::INSERT);

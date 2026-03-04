@@ -94,46 +94,46 @@ void editor::initActions()
   fileNew = new QAction(QIcon(":/icons/filenew.png"),tr("&New"),this);
   fileNew->setShortcut(tr("Ctrl+N"));
   fileNew->setStatusTip(tr("Create a new image"));
-  connect(fileNew, SIGNAL(triggered()), this, SLOT(slotFileNew()));
+  connect(fileNew, &QAction::triggered, this, &editor::slotFileNew);
 
   fileOpen = new QAction(QIcon(":/icons/fileopen.png"),tr("&Open"),this);
   fileOpen->setShortcut(tr("Ctrl+O"));
   fileOpen->setStatusTip(tr("Open an image file"));
-  connect(fileOpen, SIGNAL(triggered()), this, SLOT(slotFileOpen()));
+  connect(fileOpen, &QAction::triggered, this, &editor::slotFileOpen);
 
   fileSave = new QAction(QIcon(":/icons/filesave.png"),tr("&Save file"),this);
   fileSave->setStatusTip(tr("Save the file under the same name and format"));
-  connect(fileSave, SIGNAL(triggered()), this, SLOT(slotFileSave()));
+  connect(fileSave, &QAction::triggered, this, &editor::slotFileSave);
 
   fileSaveImage = new QAction(tr("Save as &Image"),this);
   fileSaveImage->setStatusTip(tr("Save the file in PNG format"));
-  connect(fileSaveImage, SIGNAL(triggered()), this, SLOT(slotFileSaveImage()));
+  connect(fileSaveImage, &QAction::triggered, this, &editor::slotFileSaveImage);
 
   fileSaveTemplate = new QAction(("Save as &Template"),this);
   fileSaveTemplate->setStatusTip(tr("Save template file "));
-  connect(fileSaveTemplate, SIGNAL(triggered()), this, SLOT(slotFileSaveTemplate()));
+  connect(fileSaveTemplate, &QAction::triggered, this, &editor::slotFileSaveTemplate);
 
   fileQuit = new QAction(tr("Quit"),this);
   fileQuit->setShortcut(tr("Ctrl+Q"));
   fileQuit->setStatusTip(tr("Quits the editor"));
-  connect(fileQuit, SIGNAL(triggered()), this, SLOT(slotFileQuit()));
+  connect(fileQuit, &QAction::triggered, this, &editor::slotFileQuit);
 
   clearAll= new QAction(QIcon(":/icons/eraser.png"),tr("Clear &All"),this);
   clearAll->setShortcut(tr("Ctrl+A"));
   clearAll->setStatusTip(tr("Delete all objects and fill the background with the background color"));
-  connect(clearAll, SIGNAL(triggered()), ev, SLOT(slotClearAll()));
+  connect(clearAll, &QAction::triggered, ev, &editorView::slotClearAll);
 
   copy= new QAction(tr("Copy"),this);
   copy->setShortcut(tr("Ctrl+C"));
-  connect(copy, SIGNAL(triggered()), ev->getScene(), SLOT(slotCopy()));
+  connect(copy, &QAction::triggered, ev->getScene(), &editorScene::slotCopy);
 
   paste= new QAction(tr("Paste"),this);
   paste->setShortcut(tr("Ctrl+V"));
-  connect(paste, SIGNAL(triggered()), ev->getScene(), SLOT(slotPaste()));
+  connect(paste, &QAction::triggered, ev->getScene(), &editorScene::slotPaste);
 
   deleteAction=new QAction(tr("&Delete"),this);
   deleteAction->setShortcut(tr("Del"));
-  connect(deleteAction, SIGNAL(triggered()), ev->getScene(), SLOT(slotDeleteItem()));
+  connect(deleteAction, &QAction::triggered, ev->getScene(), &editorScene::slotDeleteItem);
 }
 
 

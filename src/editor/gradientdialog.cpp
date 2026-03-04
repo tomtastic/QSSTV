@@ -27,23 +27,23 @@ gradientDialog::gradientDialog(QWidget *parent):QDialog(parent), Ui::gradientFor
 {
 	setupUi(this);
 	readSettings();
-	connect(color1Button,SIGNAL(clicked()),SLOT(slotColorDialog()));
-	connect(color2Button,SIGNAL(clicked()),SLOT(slotColorDialog()));
-	connect(color3Button,SIGNAL(clicked()),SLOT(slotColorDialog()));
-	connect(color4Button,SIGNAL(clicked()),SLOT(slotColorDialog()));
+	connect(color1Button, &QPushButton::clicked, this, &gradientDialog::slotColorDialog);
+	connect(color2Button, &QPushButton::clicked, this, &gradientDialog::slotColorDialog);
+	connect(color3Button, &QPushButton::clicked, this, &gradientDialog::slotColorDialog);
+	connect(color4Button, &QPushButton::clicked, this, &gradientDialog::slotColorDialog);
 	
 	previewLabel->setBackgroundRole(QPalette::Base);
 	g=NULL;
 	slotUpdate();
-	connect(pos1SpinBox,SIGNAL(valueChanged(int)),SLOT(slotUpdate()));
-	connect(pos2SpinBox,SIGNAL(valueChanged(int)),SLOT(slotUpdate()));
-	connect(pos3SpinBox,SIGNAL(valueChanged(int)),SLOT(slotUpdate()));
-	connect(pos4SpinBox,SIGNAL(valueChanged(int)),SLOT(slotUpdate()));
-  connect(directionDial,SIGNAL(valueChanged(int)),SLOT(slotUpdate()));
-	connect(noGradientButton,SIGNAL(clicked()),SLOT(slotUpdate()));
-	connect(linearGradientButton,SIGNAL(clicked()),SLOT(slotUpdate()));
-	connect(radialGradientButton,SIGNAL(clicked()),SLOT(slotUpdate()));
-	connect(conicalGradientButton,SIGNAL(clicked()),SLOT(slotUpdate()));
+	connect(pos1SpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &gradientDialog::slotUpdate);
+	connect(pos2SpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &gradientDialog::slotUpdate);
+	connect(pos3SpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &gradientDialog::slotUpdate);
+	connect(pos4SpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &gradientDialog::slotUpdate);
+  connect(directionDial, &QDial::valueChanged, this, &gradientDialog::slotUpdate);
+	connect(noGradientButton, &QPushButton::clicked, this, &gradientDialog::slotUpdate);
+	connect(linearGradientButton, &QPushButton::clicked, this, &gradientDialog::slotUpdate);
+	connect(radialGradientButton, &QPushButton::clicked, this, &gradientDialog::slotUpdate);
+	connect(conicalGradientButton, &QPushButton::clicked, this, &gradientDialog::slotUpdate);
 
 }
 

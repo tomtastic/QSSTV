@@ -17,7 +17,7 @@ void fileWatcher::init()
   addPathRecursive(txStockImagesPath);
   addPathRecursive(templatesPath);
 
-  connect(this,SIGNAL(directoryChanged(QString)),galleryWidgetPtr,SLOT(slotDirChanged(QString)));
+  connect(this, &QFileSystemWatcher::directoryChanged, galleryWidgetPtr, &galleryWidget::slotDirChanged);
 }
 
 void fileWatcher::addPathRecursive(QString path)

@@ -79,10 +79,10 @@ void imageMatrix::setupLayout()
   horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
   horizontalLayout->addItem(horizontalSpacer_3);
   verticalLayout->addLayout(horizontalLayout);
-  connect(prevPushButton,SIGNAL(clicked()),SLOT(slotPrev()));
-  connect(nextPushButton,SIGNAL(clicked()),SLOT(slotNext()));
-  connect(beginPushButton,SIGNAL(clicked()),SLOT(slotBegin()));
-  connect(endPushButton,SIGNAL(clicked()),SLOT(slotEnd()));
+  connect(prevPushButton, &QPushButton::clicked, this, &imageMatrix::slotPrev);
+  connect(nextPushButton, &QPushButton::clicked, this, &imageMatrix::slotNext);
+  connect(beginPushButton, &QPushButton::clicked, this, &imageMatrix::slotBegin);
+  connect(endPushButton, &QPushButton::clicked, this, &imageMatrix::slotEnd);
 }
 
 
@@ -101,7 +101,7 @@ void imageMatrix::init(int numRows, int numColumns, QString dir,imageViewer::thu
           imv = new imageViewer(this);
           imv->setType(tt);
           gridLayout->addWidget(imv, i, j, 1, 1);
-          connect(imv,SIGNAL(layoutChanged()),SLOT(slotLayoutChanged()));
+          connect(imv, &imageViewer::layoutChanged, this, &imageMatrix::slotLayoutChanged);
         }
     }
   for (i=0;i<rows;i++)
