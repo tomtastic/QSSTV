@@ -77,7 +77,7 @@ syncProcessor::syncProcessor(bool narrow, QObject *parent) :  QObject(parent),st
   //  syncFound=false;
   if(!detectNarrow)
   {
-    connect(streamDecode.getFskDecoderPtr(), &fskDecoder::callReceived, this, &syncProcessor::slotNewCall);
+    connect(streamDecode.getFskDecoderPtr(), &fskIdDecoder::callReceived, this, &syncProcessor::slotNewCall);
     connect(streamDecode.getVisDecoderPtr(), &visDecoder::visCodeWideDetected, this, &syncProcessor::slotVisCodeDetected);
   }
   else
