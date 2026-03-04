@@ -40,9 +40,9 @@ QString sampleString;
 waterfallConfig::waterfallConfig(QWidget *parent) : baseConfig(parent),  ui(new Ui::waterfallConfig)
 {
   ui->setupUi(this);
-  connect(ui->fontComboBox,SIGNAL(currentIndexChanged(int)),SLOT(slotFontChanged()));
-  connect(ui->sizeSpinBox,SIGNAL(valueChanged(int)),SLOT(slotFontChanged()));
-  connect(ui->boldCheckBox,SIGNAL(clicked(bool)),SLOT(slotFontChanged()));
+  connect(ui->fontComboBox, QOverload<int>::of(&QFontComboBox::currentIndexChanged), this, &waterfallConfig::slotFontChanged);
+  connect(ui->sizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &waterfallConfig::slotFontChanged);
+  connect(ui->boldCheckBox, &QCheckBox::clicked, this, &waterfallConfig::slotFontChanged);
 }
 
 waterfallConfig::~waterfallConfig()

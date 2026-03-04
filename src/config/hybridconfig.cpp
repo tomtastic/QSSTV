@@ -44,7 +44,7 @@ hybridConfig::hybridConfig(QWidget *parent) :baseConfig(parent), ui(new Ui::hybr
 {
   ui->setupUi(this);
   //  connect(testFTPPushButton,SIGNAL(clicked()),SLOT(slotTestFTPPushButton()));
-  connect(ui->testHybridPushButton,SIGNAL(clicked()),SLOT(slotTestHybridPushButton()));
+  connect(ui->testHybridPushButton, &QPushButton::clicked, this, &hybridConfig::slotTestHybridPushButton);
 }
 
 hybridConfig::~hybridConfig()

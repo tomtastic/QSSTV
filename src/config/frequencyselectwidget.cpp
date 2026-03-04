@@ -38,12 +38,12 @@ frequencySelectWidget::frequencySelectWidget(QWidget *parent) :baseConfig(parent
   ui->tableWidget->setAlternatingRowColors (false);
   ui->tableWidget->setColumnCount(4);
   ui->tableWidget->setHorizontalHeaderLabels(sl);
-  connect(ui->tableWidget,SIGNAL(itemChanged(QTableWidgetItem *)),this,SLOT(slotItemChanged()));
-  connect(ui->tableWidget,SIGNAL(cellClicked(int,int)),this,SLOT(slotCellClicked(int,int)));
-  connect(ui->addFreqPushButton,SIGNAL(clicked()),this,SLOT(slotFreqAdd()));
-  connect(ui->deleteFreqPushButton,SIGNAL(clicked()),this,SLOT(slotFreqDelete()));
-  connect(ui->moveUpFreqPushButton,SIGNAL(clicked()),this,SLOT(slotFreqUp()));
-  connect(ui->moveDownFreqPushButton,SIGNAL(clicked()),this,SLOT(slotFreqDown()));
+  connect(ui->tableWidget, &QTableWidget::itemChanged, this, &frequencySelectWidget::slotItemChanged);
+  connect(ui->tableWidget, &QTableWidget::cellClicked, this, &frequencySelectWidget::slotCellClicked);
+  connect(ui->addFreqPushButton, &QPushButton::clicked, this, &frequencySelectWidget::slotFreqAdd);
+  connect(ui->deleteFreqPushButton, &QPushButton::clicked, this, &frequencySelectWidget::slotFreqDelete);
+  connect(ui->moveUpFreqPushButton, &QPushButton::clicked, this, &frequencySelectWidget::slotFreqUp);
+  connect(ui->moveDownFreqPushButton, &QPushButton::clicked, this, &frequencySelectWidget::slotFreqDown);
   lastRowSelected=-1;
 }
 
@@ -280,8 +280,8 @@ void frequencySelectWidget::createEntry(int row)
 //  sb->setCurrentText(sbModeList.at(row));
   setValue(passBandList.at(row),pb);
   ui->tableWidget->setCellWidget(row,3,pb);
-  connect(cb,SIGNAL(currentIndexChanged(int)),SLOT(slotItemChanged()));
-  connect(sb,SIGNAL(currentIndexChanged(int)),SLOT(slotItemChanged()));
+  connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &frequencySelectWidget::slotItemChanged);
+  connect(sb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &frequencySelectWidget::slotItemChanged);
    ui->tableWidget->blockSignals(false);
 }
 

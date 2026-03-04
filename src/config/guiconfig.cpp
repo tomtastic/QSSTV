@@ -40,8 +40,8 @@ guiConfig::guiConfig(QWidget *parent) : baseConfig(parent),  ui(new Ui::guiConfi
 {
   ui->setupUi(this);
   backGroundColorChanged=false;
-  connect(ui->backgroundColorPushButton,SIGNAL(clicked()),SLOT(slotBGColorSelect()));
-  connect(ui->imageBackgroundColorPushButton,SIGNAL(clicked()),SLOT(slotIBGColorSelect()));
+  connect(ui->backgroundColorPushButton, &QPushButton::clicked, this, &guiConfig::slotBGColorSelect);
+  connect(ui->imageBackgroundColorPushButton, &QPushButton::clicked, this, &guiConfig::slotIBGColorSelect);
 }
 
 guiConfig::~guiConfig()

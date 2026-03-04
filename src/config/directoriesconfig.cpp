@@ -40,13 +40,13 @@ directoriesConfig::directoriesConfig(QWidget *parent) :baseConfig(parent),
   ui(new Ui::directoriesConfig)
 {
   ui->setupUi(this);
-  connect(ui->rxSSTVImagesPathBrowseButton,SIGNAL(clicked()),SLOT(slotBrowseRxSSTVImagesPath()));
-  connect(ui->rxDRMImagesPathBrowseButton,SIGNAL(clicked()),SLOT(slotBrowseRxDRMImagesPath()));
-  connect(ui->txSSTVImagesPathBrowseButton,SIGNAL(clicked()),SLOT(slotBrowseTxSSTVImagesPath()));
-  connect(ui->txDRMImagesPathBrowseButton,SIGNAL(clicked()),SLOT(slotBrowseTxDRMImagesPath()));
-  connect(ui->txStockImagesPathBrowseButton,SIGNAL(clicked()),SLOT(slotBrowseTxStockImagesPath()));
-  connect(ui->templatesPathBrowseButton,SIGNAL(clicked()),SLOT(slotBrowseTemplatesPath()));
-  connect(ui->audioPathBrowseButton,SIGNAL(clicked()),SLOT(slotBrowseAudioPath()));
+  connect(ui->rxSSTVImagesPathBrowseButton, &QPushButton::clicked, this, &directoriesConfig::slotBrowseRxSSTVImagesPath);
+  connect(ui->rxDRMImagesPathBrowseButton, &QPushButton::clicked, this, &directoriesConfig::slotBrowseRxDRMImagesPath);
+  connect(ui->txSSTVImagesPathBrowseButton, &QPushButton::clicked, this, &directoriesConfig::slotBrowseTxSSTVImagesPath);
+  connect(ui->txDRMImagesPathBrowseButton, &QPushButton::clicked, this, &directoriesConfig::slotBrowseTxDRMImagesPath);
+  connect(ui->txStockImagesPathBrowseButton, &QPushButton::clicked, this, &directoriesConfig::slotBrowseTxStockImagesPath);
+  connect(ui->templatesPathBrowseButton, &QPushButton::clicked, this, &directoriesConfig::slotBrowseTemplatesPath);
+  connect(ui->audioPathBrowseButton, &QPushButton::clicked, this, &directoriesConfig::slotBrowseAudioPath);
 }
 
 directoriesConfig::~directoriesConfig()

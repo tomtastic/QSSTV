@@ -49,12 +49,12 @@ repeaterConfig::repeaterConfig(QWidget *parent) : baseConfig(parent),  ui(new Ui
       ui->repeaterTxModeComboBox->addItem(SSTVTable[i].name);
       ui->repeaterIdleTxModeComboBox->addItem(SSTVTable[i].name);
     }
-  connect(ui->rp1BrowseButton,SIGNAL(clicked()),SLOT(slotRp1Browse()));
-  connect(ui->rp2BrowseButton,SIGNAL(clicked()),SLOT(slotRp2Browse()));
-  connect(ui->rp3BrowseButton,SIGNAL(clicked()),SLOT(slotRp3Browse()));
-  connect(ui->rp4BrowseButton,SIGNAL(clicked()),SLOT(slotRp4Browse()));
-  connect(ui->repeaterIdleTemplateBrowseButton,SIGNAL(clicked()),SLOT(slotRepeaterIdleTemplateBrowse()));
-  connect(ui->repeaterTemplateBrowseButton,SIGNAL(clicked()),SLOT(slotRepeaterTemplateBrowse()));
+  connect(ui->rp1BrowseButton, &QPushButton::clicked, this, &repeaterConfig::slotRp1Browse);
+  connect(ui->rp2BrowseButton, &QPushButton::clicked, this, &repeaterConfig::slotRp2Browse);
+  connect(ui->rp3BrowseButton, &QPushButton::clicked, this, &repeaterConfig::slotRp3Browse);
+  connect(ui->rp4BrowseButton, &QPushButton::clicked, this, &repeaterConfig::slotRp4Browse);
+  connect(ui->repeaterIdleTemplateBrowseButton, &QPushButton::clicked, this, &repeaterConfig::slotRepeaterIdleTemplateBrowse);
+  connect(ui->repeaterTemplateBrowseButton, &QPushButton::clicked, this, &repeaterConfig::slotRepeaterTemplateBrowse);
   ui->txDRMImageSizeSpinBox->setMinimum(MINDRMSIZE/1000);
   ui->txDRMImageSizeSpinBox->setMaximum(MAXDRMSIZE/1000);
 

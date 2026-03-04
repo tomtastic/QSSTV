@@ -49,7 +49,7 @@ ftpConfig::ftpConfig(QWidget *parent) :  baseConfig (parent),  ui(new Ui::ftpCon
       QString text = tr("%1").arg(QString(format));
       ui->ftpDefaultImageFormatComboBox->addItem(text);
     }
-  connect(ui->testFTPPushButton,SIGNAL(clicked()),SLOT(slotTestFTPPushButton()));
+  connect(ui->testFTPPushButton, &QPushButton::clicked, this, &ftpConfig::slotTestFTPPushButton);
 }
 
 ftpConfig::~ftpConfig()
