@@ -8,10 +8,10 @@ bsrForm::bsrForm(QWidget *parent) :
   ui(new Ui::bsrForm)
 {
   ui->setupUi(this);
-  connect(ui->bsrComboBox,SIGNAL(currentIndexChanged(int)),this, SLOT(slotBSRSelection(int)));
-  connect(ui->cancelPushButton,SIGNAL(clicked()),this,SLOT(slotCanceled()));
-  connect(ui->easypalPushButton,SIGNAL(clicked()),this,SLOT(slotEasypal()));
-  connect(ui->compatiblePushButton,SIGNAL(clicked()),this,SLOT(slotCompatible()));
+  connect(ui->bsrComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &bsrForm::slotBSRSelection);
+  connect(ui->cancelPushButton, &QPushButton::clicked, this, &bsrForm::slotCanceled);
+  connect(ui->easypalPushButton, &QPushButton::clicked, this, &bsrForm::slotEasypal);
+  connect(ui->compatiblePushButton, &QPushButton::clicked, this, &bsrForm::slotCompatible);
 
 }
 

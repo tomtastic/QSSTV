@@ -32,15 +32,15 @@
 rigConfig::rigConfig(QWidget *parent) : baseConfig(parent),  ui(new Ui::rigConfig)
 {
   ui->setupUi(this);
-  connect(ui->enableCATCheckBox,SIGNAL(clicked()),SLOT(slotEnableCAT()));
-  connect(ui->enablePTTCheckBox,SIGNAL(clicked()),SLOT(slotEnablePTT()));
-  connect(ui->enableXMLRPCCheckBox,SIGNAL(clicked()),SLOT(slotEnableXMLRPC()));
-  connect(ui->enableHamlibNetCheckBox,SIGNAL(clicked()),SLOT(slotEnableHamlibNet()));
-  connect(ui->restartPushButton,SIGNAL(clicked()),SLOT(slotRestart()));
-  connect(ui->RTSCheckBox,SIGNAL(clicked()),SLOT(slotCheckPTT0()));
-  connect(ui->DTRCheckBox,SIGNAL(clicked()),SLOT(slotCheckPTT1()));
-  connect(ui->nRTSCheckBox,SIGNAL(clicked()),SLOT(slotCheckPTT2()));
-  connect(ui->nDTRCheckBox,SIGNAL(clicked()),SLOT(slotCheckPTT3()));
+  connect(ui->enableCATCheckBox, &QCheckBox::clicked, this, &rigConfig::slotEnableCAT);
+  connect(ui->enablePTTCheckBox, &QCheckBox::clicked, this, &rigConfig::slotEnablePTT);
+  connect(ui->enableXMLRPCCheckBox, &QCheckBox::clicked, this, &rigConfig::slotEnableXMLRPC);
+  connect(ui->enableHamlibNetCheckBox, &QCheckBox::clicked, this, &rigConfig::slotEnableHamlibNet);
+  connect(ui->restartPushButton, &QPushButton::clicked, this, &rigConfig::slotRestart);
+  connect(ui->RTSCheckBox, &QCheckBox::clicked, this, &rigConfig::slotCheckPTT0);
+  connect(ui->DTRCheckBox, &QCheckBox::clicked, this, &rigConfig::slotCheckPTT1);
+  connect(ui->nRTSCheckBox, &QCheckBox::clicked, this, &rigConfig::slotCheckPTT2);
+  connect(ui->nDTRCheckBox, &QCheckBox::clicked, this, &rigConfig::slotCheckPTT3);
   rigController=NULL;
   cp=NULL;
 }

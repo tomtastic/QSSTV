@@ -303,7 +303,7 @@ QString txWidget::getPreviewFilename()
   return ui->previewWidget->getFilename();
 }
 
-void  txWidget::setPreviewWidget(QString fn)
+void  txWidget::setPreviewWidget(const QString &fn)
 {
   addToLog(QString("previewfile: %1").arg(fn),LOGTXMAIN);
   ui->previewWidget->openImage(fn,false,false,false,true);
@@ -610,7 +610,7 @@ void txWidget::updateTxTime()
 }
 
 
-void 	txWidget::setImage(QString fn)
+void 	txWidget::setImage(const QString &fn)
 {
   addToLog(QString("setImage %1").arg(fn),LOGTXMAIN);
   imageViewerPtr->openImage(fn,true,true,false,true);
@@ -834,7 +834,7 @@ void txWidget::txTestPattern(etpSelect sel)
   txFunctionsPtr->txTestPattern(imageViewerPtr,sel);
 }
 
-void txWidget::startNotifyCheck(QString fn)
+void txWidget::startNotifyCheck(const QString &fn)
 {
   mask="Dummy"+fn+"+++*";
   numberOfNotifyChecks=NUMBEROFNOTIFYCHECKS;

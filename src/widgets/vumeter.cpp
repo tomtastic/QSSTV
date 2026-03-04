@@ -45,7 +45,7 @@ vuMeter::vuMeter(QWidget *parent) : QWidget(parent)
   labelText="V";
 }
 
-void vuMeter::setLabelText(QString t)
+void vuMeter::setLabelText(const QString &t)
 {
   labelText=t;
 }

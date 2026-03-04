@@ -1,25 +1,24 @@
-Replace C-style casts with C++ casts for type safety
+Fix build failure: Update .cpp implementations to match header signatures
 
-Medium priority code quality improvements:
+This fixes build #27 failure caused by mismatched function signatures
+between header and implementation files.
 
-Replaced C-style casts with appropriate C++ cast operators for better
-type safety and clearer intent. Used reinterpret_cast for pointer casts
-and qobject_cast for Qt object casts.
+When we changed headers to use const QString & parameters, we forgot
+to update the corresponding .cpp implementations, causing compilation
+errors:
+- error: out-of-line definition does not match any declaration
 
-Changes:
-- imageviewer.cpp: reinterpret_cast for scanLine pointer
-- imageviewer.cpp: Removed unnecessary QWidget cast for dirDialog
-- fftdisplay.cpp: reinterpret_cast for scanLine pointer
-- waterfalltext.cpp: reinterpret_cast for scanLine pointer
-- editor.cpp: Removed unnecessary QWidget casts (2 instances)
-- editorview.cpp: Removed unnecessary QWidget cast
-- wavio.cpp: reinterpret_cast for char* conversions (3 instances)
-- wavio.cpp: Removed unnecessary QWidget casts (2 instances)
-- imagematrix.cpp: qobject_cast for imageViewer* (2 instances)
+Fixed implementations in:
+- soundbase.cpp: errorHandler(const QString &, const QString &)
+- vumeter.cpp: setLabelText(const QString &)
+- textdisplay.cpp: append(const QString &)
+- extviewer.cpp: setup(const QString &)
+- waterfalltext.cpp: setText/getDuration(const QString &)
+- imageviewer.cpp: save/setParam(const QString &)
+- rxwidget.cpp: setSSTVStatusText/setOnlineStatus(const QString &)
+- txwidget.cpp: setImage/setPreviewWidget/startNotifyCheck(const QString &)
+- gallerywidget.cpp: putRxImage(const QString &)
+- arraydumper.cpp: All 6 arrayDump overloads(const QString &)
+- supportfunctions.cpp: setValue(const QString &)
 
-Benefits:
-- Compile-time type checking with qobject_cast (returns nullptr on failure)
-- Clearer intent - reinterpret_cast signals low-level pointer manipulation
-- Better code maintainability and readability
-- Easier to search for potentially dangerous casts
-- Follows modern C++ best practices
+This completes the pass-by-const-reference refactoring from commit d73df5c.

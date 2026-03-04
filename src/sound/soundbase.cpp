@@ -434,7 +434,7 @@ bool soundBase::startPlayback()
 }
 
 
-void soundBase::errorHandler(QString title, QString info)
+void soundBase::errorHandler(const QString &title, const QString &info)
 {
   addToLog(title+" "+info,LOGSOUND);
   lastErrorStr=title+" "+info;

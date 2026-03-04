@@ -186,7 +186,7 @@ const QStringList &galleryWidget::getFilenames()
 
 */
 
-void galleryWidget::putRxImage ( QString fn )
+void galleryWidget::putRxImage(const QString &fn)
 {
   if(transmissionModeIndex==TRXSSTV)
     {

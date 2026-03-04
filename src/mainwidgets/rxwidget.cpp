@@ -254,7 +254,7 @@ void rxWidget::slotSave()
   dispatcherPtr->saveImage(fileName,info);
 }
 
-void rxWidget::setOnlineStatus(bool online, QString info)
+void rxWidget::setOnlineStatus(bool online, const QString &info)
 {
   QString fn;
 
@@ -395,7 +395,7 @@ bool rxWidget::rxBusy()
   return rxFunctionsPtr->rxBusy();
 }
 
-void rxWidget::setSSTVStatusText(QString txt)
+void rxWidget::setSSTVStatusText(const QString &txt)
 {
   ui->sstvStatusLineEdit->setText(txt);
 }

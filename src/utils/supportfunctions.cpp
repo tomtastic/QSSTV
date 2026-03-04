@@ -180,7 +180,7 @@ void setValue(double val, QDoubleSpinBox *input)
   input->setValue(val);
 }
 
-void setValue(QString s, QLineEdit *input)
+void setValue(const QString &s, QLineEdit *input)
 {
 	input->setText(s);
 }

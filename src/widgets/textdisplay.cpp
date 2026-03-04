@@ -19,7 +19,7 @@ void textDisplay::clear()
   ui->plainTextEdit->clear();
 }
 
-void textDisplay::append(QString t)
+void textDisplay::append(const QString &t)
 {
   int i;
   QStringList sl;

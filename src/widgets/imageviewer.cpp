@@ -806,7 +806,7 @@ void imageViewer::slotToTX()
 }
 
 
-void imageViewer::save(QString fileName,QString fmt,bool convertRGB, bool source)
+void imageViewer::save(const QString &fileName, const QString &fmt, bool convertRGB, bool source)
 {
   QImage im;
   if(source)
@@ -892,7 +892,7 @@ bool imageViewer::reload()
 }
 
 
-void imageViewer::setParam(QString templateFn,bool usesTemplate,int width,int height)
+void imageViewer::setParam(const QString &templateFn, bool usesTemplate, int width, int height)
 {
   targetWidth=width;
   targetHeight=height;

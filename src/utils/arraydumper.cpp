@@ -5,7 +5,7 @@
 
 
 
-void arrayDump(QString label,short int *data, unsigned int len,bool toAux,bool singleColumn)
+void arrayDump(const QString &label, short int *data, unsigned int len, bool toAux, bool singleColumn)
 {
   unsigned int i,j;
   QString dumpStr,tmp;
@@ -45,7 +45,7 @@ void arrayDump(QString label,short int *data, unsigned int len,bool toAux,bool s
     }
 }
 
-void arrayDump(QString label,int *data, unsigned int len,bool toAux)
+void arrayDump(const QString &label, int *data, unsigned int len, bool toAux)
 {
   unsigned int i,j;
   QString dumpStr,tmp;
@@ -70,7 +70,7 @@ void arrayDump(QString label,int *data, unsigned int len,bool toAux)
     }
 }
 
-void arrayDump(QString label,quint16 *data, unsigned int len,bool inHex,bool toAux)
+void arrayDump(const QString &label, quint16 *data, unsigned int len, bool inHex, bool toAux)
 {
   unsigned int i,j;
   QString dumpStr,tmp;
@@ -102,7 +102,7 @@ void arrayDump(QString label,quint16 *data, unsigned int len,bool inHex,bool toA
     }
 }
 
-void arrayDump(QString label, quint32* data, unsigned int len,bool inHex, bool toAux)
+void arrayDump(const QString &label, quint32* data, unsigned int len, bool inHex, bool toAux)
 {
   unsigned int i,j;
   QString dumpStr,tmp;
@@ -135,7 +135,7 @@ void arrayDump(QString label, quint32* data, unsigned int len,bool inHex, bool t
     }
 }
 
-void arrayDump(QString label, float *data, unsigned int len, bool toAux, bool singleColumn)
+void arrayDump(const QString &label, float *data, unsigned int len, bool toAux, bool singleColumn)
 {
   unsigned int i,j;
   QString dumpStr,tmp;
@@ -175,7 +175,7 @@ void arrayDump(QString label, float *data, unsigned int len, bool toAux, bool si
     }
 }
 
-void arrayDump(QString label, double *data, unsigned int len, bool toAux, bool singleColumn)
+void arrayDump(const QString &label, double *data, unsigned int len, bool toAux, bool singleColumn)
 {
   unsigned int i,j;
   QString dumpStr,tmp;

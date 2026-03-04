@@ -78,7 +78,7 @@ void waterfallText::init()
 
 }
 
-double waterfallText::getDuration(QString txt)
+double waterfallText::getDuration(const QString &txt)
 {
   if(!txt.isNull())
     {
@@ -87,7 +87,7 @@ double waterfallText::getDuration(QString txt)
   return ((double)(line*3*fftLength))/(double)samplingrate;
 }
 
-void waterfallText::setText(QString txt)
+void waterfallText::setText(const QString &txt)
 {
   QString t=convert(txt);
   setupImage(t);

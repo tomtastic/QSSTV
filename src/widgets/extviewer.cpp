@@ -17,7 +17,7 @@ extViewer::~extViewer()
 }
 
 
-void extViewer::setup(QString fn)
+void extViewer::setup(const QString &fn)
 {
   int fw,fh;
   // we want the original image
