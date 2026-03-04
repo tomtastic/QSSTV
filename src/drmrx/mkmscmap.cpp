@@ -109,7 +109,7 @@ mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
     {
       n = s % y;
       m = s / y;
-      p_min = (int) ceil((double) ((K_min - k0 - x * n) / (x * y)));
+      p_min = (int) ceil(static_cast<double>((K_min - k0 - x * n) / (x * y)));
       p_max = (K_max - k0 - x * n) / (x * y);
       for (p = p_min; p <= p_max; p++)
 

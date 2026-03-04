@@ -81,7 +81,7 @@ bool sourceDecoder::decode()
       addToLog("audio decoding not implemented in qsstv !\n",LOGDRMSRC); return false;
     }
   addToLog("Datapacket received",LOGPERFORM);
-  N_partB = (int) (length_decoded_data/ 8);
+  N_partB = static_cast<int>(length_decoded_data/ 8);
   addToLog(QString("N-partB lenght=%1").arg(N_partB),LOGDRMSRC);
   if(N_partB>PACKETBUFFERLEN)
     {
@@ -256,7 +256,7 @@ bool sourceDecoder::setupDataPacket(QByteArray ba)
 
   if(currentDataPacket.sessionFlag)
     {
-      currentDataPacket.segmentNumber = (((unsigned char)(currentDataPacket.ba.at(0)) & 0x7F))*256+ ((unsigned char)currentDataPacket.ba.at(1))  ;
+      currentDataPacket.segmentNumber = ((static_cast<unsigned char>(currentDataPacket.ba.at(0)) & 0x7F))*256+ ((unsigned char)currentDataPacket.ba.at(1))  ;
       if(currentDataPacket.ba.at(0)&0x80)
         {
           currentDataPacket.lastSegment=true;
@@ -267,14 +267,14 @@ bool sourceDecoder::setupDataPacket(QByteArray ba)
 
   if (currentDataPacket.userFlag)
     {
-      currentDataPacket.userAccessField = (unsigned char)(currentDataPacket.ba.at(0));
+      currentDataPacket.userAccessField = static_cast<unsigned char>(currentDataPacket.ba.at(0));
       currentDataPacket.advance(1);
       lengthIndicator = (currentDataPacket.userAccessField& 0xF);
 
-      if((currentDataPacket.userAccessField & 0x10) && (lengthIndicator>=2)) currentDataPacket.transportID = (((unsigned char)(currentDataPacket.ba.at(0))))*256+ ((unsigned char)currentDataPacket.ba.at(1))  ;
+      if((currentDataPacket.userAccessField & 0x10) && (lengthIndicator>=2)) currentDataPacket.transportID = ((static_cast<unsigned char>(currentDataPacket.ba.at(0))))*256+ ((unsigned char)currentDataPacket.ba.at(1))  ;
       currentDataPacket.advance(lengthIndicator);
     }
-  currentDataPacket.segmentSize=(((unsigned char)(currentDataPacket.ba.at(0)) & 0x1F))*256+ ((unsigned char)currentDataPacket.ba.at(1));
+  currentDataPacket.segmentSize=((static_cast<unsigned char>(currentDataPacket.ba.at(0)) & 0x1F))*256+ ((unsigned char)currentDataPacket.ba.at(1));
   currentDataPacket.advance(2);
   currentDataPacket.lenght=currentDataPacket.ba.size();
   currentDataPacket.log();

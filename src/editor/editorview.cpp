@@ -542,8 +542,8 @@ void editorView::slotItemSelected(graphItemBase* ib)
       fontSizeSpinBox->setValue(p.font.pointSize());
     }
   penWidthSpinBox->setValue(p.pen.widthF());
-  hshearSlider->setValue((int)(p.hShear*10));
-  vshearSlider->setValue((int)(p.vShear*10));
+  hshearSlider->setValue(static_cast<int>(p.hShear*10));
+  vshearSlider->setValue(static_cast<int>(p.vShear*10));
 }
 
 

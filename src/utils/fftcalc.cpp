@@ -53,7 +53,7 @@ void fftCalc::createHamming()
   hammingBuffer= new double[fftLength];
   for(i=0;i<fftLength;i++)
     {
-      hammingBuffer[i]=0.54-(0.46*cos(2*M_PI*((double)i/((double)(fftLength-1)))));
+      hammingBuffer[i]=0.54-(0.46*cos(2*M_PI*((double)i/(static_cast<double>(fftLength-1)))));
     }
 
 }

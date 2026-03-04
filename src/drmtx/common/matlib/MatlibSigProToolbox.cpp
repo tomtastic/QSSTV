@@ -233,7 +233,7 @@ CMatlibVector<CReal> Randn(const int iLen)
 {
 	/* Add some constant distributed random processes together */
 	_VECOP(CReal, iLen, 
-		(CReal) ((((CReal) 
+		static_cast<CReal>((((CReal) 
 		rand() + rand() + rand() + rand() + rand() + rand() + rand()) 
 		/ RAND_MAX - 0.5) * /* sqrt(3) * 2 / sqrt(7) */ 1.3093));
 }
@@ -361,7 +361,7 @@ CMatlibVector<CComplex> FirFiltDec(const CMatlibVector<CComplex>& cvB,
 		/* Calculate the number of output bits which can be generated from the
 		   provided input vector */
 		iDecSizeY = 
-				(int) (((CReal) iSizeXNew - iSizeFiltHist - 1) / iDecFact + 1);
+				static_cast<int>(((CReal) iSizeXNew - iSizeFiltHist - 1) / iDecFact + 1);
 
 		/* Since the input vector length must not be a multiple of "iDecFact",
 		   some input bits will be unused. To store this number, the size of

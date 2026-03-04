@@ -167,7 +167,7 @@ int getofdm( /*@null@ */ float *rs, float time_offset_fractional_init,
               temp2 += rs[i * 2] * rs[i * 2] + rs[i * 2 + 1] * rs[i * 2 + 1];
               temp3 += rs[(i + Tu) * 2] * rs[(i + Tu) * 2] + rs[(i + Tu) * 2 + 1] * rs[(i + Tu) * 2 + 1];
             }
-          temp4 = (float) (EPSILON + 0.5 * (temp2 + temp3));
+          temp4 = static_cast<float>(EPSILON + 0.5 * (temp2 + temp3));
 //          logfile->addToAux(QString("tmp %1 %2 %3 %4 %5").arg(temp1[0]).arg(temp1[1]).arg(temp2).arg(temp3).arg(temp4));
 
           /* time offset measurement : theta */
@@ -245,7 +245,7 @@ int getofdm( /*@null@ */ float *rs, float time_offset_fractional_init,
                                                                     + Tu) * 2 +
                   1];
             }
-          epsilon_ML = (float) (atan2(temp[1], temp[0]));
+          epsilon_ML = static_cast<float>(atan2(temp[1], temp[0]));
 
           /* filter epsilon_ML */
           freq_offset_ctrl =
@@ -293,14 +293,14 @@ int getofdm( /*@null@ */ float *rs, float time_offset_fractional_init,
                                                       + Tgh + i) * 2 +
               1] * exp_temp[i * 2];
         }
-      phi_freq_correction_last = (float) fmod(phi_freq_correction_last + (float) Ts / (float) Tu * freq_offset, (float)(2.0 * PI));
+      phi_freq_correction_last = (float) fmod(phi_freq_correction_last + (float) Ts / (float) Tu * freq_offset, static_cast<float>(2.0 * PI));
 
       /* Now do fft and output symbol */
       fftwf_execute(p);
       for (i = 0; i <= Tu / 2; i++)
 
         {
-          term1 = (float) (i * 2.0 * PI * (Tgh + time_offset_fractional) / Tu);	/* Euler */
+          term1 = static_cast<float>(i * 2.0 * PI * (Tgh + time_offset_fractional) / Tu);	/* Euler */
           exp_temp[i * 2] = (float) cos(term1);
           exp_temp[i * 2 + 1] = (float) sin(term1);
         }
@@ -308,8 +308,8 @@ int getofdm( /*@null@ */ float *rs, float time_offset_fractional_init,
       for (i = 0; i < Tu / 2; i++)
 
         {
-          out1[i * 2] = (float) (((S[(Tu - 1 - i)]).re) * exp_temp[(i + 1) * 2] + ((S[(Tu - 1 - i)]).im) * exp_temp[(i + 1) * 2 + 1]);	/* real = ac+bd */
-          out1[i * 2 + 1] = (float) (((S[(Tu - 1 - i)]).im) * exp_temp[(i + 1) * 2] - ((S[(Tu - 1 - i)]).re) * exp_temp[(i + 1) * 2 + 1]);	/* imag bc -ad */
+          out1[i * 2] = static_cast<float>(((S[(Tu - 1 - i)]).re) * exp_temp[(i + 1) * 2] + ((S[(Tu - 1 - i)]).im) * exp_temp[(i + 1) * 2 + 1]);	/* real = ac+bd */
+          out1[i * 2 + 1] = static_cast<float>(((S[(Tu - 1 - i)]).im) * exp_temp[(i + 1) * 2] - ((S[(Tu - 1 - i)]).re) * exp_temp[(i + 1) * 2 + 1]);	/* imag bc -ad */
         }
       /* Now flip out1 to out */
       for (i = 0; i < Tu / 2; i++)
@@ -318,10 +318,10 @@ int getofdm( /*@null@ */ float *rs, float time_offset_fractional_init,
           out[i * 2] = out1[(Tu / 2 - 1 - i) * 2];
           out[i * 2 + 1] = out1[(Tu / 2 - i - 1) * 2 + 1];
           out[(Tu / 2 + i) * 2] =
-              (float) (((S[i]).re) * exp_temp[i * 2] -
+              static_cast<float>(((S[i]).re) * exp_temp[i * 2] -
                        ((S[i]).im) * exp_temp[i * 2 + 1]);
           out[(Tu / 2 + i) * 2 + 1] =
-              (float) (((S[i]).im) * exp_temp[i * 2] +
+              static_cast<float>(((S[i]).im) * exp_temp[i * 2] +
                        ((S[i]).re) * exp_temp[i * 2 + 1]);
         } Zi[0] = 1.0;
       Zi[1] = phi_freq_correction_last;

@@ -48,7 +48,7 @@ void waterfallText::init()
   if(phi!=nullptr) delete phi;
   fftLength=TXSTRIPE*SUBSAMPLINGFACTOR/2;
   samplingrate=BASESAMPLERATE;
-  binSize=(double)(BASESAMPLERATE)/((double)fftLength);
+  binSize=static_cast<double>(BASESAMPLERATE)/((double)fftLength);
   txFilter= new wfFilter(TXSTRIPE);
   out = (fftw_complex *) fftw_malloc(sizeof(fftw_complex)*fftLength);
   dataBuffer = (fftw_complex *) fftw_malloc(sizeof(fftw_complex)*fftLength);
@@ -84,7 +84,7 @@ double waterfallText::getDuration(const QString &txt)
     {
       setupImage(convert(txt));
     }
-  return ((double)(line*3*fftLength))/(double)samplingrate;
+  return (static_cast<double>(line*3*fftLength))/(double)samplingrate;
 }
 
 void waterfallText::setText(const QString &txt)

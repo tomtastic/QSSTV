@@ -193,7 +193,7 @@ void CCRC::crc16_bytewise(double  checksum[],
     {
       for (j = 7; j >= 0; j--)
         {
-          y = (((b >> 15) + (unsigned int) (in[i] >> j)) & 0x01) & 0x01;	/* extra parenth pa0mbo */
+          y = (((b >> 15) + static_cast<unsigned int>(in[i] >> j)) & 0x01) & 0x01;	/* extra parenth pa0mbo */
           if (y == 1)
             b = ((b << 1) ^ x);
 
@@ -206,7 +206,7 @@ void CCRC::crc16_bytewise(double  checksum[],
     {
       for (j = 7; j >= 0; j--)
         {
-          y = (((b >> 15) + (unsigned int) ((in[i] >> j) & 0x01)) ^ 0x01) & 0x01;	/* extra parent pa0mbo */
+          y = (((b >> 15) + static_cast<unsigned int>((in[i] >> j) & 0x01)) ^ 0x01) & 0x01;	/* extra parent pa0mbo */
           if (y == 1)
             b = ((b << 1) ^ x);
 
@@ -214,6 +214,6 @@ void CCRC::crc16_bytewise(double  checksum[],
             b = (b << 1);
         }
     }
-  *checksum = (double) (b & 0xFFFF);
+  *checksum = static_cast<double>(b & 0xFFFF);
 }
 

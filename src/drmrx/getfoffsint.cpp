@@ -92,9 +92,9 @@ getfoffsint(float *symbolbuf, int N_symbols, int K_dc, int K_modulo, int Tu)
   /* detect pilots */
 
 
-  k_pilot1 = (int) ceil((float) (9 * Tu / 288));
-  k_pilot2 = (int) ceil((float) (27 * Tu / 288));
-  k_pilot3 = (int) ceil((float) (36 * Tu / 288));
+  k_pilot1 = (int) ceil(static_cast<float>(9 * Tu / 288));
+  k_pilot2 = (int) ceil(static_cast<float>(27 * Tu / 288));
+  k_pilot3 = (int) ceil(static_cast<float>(36 * Tu / 288));
 
 
 
@@ -158,6 +158,6 @@ getfoffsint(float *symbolbuf, int N_symbols, int K_dc, int K_modulo, int Tu)
     }
 
   K_dc_offset = ((K_dc_offset - K_dc + Tu / 2 + Tu) % Tu) - Tu / 2;
-  freq_offset_integer = (float) (2 * PI * K_dc_offset);
+  freq_offset_integer = static_cast<float>(2 * PI * K_dc_offset);
   return (freq_offset_integer);
 }

@@ -549,7 +549,7 @@ int msdhardmsc(double *received_real, double *received_imag, int Lrxdata,
 
 		{
 		  diff = 0;
-      for (sample_index = 0;sample_index <(int)((2 - HMmix) * N * sizeof(char) / sizeof(int));sample_index++)
+      for (sample_index = 0;sample_index <static_cast<int>((2 - HMmix) * N * sizeof(char) / sizeof(int));sample_index++)
         {
 		      diff +=
 			(((int *) hardpoints)[sample_index] ^
@@ -601,7 +601,7 @@ int msdhardmsc(double *received_real, double *received_imag, int Lrxdata,
     {
       for (m = Lvspp + 6; m < Lvspp + 6 + (int) L1_imag[0]; m++)
 	{
-	  output_ptr[n++] = (double) (infoout[0][m] ^ PRBS_BIT(PRBS_reg));
+	  output_ptr[n++] = static_cast<double>(infoout[0][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
     }}
 
@@ -610,7 +610,7 @@ int msdhardmsc(double *received_real, double *received_imag, int Lrxdata,
     {
       for (m = 0; m < (int) L1_real[level]; m++)
 	{
-	  output_ptr[n++] = (double) (infoout[level][m] ^ PRBS_BIT(PRBS_reg));
+	  output_ptr[n++] = static_cast<double>(infoout[level][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
 	}
       /* printf("msdhardmsc: 2a n %d\n", n); */
@@ -619,7 +619,7 @@ int msdhardmsc(double *received_real, double *received_imag, int Lrxdata,
 	   (int) L1_real[level] + (int) L2_real[level] + 6 +
 	   (int) L1_imag[level]; m++)
 	{
-	  output_ptr[n++] = (double) (infoout[level][m] ^ PRBS_BIT(PRBS_reg));
+	  output_ptr[n++] = static_cast<double>(infoout[level][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
     }}
   /*  printf("msdhardmsc: 2b n %d\n", n);  */
@@ -628,7 +628,7 @@ int msdhardmsc(double *received_real, double *received_imag, int Lrxdata,
       for (m = Lvspp + 6 + (int) L1_imag[0];
 	   m < Lvspp + 6 + (int) L1_imag[0] + (int) L2_imag[0]; m++)
 	{
-	  output_ptr[n++] = (double) (infoout[0][m] ^ PRBS_BIT(PRBS_reg));
+	  output_ptr[n++] = static_cast<double>(infoout[0][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
     }}
 
@@ -638,7 +638,7 @@ int msdhardmsc(double *received_real, double *received_imag, int Lrxdata,
       for (m = (int) L1_real[level];
 	   m < (int) L1_real[level] + (int) L2_real[level]; m++)
 	{
-	  output_ptr[n++] = (double) (infoout[level][m] ^ PRBS_BIT(PRBS_reg));
+	  output_ptr[n++] = static_cast<double>(infoout[level][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
       } for (m =
 	       (int) L1_real[level] + (int) L2_real[level] + 6 +
@@ -647,7 +647,7 @@ int msdhardmsc(double *received_real, double *received_imag, int Lrxdata,
 	       (int) L1_real[level] + (int) L2_real[level] + 6 +
 	       (int) L1_imag[level] + (int) L2_imag[level]; m++)
 	{
-	  output_ptr[n++] = (double) (infoout[level][m] ^ PRBS_BIT(PRBS_reg));
+	  output_ptr[n++] = static_cast<double>(infoout[level][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
     }}
 
@@ -662,7 +662,7 @@ int msdhardmsc(double *received_real, double *received_imag, int Lrxdata,
   output_ptr = VSPPhard;
   for (m = 0; m < Lvspp; m++)
     {
-      output_ptr[m] = (double) (infoout[0][m] ^ PRBS_BIT(PRBS_reg));
+      output_ptr[m] = static_cast<double>(infoout[0][m] ^ PRBS_BIT(PRBS_reg));
       PRBS_SHIFT(PRBS_reg);
     } output_ptr = iterations;
   output_ptr[0] = (double) iteration;

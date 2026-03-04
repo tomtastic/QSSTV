@@ -917,7 +917,7 @@ void syncProcessor::recalculateMatchArray()
 bool syncProcessor::lineCompare(DSPFLOAT samPerLine, int srcIdx, int dstIdx, quint16 &lineNumber, double &fraction)
 {
   double delta;
-  delta=(double)(syncArray[dstIdx].end-syncArray[srcIdx].end);
+  delta=static_cast<double>(syncArray[dstIdx].end-syncArray[srcIdx].end);
 
   lineNumber=(delta+samPerLine/2.) /samPerLine;
   fraction=(double)lineNumber-delta/samPerLine;

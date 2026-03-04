@@ -624,14 +624,14 @@ bool demodulator::channelEstimation()
       y = y_list[robustness_mode];
       k0 = k0_list[robustness_mode];
       Q_1024 = Q_1024_list[robustness_mode];
-      mean_energy_of_used_cells =(float) (no_of_used_cells_per_frame_list[spectrum_occupancy_estimation + robustness_mode * 6] + 3 + cnt_time_ref_cells);
+      mean_energy_of_used_cells =static_cast<float>(no_of_used_cells_per_frame_list[spectrum_occupancy_estimation + robustness_mode * 6] + 3 + cnt_time_ref_cells);
       rndcnt = 0;
       for (s = 0; s < symbols_per_frame; s++)
         {
           nnn = s % y;
-          m = (int) floor((double) (s / y));
-          p_min = (int) ceil((double) ((K_min - k0 - x * nnn) / (x * y)));
-          p_max = (int) floor((double) ((K_max - k0 - x * nnn) / (x * y)));
+          m = (int) floor(static_cast<double>(s / y));
+          p_min = (int) ceil(static_cast<double>((K_min - k0 - x * nnn) / (x * y)));
+          p_max = (int) floor(static_cast<double>((K_max - k0 - x * nnn) / (x * y)));
           for (p = p_min; p <= p_max; p++)
 
             {
@@ -678,7 +678,7 @@ bool demodulator::channelEstimation()
               gain_ref_cells_k[rndcnt] = k + s * carrier_per_symbol;
               gain_ref_cells_theta_1024[rndcnt] = theta_1024;
               gain_ref_cells_a[rndcnt++] = a;
-              mean_energy_of_used_cells =(float) (mean_energy_of_used_cells - 1.0 + a * a);
+              mean_energy_of_used_cells =static_cast<float>(mean_energy_of_used_cells - 1.0 + a * a);
             }
         }
       mean_energy_of_used_cells /=no_of_used_cells_per_frame_list[spectrum_occupancy_estimation + robustness_mode * 6];
@@ -781,7 +781,7 @@ bool demodulator::channelEstimation()
                       rest = sin(M_PI * xsinc2);
                       xsinc2 = rest / (M_PI * xsinc2);
                     }
-                  PHI[k_index1][k_index2] = (float) (xsinc1 * xsinc2);
+                  PHI[k_index1][k_index2] = static_cast<float>(xsinc1 * xsinc2);
                 }
             }
           for (i = 0; i < gain_ref_cells_per_window; i++)
@@ -831,7 +831,7 @@ bool demodulator::channelEstimation()
                       rest = sin(M_PI * xsinc2);
                       xsinc2 = rest / (M_PI * xsinc2);
                     }
-                  THETA[k_index2] = (float) (xsinc1 * xsinc2);
+                  THETA[k_index2] = static_cast<float>(xsinc1 * xsinc2);
                 }
               // calc matrix product THETA*PHI_INV
               for (j = 0; j < NP; j++)
@@ -868,7 +868,7 @@ bool demodulator::channelEstimation()
                       rest = sin(M_PI * xsinc2);
                       xsinc2 = rest / (M_PI * xsinc2);
                     }
-                  THETA[k_index2] = (float) (xsinc1 * xsinc2);
+                  THETA[k_index2] = static_cast<float>(xsinc1 * xsinc2);
                 }		/* end k_index2-loop */
 
               // calc matrix product THETA*PHI_INV
@@ -928,10 +928,10 @@ bool demodulator::channelEstimation()
             }
           ntc_indx = training_cells_relative_index[j] + i * K_modulo + 1;	/* pa0mbo in  matlab +1 =OK trcrindx 1 lager dan in M   */
 
-          hoek =(float) (2.0 * M_PI *(float)gain_ref_cells_theta_1024[gain_ref_cells_subset_nn[j]] /1024.0);
+          hoek =static_cast<float>(2.0 * M_PI *(float)gain_ref_cells_theta_1024[gain_ref_cells_subset_nn[j]] /1024.0);
 
-          tmpreal =(float) (cos(hoek) / gain_ref_cells_a[gain_ref_cells_subset_nn[j]]);
-          tmpimag =(float) (-sin(hoek) /gain_ref_cells_a[gain_ref_cells_subset_nn[j]]);
+          tmpreal =static_cast<float>(cos(hoek) / gain_ref_cells_a[gain_ref_cells_subset_nn[j]]);
+          tmpimag =static_cast<float>(-sin(hoek) /gain_ref_cells_a[gain_ref_cells_subset_nn[j]]);
           normalized_training_cells[2 * j] = symbol_buffer[2 * ntc_indx] * tmpreal - symbol_buffer[2 * ntc_indx + 1] * tmpimag;	/* real part */
           normalized_training_cells[2 * j + 1] = symbol_buffer[2 * ntc_indx + 1] * tmpreal + symbol_buffer[2 * ntc_indx] * tmpimag;	/* imag part */
         }
@@ -1059,9 +1059,9 @@ bool demodulator::channelEstimation()
       trxbuf_indx = transmission_frame_buffer_wptr + FAC_cells_k[i];	/* pa0mbo 18-5-2007 checked  */
       FAC_cells_sequence[i * 2] = transmission_frame_buffer[2 * trxbuf_indx];
       FAC_cells_sequence[i * 2 + 1] = transmission_frame_buffer[2 * trxbuf_indx + 1];
-      t1 = (float) (fabs(FAC_cells_sequence[i * 2]) - sqrt(0.5));
+      t1 = static_cast<float>(fabs(FAC_cells_sequence[i * 2]) - sqrt(0.5));
       t1 = t1 * t1;
-      t2 = (float) (fabs(FAC_cells_sequence[i * 2 + 1]) - sqrt(0.5));
+      t2 = static_cast<float>(fabs(FAC_cells_sequence[i * 2 + 1]) - sqrt(0.5));
       t2 = t2 * t2;
       FAC_squared_noise_sequence[i] = t1 + t2;
       t1 = channel_transfer_function_buffer[trxbuf_indx * 2];
@@ -1076,10 +1076,10 @@ bool demodulator::channelEstimation()
 
   FACAvailable=true;
   avgSNRAvailable=true;
-  MERFAC = (float) (log(sum_MERFAC / lFAC + 1.0E-10));
+  MERFAC = static_cast<float>(log(sum_MERFAC / lFAC + 1.0E-10));
   MERFAC /= (log(10.0));
   MERFAC *= -10.0;
-  WMERFAC =(float) (log(sum_WMERFAC /(mean_energy_of_used_cells * (sum_weight_FAC + lFAC * 1.0E-10))));
+  WMERFAC =static_cast<float>(log(sum_WMERFAC /(mean_energy_of_used_cells * (sum_weight_FAC + lFAC * 1.0E-10))));
   WMERFAC /= (log(10.0));
   WMERFAC *= -10.0;
   SNR_dB = WMERFAC;

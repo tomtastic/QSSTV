@@ -113,7 +113,7 @@ void drmTransmitter::init(QByteArray *ba, QString name, QString format, drmTxPar
   TransmParam->SetServiceParameters(0,Service);
   DRMTransmitter->Init();
   // calculate transmision time
-  duration=(double)(numTxFrames)*0.4*1.005; // 1.005 ->some extra time for buffers
+  duration=static_cast<double>(numTxFrames)*0.4*1.005; // 1.005 ->some extra time for buffers
 }
 
 void drmTransmitter::start(bool startTx)

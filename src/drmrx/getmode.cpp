@@ -91,7 +91,7 @@ void initGetmode(int n)
 void getmode(float *input, int n, smode_info * result)
 {
   float EPSILON = 1.0E-10;
-  float SNR_mode_det = (float) (exp(15.0 * log(10) / 10.0));
+  float SNR_mode_det = static_cast<float>(exp(15.0 * log(10) / 10.0));
   float rho;
   int Ts_list[4] = { Ts_A, Ts_B, Ts_C, Ts_D };
   int Tu_list[4] = { Tu_A, Tu_B, Tu_C, Tu_D };
@@ -154,7 +154,7 @@ void getmode(float *input, int n, smode_info * result)
             {
               gamma[i * 2] = gamma[i * 2] + conv_in_[(t_smp + Tg + i - 1) * 2];	/* pa0mbo -1 ios nieuw */
               gamma[i * 2 + 1] = gamma[i * 2 + 1] + conv_in_[(t_smp + Tg + i - 1) * 2 + 1];
-              Phi[i] =  Phi[i] +  (float) (0.5 * (EPSILON + conv_abs_in_in_[t_smp + Tg + i - 1]));
+              Phi[i] =  Phi[i] +  static_cast<float>(0.5 * (EPSILON + conv_abs_in_in_[t_smp + Tg + i - 1]));
             }
           t_smp += Ts;
         }
@@ -266,7 +266,7 @@ void getmode(float *input, int n, smode_info * result)
             {
               gamma[i * 2] = conv_in_[(t_smp + i) * 2];
               gamma[i * 2 + 1] = conv_in_[(t_smp + i) * 2 + 1];
-              Phi[i] = (float) (0.5 * (EPSILON + conv_abs_in_in_[t_smp + i]));
+              Phi[i] = static_cast<float>(0.5 * (EPSILON + conv_abs_in_in_[t_smp + i]));
 
               /* detmn max and its indx */
               tmpmax =
@@ -297,8 +297,8 @@ void getmode(float *input, int n, smode_info * result)
           sumxx += (float) i *(float) i;
           sumxy += (float) i *(float) b[i];
         }
-      slope = (float) (((N_symbols_mode_det - 2) * sumxy - sumx * sumy) / ((N_symbols_mode_det - 2) * sumxx - sumx * sumx));
-      boffs = (float) ((sumy * sumxx - sumx * sumxy) / ((N_symbols_mode_det - 2) * sumxx - sumx * sumx));
+      slope = static_cast<float>(((N_symbols_mode_det - 2) * sumxy - sumx * sumy) / ((N_symbols_mode_det - 2) * sumxx - sumx * sumx));
+      boffs = static_cast<float>((sumy * sumxx - sumx * sumxy) / ((N_symbols_mode_det - 2) * sumxx - sumx * sumx));
     }
   /* printf("in getmode N_symbols_mode_det %d \n", N_symbols_mode_det);
   printf("mode is %d toffs %g samplroffs %g f_offs_fract %g\n", mode, fmod((boffs + Ts / 2 + time_offset_mean - 1), (float) Ts), slope / ((float) Ts), epsilon_ML_list[mode]);	 */

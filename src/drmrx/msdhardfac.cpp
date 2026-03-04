@@ -632,7 +632,7 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
 
 		{
 		  diff = 0;
-      for (sample_index = 0;sample_index <((int)(((2 - HMmix) * N * sizeof(char)) / sizeof(int))); sample_index++)
+      for (sample_index = 0;sample_index <(static_cast<int>(((2 - HMmix) * N * sizeof(char)) / sizeof(int))); sample_index++)
 
 		    {
 		      diff +=
@@ -685,28 +685,28 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
     {
       for (m = Lvspp + 6; m < Lvspp + 6 + (int) L1_imag[0]; m++)
 	{
-	  output_ptr[n++] = (double) (infoout[0][m] ^ PRBS_BIT(PRBS_reg));
+	  output_ptr[n++] = static_cast<double>(infoout[0][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
     }}
   for (level = (Lvspp != 0); level < no_of_levels; level++)
     {
       for (m = 0; m < (int) L1_real[level]; m++)
 	{
-	  output_ptr[n++] = (double) (infoout[level][m] ^ PRBS_BIT(PRBS_reg));
+	  output_ptr[n++] = static_cast<double>(infoout[level][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
       } for (m = (int) L1_real[level] + (int) L2_real[level] + 6;
 	       m <
 	       (int) L1_real[level] + (int) L2_real[level] + 6 +
 	       (int) L1_imag[level]; m++)
 	{
-	  output_ptr[n++] = (double) (infoout[level][m] ^ PRBS_BIT(PRBS_reg));
+	  output_ptr[n++] = static_cast<double>(infoout[level][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
   }} if (HMmix)
     {
       for (m = Lvspp + 6 + (int) L1_imag[0];
 	   m < Lvspp + 6 + (int) L1_imag[0] + (int) L2_imag[0]; m++)
 	{
-	  output_ptr[n++] = (double) (infoout[0][m] ^ PRBS_BIT(PRBS_reg));
+	  output_ptr[n++] = static_cast<double>(infoout[0][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
     }}
   for (level = (Lvspp != 0); level < no_of_levels; level++)
@@ -714,7 +714,7 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
       for (m = (int) L1_real[level];
 	   m < (int) L1_real[level] + (int) L2_real[level]; m++)
 	{
-	  output_ptr[n++] = (double) (infoout[level][m] ^ PRBS_BIT(PRBS_reg));
+	  output_ptr[n++] = static_cast<double>(infoout[level][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
       } for (m =
 	       (int) L1_real[level] + (int) L2_real[level] + 6 +
@@ -723,7 +723,7 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
 	       (int) L1_real[level] + (int) L2_real[level] + 6 +
 	       (int) L1_imag[level] + (int) L2_imag[level]; m++)
 	{
-	  output_ptr[n++] = (double) (infoout[level][m] ^ PRBS_BIT(PRBS_reg));
+	  output_ptr[n++] = static_cast<double>(infoout[level][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
     }} PRBS_INIT(PRBS_reg);
   if (Lvspp != 0)

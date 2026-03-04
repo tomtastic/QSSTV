@@ -113,28 +113,28 @@ void modePD::calcPixelPositionTable(unsigned int colorLine,bool tx)
       lineStart+=bp;
       for(i=0;i<activeSSTVParam->numberOfPixels;i++)
         {
-          pixelPositionTable[i]=(unsigned int)round(lineStart+(((float)(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
+          pixelPositionTable[i]=(unsigned int)round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
         }
       break;
     case REDLINE:
       lineStart+=(bp+visibleLineLength);
       for(i=0;i<activeSSTVParam->numberOfPixels;i++)
         {
-          pixelPositionTable[i]=(unsigned int)round(lineStart+(((float)(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
+          pixelPositionTable[i]=(unsigned int)round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
         }
       break;
     case BLUELINE:
       lineStart+=(bp+2*visibleLineLength);
       for(i=0;i<activeSSTVParam->numberOfPixels;i++)
         {
-          pixelPositionTable[i]=(unsigned int)round(lineStart+(((float)(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
+          pixelPositionTable[i]=(unsigned int)round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
         }
       break;
     case YLINEEVEN:
       lineStart+=(bp+3*visibleLineLength);
       for(i=0;i<activeSSTVParam->numberOfPixels;i++)
         {
-          pixelPositionTable[i]=(unsigned int)round(lineStart+(((float)(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
+          pixelPositionTable[i]=(unsigned int)round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
         }
       break;
     }

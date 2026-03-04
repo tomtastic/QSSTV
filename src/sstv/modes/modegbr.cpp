@@ -120,7 +120,7 @@ void modeGBR::calcPixelPositionTable(unsigned int colorLine,bool tx)
     }
   for(i=0;i<activeSSTVParam->numberOfPixels;i++)
     {
-      pixelPositionTable[i]=(unsigned int)round(lineStart+(((float)(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
+      pixelPositionTable[i]=(unsigned int)round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
     }
 }
 

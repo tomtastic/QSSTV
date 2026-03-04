@@ -270,11 +270,11 @@ bool reedSolomonCoder::encode(QByteArray &ba,QString extension,eRSType rsType)
   ec_buf.clear();
   bk_buf.resize(bep_size*RSBSIZE);
 
-  dataByte = (unsigned char) ( rs_dsize - ( got % rs_dsize)) ; /* surplus in filelength */
+  dataByte = static_cast<unsigned char>( rs_dsize - ( got % rs_dsize)) ; /* surplus in filelength */
   ec_buf.append(dataByte);
-  dataByte = (unsigned char) ( chunks % 256) ;
+  dataByte = static_cast<unsigned char>( chunks % 256) ;
   ec_buf.append(dataByte);
-  dataByte = (unsigned char) (chunks/256) ;
+  dataByte = static_cast<unsigned char>(chunks/256) ;
   ec_buf.append(dataByte);
   ec_buf.append(suffix.toLatin1().at(0));
   ec_buf.append(suffix.toLatin1().at(1));

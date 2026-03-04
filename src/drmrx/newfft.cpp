@@ -40,7 +40,7 @@ void rfft(float *buf, int N2, int forward)
 {
   float c2, h1r, h1i, h2r, h2i, temp;
   float br, bi;
-  float theta = (float) (pi / N2);
+  float theta = static_cast<float>(pi / N2);
   float wr = 1.;
   float wi = 0.;
   float c1 = 0.5;
@@ -74,7 +74,7 @@ void rfft(float *buf, int N2, int forward)
       bi = 0.;
       *(buf + 1) = 0.;
     }
-  wpr = (float) (-2. * pow(sin(0.5 * theta), 2.));
+  wpr = static_cast<float>(-2. * pow(sin(0.5 * theta), 2.));
   wpi = (float) sin(theta);
   N2p1 = (N2 << 1) + 1;
 
@@ -143,8 +143,8 @@ void cfft(float *buf, int N2, int forward)
   for (mmax = 2; mmax < ND; mmax = delta)
     {
       delta = mmax << 1;
-      theta = (float) (twopi / ((forward == 1) ? mmax : -mmax));
-      wpr = (float) (-2. * pow(sin(0.5 * theta), 2.));
+      theta = static_cast<float>(twopi / ((forward == 1) ? mmax : -mmax));
+      wpr = static_cast<float>(-2. * pow(sin(0.5 * theta), 2.));
       wpi = (float) sin(theta);
       wr = 1.;
       wi = 0.;
@@ -170,7 +170,7 @@ void cfft(float *buf, int N2, int forward)
 
 
 /*	scale = forward ? 1./ND : 2.;		 this is the original */
-  scale = (float) ((forward == 1) ? 1.0 : 1.0 / ND);
+  scale = static_cast<float>((forward == 1) ? 1.0 : 1.0 / ND);
   if ((fabs(scale) - 1.0) < DBL_EPSILON)
     {
       bi = buf;

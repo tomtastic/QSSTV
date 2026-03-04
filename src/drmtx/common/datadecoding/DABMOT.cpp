@@ -270,7 +270,7 @@ void CMOTDABEnc::SetMOTObject(CMOTObject & NewMOTObject,int bytesAvailable)
      number the length of the parameter's DataField in bytes. The length of
      this field is either 7 or 15 bits, depending on the setting of the
      ExtensionFlag */
-  MOTObjectRaw.Header.Enqueue((uint32_t) (1 /* header */  +
+  MOTObjectRaw.Header.Enqueue(static_cast<uint32_t>(1 /* header */  +
                                           iFileNameSize	/* actual data */), 7);
   // printf("iFileNameSize is %d\n", iFileNameSize);
   // if (iFileNameSize ==0) return ;

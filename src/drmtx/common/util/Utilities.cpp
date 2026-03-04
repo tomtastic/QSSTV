@@ -258,7 +258,7 @@ CModJulDate::Set(const uint32_t iModJulDate)
 	   (Taken from "http://mathforum.org/library/drmath/view/51907.html") */
 	// 1. Add .5 to the JD and let Z = integer part of (JD+.5) and F the
 	// fractional part F = (JD+.5)-Z
-	iZ = (uint32_t) (rJulDate + (_REAL) 0.5);
+	iZ = static_cast<uint32_t>(rJulDate + (_REAL) 0.5);
 //	rF = (rJulDate + (_REAL) 0.5) - iZ;
 
 	// 2. If Z < 2299161, take A = Z
@@ -268,8 +268,8 @@ CModJulDate::Set(const uint32_t iModJulDate)
 		iA = iZ;
 	else
 	{
-		iAlpha = (int) (((_REAL) iZ - (_REAL) 1867216.25) / (_REAL) 36524.25);
-		iA = iZ + 1 + iAlpha - (int) ((_REAL) iAlpha / (_REAL) 4.0);
+		iAlpha = static_cast<int>(((_REAL) iZ - (_REAL) 1867216.25) / (_REAL) 36524.25);
+		iA = iZ + 1 + iAlpha - static_cast<int>((_REAL) iAlpha / (_REAL) 4.0);
 	}
 
 	// 3. Then calculate:
@@ -278,13 +278,13 @@ CModJulDate::Set(const uint32_t iModJulDate)
 	// D = INT( 365.25*C )
 	// E = INT( (B-D)/30.6001 )
 	iB = iA + 1524;
-	iC = (int) (((_REAL) iB - (_REAL) 122.1) / (_REAL) 365.25);
-	iD = (int) ((_REAL) 365.25 * iC);
-	iE = (int) (((_REAL) iB - iD) / (_REAL) 30.6001);
+	iC = static_cast<int>(((_REAL) iB - (_REAL) 122.1) / (_REAL) 365.25);
+	iD = static_cast<int>((_REAL) 365.25 * iC);
+	iE = static_cast<int>(((_REAL) iB - iD) / (_REAL) 30.6001);
 
 	// The day of the month dd (with decimals) is:
 	// dd = B - D - INT(30.6001*E) + F
-	iDay = iB - iD - (int) ((_REAL) 30.6001 * iE);	// + rF;
+	iDay = iB - iD - static_cast<int>((_REAL) 30.6001 * iE);	// + rF;
 
 	// The month number mm is:
 	// mm = E - 1, if E < 13.5

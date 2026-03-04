@@ -98,7 +98,7 @@ void  CDataEncoder::GeneratePacket(CVector < _BINARY > &vecbiPacket)
 		/* Padded packet. If the PPI is 1 then the first byte shall indicate
 		   the number of useful bytes that follow, and the data field is
 		   completed with padding bytes of value 0x00 */
-		vecbiPacket.Enqueue((uint32_t) (iRemainSize / SIZEOF__BYTE),
+		vecbiPacket.Enqueue(static_cast<uint32_t>(iRemainSize / SIZEOF__BYTE),
 							SIZEOF__BYTE);
 
 		/* Data */

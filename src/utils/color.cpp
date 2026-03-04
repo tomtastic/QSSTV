@@ -65,13 +65,13 @@ static void sycc_to_rgb(int offset, int upb, int y, int cb, int cr,
 	int r, g, b;
 
 	cb -= offset; cr -= offset;
-	r = y + (int)(1.402 * (float)cr);
+	r = y + static_cast<int>(1.402 * (float)cr);
 	if(r < 0) r = 0; else if(r > upb) r = upb; *out_r = r;
 
-	g = y - (int)(0.344 * (float)cb + 0.714 * (float)cr);
+	g = y - static_cast<int>(0.344 * (float)cb + 0.714 * (float)cr);
 	if(g < 0) g = 0; else if(g > upb) g = upb; *out_g = g;
 
-	b = y + (int)(1.772 * (float)cb);
+	b = y + static_cast<int>(1.772 * (float)cb);
 	if(b < 0) b = 0; else if(b > upb) b = upb; *out_b = b;
 }
 
@@ -639,9 +639,9 @@ void color_cielab_to_rgb(opj_image_t *image)
 		
 		for(i = 0; i < max; ++i)
 		{
-			Lab.L = minL + (double)(*L) * (maxL - minL)/(pow(2, prec0)-1); ++L;
-			Lab.a = mina + (double)(*a) * (maxa - mina)/(pow(2, prec1)-1); ++a;
-			Lab.b = minb + (double)(*b) * (maxb - minb)/(pow(2, prec2)-1); ++b;
+			Lab.L = minL + static_cast<double>(*L) * (maxL - minL)/(pow(2, prec0)-1); ++L;
+			Lab.a = mina + static_cast<double>(*a) * (maxa - mina)/(pow(2, prec1)-1); ++a;
+			Lab.b = minb + static_cast<double>(*b) * (maxb - minb)/(pow(2, prec2)-1); ++b;
 		
 			cmsDoTransform(transform, &Lab, RGB, 1);
 		
@@ -684,18 +684,18 @@ void color_cmyk_to_rgb(opj_image_t *image)
 
 	max = w * h;
 	
-	sC = 1.0F / (float)((1 << image->comps[0].prec) - 1);
-	sM = 1.0F / (float)((1 << image->comps[1].prec) - 1);
-	sY = 1.0F / (float)((1 << image->comps[2].prec) - 1);
-	sK = 1.0F / (float)((1 << image->comps[3].prec) - 1);
+	sC = 1.0F / static_cast<float>((1 << image->comps[0].prec) - 1);
+	sM = 1.0F / static_cast<float>((1 << image->comps[1].prec) - 1);
+	sY = 1.0F / static_cast<float>((1 << image->comps[2].prec) - 1);
+	sK = 1.0F / static_cast<float>((1 << image->comps[3].prec) - 1);
 
 	for(i = 0; i < max; ++i)
 	{
 		/* CMYK values from 0 to 1 */
-		C = (float)(image->comps[0].data[i]) * sC;
-		M = (float)(image->comps[1].data[i]) * sM;
-		Y = (float)(image->comps[2].data[i]) * sY;
-		K = (float)(image->comps[3].data[i]) * sK;
+		C = static_cast<float>(image->comps[0].data[i]) * sC;
+		M = static_cast<float>(image->comps[1].data[i]) * sM;
+		Y = static_cast<float>(image->comps[2].data[i]) * sY;
+		K = static_cast<float>(image->comps[3].data[i]) * sK;
 		
 		/* Invert all CMYK values */
 		C = 1.0F - C;
@@ -704,9 +704,9 @@ void color_cmyk_to_rgb(opj_image_t *image)
 		K = 1.0F - K;
 
 		/* CMYK -> RGB : RGB results from 0 to 255 */
-		image->comps[0].data[i] = (int)(255.0F * C * K); /* R */
-		image->comps[1].data[i] = (int)(255.0F * M * K); /* G */
-		image->comps[2].data[i] = (int)(255.0F * Y * K); /* B */
+		image->comps[0].data[i] = static_cast<int>(255.0F * C * K); /* R */
+		image->comps[1].data[i] = static_cast<int>(255.0F * M * K); /* G */
+		image->comps[2].data[i] = static_cast<int>(255.0F * Y * K); /* B */
 	}
 
 	free(image->comps[3].data); image->comps[3].data = nullptr;
@@ -750,22 +750,19 @@ void color_esycc_to_rgb(opj_image_t *image)
 		if( !sign1) cb -= flip_value;
 		if( !sign2) cr -= flip_value;
 		
-		val = (int)
-		((float)y - (float)0.0000368 * (float)cb
+		val = static_cast<int>((float)y - (float)0.0000368 * (float)cb
 		 + (float)1.40199 * (float)cr + (float)0.5);
 		
 		if(val > max_value) val = max_value; else if(val < 0) val = 0;
 		image->comps[0].data[i] = val;
 		
-		val = (int)
-		((float)1.0003 * (float)y - (float)0.344125 * (float)cb
+		val = static_cast<int>((float)1.0003 * (float)y - (float)0.344125 * (float)cb
 		 - (float)0.7141128 * (float)cr + (float)0.5);
 		
 		if(val > max_value) val = max_value; else if(val < 0) val = 0;
 		image->comps[1].data[i] = val;
 		
-		val = (int)
-		((float)0.999823 * (float)y + (float)1.77204 * (float)cb
+		val = static_cast<int>((float)0.999823 * (float)y + (float)1.77204 * (float)cb
 		 - (float)0.000008 *(float)cr + (float)0.5);
 		
 		if(val > max_value) val = max_value; else if(val < 0) val = 0;

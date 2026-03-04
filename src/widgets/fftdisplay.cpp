@@ -121,7 +121,7 @@ void fftDisplay::showFFT(double *fftData)
           tmp=(fftMax-arMagSAvg[j])/range;
           if(tmp<0) tmp=0;
           if (tmp>1)tmp=1;
-          int pos=(int)rint((double)(j*(imWidth-1))/(double)binDiff);
+          int pos=(int)rint(static_cast<double>(j*(imWidth-1))/(double)binDiff);
           fftArray->setPoint(j,pos,(imHeight-1)*tmp); // range 0 -> -1
         }
     }

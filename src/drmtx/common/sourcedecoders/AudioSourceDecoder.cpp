@@ -79,7 +79,7 @@ void CAudioSourceEncoderImplementation::InitInternalTx(CParameter & TransmParam,
 	TransmParam.Lock(); 
 
   // Calculate number of input samples in mono. Audio block are always 400 ms long
-//  const int iNumInSamplesMono = (int) ((_REAL) SOUNDCRD_SAMPLE_RATE * (_REAL) 0.4 /* 400 ms */ );
+//  const int iNumInSamplesMono = static_cast<int>((_REAL) SOUNDCRD_SAMPLE_RATE * (_REAL) 0.4 /* 400 ms */ );
 
 	/* Set the total available number of bits, byte aligned */
   iTotNumBitsForUsage = (TransmParam.iNumDecodedBitsMSC / SIZEOF__BYTE) * SIZEOF__BYTE;

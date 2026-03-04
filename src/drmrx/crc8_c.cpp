@@ -27,5 +27,5 @@ void crc8_c( /*@out@ */ double checksum[], double in[], int N)
       else
 	b = (b << 1);
     }
-  *checksum = (double) (b & 0xFF);
+  *checksum = static_cast<double>(b & 0xFF);
 }

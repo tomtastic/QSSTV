@@ -40,7 +40,7 @@ public:
   		int t;
   		temp=(freq/txSamplingClock)*(double)SINTABLEN+oldAngle;
   		oldAngle=fmod(temp,SINTABLEN);
-  		t=(int)(oldAngle+0.5);
+  		t=static_cast<int>(oldAngle+0.5);
       return sineTable[t%SINTABLEN];
 		}
 	void sendTone(double duration,double lowerFrequency,double upperFrequency, bool concat);

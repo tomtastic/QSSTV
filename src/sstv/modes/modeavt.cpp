@@ -100,7 +100,7 @@ modeBase::eModeBase modeAVT::process(quint16 *demod,unsigned int ,bool ,unsigned
                   if(fabs(avgSample-1900.) <50.)
                     {
                       if(count<10) count++;
-                      if(duration>(unsigned int)(0.011*rxClock/SUBSAMPLINGFACTOR))
+                      if(duration>static_cast<unsigned int>(0.011*rxClock/SUBSAMPLINGFACTOR))
                       {
                           addToLog(QString("MBABORTED duration: %1, sampleCounter: %2").arg(duration).arg(rxPos+i),LOGMODES);
                           duration=0;
@@ -116,7 +116,7 @@ modeBase::eModeBase modeAVT::process(quint16 *demod,unsigned int ,bool ,unsigned
                     {
                       duration-=5;
                       addToLog(QString("duration: %1, sampleCounter: %2").arg(duration).arg(rxPos+i-10),LOGMODES);
-                      if((duration<(unsigned int)(0.011*rxClock/SUBSAMPLINGFACTOR)) && (duration>(unsigned int)(0.009*rxClock/SUBSAMPLINGFACTOR)))
+                      if((duration<static_cast<unsigned int>(0.011*rxClock/SUBSAMPLINGFACTOR)) && (duration>static_cast<unsigned int>(0.009*rxClock/SUBSAMPLINGFACTOR)))
                         {
                           bitCounter=0;
                           count=10;
@@ -136,7 +136,7 @@ modeBase::eModeBase modeAVT::process(quint16 *demod,unsigned int ,bool ,unsigned
                   debugState=stHALF;
                   count++;
                   code=0;
-                  if(count>=(unsigned int)(round((BITTIME/2)*rxClock/SUBSAMPLINGFACTOR))) switchTrailerState(BITS);
+                  if(count>=static_cast<unsigned int>(round((BITTIME/2)*rxClock/SUBSAMPLINGFACTOR))) switchTrailerState(BITS);
                 break;
                 case BITS:
                   debugState=stBITS+bitCounter;
@@ -153,7 +153,7 @@ modeBase::eModeBase modeAVT::process(quint16 *demod,unsigned int ,bool ,unsigned
                 case DELAYFULL:
                   debugState=stFULL;
                   count++;
-                  if(count>=(unsigned int)(round(BITTIME*rxClock/SUBSAMPLINGFACTOR))) switchTrailerState(BITS);
+                  if(count>=static_cast<unsigned int>(round(BITTIME*rxClock/SUBSAMPLINGFACTOR))) switchTrailerState(BITS);
                 break;
                 case CALCDELAY:
                   //check if
@@ -168,7 +168,7 @@ modeBase::eModeBase modeAVT::process(quint16 *demod,unsigned int ,bool ,unsigned
                       break;
                     }
                    a&=0x1F;
-                   delay=(unsigned int)((((31-a)*WORDTIME+BITTIME/2)*rxClock/SUBSAMPLINGFACTOR)+15);
+                   delay=static_cast<unsigned int>((((31-a)*WORDTIME+BITTIME/2)*rxClock/SUBSAMPLINGFACTOR)+15);
                    switchTrailerState(WAITSTART);
                 break;
                 case WAITSTART:
@@ -252,7 +252,7 @@ void modeAVT::calcPixelPositionTable(unsigned int colorLine,bool tx)
 		}
   for(i=0;i<activeSSTVParam->numberOfPixels;i++)
 		{
-      pixelPositionTable[i]=(unsigned int)round(start+(((float)(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
+      pixelPositionTable[i]=(unsigned int)round(start+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
 		}
 }
 

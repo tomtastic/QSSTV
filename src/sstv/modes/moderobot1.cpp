@@ -168,8 +168,8 @@ void modeRobot1::calcPixelPositionTable(unsigned int colorLine,bool tx)
       lineStart+=bp;
       for(i=0;i<activeSSTVParam->numberOfPixels;i++)
         {
-//          pixelPositionTable[i]=(unsigned int)round(markerFloat+(((float)(i+ofx)*visibleLineLength*2)/activeSSTVParam->numberOfPixels));
-          pixelPositionTable[i]=(unsigned int)round(lineStart+(((float)(i+ofx)*2*visibleLineLength)/activeSSTVParam->numberOfPixels));
+//          pixelPositionTable[i]=(unsigned int)round(markerFloat+((static_cast<float>(i+ofx)*visibleLineLength*2)/activeSSTVParam->numberOfPixels));
+          pixelPositionTable[i]=(unsigned int)round(lineStart+((static_cast<float>(i+ofx)*2*visibleLineLength)/activeSSTVParam->numberOfPixels));
         }
       break;
     case REDLINE:
@@ -177,8 +177,8 @@ void modeRobot1::calcPixelPositionTable(unsigned int colorLine,bool tx)
       lineStart+=bp+blank+visibleLineLength*2;
       for(i=0;i<activeSSTVParam->numberOfPixels;i++)
         {
-//          pixelPositionTable[i]=(unsigned int)round(markerFloat+(((float)(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
-          pixelPositionTable[i]=(unsigned int)round(lineStart+(((float)(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
+//          pixelPositionTable[i]=(unsigned int)round(markerFloat+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
+          pixelPositionTable[i]=(unsigned int)round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
         }
       break;
     }

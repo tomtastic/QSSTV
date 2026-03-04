@@ -42,7 +42,7 @@ void CSDCTransmit::SDCParam(CVector<_BINARY>* pbiData, CParameter& Parameter)
 	/* Calculate length of data field in bytes 
 	   (consistant to table 61 in (6.4.1)) */
 	const int iLengthDataFieldBytes = 
-		(int) ((_REAL) (Parameter.iNumSDCBitsPerSFrame - 20) / 8);
+		static_cast<int>(static_cast<_REAL>(Parameter.iNumSDCBitsPerSFrame - 20) / 8);
 
 	/* 20 bits from AFS index and CRC */
 	const int iUsefulBitsSDC = 20 + iLengthDataFieldBytes * 8;
@@ -286,7 +286,7 @@ void CSDCTransmit::DataEntityType5(CVector<_BINARY>& vecbiData, int ServiceID,
 
 	/* Length of the body, excluding the initial 4 bits ("- 4"), 
 	   measured in bytes ("/ 8") */
-	vecbiData.Enqueue((uint32_t) (iNumBitsTotal - 4) / 8, 7);
+	vecbiData.Enqueue(static_cast<uint32_t>(iNumBitsTotal - 4) / 8, 7);
 
 	/* Version flag (not used in this implementation) */
 	vecbiData.Enqueue((uint32_t) 0, 1);
@@ -383,7 +383,7 @@ void CSDCTransmit::DataEntityType9(CVector<_BINARY>& vecbiData, int ServiceID,
 
 	/* Length of the body, excluding the initial 4 bits ("- 4"), 
 	   measured in bytes ("/ 8") */
-	vecbiData.Enqueue((uint32_t) (iNumBitsTotal - 4) / 8, 7);
+	vecbiData.Enqueue(static_cast<uint32_t>(iNumBitsTotal - 4) / 8, 7);
 
 	/* Version flag (not used in this implementation) */
 	vecbiData.Enqueue((uint32_t) 0, 1);

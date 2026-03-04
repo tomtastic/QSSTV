@@ -87,12 +87,12 @@ CVector<int> CChannelCode::GenPuncPatTable(ECodScheme eNewCodingScheme,
 	if (iLevel == 0)
 		iTailbitPattern =
 			iTailbitParamL0 - 12 - iPuncturingPatterns[iPunctPatPartB][1] *
-			(int) ((iTailbitParamL0 - 12) /
+			static_cast<int>((iTailbitParamL0 - 12) /
 			iPuncturingPatterns[iPunctPatPartB][1]);
 	else
 		iTailbitPattern =
 			iTailbitParamL1 - 12 - iPuncturingPatterns[iPunctPatPartB][1] *
-			(int) ((iTailbitParamL1 - 12) /
+			static_cast<int>((iTailbitParamL1 - 12) /
 			iPuncturingPatterns[iPunctPatPartB][1]);
 
 

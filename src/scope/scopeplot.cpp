@@ -241,7 +241,7 @@ void scopePlot::slotSamplesButtton()
     }
   for(i=0;i<x.size();i++)
     {
-      x[i]=(double)(i+xOffset)*xScaleMul;
+      x[i]=static_cast<double>(i+xOffset)*xScaleMul;
 //      x[i]=(double)i*xScaleMul;
     }
 
@@ -298,7 +298,7 @@ void scopePlot::add1(short int *data, unsigned long len,QString name,QString yLe
   for (unsigned long i = 0; i < len; i++)
     {
 
-      x[i]=(double)(i+xOffset)*xScaleMul;
+      x[i]=static_cast<double>(i+xOffset)*xScaleMul;
       c1[i]=(double)data[i];
     }
   plot1(name,yLeftLabel);
@@ -310,7 +310,7 @@ void scopePlot::add1(double *data, unsigned long len,QString curveName,QString y
   c1.resize(len);
   for (unsigned long i = 0; i < len; i++)
     {
-      x[i]=(double)(i+xOffset)*xScaleMul;
+      x[i]=static_cast<double>(i+xOffset)*xScaleMul;
       c1[i]=data[i];
     }
   plot1(curveName,yLeftLabel);

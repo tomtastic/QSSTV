@@ -183,7 +183,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
   iSymbolBlockSize = iFFTSizeN + iGuardSize;
 
   /* Calculate the index of the DC carrier in the shifted spectrum */
-  iIndexDCFreq = (int) ((_REAL) VIRTUAL_INTERMED_FREQ *
+  iIndexDCFreq = static_cast<int>((_REAL) VIRTUAL_INTERMED_FREQ *
                         iFFTSizeN / SOUNDCRD_SAMPLE_RATE);
 
   /* Index of minimum useful carrier (shifted) */
@@ -196,7 +196,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
      with robustness mode D: pilots in all carriers! BUT: DC carrier is
      counted as a pilot in that case!!! Be aware of that! */
   if (iScatPilFreqInt > 1)
-    iNumIntpFreqPil = (int) ((_REAL) iNumCarrier / iScatPilFreqInt + 1);
+    iNumIntpFreqPil = static_cast<int>((_REAL) iNumCarrier / iScatPilFreqInt + 1);
   else
     iNumIntpFreqPil = iNumCarrier;
 
@@ -231,8 +231,8 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
 
       /* Calculate the start value of "p" in equation for gain reference
        cells in Table 90 (8.4.4.1) */
-      iScatPilotsCounter = (int) ((_REAL) (iCarrierKmin -
-                                           (int) ((_REAL) iScatPilFreqInt / 2 + .5) -
+      iScatPilotsCounter = static_cast<int>(static_cast<_REAL>(iCarrierKmin -
+                                           static_cast<int>((_REAL) iScatPilFreqInt / 2 + .5) -
                                            iScatPilFreqInt * mod(iFrameSym, iScatPilTimeInt)
                                            ) / (iScatPilFreqInt * iScatPilTimeInt));
 
@@ -279,7 +279,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
          (TimeInt). In this example, "4" is the FreqInt and "5" is the
          TimeInt. The first term "2" is the half of the FreqInt, rounded
          towards infinity. The parameter "20" is FreqInt * TimeInt */
-          if (iCar == (int) ((_REAL) iScatPilFreqInt / 2 + .5) +
+          if (iCar == static_cast<int>((_REAL) iScatPilFreqInt / 2 + .5) +
               iScatPilFreqInt * mod(iFrameSym, iScatPilTimeInt) +
               iScatPilFreqInt * iScatPilTimeInt * iScatPilotsCounter)
             {
@@ -295,9 +295,8 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
               /* Calculations as in drm-standard (8.4.4.3.1) */
               /* "in" is ROW No and "im" is COLUMN No! */
               in = mod(iFrameSym, ScatPilots.piConst[1] /* "y" */);
-              im = (int)
-                  ((_REAL) iFrameSym / ScatPilots.piConst[1] /* "y" */);
-              ip = (int) ((_REAL) (iCar - ScatPilots.piConst[2] /* "k_0" */ -
+              im = static_cast<int>((_REAL) iFrameSym / ScatPilots.piConst[1] /* "y" */);
+              ip = static_cast<int>(static_cast<_REAL>(iCar - ScatPilots.piConst[2] /* "k_0" */ -
                                    in * ScatPilots.piConst[0] /* "x" */) / (
                             ScatPilots.piConst[0] /* "x" */ *
                             ScatPilots.piConst[1] /* "y" */));
@@ -491,7 +490,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
 
   /* Set number of useful MSC cells */
   iNumUsefMSCCellsPerFrame =
-      (int) (iMSCCounter / NUM_FRAMES_IN_SUPERFRAME);
+      static_cast<int>(iMSCCounter / NUM_FRAMES_IN_SUPERFRAME);
 
   /* Calculate dummy cells for MSC */
   iNoMSCDummyCells = iMSCCounter - iNumUsefMSCCellsPerFrame  *

@@ -120,7 +120,7 @@ void modeGBR2::calcPixelPositionTable(unsigned int colorLine,bool tx)
       break;
     case BLUELINE:
       lineStart+=(blank+visibleLineLength+blank);
-      syncEndPosition=(unsigned int)(lineStart+fp+syncDuration);
+      syncEndPosition=static_cast<unsigned int>(lineStart+fp+syncDuration);
 
       // addToLog(QString("gbr2: bluestart=%1").arg(start),DBMODES);
 
@@ -133,7 +133,7 @@ void modeGBR2::calcPixelPositionTable(unsigned int colorLine,bool tx)
     }
   for(i=0;i<activeSSTVParam->numberOfPixels;i++)
     {
-      pixelPositionTable[i]=(unsigned int)round(lineStart+(((float)(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
+      pixelPositionTable[i]=(unsigned int)round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
     }
 }
 
@@ -142,20 +142,20 @@ unsigned long modeGBR2::adjustSyncPosition(unsigned long syncPos0,bool isRetrace
 {
 #define SCOTTYCOMPENSATION 15
   if(isRetrace) return syncPos0+SCOTTYCOMPENSATION;
-  if(syncPos0<(unsigned long)(fp+2*visibleLineLength+2*blank+syncDuration/2))
+  if(syncPos0<static_cast<unsigned long>(fp+2*visibleLineLength+2*blank+syncDuration/2))
     {
-      return syncPos0+(unsigned long)(bp+visibleLineLength)+SCOTTYCOMPENSATION;
+      return syncPos0+static_cast<unsigned long>(bp+visibleLineLength)+SCOTTYCOMPENSATION;
     }
   else
     {
-      return syncPos0-(unsigned long)(fp+2*visibleLineLength+2*blank+syncDuration)+SCOTTYCOMPENSATION;
+      return syncPos0-static_cast<unsigned long>(fp+2*visibleLineLength+2*blank+syncDuration)+SCOTTYCOMPENSATION;
     }
 
 }
 
 //unsigned long modeGBR2::retraceAdjust(unsigned long syncPos)
 //{
-//  return syncPos-(unsigned long)(blank+visibleLineLength+syncDuration);
+//  return syncPos-static_cast<unsigned long>(blank+visibleLineLength+syncDuration);
 //}
 
 modeBase::embState modeGBR2::txSetupLine()

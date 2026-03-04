@@ -43,7 +43,7 @@ void drmSegmentsView::paintEvent(QPaintEvent *e)
   painter.setRenderHint(QPainter::Antialiasing);
 
   rct=QRectF(contentsRect().left(),contentsRect().top() ,contentsRect().width()-4 ,contentsRect().height()-4 );
-  blockWidth=(float)(contentsRect().width()-4)/maxBlocks;
+  blockWidth=static_cast<float>(contentsRect().width()-4)/maxBlocks;
   painter.drawRect(rct);
   painter.setBrush(QBrush(colOK));
 

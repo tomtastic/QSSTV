@@ -302,7 +302,7 @@ void CMLC::CalculateParam(CParameter& Parameter, int iNewChannelType)
 
 			/* M_p,2 = RX_p * floor((2 * N_2 - 12) / RY_p) */
 			iM[0][1] = iPuncturingPatterns[iCodRateCombMSC4SM][0] *
-				(int) ((_REAL) (2 * iN_mux - 12) /
+				static_cast<int>(static_cast<_REAL>(2 * iN_mux - 12) /
 				iPuncturingPatterns[iCodRateCombMSC4SM][1]);
 
 			/* iL: Number of bits each protection level ------------------------- */
@@ -373,7 +373,7 @@ void CMLC::CalculateParam(CParameter& Parameter, int iNewChannelType)
 			{
 				/* M_p,1 = 2 * N_1 * R_p */
 				iM[i][0] = 0;
-	/*			iM[i][0] = (int) (2 * iN[0] *
+	/*			iM[i][0] = static_cast<int>(2 * iN[0] *
 					(_REAL) iPuncturingPatterns[iCodRateCombMSC16SM[
 					Parameter.MSCPrLe.iPartA][i]][0] /
 					iPuncturingPatterns[iCodRateCombMSC16SM[
@@ -383,7 +383,7 @@ void CMLC::CalculateParam(CParameter& Parameter, int iNewChannelType)
 				iM[i][1] = 
 					iPuncturingPatterns[iCodRateCombMSC16SM[
 					Parameter.MSCPrLe.iPartB][i]][0] *
-					(int) ((_REAL) (2 * iN[1] - 12) /
+					static_cast<int>(static_cast<_REAL>(2 * iN[1] - 12) /
 					iPuncturingPatterns[iCodRateCombMSC16SM[
 					Parameter.MSCPrLe.iPartB][i]][1]);
 				// printf("In calcparam iM[%d][0] = %d  iM[%d][1] = %d \n", i, iM[i][0], i, iM[i][1]);
@@ -444,7 +444,7 @@ void CMLC::CalculateParam(CParameter& Parameter, int iNewChannelType)
 			{
 				/* M_p,1 = 2 * N_1 * R_p */
 				iM[i][0] = 0;
-/*				iM[i][0] = (int) (2 * iN[0] *
+/*				iM[i][0] = static_cast<int>(2 * iN[0] *
 					(_REAL) iPuncturingPatterns[iCodRateCombMSC64SM[
 					Parameter.MSCPrLe.iPartA][i]][0] /
 					iPuncturingPatterns[iCodRateCombMSC64SM[
@@ -454,7 +454,7 @@ void CMLC::CalculateParam(CParameter& Parameter, int iNewChannelType)
 				iM[i][1] = 
 					iPuncturingPatterns[iCodRateCombMSC64SM[
 					Parameter.MSCPrLe.iPartB][i]][0] *
-					(int) ((_REAL) (2 * iN[1] - 12) /
+					static_cast<int>(static_cast<_REAL>(2 * iN[1] - 12) /
 					iPuncturingPatterns[iCodRateCombMSC64SM[
 					Parameter.MSCPrLe.iPartB][i]][1]); 
 			}

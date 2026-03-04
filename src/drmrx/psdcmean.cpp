@@ -86,7 +86,7 @@ void psdcmean(float *rsbuf, float *cpsd, int lblock, int nblocks)
   for (i = 0; i < lblock / 2; i++)
 
     {
-      result[i] = (float) (10.0 * log(result[i] + 1.0e-8) / 2.305 - 14.0);
+      result[i] = static_cast<float>(10.0 * log(result[i] + 1.0e-8) / 2.305 - 14.0);
     }
   /* interchange halfs of cpsd buffer as in matlab code from
      plot_input_spectrum in diorama */

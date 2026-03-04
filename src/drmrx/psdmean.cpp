@@ -80,5 +80,5 @@ void psdmean(float *input, float *psd, int lblock, int nblocks)
       pinput += lblock;		/* update pointer in input data */
     }
   for (i = 1; i < lblock / 2; ++i)
-    psd[i] = (float) (10.0 * log(psd[i] + 1.0e-8) / 2.3025 - 14.0);
+    psd[i] = static_cast<float>(10.0 * log(psd[i] + 1.0e-8) / 2.3025 - 14.0);
 }

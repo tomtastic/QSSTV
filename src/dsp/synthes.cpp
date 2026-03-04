@@ -70,7 +70,7 @@ void synthesizer::sendTone(double duration,double lowerFrequency,double upperFre
   }
   if(!concat) adjust=0.;
 // convert duration to number of samples
-  unsigned int ns=(unsigned int)((duration+adjust)*txSamplingClock+0.5);
+  unsigned int ns=static_cast<unsigned int>((duration+adjust)*txSamplingClock+0.5);
   adjust+=duration-((double)ns)/txSamplingClock;
   sendSamples(ns,lowerFrequency);
 }
@@ -117,7 +117,7 @@ void synthesizer::sendSilence(double duration)
 {
 	unsigned int i;
 	// convert duration to number of samples
-	unsigned int ns=(uint)(duration*txSamplingClock+0.5);
+	unsigned int ns=static_cast<uint>(duration*txSamplingClock+0.5);
 	for(i=0;i<ns;i++)
 		{
       write(0);
