@@ -1,15 +1,12 @@
-Fix build #30: Use reinterpret_cast for mainWindowPtr
+Fix build #31: Create non-const copy for openImage call
 
-Build #30 failed because static_cast requires the full type definition
-to verify inheritance relationships, but mainWindow is only forward-declared
-in appglobal.h.
+Build #31 failed because extviewer.cpp passes a const QString & to
+imageViewer::openImage(), which expects a non-const QString & reference
+(because it may modify the filename).
 
-Changed from static_cast to reinterpret_cast in wavio.cpp:
-- Line 76: dirDialog d(reinterpret_cast<QWidget*>(mainWindowPtr), ...)
-- Line 208: dirDialog d(reinterpret_cast<QWidget*>(mainWindowPtr), ...)
+Fixed in extviewer.cpp setup():
+- Create a non-const copy of the filename parameter
+- Pass the copy to openImage() instead of the const reference
 
-reinterpret_cast doesn't require the full type definition and is appropriate
-here since we know at runtime that mainWindow inherits from QWidget, even
-though the compiler can't verify it at this point in the translation unit.
-
-This is the correct solution for the forward-declaration scenario.
+This resolves the const-correctness mismatch while maintaining the
+performance benefits of passing by const reference to setup().

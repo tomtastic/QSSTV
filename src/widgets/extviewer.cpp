@@ -23,7 +23,8 @@ void extViewer::setup(const QString &fn)
   // we want the original image
   ui->imViewer->stretch=true;
   ui->imViewer->setType(imageViewer::EXTVIEW);
-  ui->imViewer->openImage(fn,false,false,false,true);
+  QString filename = fn;  // Create non-const copy for openImage
+  ui->imViewer->openImage(filename,false,false,false,true);
   fileName=fn;
   QFileInfo fi(fn);
   fw=ui->imViewer-> getImagePtr()->width();
