@@ -22,7 +22,7 @@ QMAKE_CXXFLAGS_DEBUG += -O0 -Wno-implicit-fallthrough -Wno-psabi
 QMAKE_CXXFLAGS_RELEASE-= -O2
 QMAKE_CXXFLAGS_RELEASE += -O3 -Wno-implicit-fallthrough -Wno-psabi
 
-INCLUDEPATH += config dispatch drmrx drmtx dsp editor logbook mainwidgets  rig scope sound sstv utils widgets xmlrpc videocapt
+INCLUDEPATH += config dispatch drmrx drmtx dsp editor logbook mainwidgets rig scope sound sstv utils widgets xmlrpc videocapt
 
 # Add Homebrew include path on macOS
 macx {
@@ -31,7 +31,8 @@ macx {
     QMAKE_INFO_PLIST_OUT = $$OUT_PWD/Info.plist
     QMAKE_POST_LINK += /usr/libexec/PlistBuddy -c \"Add :NSMicrophoneUsageDescription string 'QSSTV needs microphone access to receive and decode SSTV and DRM signals from your radio.'\" $$OUT_PWD/qsstv.app/Contents/Info.plist || true;
 }
-#QMAKE_LIBDIR += $$[QT_SYSROOT]/usr/local/lib
+QMAKE_LIBDIR += $$[QT_SYSROOT]/usr/local/lib
+QMAKE_LIBDIR += $$[QMAKE_LIBDIR]/usr/local/lib/pkgconfig
 
 CONFIG += link_pkgconfig
 PKGCONFIG += libopenjp2 fftw3 libpulse libpulse-simple hamlib
