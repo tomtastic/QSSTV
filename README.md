@@ -21,6 +21,10 @@ For MacOS:
 ```
 brew install fftw hamlib openjpeg qt pulseaudio
 ```
+**Note:** You must have PulseAudio running for sound to work:
+```bash
+brew services start pulseaudio
+```
 
 ### Compile and Install
 
