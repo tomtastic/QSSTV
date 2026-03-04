@@ -115,7 +115,7 @@ void CTransmitData::InitInternal(CParameter& TransmParam)
 
 	vecsDataOut.Init(iBigBlockSize);
 
-	if (pFileTransmitter != NULL)
+	if (pFileTransmitter != nullptr)
 	{
 		fclose(pFileTransmitter);
 	}
@@ -140,7 +140,7 @@ void CTransmitData::InitInternal(CParameter& TransmParam)
 CTransmitData::~CTransmitData()
 {
 	/* Close file */
-	if (pFileTransmitter != NULL)
+	if (pFileTransmitter != nullptr)
 		fclose(pFileTransmitter);
 }
 

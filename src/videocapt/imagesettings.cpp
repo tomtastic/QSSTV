@@ -80,7 +80,7 @@ imageSettings::imageSettings(QString cameraDevice, QWidget *parent) :   QDialog(
   camDev=cameraDevice.toLatin1();
   ui= new Ui::imageSettingsUi;
   ui->setupUi(this);
-  gridLayout=NULL;
+  gridLayout=nullptr;
   loadCapabilities();
   ui->buttonBox->button(QDialogButtonBox::Ok)->setDefault(false);
   ui->buttonBox->button(QDialogButtonBox::Cancel)->setDefault(false);
@@ -103,7 +103,7 @@ bool imageSettings::loadCapabilities()
   if(fd < 0)
     {
       QString msg=QString("Unable to open file %1\n%2").arg(camDev.constData()).arg(strerror(errno));
-      (void)QMessageBox::warning(NULL, "v4l2ucp: Unable to open file", msg,
+      (void)QMessageBox::warning(nullptr, "v4l2ucp: Unable to open file", msg,
                                  QMessageBox::Ok, QMessageBox::Ok);
       return false;
     }
@@ -111,7 +111,7 @@ bool imageSettings::loadCapabilities()
   if(v4l2_ioctl(fd, VIDIOC_QUERYCAP, &cap) == -1) {
       QString msg;
       msg=QString("%1 is not a V4L2 device").arg(camDev.constData());
-      (void)QMessageBox::warning(NULL, "v4l2ucp: Not a V4L2 device", msg,
+      (void)QMessageBox::warning(nullptr, "v4l2ucp: Not a V4L2 device", msg,
                                  QMessageBox::Ok, QMessageBox::Ok);
       return false;
     }
@@ -159,10 +159,10 @@ bool imageSettings::loadCapabilities()
 
 void imageSettings::addControl(struct v4l2_queryctrl &ctrl, int fd)
 {
-  QWidget *w = NULL;
+  QWidget *w = nullptr;
 
   if(ctrl.flags & V4L2_CTRL_FLAG_DISABLED) return;
-  if((ctrl.type!=V4L2_CTRL_TYPE_CTRL_CLASS) && (gridLayout==NULL))
+  if((ctrl.type!=V4L2_CTRL_TYPE_CTRL_CLASS) && (gridLayout==nullptr))
      {
       addNewTab("Controls");
     }

@@ -329,7 +329,7 @@ void color_apply_icc_profile(opj_image_t *image)
   fclose(icm);
 #endif
 
-	if(in_prof == NULL) return;
+	if(in_prof == nullptr) return;
 
 	in_space = cmsGetPCS(in_prof);
 	out_space = cmsGetColorSpace(in_prof);
@@ -417,7 +417,7 @@ fprintf(stderr,"\trender_intent (%u)\n\t"
 	cmsCloseProfile(out_prof);
 #endif
 
-	if(transform == NULL)
+	if(transform == nullptr)
    {
 #ifdef DEBUG_PROFILE
 fprintf(stderr,"%s:%d:color_apply_icc_profile\n\tcmsCreateTransform failed. "
@@ -582,7 +582,7 @@ void color_cielab_to_rgb(opj_image_t *image)
 		cmsUInt16Number RGB[3];
 		cmsCIELab Lab;
 		
-		in = cmsCreateLab4Profile(NULL);
+		in = cmsCreateLab4Profile(nullptr);
 		out = cmsCreate_sRGBProfile();
 		
 		transform = cmsCreateTransform(in, TYPE_Lab_DBL, out, TYPE_RGB_16, INTENT_PERCEPTUAL, 0);
@@ -591,7 +591,7 @@ void color_cielab_to_rgb(opj_image_t *image)
 		cmsCloseProfile(in);
 		cmsCloseProfile(out);
 #endif
-		if(transform == NULL)
+		if(transform == nullptr)
 		{
 #ifdef OPJ_HAVE_LIBLCMS1
 			cmsCloseProfile(in);
@@ -709,7 +709,7 @@ void color_cmyk_to_rgb(opj_image_t *image)
 		image->comps[2].data[i] = (int)(255.0F * Y * K); /* B */
 	}
 
-	free(image->comps[3].data); image->comps[3].data = NULL;
+	free(image->comps[3].data); image->comps[3].data = nullptr;
 	image->comps[0].prec = 8;
 	image->comps[1].prec = 8;
 	image->comps[2].prec = 8;

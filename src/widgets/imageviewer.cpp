@@ -335,7 +335,7 @@ bool imageViewer::openImage(QByteArray *ba)
   QImage tempImage;
   QBuffer buffer(ba);
   buffer.open(QIODevice::ReadOnly);
-  if(tempImage.load(&buffer,NULL))
+  if(tempImage.load(&buffer,nullptr))
     {
       return  openImage(tempImage.convertToFormat(QImage::Format_ARGB32_Premultiplied));
     }
@@ -718,7 +718,7 @@ void imageViewer::slotLoad()
 
 void imageViewer::slotNew()
 {
-  callEditorEvent *ce = new callEditorEvent( this,NULL);
+  callEditorEvent *ce = new callEditorEvent( this,nullptr);
   QApplication::postEvent(dispatcherPtr, ce );  // Qt will delete it when done
 }
 

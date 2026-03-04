@@ -15,20 +15,20 @@ imageMatrix::imageMatrix(QWidget *parent) :  QWidget(parent)
 
   parentPtr=parent;
   parentPtr->resize(511, 300);
-  verticalLayout = NULL;
-  horizontalLayout=NULL;
+  verticalLayout = nullptr;
+  horizontalLayout=nullptr;
   sortFlags=QDir::Time;
 }
 
 imageMatrix::~imageMatrix()
 {
-// if(verticalLayout!=NULL) delete verticalLayout;
-// if( horizontalLayout!=NULL) delete horizontalLayout;
+// if(verticalLayout!=nullptr) delete verticalLayout;
+// if( horizontalLayout!=nullptr) delete horizontalLayout;
 }
 
 void imageMatrix::setupLayout()
 {
-  if(verticalLayout!=NULL) delete verticalLayout;
+  if(verticalLayout!=nullptr) delete verticalLayout;
   verticalLayout = new QVBoxLayout(parentPtr);
   verticalLayout->setObjectName(QString::fromUtf8("vt1"));
   verticalLayout->setSpacing(2);

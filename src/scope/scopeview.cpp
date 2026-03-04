@@ -89,7 +89,7 @@ void scopeView::setSize(uint numSamples)
 void scopeView::addData(ecurve idx,double *data,unsigned int position,unsigned int len)
 {
   unsigned int i,j;
-  double *ar=NULL;
+  double *ar=nullptr;
   if(position<scopeXOffset) return;
   switch(idx)
     {
@@ -110,7 +110,7 @@ void scopeView::addData(ecurve idx,double *data,unsigned int position,unsigned i
 void scopeView::addData(ecurve idx,float *data,unsigned int position,unsigned int len)
 {
   unsigned int i,j;
-  double *ar=NULL;
+  double *ar=nullptr;
   if(position<scopeXOffset) return;
   switch(idx)
     {
@@ -133,7 +133,7 @@ void scopeView::addData(ecurve idx,float *data,unsigned int position,unsigned in
 void scopeView::addData(ecurve idx, qint8 *data, unsigned int position, unsigned int len)
 {
   unsigned int i,j;
-  double *ar=NULL;
+  double *ar=nullptr;
   if(position<scopeXOffset) return;
   switch(idx)
     {
@@ -154,7 +154,7 @@ void scopeView::addData(ecurve idx, qint8 *data, unsigned int position, unsigned
 void scopeView::addData(ecurve idx,quint8 *data, unsigned int position, unsigned int len)
 {
   unsigned int i,j;
-  double *ar=NULL;
+  double *ar=nullptr;
   if(position<scopeXOffset) return;
   switch(idx)
     {
@@ -176,7 +176,7 @@ void scopeView::addData(ecurve idx,quint8 *data, unsigned int position, unsigned
 void scopeView::addData(ecurve idx,qint16 *data,unsigned int position,unsigned int len)
 {
   unsigned int i,j;
-  double *ar=NULL;
+  double *ar=nullptr;
   if(position<scopeXOffset) return;
   switch(idx)
     {
@@ -198,7 +198,7 @@ void scopeView::addData(ecurve idx,qint16 *data,unsigned int position,unsigned i
 void scopeView::addData(ecurve idx,quint16 *data,unsigned int position,unsigned int len)
 {
   unsigned int i,j;
-  double *ar=NULL;
+  double *ar=nullptr;
   if(position<scopeXOffset) return;
   switch(idx)
     {
@@ -221,7 +221,7 @@ void scopeView::addData(ecurve idx,quint16 *data,unsigned int position,unsigned 
 void scopeView::addData(ecurve idx,qint32 *data,unsigned int position,unsigned int len)
 {
   unsigned int i,j;
-  double *ar=NULL;
+  double *ar=nullptr;
   if(position<scopeXOffset) return;
   switch(idx)
     {
@@ -243,7 +243,7 @@ void scopeView::addData(ecurve idx,qint32 *data,unsigned int position,unsigned i
 void scopeView::addData(ecurve idx,quint32 *data,unsigned int position,unsigned int len)
 {
   unsigned int i,j;
-  double *ar=NULL;
+  double *ar=nullptr;
   if(position<scopeXOffset) return;
   switch(idx)
     {

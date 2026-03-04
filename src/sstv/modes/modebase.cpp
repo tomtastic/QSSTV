@@ -63,13 +63,13 @@ modeBase::modeBase(esstvMode m, unsigned int len, bool tx, bool narrowMode)
 
   transmit=tx;
   length=len;
-  greenArrayPtr=NULL;
-  blueArrayPtr=NULL;
-  redArrayPtr=NULL;
-  yArrayPtr=NULL;
-  pixelArrayPtr=NULL;
-  pixelPositionTable=NULL;
-  debugStatePtr=NULL;
+  greenArrayPtr=nullptr;
+  blueArrayPtr=nullptr;
+  redArrayPtr=nullptr;
+  yArrayPtr=nullptr;
+  pixelArrayPtr=nullptr;
+  pixelPositionTable=nullptr;
+  debugStatePtr=nullptr;
   addToLog(QString("mb constructor mode=%1").arg((int) m),LOGMODES);
   if(transmit)
     {
@@ -92,7 +92,7 @@ modeBase::~modeBase()
 /**
     \brief delete existing buffers
 
-    Deletes all buffers, and sets the pointers to NULL;
+    Deletes all buffers, and sets the pointers to nullptr;
  */
 void modeBase::deleteBuffers()
 {
@@ -102,9 +102,9 @@ void modeBase::deleteBuffers()
   if(redArrayPtr) delete [] redArrayPtr;
   if(yArrayPtr) delete [] yArrayPtr;
   if(debugStatePtr) delete [] debugStatePtr;
-  greenArrayPtr=blueArrayPtr=redArrayPtr=yArrayPtr=NULL;
-  debugStatePtr=NULL;
-  pixelPositionTable=NULL;
+  greenArrayPtr=blueArrayPtr=redArrayPtr=yArrayPtr=nullptr;
+  debugStatePtr=nullptr;
+  pixelPositionTable=nullptr;
 }
 
 /**

@@ -124,8 +124,8 @@ CModul<TInput, TOutput>::CModul()
 	iMaxOutputBlockSize = 0;
 	iInputBlockSize = 0;
 	iOutputBlockSize = 0;
-	pvecInputData = NULL;
-	pvecOutputData = NULL;
+	pvecInputData = nullptr;
+	pvecOutputData = nullptr;
 }
 
 template<class TInput, class TOutput>
@@ -208,8 +208,8 @@ CTransmitterModul<TInput, TOutput>::CTransmitterModul()
 	/* Initialize all member variables with zeros */
 	iInputBlockSize2 = 0;
 	iInputBlockSize3 = 0;
-	pvecInputData2 = NULL;
-	pvecInputData3 = NULL;
+	pvecInputData2 = nullptr;
+	pvecInputData3 = nullptr;
 }
 
 template<class TInput, class TOutput>

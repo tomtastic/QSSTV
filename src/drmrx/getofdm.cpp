@@ -75,26 +75,26 @@ int getofdm( /*@null@ */ float *rs, float time_offset_fractional_init,
   static float *out1;
 
   static drmComplex s[288], S[288];	/* 288 = max Tu */
-  static fftwf_plan p = NULL;
+  static fftwf_plan p = nullptr;
 
   if (init == 1)
 
     {
 
       /* malloc space for arrays */
-      if ((exp_temp = (float *)malloc(Tu * 2 * sizeof(float))) == NULL)
+      if ((exp_temp = (float *)malloc(Tu * 2 * sizeof(float))) == nullptr)
 
         {
           printf("cannot malloc space for exp_temp in get_ofdm_symbol\n");
           exit(EXIT_FAILURE);
         }
-      if ((out1 = (float *)malloc(Tu * 2 * sizeof(float))) == NULL)
+      if ((out1 = (float *)malloc(Tu * 2 * sizeof(float))) == nullptr)
 
         {
           printf("cannot malloc space for out1 in get_ofdm_symbol\n");
           exit(EXIT_FAILURE);
         }
-      if (p != NULL)
+      if (p != nullptr)
 
         {
           fftwf_destroy_plan(p);

@@ -49,10 +49,10 @@ static float threshold_timing_small_large = 2.0;	/* was 2.0 */
 static float kI_timing_controller = 0.000020;	/* was 0.00005 */
 static drmComplex s[512], S[512];
 static drmComplex s1[512], S1[512];
-static fftwf_plan p1=NULL;
-static fftwf_plan p2=NULL;
-static float /*@only@ */ *exp_temp=NULL;
-static float /*@only@ */ *out1=NULL;
+static fftwf_plan p1=nullptr;
+static fftwf_plan p2=nullptr;
+static float /*@only@ */ *exp_temp=nullptr;
+static float /*@only@ */ *out1=nullptr;
 
 
 int getofdmsync( /*@null@ */ float *rs, int Ts, int Tu, /*@null@ */ float *H,
@@ -100,27 +100,27 @@ int getofdmsync( /*@null@ */ float *rs, int Ts, int Tu, /*@null@ */ float *H,
       /* printf("Tg %d, Tgh %d, Tc %d,Tu %d,  Tgs %d, Tgsh %d\n",
          Tg, Tgh, Tc, Tu, Tgs, Tgsh);   */
       /* malloc space for arrays */
-      if(exp_temp!=NULL) free(exp_temp);
-      if(out1!=NULL) free(out1);
+      if(exp_temp!=nullptr) free(exp_temp);
+      if(out1!=nullptr) free(out1);
 
-      if ((exp_temp = (float *)malloc((Tu * 2 + 2) * sizeof(float))) == NULL)
+      if ((exp_temp = (float *)malloc((Tu * 2 + 2) * sizeof(float))) == nullptr)
 
         {
           printf("cannot malloc space for exp_temp in get_ofdm_symbol\n");
           exit(EXIT_FAILURE);
         }
-      if ((out1 = (float *)malloc(Tu * 2 * sizeof(float))) == NULL)
+      if ((out1 = (float *)malloc(Tu * 2 * sizeof(float))) == nullptr)
 
         {
           printf("cannot malloc space for out1 in get_ofdm_symbol\n");
           exit(EXIT_FAILURE);
         }
       addToLog("syn 1",LOGPERFORM);
-      if (p1 != NULL)
+      if (p1 != nullptr)
         {
           fftwf_destroy_plan(p1);
         }
-      if (p2 != NULL)
+      if (p2 != nullptr)
         {
           fftwf_destroy_plan(p2);
         }

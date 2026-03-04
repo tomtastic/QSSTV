@@ -56,7 +56,7 @@ cameraDialog::cameraDialog(QWidget *parent) :
 {
   ui->setupUi(this);
   cameraActive=false;
-  videoCapturePtr=NULL;
+  videoCapturePtr=nullptr;
   listCameraDevices();
   if(cameraList.count()==0)
     {

@@ -232,7 +232,7 @@ bool demodulator::timeSync()
               rs_buffer[i * 2 + 1] =rs_buffer[(i + time_offset_integer) * 2 + 1];
             }
           counter++;
-          (void) getofdm(NULL, 0.0, 0.0, 0.0, Ts, Tu, NULL, NULL, 1, 1, 1);	/* initialisation */
+          (void) getofdm(nullptr, 0.0, 0.0, 0.0, Ts, Tu, nullptr, nullptr, 1, 1, 1);	/* initialisation */
         }
 
       else
@@ -588,7 +588,7 @@ bool demodulator::channelEstimation()
       K_min = K_min_K_max_list[0][spectrum_occupancy + robustness_mode * 6];
       K_max = K_min_K_max_list[1][spectrum_occupancy + robustness_mode * 6];
       carrier_per_symbol = K_max - K_min + 1;
-      (void) getofdmsync(NULL, Ts, Tu, NULL, K_max - K_min + 1, 0, NULL, NULL, 1, 1, 1);	/* initialisation */
+      (void) getofdmsync(nullptr, Ts, Tu, nullptr, K_max - K_min + 1, 0, nullptr, nullptr, 1, 1, 1);	/* initialisation */
       //  reformat pilot index stuff into th K_dc/K_modulo block
       //  first call listsinit to get gain_ref_cells_k etc
       //  Jan 5th 2009 changed listsinit() call to an include of all code from listsinit.c

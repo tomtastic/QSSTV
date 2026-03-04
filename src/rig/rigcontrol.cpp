@@ -149,14 +149,14 @@ bool rigControl::init()
   // rig_debug(RIG_DEBUG_VERBOSE, "rigctl, %s\n", hamlib_version);
   // test if we can contact the transceiver
 
-  canSetFreq=(my_rig->caps->set_freq != NULL);
-  canGetFreq=(my_rig->caps->get_freq != NULL);
-  canSetMode=(my_rig->caps->set_mode != NULL);
-  canGetMode=(my_rig->caps->get_mode != NULL);
-  canSetPTT=(my_rig->caps->set_ptt != NULL) ||
+  canSetFreq=(my_rig->caps->set_freq != nullptr);
+  canGetFreq=(my_rig->caps->get_freq != nullptr);
+  canSetMode=(my_rig->caps->set_mode != nullptr);
+  canGetMode=(my_rig->caps->get_mode != nullptr);
+  canSetPTT=(my_rig->caps->set_ptt != nullptr) ||
           (my_rig->state.pttport.type.ptt == RIG_PTT_SERIAL_DTR) ||
           (my_rig->state.pttport.type.ptt == RIG_PTT_SERIAL_RTS);
-  canGetPTT=(my_rig->caps->get_ptt != NULL);
+  canGetPTT=(my_rig->caps->get_ptt != nullptr);
   double fr;
   getFrequency(fr);
   return true;

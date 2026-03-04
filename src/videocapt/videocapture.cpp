@@ -246,7 +246,7 @@ int videoCapture::getFrame()
 bool videoCapture::convert(unsigned char *src)
 {
   int result=0;
-  //  if (localImage!=NULL) delete localImage;
+  //  if (localImage!=nullptr) delete localImage;
   //  localImage=new QImage( dstFmt.fmt.pix.width,dstFmt.fmt.pix.height,qFmt);
   if(needsConversion)
     {

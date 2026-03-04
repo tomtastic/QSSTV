@@ -6,10 +6,10 @@
 
 fftCalc::fftCalc()
 {
-  plan=NULL;
-  out=NULL;
-  dataBuffer=NULL;
-  dataBufferWindowed=NULL;
+  plan=nullptr;
+  out=nullptr;
+  dataBuffer=nullptr;
+  dataBufferWindowed=nullptr;
 }
 
 fftCalc::~fftCalc()

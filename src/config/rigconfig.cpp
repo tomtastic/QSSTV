@@ -41,8 +41,8 @@ rigConfig::rigConfig(QWidget *parent) : baseConfig(parent),  ui(new Ui::rigConfi
   connect(ui->DTRCheckBox, &QCheckBox::clicked, this, &rigConfig::slotCheckPTT1);
   connect(ui->nRTSCheckBox, &QCheckBox::clicked, this, &rigConfig::slotCheckPTT2);
   connect(ui->nDTRCheckBox, &QCheckBox::clicked, this, &rigConfig::slotCheckPTT3);
-  rigController=NULL;
-  cp=NULL;
+  rigController=nullptr;
+  cp=nullptr;
 }
 
 

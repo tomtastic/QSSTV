@@ -131,7 +131,7 @@ void txWidget::init()
   readSettings();
   initView();
   setProfileNames();
-  ed=NULL;
+  ed=nullptr;
   repeaterIndex=0;
   repeaterTimer=new QTimer(this);
   connect(repeaterTimer, &QTimer::timeout, this, &txWidget::slotRepeaterTimer);
@@ -554,7 +554,7 @@ void txWidget::slotGenerateRepeaterTone()
 
 void txWidget::slotEdit()
 {
-  if (ed!=NULL) delete ed;
+  if (ed!=nullptr) delete ed;
   ed=new editor(this);
   if(txFunctionsPtr->txBusy())
     {

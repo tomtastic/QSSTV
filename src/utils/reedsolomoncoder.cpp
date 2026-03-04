@@ -21,14 +21,14 @@ QString rsTypeStr[RST4+1]=
 
 reedSolomonCoder::reedSolomonCoder()
 {
-  zeroPositions=NULL;
-  newZeroPositions=NULL;
+  zeroPositions=nullptr;
+  newZeroPositions=nullptr;
 }
 
 reedSolomonCoder::~reedSolomonCoder()
 {
-  if(zeroPositions!=NULL) delete zeroPositions;
-  if(newZeroPositions!=NULL) delete newZeroPositions;
+  if(zeroPositions!=nullptr) delete zeroPositions;
+  if(newZeroPositions!=nullptr) delete newZeroPositions;
 }
 
 void reedSolomonCoder::init()
@@ -42,8 +42,8 @@ void reedSolomonCoder::init()
   bep_size=0;
   sumOfFailures=0;
   uncorrectableFailures=0;
-  if(zeroPositions!=NULL) delete zeroPositions;
-  if(newZeroPositions!=NULL) delete newZeroPositions;
+  if(zeroPositions!=nullptr) delete zeroPositions;
+  if(newZeroPositions!=nullptr) delete newZeroPositions;
 }
 
 

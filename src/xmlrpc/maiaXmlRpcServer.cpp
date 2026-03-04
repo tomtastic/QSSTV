@@ -29,14 +29,14 @@
 #include "maiaFault.h"
 
 MaiaXmlRpcServer::MaiaXmlRpcServer(const QHostAddress &address, quint16 port, QObject* parent) : QObject(parent) {
-  allowedAddresses = NULL;
+  allowedAddresses = nullptr;
   connect(&server, &QTcpServer::newConnection, this, &MaiaXmlRpcServer::newConnection);
   server.listen(address, port);
 }
 
 MaiaXmlRpcServer::MaiaXmlRpcServer(quint16 port, QObject* parent) : QObject(parent)
 {
-  allowedAddresses = NULL;
+  allowedAddresses = nullptr;
   connect(&server, &QTcpServer::newConnection, this, &MaiaXmlRpcServer::newConnection);
   server.listen(QHostAddress::Any, port);
 }
@@ -62,8 +62,8 @@ void MaiaXmlRpcServer::getMethod(QString method, QObject **responseObject, const
 {
   if(!objectMap.contains(method))
     {
-      *responseObject = NULL;
-      *responseSlot = NULL;
+      *responseObject = nullptr;
+      *responseSlot = nullptr;
       return;
     }
   *responseObject = objectMap[method];

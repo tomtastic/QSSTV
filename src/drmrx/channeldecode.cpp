@@ -122,7 +122,7 @@ void channel_decoding(void)
   static int MSC_used_carriers[288];
   static int min_index_equal_samples;
   static int max_index_equal_samples;
-  static int /*@only@ */ *Part_Deinterleaver = NULL;
+  static int /*@only@ */ *Part_Deinterleaver = nullptr;
   static int Deinterleaver[18000];
   int no_of_streams = 1;
   static int N_MUX;
@@ -148,7 +148,7 @@ void channel_decoding(void)
   if (runstate == RUN_STATE_POWER_ON)
 
     {
-      if (FAC_Deinterleaver != NULL)
+      if (FAC_Deinterleaver != nullptr)
         free(FAC_Deinterleaver);
       FAC_Deinterleaver = deinterleaver(0, 1, 90, 21);
 
@@ -604,7 +604,7 @@ void channel_decoding(void)
           xin1 = 2 * N1;
           xin2 = 2 * N2;
           for (i = 0; i < xin1 + xin2; i++)  Deinterleaver[i] = i;
-          if (Part_Deinterleaver != NULL) free(Part_Deinterleaver);
+          if (Part_Deinterleaver != nullptr) free(Part_Deinterleaver);
           Part_Deinterleaver = deinterleaver(xin1, 13, xin2, 13);
           for (i = 0; i < xin1 + xin2; i++) Deinterleaver[i + xin1 + xin2] = Part_Deinterleaver[i];
           free(Part_Deinterleaver);
@@ -641,7 +641,7 @@ void channel_decoding(void)
           Lvspp = 0;
           xin1 = 2 * N1;
           xin2 = 2 * N2;
-          if (Part_Deinterleaver != NULL) free(Part_Deinterleaver);
+          if (Part_Deinterleaver != nullptr) free(Part_Deinterleaver);
           Part_Deinterleaver = deinterleaver(xin1, 13, xin2, 13);
           for (i = 0; i < xin1 + xin2; i++)  Deinterleaver[i] = Part_Deinterleaver[i];
           free(Part_Deinterleaver);
@@ -705,7 +705,7 @@ void channel_decoding(void)
           Lvspp = 0;
           xin1 = 2 * N1;
           xin2 = 2 * N2;
-          if (Part_Deinterleaver != NULL) free(Part_Deinterleaver);
+          if (Part_Deinterleaver != nullptr) free(Part_Deinterleaver);
           Part_Deinterleaver = deinterleaver(xin1, 21, xin2, 21);
           for (i = 0; i < xin1 + xin2; i++) Deinterleaver[i] = Part_Deinterleaver[i];
           PL[0] = 0;

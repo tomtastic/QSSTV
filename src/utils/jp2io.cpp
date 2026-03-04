@@ -19,7 +19,7 @@ static size_t opj_strnlen_s(const char *src, size_t max_len)
 {
   size_t len;
 
-  if (src == NULL) {
+  if (src == nullptr) {
       return 0U;
     }
   for (len = 0U; (*src != '\0') && (len < max_len); src++, len++);
@@ -29,10 +29,10 @@ static size_t opj_strnlen_s(const char *src, size_t max_len)
 static int opj_strcpy_s(char* dst, size_t dst_size, const char* src)
 {
   size_t src_len = 0U;
-  if ((dst == NULL) || (dst_size == 0U)) {
+  if ((dst == nullptr) || (dst_size == 0U)) {
       return EINVAL;
     }
-  if (src == NULL) {
+  if (src == nullptr) {
       dst[0] = '\0';
       return EINVAL;
     }
@@ -87,10 +87,10 @@ jp2IO::jp2IO()
 
 void  jp2IO::init()
 {
-  jp2Image = NULL;
-  l_stream = NULL;				/* Stream */
-  l_codec = NULL;				/* Handle to a decompressor */
-  cstr_index = NULL;
+  jp2Image = nullptr;
+  l_stream = nullptr;				/* Stream */
+  l_codec = nullptr;				/* Handle to a decompressor */
+  cstr_index = nullptr;
 }
 
 bool jp2IO::check(QString fileName)
@@ -143,7 +143,7 @@ void jp2IO::destroy_parameters(opj_decompress_parameters* parameters)
       if (parameters->precision)
         {
           free(parameters->precision);
-          parameters->precision = NULL;
+          parameters->precision = nullptr;
         }
     }
 }
@@ -280,7 +280,7 @@ QImage jp2IO::decode(QString fileName)
   if(jp2Image->icc_profile_buf)
     {
       free(jp2Image->icc_profile_buf);
-      jp2Image->icc_profile_buf = NULL; jp2Image->icc_profile_len = 0;
+      jp2Image->icc_profile_buf = nullptr; jp2Image->icc_profile_len = 0;
     }
 
   /* Force RGB output */
@@ -296,10 +296,10 @@ QImage jp2IO::decode(QString fileName)
         default:
           fprintf(stderr, "ERROR -> opj_decompress: don't know how to convert image to RGB colorspace!\n");
           opj_image_destroy(jp2Image);
-          jp2Image = NULL;
+          jp2Image = nullptr;
         break;
         }
-      if (jp2Image == NULL) {
+      if (jp2Image == nullptr) {
           fprintf(stderr, "ERROR -> opj_decompress: failed to convert to RGB image!\n");
           destroy_parameters(&parameters);
           opj_destroy_codec(l_codec);
@@ -342,14 +342,14 @@ QImage jp2IO::decode(QString fileName)
 opj_image_t *jp2IO::convert_gray_to_rgb(opj_image_t* original)
 {
   OPJ_UINT32 compno;
-  opj_image_t* l_new_image = NULL;
-  opj_image_cmptparm_t* l_new_components = NULL;
+  opj_image_t* l_new_image = nullptr;
+  opj_image_cmptparm_t* l_new_components = nullptr;
 
   l_new_components = (opj_image_cmptparm_t*)malloc((original->numcomps + 2U) * sizeof(opj_image_cmptparm_t));
-  if (l_new_components == NULL) {
+  if (l_new_components == nullptr) {
       fprintf(stderr, "ERROR -> opj_decompress: failed to allocate memory for RGB image!\n");
       opj_image_destroy(original);
-      return NULL;
+      return nullptr;
     }
 
   l_new_components[0].bpp  = l_new_components[1].bpp  = l_new_components[2].bpp  = original->comps[0].bpp;
@@ -376,10 +376,10 @@ opj_image_t *jp2IO::convert_gray_to_rgb(opj_image_t* original)
 
   l_new_image = opj_image_create(original->numcomps + 2U, l_new_components, OPJ_CLRSPC_SRGB);
   free(l_new_components);
-  if (l_new_image == NULL) {
+  if (l_new_image == nullptr) {
       fprintf(stderr, "ERROR -> opj_decompress: failed to allocate memory for RGB image!\n");
       opj_image_destroy(original);
-      return NULL;
+      return nullptr;
     }
 
   l_new_image->x0 = original->x0;

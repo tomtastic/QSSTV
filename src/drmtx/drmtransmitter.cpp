@@ -23,7 +23,7 @@ int partTable[BWs][MODES][PROTECTIONS][QAMS]=
 
 drmTransmitter::drmTransmitter()
 {
-  DRMTransmitter=NULL;
+  DRMTransmitter=nullptr;
 }
 
 drmTransmitter::~drmTransmitter()

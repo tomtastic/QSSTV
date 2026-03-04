@@ -444,9 +444,9 @@ eras_dec_rs(dtype data[], int eras_pos[], int no_eras)
         }
     }
 finish:
-  if(eras_pos != NULL){
+  if(eras_pos != nullptr){
       for(i=0;i<count;i++){
-          if(eras_pos!= NULL)
+          if(eras_pos!= nullptr)
             eras_pos[i] = loc[i];
         }
     }

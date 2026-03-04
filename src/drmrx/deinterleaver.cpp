@@ -39,7 +39,7 @@ int *deinterleaver(int xinA, int tA, int xinB, int tB)
   double part1, part2;
   double part3;
   deinterl = (int *) malloc((xinA + xinB) * sizeof(int));
-  if (deinterl == NULL)
+  if (deinterl == nullptr)
 
     {
       printf("Cannot malloc space for deinterl in routine deinterleaver\n");

@@ -31,7 +31,7 @@
 
 MaiaXmlRpcServerConnection::MaiaXmlRpcServerConnection(QTcpSocket *connection, QObject* parent) : QObject(parent)
 {
-  header = NULL;
+  header = nullptr;
   clientConnection = connection;
   connect(clientConnection, &QTcpSocket::readyRead, this, &MaiaXmlRpcServerConnection::readFromSocket);
   connect(clientConnection, &QTcpSocket::disconnected, this, &MaiaXmlRpcServerConnection::slotDisconnect);
@@ -87,7 +87,7 @@ void MaiaXmlRpcServerConnection::readFromSocket()
           /* all data complete */
           parseCall(clientConnection->readAll());
           delete header;
-          header=NULL;
+          header=nullptr;
         }
     }
 }

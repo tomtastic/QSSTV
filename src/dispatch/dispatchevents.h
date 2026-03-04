@@ -59,11 +59,11 @@ enum dispatchEventType
 class baseEvent: public QEvent
 {
 public:
-  baseEvent(QEvent::Type t):QEvent(t) {doneIt=NULL;}
+  baseEvent(QEvent::Type t):QEvent(t) {doneIt=nullptr;}
   void waitFor(bool *d) {doneIt=d;}
   void setDone()
   {
-    if(doneIt!=NULL) *doneIt=true;
+    if(doneIt!=nullptr) *doneIt=true;
   }
   QString description;
 private:

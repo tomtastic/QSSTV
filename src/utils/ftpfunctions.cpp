@@ -14,8 +14,8 @@
 
 ftpFunctions::ftpFunctions()
 {
-  thread=NULL;
-  ftpThr=NULL;
+  thread=nullptr;
+  ftpThr=nullptr;
   busy=false;
 }
 
@@ -93,7 +93,7 @@ bool ftpFunctions::checkRemove(QString rfn)
 bool ftpFunctions::checkStart()
 {
   endOfCommands=false;
-  if(ftpThr!=NULL)
+  if(ftpThr!=nullptr)
     {
       return true;
     }
@@ -230,7 +230,7 @@ void ftpFunctions::slotThreadFinished()
 {
 //  qDebug() << "slotThreadFished" << thread->objectName();
   thread->deleteLater();
-//  ftpThr=NULL;
+//  ftpThr=nullptr;
   busy=false;
 }
 

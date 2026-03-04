@@ -38,8 +38,8 @@
 class CFftPlans
 {
 public:
-	CFftPlans() : RFFTPlForw(NULL), RFFTPlBackw(NULL), bInitialized(false) {}
-	CFftPlans(const int iFftSize) : RFFTPlForw(NULL), RFFTPlBackw(NULL), bInitialized(false) {Init(iFftSize);}
+	CFftPlans() : RFFTPlForw(nullptr), RFFTPlBackw(nullptr), bInitialized(false) {}
+	CFftPlans(const int iFftSize) : RFFTPlForw(nullptr), RFFTPlBackw(nullptr), bInitialized(false) {Init(iFftSize);}
 	virtual ~CFftPlans();
 
 	void Init(const int iFSi);

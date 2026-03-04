@@ -84,7 +84,7 @@ void sstvTx::sendVIS()
 
 bool sstvTx::create(esstvMode m,DSPFLOAT clock)
 {
-  if((oldMode==m) && (currentMode!=NULL))
+  if((oldMode==m) && (currentMode!=nullptr))
   {
     currentMode->init(clock);
     return true;

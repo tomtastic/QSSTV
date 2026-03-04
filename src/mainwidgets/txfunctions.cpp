@@ -547,7 +547,7 @@ void txFunctions:: sendFSKID()
 
 void txFunctions::sendBSR(QByteArray *p,drmTxParams dp)
 {
-  if(p==NULL) return;
+  if(p==nullptr) return;
   drmTxPtr->sendBSR(p,dp);
 }
 
@@ -566,7 +566,7 @@ bool txFunctions::prepareFIX(QByteArray bsrByteArray)
   trID=drmTxPtr->processFIX(bsrByteArray);
   if(trID<0)  return false;
   sessionPtr=drmTxPtr->getSessionPtr((uint)trID);
-  if (sessionPtr==NULL)
+  if (sessionPtr==nullptr)
     {
       stce= new displayMBoxEvent("BSR Received","This BSR is not for you");
       QApplication::postEvent( dispatcherPtr, stce );  // Qt will delete it when done

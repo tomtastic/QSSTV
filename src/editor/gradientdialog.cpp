@@ -33,7 +33,7 @@ gradientDialog::gradientDialog(QWidget *parent):QDialog(parent), Ui::gradientFor
 	connect(color4Button, &QPushButton::clicked, this, &gradientDialog::slotColorDialog);
 	
 	previewLabel->setBackgroundRole(QPalette::Base);
-	g=NULL;
+	g=nullptr;
 	slotUpdate();
 	connect(pos1SpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &gradientDialog::slotUpdate);
 	connect(pos2SpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &gradientDialog::slotUpdate);
@@ -50,7 +50,7 @@ gradientDialog::gradientDialog(QWidget *parent):QDialog(parent), Ui::gradientFor
 gradientDialog::~gradientDialog()
 {
 	writeSettings();
-	if(g==NULL) delete g;
+	if(g==nullptr) delete g;
 }
 
 void gradientDialog::readSettings()

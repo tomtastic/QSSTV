@@ -34,15 +34,15 @@ QString commandStr[15]=
 
 ftpThread::ftpThread(QString id) : QObject()
 {
-  qftpPtr=NULL;
+  qftpPtr=nullptr;
   addToLog(QString("FTP Created: %1").arg(id),LOGFTPTHREAD);
   idName=id;
   canCloseWhenDone=false;
   displayProgress=true;
   aborting=false;
   stopThread=false;
-  sourceFn=NULL;
-  destFn=NULL;
+  sourceFn=nullptr;
+  destFn=nullptr;
 //  qDebug()<< "ftpThread constructor";
 }
 

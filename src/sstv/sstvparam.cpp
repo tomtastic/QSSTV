@@ -30,8 +30,8 @@ bool autoSave;
 int sensitivity;
 int filterIndex;
 
-DSPFLOAT *lineTimeTableRX=NULL;
-DSPFLOAT *lineTimeTableTX=NULL;
+DSPFLOAT *lineTimeTableRX=nullptr;
+DSPFLOAT *lineTimeTableTX=nullptr;
 sSSTVParam rxSSTVParam;
 //sFAXParam  rxFAXParam;
 sSSTVParam txSSTVParam;
@@ -55,7 +55,7 @@ void setupSSTVLineTimeTable(esstvMode modeIndex,DSPFLOAT clock, bool transmit)
   unsigned int i;
   if(transmit)
     {
-      if (lineTimeTableTX!=NULL) delete [] lineTimeTableTX;
+      if (lineTimeTableTX!=nullptr) delete [] lineTimeTableTX;
       lineTimeTableTX=new DSPFLOAT [SSTVTable[modeIndex].numberOfDataLines+1];
       for (i=0;i<SSTVTable[modeIndex].numberOfDataLines+1;i++)
         {
@@ -64,7 +64,7 @@ void setupSSTVLineTimeTable(esstvMode modeIndex,DSPFLOAT clock, bool transmit)
     }
   else
   {
-    if (lineTimeTableRX!=NULL) delete [] lineTimeTableRX;
+    if (lineTimeTableRX!=nullptr) delete [] lineTimeTableRX;
     lineTimeTableRX=new DSPFLOAT [SSTVTable[modeIndex].numberOfDataLines+1];
     for (i=0;i<SSTVTable[modeIndex].numberOfDataLines+1;i++)
       {

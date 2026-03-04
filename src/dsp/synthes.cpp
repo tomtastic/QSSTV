@@ -81,7 +81,7 @@ void synthesizer::sendWFText()
   int len;
   int i;
   len=waterfallPtr->getLength();
-  while ((dataPtr=waterfallPtr->nextLine())!=NULL)
+  while ((dataPtr=waterfallPtr->nextLine())!=nullptr)
     {
       addToLog(QString("sending id len=%1").arg(len),LOGSYNTHES);
       for (i=0;i<len;i++)

@@ -35,24 +35,24 @@
 
 downsampleFilter::downsampleFilter()
 {
-  filteredDataBuffer=NULL;
-  volumeBuffer=NULL;
-  filterParams=NULL;
-  samplesI=NULL;
-  samplesQ=NULL;
-  volSamples=NULL;
+  filteredDataBuffer=nullptr;
+  volumeBuffer=nullptr;
+  filterParams=nullptr;
+  samplesI=nullptr;
+  samplesQ=nullptr;
+  volSamples=nullptr;
   filterLength=0;
 
 }
 
 downsampleFilter::downsampleFilter(unsigned int len, bool scaled)
 {
-  filteredDataBuffer=NULL;
-  volumeBuffer=NULL;
-  filterParams=NULL;
-  samplesI=NULL;
-  samplesQ=NULL;
-  volSamples=NULL;
+  filteredDataBuffer=nullptr;
+  volumeBuffer=nullptr;
+  filterParams=nullptr;
+  samplesI=nullptr;
+  samplesQ=nullptr;
+  volSamples=nullptr;
   filterLength=0;
   setFilterParams(scaled);
   allocate(len);

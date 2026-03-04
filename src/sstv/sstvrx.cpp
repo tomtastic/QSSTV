@@ -38,9 +38,9 @@ const QString stateStr[sstvRx::END+1]=
 
 sstvRx::sstvRx(QObject *parent) : QObject(parent),syncNarrowProc(true),syncWideProc(false)
 {
-  syncFilterPtr=NULL;
-  videoFilterPtr=NULL;
-  syncProcPtr=NULL;
+  syncFilterPtr=nullptr;
+  videoFilterPtr=nullptr;
+  syncProcPtr=nullptr;
 #ifdef ENABLESCOPE
   scopeViewerData=new scopeView("Data Scope");
   scopeViewerSyncNarrow=new scopeView("Sync Scope Narrow");
@@ -87,17 +87,17 @@ void sstvRx::resetParams(bool bufferReset)
 
 sstvRx::~sstvRx()
 {
-  if(videoFilterPtr!=NULL) delete videoFilterPtr;
-  if(syncFilterPtr !=NULL) delete syncFilterPtr;
+  if(videoFilterPtr!=nullptr) delete videoFilterPtr;
+  if(syncFilterPtr !=nullptr) delete syncFilterPtr;
 }
 
 void sstvRx::setFilters()
 {
-  if(videoFilterPtr==NULL)
+  if(videoFilterPtr==nullptr)
     videoFilterPtr=new videoFilter(RXSTRIPE);
   else
     videoFilterPtr->init();
-  if(syncFilterPtr==NULL) syncFilterPtr=new syncFilter(RXSTRIPE);
+  if(syncFilterPtr==nullptr) syncFilterPtr=new syncFilter(RXSTRIPE);
   else syncFilterPtr->init();
 }
 
@@ -106,9 +106,9 @@ void sstvRx::setFilters()
 void sstvRx::run(DSPFLOAT *dataPtr,DSPFLOAT *volumePtr)
 {
   bufferCounter++;
-  if(videoFilterPtr==NULL)
+  if(videoFilterPtr==nullptr)
     {
-      errorOut() << "videoFltr NULL";
+      errorOut() << "videoFltr nullptr";
       return;
     }
   // run AGC
@@ -217,7 +217,7 @@ void sstvRx::process()
         }
       else
         {
-          syncProcPtr=NULL;
+          syncProcPtr=nullptr;
           syncState=syncProcessor::MODEDETECT;
           if(SSTVState!=HUNTING)
             {
@@ -238,7 +238,7 @@ void sstvRx::process()
   switch (SSTVState)
     {
     case HUNTING:
-      if(syncProcPtr==NULL)
+      if(syncProcPtr==nullptr)
         {
           stce= new rxSSTVStatusEvent(QString("No sync"));
           QApplication::postEvent( dispatcherPtr, stce );  // Qt will delete it when done

@@ -50,35 +50,35 @@ void initGetmode(int n)
   initDone=true;
   /* create and initialize  arrays */
   in_ =(float *) malloc((n - Tu_D) * 2 * sizeof(float));	/* complex data */
-  if (in_ == NULL)
+  if (in_ == nullptr)
 
     {
       printf("mem alloc problem in getmode \n");
       exit(EXIT_FAILURE);
     }
   conv_in_ = (float *)malloc((n - Tu_D) * 2 * sizeof(float));	/* complex */
-  if (conv_in_ == NULL)
+  if (conv_in_ == nullptr)
 
     {
       printf("mem alloc problem in getmode \n");
       exit(EXIT_FAILURE);
     }
   abs_in_ = (float *)malloc(n * sizeof(float));
-  if (abs_in_ == NULL)
+  if (abs_in_ == nullptr)
 
     {
       printf("mem alloc problem in getmode \n");
       exit(EXIT_FAILURE);
     }
   abs_in_in_ = (float *)malloc((n - Tu_D) * sizeof(float));
-  if (abs_in_in_ == NULL)
+  if (abs_in_in_ == nullptr)
 
     {
       printf("mem alloc problem in getmode \n");
       exit(EXIT_FAILURE);
     }
   conv_abs_in_in_ = (float *)malloc((n - Tu_D) * sizeof(float));
-  if (conv_abs_in_in_ == NULL)
+  if (conv_abs_in_in_ == nullptr)
 
     {
       printf("mem alloc problem in getmode \n");
@@ -321,11 +321,11 @@ void cleanupGetmode()
     if(abs_in_) free(abs_in_);
     if(abs_in_in_) free(abs_in_in_);
     if(conv_abs_in_in_) free(conv_abs_in_in_);
-    in_ = NULL;
-    conv_in_ = NULL;
-    abs_in_ = NULL;
-    abs_in_in_ = NULL;
-    conv_abs_in_in_ = NULL;
+    in_ = nullptr;
+    conv_in_ = nullptr;
+    abs_in_ = nullptr;
+    abs_in_in_ = nullptr;
+    conv_abs_in_in_ = nullptr;
     initDone = false;
   }
 }

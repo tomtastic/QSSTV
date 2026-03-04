@@ -50,7 +50,7 @@ sourceDecoder::sourceDecoder(QObject *parent) : QObject(parent)
 
 void sourceDecoder::init()
 {
-  lastTransportBlockPtr=NULL;
+  lastTransportBlockPtr=nullptr;
   bodyTotalSegments=0;
   checkIt=false;
   erasureList.clear();
@@ -843,7 +843,7 @@ transportBlock *sourceDecoder::getTransporPtr(unsigned short tId,bool create)
     }
   else
     {
-      return NULL;
+      return nullptr;
     }
   return lastTransportBlockPtr;
 }

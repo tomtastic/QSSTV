@@ -78,7 +78,7 @@ public:
 	enum EOutFormat {OF_REAL_VAL /* real valued */, OF_IQ_POS,
 		OF_IQ_NEG /* I / Q */, OF_EP /* envelope / phase */};
 
-	CTransmitData(CSoundOutInterface* pNS) : pFileTransmitter(NULL), pSound(pNS), 
+	CTransmitData(CSoundOutInterface* pNS) : pFileTransmitter(nullptr), pSound(pNS), 
     eOutputFormat(OF_REAL_VAL), rDefCarOffset((_REAL) VIRTUAL_INTERMED_FREQ)
 //  , strOutFileName("test/TransmittedData.txt")
   {

@@ -46,8 +46,8 @@ It also starts, stops and synchronizes the threads.
 
 dispatcher::dispatcher()
 {
-  mbox=NULL;
-  progressFTP=NULL;
+  mbox=nullptr;
+  progressFTP=nullptr;
   lastFileName.clear();
   prTimerIndex=0;
 }
@@ -223,7 +223,7 @@ void dispatcher::customEvent( QEvent * e )
         if(!rxWidgetPtr->getImageViewerPtr()->openImage(fn,false,false,false,false))
           {
             // simply save the file if it is not an image file
-            if(mbox==NULL) delete mbox;
+            if(mbox==nullptr) delete mbox;
             mbox = new QMessageBox(mainWindowPtr);
             mbox->setWindowTitle("Received file");
             mbox->setText(QString("Saved file %1").arg(fn));
@@ -251,7 +251,7 @@ void dispatcher::customEvent( QEvent * e )
       break;
 
     case displayMBox:
-      if(mbox==NULL) delete mbox;
+      if(mbox==nullptr) delete mbox;
       mbox = new QMessageBox(mainWindowPtr);
       mbox->setWindowTitle(((displayMBoxEvent*)e)->getTitle());
       mbox->setText(((displayMBoxEvent*)e)->getStr());
@@ -264,10 +264,10 @@ void dispatcher::customEvent( QEvent * e )
         if(((displayProgressFTPEvent*)e)->getTotal()==0)
           {
             delete progressFTP;
-            progressFTP=NULL;
+            progressFTP=nullptr;
             break;
           }
-        if(progressFTP==NULL)
+        if(progressFTP==nullptr)
           {
             progressFTP=new QProgressDialog("FTP Transfer","Cancel",0,0,mainWindowPtr);
           }

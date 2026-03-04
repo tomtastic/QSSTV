@@ -9,18 +9,18 @@
 fftDisplay::fftDisplay(QWidget *parent) : QLabel(parent)
 {
   //  blockIndex=0;
-  arMagSAvg=NULL;
-  fftArray=NULL;
+  arMagSAvg=nullptr;
+  fftArray=nullptr;
   showWaterfall=false;
   fftMax=FFTMAX;
   range=RANGE;
   avgVal=0.05;
   //  plan=0;
   setScaledContents(true);
-  imagePtr=NULL;
+  imagePtr=nullptr;
   imWidth=-1;
   imHeight=-1;
-  arMagWAvg=NULL;
+  arMagWAvg=nullptr;
   displayCounter=0;
 }
 
@@ -82,7 +82,7 @@ void fftDisplay::showFFT(double *fftData)
     {
       if(imWidth!=width())
         {
-          if(arMagWAvg!=NULL) delete [] arMagWAvg;
+          if(arMagWAvg!=nullptr) delete [] arMagWAvg;
           arMagWAvg=new double[width()];
           for(i=0;i<width();i++)
             {
@@ -93,7 +93,7 @@ void fftDisplay::showFFT(double *fftData)
       imHeight=height();
       if(showWaterfall)
         {
-          if(imagePtr==NULL)
+          if(imagePtr==nullptr)
             {
               imagePtr=new QImage( width(),height(),QImage::Format_RGB32);
               imagePtr->fill(Qt::black);

@@ -71,7 +71,7 @@ const QString stateStr[syncProcessor::RETRACEWAIT+1]=
 syncProcessor::syncProcessor(bool narrow, QObject *parent) :  QObject(parent),streamDecode(narrow)
 {
   detectNarrow=narrow;
-  currentModePtr=NULL;
+  currentModePtr=nullptr;
   visMode=NOTVALID;
   maxLineSamples=getMaxLineSamples();
   //  syncFound=false;
@@ -93,7 +93,7 @@ syncProcessor::~syncProcessor()
   {
     matchArray[i].clear();
   }
-  if(currentModePtr!=NULL) delete currentModePtr;
+  if(currentModePtr!=nullptr) delete currentModePtr;
 }
 
 void syncProcessor::reset()
@@ -265,7 +265,7 @@ void syncProcessor::extractSync()
 
   if((syncProcesState==INSYNC) && (enableSyncDetection))
   {
-    if(activeChainPtr==NULL)
+    if(activeChainPtr==nullptr)
     {
       switchProcessState(SYNCLOST);
     }
@@ -404,7 +404,7 @@ bool syncProcessor::validateSync()
 
 void  syncProcessor::trackSyncs()
 {
-  if(activeChainPtr==NULL)
+  if(activeChainPtr==nullptr)
   {
     return;
   }
@@ -777,7 +777,7 @@ void syncProcessor::clearMatchArray()
     }
     matchArray[i].clear();
   }
-  activeChainPtr=NULL;
+  activeChainPtr=nullptr;
   switchProcessState(MODEDETECT);
 }
 
@@ -875,7 +875,7 @@ void syncProcessor::deleteSyncArrayEntry(uint entry)
       {
         if(activeChainPtr==matchArray[i][j])
         {
-          activeChainPtr=NULL;
+          activeChainPtr=nullptr;
         }
         delete matchArray[i].takeAt(j);
       }
@@ -940,7 +940,7 @@ bool  syncProcessor::createModeBase()
 {
   bool done=false;
   if(currentModePtr) delete currentModePtr;
-  currentModePtr=NULL;
+  currentModePtr=nullptr;
   switch (currentMode)
   {
   case M1:

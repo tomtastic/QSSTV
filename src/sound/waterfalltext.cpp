@@ -20,11 +20,11 @@
 
 waterfallText::waterfallText()
 {
-  out=NULL;
-  outFiltered=NULL;
-  dataBuffer=NULL;
-  txFilter=NULL;
-  phr=phi=NULL;
+  out=nullptr;
+  outFiltered=nullptr;
+  dataBuffer=nullptr;
+  txFilter=nullptr;
+  phr=phi=nullptr;
 }
 
 waterfallText::~waterfallText()
@@ -44,8 +44,8 @@ void waterfallText::init()
   int i;
   double ph;
   double binSize;
-  if(phr!=NULL) delete phr;
-  if(phi!=NULL) delete phi;
+  if(phr!=nullptr) delete phr;
+  if(phi!=nullptr) delete phi;
   fftLength=TXSTRIPE*SUBSAMPLINGFACTOR/2;
   samplingrate=BASESAMPLERATE;
   binSize=(double)(BASESAMPLERATE)/((double)fftLength);
@@ -104,7 +104,7 @@ DSPFLOAT * waterfallText::nextLine()
     line--;
     if(line<0)
     {
-      return NULL;
+      return nullptr;
     }
 
     addToLog(QString("sendingline %1").arg(line),LOGSYNTHES);

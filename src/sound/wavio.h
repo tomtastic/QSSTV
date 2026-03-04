@@ -97,7 +97,7 @@ public:
 		{
     if(inopf.isOpen())
       {
-      write(NULL,0,true); // flush everything in case we are writing
+      write(nullptr,0,true); // flush everything in case we are writing
 			closeFile();
       }
 		}

@@ -55,7 +55,7 @@ QByteArray *bsrForm::getBA(bool compat)
       drmParams.bandwith=bsrPtr->at(i).tbPtr->spectrum;
       return(&bsrPtr->at(i).tbPtr->baBSR);
     }
-  return NULL;
+  return nullptr;
 }
 
  void bsrForm::slotBSRSelection(int idx)

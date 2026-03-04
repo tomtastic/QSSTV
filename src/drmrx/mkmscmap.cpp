@@ -70,7 +70,7 @@ mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
   int term;
   int N_SFA, N_L, N_MUX, D;
   int cnt_msc_cells_3_superframes;
-  static int *PICMSC_inv = NULL;
+  static int *PICMSC_inv = nullptr;
   int step,  ncGIMSC;
 //  int nrGIMSC;
   int columnv[5];
@@ -273,7 +273,7 @@ mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
   /*  for (i=0; i < cnt_msc_cells_3_superframes; i++)
      printf("MSC_cells3..[%d] = %d\n", i, MSC_cells_3_superframes[i]);
      printf("====\n");    */
-  if (PICMSC_inv != NULL) free(PICMSC_inv);
+  if (PICMSC_inv != nullptr) free(PICMSC_inv);
   PICMSC_inv = deinterleaver(0, 1, N_MUX, 5);
 
 

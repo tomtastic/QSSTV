@@ -333,7 +333,7 @@ txSession *drmTx::getSessionPtr(uint transportID)
           return &txList[i];
         }
     }
-  return NULL;
+  return nullptr;
 }
 
 void drmTx::applyTemplate(QString templateFilename, bool useTemplate, imageViewer *ivPtr)

@@ -20,11 +20,11 @@ enum ftpEventType
 class ftpBaseEvent: public QEvent
 {
 public:
-  ftpBaseEvent(QEvent::Type t):QEvent(t) {doneIt=NULL;}
+  ftpBaseEvent(QEvent::Type t):QEvent(t) {doneIt=nullptr;}
   void waitFor(bool *d) {doneIt=d;}
   void setDone()
   {
-    if(doneIt!=NULL) *doneIt=true;
+    if(doneIt!=nullptr) *doneIt=true;
   }
   QString description;
   bool closeWhenDone;

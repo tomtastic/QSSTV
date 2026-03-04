@@ -86,7 +86,7 @@ const char *charLookupCW(const char a)
         }
       i++;
     }
-  return NULL;
+  return nullptr;
 }
 
 bool nextSymbolCW(float &duration)
@@ -146,7 +146,7 @@ bool sendTextCW(float &tone,float &duration)
             else
               {
                 dotPtr=charLookupCW(cwString[charIndex++].toLatin1());
-                if (dotPtr==NULL)
+                if (dotPtr==nullptr)
                   {
                     cwState=CWEND;
                   }

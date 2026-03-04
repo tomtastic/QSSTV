@@ -104,7 +104,7 @@ static bool DeviceHasBuffersInScope(AudioObjectID deviceID, AudioObjectPropertyS
 	};
 
 	UInt32 dataSize = 0;
-	OSStatus result = AudioObjectGetPropertyDataSize(deviceID, &propertyAddress, 0, NULL, &dataSize);
+	OSStatus result = AudioObjectGetPropertyDataSize(deviceID, &propertyAddress, 0, nullptr, &dataSize);
 	if(result != kAudioHardwareNoError)
 		return false;
 
@@ -113,7 +113,7 @@ static bool DeviceHasBuffersInScope(AudioObjectID deviceID, AudioObjectPropertyS
 	if(!bufferList)
 		return false;
 
-	result = AudioObjectGetPropertyData(deviceID, &propertyAddress, 0, NULL, &dataSize, bufferList);
+	result = AudioObjectGetPropertyData(deviceID, &propertyAddress, 0, nullptr, &dataSize, bufferList);
 	if(result != kAudioHardwareNoError)
 		return false;
 
@@ -140,14 +140,14 @@ static std::vector<AudioObjectID> getAudioDevices()
 {
 	OSStatus ret;
 	UInt32 Size = 0;
-	ret = AudioObjectGetPropertyDataSize(kAudioObjectSystemObject, &DevicesPropertyAddress, 0, NULL, &Size);
+	ret = AudioObjectGetPropertyDataSize(kAudioObjectSystemObject, &DevicesPropertyAddress, 0, nullptr, &Size);
 	if (ret)
 	{
 		fprintf(stderr, "AudioObjectGetPropertyDataSize(DevicesPropertyAddress) returned %d\n", ret);
 		std::vector<AudioObjectID>();
 	}
 	std::vector<AudioObjectID> Devices(Size/sizeof(AudioObjectID));
-	ret = AudioObjectGetPropertyData(kAudioObjectSystemObject, &DevicesPropertyAddress, 0, NULL,
+	ret = AudioObjectGetPropertyData(kAudioObjectSystemObject, &DevicesPropertyAddress, 0, nullptr,
 									 &Size, Devices.data());
 	if (ret)
 	{
@@ -235,7 +235,7 @@ std::string getDeviceName(AudioObjectID Id)
 	CFString DeviceName;
 	UInt32 Size = sizeof(DeviceName);
 	OSStatus ret = AudioObjectGetPropertyData(Id, &DeviceNamePropertyAddress,
-											  0, NULL, &Size, &DeviceName);
+											  0, nullptr, &Size, &DeviceName);
 	if (ret)
 	{
 		fprintf(stderr, "AudioObjectGetPropertyDataSize(DeviceNamePropertyAddress) returned %d\n", ret);
@@ -255,7 +255,7 @@ std::string getDeviceUID(AudioObjectID Id)
 	CFString DeviceName;
 	UInt32 Size = sizeof(DeviceName);
 	OSStatus ret = AudioObjectGetPropertyData(Id, &DeviceUIDPropertyAddress,
-											  0, NULL, &Size, &DeviceName);
+											  0, nullptr, &Size, &DeviceName);
 	if (ret)
 	{
 		fprintf(stderr, "AudioObjectGetPropertyDataSize(DeviceUIDPropertyAddress) returned %d\n", ret);
@@ -363,14 +363,14 @@ public:
 
 		for (auto buffer: make_buffers(buffers_for_one_second))
 		{
-			auto ret = AudioQueueEnqueueBuffer(queue, buffer, 0, NULL);
+			auto ret = AudioQueueEnqueueBuffer(queue, buffer, 0, nullptr);
 			if (ret) exception("AudioQueueEnqueueBuffer", ret);
 		}
 
 		const auto UID = CFString(uid);
 		AudioQueueSetProperty(queue, kAudioQueueProperty_CurrentDevice, &UID, sizeof(UID));
 		
-		ret = AudioQueueStart(queue, NULL);
+		ret = AudioQueueStart(queue, nullptr);
 		if (ret) throw exception("AudioQueueStart", ret);
 	}
 
@@ -439,7 +439,7 @@ private:
 		buffers.pop_back();
 
 		queued_size -= buffer->mAudioDataByteSize;
-		AudioQueueEnqueueBuffer(queue, buffer, 0, NULL);
+		AudioQueueEnqueueBuffer(queue, buffer, 0, nullptr);
 		bytes_consumed = 0;
 	}
 
@@ -551,13 +551,13 @@ public:
 			memcpy(buffer->mAudioData, data, n);
 			buffer->mAudioDataByteSize = n;
 			buffers_in_queue++;
-			AudioQueueEnqueueBuffer(queue, buffer, 0, NULL);
+			AudioQueueEnqueueBuffer(queue, buffer, 0, nullptr);
 
 			bytes -= n;
 			data = static_cast<const char*>(data) + n;
 			if (!started)
 			{
-				auto ret = AudioQueueStart(queue, NULL);
+				auto ret = AudioQueueStart(queue, nullptr);
 				if (ret) throw exception("AudioQueueStart", ret );
 				printf("XXX: mac_output_channelwrite(): started\n");
 				started = true;

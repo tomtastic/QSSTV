@@ -166,7 +166,7 @@ int msdhardmsc(double *received_real, double *received_imag, int Lrxdata,
     2 * N * STATES * sizeof(char);
 
   /* printf("msdhardmsc: viterbi_mem_size is %d STATES is %d\n", viterbi_mem_size, STATES);   */
-  if (received_imag == NULL)
+  if (received_imag == nullptr)
     {
       memory_ptr =
 	(char *) malloc(viterbi_mem_size + msd_mem_size + N * sizeof(double) +
@@ -181,7 +181,7 @@ int msdhardmsc(double *received_real, double *received_imag, int Lrxdata,
 
       /*        printf("msdhardmsc: debugging memory_ptr alloc succeeded viterbi_size = %d mds_size=%d  end addr is %x\n",
          viterbi_mem_size, msd_mem_size, memory_ptr+ viterbi_mem_size+msd_mem_size);   */
-      if (memory_ptr == NULL)
+      if (memory_ptr == nullptr)
 
 	{
 	  printf("msdhardmsc: cannot malloc for memory_ptr\n");

@@ -39,31 +39,31 @@ void filter::init()
 
 void filter::resetPointers()
 {
-  coefZPtr=NULL;
-  coefPPtr=NULL;
-  sampleBufferIPtr=NULL;
-  sampleBufferQPtr=NULL;
-  sampleBufferYIPtr=NULL;
-  filteredPtr=NULL;
-  volumePtr=NULL;
-  demodPtr=NULL;
+  coefZPtr=nullptr;
+  coefPPtr=nullptr;
+  sampleBufferIPtr=nullptr;
+  sampleBufferQPtr=nullptr;
+  sampleBufferYIPtr=nullptr;
+  filteredPtr=nullptr;
+  volumePtr=nullptr;
+  demodPtr=nullptr;
 }
 
 void filter::deleteBuffers()
 {
-  if(coefZPtr!=NULL && coefZPtrNewed)
+  if(coefZPtr!=nullptr && coefZPtrNewed)
       {
 //          qDebug() <<"delete coefZptr" << this << coefZPtr;
           delete [] coefZPtr;
-          coefZPtr=NULL;
+          coefZPtr=nullptr;
           coefZPtrNewed=false;
       }
-  if(sampleBufferIPtr!=NULL)  delete [] sampleBufferIPtr;
-  if(sampleBufferQPtr!=NULL)  delete [] sampleBufferQPtr;
-  if(sampleBufferYIPtr!=NULL) delete [] sampleBufferYIPtr;
-  if(filteredPtr!=NULL)       delete [] filteredPtr;
-  if(volumePtr!=NULL)         delete [] volumePtr;
-  if(demodPtr!=NULL)          delete [] demodPtr;
+  if(sampleBufferIPtr!=nullptr)  delete [] sampleBufferIPtr;
+  if(sampleBufferQPtr!=nullptr)  delete [] sampleBufferQPtr;
+  if(sampleBufferYIPtr!=nullptr) delete [] sampleBufferYIPtr;
+  if(filteredPtr!=nullptr)       delete [] filteredPtr;
+  if(volumePtr!=nullptr)         delete [] volumePtr;
+  if(demodPtr!=nullptr)          delete [] demodPtr;
   resetPointers();
 }
 
@@ -317,7 +317,7 @@ void filter::setupMatchedFilter(FILTERPARAMTYPE freq, uint numTaps)
   uint i;
   init();
   nZeroes=numTaps-1;
-  if(coefZPtr!=NULL && coefZPtrNewed)
+  if(coefZPtr!=nullptr && coefZPtrNewed)
       {
           delete [] coefZPtr;
       }

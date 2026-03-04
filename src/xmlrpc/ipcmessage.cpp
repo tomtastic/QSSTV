@@ -70,7 +70,7 @@ bool ipcMessage::receiveMessage(QString &t)
 bool ipcMessage::closeQueue()
 {
   // remove the queue
-  rc=msgctl(messageQId,IPC_RMID,NULL);
+  rc=msgctl(messageQId,IPC_RMID,nullptr);
   if (rc < 0)
     {
       if(rc<0) errorOut() << "IPC Error" << strerror(errno);

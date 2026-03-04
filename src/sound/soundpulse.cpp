@@ -27,8 +27,8 @@
 
 soundPulse::soundPulse()
 {
-  sd[0].stream = NULL;
-  sd[1].stream = NULL;
+  sd[0].stream = nullptr;
+  sd[1].stream = nullptr;
 
 }
 
@@ -36,8 +36,8 @@ soundPulse::~soundPulse()
 {
   if(sd[0].stream)  pa_simple_free(sd[0].stream);
   if(sd[1].stream)  pa_simple_free(sd[1].stream);
-  sd[0].stream = NULL;
-  sd[1].stream = NULL;
+  sd[0].stream = nullptr;
+  sd[1].stream = nullptr;
 }
 
 
@@ -48,7 +48,7 @@ bool soundPulse::init(int samplerate)
   sampleRate=samplerate;
   //open two streams (capture and play)
   int err;
-  sd[0].stream = NULL;
+  sd[0].stream = nullptr;
   sd[0].dir = PA_STREAM_RECORD;
   sd[0].stream_params.format = PA_SAMPLE_S16LE;
   sd[0].stream_params.channels = MONOCHANNEL;
@@ -59,9 +59,9 @@ bool soundPulse::init(int samplerate)
   sd[0].buffer_attrs.tlength =   (uint32_t)-1;
   sd[0].buffer_attrs.fragsize =  CAPTFRAGSIZE * sizeof(short int);
 
-  sd[1].stream = NULL;
+  sd[1].stream = nullptr;
   sd[1].dir = PA_STREAM_PLAYBACK;
-  sd[1].stream = NULL;
+  sd[1].stream = nullptr;
   sd[1].stream_params.format = PA_SAMPLE_S16LE;
   sd[1].stream_params.channels = STEREOCHANNEL;
   sd[1].stream_params.rate=sampleRate;
@@ -73,17 +73,17 @@ bool soundPulse::init(int samplerate)
 
   // opening device
   sname=QString("capture %1").arg(getpid());
-  sd[0].stream = pa_simple_new(NULL, APPNAME.toLatin1().data(), sd[0].dir, NULL,sname.toLatin1().data(), &sd[0].stream_params, NULL,&sd[0].buffer_attrs, &err);
-//  sd[0].stream = pa_simple_new(NULL, shortName.toLatin1().data(), sd[0].dir, NULL,sname.toLatin1().data(), &sd[0].stream_params, NULL,&sd[0].buffer_attrs, &err);
-  if(sd[0].stream==NULL)
+  sd[0].stream = pa_simple_new(nullptr, APPNAME.toLatin1().data(), sd[0].dir, nullptr,sname.toLatin1().data(), &sd[0].stream_params, nullptr,&sd[0].buffer_attrs, &err);
+//  sd[0].stream = pa_simple_new(nullptr, shortName.toLatin1().data(), sd[0].dir, nullptr,sname.toLatin1().data(), &sd[0].stream_params, nullptr,&sd[0].buffer_attrs, &err);
+  if(sd[0].stream==nullptr)
   {
     errorHandler("PulseAudio read init error",QString(pa_strerror(err)));
     return false;
   }
 
   sname=QString("playback %1").arg(getpid());
-  sd[1].stream = pa_simple_new(NULL, APPNAME.toLatin1().data(), sd[1].dir, NULL,sname.toLatin1().data(), &sd[1].stream_params, NULL,&sd[1].buffer_attrs, &err);
-  if(sd[1].stream==NULL)
+  sd[1].stream = pa_simple_new(nullptr, APPNAME.toLatin1().data(), sd[1].dir, nullptr,sname.toLatin1().data(), &sd[1].stream_params, nullptr,&sd[1].buffer_attrs, &err);
+  if(sd[1].stream==nullptr)
   {
     errorHandler("PulseAudio read init error",QString(pa_strerror(err)));
     return false;

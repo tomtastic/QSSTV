@@ -127,17 +127,17 @@ class CMatlibVector
 {
 public:
 	/* Construction, Destruction -------------------------------------------- */
-	CMatlibVector() : eVType(VTY_CONST), iVectorLength(0), pData(NULL) {}
+	CMatlibVector() : eVType(VTY_CONST), iVectorLength(0), pData(nullptr) {}
 	CMatlibVector(const int iNLen, const EVecTy eNTy = VTY_CONST) :
-		eVType(eNTy), iVectorLength(0), pData(NULL) {Init(iNLen);}
+		eVType(eNTy), iVectorLength(0), pData(nullptr) {Init(iNLen);}
 	CMatlibVector(const int iNLen, const T tIniVal) :
-		eVType(VTY_CONST), iVectorLength(0), pData(NULL) {Init(iNLen, tIniVal);}
+		eVType(VTY_CONST), iVectorLength(0), pData(nullptr) {Init(iNLen, tIniVal);}
 	CMatlibVector(CMatlibVector<T>& vecI);
 	CMatlibVector(const CMatlibVector<T>& vecI);
-	virtual ~CMatlibVector() {if (pData != NULL) delete[] pData;}
+	virtual ~CMatlibVector() {if (pData != nullptr) delete[] pData;}
 
 	CMatlibVector(const CMatlibVector<CReal>& fvReal, const CMatlibVector<CReal>& fvImag) :
-		eVType(VTY_CONST/*VTY_TEMP*/), iVectorLength(fvReal.GetSize()), pData(NULL)
+		eVType(VTY_CONST/*VTY_TEMP*/), iVectorLength(fvReal.GetSize()), pData(nullptr)
 	{
 		/* Allocate data block for vector */
 		pData = new CComplex[iVectorLength];
@@ -377,7 +377,7 @@ CMatlibVector<CComplex> // c, Tv
    (the implementation of template classes must be in the header file!) */
 template<class T>
 CMatlibVector<T>::CMatlibVector(CMatlibVector<T>& vecI) :
-	 eVType(VTY_CONST/*VTY_TEMP*/), iVectorLength(vecI.GetSize()), pData(NULL)
+	 eVType(VTY_CONST/*VTY_TEMP*/), iVectorLength(vecI.GetSize()), pData(nullptr)
 {
 	/* The copy constructor for the constant vector is a real copying
 	   task. But in the case of a temporary buffer only the pointer
@@ -406,7 +406,7 @@ CMatlibVector<T>::CMatlibVector(CMatlibVector<T>& vecI) :
 			pData = vecI.pData;
 
 			/* Destroy other vector (temporary vectors only) */
-			vecI.pData = NULL;
+			vecI.pData = nullptr;
 		}
 	}
 }
@@ -414,7 +414,7 @@ CMatlibVector<T>::CMatlibVector(CMatlibVector<T>& vecI) :
 /* Copy constructor for constant Matlib vectors */
 template<class T>
 CMatlibVector<T>::CMatlibVector(const CMatlibVector<T>& vecI) :
-	eVType(VTY_CONST), iVectorLength(vecI.GetSize()), pData(NULL)
+	eVType(VTY_CONST), iVectorLength(vecI.GetSize()), pData(nullptr)
 {
 	if (iVectorLength > 0)
 	{
@@ -435,7 +435,7 @@ void CMatlibVector<T>::Init(const int iIniLen, const T tIniVal)
 	/* Allocate data block for vector */
 	if (iVectorLength > 0)
 	{
-		if (pData != NULL)
+		if (pData != nullptr)
 			delete[] pData;
 
 		pData = new T[iVectorLength];
@@ -596,16 +596,16 @@ class CMatlibMatrix
 {
 public:
 	/* Construction, Destruction -------------------------------------------- */
-	CMatlibMatrix() : eVType(VTY_CONST), iRowSize(0), ppData(NULL) {}
+	CMatlibMatrix() : eVType(VTY_CONST), iRowSize(0), ppData(nullptr) {}
 	CMatlibMatrix(const int iNRowLen, const int iNColLen,
 		const EVecTy eNTy = VTY_CONST) :  eVType(eNTy),
-		iRowSize(0), ppData(NULL) {Init(iNRowLen, iNColLen);}
+		iRowSize(0), ppData(nullptr) {Init(iNRowLen, iNColLen);}
 	CMatlibMatrix(const int iNRowLen, const int iNColLen, const T tIniVal) :
-		eVType(VTY_CONST), iRowSize(0), ppData(NULL)
+		eVType(VTY_CONST), iRowSize(0), ppData(nullptr)
 		{Init(iNRowLen, iNColLen, tIniVal);}
 	CMatlibMatrix(const CMatlibMatrix<T>& matI);
 
-	virtual ~CMatlibMatrix() {if (ppData != NULL) delete[] ppData;}
+	virtual ~CMatlibMatrix() {if (ppData != nullptr) delete[] ppData;}
 
 	void Init(const int iNRowLen, const int iNColLen, const T tIniVal = 0);
 	inline int GetRowSize() const {return iRowSize;}
@@ -799,7 +799,7 @@ operator*(const CReal& rA, const CMatlibMatrix<CReal>& rmB)
    (the implementation of template classes must be in the header file!) */
 template<class T>
 CMatlibMatrix<T>::CMatlibMatrix(const CMatlibMatrix<T>& matI) :
-	eVType(VTY_CONST), iRowSize(matI.GetRowSize()), ppData(NULL)
+	eVType(VTY_CONST), iRowSize(matI.GetRowSize()), ppData(nullptr)
 {
 	if (iRowSize > 0)
 	{
@@ -825,7 +825,7 @@ void CMatlibMatrix<T>::Init(const int iNRowLen, const int iNColLen, const T tIni
 	/* Allocate data block for vector */
 	if (iRowSize > 0)
 	{
-		if (ppData != NULL)
+		if (ppData != nullptr)
 			delete[] ppData;
 
 		ppData = new CMatlibVector<T>[iRowSize];

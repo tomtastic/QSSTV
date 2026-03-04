@@ -4,8 +4,8 @@
 
 soundAlsa::soundAlsa()
 {
-  captureHandle=NULL;
-  playbackHandle=NULL;
+  captureHandle=nullptr;
+  playbackHandle=nullptr;
 }
 
 soundAlsa::~soundAlsa()
@@ -15,10 +15,10 @@ soundAlsa::~soundAlsa()
 
 void soundAlsa::closeDevices()
 {
-  if(captureHandle!=NULL) snd_pcm_close(captureHandle);
-  captureHandle=NULL;
-  if(playbackHandle!=NULL) snd_pcm_close(playbackHandle);
-  playbackHandle=NULL;
+  if(captureHandle!=nullptr) snd_pcm_close(captureHandle);
+  captureHandle=nullptr;
+  if(playbackHandle!=nullptr) snd_pcm_close(playbackHandle);
+  playbackHandle=nullptr;
 
 }
 
@@ -360,11 +360,11 @@ void getCardList(QStringList &alsaInputList, QStringList &alsaOutputList)
 
   if (snd_device_name_hint(-1, "pcm", &hints) < 0)  return;
   n = hints;
-  while (*n != NULL)
+  while (*n != nullptr)
     {
       isInput=isOutput=true;
       io    = snd_device_name_get_hint(*n, "IOID");
-      if(io!=NULL)
+      if(io!=nullptr)
         {
           if (strcmp(io, "Input") == 0) isOutput=false;
           if (strcmp(io, "Output") == 0) isInput=false;
@@ -372,7 +372,7 @@ void getCardList(QStringList &alsaInputList, QStringList &alsaOutputList)
       name   = snd_device_name_get_hint(*n, "NAME");
       descr  = snd_device_name_get_hint(*n, "DESC");
       deviceName=QString(name);
-      if (descr!=NULL)
+      if (descr!=nullptr)
         {
           deviceDescription=QString(descr).split("\n").at(0);
         }
@@ -394,9 +394,9 @@ void getCardList(QStringList &alsaInputList, QStringList &alsaOutputList)
           if(isOutput) alsaOutputList.append(deviceName+ " -- " +deviceDescription);
         }
 
-      if (name != NULL)  free(name);
-      if (descr != NULL) free(descr);
-      if (io != NULL)    free(io);
+      if (name != nullptr)  free(name);
+      if (descr != nullptr) free(descr);
+      if (io != nullptr)    free(io);
       n++;
     }
   snd_device_name_free_hint(hints);

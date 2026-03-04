@@ -61,22 +61,22 @@ editorScene::editorScene(QGraphicsView *parent)  : QGraphicsScene(parent)
 
   zMax=0;
   pasted=false;
-  copyItem=NULL;
+  copyItem=nullptr;
   mode=MOVE;
   imageType=NONE;
-  localImage=NULL;
+  localImage=nullptr;
   rotate=0;
   vShear=0;
   hShear=0;
   border=QRectF(0,0,0,0);
-  borderItemPtr=NULL;
+  borderItemPtr=nullptr;
   penWidth=1;
 }
 
 editorScene::~editorScene()
 {
-  if(localImage!=NULL) delete localImage;
-  if((!pasted) &&(copyItem!=NULL)) delete copyItem;
+  if(localImage!=nullptr) delete localImage;
+  if((!pasted) &&(copyItem!=nullptr)) delete copyItem;
   delete arrange;
   delete contextMenu;
 }
@@ -181,7 +181,7 @@ bool editorScene::load(QFile &f)
 QImage *editorScene::renderImage(int w,int h)
 {
   clearSelection();
-  if (localImage!=NULL) delete localImage;
+  if (localImage!=nullptr) delete localImage;
   if(w==0)
     {
       localImage=new QImage(border.width(),border.height(),QImage::Format_ARGB32_Premultiplied);
@@ -211,7 +211,7 @@ void editorScene::overlay(QImage *ima)
 {
   clearSelection();
   setSceneRect(border);
-  if (localImage!=NULL) delete localImage;
+  if (localImage!=nullptr) delete localImage;
   localImage=new QImage(ima->copy());
   addToLog(QString("localImageSize %1,%2").arg(localImage->width()).arg(localImage->height()),LOGEDIT);
   convertText();
@@ -282,7 +282,7 @@ bool editorScene::save(QFile &f,bool templ)
 
 void editorScene::flattenImage(int w,int h)
 {
-  if (localImage!=NULL) delete localImage;
+  if (localImage!=nullptr) delete localImage;
   setSceneRect(border);
   localImage=new QImage(w,h,QImage::Format_ARGB32_Premultiplied);
   convertText();
@@ -534,7 +534,7 @@ void editorScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 void editorScene::slotCopy()
 {
   graphItemBase *item;
-  if((!pasted) &&(copyItem!=NULL)) delete copyItem;
+  if((!pasted) &&(copyItem!=nullptr)) delete copyItem;
   if(selectedItems().isEmpty()) return; // nothing to do
   item=qgraphicsitem_cast<graphItemBase *>(selectedItems().first());
   makeCopy(item);
@@ -767,7 +767,7 @@ void editorScene::optimizeDepth()
 
 void editorScene::addBorder(int w,int h)
 {
-  if (borderItemPtr==NULL)
+  if (borderItemPtr==nullptr)
     {
       borderItemPtr=new itemBorder(contextMenu);
       itemSetup(borderItemPtr);
