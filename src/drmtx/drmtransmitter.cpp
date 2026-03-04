@@ -35,7 +35,7 @@ drmTransmitter::~drmTransmitter()
 void drmTransmitter::init(QByteArray *ba, QString name, QString format, drmTxParams params)
 {
   if(DRMTransmitter) delete DRMTransmitter;
-  dataLength=ba->count();
+  dataLength=ba->size();
   DRMTransmitter=new CDRMTransmitter;
 //  int picSize;
   ERobMode RobMod;

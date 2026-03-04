@@ -255,7 +255,7 @@ bool rigControl::setMode(QString mode,QString passBand)
   if(catParams.enableXMLRPC)
     {
       orgMode=xmlIntfPtr->getMode();
-      for(i=0;i<xmlModes.count();i++)
+      for(i=0;i<xmlModes.size();i++)
         {
           pos=orgMode.indexOf(xmlModes.at(i),Qt::CaseInsensitive);
           if(pos>=0)
@@ -345,9 +345,9 @@ void rigControl::getRadioList()
 bool rigControl::getRadioList(QComboBox *cb)
 {
   int i;
-  if(capsList.count()==0) return false;
+  if(capsList.size()==0) return false;
   QStringList sl;
-  for (i=0;i<capsList.count();i++)
+  for (i=0;i<capsList.size();i++)
     {
       QString t;
       t= QString::number(capsList.at(i)->rig_model);
@@ -374,8 +374,8 @@ int rigControl::getRadioModelIndex()
   t=t.remove(0,5);
   t=t.simplified();
   QStringList sl=t.split(",");
-  if(sl.count()==1) sl.append("");
-  for(i=0;i<capsList.count();i++)
+  if(sl.size()==1) sl.append("");
+  for(i=0;i<capsList.size();i++)
     {
       if((capsList.at(i)->mfg_name==sl.at(0)) && (capsList.at(i)->model_name==sl.at(1)))
         {
@@ -481,7 +481,7 @@ int  rigControl::rawCommand(QByteArray ba)
       // we need to send this as a command string
       if(additionalCommandHex)
         {
-          for(i=0;i<ba.count();i++)
+          for(i=0;i<ba.size();i++)
             {
 
               command+="\\0x";
@@ -495,12 +495,12 @@ int  rigControl::rawCommand(QByteArray ba)
 
       command+="\n";
       cmdBa=command.toLatin1();
-      result=write_block(&rs->rigport,cmdBa.constData(), cmdBa.count());
+      result=write_block(&rs->rigport,cmdBa.constData(), cmdBa.size());
 
     }
   else
     {
-      result=write_block(&rs->rigport,ba.constData(), ba.count());
+      result=write_block(&rs->rigport,ba.constData(), ba.size());
     }
   read_block(&rs->rigport,rxBuffer,99);
   return result;

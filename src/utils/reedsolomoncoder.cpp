@@ -77,7 +77,7 @@ bool reedSolomonCoder::decode(QByteArray &ba,QString fn,QString &newFileName,QBy
       tr_buf=tr_buf.leftJustified(bep_size*RSBSIZE,'\0');
     }
 
-  int rest=tr_buf.count()%64;
+  int rest=tr_buf.size()%64;
   if(rest!=0)
     {
       tr_buf=tr_buf.leftJustified(bep_size*RSBSIZE+(64-rest),'\0');
@@ -99,11 +99,11 @@ bool reedSolomonCoder::decode(QByteArray &ba,QString fn,QString &newFileName,QBy
   init_rs(rs_dsize);
   // setup erasure info
   numMissing=0;
-  if(erasuresArray.count()>=2)  // we have erasure positions
+  if(erasuresArray.size()>=2)  // we have erasure positions
     {
       totalSegments=erasuresArray.at(0);
       segmentLength=erasuresArray.at(1);
-      numMissing=erasuresArray.count()-2;
+      numMissing=erasuresArray.size()-2;
       if(zeroPositions) delete zeroPositions;
       if(newZeroPositions) delete newZeroPositions;
       zeroPositions=new int[segmentLength*(totalSegments+1)];
@@ -165,7 +165,7 @@ bool reedSolomonCoder::decode(QByteArray &ba,QString fn,QString &newFileName,QBy
   baseName.append(".");
   baseName.append(coded_file_ext);
 
-  tr_buf=tr_buf.right(tr_buf.count()-7);
+  tr_buf=tr_buf.right(tr_buf.size()-7);
   tr_buf=tr_buf.left(coded_file_size);
 
   newFileName=baseName;
@@ -282,24 +282,24 @@ bool reedSolomonCoder::encode(QByteArray &ba,QString extension,eRSType rsType)
   dataByte=0;
   ec_buf.append(dataByte);
   ec_buf.append(tr_buf.left(rs_dsize-7));
-  ec_buf.resize(ec_buf.count()+RSBSIZE-rs_dsize);
+  ec_buf.resize(ec_buf.size()+RSBSIZE-rs_dsize);
   rse32(((dtype *)ec_buf.data()),((dtype *)ec_buf.data()+(rs_dsize)));
   for (i=1;i<bep_size;i++)
     {
       temp=tr_buf.mid(i*rs_dsize-7,rs_dsize);
-      if(temp.count()==0) break;
+      if(temp.size()==0) break;
       ec_buf.append(temp);
-      if(temp.count()<rs_dsize)
+      if(temp.size()<rs_dsize)
         {
-          for(j=0;j<(rs_dsize-temp.count());j++)
+          for(j=0;j<(rs_dsize-temp.size());j++)
             {
               ec_buf.append((char)0);
             }
         }
-      ec_buf.resize(ec_buf.count()+RSBSIZE-rs_dsize);
+      ec_buf.resize(ec_buf.size()+RSBSIZE-rs_dsize);
       rse32(((dtype *)ec_buf.data()+i*rs_bsize),((dtype *)ec_buf.data()+i*rs_bsize+rs_dsize));
     }
-  ba.resize(ec_buf.count());
+  ba.resize(ec_buf.size());
   distribute((unsigned char *)ec_buf.data(),(unsigned char *)ba.data(),bep_size,rs_bsize,ENCODE);
   return true;
 }
