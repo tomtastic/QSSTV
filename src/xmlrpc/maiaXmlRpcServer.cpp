@@ -30,20 +30,20 @@
 
 MaiaXmlRpcServer::MaiaXmlRpcServer(const QHostAddress &address, quint16 port, QObject* parent) : QObject(parent) {
   allowedAddresses = NULL;
-  connect(&server, SIGNAL(newConnection()), this, SLOT(newConnection()));
+  connect(&server, &QTcpServer::newConnection, this, &MaiaXmlRpcServer::newConnection);
   server.listen(address, port);
 }
 
 MaiaXmlRpcServer::MaiaXmlRpcServer(quint16 port, QObject* parent) : QObject(parent)
 {
   allowedAddresses = NULL;
-  connect(&server, SIGNAL(newConnection()), this, SLOT(newConnection()));
+  connect(&server, &QTcpServer::newConnection, this, &MaiaXmlRpcServer::newConnection);
   server.listen(QHostAddress::Any, port);
 }
 
 MaiaXmlRpcServer::MaiaXmlRpcServer(const QHostAddress &address, quint16 port, QList<QHostAddress> *allowedAddresses, QObject *parent) : QObject(parent) {
   this->allowedAddresses = allowedAddresses;
-  connect(&server, SIGNAL(newConnection()), this, SLOT(newConnection()));
+  connect(&server, &QTcpServer::newConnection, this, &MaiaXmlRpcServer::newConnection);
   server.listen(address, port);
 }
 
@@ -76,7 +76,7 @@ void MaiaXmlRpcServer::newConnection()
   if (!this->allowedAddresses || this->allowedAddresses->isEmpty() || this->allowedAddresses->contains(connection->peerAddress()))
     {
       MaiaXmlRpcServerConnection *client = new MaiaXmlRpcServerConnection(connection, this);
-      connect(client, SIGNAL(getMethod(QString, QObject **, const char**)),this, SLOT(getMethod(QString, QObject **, const char**)));
+      connect(client, &MaiaXmlRpcServerConnection::getMethod, this, &MaiaXmlRpcServer::getMethod);
     }
   else
     {

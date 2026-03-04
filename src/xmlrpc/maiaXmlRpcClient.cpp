@@ -53,10 +53,8 @@ void MaiaXmlRpcClient::init()
 	request.setRawHeader("User-Agent", "libmaia/0.2");
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "text/xml");
 	
-	connect(&manager, SIGNAL(finished(QNetworkReply*)),
-			this, SLOT(replyFinished(QNetworkReply*)));
-	connect(&manager, SIGNAL(sslErrors(QNetworkReply *, const QList<QSslError> &)),
-			this, SIGNAL(sslErrors(QNetworkReply *, const QList<QSslError> &)));
+	connect(&manager, &QNetworkAccessManager::finished, this, &MaiaXmlRpcClient::replyFinished);
+	connect(&manager, &QNetworkAccessManager::sslErrors, this, &MaiaXmlRpcClient::sslErrors);
 }
 
 void MaiaXmlRpcClient::setUrl(QUrl url)

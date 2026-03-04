@@ -33,8 +33,8 @@ MaiaXmlRpcServerConnection::MaiaXmlRpcServerConnection(QTcpSocket *connection, Q
 {
   header = NULL;
   clientConnection = connection;
-  connect(clientConnection, SIGNAL(readyRead()), this, SLOT(readFromSocket()));
-  connect(clientConnection, SIGNAL(disconnected()), this, SLOT(slotDisconnect()));
+  connect(clientConnection, &QTcpSocket::readyRead, this, &MaiaXmlRpcServerConnection::readFromSocket);
+  connect(clientConnection, &QTcpSocket::disconnected, this, &MaiaXmlRpcServerConnection::slotDisconnect);
 }
 
 MaiaXmlRpcServerConnection::~MaiaXmlRpcServerConnection()
