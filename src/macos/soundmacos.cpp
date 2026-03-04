@@ -133,7 +133,7 @@ bool DeviceSupportsOutput(AudioObjectID deviceID)
 static AudioObjectPropertyAddress DevicesPropertyAddress = {
 	.mSelector = kAudioHardwarePropertyDevices,
 	   .mScope    = kAudioObjectPropertyScopeGlobal,
-	   .mElement  = kAudioObjectPropertyElementMaster
+	   .mElement  = kAudioObjectPropertyElementMain
    };
 
 static std::vector<AudioObjectID> getAudioDevices()
@@ -229,7 +229,7 @@ std::string getDeviceName(AudioObjectID Id)
 	static AudioObjectPropertyAddress DeviceNamePropertyAddress = {
 		.mSelector = kAudioDevicePropertyDeviceNameCFString,
 		.mScope    = kAudioObjectPropertyScopeGlobal,
-		.mElement  = kAudioObjectPropertyElementMaster
+		.mElement  = kAudioObjectPropertyElementMain
 	};
 
 	CFString DeviceName;
@@ -249,7 +249,7 @@ std::string getDeviceUID(AudioObjectID Id)
 	static AudioObjectPropertyAddress DeviceUIDPropertyAddress = {
 		.mSelector = kAudioDevicePropertyDeviceUID,
 		.mScope    = kAudioObjectPropertyScopeGlobal,
-		.mElement  = kAudioObjectPropertyElementMaster
+		.mElement  = kAudioObjectPropertyElementMain
 	};
 
 	CFString DeviceName;
