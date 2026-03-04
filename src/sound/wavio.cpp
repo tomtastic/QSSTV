@@ -73,7 +73,7 @@ bool  wavIO::openFileForRead(QString fname,bool ask)
 
   if (ask)
     {
-      dirDialog d((QWidget *)mainWindowPtr,"Wave file");
+      dirDialog d(mainWindowPtr,"Wave file");
       QString s=d.openFileName(audioPath,"*");
       if (s.isNull()) return false;
       if (s.isEmpty()) return false;
@@ -166,12 +166,12 @@ int  wavIO::read(short int *dPtr ,uint numSamples)
   llen=numSamples*sizeof(quint16)*numberOfChannels; // length in bytes
   if(waveHeader.numChannels==1)
     {
-      result=inopf.read((char*)dPtr,llen); //we do not need conversion
+      result=inopf.read(reinterpret_cast<char*>(dPtr),llen); //we do not need conversion
     }
   else
     {
       tempBuf=new qint16[llen/2];
-      result=inopf.read((char*)tempBuf,llen);
+      result=inopf.read(reinterpret_cast<char*>(tempBuf),llen);
       for(i=0;i<(result/4);i++)
         {
           dPtr[i]=tempBuf[2*i];
@@ -205,7 +205,7 @@ bool  wavIO::openFileForWrite(QString fname,bool ask,bool isStereo)
   QFileInfo fin;
   if (ask)
     {
-      dirDialog d((QWidget *)mainWindowPtr,"wave IO");
+      dirDialog d(mainWindowPtr,"wave IO");
       QString fn=d.saveFileName(audioPath,"*.wav","wav");
       if(fn.isEmpty()) return false;
       inopf.setFileName(fn);
@@ -291,7 +291,7 @@ bool  wavIO::write(quint16 *dPtr, uint numSamples,bool isStereo)
         }
     }
 
-  if(inopf.write((char *)tmpPtr,len)!=len)
+  if(inopf.write(reinterpret_cast<char *>(tmpPtr),len)!=len)
     {
       addToLog("wavio write error",LOGALL);
       closeFile();

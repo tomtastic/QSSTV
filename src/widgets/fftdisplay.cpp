@@ -128,7 +128,7 @@ void fftDisplay::showFFT(double *fftData)
   else
     {
       memmove(imagePtr->scanLine(1),imagePtr->scanLine(0),(imWidth*(imHeight-2))*sizeof(uint));
-      uint *ptr=(uint *)imagePtr->scanLine(0);
+      uint *ptr=reinterpret_cast<uint *>(imagePtr->scanLine(0));
       tmp1=0;
       repCnt=0;
       for (i=binBegin,j=0;i<binEnd;i++)

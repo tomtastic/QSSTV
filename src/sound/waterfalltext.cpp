@@ -108,7 +108,7 @@ DSPFLOAT * waterfallText::nextLine()
     }
 
     addToLog(QString("sendingline %1").arg(line),LOGSYNTHES);
-    cPtr=(QRgb *)image.scanLine(line);
+    cPtr=reinterpret_cast<QRgb *>(image.scanLine(line));
     for(i=0;i<fftLength;i++)
     {
       dataBuffer[i][0]=0.0;

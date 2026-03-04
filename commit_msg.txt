@@ -1,28 +1,25 @@
-Pass large objects by const reference for performance
+Replace C-style casts with C++ casts for type safety
 
-Medium priority performance improvements:
+Medium priority code quality improvements:
 
-Changed function signatures to pass QString, QImage, and QByteArray
-by const reference instead of by value. This avoids unnecessary copies
-and reduces memory allocations.
+Replaced C-style casts with appropriate C++ cast operators for better
+type safety and clearer intent. Used reinterpret_cast for pointer casts
+and qobject_cast for Qt object casts.
 
-Modified headers:
-- textdisplay.h: append(const QString &)
-- extviewer.h: setup(const QString &)
-- vumeter.h: setLabelText(const QString &)
-- basegraphicitem.h: setImage(const QImage &)
-- waterfalltext.h: setText/getDuration(const QString &)
-- soundbase.h: errorHandler(const QString &, const QString &)
-- imageviewer.h: setParam/save(const QString &)
-- rxwidget.h: setDRMStatusText/setOnlineStatus/setSSTVStatusText(const QString &)
-- txwidget.h: setImage/setPreviewWidget/startNotifyCheck/sendHybrid(const QString &)
-- txwidget.h: setDRMNotifyText/appendDRMNotifyText(const QString &)
-- gallerywidget.h: putRxImage(const QString &)
-- arraydumper.h: All arrayDump functions(const QString &)
-- supportfunctions.h: setValue(const QString &)
+Changes:
+- imageviewer.cpp: reinterpret_cast for scanLine pointer
+- imageviewer.cpp: Removed unnecessary QWidget cast for dirDialog
+- fftdisplay.cpp: reinterpret_cast for scanLine pointer
+- waterfalltext.cpp: reinterpret_cast for scanLine pointer
+- editor.cpp: Removed unnecessary QWidget casts (2 instances)
+- editorview.cpp: Removed unnecessary QWidget cast
+- wavio.cpp: reinterpret_cast for char* conversions (3 instances)
+- wavio.cpp: Removed unnecessary QWidget casts (2 instances)
+- imagematrix.cpp: qobject_cast for imageViewer* (2 instances)
 
 Benefits:
-- Eliminates deep copies of QString objects (reference counted but still overhead)
-- Reduces memory allocations and deallocations
-- Improves performance in frequently called functions
-- No change to calling code required (implicit conversion works)
+- Compile-time type checking with qobject_cast (returns nullptr on failure)
+- Clearer intent - reinterpret_cast signals low-level pointer manipulation
+- Better code maintainability and readability
+- Easier to search for potentially dangerous casts
+- Follows modern C++ best practices

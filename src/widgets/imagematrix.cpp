@@ -176,13 +176,13 @@ void imageMatrix::displayFiles()
           k=offset+i*columns+j;
           if(k>=fileList.count())
             {
-              ((imageViewer *)gridLayout->itemAtPosition(i,j)->widget())->clear();
+              qobject_cast<imageViewer *>(gridLayout->itemAtPosition(i,j)->widget())->clear();
               j++;
             }
           else
             {
            tempStr=fileList.at(k).absoluteFilePath();
-           if(((imageViewer *)gridLayout->itemAtPosition(i,j)->widget())->openImage(tempStr,false,false,true,true))
+           if(qobject_cast<imageViewer *>(gridLayout->itemAtPosition(i,j)->widget())->openImage(tempStr,false,false,true,true))
              {
                 j++;
              }

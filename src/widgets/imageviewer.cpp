@@ -388,7 +388,7 @@ void imageViewer::createImage(QSize sz,QColor fill,bool scale)
 
 QRgb *imageViewer::getScanLineAddress(int line)
 {
-  return (QRgb *)displayedImage.scanLine(line);
+  return reinterpret_cast<QRgb *>(displayedImage.scanLine(line));
 }
 
 
@@ -696,7 +696,7 @@ void imageViewer::slotEdit()
 void imageViewer::slotLoad()
 {
   QString fileNameTmp;
-  dirDialog dd((QWidget *)this,"Browse");
+  dirDialog dd(this,"Browse");
   fileNameTmp=dd.openFileName(imageFilePath);
   if(openImage(fileNameTmp,true,false,false,true))
     {

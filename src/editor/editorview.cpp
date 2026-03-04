@@ -292,7 +292,7 @@ void editorView::slotLine()
 void editorView::slotImage()
 {
   QString fileName;
-  dirDialog dd((QWidget *)this,"editor");
+  dirDialog dd(this,"editor");
   scene->fl=dd.openFileName(QString());
   scene->setMode(editorScene::INSERT);
   scene->setItemType(graphItemBase::IMAGE);

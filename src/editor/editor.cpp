@@ -219,7 +219,7 @@ void editor::slotFileSave()
 
 void editor::slotFileSaveImage()
 {
-  dirDialog d((QWidget *)this,"Editor");
+  dirDialog d(this,"Editor");
   QString s(localFile.fileName());
   if(s.isEmpty())
     {
@@ -235,7 +235,7 @@ void editor::slotFileSaveImage()
 
 void editor::slotFileSaveTemplate()
 {
-  dirDialog d((QWidget *)this,"Browse");
+  dirDialog d(this,"Browse");
   QString s(localFile.fileName());
   if(s.isEmpty())
     {
