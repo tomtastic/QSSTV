@@ -508,7 +508,14 @@ void mainWindow::slotSetFrequency(int freqIndex)
   mode=modModeList.at(freqIndex);
   passBand=modPassBandList.at(freqIndex);
   if(freqStr.isEmpty()) return;
-  double fr=freqStr.toDouble()*1000000.;
+  bool ok;
+  double fr=freqStr.toDouble(&ok);
+  if(!ok)
+  {
+    addToLog(QString("Invalid frequency string: %1").arg(freqStr), LOGALL);
+    return;
+  }
+  fr *= 1000000.;
   rigControllerPtr->setFrequency(fr);
   rigControllerPtr->setMode(mode,passBand);
   QString s=additionalCommand;

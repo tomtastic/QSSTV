@@ -311,3 +311,21 @@ void getmode(float *input, int n, smode_info * result)
 //logfile->addToAux(QString("%1 %2 %3 %4").arg( mode).arg(result->time_offset).arg(result->sample_rate_offset).arg(result->freq_offset_fract));
 
 }
+
+void cleanupGetmode()
+{
+  if(initDone)
+  {
+    if(in_) free(in_);
+    if(conv_in_) free(conv_in_);
+    if(abs_in_) free(abs_in_);
+    if(abs_in_in_) free(abs_in_in_);
+    if(conv_abs_in_in_) free(conv_abs_in_in_);
+    in_ = NULL;
+    conv_in_ = NULL;
+    abs_in_ = NULL;
+    abs_in_in_ = NULL;
+    conv_abs_in_in_ = NULL;
+    initDone = false;
+  }
+}

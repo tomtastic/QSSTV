@@ -31,8 +31,12 @@ waterfallText::~waterfallText()
 {
   fftw_destroy_plan(plan);
   if(out) fftw_free(out);
-  if(outFiltered) delete outFiltered;
+  if(outFiltered) delete[] outFiltered;
+  if(audioBuf) delete[] audioBuf;
   if(dataBuffer) fftw_free(dataBuffer);
+  if(txFilter) delete txFilter;
+  if(phr) delete[] phr;
+  if(phi) delete[] phi;
 }
 
 void waterfallText::init()

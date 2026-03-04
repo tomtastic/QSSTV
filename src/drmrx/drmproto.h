@@ -50,6 +50,7 @@ int demodulate ( /*@null@ */ float *, int, int);
 void drmfilter1c (float *, float *, float *, int, int);
 void drmfilter1 (float *, float *, float *, int, int);
 void initGetmode(int n);
+void cleanupGetmode();
 void getmode (/*@null@ */ float *, int, /*@null@ *//*@out@ */ smode_info *);
 float getfoffsint (float *, int, int, int, int);
 int resample (float *, /*@out@ */ float *, float, int, int);
