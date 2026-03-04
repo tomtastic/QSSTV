@@ -28,8 +28,8 @@ INCLUDEPATH += config dispatch drmrx drmtx dsp editor logbook mainwidgets rig sc
 # Add Homebrew include path on macOS
 macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 15.0
-    INCLUDEPATH += /opt/homebrew/include
-    LIBS += -L/opt/homebrew/lib
+    INCLUDEPATH += $$system(brew --prefix)/include
+    LIBS += -L$$system(brew --prefix)/lib
     QMAKE_INFO_PLIST_OUT = $$OUT_PWD/Info.plist
     QMAKE_POST_LINK += /usr/libexec/PlistBuddy -c \"Add :NSMicrophoneUsageDescription string 'QSSTV needs microphone access to receive and decode SSTV and DRM signals from your radio.'\" $$OUT_PWD/qsstv.app/Contents/Info.plist || true;
 }
