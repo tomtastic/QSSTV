@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+QMAKE_CXXFLAGS += -Wno-vla-cxx-extension
 QMAKE_CXXFLAGS_DEBUG -= -O2
 QMAKE_CXXFLAGS_DEBUG += -O0 -Wno-implicit-fallthrough -Wno-psabi
 QMAKE_CXXFLAGS_RELEASE-= -O2
@@ -33,7 +34,6 @@ macx {
     QMAKE_POST_LINK += /usr/libexec/PlistBuddy -c \"Add :NSMicrophoneUsageDescription string 'QSSTV needs microphone access to receive and decode SSTV and DRM signals from your radio.'\" $$OUT_PWD/qsstv.app/Contents/Info.plist || true;
 }
 QMAKE_LIBDIR += $$[QT_SYSROOT]/usr/local/lib
-QMAKE_LIBDIR += $$[QMAKE_LIBDIR]/usr/local/lib/pkgconfig
 
 CONFIG += link_pkgconfig
 PKGCONFIG += libopenjp2 fftw3 libpulse libpulse-simple hamlib

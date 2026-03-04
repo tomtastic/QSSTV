@@ -394,7 +394,7 @@ private:
 		std::unique_lock<std::mutex> Lock(buffers_mutex);
 		buffers.push_front(buffer);
 		queued_size += buffer->mAudioDataByteSize;
-		if (buffers.size()+2 >= buffers_for_one_second)
+		if (buffers.size()+2 >= static_cast<size_t>(buffers_for_one_second))
 		{
 			recyle_buffer();
 			overruns++;
