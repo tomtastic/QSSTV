@@ -60,9 +60,9 @@ txWidget::txWidget(QWidget *parent) :  QWidget(parent), ui(new Ui::txWidget)
   connect(ui->toCallLineEdit, &QLineEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
   connect(ui->operatorLineEdit, &QLineEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
   connect(ui->rsvLineEdit, &QLineEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
-  connect(ui->xPlainTextEdit, &QPlainTextEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
-  connect(ui->yPlainTextEdit, &QPlainTextEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
-  connect(ui->zPlainTextEdit, &QPlainTextEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
+  connect(ui->xPlainTextEdit, &xyzPlainTextEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
+  connect(ui->yPlainTextEdit, &xyzPlainTextEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
+  connect(ui->zPlainTextEdit, &xyzPlainTextEdit::editingFinished, this, QOverload<>::of(&txWidget::slotGetParams));
 
 
   connect(ui->startToolButton, &QToolButton::clicked, this, &txWidget::slotStart);
@@ -80,9 +80,9 @@ txWidget::txWidget(QWidget *parent) :  QWidget(parent), ui(new Ui::txWidget)
   connect(ui->snapshotToolButton, &QToolButton::clicked, this, &txWidget::slotSnapshot);
   connect(ui->binaryPushButton, &QPushButton::clicked, this, &txWidget::slotBinary);
   connect(ui->sizeSlider, &QSlider::valueChanged, this, &txWidget::slotSize);
-  connect(ui->settingsTableWidget, &QTableWidget::currentChanged, this, &txWidget::slotTransmissionMode);
-  connect(imageViewerPtr, &imageViewer::imageChanged, this, QOverload<>::of(&txWidget::slotImageChanged));
-  connect(ui->templateCheckBox, &QCheckBox::toggled, this, QOverload<bool>::of(&txWidget::slotImageChanged));
+  connect(ui->settingsTableWidget->selectionModel(), &QItemSelectionModel::currentChanged, this, [this]() { slotTransmissionMode(0); });
+  connect(imageViewerPtr, &imageViewer::imageChanged, this, &txWidget::slotImageChanged);
+  connect(ui->templateCheckBox, &QCheckBox::toggled, this, [this](bool) { slotImageChanged(); });
   connect(&notifyTimer, &QTimer::timeout, this, &txWidget::slotNotifyTimeout);
   connect(&ff, &ftpFunctions::listingDone, this, &txWidget::slotListingDone);
   connect(&repeaterTxDelayTimer, &QTimer::timeout, this, &txWidget::slotRepaterDelay);
