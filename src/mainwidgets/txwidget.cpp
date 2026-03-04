@@ -80,7 +80,7 @@ txWidget::txWidget(QWidget *parent) :  QWidget(parent), ui(new Ui::txWidget)
   connect(ui->snapshotToolButton, &QToolButton::clicked, this, &txWidget::slotSnapshot);
   connect(ui->binaryPushButton, &QPushButton::clicked, this, &txWidget::slotBinary);
   connect(ui->sizeSlider, &QSlider::valueChanged, this, &txWidget::slotSize);
-  connect(ui->settingsTableWidget->selectionModel(), &QItemSelectionModel::currentChanged, this, [this]() { slotTransmissionMode(0); });
+  connect(ui->settingsTableWidget, &QTabWidget::currentChanged, this, &txWidget::slotTransmissionMode);
   connect(imageViewerPtr, &imageViewer::imageChanged, this, &txWidget::slotImageChanged);
   connect(ui->templateCheckBox, &QCheckBox::toggled, this, [this](bool) { slotImageChanged(); });
   connect(&notifyTimer, &QTimer::timeout, this, &txWidget::slotNotifyTimeout);
