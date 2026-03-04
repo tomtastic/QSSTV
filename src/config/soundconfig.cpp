@@ -161,7 +161,7 @@ void soundConfig::getParams()
   soundBase::edataDst soundRoutingOutputCopy=soundRoutingOutput;
 
   getValue(rxClock,ui->inputClockLineEdit);
-  getValue(txClock,ui->inputClockLineEdit);
+  getValue(txClock,ui->outputClockLineEdit);
 #ifdef __APPLE__
   inputAudioDevice  = ui->inputPCMNameComboBox->currentData().toString();
   outputAudioDevice = ui->outputPCMNameComboBox->currentData().toString();
