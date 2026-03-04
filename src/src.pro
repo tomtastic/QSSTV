@@ -26,6 +26,7 @@ INCLUDEPATH += config dispatch drmrx drmtx dsp editor logbook mainwidgets rig sc
 
 # Add Homebrew include path on macOS
 macx {
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 15.0
     INCLUDEPATH += /opt/homebrew/include
     LIBS += -L/opt/homebrew/lib
     QMAKE_INFO_PLIST_OUT = $$OUT_PWD/Info.plist
