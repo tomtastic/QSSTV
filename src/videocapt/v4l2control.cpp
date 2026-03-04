@@ -186,8 +186,17 @@ void V4L2IntegerControl::SetValueFromText()
 {
   if(le->hasAcceptableInput())
     {
-      setValue(le->text().toInt());
-      updateHardware();
+      bool ok;
+      int val = le->text().toInt(&ok);
+      if(ok)
+      {
+        setValue(val);
+        updateHardware();
+      }
+      else
+      {
+        SetValueFromSlider();
+      }
     }
   else
     {

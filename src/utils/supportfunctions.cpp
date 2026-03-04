@@ -94,7 +94,13 @@ void getValue(QString &s, QPlainTextEdit *input)
 
 void getValue(int &s, QComboBox *input)
 {
-	s=input->currentText().toInt();
+  bool ok;
+  int val = input->currentText().toInt(&ok);
+  if(ok)
+  {
+    s = val;
+  }
+  // If conversion fails, s retains its previous value
 }
 
 void getIndex(int &s, QComboBox *input)

@@ -163,8 +163,15 @@ bool imageViewer::openImage(QString &filename,QString start,bool ask,bool showMe
         {
           cacheHit=true;
           success=true;
-          orgWidth=tempImage.text("orgWidth").toInt();
-          orgHeight=tempImage.text("orgHeight").toInt();
+          bool okWidth, okHeight;
+          orgWidth=tempImage.text("orgWidth").toInt(&okWidth);
+          orgHeight=tempImage.text("orgHeight").toInt(&okHeight);
+          if(!okWidth || !okHeight)
+          {
+            // Invalid metadata, treat as cache miss
+            cacheHit=false;
+            success=false;
+          }
         }
       else
         {
