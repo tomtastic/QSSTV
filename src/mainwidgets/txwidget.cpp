@@ -5,6 +5,7 @@
 #include "rxfunctions.h"
 #include "ui_txwidget.h"
 #include <QTimer>
+#include <QDebug>
 #include "configparams.h"
 #include "dispatcher.h"
 #include "supportfunctions.h"
@@ -25,14 +26,17 @@
 
 txWidget::txWidget(QWidget *parent) :  QWidget(parent), ui(new Ui::txWidget)
 {
+  qDebug() << "txWidget::txWidget() - Constructor started";
   int i;
   QString tmp;
   ui->setupUi(this);
+  qDebug() << "txWidget::txWidget() - setupUi completed";
   ui->previewWidget->setType(imageViewer::PREVIEW);
   txFunctionsPtr=new txFunctions(this);
   imageViewerPtr=ui->imageFrame;
 
   imageViewerPtr->displayImage();
+  qDebug() << "txWidget::txWidget() - displayImage completed";
   for(i=0;i<NUMSSTVMODES;i++)
     {
       ui->sstvModeComboBox->addItem(getSSTVModeNameLong(static_cast<esstvMode>(i)));
@@ -42,6 +46,7 @@ txWidget::txWidget(QWidget *parent) :  QWidget(parent), ui(new Ui::txWidget)
   ui->sstvResizeComboBox->addItem("Crop");
   ui->sstvResizeComboBox->addItem("Fit");
 
+  qDebug() << "txWidget::txWidget() - Setting up connections";
   connect(ui->sstvModeComboBox, QOverload<int>::of(&QComboBox::activated), this, &txWidget::slotModeChanged);
   connect(ui->sstvResizeComboBox, QOverload<int>::of(&QComboBox::activated), this, &txWidget::slotResizeChanged);
 
@@ -90,6 +95,7 @@ txWidget::txWidget(QWidget *parent) :  QWidget(parent), ui(new Ui::txWidget)
   notifyTimer.setSingleShot(true);
   notifyTimer.setInterval(NOTIFYCHECKINTERVAL);
   repeaterTxDelayTimer.setSingleShot(true);
+  qDebug() << "txWidget::txWidget() - Constructor completed";
 
 #if defined(__APPLE__) && QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
   // workaround for performance issue on MacOS 12.x
@@ -124,12 +130,16 @@ txWidget::~txWidget()
 
 void txWidget::init()
 {
+  qDebug() << "txWidget::init() - Started";
   splashStr+=QString( "Setting up TX" ).rightJustified(25,' ')+"\n";
   splashPtr->showMessage ( splashStr ,Qt::AlignLeft,Qt::white);
   qApp->processEvents();
 
+  qDebug() << "txWidget::init() - Calling readSettings";
   readSettings();
+  qDebug() << "txWidget::init() - Calling initView";
   initView();
+  qDebug() << "txWidget::init() - Calling setProfileNames";
   setProfileNames();
   ed=nullptr;
   repeaterIndex=0;
@@ -138,9 +148,12 @@ void txWidget::init()
   repeaterTimer->start(60000*repeaterImageInterval);
   addToLog("Reapater Timer Started",LOGTXMAIN);
   imageViewerPtr->setType(imageViewer::TXIMG);
+  qDebug() << "txWidget::init() - Calling slotModeChanged";
   slotModeChanged(sstvModeIndexTx);
+  qDebug() << "txWidget::init() - Calling changeTransmissionMode";
   changeTransmissionMode(transmissionModeIndex);
   //  setSettingsTab();
+  qDebug() << "txWidget::init() - Calling slotProfileChanged";
   slotProfileChanged(0);
   if(lowRes)
     {
@@ -148,6 +161,7 @@ void txWidget::init()
       ui->refreshPushButton->hide();
       ui->previewWidget->hide();
     }
+  qDebug() << "txWidget::init() - Completed";
 }
 
 void txWidget::readSettings()
