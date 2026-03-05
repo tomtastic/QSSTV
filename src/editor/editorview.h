@@ -91,7 +91,7 @@ private:
   QPlainTextEdit *textEdit;
   void setTransform();
   QIcon createColorToolButtonIcon(const QString &imageFile, QColor color);
-  QMenu *createColorMenu(const char *,int,QString text);
+  QMenu *createColorMenu(void (editorView::*)(), int, QString text);
   int canvasSizeIndex;
   int pointSize;
   QString fontFamily;

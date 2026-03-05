@@ -153,11 +153,11 @@ private:
 	QAction *zoomAction;
 //	plotForm *pl;
 
-	QVector<double> x;
-  QVector<double> c1;
-  QVector<double> c2;
-	QVector<double> c3;
-  QVector<double> c4;
+	QList<double> x;
+  QList<double> c1;
+  QList<double> c2;
+	QList<double> c3;
+  QList<double> c4;
 	double startPoint;
 	double endPoint;
 	double dispCenter;

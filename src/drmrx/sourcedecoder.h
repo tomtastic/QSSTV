@@ -159,7 +159,7 @@ struct transportBlock
   int totalSegments;
   QString callsign;
   //  QList <short int> blockList;
-  QVector<dataSegment *> dataSegmentPtrList;
+  QList<dataSegment *> dataSegmentPtrList;
   int robMode;
   int interLeaver;
   int mscMode; // qam

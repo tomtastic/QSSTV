@@ -131,21 +131,21 @@ mainWindow::mainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
 
   // setup connections
 
-  connect(ui->actionSaveWaterfallImage,SIGNAL(triggered()),this, SLOT(slotSaveWaterfallImage()));
-  connect(ui->actionExit,SIGNAL(triggered()),this, SLOT(slotExit()));
-  connect(ui->actionConfigure,SIGNAL(triggered()),this, SLOT(slotConfigure()));
-  connect(ui->actionCalibrate,SIGNAL(triggered()),this, SLOT(slotCalibrate()));
-  connect(ui->actionAboutQSSTV, SIGNAL(triggered()),SLOT(slotAboutQSSTV()));
-  connect(ui->actionAboutQt, SIGNAL(triggered()),SLOT(slotAboutQt()));
-  connect(ui->actionUsersGuide, SIGNAL(triggered()),SLOT(slotDocumentation()));
-  connect(ui->actionSstvHandbook, SIGNAL(triggered()),SLOT(slotSstvHandbook()));
-  connect(idPushButton, SIGNAL(clicked()), this, SLOT(slotSendWFID()));
-  connect(cwPushButton, SIGNAL(clicked()), this, SLOT(slotSendCWID()));
-  connect(bsrPushButton, SIGNAL(clicked()), this, SLOT(slotSendBSR()));
-  connect(freqComboBox,SIGNAL(activated(int)),SLOT(slotSetFrequency(int)));
-  connect(wfTextPushButton, SIGNAL(clicked()), this, SLOT(slotSendWfText()));
-  connect(rxWidgetPtr,SIGNAL(modeSwitch(int)),this, SLOT(slotModeChange(int)));
-  connect(txWidgetPtr,SIGNAL(modeSwitch(int)),this, SLOT(slotModeChange(int)));
+  connect(ui->actionSaveWaterfallImage, &QAction::triggered, this, &mainWindow::slotSaveWaterfallImage);
+  connect(ui->actionExit, &QAction::triggered, this, &mainWindow::slotExit);
+  connect(ui->actionConfigure, &QAction::triggered, this, &mainWindow::slotConfigure);
+  connect(ui->actionCalibrate, &QAction::triggered, this, &mainWindow::slotCalibrate);
+  connect(ui->actionAboutQSSTV, &QAction::triggered, this, &mainWindow::slotAboutQSSTV);
+  connect(ui->actionAboutQt, &QAction::triggered, this, &mainWindow::slotAboutQt);
+  connect(ui->actionUsersGuide, &QAction::triggered, this, &mainWindow::slotDocumentation);
+  connect(ui->actionSstvHandbook, &QAction::triggered, this, &mainWindow::slotSstvHandbook);
+  connect(idPushButton, &QPushButton::clicked, this, &mainWindow::slotSendWFID);
+  connect(cwPushButton, &QPushButton::clicked, this, &mainWindow::slotSendCWID);
+  connect(bsrPushButton, &QPushButton::clicked, this, &mainWindow::slotSendBSR);
+  connect(freqComboBox, QOverload<int>::of(&QComboBox::activated), this, &mainWindow::slotSetFrequency);
+  connect(wfTextPushButton, &QPushButton::clicked, this, &mainWindow::slotSendWfText);
+  connect(rxWidgetPtr, &rxWidget::modeSwitch, this, &mainWindow::slotModeChange);
+  connect(txWidgetPtr, &txWidget::modeSwitch, this, &mainWindow::slotModeChange);
 
   QAction *fs = new QAction(this);
   fs->setShortcut(Qt::Key_F | Qt::CTRL);

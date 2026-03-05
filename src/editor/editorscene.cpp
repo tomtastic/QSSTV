@@ -43,20 +43,20 @@ editorScene::editorScene(QGraphicsView *parent)  : QGraphicsScene(parent)
   contextMenu=new QMenu();
   arrange = new QMenu( "Arrange");
   arrange->setTearOffEnabled(true);
-  arrange->addAction("Forward",this,SLOT(slotSendForward()));
-  arrange->addAction("Backward",this,SLOT(slotSendBackward()));
-  arrange->addAction("Bring to front",this,SLOT(slotBringToFront()));
-  arrange->addAction("Send to back",this,SLOT(slotSendToBack()));
+  arrange->addAction("Forward", this, &editorScene::slotSendForward);
+  arrange->addAction("Backward", this, &editorScene::slotSendBackward);
+  arrange->addAction("Bring to front", this, &editorScene::slotBringToFront);
+  arrange->addAction("Send to back", this, &editorScene::slotSendToBack);
   contextMenu->addMenu(arrange);
   contextMenu->addSeparator();
-  contextMenu->addAction("Change Text",this,SLOT(slotChangeText()));
+  contextMenu->addAction("Change Text", this, &editorScene::slotChangeText);
   contextMenu->addSeparator();
-  contextMenu->addAction("Delete",this,SLOT(slotDeleteItem()));
-  contextMenu->addAction("Expand",this,SLOT(slotExpand()));
-  contextMenu->addAction("Lock",this,SLOT(slotLock()));
-  contextMenu->addAction("Unlock",this,SLOT(slotUnlock()));
+  contextMenu->addAction("Delete", this, &editorScene::slotDeleteItem);
+  contextMenu->addAction("Expand", this, &editorScene::slotExpand);
+  contextMenu->addAction("Lock", this, &editorScene::slotLock);
+  contextMenu->addAction("Unlock", this, &editorScene::slotUnlock);
 #ifndef QT_NO_DEBUG
-  contextMenu->addAction("Properties",this,SLOT(slotProperties()));
+  contextMenu->addAction("Properties", this, &editorScene::slotProperties);
 #endif
 
   zMax=0;

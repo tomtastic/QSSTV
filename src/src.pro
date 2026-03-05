@@ -1,5 +1,4 @@
 QT       += core gui
-QT       += core5compat
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += svgwidgets widgets network xml
 

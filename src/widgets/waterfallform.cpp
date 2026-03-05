@@ -9,10 +9,10 @@ waterfallForm::waterfallForm(QWidget *parent) :
   ui(new Ui::waterfallForm)
 {
   ui->setupUi(this);
-  connect (ui->text1PushButton,SIGNAL(clicked()),SLOT(slotText1()));
-  connect (ui->text2PushButton,SIGNAL(clicked()),SLOT(slotText2()));
-  connect (ui->text3PushButton,SIGNAL(clicked()),SLOT(slotText3()));
-  connect (ui->text4PushButton,SIGNAL(clicked()),SLOT(slotText4()));
+  connect(ui->text1PushButton, &QPushButton::clicked, this, &waterfallForm::slotText1);
+  connect(ui->text2PushButton, &QPushButton::clicked, this, &waterfallForm::slotText2);
+  connect(ui->text3PushButton, &QPushButton::clicked, this, &waterfallForm::slotText3);
+  connect(ui->text4PushButton, &QPushButton::clicked, this, &waterfallForm::slotText4);
   readSettings();
   txt="";
 }

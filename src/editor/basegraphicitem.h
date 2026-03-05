@@ -120,7 +120,7 @@ protected:
   QRectF m_ActualRect;
   QRectF m_CornerRect;
   bool selected;
-  QVector<QRectF> m_ResizeHandles;
+  QList<QRectF> m_ResizeHandles;
   //! Arrow line used as rotation handle
   QLineF m_RotateLine;
   //! Arrow head

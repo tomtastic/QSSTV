@@ -87,15 +87,15 @@ editorView::editorView(QWidget *parent):QWidget(parent), Ui::editorForm()
   connect(underlineButton, &QPushButton::clicked, this, &editorView::slotUnderline);
 
 
-  fillToolButton->setMenu(createColorMenu(SLOT(slotColorDialog()),TBFILL,"Select Color"));
+  fillToolButton->setMenu(createColorMenu(&editorView::slotColorDialog, TBFILL, "Select Color"));
   fillToolButton->setIcon(createColorToolButtonIcon(":/icons/colorfill.png", scene->fillColor));
   connect(fillToolButton, &QToolButton::clicked, this, &editorView::slotButtonTriggered);
 
-  lineToolButton->setMenu(createColorMenu(SLOT(slotColorDialog()),TBLINE,"Select Color"));
+  lineToolButton->setMenu(createColorMenu(&editorView::slotColorDialog, TBLINE, "Select Color"));
   lineToolButton->setIcon(createColorToolButtonIcon(":/icons/colorline.png", scene->lineColor));
   connect(lineToolButton, &QToolButton::clicked, this, &editorView::slotButtonTriggered);
 
-  gradientToolButton->setMenu(createColorMenu(SLOT(slotGradientDialog()),TBGRAD,"Select Gradient"));
+  gradientToolButton->setMenu(createColorMenu(&editorView::slotGradientDialog, TBGRAD, "Select Gradient"));
   gradientToolButton->setIcon(createColorToolButtonIcon(":/icons/gradient.png", scene->gradientColor));
   connect(gradientToolButton, &QToolButton::clicked, this, &editorView::slotButtonTriggered);
 
@@ -519,12 +519,12 @@ QIcon editorView::createColorToolButtonIcon(const QString &imageFile, QColor col
   return QIcon(pixmap);
 }
 
-QMenu *editorView::createColorMenu(const char * slot,int type,QString text)
+QMenu *editorView::createColorMenu(void (editorView::*slot)(), int type, QString text)
 {
   QMenu *colorMenu = new QMenu;
   QAction *action = new QAction(text, this);
   action->setData(type);
-  connect(action, SIGNAL(triggered()),this,slot);
+  connect(action, &QAction::triggered, this, slot);
   colorMenu->addAction(action);
   return colorMenu;
 }
