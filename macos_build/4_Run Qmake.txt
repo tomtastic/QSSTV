@@ -1,5 +1,0 @@
-﻿2026-03-04T22:05:05.6038340Z ##[group]Run mkdir build; cd build; qmake6  ../qsstv.pro
-2026-03-04T22:05:05.6038780Z [36;1mmkdir build; cd build; qmake6  ../qsstv.pro[0m
-2026-03-04T22:05:05.6174430Z shell: /bin/bash -e {0}
-2026-03-04T22:05:05.6174660Z ##[endgroup]
-2026-03-04T22:05:07.9298950Z Info: creating stash file /Users/runner/work/QSSTV/QSSTV/build/.qmake.stash
