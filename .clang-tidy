@@ -1,0 +1,27 @@
+---
+# Clang-Tidy configuration for QSSTV
+# This file defines which checks to run during development
+
+Checks: >
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-narrowing-conversions,
+  cert-*,
+  -cert-err58-cpp,
+  google-readability-casting,
+  modernize-loop-convert,
+  modernize-use-bool-literals,
+  modernize-use-nullptr,
+  modernize-use-using,
+  performance-*,
+  readability-container-size-empty,
+  readability-redundant-string-cstr
+
+# Treat warnings as errors in CI (empty for now, can be enabled later)
+WarningsAsErrors: ''
+
+# Header filter - only check our own code
+HeaderFilterRegex: 'src/.*'
+
+# Format style
+FormatStyle: file
