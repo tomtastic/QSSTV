@@ -299,27 +299,23 @@ We need openjpeg2 (e.g. libopenjpeg2.1 or higher) and not libopenjpeg 1.5
 
 \section step1 Step 1: Prerequisites
 Before you can compile QSSTV make sure that you have installed the following software
+- cmake
 - pkg-config
 - g++
 - libfftw3-dev
-- qt5-default
-- hamlib-dev or libhamlib++-dev
+- qt6-base-dev
+- qt6-svg-dev
+- libhamlib++-dev
 - libasound2-dev
 - libpulse-dev
 - libopenjp2-7
 - libopenjp2-7-dev
 - libv4l-dev
+- build-essential
 
 <p>On Ubuntu, Debian or Mint you can type:
 
-<pre>sudo apt-get install pkg-config g++ libfftw3-dev qt5-default libpulse-dev</pre>
-<pre>sudo apt-get install libasound2-dev  libv4l-dev</pre>
-<pre>sudo apt-get install libopenjp2-7 libopenjp2-7-dev</pre>
-
-On older distributions:
-<pre>sudo apt-get install hamlib-dev</pre>
-On newer distributions
-<pre>sudo apt-get install libhamlib++-dev</pre>
+<pre>sudo apt-get install cmake pkg-config g++ libfftw3-dev qt6-base-dev qt6-svg-dev libhamlib++-dev libasound2-dev libpulse-dev libopenjp2-7 libopenjp2-7-dev libv4l-dev build-essential</pre>
 
 If you don't find libopenjp2-7 you can download it with the following commands if you're running a Debian derived distribution:
 
@@ -330,7 +326,7 @@ or
 <pre>wget http://ftp.de.debian.org/debian/pool/main/o/openjpeg2/libopenjp2-7-dev_2.1.0-2_amd64.deb</pre>
 
 and install the packages with the package manager or simply by double clicking on them.
-First install the library and then the development package. This is the case for example for Linux Mint 17.3.
+First install the library and then the development package.
 
 
 For specific instructions on installation on different distributions: have a look at the FAQ
