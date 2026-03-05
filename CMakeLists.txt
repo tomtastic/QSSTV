@@ -21,20 +21,20 @@ find_package(Qt6 REQUIRED COMPONENTS
 
 # Find required libraries using pkg-config
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(FFTW3 REQUIRED fftw3 fftw3f)
-pkg_check_modules(OPENJP2 REQUIRED libopenjp2)
-pkg_check_modules(HAMLIB REQUIRED hamlib)
+pkg_check_modules(FFTW3 REQUIRED IMPORTED_TARGET fftw3 fftw3f)
+pkg_check_modules(OPENJP2 REQUIRED IMPORTED_TARGET libopenjp2)
+pkg_check_modules(HAMLIB REQUIRED IMPORTED_TARGET hamlib)
 
 # Platform-specific libraries
 if(APPLE)
     find_library(AUDIOTOOLBOX_FRAMEWORK AudioToolbox REQUIRED)
     find_library(COREAUDIO_FRAMEWORK CoreAudio REQUIRED)
     find_library(AVFOUNDATION_FRAMEWORK AVFoundation REQUIRED)
-    pkg_check_modules(PULSEAUDIO REQUIRED libpulse libpulse-simple)
+    pkg_check_modules(PULSEAUDIO REQUIRED IMPORTED_TARGET libpulse libpulse-simple)
 else()
-    pkg_check_modules(PULSEAUDIO REQUIRED libpulse libpulse-simple)
-    pkg_check_modules(ALSA REQUIRED alsa)
-    pkg_check_modules(V4L2 REQUIRED libv4l2 libv4lconvert)
+    pkg_check_modules(PULSEAUDIO REQUIRED IMPORTED_TARGET libpulse libpulse-simple)
+    pkg_check_modules(ALSA REQUIRED IMPORTED_TARGET alsa)
+    pkg_check_modules(V4L2 REQUIRED IMPORTED_TARGET libv4l2 libv4lconvert)
 endif()
 
 # Add subdirectories

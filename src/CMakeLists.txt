@@ -292,9 +292,9 @@ target_link_libraries(qsstv PRIVATE
 
 # Link external libraries
 target_link_libraries(qsstv PRIVATE
-    ${FFTW3_LIBRARIES}
-    ${OPENJP2_LIBRARIES}
-    ${HAMLIB_LIBRARIES}
+    PkgConfig::FFTW3
+    PkgConfig::OPENJP2
+    PkgConfig::HAMLIB
 )
 
 # Platform-specific linking
@@ -303,7 +303,7 @@ if(APPLE)
         ${AUDIOTOOLBOX_FRAMEWORK}
         ${COREAUDIO_FRAMEWORK}
         ${AVFOUNDATION_FRAMEWORK}
-        ${PULSEAUDIO_LIBRARIES}
+        PkgConfig::PULSEAUDIO
     )
     # Set macOS bundle properties
     set_target_properties(qsstv PROPERTIES
@@ -318,25 +318,10 @@ if(APPLE)
     target_sources(qsstv PRIVATE qsstv.icns)
 else()
     target_link_libraries(qsstv PRIVATE
-        ${PULSEAUDIO_LIBRARIES}
-        ${ALSA_LIBRARIES}
-        ${V4L2_LIBRARIES}
+        PkgConfig::PULSEAUDIO
+        PkgConfig::ALSA
+        PkgConfig::V4L2
         rt
-    )
-endif()
-
-# Include directories for external libraries
-target_include_directories(qsstv PRIVATE
-    ${FFTW3_INCLUDE_DIRS}
-    ${OPENJP2_INCLUDE_DIRS}
-    ${HAMLIB_INCLUDE_DIRS}
-    ${PULSEAUDIO_INCLUDE_DIRS}
-)
-
-if(NOT APPLE)
-    target_include_directories(qsstv PRIVATE
-        ${ALSA_INCLUDE_DIRS}
-        ${V4L2_INCLUDE_DIRS}
     )
 endif()
 
