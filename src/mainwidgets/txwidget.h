@@ -114,6 +114,10 @@ private slots:
 signals:
   void modeSwitch(int);
 
+protected:
+  void showEvent(QShowEvent *event) override;
+  void paintEvent(QPaintEvent *event) override;
+
 private:
   void initView();
   void setParams();
