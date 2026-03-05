@@ -3,7 +3,7 @@
 # QSSTV
 <img width="490" height="220" alt="image" src="https://github.com/user-attachments/assets/8ea96de1-317b-4227-8a27-93bab6ea3459" />
 
-[![Build-macOS-26](https://github.com/tomtastic/QSSTV/actions/workflows/macos-26.yml/badge.svg)](https://github.com/tomtastic/QSSTV/actions/workflows/macos-26.yml)
+[![build-on-macOS-26](https://github.com/tomtastic/QSSTV/actions/workflows/macos-26.yml/badge.svg)](https://github.com/tomtastic/QSSTV/actions/workflows/macos-26.yml)
 
 QSSTV is a program for receiving and transmitting SSTV and HAMDRM (sometimes called DSSTV).
 
