@@ -189,7 +189,7 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
   for (i = 0; i < 2; i++)
 
     {
-      PL1_real[i] = (double) PL[i];
+      PL1_real[i] = static_cast<double>(PL[i]);
     } PL2_real = PL1_real + no_of_levels;
   PL1_imag = PL2_real + no_of_levels;
   PL2_imag = PL1_imag + no_of_levels;	/* pa0mbo will not be OK has to be checked !! will do for the moment */
@@ -243,8 +243,8 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
   for (level = 0; level < no_of_levels; level++)
     {
       no_of_bits +=
-	(int) L1_real[level] + (int) L2_real[level] + 6 +
-	(int) L1_imag[level] + (int) L2_imag[level] + 6;
+	static_cast<int>(L1_real[level]) + static_cast<int>(L2_real[level]) + 6 +
+	static_cast<int>(L1_imag[level]) + static_cast<int>(L2_imag[level]) + 6;
 
       /* printf(" --- level %d L1real %d L2real %d L1imga %d L2imag %d\n",
          level, (int)L1_real[level], (int)L2_real[level], (int)L1_imag[level], (int)L2_imag[level]);    */
@@ -259,15 +259,15 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
   if (received_imag == nullptr)
     {
       memory_ptr =
-	(char *) malloc(viterbi_mem_size + msd_mem_size + N * sizeof(double) +
-			2);
+	static_cast<char *>(malloc(viterbi_mem_size + msd_mem_size + N * sizeof(double) +
+			2));
       received_imag =
-	(double *) (memory_ptr + viterbi_mem_size + msd_mem_size);
+	reinterpret_cast<double *>(memory_ptr + viterbi_mem_size + msd_mem_size);
       memset(received_imag, 0, N * sizeof(double));
     }
   else
     {
-      memory_ptr = (char *) malloc(viterbi_mem_size + msd_mem_size + 2);
+      memory_ptr = static_cast<char *>(malloc(viterbi_mem_size + msd_mem_size + 2));
 
       /* printf("msdhardfac: debugging memory_ptr alloc succeeded viterbi_size = %d mds_size=%d  end addr is %x\n",
          viterbi_mem_size, msd_mem_size, memory_ptr+ viterbi_mem_size+msd_mem_size); */
@@ -285,19 +285,19 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
     }
   viterbi_mem = memory_ptr;
   msd_mem = memory_ptr + viterbi_mem_size;
-  llr = (float *) msd_mem;
-  hardpoints = (char *) (msd_mem + 2 * N * sizeof(float));
+  llr = reinterpret_cast<float *>(msd_mem);
+  hardpoints = (msd_mem + 2 * N * sizeof(float));
   lastiter =
-    (char *) (msd_mem + 2 * N * sizeof(float) + 2 * N * sizeof(char) + 2);
+    (msd_mem + 2 * N * sizeof(float) + 2 * N * sizeof(char) + 2);
   infoout[0] =
-    (char *) (msd_mem + 2 * N * sizeof(float) + 2 * N * sizeof(char) + 2 +
+    (msd_mem + 2 * N * sizeof(float) + 2 * N * sizeof(char) + 2 +
 	      2 * N * sizeof(char));
   infoout[1] = 0;
   for (m = 1; m < no_of_levels; m++)
     {
       infoout[m] =
-	infoout[m - 1] + (int) L1_real[m - 1] + (int) L2_real[m - 1] + 6 +
-	(int) L1_imag[m - 1] + (int) L2_imag[m - 1] + 6;
+	infoout[m - 1] + static_cast<int>(L1_real[m - 1]) + static_cast<int>(L2_real[m - 1]) + 6 +
+	static_cast<int>(L1_imag[m - 1]) + static_cast<int>(L2_imag[m - 1]) + 6;
 
       /* debugging pa0mbo 
          printf("infoout[%d] = %p \n", m, infoout[m]);  */
@@ -312,22 +312,22 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
 	  metric_imag = partitioning[0];
 	  rp_real[0] =
 	    (N - 12) -
-	    RY[(int) PL2_real[0]] * ((N - 12) / RY[(int) PL2_real[0]]);
+	    RY[static_cast<int>(PL2_real[0])] * ((N - 12) / RY[static_cast<int>(PL2_real[0])]);
 	  rp_real[1] =
 	    ((N - N1) - 12) -
-	    RY[(int) PL2_real[1]] * (((N - N1) - 12) / RY[(int) PL2_real[1]]);
+	    RY[static_cast<int>(PL2_real[1])] * (((N - N1) - 12) / RY[static_cast<int>(PL2_real[1])]);
 	  rp_real[2] =
 	    ((N - N1) - 12) -
-	    RY[(int) PL2_real[2]] * (((N - N1) - 12) / RY[(int) PL2_real[2]]);
+	    RY[static_cast<int>(PL2_real[2])] * (((N - N1) - 12) / RY[static_cast<int>(PL2_real[2])]);
 	  rp_imag[0] =
 	    ((N - N1) - 12) -
-	    RY[(int) PL2_imag[0]] * (((N - N1) - 12) / RY[(int) PL2_imag[0]]);
+	    RY[static_cast<int>(PL2_imag[0])] * (((N - N1) - 12) / RY[static_cast<int>(PL2_imag[0])]);
 	  rp_imag[1] =
 	    ((N - N1) - 12) -
-	    RY[(int) PL2_imag[1]] * (((N - N1) - 12) / RY[(int) PL2_imag[1]]);
+	    RY[static_cast<int>(PL2_imag[1])] * (((N - N1) - 12) / RY[static_cast<int>(PL2_imag[1])]);
 	  rp_imag[2] =
 	    ((N - N1) - 12) -
-	    RY[(int) PL2_imag[2]] * (((N - N1) - 12) / RY[(int) PL2_imag[2]]);
+	    RY[static_cast<int>(PL2_imag[2])] * (((N - N1) - 12) / RY[static_cast<int>(PL2_imag[2])]);
 	}
       else if (Lvspp != 0)
 	{			/* HMsym 64-QAM */
@@ -336,15 +336,15 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
 	  metric_imag = partitioning[1];
 	  rp_real[0] =
 	    (2 * N - 12) -
-	    RY[(int) PL2_real[0]] * ((2 * N - 12) / RY[(int) PL2_real[0]]);
+	    RY[static_cast<int>(PL2_real[0])] * ((2 * N - 12) / RY[static_cast<int>(PL2_real[0])]);
 	  rp_real[1] =
 	    (2 * (N - N1) - 12) -
-	    RY[(int) PL2_real[1]] * ((2 * (N - N1) - 12) /
-				     RY[(int) PL2_real[1]]);
+	    RY[static_cast<int>(PL2_real[1])] * ((2 * (N - N1) - 12) /
+				     RY[static_cast<int>(PL2_real[1])]);
 	  rp_real[2] =
 	    (2 * (N - N1) - 12) -
-	    RY[(int) PL2_real[2]] * ((2 * (N - N1) - 12) /
-				     RY[(int) PL2_real[2]]);
+	    RY[static_cast<int>(PL2_real[2])] * ((2 * (N - N1) - 12) /
+				     RY[static_cast<int>(PL2_real[2])]);
 	}
       else
 	{			/* SM 64-QAM */
@@ -352,25 +352,25 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
 	  metric_imag = partitioning[0];
 	  rp_real[0] =
 	    (2 * (N - N1) - 12) -
-	    RY[(int) PL2_real[0]] * ((2 * (N - N1) - 12) /
-				     RY[(int) PL2_real[0]]);
+	    RY[static_cast<int>(PL2_real[0])] * ((2 * (N - N1) - 12) /
+				     RY[static_cast<int>(PL2_real[0])]);
 	  rp_real[1] =
 	    (2 * (N - N1) - 12) -
-	    RY[(int) PL2_real[1]] * ((2 * (N - N1) - 12) /
-				     RY[(int) PL2_real[1]]);
+	    RY[static_cast<int>(PL2_real[1])] * ((2 * (N - N1) - 12) /
+				     RY[static_cast<int>(PL2_real[1])]);
 	  rp_real[2] =
 	    (2 * (N - N1) - 12) -
-	    RY[(int) PL2_real[2]] * ((2 * (N - N1) - 12) /
-				     RY[(int) PL2_real[2]]);
+	    RY[static_cast<int>(PL2_real[2])] * ((2 * (N - N1) - 12) /
+				     RY[static_cast<int>(PL2_real[2])]);
     }}
   else if (no_of_levels == 2)
     {				/* SM 16-QAM */
       rp_real[0] =
 	(2 * (N - N1) - 12) -
-	RY[(int) PL2_real[0]] * ((2 * (N - N1) - 12) / RY[(int) PL2_real[0]]);
+	RY[static_cast<int>(PL2_real[0])] * ((2 * (N - N1) - 12) / RY[static_cast<int>(PL2_real[0])]);
       rp_real[1] =
 	(2 * (N - N1) - 12) -
-	RY[(int) PL2_real[1]] * ((2 * (N - N1) - 12) / RY[(int) PL2_real[1]]);
+	RY[static_cast<int>(PL2_real[1])] * ((2 * (N - N1) - 12) / RY[static_cast<int>(PL2_real[1])]);
       metric_real = partitioning[2];
       metric_imag = partitioning[2];
     }
@@ -378,7 +378,7 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
     {				/* SM 4-QAM */
       rp_real[0] =
 	(2 * (N - N1) - 12) -
-	RY[(int) PL2_real[0]] * ((2 * (N - N1) - 12) / RY[(int) PL2_real[0]]);
+	RY[static_cast<int>(PL2_real[0])] * ((2 * (N - N1) - 12) / RY[static_cast<int>(PL2_real[0])]);
       metric_real = partitioning[3];
       metric_imag = partitioning[3];
   } if (!SDCorMSC)
@@ -390,7 +390,7 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
   if (Lvspp != 0)
     {
       L1_real[0] = 0;
-      L2_real[0] = (double) Lvspp;
+      L2_real[0] = static_cast<double>(Lvspp);
     }
 
   /* debugging pa0mbo 
@@ -431,9 +431,9 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
 		   sample_index += 2 - HMmix)
 
 		{
-		  sample = (float) received[sample_index >> (1 - HMmix)];	/* extract real or imaginary part respectively */
+		  sample = static_cast<float>(received[sample_index >> (1 - HMmix)]);	/* extract real or imaginary part respectively */
 		  closest_zero =
-		    fabs(sample - metric[(int) hardpoints_ptr[sample_index]]);
+		    fabs(sample - metric[static_cast<int>(hardpoints_ptr[sample_index])]);
 
 		  /* printf("msdhardfac: index= %d  sample = %g metric = %g closest_zero = %g \n",
 		     sample_index, sample,  metric[hardpoints_ptr[sample_index]], closest_zero);   pa0mbo */
@@ -478,8 +478,8 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
 
 #ifdef CONSIDERING_SNR
 		  SNR =
-		    (float) signal_to_noise_ratio[sample_index >>
-						  (1 - HMmix)];
+		    static_cast<float>(signal_to_noise_ratio[sample_index >>
+						  (1 - HMmix)]);
 		  llr[sample_index] = (closest_zero - closest_one) * SNR;
 
 		  /* printf("llr[%d] = %g\n", sample_index, llr[sample_index]);   */
@@ -507,14 +507,14 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
 			    || (!HMsym
 				&& (n
 				    || !HMmix))) * (2 - HMmix) * N1,
-			   puncturing[(int) PL1[level]],
-			   puncturing[(int) PL2[level]],
+			   puncturing[static_cast<int>(PL1[level])],
+			   puncturing[static_cast<int>(PL2[level])],
 			   tailpuncturing[rp[level] + 12],
-			   infoout[level] + n * ((int) L1_real[level] +
-						 (int) L2_real[level] + 6),
+			   infoout[level] + n * (static_cast<int>(L1_real[level]) +
+						 static_cast<int>(L2_real[level]) + 6),
 			   hardpoints_ptr, level,
 			   Deinterleaver + (2 - HMmix) * N * level,
-			   (int) L1[level] + (int) L2[level] + 6,
+			   static_cast<int>(L1[level]) + static_cast<int>(L2[level]) + 6,
 			   rp[level] + 12, viterbi_mem);
 
 	  /* debugging pa0mbo 
@@ -575,7 +575,7 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
 		       sample_index += 2 - HMmix)
 
 		    {
-		      sample = (float) received[sample_index >> (1 - HMmix)];	/* extract real or imaginary part respectively */
+		      sample = static_cast<float>(received[sample_index >> (1 - HMmix)]);	/* extract real or imaginary part respectively */
 		      closest_zero =
 			fabs(sample -
 			     metric[hardpoints_ptr[sample_index] &
@@ -587,8 +587,8 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
 
 #ifdef CONSIDERING_SNR
 		      SNR =
-			(float) signal_to_noise_ratio[sample_index >>
-						      (1 - HMmix)];
+			static_cast<float>(signal_to_noise_ratio[sample_index >>
+						      (1 - HMmix)]);
 		      llr[sample_index] = (closest_zero - closest_one) * SNR;
 
 		      /* llr[sample_index] = (closest_zero*closest_zero - closest_one*closest_one) * SNR * SNR; */
@@ -610,14 +610,14 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
 				|| (!HMsym
 				    && (n
 					|| !HMmix))) * (2 - HMmix) * N1,
-			       puncturing[(int) PL1[level]],
-			       puncturing[(int) PL2[level]],
+			       puncturing[static_cast<int>(PL1[level])],
+			       puncturing[static_cast<int>(PL2[level])],
 			       tailpuncturing[rp[level]],
-			       infoout[level] + n * ((int) L1_real[level] +
-						     (int) L2_real[level] +
+			       infoout[level] + n * (static_cast<int>(L1_real[level]) +
+						     static_cast<int>(L2_real[level]) +
 						     6), hardpoints_ptr,
 			       level, Deinterleaver + (2 - HMmix) * N * level,
-			       (int) L1[level] + (int) L2[level] + 6,
+			       static_cast<int>(L1[level]) + static_cast<int>(L2[level]) + 6,
 			       rp[level] + 12, viterbi_mem);
 	      if (error)
 
@@ -636,8 +636,8 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
 
 		    {
 		      diff +=
-			(((int *) hardpoints)[sample_index] ^
-			 ((int *) lastiter)[sample_index]) != 0;
+			((reinterpret_cast<int *>(hardpoints))[sample_index] ^
+			 (reinterpret_cast<int *>(lastiter))[sample_index]) != 0;
 		    }
 		  /*diff = memcmp (lastiter,hardpoints,2 * N); */
 		  if (!diff)
@@ -674,54 +674,54 @@ msdhardfac(double /*@out@ */ *received_real, double /*@out@ */ *received_imag,
   no_of_bits = 0;
   for (level = (Lvspp != 0); level < no_of_levels; level++)
     {
-      no_of_bits += (int) L1_real[level] + (int) L2_real[level];
+      no_of_bits += static_cast<int>(L1_real[level]) + static_cast<int>(L2_real[level]);
   } for (level = 0; level < no_of_levels; level++)
     {
-      no_of_bits += (int) L1_imag[level] + (int) L2_imag[level];
+      no_of_bits += static_cast<int>(L1_imag[level]) + static_cast<int>(L2_imag[level]);
     } output_ptr = facdata;
   PRBS_INIT(PRBS_reg);
   n = 0;
   if (HMmix)
     {
-      for (m = Lvspp + 6; m < Lvspp + 6 + (int) L1_imag[0]; m++)
+      for (m = Lvspp + 6; m < Lvspp + 6 + static_cast<int>(L1_imag[0]); m++)
 	{
 	  output_ptr[n++] = static_cast<double>(infoout[0][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
     }}
   for (level = (Lvspp != 0); level < no_of_levels; level++)
     {
-      for (m = 0; m < (int) L1_real[level]; m++)
+      for (m = 0; m < static_cast<int>(L1_real[level]); m++)
 	{
 	  output_ptr[n++] = static_cast<double>(infoout[level][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
-      } for (m = (int) L1_real[level] + (int) L2_real[level] + 6;
+      } for (m = static_cast<int>(L1_real[level]) + static_cast<int>(L2_real[level]) + 6;
 	       m <
-	       (int) L1_real[level] + (int) L2_real[level] + 6 +
-	       (int) L1_imag[level]; m++)
+	       static_cast<int>(L1_real[level]) + static_cast<int>(L2_real[level]) + 6 +
+	       static_cast<int>(L1_imag[level]); m++)
 	{
 	  output_ptr[n++] = static_cast<double>(infoout[level][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
   }} if (HMmix)
     {
-      for (m = Lvspp + 6 + (int) L1_imag[0];
-	   m < Lvspp + 6 + (int) L1_imag[0] + (int) L2_imag[0]; m++)
+      for (m = Lvspp + 6 + static_cast<int>(L1_imag[0]);
+	   m < Lvspp + 6 + static_cast<int>(L1_imag[0]) + static_cast<int>(L2_imag[0]); m++)
 	{
 	  output_ptr[n++] = static_cast<double>(infoout[0][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
     }}
   for (level = (Lvspp != 0); level < no_of_levels; level++)
     {
-      for (m = (int) L1_real[level];
-	   m < (int) L1_real[level] + (int) L2_real[level]; m++)
+      for (m = static_cast<int>(L1_real[level]);
+	   m < static_cast<int>(L1_real[level]) + static_cast<int>(L2_real[level]); m++)
 	{
 	  output_ptr[n++] = static_cast<double>(infoout[level][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);
       } for (m =
-	       (int) L1_real[level] + (int) L2_real[level] + 6 +
-	       (int) L1_imag[level];
+	       static_cast<int>(L1_real[level]) + static_cast<int>(L2_real[level]) + 6 +
+	       static_cast<int>(L1_imag[level]);
 	       m <
-	       (int) L1_real[level] + (int) L2_real[level] + 6 +
-	       (int) L1_imag[level] + (int) L2_imag[level]; m++)
+	       static_cast<int>(L1_real[level]) + static_cast<int>(L2_real[level]) + 6 +
+	       static_cast<int>(L1_imag[level]) + static_cast<int>(L2_imag[level]); m++)
 	{
 	  output_ptr[n++] = static_cast<double>(infoout[level][m] ^ PRBS_BIT(PRBS_reg));
 	  PRBS_SHIFT(PRBS_reg);

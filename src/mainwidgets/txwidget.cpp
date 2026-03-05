@@ -35,7 +35,7 @@ txWidget::txWidget(QWidget *parent) :  QWidget(parent), ui(new Ui::txWidget)
   imageViewerPtr->displayImage();
   for(i=0;i<NUMSSTVMODES;i++)
     {
-      ui->sstvModeComboBox->addItem(getSSTVModeNameLong((esstvMode)i));
+      ui->sstvModeComboBox->addItem(getSSTVModeNameLong(static_cast<esstvMode>(i)));
     }
   sizeChanged=true;
   ui->sstvResizeComboBox->addItem("Stretch");
@@ -154,7 +154,7 @@ void txWidget::readSettings()
 {
   QSettings qSettings;
   qSettings.beginGroup("TX");
-  sstvModeIndexTx=((esstvMode)qSettings.value("sstvModeIndexTx",0).toInt());
+  sstvModeIndexTx=(static_cast<esstvMode>(qSettings.value("sstvModeIndexTx",0).toInt()));
   if((sstvModeIndexTx<M1) || (sstvModeIndexTx>=NOTVALID))
     {
       sstvModeIndexTx=M1;
@@ -241,7 +241,7 @@ void txWidget::slotGetParams()
 
 void txWidget::setParams()
 {
-  setIndex(((int)sstvModeIndexTx),ui->sstvModeComboBox);
+  setIndex((static_cast<int>(sstvModeIndexTx)),ui->sstvModeComboBox);
   ui->templateCheckBox->blockSignals(true);
   ui->templatesComboBox->blockSignals(true);
   setIndex(templateIndex,ui->templatesComboBox);
@@ -440,7 +440,7 @@ void txWidget::sendBSR()
   bsrForm::eResult res;
   bsrForm bsrf;
   bsrf.init();
-  res=(bsrForm::eResult)bsrf.exec();
+  res=static_cast<bsrForm::eResult>(bsrf.exec());
   if(res==bsrForm::CANCEL) return;
   p=bsrf.getBA(res==bsrForm::COMPAT);
   txFunctionsPtr->sendBSR(p,bsrf.getDRMParams());
@@ -516,7 +516,7 @@ void txWidget::slotGenerateSignal()
     {
       getValue(freq,ff->frequencySpinBox);
       getValue(duration,ff->durationSpinBox);
-      txFunctionsPtr->setToneParam((double)duration,(double)freq);
+      txFunctionsPtr->setToneParam(static_cast<double>(duration),static_cast<double>(freq));
       dispatcherPtr->startTX(txFunctions::TXSENDTONE);
     }
 }
@@ -534,7 +534,7 @@ void txWidget::slotSweepSignal()
       getValue(lowerFreq,ff->lowerFrequencySpinBox);
       getValue(upperFreq,ff->upperFrequencySpinBox);
       getValue(duration,ff->durationSpinBox);
-      txFunctionsPtr->setToneParam((double)duration,(double)lowerFreq,(double)upperFreq);
+      txFunctionsPtr->setToneParam(static_cast<double>(duration),static_cast<double>(lowerFreq),static_cast<double>(upperFreq));
       dispatcherPtr->startTX(txFunctions::TXSENDTONE);
     }
 }
@@ -606,7 +606,7 @@ void txWidget::updateTxTime()
     {
       ui->sizeDurationLabel->setText(QString("%1 min %2 s").arg(minutes).arg(seconds));
     }
-  sizeKb=round((double)imageViewerPtr->getFileSize()/1000.);
+  sizeKb=round(static_cast<double>(imageViewerPtr->getFileSize())/1000.);
   ui->sizeKbLabel->setText( QString::number(sizeKb)+"KB");
 }
 
@@ -632,7 +632,7 @@ void txWidget::slotModeChanged(int m)
   addToLog("slotModeChange",LOGTXMAIN);
   if(transmissionModeIndex==TRXSSTV)
     {
-      sstvModeIndexTx=(esstvMode)m;
+      sstvModeIndexTx=static_cast<esstvMode>(m);
       applyTemplate();
     }
 }
@@ -714,7 +714,7 @@ void txWidget::setSettingsTab()
 void txWidget::slotSize(int fsize)
 {
   QString t;
-  if((sizeChanged) || (compressedSize!=(uint)fsize))
+  if((sizeChanged) || (compressedSize!=static_cast<uint>(fsize)))
     {
       sizeChanged=true;
       compressedSize=fsize;
@@ -741,7 +741,7 @@ void txWidget::slotTransmissionMode(int rxtxMode)
 void txWidget::changeTransmissionMode(int rxtxMode)
 {
   int i;
-  transmissionModeIndex=(etransmissionMode)rxtxMode;
+  transmissionModeIndex=static_cast<etransmissionMode>(rxtxMode);
   if((transmissionModeIndex>=0)&&(transmissionModeIndex<TRXNOMODE))
     {
       for(i=0;i<TRXNOMODE;i++)
@@ -895,7 +895,7 @@ void txWidget::sendRepeaterImage(esstvMode rxMode)
   if(transmissionModeIndex==TRXSSTV)
     {
       if(repeaterTxMode==0) txMode=rxMode; // 0 index = Same as RX
-      else txMode=(esstvMode)(repeaterTxMode-1);
+      else txMode=static_cast<esstvMode>(repeaterTxMode-1);
       slotModeChanged(txMode);
     }
 }

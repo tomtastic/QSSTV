@@ -48,10 +48,10 @@ void waterfallText::init()
   if(phi!=nullptr) delete phi;
   fftLength=TXSTRIPE*SUBSAMPLINGFACTOR/2;
   samplingrate=BASESAMPLERATE;
-  binSize=static_cast<double>(BASESAMPLERATE)/((double)fftLength);
+  binSize=static_cast<double>(BASESAMPLERATE)/(static_cast<double>(fftLength));
   txFilter= new wfFilter(TXSTRIPE);
-  out = (fftw_complex *) fftw_malloc(sizeof(fftw_complex)*fftLength);
-  dataBuffer = (fftw_complex *) fftw_malloc(sizeof(fftw_complex)*fftLength);
+  out = static_cast<fftw_complex *>(fftw_malloc(sizeof(fftw_complex)*fftLength));
+  dataBuffer = static_cast<fftw_complex *>(fftw_malloc(sizeof(fftw_complex)*fftLength));
   outFiltered = new DSPFLOAT [fftLength];
   audioBuf = new DSPFLOAT [fftLength];
   // create the fftw plan
@@ -61,7 +61,7 @@ void waterfallText::init()
   imageWidth=(FREQ_MAX-FREQ_OFFSET)/binSize;
 
   //  imageWidth=200;
-  startFreqIndex=(int)round(FREQ_OFFSET/binSize);
+  startFreqIndex=static_cast<int>(round(FREQ_OFFSET/binSize));
 
   //Chirp
   phr=new double[imageWidth];
@@ -84,7 +84,7 @@ double waterfallText::getDuration(const QString &txt)
     {
       setupImage(convert(txt));
     }
-  return (static_cast<double>(line*3*fftLength))/(double)samplingrate;
+  return (static_cast<double>(line*3*fftLength))/static_cast<double>(samplingrate);
 }
 
 void waterfallText::setText(const QString &txt)
@@ -127,7 +127,7 @@ DSPFLOAT * waterfallText::nextLine()
     fftw_execute(plan);
     for(i=0;i<fftLength;i++)
     {
-      outFiltered[i]=(DSPFLOAT) out[i][0];
+      outFiltered[i]=static_cast<DSPFLOAT>(out[i][0]);
     }
   }
   dLine++;

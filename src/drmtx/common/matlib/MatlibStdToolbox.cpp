@@ -119,9 +119,9 @@ CMatlibMatrix<CReal> Eye(const int iLen)
 		for (int j = 0; j < iLen; j++)
 		{
 			if (i == j)
-				matrRet[i][j] = (CReal) 1.0;
+				matrRet[i][j] = static_cast<CReal>(1.0);
 			else
-				matrRet[i][j] = (CReal) 0.0;
+				matrRet[i][j] = static_cast<CReal>(0.0);
 		}
 	}
 
@@ -141,7 +141,7 @@ CMatlibMatrix<CComplex> Diag(const CMatlibVector<CComplex>& cvI)
 			if (i == j)
 				matcRet[i][j] = cvI[i];
 			else
-				matcRet[i][j] = (CReal) 0.0;
+				matcRet[i][j] = static_cast<CReal>(0.0);
 		}
 	}
 
@@ -151,7 +151,7 @@ CMatlibMatrix<CComplex> Diag(const CMatlibVector<CComplex>& cvI)
 CReal Trace(const CMatlibMatrix<CReal>& rmI)
 {
 	const int iSize = rmI.GetRowSize(); /* matrix must be square */
-	CReal rReturn = (CReal) 0.0;
+	CReal rReturn = static_cast<CReal>(0.0);
 
 	for (int i = 0; i < iSize; i++)
 		rReturn += rmI[i][i];
@@ -319,9 +319,9 @@ CComplex _integral(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b,
 	h = b - a;
 	x[0] = a;
 	f1[0] = f(a);
-	f2[0] = f((CReal) 0.5 * (a + b));
+	f2[0] = f(static_cast<CReal>(0.5) * (a + b));
 	f3[0] = f(b);
-	v[0] = h * (f1[0] + (CReal) 4.0 * f2[0] + f3[0]) / (CReal) 6.0;
+	v[0] = h * (f1[0] + static_cast<CReal>(4.0) * f2[0] + f3[0]) / static_cast<CReal>(6.0);
 
 	do
 	{
@@ -345,14 +345,14 @@ CComplex _integral(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b,
 			mstart = max - 1;
 		}
 		
-		h = (CReal) 0.5 * h;
+		h = static_cast<CReal>(0.5) * h;
 		h6 = h / 6;
-		bound = (CReal) 0.5 * bound;
+		bound = static_cast<CReal>(0.5) * bound;
 		
 		do
 		{
 			left = x[j];
-			right = x[j] + (CReal) 0.5 * h;
+			right = x[j] + static_cast<CReal>(0.5) * h;
 
 			/* Complete loss of significance? */
 			if (left >= right)
@@ -361,11 +361,11 @@ CComplex _integral(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b,
 				return value;
 			}
 
-			fa = f(x[j] + (CReal) 0.5 * h);
-			fb = f(x[j] + (CReal) 1.5 * h);
-			v1 = h6 * (f1[j] + (CReal) 4.0 * fa + f2[j]);
-			v2 = h6 * (f2[j] + (CReal) 4.0 * fb + f3[j]);
-			error = (v[j] - v1 - v2) / (CReal) 15.0;
+			fa = f(x[j] + static_cast<CReal>(0.5) * h);
+			fb = f(x[j] + static_cast<CReal>(1.5) * h);
+			v1 = h6 * (f1[j] + static_cast<CReal>(4.0) * fa + f2[j]);
+			v2 = h6 * (f2[j] + static_cast<CReal>(4.0) * fb + f3[j]);
+			error = (v[j] - v1 - v2) / static_cast<CReal>(15.0);
 
 			if ((Abs(error) <= bound) || (Abs(v1 + v2) < Abs(value) * ru))
 				value = ((v1 + v2) + value) - error;
@@ -378,7 +378,7 @@ CComplex _integral(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b,
 				if (m == j)
 				{
 					left = x[j];
-					right = x[j] + (CReal) 0.5 * h;
+					right = x[j] + static_cast<CReal>(0.5) * h;
 
 					/* Complete loss of significance? */
 					if (left >= right)
@@ -394,7 +394,7 @@ CComplex _integral(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b,
 				{
 					/* No, we are not */
 					left = x[j];
-					right = x[j] + (CReal) 0.125 * h;
+					right = x[j] + static_cast<CReal>(0.125) * h;
 
 					if (left >= right)
 					{
@@ -435,13 +435,13 @@ CComplex Quad(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b,
 	/* Set globals */
 	/* Generate rounding unit */
 	CReal value;
-	CReal ru = (CReal) 1.0;
+	CReal ru = static_cast<CReal>(1.0);
 	do
 	{
-		ru = (CReal) 0.5 * ru;
-		value = (CReal) 1.0 + ru;
+		ru = static_cast<CReal>(0.5) * ru;
+		value = static_cast<CReal>(1.0) + ru;
 	}
-	while (value != (CReal) 1.0);
+	while (value != static_cast<CReal>(1.0));
 
 	ru *= 2;
 
@@ -479,7 +479,7 @@ CMatlibVector<CComplex> Fft(const CMatlibVector<CComplex>& cvI,
 		/* Ugly, but ok: We transform "const" object in "non constant" object
 		   since we KNOW that the original object is not constant since it
 		   was already initialized! */
-		pCurPlan = (CFftPlans*) &FftPlans;
+		pCurPlan = const_cast<CFftPlans*>(&FftPlans);
 	}
 
 	pFftwComplexIn = pCurPlan->pFftwComplexIn;
@@ -531,7 +531,7 @@ CMatlibVector<CComplex> Ifft(const CMatlibVector<CComplex>& cvI,
 		/* Ugly, but ok: We transform "const" object in "non constant" object
 		   since we KNOW that the original object is not constant since it
 		   was already initialized! */
-		pCurPlan = (CFftPlans*) &FftPlans;
+		pCurPlan = const_cast<CFftPlans*>(&FftPlans);
 	}
 
 	pFftwComplexIn = pCurPlan->pFftwComplexIn;
@@ -549,7 +549,7 @@ CMatlibVector<CComplex> Ifft(const CMatlibVector<CComplex>& cvI,
 	/* Actual fftw call */
 	fftw_execute(pCurPlan->FFTPlBackw);
       //  printf("Na execute plan in Ifft n is %d \n", n);	
-	const CReal scale = (CReal) 1.0 / n;
+	const CReal scale = static_cast<CReal>(1.0) / n;
 	for (i = 0; i < n; i++)
 	{
 		cvReturn[i] = CComplex(pFftwComplexOut[i][0] * scale,
@@ -594,7 +594,7 @@ CMatlibVector<CComplex> rfft(const CMatlibVector<CReal>& fvI,
 		/* Ugly, but ok: We transform "const" object in "non constant" object
 		   since we KNOW that the original object is not constant since it
 		   was already initialized! */
-		pCurPlan = (CFftPlans*) &FftPlans;
+		pCurPlan = const_cast<CFftPlans*>(&FftPlans);
 	}
 
 	pFftwRealIn = pCurPlan->pFftwRealIn;
@@ -655,7 +655,7 @@ CMatlibVector<CReal> rifft(const CMatlibVector<CComplex>& cvI,
 		/* Ugly, but ok: We transform "const" object in "non constant" object
 		   since we KNOW that the original object is not constant since it
 		   was already initialized! */
-		pCurPlan = (CFftPlans*) &FftPlans;
+		pCurPlan = const_cast<CFftPlans*>(&FftPlans);
 	}
 
 	pFftwRealIn = pCurPlan->pFftwRealIn;
@@ -675,7 +675,7 @@ CMatlibVector<CReal> rifft(const CMatlibVector<CComplex>& cvI,
 	fftw_execute(pCurPlan->RFFTPlBackw);
 
 	/* Scale output vector */
-	const CReal scale = (CReal) 1.0 / iLongLength;
+	const CReal scale = static_cast<CReal>(1.0) / iLongLength;
 	for (i = 0; i < iLongLength; i++) 
 		fvReturn[i] = pFftwRealOut[i] * scale;
 
@@ -710,7 +710,7 @@ CMatlibVector<CReal> FftFilt(const CMatlibVector<CComplex>& rvH,
 		/* Ugly, but ok: We transform "const" object in "non constant" object
 		   since we KNOW that the original object is not constant since it
 		   was already initialized! */
-		pCurPlan = (CFftPlans*) &FftPlans;
+		pCurPlan = const_cast<CFftPlans*>(&FftPlans);
 	}
 
 	/* Update history of input signal */
@@ -762,10 +762,10 @@ void CFftPlans::Init(const int iFSi)
 	}
 
 	/* Create new plans and intermediate buffers */
-	pFftwRealIn = (double *) fftw_malloc(sizeof(double)*2*iFSi);
-	pFftwRealOut = (double *) fftw_malloc(sizeof(double)*2*iFSi);
-	pFftwComplexIn = (fftw_complex *) fftw_malloc(sizeof(fftw_complex)*iFSi);
-	pFftwComplexOut = (fftw_complex *) fftw_malloc(sizeof(fftw_complex)*iFSi);
+	pFftwRealIn = static_cast<double *>(fftw_malloc(sizeof(double)*2*iFSi));
+	pFftwRealOut = static_cast<double *>(fftw_malloc(sizeof(double)*2*iFSi));
+	pFftwComplexIn = static_cast<fftw_complex *>(fftw_malloc(sizeof(fftw_complex)*iFSi));
+	pFftwComplexOut = static_cast<fftw_complex *>(fftw_malloc(sizeof(fftw_complex)*iFSi));
 
 
     addToLog("fftw_plan_r2r_1d start",LOGFFT);

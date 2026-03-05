@@ -43,9 +43,9 @@ CMatlibVector<CReal> Hann(const int iLen)
 		CMatlibVector<CReal> vecTemp(iHalf);
 		CMatlibVector<CReal> w(iHalf);
 		for (i = 0; i < iHalf; i++)
-			vecTemp[i] = (CReal) i;
+			vecTemp[i] = static_cast<CReal>(i);
 
-		w = (CReal) 0.5 * (1 - Cos((CReal) 2.0 * crPi * vecTemp / (iLen - 1)));
+		w = static_cast<CReal>(0.5) * (1 - Cos(static_cast<CReal>(2.0) * crPi * vecTemp / (iLen - 1)));
 
 		/* Make symmetric window */
 		return fvRet.Merge(w, w(iHalf - 1, -1, 1));
@@ -59,9 +59,9 @@ CMatlibVector<CReal> Hann(const int iLen)
 		CMatlibVector<CReal> vecTemp(iHalf);
 		CMatlibVector<CReal> w(iHalf);
 		for (i = 0; i < iHalf; i++)
-			vecTemp[i] = (CReal) i;
+			vecTemp[i] = static_cast<CReal>(i);
 
-		w = (CReal) 0.5 * (1 - Cos((CReal) 2.0 * crPi * vecTemp / (iLen - 1)));
+		w = static_cast<CReal>(0.5) * (1 - Cos(static_cast<CReal>(2.0) * crPi * vecTemp / (iLen - 1)));
 
 		/* Make symmetric window */
 		return fvRet.Merge(w, w(iHalf, -1, 1));
@@ -82,10 +82,10 @@ CMatlibVector<CReal> Hamming(const int iLen)
 		CMatlibVector<CReal> vecTemp(iHalf);
 		CMatlibVector<CReal> w(iHalf);
 		for (i = 0; i < iHalf; i++)
-			vecTemp[i] = (CReal) i;
+			vecTemp[i] = static_cast<CReal>(i);
 
-		w = (CReal) 0.54 - (CReal) 0.46 * 
-			Cos((CReal) 2.0 * crPi * vecTemp / (iLen - 1));
+		w = static_cast<CReal>(0.54) - static_cast<CReal>(0.46) * 
+			Cos(static_cast<CReal>(2.0) * crPi * vecTemp / (iLen - 1));
 
 		/* Make symmetric window */
 		return fvRet.Merge(w, w(iHalf - 1, -1, 1));
@@ -99,10 +99,10 @@ CMatlibVector<CReal> Hamming(const int iLen)
 		CMatlibVector<CReal> vecTemp(iHalf);
 		CMatlibVector<CReal> w(iHalf);
 		for (i = 0; i < iHalf; i++)
-			vecTemp[i] = (CReal) i;
+			vecTemp[i] = static_cast<CReal>(i);
 
-		w = (CReal) 0.54 - (CReal) 0.46 * 
-			Cos((CReal) 2.0 * crPi * vecTemp / (iLen - 1));
+		w = static_cast<CReal>(0.54) - static_cast<CReal>(0.46) * 
+			Cos(static_cast<CReal>(2.0) * crPi * vecTemp / (iLen - 1));
 
 		/* Make symmetric window */
 		return fvRet.Merge(w, w(iHalf, -1, 1));
@@ -114,12 +114,12 @@ CMatlibVector<CReal> Nuttallwin(const int iLen)
 	CMatlibVector<CReal> fvRet(iLen, VTY_TEMP);
 
 	/* Nuttall coefficients */
-	const CReal rA0 = (CReal) 0.3635819;
-	const CReal rA1 = (CReal) 0.4891775;
-	const CReal rA2 = (CReal) 0.1365995;
-	const CReal rA3 = (CReal) 0.0106411;
+	const CReal rA0 = static_cast<CReal>(0.3635819);
+	const CReal rA1 = static_cast<CReal>(0.4891775);
+	const CReal rA2 = static_cast<CReal>(0.1365995);
+	const CReal rA3 = static_cast<CReal>(0.0106411);
 
-	const CReal rArg = (CReal) 2.0 * crPi / (iLen - 1);
+	const CReal rArg = static_cast<CReal>(2.0) * crPi / (iLen - 1);
 
 	for (int i = 0; i < iLen; i++)
 	{
@@ -132,12 +132,12 @@ CMatlibVector<CReal> Nuttallwin(const int iLen)
 
 CMatlibVector<CReal> Bartlett(const int iLen)
 {
-	const int iHalf = (int) Ceil((CReal) iLen / 2);
+	const int iHalf = static_cast<int>(Ceil(static_cast<CReal>(iLen) / 2));
 	CMatlibVector<CReal> fvHalfWin(iHalf);
 	CMatlibVector<CReal> fvRet(iLen, VTY_TEMP);
 
 	for (int i = 0; i < iHalf; i++)
-		fvHalfWin[i] = (CReal) 2.0 * i / (iLen - 1);
+		fvHalfWin[i] = static_cast<CReal>(2.0) * i / (iLen - 1);
 
 	/* Build complete output vector depending on odd or even input length */
 	if (iLen % 2)
@@ -150,7 +150,7 @@ CMatlibVector<CReal> Bartlett(const int iLen)
 
 CMatlibVector<CReal> Triang(const int iLen)
 {
-	const int iHalf = (int) Ceil((CReal) iLen / 2);
+	const int iHalf = static_cast<int>(Ceil(static_cast<CReal>(iLen) / 2));
 	CMatlibVector<CReal> fvHalfWin(iHalf);
 	CMatlibVector<CReal> fvRet(iLen, VTY_TEMP);
 
@@ -158,14 +158,14 @@ CMatlibVector<CReal> Triang(const int iLen)
 	if (iLen % 2)
 	{
 		for (int i = 0; i < iHalf; i++)
-			fvHalfWin[i] = (CReal) 2.0 * (i + 1) / (iLen + 1);
+			fvHalfWin[i] = static_cast<CReal>(2.0) * (i + 1) / (iLen + 1);
 
 		fvRet.Merge(fvHalfWin, fvHalfWin(iHalf - 1, -1, 1)); /* Odd */
 	}
 	else
 	{
 		for (int i = 0; i < iHalf; i++)
-			fvHalfWin[i] = ((CReal) 2.0 * (i + 1) - 1) / iLen;
+			fvHalfWin[i] = (static_cast<CReal>(2.0) * (i + 1) - 1) / iLen;
 
 		fvRet.Merge(fvHalfWin, fvHalfWin(iHalf, -1, 1)); /* Even */
 	}
@@ -181,19 +181,19 @@ CMatlibVector<CReal> Kaiser(const int iLen, const CReal rBeta)
 	CMatlibVector<CReal> fvRet(iLen);
 	CMatlibVector<CReal> fvW(n);
 
-	const CReal rNorm = Abs(Besseli((CReal) 0.0, rBeta));
+	const CReal rNorm = Abs(Besseli(static_cast<CReal>(0.0), rBeta));
 	const CReal rXind = (iLen - 1) * (iLen - 1);
 
 	if (iIsOdd == 0)
-		rX = (CReal) 0.5;
+		rX = static_cast<CReal>(0.5);
 	else
-		rX = (CReal) 0.0;
+		rX = static_cast<CReal>(0.0);
 
 	for (int i = 0; i < n; i++)
 	{
-		fvW[i] = Besseli((CReal) 0.0, rBeta * Sqrt((CReal) 1.0 -
-			(CReal) 4.0 * rX * rX / rXind)) / rNorm;
-		rX += (CReal) 1.0;
+		fvW[i] = Besseli(static_cast<CReal>(0.0), rBeta * Sqrt(static_cast<CReal>(1.0) -
+			static_cast<CReal>(4.0) * rX * rX / rXind)) / rNorm;
+		rX += static_cast<CReal>(1.0);
 	}
 
 	/* Symmetrical window */
@@ -204,14 +204,14 @@ CMatlibVector<CReal> Kaiser(const int iLen, const CReal rBeta)
 
 CReal Besseli(const CReal rNu, const CReal rZ)
 {
-	const CReal	rEp = (CReal) 10e-9; /* Define accuracy */
-	const CReal	rY = rZ / (CReal) 2.0;
-	CReal		rReturn = (CReal) 1.0;
-	CReal		rD = (CReal) 1.0;
-	CReal		rS = (CReal) 1.0;
+	const CReal	rEp = static_cast<CReal>(10e-9); /* Define accuracy */
+	const CReal	rY = rZ / static_cast<CReal>(2.0);
+	CReal		rReturn = static_cast<CReal>(1.0);
+	CReal		rD = static_cast<CReal>(1.0);
+	CReal		rS = static_cast<CReal>(1.0);
 
 	/* Only nu = 0 is supported right now! */
-	if (rNu != (CReal) 0.0)
+	if (rNu != static_cast<CReal>(0.0))
 	{
 #ifdef _DEBUG_
 		DebugError("MatLibr: Besseli function", "The nu = ", rNu, \
@@ -251,7 +251,7 @@ CMatlibVector<CReal> Filter(const CMatlibVector<CReal>& fvB,
 	CMatlibVector<CReal>	fvY(iSizeX, VTY_TEMP);
 	CMatlibVector<CReal>	fvANew, fvBNew;
 
-	if ((iSizeA == 1) && (fvA[0] == (CReal) 1.0))
+	if ((iSizeA == 1) && (fvA[0] == static_cast<CReal>(1.0)))
 	{
 		/* FIR filter ------------------------------------------------------- */
 		const int				iSizeXNew = iSizeX + iSizeZ;
@@ -263,7 +263,7 @@ CMatlibVector<CReal> Filter(const CMatlibVector<CReal>& fvB,
 		/* Actual convolution */
 		for (m = 0; m < iSizeX; m++)
 		{
-			fvY[m] = (CReal) 0.0;
+			fvY[m] = static_cast<CReal>(0.0);
 
 			for (n = 0; n < iSizeB; n++)
 				fvY[m] += fvB[n] * rvXNew[m + iSizeB - n - 1];
@@ -276,7 +276,7 @@ CMatlibVector<CReal> Filter(const CMatlibVector<CReal>& fvB,
 	{
 		/* IIR filter ------------------------------------------------------- */
 		/* Length of coefficients */
-		iLenCoeff = (int) Max((CReal) iSizeB, (CReal) iSizeA);
+		iLenCoeff = static_cast<int>(Max(static_cast<CReal>(iSizeB), static_cast<CReal>(iSizeA)));
 
 		/* Make fvB and fvA the same length (zero padding) */
 		if (iSizeB > iSizeA)
@@ -321,7 +321,7 @@ CMatlibVector<CReal> FirLP(const CReal rNormBW,
 	Lowpass filter design using windowing method
 */
 	const int				iLen = rvWin.GetSize();
-	const int				iHalfLen = (int) Floor((CReal) iLen / 2);
+	const int				iHalfLen = static_cast<int>(Floor(static_cast<CReal>(iLen) / 2));
 	CMatlibVector<CReal>	fvRet(iLen, VTY_TEMP);
 
 	/* Generate truncuated ideal response */
@@ -361,7 +361,7 @@ CMatlibVector<CComplex> FirFiltDec(const CMatlibVector<CComplex>& cvB,
 		/* Calculate the number of output bits which can be generated from the
 		   provided input vector */
 		iDecSizeY = 
-				static_cast<int>(((CReal) iSizeXNew - iSizeFiltHist - 1) / iDecFact + 1);
+				static_cast<int>((static_cast<CReal>(iSizeXNew) - iSizeFiltHist - 1) / iDecFact + 1);
 
 		/* Since the input vector length must not be a multiple of "iDecFact",
 		   some input bits will be unused. To store this number, the size of
@@ -381,7 +381,7 @@ CMatlibVector<CComplex> FirFiltDec(const CMatlibVector<CComplex>& cvB,
 	{
 		iCurPos = m * iDecFact + iSizeFiltHist;
 
-		cvY[m] = (CReal) 0.0;
+		cvY[m] = static_cast<CReal>(0.0);
 
 		for (n = 0; n < iSizeB; n++)
 			cvY[m] += cvB[n] * cvXNew[iCurPos - n];
@@ -422,8 +422,8 @@ CMatlibVector<CReal> Levinson(const CMatlibVector<CReal>& vecrRx,
 
 	/* Initialize the recursion --------------------------------------------- */
 	// (a) First coefficient is always unity
-	vecrA[0] = (CReal) 1.0;
-	vecraP[0] = (CReal) 1.0;
+	vecrA[0] = static_cast<CReal>(1.0);
+	vecraP[0] = static_cast<CReal>(1.0);
 
 	// (b) 
 	vecrX[0] = vecrB[0] / vecrRx[0];
@@ -457,10 +457,10 @@ CMatlibVector<CReal> Levinson(const CMatlibVector<CReal>& vecrRx,
 			vecrA[i] = vecraP[i];
 
 		// (e) Update the prediction error power
-		rE = rE * ((CReal) 1.0 - rGammaCap * rGammaCap);
+		rE = rE * (static_cast<CReal>(1.0) - rGammaCap * rGammaCap);
 
 		// (f)
-		rDelta = (CReal) 0.0;
+		rDelta = static_cast<CReal>(0.0);
 		for (i = 0; i < iNextInd; i++) 
 			rDelta += vecrX[i] * vecrRx[iNextInd - i];
 
@@ -504,8 +504,8 @@ CMatlibVector<CComplex> Levinson(const CMatlibVector<CComplex>& veccRx,
 
 	/* Initialize the recursion --------------------------------------------- */
 	// (a) First coefficient is always unity
-	veccA[0] = (CReal) 1.0;
-	veccaP[0] = (CReal) 1.0;
+	veccA[0] = static_cast<CReal>(1.0);
+	veccaP[0] = static_cast<CReal>(1.0);
 
 	// (b) 
 	veccX[0] = veccB[0] / veccRx[0];
@@ -539,10 +539,10 @@ CMatlibVector<CComplex> Levinson(const CMatlibVector<CComplex>& veccRx,
 			veccA[i] = veccaP[i];
 
 		// (e) Update the prediction error power
-		rE = rE * ((CReal) 1.0 - SqMag(cGammaCap));
+		rE = rE * (static_cast<CReal>(1.0) - SqMag(cGammaCap));
 
 		// (f)
-		cDelta = (CReal) 0.0;
+		cDelta = static_cast<CReal>(0.0);
 		for (i = 0; i < iNextInd; i++) 
 			cDelta += veccX[i] * veccRx[iNextInd - i];
 
@@ -570,7 +570,7 @@ CMatlibVector<CReal> DomEig(const CMatlibMatrix<CReal>& rmI,
 	/* Implementing the power method for getting the dominant eigenvector */
 	/* Start value for eigenvector */
 	vecrV = Ones(iSize);
-	rLambda = rLambdaold = (CReal) 1.0;
+	rLambda = rLambdaold = static_cast<CReal>(1.0);
 	rError = _MAXREAL;
 	int iItCnt = iMaxNumIt;
 
@@ -582,7 +582,7 @@ CMatlibVector<CReal> DomEig(const CMatlibMatrix<CReal>& rmI,
 
 		/* Actual power method calculations */
 		rLambda = Max(Abs(vecrV));
-		vecrV = (CReal) 1.0 / rLambda * rmI * vecrV;
+		vecrV = static_cast<CReal>(1.0) / rLambda * rmI * vecrV;
 
 		/* Take care of number of iterations and error calculations */
 		iItCnt--;

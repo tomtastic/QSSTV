@@ -92,9 +92,9 @@ getfoffsint(float *symbolbuf, int N_symbols, int K_dc, int K_modulo, int Tu)
   /* detect pilots */
 
 
-  k_pilot1 = (int) ceil(static_cast<float>(9 * Tu / 288));
-  k_pilot2 = (int) ceil(static_cast<float>(27 * Tu / 288));
-  k_pilot3 = (int) ceil(static_cast<float>(36 * Tu / 288));
+  k_pilot1 = static_cast<int>(ceil(static_cast<float>(9 * Tu / 288)));
+  k_pilot2 = static_cast<int>(ceil(static_cast<float>(27 * Tu / 288)));
+  k_pilot3 = static_cast<int>(ceil(static_cast<float>(36 * Tu / 288)));
 
 
 
@@ -102,7 +102,7 @@ getfoffsint(float *symbolbuf, int N_symbols, int K_dc, int K_modulo, int Tu)
 
     {
       abs_dS_sum[i] =
-	(float) sqrt(dS_sum[i * 2] * dS_sum[i * 2] +
+	sqrt(dS_sum[i * 2] * dS_sum[i * 2] +
 		     dS_sum[i * 2 + 1] * dS_sum[i * 2 + 1]);
 
 

@@ -45,7 +45,7 @@ void CCRC::Reset(const int iNewDegree)
 
 	/* Init state shift-register with ones. Set all registers to "1" with
 	   bit-wise not operation */
-	iStateShiftReg = ~uint32_t(0);
+	iStateShiftReg = ~static_cast<uint32_t>(0);
 }
 
 void CCRC::AddByte(const _BYTE byNewInput)

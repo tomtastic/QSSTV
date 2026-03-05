@@ -49,35 +49,35 @@ void initGetmode(int n)
   if(initDone) return;
   initDone=true;
   /* create and initialize  arrays */
-  in_ =(float *) malloc((n - Tu_D) * 2 * sizeof(float));	/* complex data */
+  in_ =static_cast<float *>(malloc((n - Tu_D) * 2 * sizeof(float)));	/* complex data */
   if (in_ == nullptr)
 
     {
       printf("mem alloc problem in getmode \n");
       exit(EXIT_FAILURE);
     }
-  conv_in_ = (float *)malloc((n - Tu_D) * 2 * sizeof(float));	/* complex */
+  conv_in_ = static_cast<float *>(malloc((n - Tu_D) * 2 * sizeof(float)));	/* complex */
   if (conv_in_ == nullptr)
 
     {
       printf("mem alloc problem in getmode \n");
       exit(EXIT_FAILURE);
     }
-  abs_in_ = (float *)malloc(n * sizeof(float));
+  abs_in_ = static_cast<float *>(malloc(n * sizeof(float)));
   if (abs_in_ == nullptr)
 
     {
       printf("mem alloc problem in getmode \n");
       exit(EXIT_FAILURE);
     }
-  abs_in_in_ = (float *)malloc((n - Tu_D) * sizeof(float));
+  abs_in_in_ = static_cast<float *>(malloc((n - Tu_D) * sizeof(float)));
   if (abs_in_in_ == nullptr)
 
     {
       printf("mem alloc problem in getmode \n");
       exit(EXIT_FAILURE);
     }
-  conv_abs_in_in_ = (float *)malloc((n - Tu_D) * sizeof(float));
+  conv_abs_in_in_ = static_cast<float *>(malloc((n - Tu_D) * sizeof(float)));
   if (conv_abs_in_in_ == nullptr)
 
     {
@@ -166,7 +166,7 @@ void getmode(float *input, int n, smode_info * result)
          printf("==== mode %d === gamma\n",mode);   */
       for (i = 0; i < Ts; i++)
         {
-          tmpmax = (float) sqrt(gamma[2 * i] * gamma[2 * i] + gamma[2 * i + 1] * gamma[2 * i + 1]);
+          tmpmax = sqrt(gamma[2 * i] * gamma[2 * i] + gamma[2 * i + 1] * gamma[2 * i + 1]);
 
           /* printf("%g\n", tmpmax);  */
           tmpmax -= rho * Phi[i];
@@ -179,8 +179,8 @@ void getmode(float *input, int n, smode_info * result)
    //   arrayDump("gM2",gamma,Ts*2,true);
 
       /*  printf("===============\n");    */
-      max_abs_gamma_rel = (float) sqrt(gamma[theta * 2] * gamma[theta * 2] + gamma[theta * 2 + 1] * gamma[theta * 2 + 1]) / (rho * Phi[theta]);
-      epsilon_ML = (float) atan2(gamma[2 * theta], gamma[2 * theta + 1]);
+      max_abs_gamma_rel = sqrt(gamma[theta * 2] * gamma[theta * 2] + gamma[theta * 2 + 1] * gamma[theta * 2 + 1]) / (rho * Phi[theta]);
+      epsilon_ML = atan2(gamma[2 * theta], gamma[2 * theta + 1]);
       max_abs_gamma_rel_list[mode] = max_abs_gamma_rel;
       theta_list[mode] = theta;
       epsilon_ML_list[mode] = epsilon_ML;
@@ -270,7 +270,7 @@ void getmode(float *input, int n, smode_info * result)
 
               /* detmn max and its indx */
               tmpmax =
-                  (float) sqrt(gamma[2 * i] * gamma[2 * i] +
+                  sqrt(gamma[2 * i] * gamma[2 * i] +
                                gamma[2 * i + 1] * gamma[2 * i + 1]) -
                   rho * Phi[i];
               if (tmpmax > max_abs_gamma_rel)
@@ -292,10 +292,10 @@ void getmode(float *input, int n, smode_info * result)
       for (i = 0; i < N_symbols_mode_det - 2; i++)
 
         {
-          sumx += (float) i;
-          sumy += (float) b[i];
-          sumxx += (float) i *(float) i;
-          sumxy += (float) i *(float) b[i];
+          sumx += static_cast<float>(i);
+          sumy += static_cast<float>(b[i]);
+          sumxx += static_cast<float>(i) *static_cast<float>(i);
+          sumxy += static_cast<float>(i) *static_cast<float>(b[i]);
         }
       slope = static_cast<float>(((N_symbols_mode_det - 2) * sumxy - sumx * sumy) / ((N_symbols_mode_det - 2) * sumxx - sumx * sumx));
       boffs = static_cast<float>((sumy * sumxx - sumx * sumxy) / ((N_symbols_mode_det - 2) * sumxx - sumx * sumx));
@@ -305,8 +305,8 @@ void getmode(float *input, int n, smode_info * result)
 
   /* pa0mbo todo reliability check */
   result->mode_indx = mode;
-  result->time_offset = fmodf((boffs + Ts / 2 + time_offset_mean - 1), (float) Ts);	/* fp rest pa0mbo was -2  */
-  result->sample_rate_offset = slope / ((float) Ts);
+  result->time_offset = fmodf((boffs + Ts / 2 + time_offset_mean - 1), static_cast<float>(Ts));	/* fp rest pa0mbo was -2  */
+  result->sample_rate_offset = slope / (static_cast<float>(Ts));
   result->freq_offset_fract = epsilon_ML_list[mode];
 //logfile->addToAux(QString("%1 %2 %3 %4").arg( mode).arg(result->time_offset).arg(result->sample_rate_offset).arg(result->freq_offset_fract));
 

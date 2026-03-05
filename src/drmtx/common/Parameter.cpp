@@ -482,7 +482,7 @@ _REAL CParameter::GetBitRateKbps(const int iShortID, const _BOOLEAN bAudData)
 
 	/* We have 3 frames with time duration of 1.2 seconds. Bit rate should be
 	   returned in kbps (/ 1000) */
-	return (_REAL) iLen * SIZEOF__BYTE * 3 / (_REAL) 1.2 / 1000;
+	return static_cast<_REAL>(iLen) * SIZEOF__BYTE * 3 / static_cast<_REAL>(1.2) / 1000;
 }
 
 _REAL CParameter::PartABLenRatio(const int iShortID)
@@ -513,9 +513,9 @@ _REAL CParameter::PartABLenRatio(const int iShortID)
 	const int iTotLen = iLenA + iLenB;
 
 	if (iTotLen != 0)
-		return (_REAL) iLenA / iTotLen;
+		return static_cast<_REAL>(iLenA) / iTotLen;
 	else
-		return (_REAL) 0.0;
+		return static_cast<_REAL>(0.0);
 }
 
 void CParameter::InitCellMapTable(const ERobMode eNewWaveMode,
@@ -930,8 +930,8 @@ _REAL CParameter::GetSysSNRdBPilPos() const
 	the pilots is higher than the data cells, the SNR is also higher at these
 	positions compared to the total SNR of the DRM signal.
 */
-	return (_REAL) 10.0 * log10(pow((_REAL) 10.0, rSysSimSNRdB / 10) /
-		CellMappingTable.rAvPowPerSymbol * CellMappingTable.rAvScatPilPow * (_REAL) CellMappingTable.iNumCarrier);
+	return static_cast<_REAL>(10.0) * log10(pow(static_cast<_REAL>(10.0), rSysSimSNRdB / 10) /
+		CellMappingTable.rAvPowPerSymbol * CellMappingTable.rAvScatPilPow * static_cast<_REAL>(CellMappingTable.iNumCarrier));
 }
 
 void
@@ -949,14 +949,14 @@ CParameter::GetSNR()
 _REAL CParameter::GetNominalSNRdB()
 {
 	/* Convert SNR from system bandwidth to nominal bandwidth */
-	return (_REAL) 10.0 * log10(pow((_REAL) 10.0, rSysSimSNRdB / 10) *
+	return static_cast<_REAL>(10.0) * log10(pow(static_cast<_REAL>(10.0), rSysSimSNRdB / 10) *
 		GetSysToNomBWCorrFact());
 }
 
 void CParameter::SetNominalSNRdB(const _REAL rSNRdBNominal)
 {
 	/* Convert SNR from nominal bandwidth to system bandwidth */
-	rSysSimSNRdB = (_REAL) 10.0 * log10(pow((_REAL) 10.0, rSNRdBNominal / 10) /
+	rSysSimSNRdB = static_cast<_REAL>(10.0) * log10(pow(static_cast<_REAL>(10.0), rSNRdBNominal / 10) /
 		GetSysToNomBWCorrFact());
 }
 
@@ -968,31 +968,31 @@ _REAL CParameter::GetNominalBandwidth()
 	switch (eSpectOccup)
 	{
 	case SO_0:
-		rNomBW = (_REAL) 4500.0; /* Hz */
+		rNomBW = static_cast<_REAL>(4500.0); /* Hz */
 		break;
 
 	case SO_1:
-		rNomBW = (_REAL) 5000.0; /* Hz */
+		rNomBW = static_cast<_REAL>(5000.0); /* Hz */
 		break;
 
 	case SO_2:
-		rNomBW = (_REAL) 9000.0; /* Hz */
+		rNomBW = static_cast<_REAL>(9000.0); /* Hz */
 		break;
 
 	case SO_3:
-		rNomBW = (_REAL) 10000.0; /* Hz */
+		rNomBW = static_cast<_REAL>(10000.0); /* Hz */
 		break;
 
 	case SO_4:
-		rNomBW = (_REAL) 18000.0; /* Hz */
+		rNomBW = static_cast<_REAL>(18000.0); /* Hz */
 		break;
 
 	case SO_5:
-		rNomBW = (_REAL) 20000.0; /* Hz */
+		rNomBW = static_cast<_REAL>(20000.0); /* Hz */
 		break;
 
 	default:
-		rNomBW = (_REAL) 10000.0; /* Hz */
+		rNomBW = static_cast<_REAL>(10000.0); /* Hz */
 		break;
 	}
 
@@ -1004,7 +1004,7 @@ _REAL CParameter::GetSysToNomBWCorrFact()
 	_REAL rNomBW = GetNominalBandwidth();
 
 	/* Calculate system bandwidth (N / T_u) */
-	const _REAL rSysBW = (_REAL) CellMappingTable.iNumCarrier / CellMappingTable.iFFTSizeN * SOUNDCRD_SAMPLE_RATE;
+	const _REAL rSysBW = static_cast<_REAL>(CellMappingTable.iNumCarrier) / CellMappingTable.iFFTSizeN * SOUNDCRD_SAMPLE_RATE;
 
 	return rSysBW / rNomBW;
 }
@@ -1068,22 +1068,22 @@ void CRxStatus::SetStatus(const ETypeRxStatus OK)
 void CParameter::GenerateRandomSerialNumber()
 {
 	//seed random number generator
-	srand((unsigned int)time(0));
+	srand(static_cast<unsigned int>(time(0)));
 
 	char randomChars[36];
 
 	for (size_t q=0; q < 36; q++)
 	{
 		if (q < 26)
-			randomChars[q] = char(q)+97;
+			randomChars[q] = static_cast<char>(q)+97;
 		else
-			randomChars[q] = (char(q)-26)+48;
+			randomChars[q] = (static_cast<char>(q)-26)+48;
 	}
 
 	char serialNumTemp[7];
 
 	for (size_t i=0; i < 6; i++)
-		serialNumTemp[i] = randomChars[(int) 35.0*rand()/RAND_MAX];
+		serialNumTemp[i] = randomChars[static_cast<int>(35.0)*rand()/RAND_MAX];
 
 	serialNumTemp[6] = '\0';
 
@@ -1162,14 +1162,14 @@ string CServiceDefinition::Frequency(size_t n) const
 	case 4:
 	case 5:
 		/* 'FM1 frequency' - 87.5 to 107.9 MHz (100 kHz steps) */
-		ss << 87.5 + 0.1 * float(iFrequency);
+		ss << 87.5 + 0.1 * static_cast<float>(iFrequency);
 		break;
 
 	case 6:
 	case 7:
 	case 8:
 		/* 'FM2 frequency'- 76.0 to 90.0 MHz (100 kHz steps) */
-		ss << 76.0 + 0.1 * float(iFrequency);
+		ss << 76.0 + 0.1 * static_cast<float>(iFrequency);
 		break;
 
 	case 9:
@@ -1189,11 +1189,11 @@ string CServiceDefinition::Frequency(size_t n) const
 			ss << "Band III+ channel " << (chan-3) << subchan;
 		} else if(128<= iFrequency && iFrequency <=143) {
 			char chan = iFrequency - 128;
-			double m = 1452.96+1.712*double(chan);
+			double m = 1452.96+1.712*static_cast<double>(chan);
 			ss << "European L-Band channel L" << ('A'+chan) << ", " << m << " MHz";
 		} else if(160<= iFrequency && iFrequency <=182) {
 			int chan = iFrequency - 159;
-            double m = 1451.072+1.744*double(chan);
+            double m = 1451.072+1.744*static_cast<double>(chan);
 			ss << "Canadian L-Band channel " << chan << ", " << m << " MHz";
 		} else {
 			ss << "unknown channel " << iFrequency;

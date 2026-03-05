@@ -171,7 +171,7 @@ enum ERobMode {RM_ROBUSTNESS_MODE_A, RM_ROBUSTNESS_MODE_B,
 
 
 /* Constants ---------------------------------------------------------------- */
-const _REAL crPi = ((_REAL) 3.14159265358979323846);
+const _REAL crPi = (static_cast<_REAL>(3.14159265358979323846));
 
 
 #define S9_DBUV 34.0 /* S9 in dBuV for converting HamLib S-meter readings to RSCI format */
@@ -199,7 +199,7 @@ public:
 class CEquSig
 {
 public:
-	CEquSig() : cSig(_COMPLEX((_REAL) 0.0, (_REAL) 0.0)), rChan((_REAL) 0.0) {}
+	CEquSig() : cSig(_COMPLEX(static_cast<_REAL>(0.0), static_cast<_REAL>(0.0))), rChan(static_cast<_REAL>(0.0)) {}
 	CEquSig(const _COMPLEX cNS, const _REAL rNC) : cSig(cNS), rChan(rNC) {}
 
 	_COMPLEX	cSig; /* Actual signal */
@@ -283,7 +283,7 @@ inline _SAMPLE Real2Sample(const _REAL rInput)
 	if (rInput > _MAXSHORT)
 		return _MAXSHORT;
 
-	return (_SAMPLE) rInput;
+	return static_cast<_SAMPLE>(rInput);
 }
 
 

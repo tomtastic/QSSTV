@@ -38,7 +38,7 @@ class ftp_downloadEvent : public  ftpBaseEvent
 {
 public:
   /** create event */
-  ftp_downloadEvent(QString tSource,QString tDestination,bool closeDone):ftpBaseEvent( (QEvent::Type) ftp_download)
+  ftp_downloadEvent(QString tSource,QString tDestination,bool closeDone):ftpBaseEvent( static_cast<QEvent::Type>(ftp_download))
   {
     description="ftp download";
     closeWhenDone=closeDone;
@@ -51,7 +51,7 @@ class ftp_uploadEvent : public  ftpBaseEvent
 {
 public:
   /** create event */
-  ftp_uploadEvent(QString tSource,QString tDestination,bool closeDone):ftpBaseEvent( (QEvent::Type) ftp_upload)
+  ftp_uploadEvent(QString tSource,QString tDestination,bool closeDone):ftpBaseEvent( static_cast<QEvent::Type>(ftp_upload))
   {
     description="ftp upload";
     closeWhenDone=closeDone;
@@ -64,7 +64,7 @@ class ftp_renameEvent : public  ftpBaseEvent
 {
 public:
   /** create event */
-  ftp_renameEvent(QString tSource,QString tDestination,bool closeDone):ftpBaseEvent( (QEvent::Type) ftp_rename)
+  ftp_renameEvent(QString tSource,QString tDestination,bool closeDone):ftpBaseEvent( static_cast<QEvent::Type>(ftp_rename))
   {
     description="ftp rename";
     closeWhenDone=closeDone;
@@ -79,7 +79,7 @@ class ftp_removeEvent : public  ftpBaseEvent
 {
 public:
   /** create event */
-  ftp_removeEvent(QString tSource,bool closeDone):ftpBaseEvent( (QEvent::Type) ftp_remove )
+  ftp_removeEvent(QString tSource,bool closeDone):ftpBaseEvent( static_cast<QEvent::Type>(ftp_remove) )
   {
     description="ftp remove";
     closeWhenDone=closeDone;
@@ -92,7 +92,7 @@ class ftp_listEvent : public  ftpBaseEvent
 {
 public:
   /** create event */
-  ftp_listEvent(QString tMask,bool closeDone):ftpBaseEvent( (QEvent::Type) ftp_list )
+  ftp_listEvent(QString tMask,bool closeDone):ftpBaseEvent( static_cast<QEvent::Type>(ftp_list) )
   {
     description="ftp list";
     closeWhenDone=closeDone;
@@ -106,7 +106,7 @@ class ftp_cdEvent : public  ftpBaseEvent
 {
 public:
   /** create event */
-  ftp_cdEvent(QString dir):ftpBaseEvent( (QEvent::Type) ftp_cd )
+  ftp_cdEvent(QString dir):ftpBaseEvent( static_cast<QEvent::Type>(ftp_cd) )
   {
     description="ftp cd";
     closeWhenDone=false;
@@ -120,7 +120,7 @@ class ftp_disconnectEvent : public  ftpBaseEvent
 {
 public:
   /** create event */
-  ftp_disconnectEvent():ftpBaseEvent( (QEvent::Type) ftp_disconnect)
+  ftp_disconnectEvent():ftpBaseEvent( static_cast<QEvent::Type>(ftp_disconnect))
   {
     description="ftp disconnect";
   }

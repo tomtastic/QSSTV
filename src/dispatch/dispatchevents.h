@@ -78,7 +78,7 @@ class infoEvent : public  baseEvent
 {
 public:
   /** create event */
-  infoEvent(QString t):baseEvent( (QEvent::Type) info ), str(t)
+  infoEvent(QString t):baseEvent( static_cast<QEvent::Type>(info) ), str(t)
   {
     description="infoEvent";
   }
@@ -95,7 +95,7 @@ class soundcardIdleEvent : public baseEvent
 {
 public:
   /** create event */
-  soundcardIdleEvent():baseEvent( (QEvent::Type) soundcardIdle )
+  soundcardIdleEvent():baseEvent( static_cast<QEvent::Type>(soundcardIdle) )
   {
     {
       description=" soudcardIdleEvent";
@@ -111,7 +111,7 @@ class displaySyncEvent : public baseEvent
 {
 public:
   /** create event */
-  displaySyncEvent(uint s):baseEvent( (QEvent::Type) displaySync), sync(s)
+  displaySyncEvent(uint s):baseEvent( static_cast<QEvent::Type>(displaySync)), sync(s)
   {
     description=" displaySyncEvent";
   }
@@ -127,7 +127,7 @@ class displayDRMStatEvent  : public baseEvent
 {
 public:
   /** create event */
-  displayDRMStatEvent(uint s):baseEvent( (QEvent::Type) displayDRMStat), snr(s)
+  displayDRMStatEvent(uint s):baseEvent( static_cast<QEvent::Type>(displayDRMStat)), snr(s)
   {
     description=" displayDRMStatEvent";
   }
@@ -144,7 +144,7 @@ class ftpSetupEvent : public baseEvent
 public:
   /** create event */
   ftpSetupEvent(ftpThread * ftpIntf,QString h,int p,QString u,QString pwd,QString d)
-    :baseEvent( (QEvent::Type)ftpSetup ),ftpIntfPtr(ftpIntf), host(h),port(p),user(u),password(pwd),dir(d)
+    :baseEvent( static_cast<QEvent::Type>(ftpSetup) ),ftpIntfPtr(ftpIntf), host(h),port(p),user(u),password(pwd),dir(d)
   {
     description="ftpSetupEvent";
   }
@@ -169,7 +169,7 @@ class ftpUploadFileEvent : public baseEvent
 public:
   /** create event */
   ftpUploadFileEvent(ftpThread * ftpIntf,QString srcFn,QString dstFn,bool recon)
-    :baseEvent( (QEvent::Type)ftpUploadFile ),ftpIntfPtr(ftpIntf),sourceFilename(srcFn), destFilename(dstFn),reconnect(recon)
+    :baseEvent( static_cast<QEvent::Type>(ftpUploadFile) ),ftpIntfPtr(ftpIntf),sourceFilename(srcFn), destFilename(dstFn),reconnect(recon)
   {
     description="ftpUploadFileEvent";
   }
@@ -213,7 +213,7 @@ class notifyCheckEvent : public baseEvent
 {
 public:
   /** create event */
-  notifyCheckEvent(QString fn):baseEvent( (QEvent::Type)notifyCheck),filename(fn)
+  notifyCheckEvent(QString fn):baseEvent( static_cast<QEvent::Type>(notifyCheck)),filename(fn)
   {
     description="notifyCheckEvent";
   }
@@ -228,7 +228,7 @@ class rxSSTVStatusEvent : public baseEvent
 {
 public:
   /** create event */
-  rxSSTVStatusEvent(QString t):baseEvent( (QEvent::Type)rxSSTVStatus ), str(t)
+  rxSSTVStatusEvent(QString t):baseEvent( static_cast<QEvent::Type>(rxSSTVStatus) ), str(t)
   {
     description="rxSSTVStatusEvent";
   }
@@ -242,7 +242,7 @@ class rxDRMStatusEvent : public baseEvent
 {
 public:
   /** create event */
-  rxDRMStatusEvent(QString t):baseEvent( (QEvent::Type)rxDRMStatus ), str(t)
+  rxDRMStatusEvent(QString t):baseEvent( static_cast<QEvent::Type>(rxDRMStatus) ), str(t)
   {
     description="rxDRMStatusEvent";
   }
@@ -258,7 +258,7 @@ class txDRMNotifyEvent : public baseEvent
 {
 public:
   /** create event */
-  txDRMNotifyEvent(QString t):baseEvent( (QEvent::Type)txDRMNotify ), str(t)
+  txDRMNotifyEvent(QString t):baseEvent( static_cast<QEvent::Type>(txDRMNotify) ), str(t)
   {
     description="txDRMNotifyEvent";
   }
@@ -272,7 +272,7 @@ class txDRMNotifyAppendEvent : public baseEvent
 {
 public:
   /** create event */
-  txDRMNotifyAppendEvent(QString t):baseEvent( (QEvent::Type)txDRMNotifyAppend ), str(t)
+  txDRMNotifyAppendEvent(QString t):baseEvent( static_cast<QEvent::Type>(txDRMNotifyAppend) ), str(t)
   {
     description="txDRMNotifyAppendEvent";
   }
@@ -286,7 +286,7 @@ class txPrepareCompleteEvent : public baseEvent
 {
 public:
   /** create event */
-  txPrepareCompleteEvent(bool tok):baseEvent( (QEvent::Type)txPrepareComplete ), _ok(tok)
+  txPrepareCompleteEvent(bool tok):baseEvent( static_cast<QEvent::Type>(txPrepareComplete) ), _ok(tok)
   {
     description="txPrepareCompleteEvent";
   }
@@ -300,7 +300,7 @@ class lineDisplayEvent : public baseEvent
 {
 public:
   /** create event */
-  lineDisplayEvent(uint lineNbr):baseEvent( (QEvent::Type)lineDisplay ), lineNumber(lineNbr)
+  lineDisplayEvent(uint lineNbr):baseEvent( static_cast<QEvent::Type>(lineDisplay) ), lineNumber(lineNbr)
   {
     description="lineDisplayEvent";
   }
@@ -315,7 +315,7 @@ class eraseDisplayEvent : public baseEvent
 {
 public:
   /** create event */
-  eraseDisplayEvent():baseEvent( (QEvent::Type)eraseDisp )
+  eraseDisplayEvent():baseEvent( static_cast<QEvent::Type>(eraseDisp) )
   {
     description="eraseDisplayEvent";
   }
@@ -327,7 +327,7 @@ class displayDRMInfoEvent : public baseEvent
 {
 public:
   /** create event */
-  displayDRMInfoEvent():baseEvent( (QEvent::Type)displayDRMInfo)
+  displayDRMInfoEvent():baseEvent( static_cast<QEvent::Type>(displayDRMInfo))
   {
     description="displayDRMInfo";
   }
@@ -358,7 +358,7 @@ class createModeEvent : public baseEvent
 {
 public:
   /** create event */
-  createModeEvent(uint m,QString t):baseEvent( (QEvent::Type)createMode ), mode(m) ,str(t)
+  createModeEvent(uint m,QString t):baseEvent( static_cast<QEvent::Type>(createMode) ), mode(m) ,str(t)
   {
     description="createModeEvent";
   }
@@ -372,7 +372,7 @@ private:
 class loadRXImageEvent : public baseEvent
 {
 public:
-  loadRXImageEvent(QString fn):baseEvent( (QEvent::Type)loadRXImage),fileName(fn)
+  loadRXImageEvent(QString fn):baseEvent( static_cast<QEvent::Type>(loadRXImage)),fileName(fn)
   {
     description="loadRXImageEvent";
   }
@@ -385,7 +385,7 @@ private:
 class moveToTxEvent : public baseEvent
 {
 public:
-  moveToTxEvent(QString fn):baseEvent( (QEvent::Type)moveToTx),fileName(fn)
+  moveToTxEvent(QString fn):baseEvent( static_cast<QEvent::Type>(moveToTx)),fileName(fn)
   {
     description="moveToTxEvent";
   }
@@ -399,7 +399,7 @@ private:
 class saveDRMImageEvent : public baseEvent
 {
 public:
-  saveDRMImageEvent(QString fn,QString i):baseEvent( (QEvent::Type)saveDRMImage),fileName(fn),info(i)
+  saveDRMImageEvent(QString fn,QString i):baseEvent( static_cast<QEvent::Type>(saveDRMImage)),fileName(fn),info(i)
   {
     description="saveDRMImageEvent";
   }
@@ -416,7 +416,7 @@ class startImageRXEvent : public baseEvent
 {
 public:
   /** create event */
-  startImageRXEvent(QSize ims):baseEvent( (QEvent::Type)startImageRX ),imSize(ims)
+  startImageRXEvent(QSize ims):baseEvent( static_cast<QEvent::Type>(startImageRX) ),imSize(ims)
   {
     description="startImageRXEvent";
   }
@@ -430,7 +430,7 @@ class endImageSSTVRXEvent : public baseEvent
 {
 public:
   /** create event */
-  endImageSSTVRXEvent(esstvMode md):baseEvent( (QEvent::Type)endSSTVImageRX ),mode(md)
+  endImageSSTVRXEvent(esstvMode md):baseEvent( static_cast<QEvent::Type>(endSSTVImageRX) ),mode(md)
   {
     description="endImageSSTVRXEvent";
   }
@@ -443,7 +443,7 @@ class endImageTXEvent : public baseEvent
 {
 public:
   /** create event */
-  endImageTXEvent():baseEvent( (QEvent::Type)endImageTX )
+  endImageTXEvent():baseEvent( static_cast<QEvent::Type>(endImageTX) )
   {
     description="endImageTXEvent";
   }
@@ -454,7 +454,7 @@ class stopTXEvent : public baseEvent
 {
 public:
   /** create event */
-  stopTXEvent():baseEvent( (QEvent::Type)stoppingTX )
+  stopTXEvent():baseEvent( static_cast<QEvent::Type>(stoppingTX) )
   {
     description="stopTXEvent";
   }
@@ -467,7 +467,7 @@ class outOfSyncEvent : public baseEvent
 {
 public:
   /** create event */
-  outOfSyncEvent():baseEvent( (QEvent::Type)outOfSync )
+  outOfSyncEvent():baseEvent( static_cast<QEvent::Type>(outOfSync) )
   {
     description="outOfSyncEvent";
   }
@@ -479,7 +479,7 @@ class progressTXEvent : public baseEvent
 {
 public:
   /** create event */
-  progressTXEvent(double tim):baseEvent( (QEvent::Type)progressTX ), txTime(tim)
+  progressTXEvent(double tim):baseEvent( static_cast<QEvent::Type>(progressTX) ), txTime(tim)
   {
     description="progressTXEvent";
   }
@@ -494,7 +494,7 @@ class closeWindowsEvent : public baseEvent
 {
 public:
   /** create event */
-  closeWindowsEvent():baseEvent( (QEvent::Type)closeWindows)
+  closeWindowsEvent():baseEvent( static_cast<QEvent::Type>(closeWindows))
   {
     description="closeWindowEvent";
   }
@@ -507,7 +507,7 @@ class callEditorEvent : public baseEvent
 {
 public:
   /** create event */
-  callEditorEvent(imageViewer *iv,QString fn):baseEvent( (QEvent::Type) callEditor ), filename(fn),imviewer(iv)
+  callEditorEvent(imageViewer *iv,QString fn):baseEvent( static_cast<QEvent::Type>(callEditor) ), filename(fn),imviewer(iv)
   {
     description="callEditorEvent";
   }
@@ -524,7 +524,7 @@ class templatesChangedEvent : public baseEvent
 {
 public:
   /** create event */
-  templatesChangedEvent():baseEvent( (QEvent::Type) templatesChanged )
+  templatesChangedEvent():baseEvent( static_cast<QEvent::Type>(templatesChanged) )
   {
     description="templateChangeEvent";
   }
@@ -534,7 +534,7 @@ class editorFinishedEvent : public baseEvent
 {
 public:
   /** create event */
-  editorFinishedEvent(bool b,QString fn):baseEvent( (QEvent::Type)editorFinished),ok(b),filename(fn)
+  editorFinishedEvent(bool b,QString fn):baseEvent( static_cast<QEvent::Type>(editorFinished)),ok(b),filename(fn)
   {
     description="editorFinishedEvent";
   }
@@ -552,7 +552,7 @@ class displayFFTEvent : public baseEvent
 {
 public:
   /** create event */
-  displayFFTEvent(DSPFLOAT *buf):baseEvent( (QEvent::Type)displayFFT),buffer(buf)
+  displayFFTEvent(DSPFLOAT *buf):baseEvent( static_cast<QEvent::Type>(displayFFT)),buffer(buf)
   {
     description="displayFFTEvent";
   }
@@ -566,7 +566,7 @@ class filterRXChangedEvent: public baseEvent
 {
 public:
   /** create event */
-  filterRXChangedEvent(int fIndex):baseEvent( (QEvent::Type)changeRXFilter),filterIndex(fIndex)
+  filterRXChangedEvent(int fIndex):baseEvent( static_cast<QEvent::Type>(changeRXFilter)),filterIndex(fIndex)
   {
     description="filterChangedEvent";
   }
@@ -579,7 +579,7 @@ class stopRxTxEvent : public baseEvent
 {
 public:
   /** create event */
-  stopRxTxEvent():baseEvent( (QEvent::Type)stopRxTx)
+  stopRxTxEvent():baseEvent( static_cast<QEvent::Type>(stopRxTx))
   {
     description="stopRxTxEvent";
   }
@@ -589,7 +589,7 @@ public:
 class prepareFixEvent: public baseEvent
 {
 public:
-  prepareFixEvent(QByteArray ba):baseEvent( (QEvent::Type)prepareFix),data(ba)
+  prepareFixEvent(QByteArray ba):baseEvent( static_cast<QEvent::Type>(prepareFix)),data(ba)
   {
     description="filterChangedEvent";
   }
@@ -606,7 +606,7 @@ class displayTextEvent : public  baseEvent
 {
 public:
   /** create event */
-  displayTextEvent(QString t):baseEvent( (QEvent::Type) displayText ), str(t)
+  displayTextEvent(QString t):baseEvent( static_cast<QEvent::Type>(displayText) ), str(t)
   {
     description="displayTextEvent";
   }
@@ -620,7 +620,7 @@ class displayMBoxEvent : public  baseEvent
 {
 public:
   /** create event */
-  displayMBoxEvent(QString title,QString text):baseEvent( (QEvent::Type) displayMBox ), str(text), title(title)
+  displayMBoxEvent(QString title,QString text):baseEvent( static_cast<QEvent::Type>(displayMBox) ), str(text), title(title)
   {
     description="displayMBoxEvent";
   }
@@ -638,7 +638,7 @@ class displayProgressFTPEvent : public  baseEvent
 {
 public:
   /** create event */
-  displayProgressFTPEvent(quint64 byts,quint64 tot):baseEvent( (QEvent::Type) displayProgressFTP ),  bytes(byts),total(tot)
+  displayProgressFTPEvent(quint64 byts,quint64 tot):baseEvent( static_cast<QEvent::Type>(displayProgressFTP) ),  bytes(byts),total(tot)
   {
     description="displayMBoxEvent";
   }
@@ -656,7 +656,7 @@ class statusBarMsgEvent : public baseEvent
 {
 public:
   /** create event */
-  statusBarMsgEvent(QString t):baseEvent( (QEvent::Type)statusBarMsg ), str(t)
+  statusBarMsgEvent(QString t):baseEvent( static_cast<QEvent::Type>(statusBarMsg) ), str(t)
   {
     description="statusBarMsgEvent";
   }

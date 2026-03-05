@@ -1,0 +1,8 @@
+2026-03-04T22:02:03.6090000Z Evaluating macos_build.if
+2026-03-04T22:02:03.6090000Z Evaluating: success()
+2026-03-04T22:02:03.6090000Z Result: true
+2026-03-04T22:02:03.8780000Z Requested labels: macos-26
+2026-03-04T22:02:03.8780000Z Job defined at: tomtastic/QSSTV/.github/workflows/macos-26.yml@refs/heads/main
+2026-03-04T22:02:03.8780000Z Waiting for a runner to pick up this job...
+2026-03-04T22:02:04.2440000Z Job is about to start running on the hosted runner: GitHub Actions 1000000262
+2026-03-04T22:02:04.2440000Z Job is waiting for a hosted runner to come online.

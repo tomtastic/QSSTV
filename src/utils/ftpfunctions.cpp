@@ -268,7 +268,7 @@ QList<QUrlInfo> ftpFunctions::getListing()
 void ftpFunctions::slotCommandsDone(int err,QString errStr)
 {
   displayMBoxEvent *stmb;
-  lastError=(eftpError) err;
+  lastError=static_cast<eftpError>(err);
   lastErrorStr=errStr;
   endOfCommands=true;
   addToLog("slotDone",LOGFTPFUNC);

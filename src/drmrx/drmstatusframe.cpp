@@ -230,9 +230,9 @@ void drmStatusFrame::setStatus()
       prevWMERFAC=tempWMERFAC;
       ui->snrEdit->setText(QString::number(prevWMERFAC)+" dB");
     }
-  if(prevFreqOff!=((int)round(freqOffset-350)))
+  if(prevFreqOff!=(static_cast<int>(round(freqOffset-350))))
     {
-      prevFreqOff=((int)round(freqOffset-350));
+      prevFreqOff=(static_cast<int>(round(freqOffset-350)));
       ui->offsetEdit->setText(QString::number(prevFreqOff)+" Hz");
     }
   if(prevBodyTotalSegments!=bodyTotalSegments)

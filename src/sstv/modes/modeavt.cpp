@@ -252,7 +252,7 @@ void modeAVT::calcPixelPositionTable(unsigned int colorLine,bool tx)
 		}
   for(i=0;i<activeSSTVParam->numberOfPixels;i++)
 		{
-      pixelPositionTable[i]=(unsigned int)round(start+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
+      pixelPositionTable[i]=static_cast<unsigned int>(round(start+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels)));
 		}
 }
 
@@ -267,7 +267,7 @@ modeBase::embState modeAVT::txSetupLine()
 				return MBPIXELS;
 			case 1:
 				txFreq=1500.;
-				txDur=(unsigned int)rint(blank);
+				txDur=static_cast<unsigned int>(rint(blank));
 				return MBTXGAP;
 			case 2:
 				calcPixelPositionTable(BLUELINE,true);
@@ -275,7 +275,7 @@ modeBase::embState modeAVT::txSetupLine()
 				return MBPIXELS;
 			case 3:
 				txFreq=1500.;
-				txDur=(unsigned int)rint(blank);
+				txDur=static_cast<unsigned int>(rint(blank));
 				return MBTXGAP;
 			case 4:
 				calcPixelPositionTable(REDLINE,true);
@@ -283,11 +283,11 @@ modeBase::embState modeAVT::txSetupLine()
 				return MBPIXELS;
 			case 5:
 				txFreq=1500;
-				txDur=(unsigned int)rint(fp);
+				txDur=static_cast<unsigned int>(rint(fp));
 				return MBTXGAP;
 			case 6:
         txFreq=syncFreq;
-				txDur=(unsigned int)rint(syncDuration);
+				txDur=static_cast<unsigned int>(rint(syncDuration));
 				return MBTXGAP;
 			default:
 				return MBENDOFLINE;

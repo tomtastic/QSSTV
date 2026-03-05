@@ -500,7 +500,7 @@ void visDecoder::extractNarrow()
                           validCode=true;
                           if((mode=lookupVIS(symbol))!=NOTVALID)
                             {
-                              emit visCodeNarrowDetected((int)mode,syncSampleCounter+i);
+                              emit visCodeNarrowDetected(static_cast<int>(mode),syncSampleCounter+i);
                             }
                         }
                      switchState(VISINIT,i);
@@ -608,7 +608,7 @@ void visDecoder::extractWide()
                   if((mode=lookupVIS(symbol))!=NOTVALID)
                     {
 //                      emit visCodeWideDetected((int)mode,syncSampleCounter+i-VISBITWIDE/2);
-                      emit visCodeWideDetected((int)mode,syncSampleCounter+i);
+                      emit visCodeWideDetected(static_cast<int>(mode),syncSampleCounter+i);
                     }
 
                   switchState(VISINIT,i);
@@ -660,7 +660,7 @@ void streamDecoder::process(quint16 *freqPtr , unsigned int syncSampleCtr)
   int i;
   for(i=0;i<RXSTRIPE;i++)
     {
-      avgFreq=avgFreq*(1-FREQAVG)+FREQAVG*(DSPFLOAT)freqPtr[i];
+      avgFreq=avgFreq*(1-FREQAVG)+FREQAVG*static_cast<DSPFLOAT>(freqPtr[i]);
       avgBuffer[i]=avgFreq;
     }
 

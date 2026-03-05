@@ -41,9 +41,9 @@ void fftDisplay::init(int length,int nblocks,int isamplingrate)
   samplingrate=isamplingrate;
   if(fftArray) delete fftArray;
   if(arMagSAvg) delete [] arMagSAvg;
-  step=(double)samplingrate/(double)fftLength;  //freq step per bin
-  binBegin=(int) rint(FFTLOW/step);
-  binEnd  =(int) rint(FFTHIGH/step);
+  step=static_cast<double>(samplingrate)/static_cast<double>(fftLength);  //freq step per bin
+  binBegin=static_cast<int>(rint(FFTLOW/step));
+  binEnd  =static_cast<int>(rint(FFTHIGH/step));
   binDiff=binEnd-binBegin;
   fftArray=new QPolygon(binDiff);
   arMagSAvg=new double[binDiff];
@@ -121,7 +121,7 @@ void fftDisplay::showFFT(double *fftData)
           tmp=(fftMax-arMagSAvg[j])/range;
           if(tmp<0) tmp=0;
           if (tmp>1)tmp=1;
-          int pos=(int)rint(static_cast<double>(j*(imWidth-1))/(double)binDiff);
+          int pos=static_cast<int>(rint(static_cast<double>(j*(imWidth-1))/static_cast<double>(binDiff)));
           fftArray->setPoint(j,pos,(imHeight-1)*tmp); // range 0 -> -1
         }
     }

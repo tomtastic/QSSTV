@@ -176,7 +176,7 @@ void filter::processFIRInt(FILTERPARAMTYPE *dataPtr, quint16 *dataOutputPtr)
 
           resI+=sampleBufferIPtr[fi+i]*(*cf1);
         }
-      dataOutputPtr[k]=(quint16)rint(resI/gain);
+      dataOutputPtr[k]=static_cast<quint16>(rint(resI/gain));
     }
 }
 

@@ -170,7 +170,7 @@ template<class TData> void CVector<TData>::Enqueue(uint32_t iInformation,
 	for (int i = 0; i < iNumOfBits; i++)
 	{
 		/* We want to put the bits on the array with the MSB first */
-		operator[](iBitArrayCounter + iNumOfBits - i - 1) = _BINARY(iInformation & 1);
+		operator[](iBitArrayCounter + iNumOfBits - i - 1) = static_cast<_BINARY>(iInformation & 1);
 
 		/* Shift one bit to mask next bit at LSB-position */
 		iInformation >>= 1;

@@ -67,7 +67,7 @@ static QString cwString;
 void initCW(QString cwTxt)
 { 
   cwState=CWNEW;
-  dotSpacing=1.2/(float)cwWPM;
+  dotSpacing=1.2/static_cast<float>(cwWPM);
   cwString=cwTxt;
 }
 
@@ -162,7 +162,7 @@ bool sendTextCW(float &tone,float &duration)
           {
             if(nextSymbolCW(duration))
               {
-                tone=(float)cwTone;
+                tone=static_cast<float>(cwTone);
                 cwState=CWDOTSPACING;
                 result=CWtrue;
               }

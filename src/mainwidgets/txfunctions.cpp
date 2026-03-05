@@ -516,7 +516,7 @@ void txFunctions:: sendFSKID()
   sendFSKChar(IDChar);
 
   QChar IDText=	QChar(myCallsign[idx]);
-  IDChar=int(IDText.toLatin1());
+  IDChar=static_cast<int>(IDText.toLatin1());
 
   IDChar = (IDChar - 0x20);
   Checksum = IDChar;
@@ -529,7 +529,7 @@ void txFunctions:: sendFSKID()
       if (idx < l)
         {
           QChar IDText=QChar(myCallsign[idx].toUpper());
-          IDChar=int(IDText.toLatin1());
+          IDChar=static_cast<int>(IDText.toLatin1());
           IDChar = (IDChar - 0x20);
           Checksum = Checksum ^ IDChar;
         }
@@ -565,7 +565,7 @@ bool txFunctions::prepareFIX(QByteArray bsrByteArray)
   fixForm fx(mainWindowPtr);
   trID=drmTxPtr->processFIX(bsrByteArray);
   if(trID<0)  return false;
-  sessionPtr=drmTxPtr->getSessionPtr((uint)trID);
+  sessionPtr=drmTxPtr->getSessionPtr(static_cast<uint>(trID));
   if (sessionPtr==nullptr)
     {
       stce= new displayMBoxEvent("BSR Received","This BSR is not for you");

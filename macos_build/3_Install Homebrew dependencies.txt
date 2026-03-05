@@ -1,0 +1,361 @@
+﻿2026-03-04T22:02:09.6148530Z ##[group]Run env HOMEBREW_NO_AUTO_UPDATE=1 brew install fftw hamlib openjpeg qt pulseaudio
+2026-03-04T22:02:09.6150580Z [36;1menv HOMEBREW_NO_AUTO_UPDATE=1 brew install fftw hamlib openjpeg qt pulseaudio[0m
+2026-03-04T22:02:09.6188460Z shell: /bin/bash -e {0}
+2026-03-04T22:02:09.6189220Z ##[endgroup]
+2026-03-04T22:02:14.1994750Z [32m==>[0m [1mFetching downloads for: [32mfftw[39m, [32mhamlib[39m, [32mopenjpeg[39m, [32mqt[39m and [32mpulseaudio[39m[0m
+2026-03-04T22:02:14.6388610Z ✔︎ Bottle Manifest fftw (3.3.10_3)
+2026-03-04T22:02:14.6389900Z ✔︎ Bottle Manifest openjpeg (2.5.4)
+2026-03-04T22:02:14.7622770Z ✔︎ Bottle Manifest qt (6.10.2)
+2026-03-04T22:02:14.7626740Z ✔︎ Bottle Manifest pulseaudio (17.0)
+2026-03-04T22:02:15.5905690Z ✔︎ Bottle Manifest hamlib (4.7.0)
+2026-03-04T22:02:30.0835160Z ✔︎ Bottle Manifest libomp (22.1.0)
+2026-03-04T22:02:30.0936720Z ✔︎ Bottle libomp (22.1.0)
+2026-03-04T22:02:30.1027020Z ✔︎ Bottle fftw (3.3.10_3)
+2026-03-04T22:02:30.1053960Z ✔︎ Bottle Manifest m4 (1.4.21)
+2026-03-04T22:02:30.1106330Z ✔︎ Bottle m4 (1.4.21)
+2026-03-04T22:02:30.1129520Z ✔︎ Bottle Manifest libtool (2.5.4)
+2026-03-04T22:02:30.1131180Z ✔︎ Bottle libtool (2.5.4)
+2026-03-04T22:02:30.1132730Z ✔︎ Bottle Manifest libusb-compat (0.1.8)
+2026-03-04T22:02:30.1137990Z ✔︎ Bottle libusb-compat (0.1.8)
+2026-03-04T22:02:30.1174660Z ✔︎ Bottle hamlib (4.7.0)
+2026-03-04T22:02:30.1178690Z ✔︎ Bottle openjpeg (2.5.4)
+2026-03-04T22:02:30.1207940Z ✔︎ Bottle Manifest assimp (6.0.4_1)
+2026-03-04T22:02:30.1310840Z ✔︎ Bottle assimp (6.0.4_1)
+2026-03-04T22:02:30.1419510Z ✔︎ Bottle Manifest dbus (1.16.2_1)
+2026-03-04T22:02:30.1504730Z ✔︎ Bottle dbus (1.16.2_1)
+2026-03-04T22:02:30.1542020Z ✔︎ Bottle Manifest double-conversion (3.4.0)
+2026-03-04T22:02:30.1600550Z ✔︎ Bottle double-conversion (3.4.0)
+2026-03-04T22:02:30.1710430Z ✔︎ Bottle Manifest libb2 (0.98.1)
+2026-03-04T22:02:30.1819520Z ✔︎ Bottle libb2 (0.98.1)
+2026-03-04T22:02:30.1929020Z ✔︎ Bottle Manifest md4c (0.5.2)
+2026-03-04T22:02:30.2033510Z ✔︎ Bottle md4c (0.5.2)
+2026-03-04T22:02:30.2138980Z ✔︎ Bottle Manifest qtbase (6.10.2)
+2026-03-04T22:02:30.2256580Z ✔︎ Bottle qtbase (6.10.2)
+2026-03-04T22:02:30.2373560Z ✔︎ Bottle Manifest qtsvg (6.10.2)
+2026-03-04T22:02:30.2542510Z ✔︎ Bottle qtsvg (6.10.2)
+2026-03-04T22:02:30.2664510Z ✔︎ Bottle Manifest qtdeclarative (6.10.2)
+2026-03-04T22:02:30.2792930Z ✔︎ Bottle qtdeclarative (6.10.2)
+2026-03-04T22:02:30.2939190Z ✔︎ Bottle Manifest qtshadertools (6.10.2)
+2026-03-04T22:02:30.3109600Z ✔︎ Bottle qtshadertools (6.10.2)
+2026-03-04T22:02:30.3252440Z ✔︎ Bottle Manifest qt3d (6.10.2)
+2026-03-04T22:02:30.3379090Z ✔︎ Bottle qt3d (6.10.2)
+2026-03-04T22:02:30.3489360Z ✔︎ Bottle Manifest qt5compat (6.10.2)
+2026-03-04T22:02:30.3591240Z ✔︎ Bottle qt5compat (6.10.2)
+2026-03-04T22:02:30.3655140Z ✔︎ Bottle Manifest qtcharts (6.10.2)
+2026-03-04T22:02:30.3655820Z ✔︎ Bottle qtcharts (6.10.2)
+2026-03-04T22:02:30.3656170Z ✔︎ Bottle Manifest qtconnectivity (6.10.2)
+2026-03-04T22:02:30.3656540Z ✔︎ Bottle qtconnectivity (6.10.2)
+2026-03-04T22:02:30.3656860Z ✔︎ Bottle Manifest qtdatavis3d (6.10.2)
+2026-03-04T22:02:30.3657240Z ✔︎ Bottle qtdatavis3d (6.10.2)
+2026-03-04T22:02:30.3657730Z ✔︎ Bottle Manifest qtquicktimeline (6.10.2)
+2026-03-04T22:02:30.3658080Z ✔︎ Bottle qtquicktimeline (6.10.2)
+2026-03-04T22:02:30.3658430Z ✔︎ Bottle Manifest qtquick3d (6.10.2)
+2026-03-04T22:02:30.3658750Z ✔︎ Bottle qtquick3d (6.10.2)
+2026-03-04T22:02:30.3659050Z ✔︎ Bottle Manifest qtgraphs (6.10.2)
+2026-03-04T22:02:30.3659350Z ✔︎ Bottle qtgraphs (6.10.2)
+2026-03-04T22:02:30.3659670Z ✔︎ Bottle Manifest abseil (20260107.1)
+2026-03-04T22:02:30.3659990Z ✔︎ Bottle abseil (20260107.1)
+2026-03-04T22:02:30.3660530Z ✔︎ Bottle Manifest protobuf (34.0)
+2026-03-04T22:02:30.3660860Z ✔︎ Bottle protobuf (34.0)
+2026-03-04T22:02:30.3661120Z ✔︎ Bottle Manifest qtgrpc (6.10.2_1)
+2026-03-04T22:02:30.3661380Z ✔︎ Bottle qtgrpc (6.10.2_1)
+2026-03-04T22:02:30.3661640Z ✔︎ Bottle Manifest qtwebsockets (6.10.2)
+2026-03-04T22:02:30.3661890Z ✔︎ Bottle qtwebsockets (6.10.2)
+2026-03-04T22:02:30.3662110Z ✔︎ Bottle Manifest qthttpserver (6.10.2)
+2026-03-04T22:02:30.3662980Z ✔︎ Bottle qthttpserver (6.10.2)
+2026-03-04T22:02:30.3663200Z ✔︎ Bottle Manifest jasper (4.2.8)
+2026-03-04T22:02:30.3663420Z ✔︎ Bottle jasper (4.2.8)
+2026-03-04T22:02:30.3663640Z ✔︎ Bottle Manifest libmng (2.0.3_1)
+2026-03-04T22:02:30.3663850Z ✔︎ Bottle libmng (2.0.3_1)
+2026-03-04T22:02:30.3664060Z ✔︎ Bottle Manifest webp (1.6.0)
+2026-03-04T22:02:30.3664250Z ✔︎ Bottle webp (1.6.0)
+2026-03-04T22:02:30.3664560Z ✔︎ Bottle Manifest qtimageformats (6.10.2)
+2026-03-04T22:02:30.3664800Z ✔︎ Bottle qtimageformats (6.10.2)
+2026-03-04T22:02:30.3665040Z ✔︎ Bottle Manifest qtlanguageserver (6.10.2)
+2026-03-04T22:02:30.3665280Z ✔︎ Bottle qtlanguageserver (6.10.2)
+2026-03-04T22:02:30.3665540Z ✔︎ Bottle Manifest qtserialport (6.10.2)
+2026-03-04T22:02:30.3665780Z ✔︎ Bottle qtserialport (6.10.2)
+2026-03-04T22:02:30.3666040Z ✔︎ Bottle Manifest qtpositioning (6.10.2)
+2026-03-04T22:02:30.3666310Z ✔︎ Bottle qtpositioning (6.10.2)
+2026-03-04T22:02:30.3666530Z ✔︎ Bottle Manifest qtlocation (6.10.2)
+2026-03-04T22:02:30.3666870Z ✔︎ Bottle qtlocation (6.10.2)
+2026-03-04T22:02:30.3667090Z ✔︎ Bottle Manifest qtlottie (6.10.2)
+2026-03-04T22:02:30.3667330Z ✔︎ Bottle qtlottie (6.10.2)
+2026-03-04T22:02:30.3667530Z ✔︎ Bottle Manifest qtmultimedia (6.10.2)
+2026-03-04T22:02:30.3667760Z ✔︎ Bottle qtmultimedia (6.10.2)
+2026-03-04T22:02:30.3667980Z ✔︎ Bottle Manifest qtnetworkauth (6.10.2)
+2026-03-04T22:02:30.3668230Z ✔︎ Bottle qtnetworkauth (6.10.2)
+2026-03-04T22:02:30.3668460Z ✔︎ Bottle Manifest qtquick3dphysics (6.10.2)
+2026-03-04T22:02:30.3668700Z ✔︎ Bottle qtquick3dphysics (6.10.2)
+2026-03-04T22:02:30.3668990Z ✔︎ Bottle Manifest qtquickeffectmaker (6.10.2)
+2026-03-04T22:02:30.3669240Z ✔︎ Bottle qtquickeffectmaker (6.10.2)
+2026-03-04T22:02:30.3669480Z ✔︎ Bottle Manifest qtremoteobjects (6.10.2)
+2026-03-04T22:02:30.3669960Z ✔︎ Bottle qtremoteobjects (6.10.2)
+2026-03-04T22:02:30.3670210Z ✔︎ Bottle Manifest qtscxml (6.10.2)
+2026-03-04T22:02:30.3670430Z ✔︎ Bottle qtscxml (6.10.2)
+2026-03-04T22:02:30.3670660Z ✔︎ Bottle Manifest qtsensors (6.10.2)
+2026-03-04T22:02:30.3670900Z ✔︎ Bottle qtsensors (6.10.2)
+2026-03-04T22:02:30.3671110Z ✔︎ Bottle Manifest qtserialbus (6.10.2)
+2026-03-04T22:02:30.3671340Z ✔︎ Bottle qtserialbus (6.10.2)
+2026-03-04T22:02:30.3671620Z ✔︎ Bottle Manifest qtspeech (6.10.2)
+2026-03-04T22:02:30.3671850Z ✔︎ Bottle qtspeech (6.10.2)
+2026-03-04T22:02:30.3672070Z ✔︎ Bottle Manifest gumbo-parser (0.13.2)
+2026-03-04T22:02:30.3672500Z ✔︎ Bottle gumbo-parser (0.13.2)
+2026-03-04T22:02:30.3672720Z ✔︎ Bottle Manifest litehtml (0.9)
+2026-03-04T22:02:30.3672940Z ✔︎ Bottle litehtml (0.9)
+2026-03-04T22:02:30.3673140Z ✔︎ Bottle Manifest qttools (6.10.2)
+2026-03-04T22:02:30.3673350Z ✔︎ Bottle qttools (6.10.2)
+2026-03-04T22:02:30.3673580Z ✔︎ Bottle Manifest qttranslations (6.10.2)
+2026-03-04T22:02:30.3674210Z ✔︎ Bottle qttranslations (6.10.2)
+2026-03-04T22:02:30.3674440Z ✔︎ Bottle Manifest hunspell (1.7.2)
+2026-03-04T22:02:30.3674650Z ✔︎ Bottle hunspell (1.7.2)
+2026-03-04T22:02:30.3674890Z ✔︎ Bottle Manifest qtvirtualkeyboard (6.10.2)
+2026-03-04T22:02:30.3675160Z ✔︎ Bottle qtvirtualkeyboard (6.10.2)
+2026-03-04T22:02:30.3675390Z ✔︎ Bottle Manifest qtwebchannel (6.10.2)
+2026-03-04T22:02:30.3675630Z ✔︎ Bottle qtwebchannel (6.10.2)
+2026-03-04T22:02:30.3675870Z ✔︎ Bottle Manifest qtwebengine (6.10.2)
+2026-03-04T22:02:30.3676100Z ✔︎ Bottle Manifest qtwebview (6.10.2)
+2026-03-04T22:02:30.3676320Z ✔︎ Bottle Manifest libogg (1.3.6)
+2026-03-04T22:02:30.3676570Z ✔︎ Bottle Manifest flac (1.5.0)
+2026-03-04T22:02:30.4681870Z ✔︎ Bottle qtwebview (6.10.2)
+2026-03-04T22:02:30.4811510Z ✔︎ Bottle qt (6.10.2)
+2026-03-04T22:02:30.5410930Z ✔︎ Bottle libogg (1.3.6)
+2026-03-04T22:02:30.7559310Z ✔︎ Bottle Manifest lame (3.100)
+2026-03-04T22:02:30.8363810Z ✔︎ Bottle flac (1.5.0)
+2026-03-04T22:02:30.8433540Z ✔︎ Bottle Manifest libvorbis (1.3.7)
+2026-03-04T22:02:30.9489150Z ✔︎ Bottle lame (3.100)
+2026-03-04T22:02:30.9590610Z ✔︎ Bottle Manifest mpg123 (1.33.4)
+2026-03-04T22:02:31.0225410Z ✔︎ Bottle libvorbis (1.3.7)
+2026-03-04T22:02:31.1466940Z ✔︎ Bottle Manifest opus (1.6.1)
+2026-03-04T22:02:31.1974340Z ✔︎ Bottle mpg123 (1.33.4)
+2026-03-04T22:02:31.2024230Z ✔︎ Bottle Manifest libsndfile (1.2.2_1)
+2026-03-04T22:02:31.3085820Z ✔︎ Bottle Manifest libsoxr (0.1.3)
+2026-03-04T22:02:31.4260170Z ✔︎ Bottle opus (1.6.1)
+2026-03-04T22:02:31.4275220Z ✔︎ Bottle libsndfile (1.2.2_1)
+2026-03-04T22:02:31.4989930Z ✔︎ Bottle Manifest orc (0.4.42)
+2026-03-04T22:02:31.5781080Z ✔︎ Bottle libsoxr (0.1.3)
+2026-03-04T22:02:31.5781450Z ✔︎ Bottle Manifest speexdsp (1.2.1)
+2026-03-04T22:02:31.7027070Z ✔︎ Bottle orc (0.4.42)
+2026-03-04T22:02:31.8066560Z ✔︎ Bottle speexdsp (1.2.1)
+2026-03-04T22:02:31.9879430Z ✔︎ Bottle pulseaudio (17.0)
+2026-03-04T22:02:32.1026620Z ✔︎ Bottle qtwebengine (6.10.2)
+2026-03-04T22:02:32.2330350Z [32m==>[0m [1mInstalling fftw dependency: [32mlibomp[39m[0m
+2026-03-04T22:02:32.2375450Z [34m==>[0m [1mPouring libomp--22.1.0.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:02:33.5371060Z 🍺  /opt/homebrew/Cellar/libomp/22.1.0: 11 files, 1.8MB
+2026-03-04T22:02:33.5376270Z [34m==>[0m [1mPouring fftw--3.3.10_3.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:02:35.5247220Z 🍺  /opt/homebrew/Cellar/fftw/3.3.10_3: 74 files, 9MB
+2026-03-04T22:02:35.5415310Z [32m==>[0m [1mInstalling dependencies for hamlib: [32mm4[39m, [32mlibtool[39m and [32mlibusb-compat[39m[0m
+2026-03-04T22:02:35.5434790Z [32m==>[0m [1mInstalling hamlib dependency: [32mm4[39m[0m
+2026-03-04T22:02:35.5448850Z [34m==>[0m [1mPouring m4--1.4.21.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:02:36.4576740Z 🍺  /opt/homebrew/Cellar/m4/1.4.21: 14 files, 817KB
+2026-03-04T22:02:36.4582440Z [32m==>[0m [1mInstalling hamlib dependency: [32mlibtool[39m[0m
+2026-03-04T22:02:36.4644000Z [34m==>[0m [1mPouring libtool--2.5.4.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:02:37.5434870Z 🍺  /opt/homebrew/Cellar/libtool/2.5.4: 76 files, 4.1MB
+2026-03-04T22:02:37.5439920Z [32m==>[0m [1mInstalling hamlib dependency: [32mlibusb-compat[39m[0m
+2026-03-04T22:02:37.5574780Z [34m==>[0m [1mPouring libusb-compat--0.1.8.arm64_tahoe.bottle.1.tar.gz[0m
+2026-03-04T22:02:38.6982910Z 🍺  /opt/homebrew/Cellar/libusb-compat/0.1.8: 14 files, 121.3KB
+2026-03-04T22:02:38.7003050Z [32m==>[0m [1mInstalling [32mhamlib[39m[0m
+2026-03-04T22:02:38.7004110Z [34m==>[0m [1mPouring hamlib--4.7.0.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:02:40.8437330Z 🍺  /opt/homebrew/Cellar/hamlib/4.7.0: 74 files, 28.4MB
+2026-03-04T22:02:40.8728000Z [34m==>[0m [1mPouring openjpeg--2.5.4.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:02:42.3118760Z 🍺  /opt/homebrew/Cellar/openjpeg/2.5.4: 512 files, 14.7MB
+2026-03-04T22:02:42.6676120Z [32m==>[0m [1mInstalling dependencies for qt: [32massimp[39m, [32mdbus[39m, [32mdouble-conversion[39m, [32mlibb2[39m, [32mmd4c[39m, [32mqtbase[39m, [32mqtsvg[39m, [32mqtdeclarative[39m, [32mqtshadertools[39m, [32mqt3d[39m, [32mqt5compat[39m, [32mqtcharts[39m, [32mqtconnectivity[39m, [32mqtdatavis3d[39m, [32mqtquicktimeline[39m, [32mqtquick3d[39m, [32mqtgraphs[39m, [32mabseil[39m, [32mprotobuf[39m, [32mqtgrpc[39m, [32mqtwebsockets[39m, [32mqthttpserver[39m, [32mjasper[39m, [32mlibmng[39m, [32mwebp[39m, [32mqtimageformats[39m, [32mqtlanguageserver[39m, [32mqtserialport[39m, [32mqtpositioning[39m, [32mqtlocation[39m, [32mqtlottie[39m, [32mqtmultimedia[39m, [32mqtnetworkauth[39m, [32mqtquick3dphysics[39m, [32mqtquickeffectmaker[39m, [32mqtremoteobjects[39m, [32mqtscxml[39m, [32mqtsensors[39m, [32mqtserialbus[39m, [32mqtspeech[39m, [32mgumbo-parser[39m, [32mlitehtml[39m, [32mqttools[39m, [32mqttranslations[39m, [32mhunspell[39m, [32mqtvirtualkeyboard[39m, [32mqtwebchannel[39m, [32mqtwebengine[39m and [32mqtwebview[39m[0m
+2026-03-04T22:02:42.6722070Z [32m==>[0m [1mInstalling qt dependency: [32massimp[39m[0m
+2026-03-04T22:02:42.6748960Z [34m==>[0m [1mPouring assimp--6.0.4_1.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:02:43.9541480Z 🍺  /opt/homebrew/Cellar/assimp/6.0.4_1: 104 files, 10.9MB
+2026-03-04T22:02:43.9549070Z [32m==>[0m [1mInstalling qt dependency: [32mdbus[39m[0m
+2026-03-04T22:02:43.9672100Z [34m==>[0m [1mPouring dbus--1.16.2_1.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:02:45.6678790Z [34m==>[0m [1m/opt/homebrew/Cellar/dbus/1.16.2_1/bin/dbus-uuidgen --ensure=/opt/homebrew/v[0m
+2026-03-04T22:02:45.9583220Z 🍺  /opt/homebrew/Cellar/dbus/1.16.2_1: 79 files, 2.2MB
+2026-03-04T22:02:45.9588640Z [32m==>[0m [1mInstalling qt dependency: [32mdouble-conversion[39m[0m
+2026-03-04T22:02:45.9613720Z [34m==>[0m [1mPouring double-conversion--3.4.0.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:02:47.0431880Z 🍺  /opt/homebrew/Cellar/double-conversion/3.4.0: 29 files, 275.2KB
+2026-03-04T22:02:47.0438370Z [32m==>[0m [1mInstalling qt dependency: [32mlibb2[39m[0m
+2026-03-04T22:02:47.0454000Z [34m==>[0m [1mPouring libb2--0.98.1.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:02:48.1782670Z 🍺  /opt/homebrew/Cellar/libb2/0.98.1: 9 files, 131.6KB
+2026-03-04T22:02:48.1789050Z [32m==>[0m [1mInstalling qt dependency: [32mmd4c[39m[0m
+2026-03-04T22:02:48.1812820Z [34m==>[0m [1mPouring md4c--0.5.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:02:49.2528480Z 🍺  /opt/homebrew/Cellar/md4c/0.5.2: 20 files, 308.5KB
+2026-03-04T22:02:49.2537750Z [32m==>[0m [1mInstalling qt dependency: [32mqtbase[39m[0m
+2026-03-04T22:02:49.4984670Z [34m==>[0m [1mPouring qtbase--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:02:53.0821060Z 🍺  /opt/homebrew/Cellar/qtbase/6.10.2: 4,106 files, 63.3MB
+2026-03-04T22:02:53.0830030Z [32m==>[0m [1mInstalling qt dependency: [32mqtsvg[39m[0m
+2026-03-04T22:02:53.3695510Z [34m==>[0m [1mPouring qtsvg--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:02:54.8523140Z 🍺  /opt/homebrew/Cellar/qtsvg/6.10.2: 108 files, 1.2MB
+2026-03-04T22:02:54.8529770Z [32m==>[0m [1mInstalling qt dependency: [32mqtdeclarative[39m[0m
+2026-03-04T22:02:55.1267610Z [34m==>[0m [1mPouring qtdeclarative--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:07.9999730Z 🍺  /opt/homebrew/Cellar/qtdeclarative/6.10.2: 5,071 files, 136.5MB
+2026-03-04T22:03:08.0005180Z [32m==>[0m [1mInstalling qt dependency: [32mqtshadertools[39m[0m
+2026-03-04T22:03:08.2467960Z [34m==>[0m [1mPouring qtshadertools--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:09.4456720Z 🍺  /opt/homebrew/Cellar/qtshadertools/6.10.2: 56 files, 6.0MB
+2026-03-04T22:03:09.4464260Z [32m==>[0m [1mInstalling qt dependency: [32mqt3d[39m[0m
+2026-03-04T22:03:09.7497010Z [34m==>[0m [1mPouring qt3d--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:14.0483350Z 🍺  /opt/homebrew/Cellar/qt3d/6.10.2: 1,657 files, 18.7MB
+2026-03-04T22:03:14.0487870Z [32m==>[0m [1mInstalling qt dependency: [32mqt5compat[39m[0m
+2026-03-04T22:03:14.3794970Z [34m==>[0m [1mPouring qt5compat--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:15.8456630Z 🍺  /opt/homebrew/Cellar/qt5compat/6.10.2: 136 files, 3.3MB
+2026-03-04T22:03:15.8462130Z [32m==>[0m [1mInstalling qt dependency: [32mqtcharts[39m[0m
+2026-03-04T22:03:16.1890110Z [34m==>[0m [1mPouring qtcharts--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:17.7589430Z 🍺  /opt/homebrew/Cellar/qtcharts/6.10.2: 410 files, 5MB
+2026-03-04T22:03:17.7596870Z [32m==>[0m [1mInstalling qt dependency: [32mqtconnectivity[39m[0m
+2026-03-04T22:03:18.0835940Z [34m==>[0m [1mPouring qtconnectivity--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:19.5016170Z 🍺  /opt/homebrew/Cellar/qtconnectivity/6.10.2: 202 files, 1.8MB
+2026-03-04T22:03:19.5020780Z [32m==>[0m [1mInstalling qt dependency: [32mqtdatavis3d[39m[0m
+2026-03-04T22:03:19.8413570Z [34m==>[0m [1mPouring qtdatavis3d--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:21.1904950Z 🍺  /opt/homebrew/Cellar/qtdatavis3d/6.10.2: 260 files, 3.7MB
+2026-03-04T22:03:21.1990530Z [32m==>[0m [1mInstalling qt dependency: [32mqtquicktimeline[39m[0m
+2026-03-04T22:03:21.4996800Z [34m==>[0m [1mPouring qtquicktimeline--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:22.9299810Z 🍺  /opt/homebrew/Cellar/qtquicktimeline/6.10.2: 102 files, 784.6KB
+2026-03-04T22:03:22.9303820Z [32m==>[0m [1mInstalling qt dependency: [32mqtquick3d[39m[0m
+2026-03-04T22:03:23.2544260Z [34m==>[0m [1mPouring qtquick3d--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:27.1061990Z 🍺  /opt/homebrew/Cellar/qtquick3d/6.10.2: 1,306 files, 28.4MB
+2026-03-04T22:03:27.1067590Z [32m==>[0m [1mInstalling qt dependency: [32mqtgraphs[39m[0m
+2026-03-04T22:03:27.4746610Z [34m==>[0m [1mPouring qtgraphs--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:28.8720670Z 🍺  /opt/homebrew/Cellar/qtgraphs/6.10.2: 306 files, 5.2MB
+2026-03-04T22:03:28.8725540Z [32m==>[0m [1mInstalling qt dependency: [32mabseil[39m[0m
+2026-03-04T22:03:28.8768620Z [34m==>[0m [1mPouring abseil--20260107.1.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:37.8325510Z 🍺  /opt/homebrew/Cellar/abseil/20260107.1: 806 files, 12.8MB
+2026-03-04T22:03:37.8331280Z [32m==>[0m [1mInstalling qt dependency: [32mprotobuf[39m[0m
+2026-03-04T22:03:37.8426030Z [34m==>[0m [1mPouring protobuf--34.0.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:40.8569940Z 🍺  /opt/homebrew/Cellar/protobuf/34.0: 368 files, 17.4MB
+2026-03-04T22:03:40.8576090Z [32m==>[0m [1mInstalling qt dependency: [32mqtgrpc[39m[0m
+2026-03-04T22:03:41.2189230Z [34m==>[0m [1mPouring qtgrpc--6.10.2_1.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:43.4181340Z 🍺  /opt/homebrew/Cellar/qtgrpc/6.10.2_1: 410 files, 7.1MB
+2026-03-04T22:03:43.4187580Z [32m==>[0m [1mInstalling qt dependency: [32mqtwebsockets[39m[0m
+2026-03-04T22:03:43.7063270Z [34m==>[0m [1mPouring qtwebsockets--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:44.9408300Z 🍺  /opt/homebrew/Cellar/qtwebsockets/6.10.2: 72 files, 643.5KB
+2026-03-04T22:03:44.9415970Z [32m==>[0m [1mInstalling qt dependency: [32mqthttpserver[39m[0m
+2026-03-04T22:03:45.2937450Z [34m==>[0m [1mPouring qthttpserver--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:46.5756030Z 🍺  /opt/homebrew/Cellar/qthttpserver/6.10.2: 74 files, 495.9KB
+2026-03-04T22:03:46.5759660Z [32m==>[0m [1mInstalling qt dependency: [32mjasper[39m[0m
+2026-03-04T22:03:46.5850340Z [34m==>[0m [1mPouring jasper--4.2.8.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:48.0960330Z 🍺  /opt/homebrew/Cellar/jasper/4.2.8: 45 files, 1.7MB
+2026-03-04T22:03:48.0963600Z [32m==>[0m [1mInstalling qt dependency: [32mlibmng[39m[0m
+2026-03-04T22:03:48.1518940Z [34m==>[0m [1mPouring libmng--2.0.3_1.arm64_tahoe.bottle.2.tar.gz[0m
+2026-03-04T22:03:49.4865760Z 🍺  /opt/homebrew/Cellar/libmng/2.0.3_1: 17 files, 1.2MB
+2026-03-04T22:03:49.4972710Z [32m==>[0m [1mInstalling qt dependency: [32mwebp[39m[0m
+2026-03-04T22:03:49.5428230Z [34m==>[0m [1mPouring webp--1.6.0.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:51.4245880Z 🍺  /opt/homebrew/Cellar/webp/1.6.0: 64 files, 2.6MB
+2026-03-04T22:03:51.4253300Z [32m==>[0m [1mInstalling qt dependency: [32mqtimageformats[39m[0m
+2026-03-04T22:03:51.8336130Z [34m==>[0m [1mPouring qtimageformats--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:53.5259150Z 🍺  /opt/homebrew/Cellar/qtimageformats/6.10.2: 63 files, 992.3KB
+2026-03-04T22:03:53.5263340Z [32m==>[0m [1mInstalling qt dependency: [32mqtlanguageserver[39m[0m
+2026-03-04T22:03:53.8182390Z [34m==>[0m [1mPouring qtlanguageserver--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:54.9391910Z 🍺  /opt/homebrew/Cellar/qtlanguageserver/6.10.2: 59 files, 4.4MB
+2026-03-04T22:03:54.9398520Z [32m==>[0m [1mInstalling qt dependency: [32mqtserialport[39m[0m
+2026-03-04T22:03:55.1986290Z [34m==>[0m [1mPouring qtserialport--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:56.2520220Z 🍺  /opt/homebrew/Cellar/qtserialport/6.10.2: 48 files, 355.4KB
+2026-03-04T22:03:56.2523810Z [32m==>[0m [1mInstalling qt dependency: [32mqtpositioning[39m[0m
+2026-03-04T22:03:56.5438410Z [34m==>[0m [1mPouring qtpositioning--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:58.1273700Z 🍺  /opt/homebrew/Cellar/qtpositioning/6.10.2: 177 files, 2.6MB
+2026-03-04T22:03:58.1277050Z [32m==>[0m [1mInstalling qt dependency: [32mqtlocation[39m[0m
+2026-03-04T22:03:58.4475570Z [34m==>[0m [1mPouring qtlocation--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:03:59.8824940Z 🍺  /opt/homebrew/Cellar/qtlocation/6.10.2: 233 files, 3.9MB
+2026-03-04T22:03:59.8828340Z [32m==>[0m [1mInstalling qt dependency: [32mqtlottie[39m[0m
+2026-03-04T22:04:00.1737190Z [34m==>[0m [1mPouring qtlottie--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:01.8809700Z 🍺  /opt/homebrew/Cellar/qtlottie/6.10.2: 164 files, 1.5MB
+2026-03-04T22:04:01.8813930Z [32m==>[0m [1mInstalling qt dependency: [32mqtmultimedia[39m[0m
+2026-03-04T22:04:02.2926030Z [34m==>[0m [1mPouring qtmultimedia--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:04.3825560Z 🍺  /opt/homebrew/Cellar/qtmultimedia/6.10.2: 439 files, 7.2MB
+2026-03-04T22:04:04.3833110Z [32m==>[0m [1mInstalling qt dependency: [32mqtnetworkauth[39m[0m
+2026-03-04T22:04:04.6895970Z [34m==>[0m [1mPouring qtnetworkauth--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:05.9824890Z 🍺  /opt/homebrew/Cellar/qtnetworkauth/6.10.2: 70 files, 632.2KB
+2026-03-04T22:04:05.9899100Z [32m==>[0m [1mInstalling qt dependency: [32mqtquick3dphysics[39m[0m
+2026-03-04T22:04:06.4034190Z [34m==>[0m [1mPouring qtquick3dphysics--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:08.2292880Z 🍺  /opt/homebrew/Cellar/qtquick3dphysics/6.10.2: 203 files, 15.0MB
+2026-03-04T22:04:08.2298160Z [32m==>[0m [1mInstalling qt dependency: [32mqtquickeffectmaker[39m[0m
+2026-03-04T22:04:08.6009260Z [34m==>[0m [1mPouring qtquickeffectmaker--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:09.9373970Z 🍺  /opt/homebrew/Cellar/qtquickeffectmaker/6.10.2: 116 files, 5.3MB
+2026-03-04T22:04:09.9381160Z [32m==>[0m [1mInstalling qt dependency: [32mqtremoteobjects[39m[0m
+2026-03-04T22:04:10.2530060Z [34m==>[0m [1mPouring qtremoteobjects--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:11.7310430Z 🍺  /opt/homebrew/Cellar/qtremoteobjects/6.10.2: 165 files, 2.4MB
+2026-03-04T22:04:11.7314580Z [32m==>[0m [1mInstalling qt dependency: [32mqtscxml[39m[0m
+2026-03-04T22:04:12.0211190Z [34m==>[0m [1mPouring qtscxml--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:13.7383130Z 🍺  /opt/homebrew/Cellar/qtscxml/6.10.2: 274 files, 3MB
+2026-03-04T22:04:13.7390070Z [32m==>[0m [1mInstalling qt dependency: [32mqtsensors[39m[0m
+2026-03-04T22:04:14.0229760Z [34m==>[0m [1mPouring qtsensors--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:15.5323170Z 🍺  /opt/homebrew/Cellar/qtsensors/6.10.2: 208 files, 1.5MB
+2026-03-04T22:04:15.5327140Z [32m==>[0m [1mInstalling qt dependency: [32mqtserialbus[39m[0m
+2026-03-04T22:04:15.8082220Z [34m==>[0m [1mPouring qtserialbus--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:17.3763930Z 🍺  /opt/homebrew/Cellar/qtserialbus/6.10.2: 139 files, 1.5MB
+2026-03-04T22:04:17.3769940Z [32m==>[0m [1mInstalling qt dependency: [32mqtspeech[39m[0m
+2026-03-04T22:04:17.7666810Z [34m==>[0m [1mPouring qtspeech--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:19.1937900Z 🍺  /opt/homebrew/Cellar/qtspeech/6.10.2: 77 files, 880.2KB
+2026-03-04T22:04:19.1941410Z [32m==>[0m [1mInstalling qt dependency: [32mgumbo-parser[39m[0m
+2026-03-04T22:04:19.1993610Z [34m==>[0m [1mPouring gumbo-parser--0.13.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:20.2640420Z 🍺  /opt/homebrew/Cellar/gumbo-parser/0.13.2: 11 files, 839KB
+2026-03-04T22:04:20.2645510Z [32m==>[0m [1mInstalling qt dependency: [32mlitehtml[39m[0m
+2026-03-04T22:04:20.2746640Z [34m==>[0m [1mPouring litehtml--0.9.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:21.4713280Z 🍺  /opt/homebrew/Cellar/litehtml/0.9: 73 files, 833.6KB
+2026-03-04T22:04:21.4749650Z [32m==>[0m [1mInstalling qt dependency: [32mqttools[39m[0m
+2026-03-04T22:04:21.8529500Z [34m==>[0m [1mPouring qttools--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:25.4651930Z 🍺  /opt/homebrew/Cellar/qttools/6.10.2: 522 files, 20.3MB
+2026-03-04T22:04:25.4662620Z [32m==>[0m [1mInstalling qt dependency: [32mqttranslations[39m[0m
+2026-03-04T22:04:25.5348360Z [34m==>[0m [1mPouring qttranslations--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:26.7377090Z 🍺  /opt/homebrew/Cellar/qttranslations/6.10.2: 309 files, 16MB
+2026-03-04T22:04:26.7384920Z [32m==>[0m [1mInstalling qt dependency: [32mhunspell[39m[0m
+2026-03-04T22:04:26.7566080Z [34m==>[0m [1mPouring hunspell--1.7.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:28.3558610Z 🍺  /opt/homebrew/Cellar/hunspell/1.7.2: 87 files, 2.8MB
+2026-03-04T22:04:28.3562170Z [32m==>[0m [1mInstalling qt dependency: [32mqtvirtualkeyboard[39m[0m
+2026-03-04T22:04:28.7282530Z [34m==>[0m [1mPouring qtvirtualkeyboard--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:31.4115290Z 🍺  /opt/homebrew/Cellar/qtvirtualkeyboard/6.10.2: 376 files, 8.3MB
+2026-03-04T22:04:31.4118920Z [32m==>[0m [1mInstalling qt dependency: [32mqtwebchannel[39m[0m
+2026-03-04T22:04:31.6934930Z [34m==>[0m [1mPouring qtwebchannel--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:33.0186530Z 🍺  /opt/homebrew/Cellar/qtwebchannel/6.10.2: 95 files, 759.7KB
+2026-03-04T22:04:33.0193040Z [32m==>[0m [1mInstalling qt dependency: [32mqtwebengine[39m[0m
+2026-03-04T22:04:33.3834610Z [34m==>[0m [1mPouring qtwebengine--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:41.9001950Z 🍺  /opt/homebrew/Cellar/qtwebengine/6.10.2: 546 files, 472.8MB
+2026-03-04T22:04:41.9006640Z [32m==>[0m [1mInstalling qt dependency: [32mqtwebview[39m[0m
+2026-03-04T22:04:42.4804980Z [34m==>[0m [1mPouring qtwebview--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:44.1273180Z 🍺  /opt/homebrew/Cellar/qtwebview/6.10.2: 111 files, 951.0KB
+2026-03-04T22:04:44.1275500Z [32m==>[0m [1mInstalling [32mqt[39m[0m
+2026-03-04T22:04:44.1280590Z [34m==>[0m [1mPouring qt--6.10.2.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:45.3091120Z 🍺  /opt/homebrew/Cellar/qt/6.10.2: 246 files, 182.7KB
+2026-03-04T22:04:45.3559980Z [32m==>[0m [1mInstalling dependencies for pulseaudio: [32mlibogg[39m, [32mflac[39m, [32mlame[39m, [32mlibvorbis[39m, [32mmpg123[39m, [32mopus[39m, [32mlibsndfile[39m, [32mlibsoxr[39m, [32morc[39m and [32mspeexdsp[39m[0m
+2026-03-04T22:04:45.3562080Z [32m==>[0m [1mInstalling pulseaudio dependency: [32mlibogg[39m[0m
+2026-03-04T22:04:45.3585810Z [34m==>[0m [1mPouring libogg--1.3.6.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:46.4310420Z 🍺  /opt/homebrew/Cellar/libogg/1.3.6: 103 files, 551KB
+2026-03-04T22:04:46.4315430Z [32m==>[0m [1mInstalling pulseaudio dependency: [32mflac[39m[0m
+2026-03-04T22:04:46.4399960Z [34m==>[0m [1mPouring flac--1.5.0.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:47.8604600Z 🍺  /opt/homebrew/Cellar/flac/1.5.0: 40 files, 1.9MB
+2026-03-04T22:04:47.8609250Z [32m==>[0m [1mInstalling pulseaudio dependency: [32mlame[39m[0m
+2026-03-04T22:04:47.8632310Z [34m==>[0m [1mPouring lame--3.100.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:49.0645840Z 🍺  /opt/homebrew/Cellar/lame/3.100: 28 files, 2.3MB
+2026-03-04T22:04:49.0652940Z [32m==>[0m [1mInstalling pulseaudio dependency: [32mlibvorbis[39m[0m
+2026-03-04T22:04:49.0764240Z [34m==>[0m [1mPouring libvorbis--1.3.7.arm64_tahoe.bottle.1.tar.gz[0m
+2026-03-04T22:04:50.2662000Z 🍺  /opt/homebrew/Cellar/libvorbis/1.3.7: 158 files, 2.5MB
+2026-03-04T22:04:50.2665810Z [32m==>[0m [1mInstalling pulseaudio dependency: [32mmpg123[39m[0m
+2026-03-04T22:04:50.2683800Z [34m==>[0m [1mPouring mpg123--1.33.4.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:51.8256100Z 🍺  /opt/homebrew/Cellar/mpg123/1.33.4: 34 files, 2MB
+2026-03-04T22:04:51.8262110Z [32m==>[0m [1mInstalling pulseaudio dependency: [32mopus[39m[0m
+2026-03-04T22:04:51.8279950Z [34m==>[0m [1mPouring opus--1.6.1.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:53.1658900Z 🍺  /opt/homebrew/Cellar/opus/1.6.1: 16 files, 1.1MB
+2026-03-04T22:04:53.1704370Z [32m==>[0m [1mInstalling pulseaudio dependency: [32mlibsndfile[39m[0m
+2026-03-04T22:04:53.2167900Z [34m==>[0m [1mPouring libsndfile--1.2.2_1.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:54.4443280Z 🍺  /opt/homebrew/Cellar/libsndfile/1.2.2_1: 55 files, 1.8MB
+2026-03-04T22:04:54.4507670Z [32m==>[0m [1mInstalling pulseaudio dependency: [32mlibsoxr[39m[0m
+2026-03-04T22:04:54.4508530Z [34m==>[0m [1mPouring libsoxr--0.1.3.arm64_tahoe.bottle.1.tar.gz[0m
+2026-03-04T22:04:55.8403050Z 🍺  /opt/homebrew/Cellar/libsoxr/0.1.3: 30 files, 299.0KB
+2026-03-04T22:04:55.8424160Z [32m==>[0m [1mInstalling pulseaudio dependency: [32morc[39m[0m
+2026-03-04T22:04:55.8554280Z [34m==>[0m [1mPouring orc--0.4.42.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:57.3073790Z 🍺  /opt/homebrew/Cellar/orc/0.4.42: 55 files, 1.6MB
+2026-03-04T22:04:57.3080490Z [32m==>[0m [1mInstalling pulseaudio dependency: [32mspeexdsp[39m[0m
+2026-03-04T22:04:57.3116670Z [34m==>[0m [1mPouring speexdsp--1.2.1.arm64_tahoe.bottle.tar.gz[0m
+2026-03-04T22:04:58.5536690Z 🍺  /opt/homebrew/Cellar/speexdsp/1.2.1: 20 files, 675.6KB
+2026-03-04T22:04:58.5539070Z [32m==>[0m [1mInstalling [32mpulseaudio[39m[0m
+2026-03-04T22:04:58.5543020Z [34m==>[0m [1mPouring pulseaudio--17.0.arm64_tahoe.bottle.2.tar.gz[0m
+2026-03-04T22:05:05.5475520Z [34m==>[0m [1mCaveats[0m
+2026-03-04T22:05:05.5475890Z To start pulseaudio now and restart at login:
+2026-03-04T22:05:05.5476180Z   brew services start pulseaudio
+2026-03-04T22:05:05.5476520Z Or, if you don't want/need a background service you can just run:
+2026-03-04T22:05:05.5477940Z   /opt/homebrew/opt/pulseaudio/bin/pulseaudio --exit-idle-time\=-1 --verbose
+2026-03-04T22:05:05.5478310Z [34m==>[0m [1mSummary[0m
+2026-03-04T22:05:05.5542240Z 🍺  /opt/homebrew/Cellar/pulseaudio/17.0: 215 files, 10.9MB
+2026-03-04T22:05:05.5542700Z [32m==>[0m [1mCaveats[0m
+2026-03-04T22:05:05.5543620Z Bash completion has been installed to:
+2026-03-04T22:05:05.5543860Z   /opt/homebrew/etc/bash_completion.d
+2026-03-04T22:05:05.5544260Z [34m==>[0m [1mpulseaudio[0m
+2026-03-04T22:05:05.5544500Z To start pulseaudio now and restart at login:
+2026-03-04T22:05:05.5544740Z   brew services start pulseaudio
+2026-03-04T22:05:05.5545070Z Or, if you don't want/need a background service you can just run:
+2026-03-04T22:05:05.5545520Z   /opt/homebrew/opt/pulseaudio/bin/pulseaudio --exit-idle-time\=-1 --verbose

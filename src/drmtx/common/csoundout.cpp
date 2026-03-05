@@ -19,7 +19,7 @@ CSoundOut::~CSoundOut()
 bool CSoundOut::Write(CVector< _SAMPLE >& psData)
 {
 //  addToLog(QString("csize start %1").arg(psData.Size()/2),LOGSOUND);
-  synthesPtr->writeBuffer((quint32 *)&psData[0],psData.Size()/2);
+  synthesPtr->writeBuffer(reinterpret_cast<quint32 *>(&psData[0]),psData.Size()/2);
 //  addToLog(QString("csize end %1").arg(psData.Size()/2),LOGSOUND);
   return false;
 }

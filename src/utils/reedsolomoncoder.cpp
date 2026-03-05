@@ -136,7 +136,7 @@ bool reedSolomonCoder::decode(QByteArray &ba,QString fn,QString &newFileName,QBy
         }
     }
 
-  distribute((unsigned char *)tr_buf.data(),(unsigned char *)ec_buf.data(),bep_size,rs_bsize,DECODE);
+  distribute(reinterpret_cast<unsigned char *>(tr_buf.data()),reinterpret_cast<unsigned char *>(ec_buf.data()),bep_size,rs_bsize,DECODE);
   if(!decode_and_write())
     {
       //      fpout.close();
@@ -148,14 +148,14 @@ bool reedSolomonCoder::decode(QByteArray &ba,QString fn,QString &newFileName,QBy
   if(uncorrectableFailures>0) return false;
   //  if(fpout.open(QIODevice::ReadOnly)<=0) return false;
   //  tr_buf=fpout.readAll();
-  if (bep_size != (((unsigned char) tr_buf[1]) + ((unsigned char) tr_buf[2])*256 ))
+  if (bep_size != ((static_cast<unsigned char>(tr_buf[1])) + (static_cast<unsigned char>(tr_buf[2]))*256 ))
     {
       errorOut()<< "problems with bep_size coded in file";
-      errorOut() << "bep_size: " << bep_size <<" coded size: " << (((unsigned char) tr_buf[1]) + ((unsigned char) tr_buf[2])*256 ) ;
-      errorOut() << "bep_sizeaa: " << bep_size <<" coded size: " << (((unsigned char) ba[1]) + ((unsigned char)ba[2])*256 ) ;
+      errorOut() << "bep_size: " << bep_size <<" coded size: " << ((static_cast<unsigned char>(tr_buf[1])) + (static_cast<unsigned char>(tr_buf[2]))*256 ) ;
+      errorOut() << "bep_sizeaa: " << bep_size <<" coded size: " << ((static_cast<unsigned char>(ba[1])) + (static_cast<unsigned char>(ba[2]))*256 ) ;
       return false;
     }
-  coded_file_size = bep_size*rs_dsize - (int)tr_buf[0];
+  coded_file_size = bep_size*rs_dsize - static_cast<int>(tr_buf[0]);
   strncpy(coded_file_ext, tr_buf.data()+3,3);
   coded_file_ext[3]=0;
 
@@ -229,7 +229,7 @@ bool reedSolomonCoder::decode_and_write()
             }
         }
       if(nr_erasures>(rs_bsize-rs_dsize)) nr_erasures=rs_bsize-rs_dsize-1;
-      int failure=rsd32(((dtype *)ec_buf.data()+(i*rs_bsize)),eras_pos, nr_erasures);
+      int failure=rsd32((reinterpret_cast<dtype *>(ec_buf.data())+(i*rs_bsize)),eras_pos, nr_erasures);
       if (failure>0)
         {
           sumOfFailures+=failure;
@@ -283,7 +283,7 @@ bool reedSolomonCoder::encode(QByteArray &ba,QString extension,eRSType rsType)
   ec_buf.append(dataByte);
   ec_buf.append(tr_buf.left(rs_dsize-7));
   ec_buf.resize(ec_buf.size()+RSBSIZE-rs_dsize);
-  rse32(((dtype *)ec_buf.data()),((dtype *)ec_buf.data()+(rs_dsize)));
+  rse32((reinterpret_cast<dtype *>(ec_buf.data())),(reinterpret_cast<dtype *>(ec_buf.data())+(rs_dsize)));
   for (i=1;i<bep_size;i++)
     {
       temp=tr_buf.mid(i*rs_dsize-7,rs_dsize);
@@ -293,14 +293,14 @@ bool reedSolomonCoder::encode(QByteArray &ba,QString extension,eRSType rsType)
         {
           for(j=0;j<(rs_dsize-temp.size());j++)
             {
-              ec_buf.append((char)0);
+              ec_buf.append(static_cast<char>(0));
             }
         }
       ec_buf.resize(ec_buf.size()+RSBSIZE-rs_dsize);
-      rse32(((dtype *)ec_buf.data()+i*rs_bsize),((dtype *)ec_buf.data()+i*rs_bsize+rs_dsize));
+      rse32((reinterpret_cast<dtype *>(ec_buf.data())+i*rs_bsize),(reinterpret_cast<dtype *>(ec_buf.data())+i*rs_bsize+rs_dsize));
     }
   ba.resize(ec_buf.size());
-  distribute((unsigned char *)ec_buf.data(),(unsigned char *)ba.data(),bep_size,rs_bsize,ENCODE);
+  distribute(reinterpret_cast<unsigned char *>(ec_buf.data()),reinterpret_cast<unsigned char *>(ba.data()),bep_size,rs_bsize,ENCODE);
   return true;
 }
 

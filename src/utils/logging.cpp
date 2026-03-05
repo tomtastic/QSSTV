@@ -283,7 +283,7 @@ void logFile::maskSelect(QWidget *wPtr)
         {
           for(j=0;(j<2)&(i*2+j<NUMDEBUGLEVELS);j++)
             {
-              cb=(QCheckBox *)ui.maskTableWidget->cellWidget(i,j);
+              cb=static_cast<QCheckBox *>(ui.maskTableWidget->cellWidget(i,j));
               maskBA[i*2+j]=cb->isChecked();
             }
         }

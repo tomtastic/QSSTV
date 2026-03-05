@@ -140,64 +140,64 @@ CDRMBandpassFilt::Init(const int iNewBlockSize, const _REAL rOffsetHz,
 	   of the DC frequency */
 	CReal rNormCurFreqOffset = rOffsetHz / SOUNDCRD_SAMPLE_RATE;
 	/* Band-pass filter bandwidth */
-	CReal rBPFiltBW = ((CReal) 10000.0 + rMargin) / SOUNDCRD_SAMPLE_RATE;
+	CReal rBPFiltBW = (static_cast<CReal>(10000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;
 
 	/* Negative margin for receiver filter for better interferer rejection */
 	if (eNFiTy == FT_TRANSMITTER)
-		rMargin = (CReal) 0.0;	/* Hz was 300 */
+		rMargin = static_cast<CReal>(0.0);	/* Hz was 300 */
 	else
-		rMargin = (CReal) 0.0;	/* Hz */
+		rMargin = static_cast<CReal>(0.0);	/* Hz */
 
 	switch (eSpecOcc)
 	{
 	case SO_0:
-		rBPFiltBW = ((CReal) 2000.0 + rMargin) / SOUNDCRD_SAMPLE_RATE;   // pa0mbo was 4500.0 moet zijn 2250?
+		rBPFiltBW = (static_cast<CReal>(2000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;   // pa0mbo was 4500.0 moet zijn 2250?
 
 		/* Completely on the right side of DC */
 		rNormCurFreqOffset =
-			(rOffsetHz + (CReal) 1100.0) / SOUNDCRD_SAMPLE_RATE;    // pa0mbo
+			(rOffsetHz + static_cast<CReal>(1100.0)) / SOUNDCRD_SAMPLE_RATE;    // pa0mbo
 //			( (CReal) 7100.0  ) / SOUNDCRD_SAMPLE_RATE;    // pa0mbo
 		         // printf("util Bandpass filt init SO_0  BW %g rNormOffs %g\n", rBPFiltBW, rNormCurFreqOffset);
 		break;
 
 	case SO_1:
-		rBPFiltBW = ((CReal) 2500.0 + rMargin) / SOUNDCRD_SAMPLE_RATE;  // pa0mbo was 5000.0 moet zijn 2500  ?
+		rBPFiltBW = (static_cast<CReal>(2500.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;  // pa0mbo was 5000.0 moet zijn 2500  ?
 
 		/* Completely on the right side of DC */
 		rNormCurFreqOffset =
-			(rOffsetHz + (CReal) 1250.0) / SOUNDCRD_SAMPLE_RATE;   // pa0mbo
+			(rOffsetHz + static_cast<CReal>(1250.0)) / SOUNDCRD_SAMPLE_RATE;   // pa0mbo
 //			( (CReal) 7240.0 )  / SOUNDCRD_SAMPLE_RATE;   // pa0mbo
 		// printf("util drmbandpass SO_1   BW = %g , Offset = %g \n", rBPFiltBW,  rNormCurFreqOffset);
 		break;
 
 	case SO_2:
-		rBPFiltBW = ((CReal) 9000.0 + rMargin) / SOUNDCRD_SAMPLE_RATE;
+		rBPFiltBW = (static_cast<CReal>(9000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;
 
 		/* Centered */
 		rNormCurFreqOffset = rOffsetHz / SOUNDCRD_SAMPLE_RATE;
 		break;
 
 	case SO_3:
-		rBPFiltBW = ((CReal) 10000.0 + rMargin) / SOUNDCRD_SAMPLE_RATE;
+		rBPFiltBW = (static_cast<CReal>(10000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;
 
 		/* Centered */
 		rNormCurFreqOffset = rOffsetHz / SOUNDCRD_SAMPLE_RATE;
 		break;
 
 	case SO_4:
-		rBPFiltBW = ((CReal) 18000.0 + rMargin) / SOUNDCRD_SAMPLE_RATE;
+		rBPFiltBW = (static_cast<CReal>(18000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;
 
 		/* Main part on the right side of DC */
 		rNormCurFreqOffset =
-			(rOffsetHz + (CReal) 4500.0) / SOUNDCRD_SAMPLE_RATE;
+			(rOffsetHz + static_cast<CReal>(4500.0)) / SOUNDCRD_SAMPLE_RATE;
 		break;
 
 	case SO_5:
-		rBPFiltBW = ((CReal) 20000.0 + rMargin) / SOUNDCRD_SAMPLE_RATE;
+		rBPFiltBW = (static_cast<CReal>(20000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;
 
 		/* Main part on the right side of DC */
 		rNormCurFreqOffset =
-			(rOffsetHz + (CReal) 5000.0) / SOUNDCRD_SAMPLE_RATE;
+			(rOffsetHz + static_cast<CReal>(5000.0)) / SOUNDCRD_SAMPLE_RATE;
 		break;
 	}
          // printf("Init bandpass BW = %g rNorm %g \n", rBPFiltBW, rNormCurFreqOffset); 
@@ -205,8 +205,8 @@ CDRMBandpassFilt::Init(const int iNewBlockSize, const _REAL rOffsetHz,
 	FftPlanBP.Init(iBlockSize * 2);
 
 	/* State memory (init with zeros) and data vector */
-	rvecZReal.Init(iBlockSize, (CReal) 0.0);
-	rvecZImag.Init(iBlockSize, (CReal) 0.0);
+	rvecZReal.Init(iBlockSize, static_cast<CReal>(0.0));
+	rvecZImag.Init(iBlockSize, static_cast<CReal>(0.0));
 	rvecDataReal.Init(iBlockSize);
 	rvecDataImag.Init(iBlockSize);
 
@@ -219,13 +219,13 @@ CDRMBandpassFilt::Init(const int iNewBlockSize, const _REAL rOffsetHz,
 
 	/* Copy actual filter coefficients. It is important to initialize the
 	   vectors with zeros because we also do a zero-padding */
-	CRealVector rvecB(2 * iBlockSize, (CReal) 0.0);
+	CRealVector rvecB(2 * iBlockSize, static_cast<CReal>(0.0));
 
 	/* Modulate filter to shift it to the correct IF frequency */
 	for (int i = 0; i < iBlockSize; i++)
 	{
 		rvecB[i] =
-			vecrFilter[i] * Cos((CReal) 2.0 * crPi * rNormCurFreqOffset * i);
+			vecrFilter[i] * Cos(static_cast<CReal>(2.0) * crPi * rNormCurFreqOffset * i);
 	}
 
 	/* Transformation in frequency domain for fft filter */
@@ -252,13 +252,13 @@ CModJulDate::Set(const uint32_t iModJulDate)
   _REAL rJulDate;
 
 	/* Definition of the Modified Julian Date */
-	rJulDate = (_REAL) iModJulDate + 2400000.5;
+	rJulDate = static_cast<_REAL>(iModJulDate) + 2400000.5;
 
 	/* Get "real" date out of Julian Date
 	   (Taken from "http://mathforum.org/library/drmath/view/51907.html") */
 	// 1. Add .5 to the JD and let Z = integer part of (JD+.5) and F the
 	// fractional part F = (JD+.5)-Z
-	iZ = static_cast<uint32_t>(rJulDate + (_REAL) 0.5);
+	iZ = static_cast<uint32_t>(rJulDate + static_cast<_REAL>(0.5));
 //	rF = (rJulDate + (_REAL) 0.5) - iZ;
 
 	// 2. If Z < 2299161, take A = Z
@@ -268,8 +268,8 @@ CModJulDate::Set(const uint32_t iModJulDate)
 		iA = iZ;
 	else
 	{
-		iAlpha = static_cast<int>(((_REAL) iZ - (_REAL) 1867216.25) / (_REAL) 36524.25);
-		iA = iZ + 1 + iAlpha - static_cast<int>((_REAL) iAlpha / (_REAL) 4.0);
+		iAlpha = static_cast<int>((static_cast<_REAL>(iZ) - static_cast<_REAL>(1867216.25)) / static_cast<_REAL>(36524.25));
+		iA = iZ + 1 + iAlpha - static_cast<int>(static_cast<_REAL>(iAlpha) / static_cast<_REAL>(4.0));
 	}
 
 	// 3. Then calculate:
@@ -278,19 +278,19 @@ CModJulDate::Set(const uint32_t iModJulDate)
 	// D = INT( 365.25*C )
 	// E = INT( (B-D)/30.6001 )
 	iB = iA + 1524;
-	iC = static_cast<int>(((_REAL) iB - (_REAL) 122.1) / (_REAL) 365.25);
-	iD = static_cast<int>((_REAL) 365.25 * iC);
-	iE = static_cast<int>(((_REAL) iB - iD) / (_REAL) 30.6001);
+	iC = static_cast<int>((static_cast<_REAL>(iB) - static_cast<_REAL>(122.1)) / static_cast<_REAL>(365.25));
+	iD = static_cast<int>(static_cast<_REAL>(365.25) * iC);
+	iE = static_cast<int>((static_cast<_REAL>(iB) - iD) / static_cast<_REAL>(30.6001));
 
 	// The day of the month dd (with decimals) is:
 	// dd = B - D - INT(30.6001*E) + F
-	iDay = iB - iD - static_cast<int>((_REAL) 30.6001 * iE);	// + rF;
+	iDay = iB - iD - static_cast<int>(static_cast<_REAL>(30.6001) * iE);	// + rF;
 
 	// The month number mm is:
 	// mm = E - 1, if E < 13.5
 	// or
 	// mm = E - 13, if E > 13.5
-	if ((_REAL) iE < 13.5)
+	if (static_cast<_REAL>(iE) < 13.5)
 		iMonth = iE - 1;
 	else
 		iMonth = iE - 13;
@@ -299,7 +299,7 @@ CModJulDate::Set(const uint32_t iModJulDate)
 	// yyyy = C - 4716   if m > 2.5
 	// or
 	// yyyy = C - 4715   if m < 2.5
-	if ((_REAL) iMonth > 2.5)
+	if (static_cast<_REAL>(iMonth) > 2.5)
 		iYear = iC - 4716;
 	else
 		iYear = iC - 4715;

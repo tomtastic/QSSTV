@@ -47,30 +47,30 @@ void  CDataEncoder::GeneratePacket(CVector < _BINARY > &vecbiPacket)
 
 	/* Header --------------------------------------------------------------- */
 	/* First flag */
-  if (iCurDataPointer == 0) vecbiPacket.Enqueue((uint32_t) 1, 1);
-  else vecbiPacket.Enqueue((uint32_t) 0, 1);
+  if (iCurDataPointer == 0) vecbiPacket.Enqueue(static_cast<uint32_t>(1), 1);
+  else vecbiPacket.Enqueue(static_cast<uint32_t>(0), 1);
 
 	/* Last flag */
 	if (iRemainSize > iPacketLen)
 	{
-		vecbiPacket.Enqueue((uint32_t) 0, 1);
+		vecbiPacket.Enqueue(static_cast<uint32_t>(0), 1);
 		bLastFlag = false;
 	}
 	else
 	{
-		vecbiPacket.Enqueue((uint32_t) 1, 1);
+		vecbiPacket.Enqueue(static_cast<uint32_t>(1), 1);
 		bLastFlag = true;
 	}
 
 	/* Packet Id */
-	vecbiPacket.Enqueue((uint32_t) iPacketID, 2);
+	vecbiPacket.Enqueue(static_cast<uint32_t>(iPacketID), 2);
 
 	/* Padded packet indicator (PPI) */
-  if (iRemainSize < iPacketLen) vecbiPacket.Enqueue((uint32_t) 1, 1);
-  else vecbiPacket.Enqueue((uint32_t) 0, 1);
+  if (iRemainSize < iPacketLen) vecbiPacket.Enqueue(static_cast<uint32_t>(1), 1);
+  else vecbiPacket.Enqueue(static_cast<uint32_t>(0), 1);
 
 	/* Continuity index (CI) */
-	vecbiPacket.Enqueue((uint32_t) iContinInd, 3);
+	vecbiPacket.Enqueue(static_cast<uint32_t>(iContinInd), 3);
 
 	/* Increment index modulo 8 (1 << 3) */
 	iContinInd++;
@@ -132,7 +132,7 @@ void  CDataEncoder::GeneratePacket(CVector < _BINARY > &vecbiPacket)
 
 	/* "byLengthBody" was defined in the header */
 	for (i = 0; i < (iTotalPacketSize / SIZEOF__BYTE - 2); i++)
-		CRCObject.AddByte(_BYTE(vecbiPacket.Separate(SIZEOF__BYTE)));
+		CRCObject.AddByte(static_cast<_BYTE>(vecbiPacket.Separate(SIZEOF__BYTE)));
         // printf("adding crc16 to packet  iTotalPacketSize is %d\n", iTotalPacketSize);
 	/* Now, pointer in "enqueue"-function is back at the same place, add CRC */
 	vecbiPacket.Enqueue(CRCObject.GetCRC(), 16);

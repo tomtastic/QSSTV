@@ -139,7 +139,7 @@ void CFACTransmit::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Parameter)
 
 		/* Packet Id */
 		(*pbiFACData).Enqueue( 
-			(uint32_t) Parameter.Service[0].DataParam.iPacketID, 2);
+			static_cast<uint32_t>(Parameter.Service[0].DataParam.iPacketID), 2);
 		/* Extended MSC mode 1 bit */
 		if (Parameter.eMSCCodingScheme == CS_1_SM)
 			(*pbiFACData).Enqueue(1 /* 1 */, 1);  // QAM 4
@@ -167,7 +167,7 @@ void CFACTransmit::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Parameter)
 				cNewChar = Parameter.Service[0].strLabel[i];
 			cNewChar &= 127;
 			/* Set character */
-			(*pbiFACData).Enqueue((uint32_t) cNewChar, 7);
+			(*pbiFACData).Enqueue(static_cast<uint32_t>(cNewChar), 7);
 		}
 	}
 
@@ -179,7 +179,7 @@ void CFACTransmit::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Parameter)
 	(*pbiFACData).ResetBitAccess();
 
 	for (int i = 0; i < NUM_FAC_BITS_PER_BLOCK / SIZEOF__BYTE - 1; i++)
-		CRCObject.AddByte((_BYTE) (*pbiFACData).Separate(SIZEOF__BYTE));
+		CRCObject.AddByte(static_cast<_BYTE>((*pbiFACData).Separate(SIZEOF__BYTE)));
 
 	/* Now, pointer in "enqueue"-function is back at the same place,
 	   add CRC */
@@ -362,7 +362,7 @@ _BOOLEAN CFACReceive::FACParam(CVector<_BINARY>* pbiFACData,
 	(*pbiFACData).ResetBitAccess();
 
 	for (int i = 0; i < NUM_FAC_BITS_PER_BLOCK / SIZEOF__BYTE - 1; i++)
-		CRCObject.AddByte((_BYTE) (*pbiFACData).Separate(SIZEOF__BYTE));
+		CRCObject.AddByte(static_cast<_BYTE>((*pbiFACData).Separate(SIZEOF__BYTE)));
 
 	if (CRCObject.CheckCRC((*pbiFACData).Separate(8)) == true)
 	{

@@ -177,10 +177,10 @@ int soundBase::capture()
           switchCaptureState(CPINIT);
         }
 
-      if((storedFrames<=(ulong)recordingSize*1048576L) && (soundRoutingInput==SNDINCARDTOFILE))
+      if((storedFrames<=static_cast<ulong>(recordingSize)*1048576L) && (soundRoutingInput==SNDINCARDTOFILE))
         {
           addToLog(QString("written %1 tofile").arg(count),LOGSOUND);
-          waveOut.write((quint16*)tempRXBuffer,count,false);
+          waveOut.write(reinterpret_cast<quint16*>(tempRXBuffer),count,false);
           storedFrames+=count;
         }
     }
@@ -207,7 +207,7 @@ int soundBase::captureCalibration(bool leadIn)
           stopwatch.start();
           mutex.lock();
           clock_gettime(CLOCK_MONOTONIC,&ts);
-          ustartcalibrationTime=(double)ts.tv_sec +(double)ts.tv_nsec / 1000000000.0;
+          ustartcalibrationTime=static_cast<double>(ts.tv_sec) +static_cast<double>(ts.tv_nsec) / 1000000000.0;
           calibrationFrames=0;
           mutex.unlock();
           switchCaptureState(CPCALIBRATE);
@@ -219,7 +219,7 @@ int soundBase::captureCalibration(bool leadIn)
       calibrationFrames++;
       calibrationTime=stopwatch.elapsed();
       clock_gettime(CLOCK_MONOTONIC,&ts);
-      ucalibrationTime=(double)ts.tv_sec +(double)ts.tv_nsec / 1000000000.0 -ustartcalibrationTime;
+      ucalibrationTime=static_cast<double>(ts.tv_sec) +static_cast<double>(ts.tv_nsec) / 1000000000.0 -ustartcalibrationTime;
       mutex.unlock();
       //logFilePtr->addToAux(QString("%1\t%2\t%3").arg(countAvailable).arg(calibrationFrames).arg(calibrationTime) );
     }
@@ -264,7 +264,7 @@ int soundBase::playbackCalibration(bool leadIn)
           //      stopwatch.start();
           mutex.lock();
           clock_gettime(CLOCK_MONOTONIC,&ts);
-          ustartcalibrationTime=(double)ts.tv_sec +(double)ts.tv_nsec / 1000000000.0;
+          ustartcalibrationTime=static_cast<double>(ts.tv_sec) +static_cast<double>(ts.tv_nsec) / 1000000000.0;
           addToLog(QString("calib start time %1").arg(ustartcalibrationTime),LOGCALIB);
           calibrationFrames=0;
           mutex.unlock();
@@ -276,7 +276,7 @@ int soundBase::playbackCalibration(bool leadIn)
       mutex.lock();
       calibrationFrames++;
       clock_gettime(CLOCK_MONOTONIC,&ts);
-      ucalibrationTime=(double)ts.tv_sec +(double)ts.tv_nsec / 1000000000.0 -ustartcalibrationTime;
+      ucalibrationTime=static_cast<double>(ts.tv_sec) +static_cast<double>(ts.tv_nsec) / 1000000000.0 -ustartcalibrationTime;
       mutex.unlock();
       //    addToLog(QString("calib time %1 frames %2").arg(ucalibrationTime).arg(calibrationFrames),LOGCALIB);
       //logFilePtr->addToAux(QString("%1\t%2\t%3").arg(countAvailable).arg(calibrationFrames).arg(calibrationTime) );
@@ -389,9 +389,9 @@ int soundBase::play()
   if(soundRoutingOutput==SNDOUTTOFILE)  // output the wav-file
     {
 
-      if(storedFrames<=(ulong)recordingSize*1048576L)
+      if(storedFrames<=static_cast<ulong>(recordingSize)*1048576L)
         {
-          waveOut.write((quint16*)txBuffer.readPointer(),numFrames,true); //always stereo
+          waveOut.write(reinterpret_cast<quint16*>(txBuffer.readPointer()),numFrames,true); //always stereo
           storedFrames+=numFrames;
         }
     }

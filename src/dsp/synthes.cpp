@@ -43,7 +43,7 @@ synthesizer::synthesizer(double txSmpClock)
   addToLog(QString("synthes: tx sampling clock=%1").arg(txSamplingClock),LOGSOUND);
   for (i=0;i<SINTABLEN;i++)
     {
-      sineTable[i]=(sin(((double)i*M_PI*2.)/SINTABLEN)*8000.);
+      sineTable[i]=(sin((static_cast<double>(i)*M_PI*2.)/SINTABLEN)*8000.);
     }
 
 //  waterfallPtr= new waterfallText;
@@ -71,7 +71,7 @@ void synthesizer::sendTone(double duration,double lowerFrequency,double upperFre
   if(!concat) adjust=0.;
 // convert duration to number of samples
   unsigned int ns=static_cast<unsigned int>((duration+adjust)*txSamplingClock+0.5);
-  adjust+=duration-((double)ns)/txSamplingClock;
+  adjust+=duration-(static_cast<double>(ns))/txSamplingClock;
   sendSamples(ns,lowerFrequency);
 }
 
@@ -86,7 +86,7 @@ void synthesizer::sendWFText()
       addToLog(QString("sending id len=%1").arg(len),LOGSYNTHES);
       for (i=0;i<len;i++)
         {
-          write((double)dataPtr[i]);
+          write(static_cast<double>(dataPtr[i]));
         }
 //       arrayDump(QString("wf"),dataPtr,32,true);
     }
@@ -135,14 +135,14 @@ SOUNDFRAME synthesizer::filter(double sample)
 {
  quint32 tst;
  quint32 ptt;
- tst=(quint32) round(sample);
+ tst=static_cast<quint32>(round(sample));
 // if(outputStereo)
 //   {
 //      tst+=tst<<16;
 //   }
  if(pttToneOtherChannel)
    {
-     ptt=((quint32)toneBuffer[(pttToneCounter++)%TONEBUFLEN])<< 16;
+     ptt=(static_cast<quint32>(toneBuffer[(pttToneCounter++)%TONEBUFLEN]))<< 16;
      tst+=ptt;
    }
  if(swapChannel)

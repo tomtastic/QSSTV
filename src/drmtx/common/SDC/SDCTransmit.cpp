@@ -56,7 +56,7 @@ void CSDCTransmit::SDCParam(CVector<_BINARY>* pbiData, CParameter& Parameter)
 
 	/* SDC Header ----------------------------------------------------------- */
 	/* AFS index (not used by this application, insert a "1" */
-	(*pbiData).Enqueue((uint32_t) 1, 4);
+	(*pbiData).Enqueue(static_cast<uint32_t>(1), 4);
 
 
 	/* Data Entities -------------------------------------------------------- */
@@ -120,7 +120,7 @@ if (iNumUsedBits + iSize < iMaxNumBitsDataBlocks)
 
 	/* Zero-pad the unused bits in this SDC-block */
 	for (i = 0; i < iMaxNumBitsDataBlocks - iNumUsedBits; i++)
-		(*pbiData).Enqueue((uint32_t) 0, 1);
+		(*pbiData).Enqueue(static_cast<uint32_t>(0), 1);
 
 
 	/* CRC ------------------------------------------------------------------ */
@@ -133,11 +133,11 @@ if (iNumUsedBits + iSize < iMaxNumBitsDataBlocks)
 	Check) field shall contain a 16-bit CRC calculated over the AFS 
 	index coded in an 8-bit field (4 msbs are 0) and the data field.
 	4 MSBs from AFS-index. Insert four "0" in the data-stream */
-	const _BYTE byFirstByte = (_BYTE) (*pbiData).Separate(4);
+	const _BYTE byFirstByte = static_cast<_BYTE>((*pbiData).Separate(4));
 	CRCObject.AddByte(byFirstByte);
 
 	for (i = 0; i < (iUsefulBitsSDC - 4) / SIZEOF__BYTE - 2; i++)
-		CRCObject.AddByte((_BYTE) (*pbiData).Separate(SIZEOF__BYTE));
+		CRCObject.AddByte(static_cast<_BYTE>((*pbiData).Separate(SIZEOF__BYTE)));
 
 	/* Now, pointer in "enqueue"-function is back at the same place, 
 	   add CRC */
@@ -164,18 +164,18 @@ void CSDCTransmit::DataEntityType0(CVector<_BINARY>& vecbiData,
 	vecbiData.Enqueue(iLengthInBytes, 7);
 
 	/* Version flag (not used in this implementation) */
-	vecbiData.Enqueue((uint32_t) 0, 1);
+	vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
 
 	/* Data entity type */
-	vecbiData.Enqueue((uint32_t) 00, 4); /* Type 00 */
+	vecbiData.Enqueue(static_cast<uint32_t>(00), 4); /* Type 00 */
 
 
 	/* Actual body ---------------------------------------------------------- */
 	/* Protection level for part A */
-	vecbiData.Enqueue((uint32_t) Parameter.MSCPrLe.iPartA, 2);
+	vecbiData.Enqueue(static_cast<uint32_t>(Parameter.MSCPrLe.iPartA), 2);
 
 	/* Protection level for part B */
-	vecbiData.Enqueue((uint32_t) Parameter.MSCPrLe.iPartB, 2);
+	vecbiData.Enqueue(static_cast<uint32_t>(Parameter.MSCPrLe.iPartB), 2);
 
 	for (size_t i = 0; i < Parameter.GetTotNumServices(); i++)
 	{
@@ -186,21 +186,21 @@ void CSDCTransmit::DataEntityType0(CVector<_BINARY>& vecbiData,
 			(Parameter.eMSCCodingScheme == CS_3_HMMIX)))
 		{
 			/* Protection level for hierarchical */
-			vecbiData.Enqueue((uint32_t) Parameter.MSCPrLe.iHierarch, 2);
+			vecbiData.Enqueue(static_cast<uint32_t>(Parameter.MSCPrLe.iHierarch), 2);
 		
 			/* rfu */
-			vecbiData.Enqueue((uint32_t) 0, 10);
+			vecbiData.Enqueue(static_cast<uint32_t>(0), 10);
 	
 			/* Data length for hierarchical */
-			vecbiData.Enqueue((uint32_t) Parameter.Stream[i].iLenPartB, 12);
+			vecbiData.Enqueue(static_cast<uint32_t>(Parameter.Stream[i].iLenPartB), 12);
 		}
 		else
 		{
 			/* Data length for part A */
-			vecbiData.Enqueue((uint32_t) Parameter.Stream[i].iLenPartA, 12);
+			vecbiData.Enqueue(static_cast<uint32_t>(Parameter.Stream[i].iLenPartA), 12);
 		
 			/* Data length for part B */
-			vecbiData.Enqueue((uint32_t) Parameter.Stream[i].iLenPartB, 12);
+			vecbiData.Enqueue(static_cast<uint32_t>(Parameter.Stream[i].iLenPartB), 12);
 		}
 	}
 }
@@ -233,21 +233,21 @@ void CSDCTransmit::DataEntityType1(CVector<_BINARY>& vecbiData, int ServiceID,
 	/**** Multiplex description data entity - type 1 ****/
 	/* Length of the body, excluding the initial 4 bits, 
 	   measured in bytes -> only number bytes of label */
-	vecbiData.Enqueue((uint32_t) iLenLabel, 7);
+	vecbiData.Enqueue(static_cast<uint32_t>(iLenLabel), 7);
 
 	/* Version flag (not used in this implementation) */
-	vecbiData.Enqueue((uint32_t) 0, 1);
+	vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
 
 	/* Data entity type */
-	vecbiData.Enqueue((uint32_t) 01, 4); /* Type 01 */
+	vecbiData.Enqueue(static_cast<uint32_t>(01), 4); /* Type 01 */
 
 
 	/* Actual body ---------------------------------------------------------- */
 	/* Short Id */
-	vecbiData.Enqueue((uint32_t) ServiceID, 2);
+	vecbiData.Enqueue(static_cast<uint32_t>(ServiceID), 2);
 
 	/* rfu */
-	vecbiData.Enqueue((uint32_t) 0, 2);
+	vecbiData.Enqueue(static_cast<uint32_t>(0), 2);
 
 	/* Set all characters of label string */
 	for (int i = 0; i < iLenLabel; i++)
@@ -255,7 +255,7 @@ void CSDCTransmit::DataEntityType1(CVector<_BINARY>& vecbiData, int ServiceID,
 		const char cNewChar = Parameter.Service[ServiceID].strLabel[i];
 
 		/* Set character */
-		vecbiData.Enqueue((uint32_t) cNewChar, 8);
+		vecbiData.Enqueue(static_cast<uint32_t>(cNewChar), 8);
 	}
 }
 
@@ -289,19 +289,19 @@ void CSDCTransmit::DataEntityType5(CVector<_BINARY>& vecbiData, int ServiceID,
 	vecbiData.Enqueue(static_cast<uint32_t>(iNumBitsTotal - 4) / 8, 7);
 
 	/* Version flag (not used in this implementation) */
-	vecbiData.Enqueue((uint32_t) 0, 1);
+	vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
 
 	/* Data entity type */
-	vecbiData.Enqueue((uint32_t) 05, 4); /* Type 05 */
+	vecbiData.Enqueue(static_cast<uint32_t>(05), 4); /* Type 05 */
 
 
 	/* Actual body ---------------------------------------------------------- */
 	/* Short Id */
-	vecbiData.Enqueue((uint32_t) ServiceID, 2);
+	vecbiData.Enqueue(static_cast<uint32_t>(ServiceID), 2);
 
 	/* Stream Id */
-	vecbiData.Enqueue((uint32_t) Parameter.Service[ServiceID].DataParam.
-		iStreamID, 2);
+	vecbiData.Enqueue(static_cast<uint32_t>(Parameter.Service[ServiceID].DataParam.
+		iStreamID), 2);
 
 	/* Packet mode indicator */
 	switch (Parameter.Service[ServiceID].DataParam.ePacketModInd)
@@ -310,7 +310,7 @@ void CSDCTransmit::DataEntityType5(CVector<_BINARY>& vecbiData, int ServiceID,
 		vecbiData.Enqueue(0 /* 0 */, 1);
 
 		/* Descriptor */
-		vecbiData.Enqueue((uint32_t) 0, 7);
+		vecbiData.Enqueue(static_cast<uint32_t>(0), 7);
 		break;
 
 	case CDataParam::PM_PACKET_MODE:
@@ -331,7 +331,7 @@ void CSDCTransmit::DataEntityType5(CVector<_BINARY>& vecbiData, int ServiceID,
 
 		/* Packet Id */
 		vecbiData.Enqueue( 
-			(uint32_t) Parameter.Service[ServiceID].DataParam.iPacketID, 2);
+			static_cast<uint32_t>(Parameter.Service[ServiceID].DataParam.iPacketID), 2);
 
 		/* Application domain */
 		switch (Parameter.Service[ServiceID].DataParam.eAppDomain)
@@ -349,7 +349,7 @@ void CSDCTransmit::DataEntityType5(CVector<_BINARY>& vecbiData, int ServiceID,
 
 		/* Packet length */
 		vecbiData.Enqueue( 
-			(uint32_t) Parameter.Service[ServiceID].DataParam.iPacketLen, 8);
+			static_cast<uint32_t>(Parameter.Service[ServiceID].DataParam.iPacketLen), 8);
 
 		break;
 	}
@@ -361,10 +361,10 @@ void CSDCTransmit::DataEntityType5(CVector<_BINARY>& vecbiData, int ServiceID,
 /* Fixed implementation for MOTSlideshow application which is the one and
    only supported application right now. TODO */
 /* rfu */
-vecbiData.Enqueue((uint32_t) 0, 5);
+vecbiData.Enqueue(static_cast<uint32_t>(0), 5);
 
 /* User application identifier. SlideShow = 2 */
-vecbiData.Enqueue((uint32_t) 2, 11);
+vecbiData.Enqueue(static_cast<uint32_t>(2), 11);
 }
 
 
@@ -386,19 +386,19 @@ void CSDCTransmit::DataEntityType9(CVector<_BINARY>& vecbiData, int ServiceID,
 	vecbiData.Enqueue(static_cast<uint32_t>(iNumBitsTotal - 4) / 8, 7);
 
 	/* Version flag (not used in this implementation) */
-	vecbiData.Enqueue((uint32_t) 0, 1);
+	vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
 
 	/* Data entity type */
-	vecbiData.Enqueue((uint32_t) 9, 4); /* Type 09 */
+	vecbiData.Enqueue(static_cast<uint32_t>(9), 4); /* Type 09 */
 
 
 	/* Actual body ---------------------------------------------------------- */
 	/* Short Id */
-	vecbiData.Enqueue((uint32_t) ServiceID, 2);
+	vecbiData.Enqueue(static_cast<uint32_t>(ServiceID), 2);
 
 	/* Stream Id */
-	vecbiData.Enqueue((uint32_t) Parameter.Service[ServiceID].AudioParam.
-		iStreamID, 2);
+	vecbiData.Enqueue(static_cast<uint32_t>(Parameter.Service[ServiceID].AudioParam.
+		iStreamID), 2);
 
 	/* Audio coding */
 	switch (Parameter.Service[ServiceID].AudioParam.eAudioCoding)
@@ -451,7 +451,7 @@ void CSDCTransmit::DataEntityType9(CVector<_BINARY>& vecbiData, int ServiceID,
 
 	case CAudioParam::AC_CELP:
 		/* rfa */
-		vecbiData.Enqueue((uint32_t) 0, 1);
+		vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
 
 		/* CELP_CRC */
     if (!Parameter.Service[ServiceID].AudioParam.bCELPCRC) vecbiData.Enqueue(0 /* 0 */, 1);
@@ -521,14 +521,14 @@ void CSDCTransmit::DataEntityType9(CVector<_BINARY>& vecbiData, int ServiceID,
 	{
 		/* CELP index */
 		vecbiData.Enqueue( 
-			(uint32_t) Parameter.Service[ServiceID].AudioParam.iCELPIndex, 5);
+			static_cast<uint32_t>(Parameter.Service[ServiceID].AudioParam.iCELPIndex), 5);
 	}
 	else
 	{
 		/* rfa 5 bit */
-		vecbiData.Enqueue((uint32_t) 0, 5);
+		vecbiData.Enqueue(static_cast<uint32_t>(0), 5);
 	}
 	
 	/* rfa 1 bit */
-	vecbiData.Enqueue((uint32_t) 0, 1);
+	vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
 }

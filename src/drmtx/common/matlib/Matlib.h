@@ -486,7 +486,7 @@ CMatlibVector<T> CMatlibVector<T>::operator()(const int iFrom,
 											  const int iStep,
 											  const int iTo) const
 {
-	CMatlibVector<T> vecRet(size_t(abs(float(iTo - iFrom)) / abs(float(iStep))) + 1, VTY_TEMP);
+	CMatlibVector<T> vecRet(static_cast<size_t>(abs(static_cast<float>(iTo - iFrom)) / abs(static_cast<float>(iStep))) + 1, VTY_TEMP);
 	int iOutPos = 0;
 	int i;
 
@@ -709,7 +709,7 @@ operator*(const CMatlibMatrix<CComplex>& cmA, const CMatlibVector<CComplex>& cvB
 
 	for (int j = 0; j < iRowSizeA; j++)
 	{
-		vecRet[j] = (CReal) 0.0;
+		vecRet[j] = static_cast<CReal>(0.0);
 
 		for (int i = 0; i < iSizeB; i++)
 			vecRet[j] += cmA[j][i] * cvB[i];
@@ -728,7 +728,7 @@ operator*(const CMatlibMatrix<CReal>& rmA, const CMatlibVector<CReal>& rvB)
 
 	for (int j = 0; j < iRowSizeA; j++)
 	{
-		vecRet[j] = (CReal) 0.0;
+		vecRet[j] = static_cast<CReal>(0.0);
 
 		for (int i = 0; i < iSizeB; i++)
 			vecRet[j] += rmA[j][i] * rvB[i];
@@ -750,7 +750,7 @@ operator*(const CMatlibMatrix<CComplex>& cmA, const CMatlibMatrix<CComplex>& cmB
 	{
 		for (int j = 0; j < iRowSizeA; j++)
 		{
-			matRet[j][k] = (CReal) 0.0;
+			matRet[j][k] = static_cast<CReal>(0.0);
 
 			for (int i = 0; i < iRowSizeB; i++)
 				matRet[j][k] += cmA[j][i] * cmB[i][k];

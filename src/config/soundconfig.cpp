@@ -96,8 +96,8 @@ void soundConfig::readSettings()
   pulseSelected=qSettings.value("pulseSelected",false).toBool();
   swapChannel=qSettings.value("swapChannel",false).toBool();
   pttToneOtherChannel=qSettings.value("pttToneOtherChannel",false).toBool();
-  soundRoutingInput=  (soundBase::edataSrc)qSettings.value("soundRoutingInput",  0 ).toInt();
-  soundRoutingOutput= (soundBase::edataDst)qSettings.value("soundRoutingOutput", 0 ).toInt();
+  soundRoutingInput=  static_cast<soundBase::edataSrc>(qSettings.value("soundRoutingInput",  0 ).toInt());
+  soundRoutingOutput= static_cast<soundBase::edataDst>(qSettings.value("soundRoutingOutput", 0 ).toInt());
   recordingSize= qSettings.value("recordingSize", 100 ).toInt();
   qSettings.endGroup();
   setParams();

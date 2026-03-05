@@ -128,7 +128,7 @@ void sgradientParam::load(QDataStream &str)
 	str >> pos3;
 	str >>pos4;
 	str >> t;
-	type=(gType)t;
+	type=static_cast<gType>(t);
 	str >> direction;
 }
 void sgradientParam::save(QDataStream &str)
@@ -141,7 +141,7 @@ void sgradientParam::save(QDataStream &str)
 	str << pos2;
 	str << pos3;
 	str << pos4;
-	str << (int)type;
+	str << static_cast<int>(type);
 	str << direction;
 }
 
@@ -236,7 +236,7 @@ QGradient buildGradient(sgradientParam prm, QRectF f)
 {
 	qreal w=f.width();
 	qreal h=f.height();
-	qreal d=(double)prm.direction;
+	qreal d=static_cast<double>(prm.direction);
 	qreal x1,y1,x2,y2;
 	qreal temp;
 	if(prm.type==sgradientParam::NONE)

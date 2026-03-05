@@ -69,7 +69,7 @@ void ftpConfig::readSettings()
   ftpLogin=qSettings.value("ftpLogin","").toString();
   ftpPassword=qSettings.value("ftpPassword","").toString();
   ftpDefaultImageFormat=qSettings.value("ftpDefaultImageFormat","png").toString();
-  ftpSaveFormat=(eftpSaveFormat)qSettings.value("ftpSaveFormat",0).toInt();
+  ftpSaveFormat=static_cast<eftpSaveFormat>(qSettings.value("ftpSaveFormat",0).toInt());
   ftpNumImages=qSettings.value("ftpNumImages",30).toInt();
   addExtension=qSettings.value("addExtension",false).toBool();
   qSettings.endGroup();
@@ -90,7 +90,7 @@ void ftpConfig::writeSettings()
   qSettings.setValue("ftpLogin",ftpLogin);
   qSettings.setValue("ftpPassword",ftpPassword);
   qSettings.setValue("ftpDefaultImageFormat",ftpDefaultImageFormat);
-  qSettings.setValue("ftpSaveFormat",(int)ftpSaveFormat);
+  qSettings.setValue("ftpSaveFormat",static_cast<int>(ftpSaveFormat));
   qSettings.setValue("ftpNumImages",ftpNumImages);
   qSettings.setValue("addExtension",addExtension);
 

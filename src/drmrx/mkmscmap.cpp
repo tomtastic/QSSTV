@@ -109,7 +109,7 @@ mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
     {
       n = s % y;
       m = s / y;
-      p_min = (int) ceil(static_cast<double>((K_min - k0 - x * n) / (x * y)));
+      p_min = static_cast<int>(ceil(static_cast<double>((K_min - k0 - x * n) / (x * y))));
       p_max = (K_max - k0 - x * n) / (x * y);
       for (p = p_min; p <= p_max; p++)
 
@@ -289,7 +289,7 @@ mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
       /* first step [1:N_MUX+1:D*(N_MUX+1)] */
       step = N_MUX + 1;
 //      nrGIMSC = D;
-      ncGIMSC = (int) ceil((float) N_MUX / D);
+      ncGIMSC = static_cast<int>(ceil(static_cast<float>(N_MUX) / D));
 
       /* printf("ncGIMSC = %d\n", ncGIMSC); */
       columnv[0] = 1;

@@ -107,11 +107,11 @@ void ftpThread::customEvent( QEvent * e)
   QString source;
   QString destination;
   ftpEventType type;
-  type=(ftpEventType)e->type();
+  type=static_cast<ftpEventType>(e->type());
   addToLog(QString("customevent:%1 in thread: %2").arg(((ftpBaseEvent *)e)->description).arg(QThread::currentThread()->objectName()),LOGFTPTHREAD);
-  source=((ftpBaseEvent *)e)->source;
-  destination=((ftpBaseEvent *)e)->destination;
-  canCloseWhenDone=((ftpBaseEvent *)e)->closeWhenDone;
+  source=(static_cast<ftpBaseEvent *>(e))->source;
+  destination=(static_cast<ftpBaseEvent *>(e))->destination;
+  canCloseWhenDone=(static_cast<ftpBaseEvent *>(e))->closeWhenDone;
 
   switch (type)
     {
@@ -258,7 +258,7 @@ void ftpThread::uploadFile(QString source,QString destination)
       lastError=FTPERROR;
       lastErrorStr="Filename is empty";
       destroy();
-      emit commandsDone((int)lastError,lastErrorStr);
+      emit commandsDone(static_cast<int>(lastError),lastErrorStr);
       return;
     }
   sourceFn=new QFile(source);
@@ -268,7 +268,7 @@ void ftpThread::uploadFile(QString source,QString destination)
       lastError=FTPERROR;
       lastErrorStr=QString("Unable to read '%1'").arg(source);
       destroy();
-      emit commandsDone((int)lastError,lastErrorStr);
+      emit commandsDone(static_cast<int>(lastError),lastErrorStr);
       return;
     }
   QFileInfo fi( source );
@@ -300,7 +300,7 @@ void ftpThread::downloadFile(QString source,QString destination)
       lastError=FTPERROR;
       lastErrorStr=QString("Can't open %1 for writing").arg(destination);
       destroy();
-      emit commandsDone((int)lastError,lastErrorStr);
+      emit commandsDone(static_cast<int>(lastError),lastErrorStr);
       return;
     }
   if (source.isNull() )
@@ -309,7 +309,7 @@ void ftpThread::downloadFile(QString source,QString destination)
       lastError=FTPERROR;
       lastErrorStr="Invalid source";
       destroy();
-      emit commandsDone((int)lastError,lastErrorStr);
+      emit commandsDone(static_cast<int>(lastError),lastErrorStr);
       return;
     }
   ftpDone=false;
@@ -539,11 +539,11 @@ void ftpThread::slotDone( bool error )
             }
           if(lastError==FTPOK)
             {
-              emit commandsDone((int)lastError,"Success");
+              emit commandsDone(static_cast<int>(lastError),"Success");
             }
           else
             {
-              emit commandsDone((int)lastError,qftpPtr->errorString());
+              emit commandsDone(static_cast<int>(lastError),qftpPtr->errorString());
             }
 
           ftpCommandSuccess=false;
@@ -567,7 +567,7 @@ void ftpThread::slotDone( bool error )
   ftpCommandSuccess=true;
   ftpDone=true;
   lastError=FTPOK;
-  emit commandsDone((int)lastError,"Success");
+  emit commandsDone(static_cast<int>(lastError),"Success");
 }
 
 

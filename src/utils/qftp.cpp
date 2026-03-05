@@ -362,7 +362,7 @@ QTcpSocket::SocketState QFtpDTP::state() const
 qint64 QFtpDTP::bytesAvailable() const
 {
   if (!socket || socket->state() != QTcpSocket::ConnectedState)
-    return (qint64) bytesFromSocket.size();
+    return static_cast<qint64>(bytesFromSocket.size());
   return socket->bytesAvailable();
 }
 
@@ -372,7 +372,7 @@ qint64 QFtpDTP::read(char *data, qint64 maxlen)
   if (socket && socket->state() == QTcpSocket::ConnectedState) {
       read = socket->read(data, maxlen);
     } else {
-      read = qMin(maxlen, qint64(bytesFromSocket.size()));
+      read = qMin(maxlen, static_cast<qint64>(bytesFromSocket.size()));
       memcpy(data, bytesFromSocket.data(), read);
       bytesFromSocket.remove(0, read);
     }
@@ -1618,7 +1618,7 @@ int QFtp::connectToHost(const QString &host, quint16 port)
 {
   QStringList cmds;
   cmds << host;
-  cmds << QString::number((uint)port);
+  cmds << QString::number(static_cast<uint>(port));
   int id = d->addCommand(new QFtpCommand(ConnectToHost, cmds));
   d->pi.transferConnectionExtended = true;
   return id;

@@ -20,7 +20,7 @@ void crc8_c( /*@out@ */ double checksum[], double in[], int N)
   for (i = 0; i < N; i++)
 
     {
-      y = ((b >> 7) + (int) floor(in[i] + 0.5)) & 0x01;
+      y = ((b >> 7) + static_cast<int>(floor(in[i] + 0.5))) & 0x01;
       if (y == 1)
 	b = ((b << 1) ^ x);
 

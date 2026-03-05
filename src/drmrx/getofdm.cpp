@@ -82,13 +82,13 @@ int getofdm( /*@null@ */ float *rs, float time_offset_fractional_init,
     {
 
       /* malloc space for arrays */
-      if ((exp_temp = (float *)malloc(Tu * 2 * sizeof(float))) == nullptr)
+      if ((exp_temp = static_cast<float *>(malloc(Tu * 2 * sizeof(float)))) == nullptr)
 
         {
           printf("cannot malloc space for exp_temp in get_ofdm_symbol\n");
           exit(EXIT_FAILURE);
         }
-      if ((out1 = (float *)malloc(Tu * 2 * sizeof(float))) == nullptr)
+      if ((out1 = static_cast<float *>(malloc(Tu * 2 * sizeof(float)))) == nullptr)
 
         {
           printf("cannot malloc space for out1 in get_ofdm_symbol\n");
@@ -100,7 +100,7 @@ int getofdm( /*@null@ */ float *rs, float time_offset_fractional_init,
           fftwf_destroy_plan(p);
         }
       addToLog("fftwf_plan_dft_1d getofdm start",LOGFFT);
-      p = fftwf_plan_dft_1d(Tu,(fftwf_complex *)s,(fftwf_complex *)S,FFTW_FORWARD, FFTW_ESTIMATE);
+      p = fftwf_plan_dft_1d(Tu,reinterpret_cast<fftwf_complex *>(s),reinterpret_cast<fftwf_complex *>(S),FFTW_FORWARD, FFTW_ESTIMATE);
       addToLog("fftwf_plan_dft_1d getofdm stop",LOGFFT);
       return (0);
     }
@@ -123,7 +123,7 @@ int getofdm( /*@null@ */ float *rs, float time_offset_fractional_init,
       threshold_freq_small_large = 0.5;
       kI_freq_controller = 0.0008;
       Tg = Ts - Tu;
-      Tgh = (int) floor(Tg / 2 + 0.5);
+      Tgh = static_cast<int>(floor(Tg / 2 + 0.5));
       if (Zi[0] < 0.0)
 
         {
@@ -183,9 +183,9 @@ int getofdm( /*@null@ */ float *rs, float time_offset_fractional_init,
               temp9 += rs[(i + Tg - 3) * 2] * rs[(i + Tg - 3) * 2] + rs[(i + Tg - 3) * 2 + 1] * rs[(i + Tg - 3) * 2 + 1];	/* Tg-2+2 * Tg-2+2 */
               temp10 += rs[(i + Tg + Tu - 3) * 2] * rs[(i + Tg + Tu - 3) * 2] + rs[(i + Tg + Tu - 3) * 2 + 1] * rs[(i + Tg + Tu - 3) * 2 + 1];	/* TG+Tu-2+2 * Tg+Tu-2+2 */
             }
-          theta_plus = (float) sqrt((temp1[0] - temp5[0]) * (temp1[0] - temp5[0]) + (temp1[1] - temp5[1]) * (temp1[1] - temp5[1]));
+          theta_plus = sqrt((temp1[0] - temp5[0]) * (temp1[0] - temp5[0]) + (temp1[1] - temp5[1]) * (temp1[1] - temp5[1]));
           theta_plus -= (0.5 * (-temp6 - temp7));
-          theta_minus = (float) sqrt((temp1[0] - temp8[0]) * (temp1[0] - temp8[0]) + (temp1[1] - temp8[1]) * (temp1[1] - temp8[1]));
+          theta_minus = sqrt((temp1[0] - temp8[0]) * (temp1[0] - temp8[0]) + (temp1[1] - temp8[1]) * (temp1[1] - temp8[1]));
           theta_minus -= (0.5 * (temp9 - temp10));
           delta_theta = (theta_plus - theta_minus) * Tgh / temp4;
 
@@ -200,7 +200,7 @@ int getofdm( /*@null@ */ float *rs, float time_offset_fractional_init,
               threshold_timing_small_large * (kP_small_timing_controller -kP_large_timing_controller) *
               tanh(time_offset_ctrl / threshold_timing_small_large);
           delta_time_offset = delta_time_offset_P + delta_time_offset_I + time_offset_fractional;
-          delta_time_offset_integer = (int) floor(delta_time_offset + 0.5);
+          delta_time_offset_integer = static_cast<int>(floor(delta_time_offset + 0.5));
 //          logfile->addToAux(QString("dt %1 %2 %3 %4 %5").arg(time_offset_ctrl).arg(delta_time_offset_I).arg(delta_time_offset_P).arg(delta_time_offset).arg(delta_time_offset_integer));
 
           /* now limit delta_time_offset_integer */
@@ -274,8 +274,8 @@ int getofdm( /*@null@ */ float *rs, float time_offset_fractional_init,
 
         {
           tmptheta = (freq_offset / Tu) * i + phi_freq_correction_last;
-          exp_temp[i * 2] = (float) cos(tmptheta);
-          exp_temp[i * 2 + 1] = (float) sin(tmptheta);
+          exp_temp[i * 2] = cos(tmptheta);
+          exp_temp[i * 2 + 1] = sin(tmptheta);
         }
 
       for (i = 0; i < Tu; i++)
@@ -293,7 +293,7 @@ int getofdm( /*@null@ */ float *rs, float time_offset_fractional_init,
                                                       + Tgh + i) * 2 +
               1] * exp_temp[i * 2];
         }
-      phi_freq_correction_last = (float) fmod(phi_freq_correction_last + (float) Ts / (float) Tu * freq_offset, static_cast<float>(2.0 * PI));
+      phi_freq_correction_last = fmod(phi_freq_correction_last + static_cast<float>(Ts) / static_cast<float>(Tu) * freq_offset, static_cast<float>(2.0 * PI));
 
       /* Now do fft and output symbol */
       fftwf_execute(p);
@@ -301,8 +301,8 @@ int getofdm( /*@null@ */ float *rs, float time_offset_fractional_init,
 
         {
           term1 = static_cast<float>(i * 2.0 * PI * (Tgh + time_offset_fractional) / Tu);	/* Euler */
-          exp_temp[i * 2] = (float) cos(term1);
-          exp_temp[i * 2 + 1] = (float) sin(term1);
+          exp_temp[i * 2] = cos(term1);
+          exp_temp[i * 2 + 1] = sin(term1);
         }
       /* now calc out */
       for (i = 0; i < Tu / 2; i++)

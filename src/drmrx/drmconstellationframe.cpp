@@ -40,8 +40,8 @@ void drmConstellationFrame::paintEvent (QPaintEvent *e)
     qpainter.drawLine (contentsRect().x(), contentsRect().y()+contentsRect().height()/2, contentsRect().x()+contentsRect().width(),contentsRect().y()+contentsRect().height()/2);
     for(i=0;i<lmsc/2;i++)
     {
-        posx=rint(((ConstellationArray[2*i]+CSTRANGE)/CSTSPAN)*(float)contentsRect().width());
-        posy=contentsRect().height()-rint(((ConstellationArray[2*i+1]+CSTRANGE)/CSTSPAN)*(float)contentsRect().height());
+        posx=rint(((ConstellationArray[2*i]+CSTRANGE)/CSTSPAN)*static_cast<float>(contentsRect().width()));
+        posy=contentsRect().height()-rint(((ConstellationArray[2*i+1]+CSTRANGE)/CSTSPAN)*static_cast<float>(contentsRect().height()));
         qpainter.drawEllipse(posx,posy,2,2);
     }
   QFrame::paintEvent(e);

@@ -183,7 +183,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
   iSymbolBlockSize = iFFTSizeN + iGuardSize;
 
   /* Calculate the index of the DC carrier in the shifted spectrum */
-  iIndexDCFreq = static_cast<int>((_REAL) VIRTUAL_INTERMED_FREQ *
+  iIndexDCFreq = static_cast<int>(static_cast<_REAL>(VIRTUAL_INTERMED_FREQ) *
                         iFFTSizeN / SOUNDCRD_SAMPLE_RATE);
 
   /* Index of minimum useful carrier (shifted) */
@@ -196,7 +196,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
      with robustness mode D: pilots in all carriers! BUT: DC carrier is
      counted as a pilot in that case!!! Be aware of that! */
   if (iScatPilFreqInt > 1)
-    iNumIntpFreqPil = static_cast<int>((_REAL) iNumCarrier / iScatPilFreqInt + 1);
+    iNumIntpFreqPil = static_cast<int>(static_cast<_REAL>(iNumCarrier) / iScatPilFreqInt + 1);
   else
     iNumIntpFreqPil = iNumCarrier;
 
@@ -209,7 +209,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
 
   /* Allocate memory for pilot cells definition and set it to zero */
   matcPilotCells.Init(iNumSymbolsPerSuperframe, iNumCarrier,
-                      _COMPLEX((_REAL) 0.0, (_REAL) 0.0));
+                      _COMPLEX(static_cast<_REAL>(0.0), static_cast<_REAL>(0.0)));
 
   /* Allocate memory for vectors with number of certain cells */
   veciNumMSCSym.Init(iNumSymbolsPerSuperframe);
@@ -232,7 +232,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
       /* Calculate the start value of "p" in equation for gain reference
        cells in Table 90 (8.4.4.1) */
       iScatPilotsCounter = static_cast<int>(static_cast<_REAL>(iCarrierKmin -
-                                           static_cast<int>((_REAL) iScatPilFreqInt / 2 + .5) -
+                                           static_cast<int>(static_cast<_REAL>(iScatPilFreqInt) / 2 + .5) -
                                            iScatPilFreqInt * mod(iFrameSym, iScatPilTimeInt)
                                            ) / (iScatPilFreqInt * iScatPilTimeInt));
 
@@ -279,7 +279,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
          (TimeInt). In this example, "4" is the FreqInt and "5" is the
          TimeInt. The first term "2" is the half of the FreqInt, rounded
          towards infinity. The parameter "20" is FreqInt * TimeInt */
-          if (iCar == static_cast<int>((_REAL) iScatPilFreqInt / 2 + .5) +
+          if (iCar == static_cast<int>(static_cast<_REAL>(iScatPilFreqInt) / 2 + .5) +
               iScatPilFreqInt * mod(iFrameSym, iScatPilTimeInt) +
               iScatPilFreqInt * iScatPilTimeInt * iScatPilotsCounter)
             {
@@ -295,7 +295,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
               /* Calculations as in drm-standard (8.4.4.3.1) */
               /* "in" is ROW No and "im" is COLUMN No! */
               in = mod(iFrameSym, ScatPilots.piConst[1] /* "y" */);
-              im = static_cast<int>((_REAL) iFrameSym / ScatPilots.piConst[1] /* "y" */);
+              im = static_cast<int>(static_cast<_REAL>(iFrameSym) / ScatPilots.piConst[1] /* "y" */);
               ip = static_cast<int>(static_cast<_REAL>(iCar - ScatPilots.piConst[2] /* "k_0" */ -
                                    in * ScatPilots.piConst[0] /* "x" */) / (
                             ScatPilots.piConst[0] /* "x" */ *
@@ -333,7 +333,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
               else
                 {
                   matcPilotCells[iSym][iCarArrInd] =
-                      Polar2Cart(sqrt((_REAL) 2.0), iScatPilPhase);
+                      Polar2Cart(sqrt(static_cast<_REAL>(2.0)), iScatPilPhase);
                 }
             }
 
@@ -354,7 +354,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
 
                   /* Set complex value for this pilot */
                   matcPilotCells[iSym][iCarArrInd] =
-                      Polar2Cart(sqrt((_REAL) 2.0),
+                      Polar2Cart(sqrt(static_cast<_REAL>(2.0)),
                                  piTableTimePilots[iTimePilotsCounter * 2 + 1]);
 
                   if (iTimePilotsCounter == iNumTimePilots - 1)
@@ -398,8 +398,8 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
                 }
 
               /* Apply complex value */
-              if (bIsFreqPilSpeciCase) matcPilotCells[iSym][iCarArrInd] = Polar2Cart(sqrt((_REAL) 2.0), mod(piTableFreqPilots[iFreqPilotsCounter * 2 + 1] + 512, 1024));
-              else matcPilotCells[iSym][iCarArrInd] = Polar2Cart(sqrt((_REAL) 2.0), piTableFreqPilots[iFreqPilotsCounter * 2 + 1]);
+              if (bIsFreqPilSpeciCase) matcPilotCells[iSym][iCarArrInd] = Polar2Cart(sqrt(static_cast<_REAL>(2.0)), mod(piTableFreqPilots[iFreqPilotsCounter * 2 + 1] + 512, 1024));
+              else matcPilotCells[iSym][iCarArrInd] = Polar2Cart(sqrt(static_cast<_REAL>(2.0)), piTableFreqPilots[iFreqPilotsCounter * 2 + 1]);
 
               /* Increase counter and wrap if needed */
               if (iFreqPilotsCounter == NUM_FREQ_PILOTS - 1) iFreqPilotsCounter = 0;
@@ -429,8 +429,8 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
   iMaxNumMSCSym = 0;
   iMSCCounter = 0;
 
-  rAvPowPerSymbol = (_REAL) 0.0;
-  rAvPilPowPerSym = (_REAL) 0.0;
+  rAvPowPerSymbol = static_cast<_REAL>(0.0);
+  rAvPilPowPerSym = static_cast<_REAL>(0.0);
 
   for (iSym = 0; iSym < iNumSymbolsPerSuperframe; iSym++)
     {
@@ -461,7 +461,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
               if (_IsData(matiMapTab[iSym][iCar]))
                 {
                   /* Data cells have average power of 1 */
-                  rAvPowPerSymbol += (_REAL) 1.0;
+                  rAvPowPerSymbol += static_cast<_REAL>(1.0);
                 }
               else
                 {
@@ -469,14 +469,14 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode,
              at the edges of the spectrum (they have power of 4) */
                   if (_IsBoosPil(matiMapTab[iSym][iCar]))
                     {
-                      rAvPowPerSymbol += (_REAL) 4.0;
-                      rAvPilPowPerSym += (_REAL) 4.0;
+                      rAvPowPerSymbol += static_cast<_REAL>(4.0);
+                      rAvPilPowPerSym += static_cast<_REAL>(4.0);
                     }
                   else
                     {
                       /* Regular pilot has power of 2 */
-                      rAvPowPerSymbol += (_REAL) 2.0;
-                      rAvPilPowPerSym += (_REAL) 2.0;
+                      rAvPowPerSymbol += static_cast<_REAL>(2.0);
+                      rAvPilPowPerSym += static_cast<_REAL>(2.0);
                     }
                 }
             }
@@ -606,8 +606,8 @@ _COMPLEX CCellMappingTable::Polar2Cart(const _REAL rAbsolute,
   This function takes phases normalized to 1024 as defined in the drm-
   standard.
 */
-  return _COMPLEX(rAbsolute * cos((_REAL) 2 * crPi * iPhase / 1024),
-                  rAbsolute * sin((_REAL) 2 * crPi * iPhase / 1024));
+  return _COMPLEX(rAbsolute * cos(static_cast<_REAL>(2) * crPi * iPhase / 1024),
+                  rAbsolute * sin(static_cast<_REAL>(2) * crPi * iPhase / 1024));
 }
 
 int CCellMappingTable::mod(const int ix, const int iy) const

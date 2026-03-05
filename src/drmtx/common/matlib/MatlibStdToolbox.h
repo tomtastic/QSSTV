@@ -194,7 +194,7 @@ template<class T> T			Var(const CMatlibVector<T>& vecI);
 
 
 /* Rounding functions */
-inline CReal				Fix(const CReal& fI) {return (int) fI;}
+inline CReal				Fix(const CReal& fI) {return static_cast<int>(fI);}
 inline CMatlibVector<CReal>	Fix(const CMatlibVector<CReal>& fvI)
 								{_VECOP(CReal, fvI.GetSize(), Fix(fvI[i]));}
 
@@ -207,7 +207,7 @@ inline CMatlibVector<CReal>	Ceil(const CMatlibVector<CReal>& fvI)
 								{_VECOP(CReal, fvI.GetSize(), Ceil(fvI[i]));}
 
 inline CReal				Round(const CReal& fI)
-								{return Floor(fI + (CReal) 0.5);}
+								{return Floor(fI + static_cast<CReal>(0.5));}
 inline CMatlibVector<CReal>	Round(const CMatlibVector<CReal>& fvI)
 								{_VECOP(CReal, fvI.GetSize(), Round(fvI[i]));}
 

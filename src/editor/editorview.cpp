@@ -471,8 +471,8 @@ void editorView::setTransform()
 {
   //	int r=450-rotateDial->value();
   //	if ( r >= 360 )	r-=360;
-  scene->hShear=(double)hshearSlider->value()/10.;
-  scene->vShear=(double)vshearSlider->value()/10.;
+  scene->hShear=static_cast<double>(hshearSlider->value())/10.;
+  scene->vShear=static_cast<double>(vshearSlider->value())/10.;
   scene->apply(editorScene::DTRANSFORM);
 }
 
@@ -491,7 +491,7 @@ void editorView::slotShearChanged(int)
   double shearVal;
   QSlider *sl;
   sl=qobject_cast<QSlider *>(sender());
-  shearVal=((double)sl->value())/10;
+  shearVal=(static_cast<double>(sl->value()))/10;
   tmp=QString("%1").arg(shearVal,4,'g',2,QChar('0'));
   if ( shearVal >= 0 )
     tmp.insert( 0, " " );

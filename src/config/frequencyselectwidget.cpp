@@ -147,9 +147,9 @@ void frequencySelectWidget:: getParams()
           }
       }
       freqList.append(ui->tableWidget->item(i,0)->text());
-      modeList.append(((QComboBox *)ui->tableWidget->cellWidget(i,1))->currentText());
-      sbModeList.append(((QComboBox *)ui->tableWidget->cellWidget(i,2))->currentText());
-      passBandList.append(((QComboBox *)ui->tableWidget->cellWidget(i,3))->currentText());
+      modeList.append((static_cast<QComboBox *>(ui->tableWidget->cellWidget(i,1)))->currentText());
+      sbModeList.append((static_cast<QComboBox *>(ui->tableWidget->cellWidget(i,2)))->currentText());
+      passBandList.append((static_cast<QComboBox *>(ui->tableWidget->cellWidget(i,3)))->currentText());
     }
   getValue(additionalCommand,ui->additionalCommandLineEdit);
   getValue(additionalCommandHex,ui->additionalCommandHexCheckBox);

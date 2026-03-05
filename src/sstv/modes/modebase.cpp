@@ -149,7 +149,7 @@ void modeBase::init(DSPFLOAT clk)
     }
   syncDuration=activeSSTVParam->sync*localClock;
   setupParams(localClock);
-  activeSSTVParam->pixelDuration=visibleLineLength/(double)activeSSTVParam->numberOfPixels;
+  activeSSTVParam->pixelDuration=visibleLineLength/static_cast<double>(activeSSTVParam->numberOfPixels);
   avgSample=0;
   avgSampleCounter=0;
   isRunning=false;
@@ -323,10 +323,10 @@ bool modeBase::getPixels()
     {
       //      addToLog(QString("modebase:getPixels[0] =%1").arg(sampleCounter+rxSampleCounter),LOGMODES);
       //      color=128+lround(((double)avgSample/(double)avgSampleCounter-fc)*255./dev);
-      color=128+lround(((double)sample-fc)*255./dev);
+      color=128+lround((static_cast<double>(sample)-fc)*255./dev);
       if(color<0) color=0;
       if (color>255) color=255;
-      pixelArrayPtr[pixelCounter]=(unsigned char)color;
+      pixelArrayPtr[pixelCounter]=static_cast<unsigned char>(color);
       pixelCounter++;
       avgSample=0;
       avgSampleCounter=0;
@@ -500,7 +500,7 @@ void modeBase::sendPixelBuffer()
   // addToLog (QString(" sendPixelBuffer: pixelBuffer: %1").arg(QString::number((ulong)pixelArrayPtr,16)),LOGMODES);
   do
     {
-      f=lowerFreq+((double)pixelArrayPtr[pixelCounter]*(2300-lowerFreq)/255.);
+      f=lowerFreq+(static_cast<double>(pixelArrayPtr[pixelCounter])*(2300-lowerFreq)/255.);
 
       while(sampleCounter<pixelPositionTable[pixelCounter])
         {

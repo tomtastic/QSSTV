@@ -51,8 +51,8 @@ void CTransmitData::ProcessDataInternal(CParameter&)
       const short  sCurOutImag = static_cast<short>((*pvecInputData)[i / 2].imag() * rNormFactor);
 
       /* Envelope, phase */
-      const short sCurOutEnv = static_cast<short>(Abs((*pvecInputData)[i / 2]) * (_REAL) 256.0);
-      const short sCurOutPhase = 	static_cast<short>(Angle((*pvecInputData)[i / 2]) * (_REAL) 5000.0);  /* 2^15 / pi / 2 -> approx. 5000 */
+      const short sCurOutEnv = static_cast<short>(Abs((*pvecInputData)[i / 2]) * static_cast<_REAL>(256.0));
+      const short sCurOutPhase = 	static_cast<short>(Angle((*pvecInputData)[i / 2]) * static_cast<_REAL>(5000.0));  /* 2^15 / pi / 2 -> approx. 5000 */
 
       switch (eOutputFormat)
         {
@@ -132,7 +132,7 @@ void CTransmitData::InitInternal(CParameter& TransmParam)
 	/* All robustness modes and spectrum occupancies should have the same output
 	   power. Calculate the normaization factor based on the average power of
 	   symbol (the number 3000 was obtained through output tests) */
-	rNormFactor = (CReal) 6000.0 / Sqrt(TransmParam.CellMappingTable.rAvPowPerSymbol);  // pa0mbo was 3000.0 nu as in ham
+	rNormFactor = static_cast<CReal>(6000.0) / Sqrt(TransmParam.CellMappingTable.rAvPowPerSymbol);  // pa0mbo was 3000.0 nu as in ham
 	/* Define block-size for input */
 	iInputBlockSize = iSymbolBlockSize;
 }

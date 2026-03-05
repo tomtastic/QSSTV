@@ -56,7 +56,7 @@ void COFDMModulation::ProcessDataInternal(CParameter&)
 
 	/* Copy complex FFT output in output buffer and scale */
 	for (i = 0; i < iDFTSize; i++)
-		(*pvecOutputData)[i + iGuardSize] = veccFFTOutput[i] * (CReal) iDFTSize;
+		(*pvecOutputData)[i + iGuardSize] = veccFFTOutput[i] * static_cast<CReal>(iDFTSize);
 
 	/* Copy data from the end to the guard-interval (Add guard-interval) */
 	for (i = 0; i < iGuardSize; i++)
@@ -70,7 +70,7 @@ void COFDMModulation::ProcessDataInternal(CParameter&)
 
 	/* Shift spectrum to desired IF ----------------------------------------- */
 	/* Only apply shifting if phase is not zero */
-	if (cExpStep != _COMPLEX((_REAL) 1.0, (_REAL) 0.0))
+	if (cExpStep != _COMPLEX(static_cast<_REAL>(1.0), static_cast<_REAL>(0.0)))
 	{
 		for (i = 0; i < iOutputBlockSize; i++)
 		{
@@ -98,7 +98,7 @@ void COFDMModulation::InitInternal(CParameter& TransmParam)
 
 	/* Normalized offset correction factor for IF shift. Subtract the
 	   default IF frequency ("VIRTUAL_INTERMED_FREQ") */
-	const _REAL rNormCurFreqOffset = (_REAL) -2.0 * crPi *
+	const _REAL rNormCurFreqOffset = static_cast<_REAL>(-2.0) * crPi *
 //		((_REAL ) -6751.0)/ SOUNDCRD_SAMPLE_RATE;  
 		(rDefCarOffset - VIRTUAL_INTERMED_FREQ) / SOUNDCRD_SAMPLE_RATE;  
          // printf("COFDMMod rDefCarOffset %g Virt IF %g rNormCurFreqoffset %g \n", rDefCarOffset, (_REAL) VIRTUAL_INTERMED_FREQ,  rNormCurFreqOffset);
@@ -108,7 +108,7 @@ void COFDMModulation::InitInternal(CParameter& TransmParam)
 
          //  printf("COFDMMod cExpStep real %g imag  %g \n", cos(rNormCurFreqOffset), sin(rNormCurFreqOffset));
 	/* Start with phase null (can be arbitrarily chosen) */
-	cCurExp = (_REAL) 1.0;
+	cCurExp = static_cast<_REAL>(1.0);
 
 	/* Init plans for FFT (faster processing of Fft and Ifft commands) */
 	FftPlan.Init(iDFTSize);
@@ -116,7 +116,7 @@ void COFDMModulation::InitInternal(CParameter& TransmParam)
 
 	/* Allocate memory for intermediate result of fft. Zero out input vector
 	   (because only a few bins are used, the rest has to be zero) */
-	veccFFTInput.Init(iDFTSize, (CReal) 0.0);
+	veccFFTInput.Init(iDFTSize, static_cast<CReal>(0.0));
 	veccFFTOutput.Init(iDFTSize);
 
 	/* Define block-sizes for input and output */

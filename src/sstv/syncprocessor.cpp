@@ -144,7 +144,7 @@ void syncProcessor::init()
   {
     //      if((sstvModeIndexRx>=idxStart) && (sstvModeIndexRx<=idxEnd))
     {
-      idxEnd=idxStart=(esstvMode)(sstvModeIndexRx-1);
+      idxEnd=idxStart=static_cast<esstvMode>(sstvModeIndexRx-1);
       if((idxStart>=AVT24)&&(idxStart<=AVT94))
       {
         enableSyncDetection=false;
@@ -276,7 +276,7 @@ void syncProcessor::extractSync()
       {
         if(sensitivity!=(NUMBEROFSENSITIVITIES-1)) tempOutOfSync=true; // no temp out of sync if DX
       }
-      missingLines=(uint) round(((sampleCounter+RXSTRIPE-RXSTRIPE/7)-(lastSync+samplesPerLine))/samplesPerLine+1);
+      missingLines=static_cast<uint>(round(((sampleCounter+RXSTRIPE-RXSTRIPE/7)-(lastSync+samplesPerLine))/samplesPerLine+1));
       calcSyncQuality();
     }
   }
@@ -458,13 +458,13 @@ void syncProcessor::slotVisCodeDetected(int mode,uint visSampleCounter)
 {
   if((mode>=idxStart) && (mode<=idxEnd))
   {
-    visMode=(esstvMode)mode;
+    visMode=static_cast<esstvMode>(mode);
     if((visMode>=AVT24)&&(visMode<=AVT94))
     {
       enableSyncDetection=false;
     }
     addToLog(QString("viscode %1 accepted").arg(visMode),LOGSYNCACCEPTED);
-    idxStart=idxEnd=(esstvMode)mode;
+    idxStart=idxEnd=static_cast<esstvMode>(mode);
     minMatchedLines=3;
     visEndCounter=visSampleCounter;
   }
@@ -581,12 +581,12 @@ bool syncProcessor::findMatch()
     //      addToLog (QString(" checking match for syncArrayIndex %1 at %2").arg(syncArrayIndex).arg(syncArray[syncArrayIndex].end),LOGSYNCMATCH);
     for(i=idxStart;i<=idxEnd;i++)
     {
-      syncWidth=getSyncWidth((esstvMode)i ,modifiedClock);
-      if(addToMatch((esstvMode)i))
+      syncWidth=getSyncWidth(static_cast<esstvMode>(i) ,modifiedClock);
+      if(addToMatch(static_cast<esstvMode>(i)))
       {
         for(j=0;j<matchArray[i].count();j++)
         {
-          if(matchArray[i][j]->count()>=(int)minMatchedLines)
+          if(matchArray[i][j]->count()>=static_cast<int>(minMatchedLines))
           {
             fs=0;
             for(k=0;k<matchArray[i][j]->count()-1;k++)
@@ -627,7 +627,7 @@ bool syncProcessor::findMatch()
       }
       else
       {
-        currentMode=(esstvMode)modeList.at(idx);
+        currentMode=static_cast<esstvMode>(modeList.at(idx));
       }
 
       activeChainPtr=changeList.at(idx);
@@ -773,7 +773,7 @@ void syncProcessor::clearMatchArray()
   {
     for(j=0;j<matchArray[i].count();j++)
     {
-      removeMatchArrayChain((esstvMode)i,0);
+      removeMatchArrayChain(static_cast<esstvMode>(i),0);
     }
     matchArray[i].clear();
   }
@@ -804,7 +804,7 @@ void syncProcessor::cleanupMatchArray()
     {
       if(activeChainPtr!=matchArray[i][j])
       {
-        removeMatchArrayChain((esstvMode)i,j);
+        removeMatchArrayChain(static_cast<esstvMode>(i),j);
       }
       else
       {
@@ -885,7 +885,7 @@ void syncProcessor::deleteSyncArrayEntry(uint entry)
       }
     }
   }
-  for(i=entry;i<(int)syncArrayIndex;i++)
+  for(i=entry;i<static_cast<int>(syncArrayIndex);i++)
   {
     syncArray[i]=syncArray[i+1];
   }
@@ -920,7 +920,7 @@ bool syncProcessor::lineCompare(DSPFLOAT samPerLine, int srcIdx, int dstIdx, qui
   delta=static_cast<double>(syncArray[dstIdx].end-syncArray[srcIdx].end);
 
   lineNumber=(delta+samPerLine/2.) /samPerLine;
-  fraction=(double)lineNumber-delta/samPerLine;
+  fraction=static_cast<double>(lineNumber)-delta/samPerLine;
   if(fraction<0) fraction=-fraction;
   //  if(fraction<lineTolerance)
   //  addToLog(QString("Lnbr: %1, fract: %2, delta: %3 src: %4,dest: %5, OK %6")
@@ -1054,7 +1054,7 @@ void syncProcessor::regression(DSPFLOAT &a,DSPFLOAT &b,bool initial)
       continue;
     }
 
-    slantXYArray[tempCount].y=(DSPFLOAT)(syncArray[activeChainPtr->at(j)->to].end-endZero);
+    slantXYArray[tempCount].y=static_cast<DSPFLOAT>(syncArray[activeChainPtr->at(j)->to].end-endZero);
     slantXYArray[tempCount].x= syncArray[activeChainPtr->at(j)->to].lineNumber*samplesPerLine;
     addToLog(QString("pos: %1, x=%2 y=%3 syncIndex:%4, diff %5").arg(tempCount).arg(slantXYArray[tempCount].x).arg(slantXYArray[tempCount].y).arg(activeChainPtr->at(j)->to).arg(slantXYArray[tempCount].x-slantXYArray[tempCount].y) ,LOGSLANT);
     if((fabs(slantXYArray[tempCount].x-slantXYArray[tempCount].y)>150.)&&(!initial))
@@ -1106,8 +1106,8 @@ bool syncProcessor::slantAdjust(bool initial)
     samplesPerLine=getLineLength(currentMode,modifiedClock); //recalculate the samples per line
     addToLog(QString("new clock accepted: %1 a=%2,b=%3").arg(modifiedClock).arg(a).arg(b),LOGSLANT);
 
-    syncArray[0].end+=(long)round(a);
-    syncArray[0].start+=(long)round(a);
+    syncArray[0].end+=static_cast<long>(round(a));
+    syncArray[0].start+=static_cast<long>(round(a));
 
     unsigned int syncCorrected;
     if(syncArray[0].retrace)

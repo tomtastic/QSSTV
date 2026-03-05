@@ -32,7 +32,7 @@ rxWidget::rxWidget(QWidget *parent):QWidget(parent),ui(new Ui::rxWidget)
   ui->sstvModeComboBox->addItem("Auto");
   for(i=0;i<NUMSSTVMODES;i++)
     {
-      ui->sstvModeComboBox->addItem(getSSTVModeNameLong((esstvMode)i));
+      ui->sstvModeComboBox->addItem(getSSTVModeNameLong(static_cast<esstvMode>(i)));
     }
   foreach (QByteArray format, QImageWriter::supportedImageFormats())
     {
@@ -111,7 +111,7 @@ void rxWidget::readSettings()
   autoSlantAdjust=qSettings.value("autoSlantAdjust",false).toBool();
   autoSave=qSettings.value("autoSave",true).toBool();
   sensitivity=qSettings.value("sensitivity",1).toInt();
-  sstvModeIndexRx=(esstvMode)qSettings.value("sstvModeIndexRx",0).toInt();
+  sstvModeIndexRx=static_cast<esstvMode>(qSettings.value("sstvModeIndexRx",0).toInt());
   defaultImageFormat=qSettings.value("defaultImageFormat","png").toString();
   minCompletion=qSettings.value("minCompletion",25).toInt();
   setParams();
@@ -140,7 +140,7 @@ void rxWidget::getParams()
   getValue(autoSave,ui->autoSaveCheckBox);
   getIndex(sensitivity,ui->sensitivityComboBox);
   getIndex(temp,ui->sstvModeComboBox);
-  sstvModeIndexRx=(esstvMode)temp;
+  sstvModeIndexRx=static_cast<esstvMode>(temp);
   getValue(defaultImageFormat,ui->defaultImageFormatComboBox);
   getValue(minCompletion,ui->completeSpinBox);
 }
@@ -186,7 +186,7 @@ void rxWidget::slotTransmissionMode(int rxtxMode)
 
 void rxWidget::changeTransmissionMode(int rxtxMode)
 {
-  transmissionModeIndex=(etransmissionMode)rxtxMode;
+  transmissionModeIndex=static_cast<etransmissionMode>(rxtxMode);
   dispatcherPtr->idleAll();
   setSettingsTab();
   switch(transmissionModeIndex)

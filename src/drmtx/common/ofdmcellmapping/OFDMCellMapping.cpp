@@ -99,7 +99,7 @@ void COFDMCellMapping::ProcessDataInternal(CParameter& TransmParam)
 
 		/* DC carrier */
 		if (_IsDC(Param.matiMapTab[iSymbolCounterAbs][iCar]))
-			(*pvecOutputData)[iCar] = _COMPLEX((_REAL) 0.0, (_REAL) 0.0);
+			(*pvecOutputData)[iCar] = _COMPLEX(static_cast<_REAL>(0.0), static_cast<_REAL>(0.0));
 
 		/* Pilots */
 		if (_IsPilot(Param.matiMapTab[iSymbolCounterAbs][iCar]))
@@ -149,11 +149,11 @@ void COFDMCellMapping::InitInternal(CParameter& TransmParam)
     case CS_3_HMMIX:
     case CS_1_SM:
 		case CS_2_SM:                // pa0mbo was CParameter::CS_2_SM
-		pcDummyCells = (_COMPLEX*) &cDummyCells16QAM[0];
+		pcDummyCells = const_cast<_COMPLEX*>(&cDummyCells16QAM[0]);
 		break;
 
 	case CS_3_SM:
-		pcDummyCells = (_COMPLEX*) &cDummyCells64QAM[0];  // pa0mbo was CParameter::CS_#_SM
+		pcDummyCells = const_cast<_COMPLEX*>(&cDummyCells64QAM[0]);  // pa0mbo was CParameter::CS_#_SM
 		break;
 	}
 

@@ -27,7 +27,7 @@ float tempbuf[30000];
 demodulator::demodulator()
 {
    addToLog("fftwf_plan_dft_1d start",LOGFFT);
-   p1 = fftwf_plan_dft_1d(256,(fftwf_complex *)ss,(fftwf_complex *)S, FFTW_FORWARD, FFTW_ESTIMATE);
+   p1 = fftwf_plan_dft_1d(256,reinterpret_cast<fftwf_complex *>(ss),reinterpret_cast<fftwf_complex *>(S), FFTW_FORWARD, FFTW_ESTIMATE);
    addToLog("fftwf_plan_dft_1d stop",LOGFFT);
 }
 
@@ -76,10 +76,10 @@ void demodulator::init()
           no_of_used_cells_per_frame_list[k++] = (K_min_K_max_list[1][j + i * 6] - K_min_K_max_list[0][j + i * 6] + 1 - no_of_unused_carriers_list[i]) * symbols_per_frame_list[i];
         }
     }
-  sigmaq_noise_list[0] = (float) pow(10.0, -16.0 / 10.0);
-  sigmaq_noise_list[1] = (float) pow(10.0, -14.0 / 10.0);
-  sigmaq_noise_list[2] = (float) pow(10.0, -14.0 / 10.0);
-  sigmaq_noise_list[3] = (float) pow(10.0, -12.0 / 10.0);
+  sigmaq_noise_list[0] = static_cast<float>(pow(10.0, -16.0 / 10.0));
+  sigmaq_noise_list[1] = static_cast<float>(pow(10.0, -14.0 / 10.0));
+  sigmaq_noise_list[2] = static_cast<float>(pow(10.0, -14.0 / 10.0));
+  sigmaq_noise_list[3] = static_cast<float>(pow(10.0, -12.0 / 10.0));
   SNR_timeout_counter=0;
   delta_freq_offset=0;
 }
@@ -190,7 +190,7 @@ bool demodulator::timeSync()
       time_offset = mode_block.time_offset;
       samplerate_offset_estimation = mode_block.sample_rate_offset;
       frequency_offset_fractional_init = mode_block.freq_offset_fract;
-      time_offset_integer = (int) floor(time_offset + 0.5);
+      time_offset_integer = static_cast<int>(floor(time_offset + 0.5));
       if(robustness_mode!=99)
         {
           addToLog(QString("numSamples %1, robustmode %2,timeoffset %3,smplrateOffsetEst %4,freqOffsetFracInit %5,timeOffsetInteger %6")
@@ -214,7 +214,7 @@ bool demodulator::timeSync()
           Ts = Ts_list[robustness_mode];
           Tu = Tu_list[robustness_mode];
           Tg = Tg_list[robustness_mode];
-          Tgh = (int) floor(Tg / 2 + 0.5);
+          Tgh = static_cast<int>(floor(Tg / 2 + 0.5));
           symbols_per_frame = symbols_per_frame_list[robustness_mode];
           K_dc = Tu / 2;
           K_modulo = Tu;
@@ -340,7 +340,7 @@ bool demodulator::frequencySync()
           if (K_min_ != K_max_)
 
             {
-              K_dc_indx = (int) floor(freq_offset_integer / (2.0 * M_PI) + 0.5) + Tu / 2;
+              K_dc_indx = static_cast<int>(floor(freq_offset_integer / (2.0 * M_PI) + 0.5)) + Tu / 2;
 
               K_dc_indx = K_dc_indx % Tu;
               K_dc_plus2_indx = (K_dc_indx + 2 + Tu) % Tu;
@@ -629,9 +629,9 @@ bool demodulator::channelEstimation()
       for (s = 0; s < symbols_per_frame; s++)
         {
           nnn = s % y;
-          m = (int) floor(static_cast<double>(s / y));
-          p_min = (int) ceil(static_cast<double>((K_min - k0 - x * nnn) / (x * y)));
-          p_max = (int) floor(static_cast<double>((K_max - k0 - x * nnn) / (x * y)));
+          m = static_cast<int>(floor(static_cast<double>(s / y)));
+          p_min = static_cast<int>(ceil(static_cast<double>((K_min - k0 - x * nnn) / (x * y))));
+          p_max = static_cast<int>(floor(static_cast<double>((K_max - k0 - x * nnn) / (x * y))));
           for (p = p_min; p <= p_max; p++)
 
             {
@@ -690,8 +690,8 @@ bool demodulator::channelEstimation()
       //       and rndcnt
       symbols_per_2D_window = symbols_per_2D_window_list[robustness_mode];
       symbols_to_delay = symbols_to_delay_list[robustness_mode];
-      f_cut_t = 0.0675 / (1.0 * (double) y);
-      f_cut_k = 1.75 * (float) Tg / (float) Tu;
+      f_cut_t = 0.0675 / (1.0 * static_cast<double>(y));
+      f_cut_k = 1.75 * static_cast<float>(Tg) / static_cast<float>(Tu);
 
       for(i=0;i<5;i++) cnt_tr_cells[i]=0;
       //    start nnn-loop
@@ -928,7 +928,7 @@ bool demodulator::channelEstimation()
             }
           ntc_indx = training_cells_relative_index[j] + i * K_modulo + 1;	/* pa0mbo in  matlab +1 =OK trcrindx 1 lager dan in M   */
 
-          hoek =static_cast<float>(2.0 * M_PI *(float)gain_ref_cells_theta_1024[gain_ref_cells_subset_nn[j]] /1024.0);
+          hoek =static_cast<float>(2.0 * M_PI *static_cast<float>(gain_ref_cells_theta_1024[gain_ref_cells_subset_nn[j]]) /1024.0);
 
           tmpreal =static_cast<float>(cos(hoek) / gain_ref_cells_a[gain_ref_cells_subset_nn[j]]);
           tmpimag =static_cast<float>(-sin(hoek) /gain_ref_cells_a[gain_ref_cells_subset_nn[j]]);
@@ -1029,7 +1029,7 @@ bool demodulator::channelEstimation()
 
   addToLog(QString("Rate %1 %2 %3").arg(smp_rate_conv_fft_phase_diff).arg(smp_rate_conv_fft_phase_offset).arg(smp_rate_conv_in_out_delay),LOGDRMDEMOD);
   //    display results
-  freqOffset=-freq_offset * 12000.0 / (float) Tu / (2.0 * M_PI);
+  freqOffset=-freq_offset * 12000.0 / static_cast<float>(Tu) / (2.0 * M_PI);
   deltaFS= (1.0 / (delta_time_offset_I / Ts + 1.0) - 1.0) ;
   samplerate_offset=delta_time_offset_I /Ts;
 

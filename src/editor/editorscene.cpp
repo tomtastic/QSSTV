@@ -264,9 +264,9 @@ bool editorScene::save(QFile &f,bool templ)
   QDataStream str(&f);
   str.setVersion(QDataStream::Qt_4_4);
   // Header with a "magic number" and a version
-  str << (quint32) MAGICNUMBER;
+  str << static_cast<quint32>MAGICNUMBER;
   str <<  CONFIGVERSION;
-  str << (quint16) QDataStream::Qt_4_4;
+  str << static_cast<quint16>(QDataStream::Qt_4_4);
   graphItemBase *it;
   foreach(QGraphicsItem *t,items())
     {
@@ -543,7 +543,7 @@ void editorScene::slotCopy()
 void editorScene::makeCopy(graphItemBase *it)
 {
   graphItemBase *item=it;
-  graphItemBase::egraphType type=(graphItemBase::egraphType)item->type();
+  graphItemBase::egraphType type=static_cast<graphItemBase::egraphType>(item->type());
   switch(type)
     {
     case graphItemBase::RECTANGLE:

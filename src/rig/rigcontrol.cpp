@@ -221,7 +221,7 @@ bool rigControl::setFrequency(double frequency)
   // Check for Hamlib network control first
   if(catParams.enableHamlibNetworkControl)
   {
-    QString cmd = QString("F %1").arg((qint64)frequency);
+    QString cmd = QString("F %1").arg(static_cast<qint64>(frequency));
     if(sendHamlibCommand(cmd))
     {
       QString response = readHamlibResponse();
@@ -593,7 +593,7 @@ int  rigControl::rawCommand(QByteArray ba)
             {
 
               command+="\\0x";
-              command+=QString::number((unsigned char)ba.at(i),16);
+              command+=QString::number(static_cast<unsigned char>(ba.at(i)),16);
             }
         }
       else

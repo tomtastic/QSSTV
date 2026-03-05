@@ -38,7 +38,7 @@ public:
 		{
   		double temp;
   		int t;
-  		temp=(freq/txSamplingClock)*(double)SINTABLEN+oldAngle;
+  		temp=(freq/txSamplingClock)*static_cast<double>(SINTABLEN)+oldAngle;
   		oldAngle=fmod(temp,SINTABLEN);
   		t=static_cast<int>(oldAngle+0.5);
       return sineTable[t%SINTABLEN];

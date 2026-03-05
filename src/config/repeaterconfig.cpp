@@ -71,8 +71,8 @@ void repeaterConfig::readSettings()
   qSettings.beginGroup("REPEATER");
   repeaterImageInterval=qSettings.value("repeaterImageInterval",10).toInt();
   repeaterEnabled=qSettings.value("repeaterEnabled",false).toBool();
-  repeaterTxMode=(esstvMode)qSettings.value("repeaterTxMode",0).toInt();
-  repeaterIdleTxMode=(esstvMode)qSettings.value("repeaterIdleTxMode",0).toInt();
+  repeaterTxMode=static_cast<esstvMode>(qSettings.value("repeaterTxMode",0).toInt());
+  repeaterIdleTxMode=static_cast<esstvMode>(qSettings.value("repeaterIdleTxMode",0).toInt());
   repeaterImage1=qSettings.value("repeaterImage1","").toString();
   repeaterImage2=qSettings.value("repeaterImage2","").toString();
   repeaterImage3=qSettings.value("repeaterImage3","").toString();
@@ -126,11 +126,11 @@ void repeaterConfig::getParams()
   getValue(repeaterImageInterval,ui->imageIntervalSpinBox);
   getValue(repeaterEnabled,ui->repeaterEnabledCheckBox);
   getIndex(temp,ui->repeaterTxModeComboBox);
-  repeaterTxMode=(esstvMode)temp;
+  repeaterTxMode=static_cast<esstvMode>(temp);
   getIndex(temp,ui->repeaterIdleTxModeComboBox);
   getValue(repeaterTxDelay,ui->txDelaySpinBox);
   getValue(repeaterImageSize,ui->txDRMImageSizeSpinBox);
-  repeaterIdleTxMode=(esstvMode)temp;
+  repeaterIdleTxMode=static_cast<esstvMode>(temp);
 
   getValue(repeaterImage1,ui->repeaterImage1LineEdit);
   getValue(repeaterImage2,ui->repeaterImage2LineEdit);

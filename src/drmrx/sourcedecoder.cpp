@@ -122,7 +122,7 @@ bool sourceDecoder::setupDataBlock(unsigned char *buffer,bool crcIsOK,int len)
   unsigned char header=buffer[0];
   unsigned int availableBytes;
   const char *bufPtr;
-  currentDataBlock.ba=QByteArray((char *)buffer,len);
+  currentDataBlock.ba=QByteArray(reinterpret_cast<char *>(buffer),len);
   currentDataBlock.firstFlag=currentDataBlock.lastFlag=false;
   if(header & 0x80) currentDataBlock.firstFlag = true;
   if(header & 0x40) currentDataBlock.lastFlag  = true;
@@ -133,12 +133,12 @@ bool sourceDecoder::setupDataBlock(unsigned char *buffer,bool crcIsOK,int len)
   if ((currentDataBlock.PPI != 0) && (crcIsOK))
     {
       availableBytes=buffer[1];
-      bufPtr=(const char *)&buffer[2];
+      bufPtr=reinterpret_cast<const char *>(&buffer[2]);
     }
   else
     {
       availableBytes=len-3;
-      bufPtr=(const char *)&buffer[1];
+      bufPtr=reinterpret_cast<const char *>(&buffer[1]);
     }
   if(currentDataBlock.firstFlag)
     {
@@ -231,14 +231,14 @@ bool sourceDecoder::setupDataPacket(QByteArray ba)
   currentDataPacket.crcOK=currentDataBlock.crcOK;
 
   if(header&0x10) currentDataPacket.userFlag=true;
-  currentDataPacket.dataGroupType=(edataGroupType)(header&0x07);
+  currentDataPacket.dataGroupType=static_cast<edataGroupType>(header&0x07);
   if(header&0x80) currentDataPacket.extFlag=true;
   if(header&0x20) currentDataPacket.sessionFlag=true;
 
   if(header&0x40)
     {
       currentDataPacket.crcFlag=true;
-      crc16_bytewise (&checksum,(unsigned char *)currentDataPacket.ba.data(),currentDataPacket.ba.size());
+      crc16_bytewise (&checksum,reinterpret_cast<unsigned char *>(currentDataPacket.ba.data()),currentDataPacket.ba.size());
       if (fabs (checksum) <= DBL_EPSILON)
         {
           currentDataPacket.crcOK=true;
@@ -256,7 +256,7 @@ bool sourceDecoder::setupDataPacket(QByteArray ba)
 
   if(currentDataPacket.sessionFlag)
     {
-      currentDataPacket.segmentNumber = ((static_cast<unsigned char>(currentDataPacket.ba.at(0)) & 0x7F))*256+ ((unsigned char)currentDataPacket.ba.at(1))  ;
+      currentDataPacket.segmentNumber = ((static_cast<unsigned char>(currentDataPacket.ba.at(0)) & 0x7F))*256+ (static_cast<unsigned char>(currentDataPacket.ba.at(1)))  ;
       if(currentDataPacket.ba.at(0)&0x80)
         {
           currentDataPacket.lastSegment=true;
@@ -271,10 +271,10 @@ bool sourceDecoder::setupDataPacket(QByteArray ba)
       currentDataPacket.advance(1);
       lengthIndicator = (currentDataPacket.userAccessField& 0xF);
 
-      if((currentDataPacket.userAccessField & 0x10) && (lengthIndicator>=2)) currentDataPacket.transportID = ((static_cast<unsigned char>(currentDataPacket.ba.at(0))))*256+ ((unsigned char)currentDataPacket.ba.at(1))  ;
+      if((currentDataPacket.userAccessField & 0x10) && (lengthIndicator>=2)) currentDataPacket.transportID = ((static_cast<unsigned char>(currentDataPacket.ba.at(0))))*256+ (static_cast<unsigned char>(currentDataPacket.ba.at(1)))  ;
       currentDataPacket.advance(lengthIndicator);
     }
-  currentDataPacket.segmentSize=((static_cast<unsigned char>(currentDataPacket.ba.at(0)) & 0x1F))*256+ ((unsigned char)currentDataPacket.ba.at(1));
+  currentDataPacket.segmentSize=((static_cast<unsigned char>(currentDataPacket.ba.at(0)) & 0x1F))*256+ (static_cast<unsigned char>(currentDataPacket.ba.at(1)));
   currentDataPacket.advance(2);
   currentDataPacket.lenght=currentDataPacket.ba.size();
   currentDataPacket.log();
@@ -318,31 +318,31 @@ bool sourceDecoder::addHeaderSegment()
     }
 
   tbPtr->headerReceived=true;
-  unsigned char *dataPtr=(unsigned char *)currentDataPacket.ba.data();
+  unsigned char *dataPtr=reinterpret_cast<unsigned char *>(currentDataPacket.ba.data());
   unsigned char PLI;
   unsigned char paramID;
   unsigned char extBit;
   unsigned short dataFieldLength;
   tbPtr->bodySize =
-      (((unsigned int)dataPtr[0]) << 20) +
-      (((unsigned int)dataPtr[1]) << 12) +
-      (((unsigned int)dataPtr[2]) << 4) +
-      ((((unsigned int)dataPtr[3]) & 0xF0) >> 4);
+      ((static_cast<unsigned int>(dataPtr[0])) << 20) +
+      ((static_cast<unsigned int>(dataPtr[1])) << 12) +
+      ((static_cast<unsigned int>(dataPtr[2])) << 4) +
+      (((static_cast<unsigned int>(dataPtr[3])) & 0xF0) >> 4);
 
   tbPtr->headerSize =
-      (((unsigned int)dataPtr[3] & 0x0F) << 9) +
-      (((unsigned int)dataPtr[4]) << 1) +
-      ((((unsigned int)dataPtr[5]) & 0x80) >> 7);
+      ((static_cast<unsigned int>(dataPtr[3]) & 0x0F) << 9) +
+      ((static_cast<unsigned int>(dataPtr[4])) << 1) +
+      (((static_cast<unsigned int>(dataPtr[5])) & 0x80) >> 7);
 
-  tbPtr->contentType = (((unsigned int)dataPtr[5] & 0x7E) >> 1);
-  tbPtr->contentSubtype = ((((unsigned int)dataPtr[5]) & 0x1) <<8) +((unsigned int)dataPtr[6]);
+  tbPtr->contentType = ((static_cast<unsigned int>(dataPtr[5]) & 0x7E) >> 1);
+  tbPtr->contentSubtype = (((static_cast<unsigned int>(dataPtr[5])) & 0x1) <<8) +(static_cast<unsigned int>(dataPtr[6]));
   currentDataPacket.advance(7); // size of header core
   // The header core is followed by a number of parameter blocks
   // the first byte of every parameter block contains a 2-bits PLI (B7 and B6) indicating the type of parameter block.
 
   while(currentDataPacket.ba.size())
     {
-      dataPtr=(unsigned char *)currentDataPacket.ba.data();
+      dataPtr=reinterpret_cast<unsigned char *>(currentDataPacket.ba.data());
       PLI=dataPtr[0]>>6;
       paramID=dataPtr[0]&0x3F;
       switch (PLI)

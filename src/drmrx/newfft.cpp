@@ -75,7 +75,7 @@ void rfft(float *buf, int N2, int forward)
       *(buf + 1) = 0.;
     }
   wpr = static_cast<float>(-2. * pow(sin(0.5 * theta), 2.));
-  wpi = (float) sin(theta);
+  wpi = sin(theta);
   N2p1 = (N2 << 1) + 1;
 
   /* debugging pa0mbo 
@@ -145,7 +145,7 @@ void cfft(float *buf, int N2, int forward)
       delta = mmax << 1;
       theta = static_cast<float>(twopi / ((forward == 1) ? mmax : -mmax));
       wpr = static_cast<float>(-2. * pow(sin(0.5 * theta), 2.));
-      wpi = (float) sin(theta);
+      wpi = sin(theta);
       wr = 1.;
       wi = 0.;
       for (m = 0; m < mmax; m += 2)

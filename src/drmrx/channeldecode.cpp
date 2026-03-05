@@ -344,8 +344,8 @@ void channel_decoding(void)
 
     {
       trxfrmbufptr = (frame_index - 1) * symbol_period * symbols_per_frame + FAC_cells_k[i];
-      received_real[i] = (double) transmission_frame_buffer[2 * trxfrmbufptr];
-      received_imag[i] = (double) transmission_frame_buffer[2 * trxfrmbufptr + 1];
+      received_real[i] = static_cast<double>(transmission_frame_buffer[2 * trxfrmbufptr]);
+      received_imag[i] = static_cast<double>(transmission_frame_buffer[2 * trxfrmbufptr + 1]);
       transfer_function_FAC[i * 2] = channel_transfer_function_buffer[2 * trxfrmbufptr];
       transfer_function_FAC[i * 2 + 1] = channel_transfer_function_buffer[2 * trxfrmbufptr + 1];
       snr[i] = sqrt(transfer_function_FAC[i * 2] * transfer_function_FAC[i * 2] +
@@ -386,7 +386,7 @@ void channel_decoding(void)
   msc_parameters_valid = 1;
    /* frame alignment */
   temp = 2.0 * channel_parameters[0] + channel_parameters[1];
-  identity = (int) temp % 3;
+  identity = static_cast<int>(temp) % 3;
   if (identity != ((frame_index - 1) % 3))
       {
       old_ptr = transmission_frame_buffer_wptr;
@@ -401,13 +401,13 @@ void channel_decoding(void)
         }
       frame_index = identity + 1;
     }
-  interleaver_depth_new = (int) channel_parameters[3];
-  msc_mode_new = (int) channel_parameters[4];
+  interleaver_depth_new = static_cast<int>(channel_parameters[3]);
+  msc_mode_new = static_cast<int>(channel_parameters[4]);
   if (fabs(channel_parameters[6] - 1.0) < DBL_EPSILON)
     {
-      msc_mode_new = msc_mode_new + 2 * (int) channel_parameters[9];
+      msc_mode_new = msc_mode_new + 2 * static_cast<int>(channel_parameters[9]);
     }
-  spectrum_occupancy_new = (int) channel_parameters[2];
+  spectrum_occupancy_new = static_cast<int>(channel_parameters[2]);
   if (spectrum_occupancy_new > 1)
    {
       spectrum_occupancy = -1;
@@ -416,7 +416,7 @@ void channel_decoding(void)
       return;
     }
   identityCount++;
-  audio_data_flag = (int) channel_parameters[6];
+  audio_data_flag = static_cast<int>(channel_parameters[6]);
   // we need 3 consequetive valid fac's to have a complete call
 
   /* decoding of text in fac data */
@@ -657,10 +657,10 @@ void channel_decoding(void)
       else if (msc_mode == 3)	/* 4-QAM */
         {
           //	  rylcm = (int) RY[multiplex_description.PL_PartA];
-          ratesA[0] = (int) RX[multiplex_description.PL_PartA] - 1;
+          ratesA[0] = static_cast<int>(RX[multiplex_description.PL_PartA]) - 1;
           N1 = 0;
           N2 = N_MUX - N1;
-          ratesB[0] = (int) RX[multiplex_description.PL_PartB] - 1;
+          ratesB[0] = static_cast<int>(RX[multiplex_description.PL_PartB]) - 1;
           if (robustness_mode == 0)
             {
               if (spectrum_occupancy == 0)
@@ -720,11 +720,11 @@ void channel_decoding(void)
       for (i = 0; i < lMSC; i++)
         {
           trxfrmbufptr = MSC_Demapper[frame_index - 1][i];
-          received_real[i] = (double) transmission_frame_buffer[2 * trxfrmbufptr];
-          received_imag[i] = (double) transmission_frame_buffer[2 * trxfrmbufptr + 1];
+          received_real[i] = static_cast<double>(transmission_frame_buffer[2 * trxfrmbufptr]);
+          received_imag[i] = static_cast<double>(transmission_frame_buffer[2 * trxfrmbufptr + 1]);
 
-          MSC_cells_sequence[2 * i] = (float) received_real[i];
-          MSC_cells_sequence[2 * i + 1] = (float) received_imag[i];
+          MSC_cells_sequence[2 * i] = static_cast<float>(received_real[i]);
+          MSC_cells_sequence[2 * i + 1] = static_cast<float>(received_imag[i]);
           transfer_function_MSC[i * 2] =  channel_transfer_function_buffer[2 * trxfrmbufptr];
           transfer_function_MSC[i * 2 + 1] = channel_transfer_function_buffer[2 * trxfrmbufptr + 1];
         }

@@ -79,7 +79,7 @@ viterbi_decode(float *llr, int N, int N_PartA, signed char *puncturing1,
 	       char *infoout, char *cwout, int bitpos, int *Deinterleaver,
 	       int L, int N_tail, char *memory_ptr)
 {
-  float *old_metrics, *new_metrics, inf = (float) 1e20;
+  float *old_metrics, *new_metrics, inf = static_cast<float>(1e20);
   char *path_reg;
   signed char *puncture_ptr;
   void *swap_ptr;
@@ -97,10 +97,10 @@ viterbi_decode(float *llr, int N, int N_PartA, signed char *puncturing1,
   /* debugging pa0mbo 
      printf("viterbidecoder: N = %d, N_PartA = %d , L = %d, N_tail= %d  STATES = %d\n",
      N, N_PartA, L, N_tail, STATES );   */
-  old_metrics = (float *) (memory_ptr + 0);
-  new_metrics = (float *) (memory_ptr + STATES * sizeof(float));
+  old_metrics = reinterpret_cast<float *>(memory_ptr + 0);
+  new_metrics = reinterpret_cast<float *>(memory_ptr + STATES * sizeof(float));
   path_reg =
-    (char *) (memory_ptr + STATES * sizeof(float) + STATES * sizeof(float));
+    (memory_ptr + STATES * sizeof(float) + STATES * sizeof(float));
   for (j = 1; j < STATES; j++)
     {
       old_metrics[j] = -inf;
@@ -191,7 +191,7 @@ viterbi_decode(float *llr, int N, int N_PartA, signed char *puncturing1,
 	    {
 	      metric_s1 = old_metrics[butterfly];
 	      metric_s2 = old_metrics[butterfly + NOOFBF];
-	      metric_inc = symbols_acc[(int) CODER_OUTPUT[butterfly]];
+	      metric_inc = symbols_acc[static_cast<int>(CODER_OUTPUT[butterfly])];
 	      new_metrics[2 * butterfly] = metric_s1 + metric_inc;
 	      path_reg[path_reg_index + 2 * butterfly] = 0;
 	      metric_path2 = metric_s2 - metric_inc;	/* Add */
@@ -214,7 +214,7 @@ viterbi_decode(float *llr, int N, int N_PartA, signed char *puncturing1,
 	  path_reg_index += STATES;
 	  swap_ptr = old_metrics;
 	  old_metrics = new_metrics;
-      new_metrics = (float *)swap_ptr;
+      new_metrics = static_cast<float *>(swap_ptr);
 	}
       if (part == 0)
 	{

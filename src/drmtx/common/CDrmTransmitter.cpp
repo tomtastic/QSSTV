@@ -215,7 +215,7 @@ void CDRMTransmitter::init_base()
 
   /* Set desired intermedia frequency (IF) in Hertz */
   SetCarOffset(350.0); /* Default: "VIRTUAL_INTERMED_FREQ" was 12000.0  pa0mbo */
-  rDefCarOffset=(_REAL) VIRTUAL_INTERMED_FREQ;
+  rDefCarOffset=static_cast<_REAL>(VIRTUAL_INTERMED_FREQ);
 
   if (bUseUEP == true)
     {

@@ -42,8 +42,8 @@ void CEngergyDispersal::ProcessData(CVector<_BINARY>* pbiData)
 
 	/* Init shift register and set all registers to "1" with bit-wise
 	   not-operation */
-	iShiftRegisterSPP = ~uint32_t(0);
-	iShiftRegisterVSPP = ~uint32_t(0);
+	iShiftRegisterSPP = ~static_cast<uint32_t>(0);
+	iShiftRegisterVSPP = ~static_cast<uint32_t>(0);
 
 	/* Main routine */
 	for (i = 0; i < iNumInBits; i++)
@@ -55,7 +55,7 @@ void CEngergyDispersal::ProcessData(CVector<_BINARY>* pbiData)
 
 			/* P(X) = X^9 + X^5 + 1, 
 			   in this implementation we have to shift n-1! */
-			biPRBSbit = _BINARY(((iTempShiftRegister >> 4) & 1) ^
+			biPRBSbit = static_cast<_BINARY>(((iTempShiftRegister >> 4) & 1) ^
 				((iTempShiftRegister >> 8) & 1));
 
 			/* Shift bits in shift register and add new bit */
@@ -69,7 +69,7 @@ void CEngergyDispersal::ProcessData(CVector<_BINARY>* pbiData)
 	
 			/* P(X) = X^9 + X^5 + 1, 
 			   in this implementation we have to shift n-1! */
-			biPRBSbit = _BINARY(((iTempShiftRegister >> 4) & 1) ^
+			biPRBSbit = static_cast<_BINARY>(((iTempShiftRegister >> 4) & 1) ^
 				((iTempShiftRegister >> 8) & 1));
 
 			/* Shift bits in shift register and add new bit */

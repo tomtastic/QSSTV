@@ -159,14 +159,14 @@ public:
 
   void AddSegment (int iSegNum)
   {
-    if ((iSegNum + 1) > int (vecbHaveSegment.size ()))
+    if ((iSegNum + 1) > static_cast<int>(vecbHaveSegment.size ()))
       vecbHaveSegment.resize (iSegNum + 1, false);
     vecbHaveSegment[iSegNum] = true;
   }
 
   _BOOLEAN HaveSegment (int iSegNum)
   {
-    if (iSegNum < int (vecbHaveSegment.size ()))
+    if (iSegNum < static_cast<int>(vecbHaveSegment.size ()))
       return vecbHaveSegment[iSegNum];
     return false;
   }

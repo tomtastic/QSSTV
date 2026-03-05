@@ -148,7 +148,7 @@ void imageMatrix::getList()
       }
     }
     std::sort(fileList.begin(), fileList.end(), compareFile);
-  numPages=ceil((double)fileList.count()/static_cast<double>(rows*columns));
+  numPages=ceil(static_cast<double>(fileList.count())/static_cast<double>(rows*columns));
   if(numPages==0) numPages=1;
   slotBegin();
 }

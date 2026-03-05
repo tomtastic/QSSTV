@@ -56,7 +56,7 @@ modeBase::embState modePD::rxSetupLine()
       debugState=stBP;
       start=lineTimeTableRX[lineCounter];
       markerFloat=start+bp;
-      marker=(unsigned int)round(markerFloat);
+      marker=static_cast<unsigned int>(round(markerFloat));
       return MBRXWAIT;
     case 1:
       debugState=stColorLine0 ;
@@ -86,12 +86,12 @@ modeBase::embState modePD::rxSetupLine()
       debugState=stFP;
       start=lineTimeTableRX[lineCounter];
       markerFloat+=fp;
-      marker=(unsigned int)round(markerFloat);
+      marker=static_cast<unsigned int>(round(markerFloat));
       return MBRXWAIT;
     case 6:
       debugState=stSync;
       markerFloat+=syncDuration;
-      marker=(unsigned int)round(markerFloat);
+      marker=static_cast<unsigned int>(round(markerFloat));
       syncPosition=marker;
       return MBSYNC;
     default:
@@ -113,28 +113,28 @@ void modePD::calcPixelPositionTable(unsigned int colorLine,bool tx)
       lineStart+=bp;
       for(i=0;i<activeSSTVParam->numberOfPixels;i++)
         {
-          pixelPositionTable[i]=(unsigned int)round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
+          pixelPositionTable[i]=static_cast<unsigned int>(round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels)));
         }
       break;
     case REDLINE:
       lineStart+=(bp+visibleLineLength);
       for(i=0;i<activeSSTVParam->numberOfPixels;i++)
         {
-          pixelPositionTable[i]=(unsigned int)round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
+          pixelPositionTable[i]=static_cast<unsigned int>(round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels)));
         }
       break;
     case BLUELINE:
       lineStart+=(bp+2*visibleLineLength);
       for(i=0;i<activeSSTVParam->numberOfPixels;i++)
         {
-          pixelPositionTable[i]=(unsigned int)round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
+          pixelPositionTable[i]=static_cast<unsigned int>(round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels)));
         }
       break;
     case YLINEEVEN:
       lineStart+=(bp+3*visibleLineLength);
       for(i=0;i<activeSSTVParam->numberOfPixels;i++)
         {
-          pixelPositionTable[i]=(unsigned int)round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));
+          pixelPositionTable[i]=static_cast<unsigned int>(round(lineStart+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels)));
         }
       break;
     }
@@ -157,7 +157,7 @@ modeBase::embState modePD::txSetupLine()
       return MBPIXELS;
     case 1:
       txFreq=lowerFreq;
-      txDur=(unsigned int)rint(blank);
+      txDur=static_cast<unsigned int>(rint(blank));
       return MBTXGAP;
     case 2:
       calcPixelPositionTable(REDLINE,true);
@@ -165,7 +165,7 @@ modeBase::embState modePD::txSetupLine()
       return MBPIXELS;
     case 3:
       txFreq=lowerFreq;
-      txDur=(unsigned int)rint(blank);
+      txDur=static_cast<unsigned int>(rint(blank));
       return MBTXGAP;
     case 4:
       calcPixelPositionTable(BLUELINE,true);
@@ -173,7 +173,7 @@ modeBase::embState modePD::txSetupLine()
       return MBPIXELS;
     case 5:
       txFreq=lowerFreq;
-      txDur=(unsigned int)rint(blank);
+      txDur=static_cast<unsigned int>(rint(blank));
       return MBTXGAP;
     case 6:
       calcPixelPositionTable(YLINEEVEN,true);
@@ -181,15 +181,15 @@ modeBase::embState modePD::txSetupLine()
       return MBPIXELS;
     case 7:
       txFreq=lowerFreq;
-      txDur=(unsigned int)rint(fp);
+      txDur=static_cast<unsigned int>(rint(fp));
       return MBTXGAP;
     case 8:
       txFreq=syncFreq;
-      txDur=(unsigned int)rint(syncDuration);
+      txDur=static_cast<unsigned int>(rint(syncDuration));
       return MBTXGAP;
     case 9:
       txFreq=lowerFreq;
-      txDur=(unsigned int)rint(bp);
+      txDur=static_cast<unsigned int>(rint(bp));
       return MBTXGAP;
     default:
       //				lineCounter++;

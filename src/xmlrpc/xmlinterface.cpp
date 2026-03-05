@@ -129,7 +129,7 @@ QVariantList xmlInterface::systemMulticall(QVariantList s)
 //                return QVariantList ();
             }
             tmp.append(ret);
-            results << (QVariant)tmp;
+            results << QVariant(tmp);
         }
     }
 

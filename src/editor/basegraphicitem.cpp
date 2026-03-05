@@ -27,7 +27,7 @@ QString itemTypeStr[NUMITEMTYPES]=
   "Border"
 };
 
-const qreal penWidthZero = qreal(0.00000001);
+const qreal penWidthZero = static_cast<qreal>(0.00000001);
 
 QPainterPath graphItemBase::qt_graphicsItem_shapeFromPath(const QPainterPath &path, const QPen &pen) const
 {

@@ -114,7 +114,7 @@ bool drmTx::initDRMImage(bool binary,QString fileName)
           drmTxFileName.setFile(drmTxFileName.completeBaseName()+".jp2");
         }
 
-      rsType=(eRSType)drmTxParameters.reedSolomon;
+      rsType=static_cast<eRSType>(drmTxParameters.reedSolomon);
       if(rsType!=RSTNONE)
         {
           rsd.encode(baDRM,drmTxFileName.suffix(),rsType);
@@ -300,7 +300,7 @@ bool drmTx::initDRMFIX(txSession *sessionPtr)
 {
   reedSolomonCoder rsd;
   eRSType rsType;
-  rsType=(eRSType)sessionPtr->drmParams.reedSolomon;
+  rsType=static_cast<eRSType>(sessionPtr->drmParams.reedSolomon);
   baDRM=sessionPtr->ba;
   if(rsType!=RSTNONE)
     {

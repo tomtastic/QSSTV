@@ -110,7 +110,7 @@ void CMOTSlideShowEncoder::AddNextPicture ()
 //            byteIn=0;
            /* Add one byte = SIZEOF__BYTE bits */
            MOTPicture.vecbRawData.Enlarge (SIZEOF__BYTE);
-           MOTPicture.vecbRawData.Enqueue ((uint32_t)byteIn,SIZEOF__BYTE);
+           MOTPicture.vecbRawData.Enqueue (static_cast<uint32_t>(byteIn),SIZEOF__BYTE);
          }
        MOTDAB.SetMOTObject (MOTPicture,bytesToBeUsed);
       /* Set file counter to next picture, test for wrap around */

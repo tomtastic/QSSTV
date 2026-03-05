@@ -92,10 +92,10 @@ int getofdmsync( /*@null@ */ float *rs, int Ts, int Tu, /*@null@ */ float *H,
 
     {
       Tg = Ts - Tu;
-      Tgh = (int) floor(Tg / 2 + 0.5);
-      Tc = (int) pow(2, ceil(log((double) lH) / log(2.0)));
-      Tgs = (int) floor((float) Tg / (float) Tu * (float) Tc);
-      Tgsh = (int) floor((float) Tg / (float) Tu / 2.0 * (float) Tc);
+      Tgh = static_cast<int>(floor(Tg / 2 + 0.5));
+      Tc = static_cast<int>(pow(2, ceil(log(static_cast<double>(lH)) / log(2.0))));
+      Tgs = static_cast<int>(floor(static_cast<float>(Tg) / static_cast<float>(Tu) * static_cast<float>(Tc)));
+      Tgsh = static_cast<int>(floor(static_cast<float>(Tg) / static_cast<float>(Tu) / 2.0 * static_cast<float>(Tc)));
 
       /* printf("Tg %d, Tgh %d, Tc %d,Tu %d,  Tgs %d, Tgsh %d\n",
          Tg, Tgh, Tc, Tu, Tgs, Tgsh);   */
@@ -103,13 +103,13 @@ int getofdmsync( /*@null@ */ float *rs, int Ts, int Tu, /*@null@ */ float *H,
       if(exp_temp!=nullptr) free(exp_temp);
       if(out1!=nullptr) free(out1);
 
-      if ((exp_temp = (float *)malloc((Tu * 2 + 2) * sizeof(float))) == nullptr)
+      if ((exp_temp = static_cast<float *>(malloc((Tu * 2 + 2) * sizeof(float)))) == nullptr)
 
         {
           printf("cannot malloc space for exp_temp in get_ofdm_symbol\n");
           exit(EXIT_FAILURE);
         }
-      if ((out1 = (float *)malloc(Tu * 2 * sizeof(float))) == nullptr)
+      if ((out1 = static_cast<float *>(malloc(Tu * 2 * sizeof(float)))) == nullptr)
 
         {
           printf("cannot malloc space for out1 in get_ofdm_symbol\n");
@@ -125,15 +125,15 @@ int getofdmsync( /*@null@ */ float *rs, int Ts, int Tu, /*@null@ */ float *H,
           fftwf_destroy_plan(p2);
         }
       addToLog("fftwf_plan_dft_1d getofdmsync p1 start",LOGFFT);
-      p1 = fftwf_plan_dft_1d(Tc,(fftwf_complex *)s,(fftwf_complex *)S,FFTW_FORWARD, FFTW_ESTIMATE);
-      p2 = fftwf_plan_dft_1d(Tu,(fftwf_complex *)s1,(fftwf_complex *)S1, FFTW_FORWARD, FFTW_ESTIMATE);
+      p1 = fftwf_plan_dft_1d(Tc,reinterpret_cast<fftwf_complex *>(s),reinterpret_cast<fftwf_complex *>(S),FFTW_FORWARD, FFTW_ESTIMATE);
+      p2 = fftwf_plan_dft_1d(Tu,reinterpret_cast<fftwf_complex *>(s1),reinterpret_cast<fftwf_complex *>(S1), FFTW_FORWARD, FFTW_ESTIMATE);
       addToLog("fftwf_plan_dft_1d getofdmsync p1 stop",LOGFFT);
 
       /*      printf("xxxx sinfilter\n");   */
       for (i = 0; i < Tgs; i++)
 
         {
-          sinfilter[i] = (float) pow(sin(static_cast<float>(i + 1.0) / static_cast<float>(Tgs + 1.0) * PI), 0.001);
+          sinfilter[i] = static_cast<float>(pow(sin(static_cast<float>(i + 1.0) / static_cast<float>(Tgs + 1.0) * PI), 0.001));
         } return (0);
     }
 
@@ -143,13 +143,13 @@ int getofdmsync( /*@null@ */ float *rs, int Ts, int Tu, /*@null@ */ float *H,
 
       /* fixed parameters */
       Tg = Ts - Tu;
-      Tgh = (int) floor(Tg / 2 + 0.5);
-      Tc = (int) pow(2, ceil(log((double) lH) / log(2.0)));
-      Tgs = (int) floor((float) Tg / (float) Tu * (float) Tc);
-      Tgsh = (int) floor((float) Tg / (float) Tu / 2.0 * (float) Tc);
+      Tgh = static_cast<int>(floor(Tg / 2 + 0.5));
+      Tc = static_cast<int>(pow(2, ceil(log(static_cast<double>(lH)) / log(2.0))));
+      Tgs = static_cast<int>(floor(static_cast<float>(Tg) / static_cast<float>(Tu) * static_cast<float>(Tc)));
+      Tgsh = static_cast<int>(floor(static_cast<float>(Tg) / static_cast<float>(Tu) / 2.0 * static_cast<float>(Tc)));
       kP_small_timing_controller = 0.001;	/* pa0mbo was 0.005 */
       kP_large_timing_controller = 0.001;	/* pa0mbo was 0.01 */
-      threshold_timing_small_large = (float) Tgh;
+      threshold_timing_small_large = static_cast<float>(Tgh);
       kI_timing_controller = 2E-5;	/* pa0mbo was 0.000005 */
       max_delta_theta = Tgh;
       max_delta_time_offset_integer = 3;
@@ -217,27 +217,27 @@ int getofdmsync( /*@null@ */ float *rs, int Ts, int Tu, /*@null@ */ float *H,
 
                 {
                   dummy = h_absq_filtered[i];
-                  delta_theta = (float) i;
+                  delta_theta = static_cast<float>(i);
                 }
             }
           /* debugging
        printf("ofdmsync: dummy= %g delta_theta=%g\n", dummy, delta_theta);  */
           delta_theta =
-              static_cast<float>(((((Tc + Tgsh - (int) delta_theta +
+              static_cast<float>(((((Tc + Tgsh - static_cast<int>(delta_theta) +
                            static_cast<int>(Tc * 1.5)) % Tc) -
-                         Tc / 2) * Tu) / (float) Tc);
+                         Tc / 2) * Tu) / static_cast<float>(Tc));
 
           /* printf("delta_theta rescaled %g\n", delta_theta);   */
-          if (delta_theta >= (float) max_delta_theta)
-            delta_theta_tmp = (float) max_delta_theta;
+          if (delta_theta >= static_cast<float>(max_delta_theta))
+            delta_theta_tmp = static_cast<float>(max_delta_theta);
 
           else
             delta_theta_tmp = delta_theta;
-          if (delta_theta_tmp > (float) -max_delta_theta)
+          if (delta_theta_tmp > static_cast<float>(-max_delta_theta))
             delta_theta = delta_theta_tmp;
 
           else
-            delta_theta = (float) -max_delta_theta;
+            delta_theta = static_cast<float>(-max_delta_theta);
 
           /* filter theta: P-I controller */
           time_offset_ctrl = delta_theta - time_offset_fractional;
@@ -250,7 +250,7 @@ int getofdmsync( /*@null@ */ float *rs, int Ts, int Tu, /*@null@ */ float *H,
           delta_time_offset =
               delta_time_offset_P + delta_time_offset_I +
               time_offset_fractional;
-          delta_time_offset_integer = (int) floor(delta_time_offset + 0.5);
+          delta_time_offset_integer = static_cast<int>(floor(delta_time_offset + 0.5));
           if (delta_time_offset_integer > -max_delta_time_offset_integer)
             dftmp = delta_time_offset_integer;
 
@@ -269,7 +269,7 @@ int getofdmsync( /*@null@ */ float *rs, int Ts, int Tu, /*@null@ */ float *H,
        delta_time_offset, delta_time_offset_integer, time_offset_fractional);  */
 
           /* get best time window */
-          symbol_position_offset = (int) floor(delta_theta - delta_time_offset_integer + 0.5);
+          symbol_position_offset = static_cast<int>(floor(delta_theta - delta_time_offset_integer + 0.5));
 
           if (symbol_position_offset > -max_symbol_position_offset) spotmp = symbol_position_offset;
           else           spotmp = -max_symbol_position_offset;
@@ -278,7 +278,7 @@ int getofdmsync( /*@null@ */ float *rs, int Ts, int Tu, /*@null@ */ float *H,
 
           /* do integer time offset correction and comp phase shift */
           phi_freq_correction_last +=
-              ((float) delta_time_offset_integer / Tu) * freq_offset;
+              (static_cast<float>(delta_time_offset_integer) / Tu) * freq_offset;
         }
 
       else
@@ -304,8 +304,8 @@ int getofdmsync( /*@null@ */ float *rs, int Ts, int Tu, /*@null@ */ float *H,
         {
           indexin = i + symbol_position_offset;
           tmptheta = (freq_offset / Tu) * indexin + phi_freq_correction_last;
-          exp_temp[i * 2] = (float) cos(tmptheta);
-          exp_temp[i * 2 + 1] = (float) sin(tmptheta);
+          exp_temp[i * 2] = cos(tmptheta);
+          exp_temp[i * 2 + 1] = sin(tmptheta);
         }
 
       for (i = 0; i < Tu; i++)
@@ -316,7 +316,7 @@ int getofdmsync( /*@null@ */ float *rs, int Ts, int Tu, /*@null@ */ float *H,
         }
       phi_freq_correction_last =
           fmodf(phi_freq_correction_last +
-                (float) Ts / (float) Tu * freq_offset, 2.0 * PI);
+                static_cast<float>(Ts) / static_cast<float>(Tu) * freq_offset, 2.0 * PI);
 
       /* Now do fft and output symbol */
       fftwf_execute(p2);
@@ -325,9 +325,9 @@ int getofdmsync( /*@null@ */ float *rs, int Ts, int Tu, /*@null@ */ float *H,
       for (i = 0; i <= Tu / 2; i++)
 
         {
-          term1 = static_cast<float>((i * 2.0 * PI / (float) Tu) * (Tgh + time_offset_fractional - symbol_position_offset));	/* Euler */
-          exp_temp[i * 2] = (float) cos(term1);
-          exp_temp[i * 2 + 1] = (float) sin(term1);
+          term1 = static_cast<float>((i * 2.0 * PI / static_cast<float>(Tu)) * (Tgh + time_offset_fractional - symbol_position_offset));	/* Euler */
+          exp_temp[i * 2] = cos(term1);
+          exp_temp[i * 2 + 1] = sin(term1);
 
           /*    printf(" %g %g \n", exp_temp[i*2], exp_temp[i*2+1]); */
         }

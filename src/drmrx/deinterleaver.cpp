@@ -38,7 +38,7 @@ int *deinterleaver(int xinA, int tA, int xinB, int tB)
   int PIofi;
   double part1, part2;
   double part3;
-  deinterl = (int *) malloc((xinA + xinB) * sizeof(int));
+  deinterl = static_cast<int *>(malloc((xinA + xinB) * sizeof(int)));
   if (deinterl == nullptr)
 
     {
@@ -79,10 +79,10 @@ int *deinterleaver(int xinA, int tA, int xinB, int tB)
   else
 
     {
-      part1 = log((double) xinA);
+      part1 = log(static_cast<double>(xinA));
       part2 = log(2.0);
       part3 = ceil(part1 / part2);
-      sA = (int) pow(2, part3);
+      sA = static_cast<int>(pow(2, part3));
     } qA = sA / 4 - 1;
   if (xinB == 0)
     sB = 0;
@@ -90,10 +90,10 @@ int *deinterleaver(int xinA, int tA, int xinB, int tB)
   else
 
     {
-      part1 = log((double) xinB);
+      part1 = log(static_cast<double>(xinB));
       part2 = log(2.0);
       part3 = ceil(part1 / part2);
-      sB = (int) pow(2, part3);
+      sB = static_cast<int>(pow(2, part3));
     } qB = sB / 4 - 1;
   deinterl[0] = 0;
   PIofi = 0;

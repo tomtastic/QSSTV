@@ -159,15 +159,15 @@ bool calibration::start(bool isRX)
       elapsed=elapsedTime;
       if(i%2==0)
         {
-        clock=((double)frames*CALIBRATIONSIZE)/(elapsedTime); // debug joma
+        clock=(static_cast<double>(frames)*CALIBRATIONSIZE)/(elapsedTime); // debug joma
         if(isRX)
         {
-          display((int) round(clock),ui->rxLCD);
+          display(static_cast<int>(round(clock)),ui->rxLCD);
           ui->rxProgress->setValue(i);
         }
         else
         {
-          display((int) round(clock),ui->txLCD);
+          display(static_cast<int>(round(clock)),ui->txLCD);
           ui->txProgress->setValue(i);
         }
       }

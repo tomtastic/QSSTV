@@ -79,7 +79,7 @@ public:
 		OF_IQ_NEG /* I / Q */, OF_EP /* envelope / phase */};
 
 	CTransmitData(CSoundOutInterface* pNS) : pFileTransmitter(nullptr), pSound(pNS), 
-    eOutputFormat(OF_REAL_VAL), rDefCarOffset((_REAL) VIRTUAL_INTERMED_FREQ)
+    eOutputFormat(OF_REAL_VAL), rDefCarOffset(static_cast<_REAL>(VIRTUAL_INTERMED_FREQ))
 //  , strOutFileName("test/TransmittedData.txt")
   {
   }

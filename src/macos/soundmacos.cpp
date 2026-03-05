@@ -109,7 +109,7 @@ static bool DeviceHasBuffersInScope(AudioObjectID deviceID, AudioObjectPropertyS
 		return false;
 
 	std::vector<char> buffer(dataSize);
-	AudioBufferList *bufferList = (AudioBufferList *)buffer.data();
+	AudioBufferList *bufferList = reinterpret_cast<AudioBufferList *>(buffer.data());
 	if(!bufferList)
 		return false;
 
@@ -178,7 +178,7 @@ public:
 	explicit CFString(const char *s):
 	s(CFStringCreateWithCString(kCFAllocatorDefault, s, kCFStringEncodingUTF8)){}
 
-	CFString(const CFString&other):s((CFStringRef)CFRetain(other.s)) {}
+	CFString(const CFString&other):s(static_cast<CFStringRef>(CFRetain(other.s))) {}
 	CFString(CFString&&other):s(other.s) { other.s=nullptr; }
 
 	~CFString()
@@ -189,7 +189,7 @@ public:
 	CFString&operator=(const CFString &other)
 	{
 		reset();
-		s = (CFStringRef)CFRetain(other.s);
+		s = static_cast<CFStringRef>(CFRetain(other.s));
 		return *this;
 	}
 
@@ -378,7 +378,7 @@ private:
 	static void staticCallback(void *ctx, AudioQueueRef queue, AudioQueueBufferRef buffer, const AudioTimeStamp *inStartTime,
 					UInt32 inNumberPacketDescriptions, const AudioStreamPacketDescription *inPacketDescs)
 	{
-		auto ch = (input_channel*)ctx;
+		auto ch = static_cast<input_channel*>(ctx);
 		assert(ch);
 		assert(queue == ch->queue);
 		ch->Callback(buffer, inStartTime, inNumberPacketDescriptions, inPacketDescs);
@@ -497,7 +497,7 @@ public:
 private:
 	static void staticCallback(void *ctx, AudioQueueRef queue, AudioQueueBufferRef buffer)
 	{
-		auto ch = (output_channel*)ctx;
+		auto ch = static_cast<output_channel*>(ctx);
 		assert(ch);
 		assert(queue == ch->queue);
 		ch->Callback(buffer);
@@ -546,7 +546,7 @@ public:
 		while (bytes)
 		{
 			auto buffer = get_buffer();
-			const auto n = std::min(bytes, size_t(buffer->mAudioDataBytesCapacity));
+			const auto n = std::min(bytes, static_cast<size_t>(buffer->mAudioDataBytesCapacity));
 			assert(n);
 			memcpy(buffer->mAudioData, data, n);
 			buffer->mAudioDataByteSize = n;
@@ -623,8 +623,8 @@ struct impl: public soundBase
 	{
 		if (!input) return 0;
 		try {
-			countAvailable = int(input->bytes_available());
-			if (size_t(countAvailable) < sizeof(qint16)*DOWNSAMPLESIZE)
+			countAvailable = static_cast<int>(input->bytes_available());
+			if (static_cast<size_t>(countAvailable) < sizeof(qint16)*DOWNSAMPLESIZE)
 				return 0;
 
 //			printf("XXX: %s(%d bytes available)\n", __FUNCTION__, countAvailable);

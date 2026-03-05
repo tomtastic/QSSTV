@@ -236,8 +236,8 @@ QImage jp2IO::decode(QString fileName)
   if (!parameters.nb_tile_to_decode)
     {
       /* Optional if you want decode the entire image */
-      if (!opj_set_decode_area(l_codec, jp2Image, (OPJ_INT32)parameters.DA_x0,
-                               (OPJ_INT32)parameters.DA_y0, (OPJ_INT32)parameters.DA_x1, (OPJ_INT32)parameters.DA_y1))
+      if (!opj_set_decode_area(l_codec, jp2Image, static_cast<OPJ_INT32>(parameters.DA_x0),
+                               static_cast<OPJ_INT32>(parameters.DA_y0), static_cast<OPJ_INT32>(parameters.DA_x1), static_cast<OPJ_INT32>(parameters.DA_y1)))
         {
           addToLog( "ERROR -> opj_decompress: failed to set the decoded area",LOGALL);
           destroy_parameters(&parameters);
@@ -316,7 +316,7 @@ QImage jp2IO::decode(QString fileName)
   qimage=QImage(wr, hr, QImage::Format_RGB32);
 
   // get a pointer to the first pixel data in result image
-  QRgb *bits = (QRgb *)qimage.bits();
+  QRgb *bits = reinterpret_cast<QRgb *>(qimage.bits());
   for(int i = 0; i < wr * hr; i++) {
       unsigned char R, G, B;
 
@@ -345,7 +345,7 @@ opj_image_t *jp2IO::convert_gray_to_rgb(opj_image_t* original)
   opj_image_t* l_new_image = nullptr;
   opj_image_cmptparm_t* l_new_components = nullptr;
 
-  l_new_components = (opj_image_cmptparm_t*)malloc((original->numcomps + 2U) * sizeof(opj_image_cmptparm_t));
+  l_new_components = static_cast<opj_image_cmptparm_t*>(malloc((original->numcomps + 2U) * sizeof(opj_image_cmptparm_t)));
   if (l_new_components == nullptr) {
       fprintf(stderr, "ERROR -> opj_decompress: failed to allocate memory for RGB image!\n");
       opj_image_destroy(original);
@@ -516,8 +516,8 @@ bool jp2IO::createImage(QImage qimage)
       cmptparm[i].prec = 8;
       cmptparm[i].bpp  = 8;
       cmptparm[i].sgnd = 0;
-      cmptparm[i].dx   = (OPJ_UINT32)cparameters.subsampling_dx;
-      cmptparm[i].dy   = (OPJ_UINT32)cparameters.subsampling_dy;
+      cmptparm[i].dx   = static_cast<OPJ_UINT32>(cparameters.subsampling_dx);
+      cmptparm[i].dy   = static_cast<OPJ_UINT32>(cparameters.subsampling_dy);
       cmptparm[i].w    = qimage.width();
       cmptparm[i].h    = qimage.height();
     }
@@ -530,10 +530,10 @@ bool jp2IO::createImage(QImage qimage)
     }
 
   /* set image offset and reference grid */
-  jp2Image->x0 = (OPJ_UINT32)cparameters.image_offset_x0;
-  jp2Image->y0 = (OPJ_UINT32)cparameters.image_offset_y0;
-  jp2Image->x1 =	jp2Image->x0 + (qimage.width()  - 1U) * (OPJ_UINT32)cparameters.subsampling_dx + 1U;
-  jp2Image->y1 = jp2Image->y0 + (qimage.height() - 1U) * (OPJ_UINT32)cparameters.subsampling_dy + 1U;
+  jp2Image->x0 = static_cast<OPJ_UINT32>(cparameters.image_offset_x0);
+  jp2Image->y0 = static_cast<OPJ_UINT32>(cparameters.image_offset_y0);
+  jp2Image->x1 =	jp2Image->x0 + (qimage.width()  - 1U) * static_cast<OPJ_UINT32>(cparameters.subsampling_dx) + 1U;
+  jp2Image->y1 = jp2Image->y0 + (qimage.height() - 1U) * static_cast<OPJ_UINT32>(cparameters.subsampling_dy) + 1U;
 
 
   int width  = jp2Image->comps[0].w;
@@ -543,15 +543,15 @@ bool jp2IO::createImage(QImage qimage)
   QRgb color;
   int index = 0;
   int x,y;
-  bits= (QRgb *)qimage.bits();
+  bits= reinterpret_cast<QRgb *>(qimage.bits());
   for(y = 0; y < height; y++)
     {
       for(x = 0; x < width; x++)
         {
           color=bits[x+y* width];
-          jp2Image->comps[0].data[index] = (OPJ_INT32)qRed(color);	/* R */
-          jp2Image->comps[1].data[index] = (OPJ_INT32)qGreen(color);	/* G */
-          jp2Image->comps[2].data[index] = (OPJ_INT32)qBlue(color);	/* B */
+          jp2Image->comps[0].data[index] = static_cast<OPJ_INT32>(qRed(color));	/* R */
+          jp2Image->comps[1].data[index] = static_cast<OPJ_INT32>(qGreen(color));	/* G */
+          jp2Image->comps[2].data[index] = static_cast<OPJ_INT32>(qBlue(color));	/* B */
           index++;
         }
     }

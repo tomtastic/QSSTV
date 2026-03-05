@@ -79,7 +79,7 @@ void rigConfig::readSettings()
   cp->enableXMLRPC=qSettings.value("enableXMLRPC",0).toBool();
   cp->XMLRPCPort=qSettings.value("XMLRPCPort","7362").toInt();
   cp->txOnDelay=qSettings.value("txOnDelay",0.0).toDouble();
-  cp->pttType=(ptt_type_t)qSettings.value("pttType",(int)RIG_PTT_RIG).toInt();
+  cp->pttType=static_cast<ptt_type_t>(qSettings.value("pttType",static_cast<int>(RIG_PTT_RIG)).toInt());
   cp->enableHamlibNetworkControl=qSettings.value("enableHamlibNetworkControl",0).toBool();
   cp->hamlibHost=qSettings.value("hamlibHost","localhost").toString();
   cp->hamlibPort=qSettings.value("hamlibPort",4532).toInt();
@@ -107,7 +107,7 @@ void rigConfig::writeSettings()
   qSettings.setValue("activeDTR",cp->activeDTR);
   qSettings.setValue("nactiveRTS",cp->nactiveRTS);
   qSettings.setValue("nactiveDTR",cp->nactiveDTR);
-  qSettings.setValue("pttType",(int) cp->pttType);
+  qSettings.setValue("pttType",static_cast<int>(cp->pttType));
   qSettings.setValue("enableXMLRPC",cp->enableXMLRPC);
   qSettings.setValue("XMLRPCPort",cp->XMLRPCPort);
   qSettings.setValue("txOnDelay",cp->txOnDelay);

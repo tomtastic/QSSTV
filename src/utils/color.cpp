@@ -65,13 +65,13 @@ static void sycc_to_rgb(int offset, int upb, int y, int cb, int cr,
 	int r, g, b;
 
 	cb -= offset; cr -= offset;
-	r = y + static_cast<int>(1.402 * (float)cr);
+	r = y + static_cast<int>(1.402 * static_cast<float>(cr));
 	if(r < 0) r = 0; else if(r > upb) r = upb; *out_r = r;
 
-	g = y - static_cast<int>(0.344 * (float)cb + 0.714 * (float)cr);
+	g = y - static_cast<int>(0.344 * static_cast<float>(cb) + 0.714 * static_cast<float>(cr));
 	if(g < 0) g = 0; else if(g > upb) g = upb; *out_g = g;
 
-	b = y + static_cast<int>(1.772 * (float)cb);
+	b = y + static_cast<int>(1.772 * static_cast<float>(cb));
 	if(b < 0) b = 0; else if(b > upb) b = upb; *out_b = b;
 }
 
@@ -82,19 +82,19 @@ static void sycc444_to_rgb(opj_image_t *img)
 	unsigned int maxw, maxh, max, i;
 	int offset, upb;
 
-	upb = (int)img->comps[0].prec;
+	upb = static_cast<int>(img->comps[0].prec);
 	offset = 1<<(upb - 1); upb = (1<<upb)-1;
 
-	maxw = (unsigned int)img->comps[0].w; maxh = (unsigned int)img->comps[0].h;
+	maxw = static_cast<unsigned int>(img->comps[0].w); maxh = static_cast<unsigned int>(img->comps[0].h);
 	max = maxw * maxh;
 
 	y = img->comps[0].data;
 	cb = img->comps[1].data;
 	cr = img->comps[2].data;
 
-	d0 = r = (int*)malloc(sizeof(int) * (size_t)max);
-	d1 = g = (int*)malloc(sizeof(int) * (size_t)max);
-	d2 = b = (int*)malloc(sizeof(int) * (size_t)max);
+	d0 = r = static_cast<int*>(malloc(sizeof(int) * static_cast<size_t>(max)));
+	d1 = g = static_cast<int*>(malloc(sizeof(int) * static_cast<size_t>(max)));
+	d2 = b = static_cast<int*>(malloc(sizeof(int) * static_cast<size_t>(max)));
 
 	for(i = 0U; i < max; ++i)
 	{
@@ -115,23 +115,23 @@ static void sycc422_to_rgb(opj_image_t *img)
 	int offset, upb;
 	unsigned int i, j;
 
-	upb = (int)img->comps[0].prec;
+	upb = static_cast<int>(img->comps[0].prec);
 	offset = 1<<(upb - 1); upb = (1<<upb)-1;
 
-	maxw = (unsigned int)img->comps[0].w; maxh = (unsigned int)img->comps[0].h;
+	maxw = static_cast<unsigned int>(img->comps[0].w); maxh = static_cast<unsigned int>(img->comps[0].h);
 	max = maxw * maxh;
 
 	y = img->comps[0].data;
 	cb = img->comps[1].data;
 	cr = img->comps[2].data;
 
-	d0 = r = (int*)malloc(sizeof(int) * (size_t)max);
-	d1 = g = (int*)malloc(sizeof(int) * (size_t)max);
-	d2 = b = (int*)malloc(sizeof(int) * (size_t)max);
+	d0 = r = static_cast<int*>(malloc(sizeof(int) * static_cast<size_t>(max)));
+	d1 = g = static_cast<int*>(malloc(sizeof(int) * static_cast<size_t>(max)));
+	d2 = b = static_cast<int*>(malloc(sizeof(int) * static_cast<size_t>(max)));
 
 	for(i=0U; i < maxh; ++i)
 	{
-		for(j=0U; j < (maxw & ~(unsigned int)1U); j += 2U)
+		for(j=0U; j < (maxw & ~1U); j += 2U)
 		{
 			sycc_to_rgb(offset, upb, *y, *cb, *cr, r, g, b);
 			++y; ++r; ++g; ++b;
@@ -151,8 +151,8 @@ static void sycc422_to_rgb(opj_image_t *img)
 	img->comps[1].w = maxw; img->comps[1].h = maxh;
 	img->comps[2].w = maxw; img->comps[2].h = maxh;
 #else
-	img->comps[1].w = (OPJ_UINT32)maxw; img->comps[1].h = (OPJ_UINT32)maxh;
-	img->comps[2].w = (OPJ_UINT32)maxw; img->comps[2].h = (OPJ_UINT32)maxh;
+	img->comps[1].w = static_cast<OPJ_UINT32>(maxw); img->comps[1].h = static_cast<OPJ_UINT32>(maxh);
+	img->comps[2].w = static_cast<OPJ_UINT32>(maxw); img->comps[2].h = static_cast<OPJ_UINT32>(maxh);
 #endif
 	img->comps[1].dx = img->comps[0].dx;
 	img->comps[2].dx = img->comps[0].dx;
@@ -169,26 +169,26 @@ static void sycc420_to_rgb(opj_image_t *img)
 	int offset, upb;
 	unsigned int i, j;
 
-	upb = (int)img->comps[0].prec;
+	upb = static_cast<int>(img->comps[0].prec);
 	offset = 1<<(upb - 1); upb = (1<<upb)-1;
 
-	maxw = (unsigned int)img->comps[0].w; maxh = (unsigned int)img->comps[0].h;
+	maxw = static_cast<unsigned int>(img->comps[0].w); maxh = static_cast<unsigned int>(img->comps[0].h);
 	max = maxw * maxh;
 
 	y = img->comps[0].data;
 	cb = img->comps[1].data;
 	cr = img->comps[2].data;
 
-	d0 = r = (int*)malloc(sizeof(int) * (size_t)max);
-	d1 = g = (int*)malloc(sizeof(int) * (size_t)max);
-	d2 = b = (int*)malloc(sizeof(int) * (size_t)max);
+	d0 = r = static_cast<int*>(malloc(sizeof(int) * static_cast<size_t>(max)));
+	d1 = g = static_cast<int*>(malloc(sizeof(int) * static_cast<size_t>(max)));
+	d2 = b = static_cast<int*>(malloc(sizeof(int) * static_cast<size_t>(max)));
 
-	for(i=0U; i < (maxh & ~(unsigned int)1U); i += 2U)
+	for(i=0U; i < (maxh & ~1U); i += 2U)
 	{
 		ny = y + maxw;
 		nr = r + maxw; ng = g + maxw; nb = b + maxw;
 
-		for(j=0; j < (maxw & ~(unsigned int)1U); j += 2U)
+		for(j=0; j < (maxw & ~1U); j += 2U)
 		{
 			sycc_to_rgb(offset, upb, *y, *cb, *cr, r, g, b);
 			++y; ++r; ++g; ++b;
@@ -212,7 +212,7 @@ static void sycc420_to_rgb(opj_image_t *img)
 	}
 	if(i < maxh)
 	{
-		for(j=0U; j < (maxw & ~(unsigned int)1U); j += 2U)
+		for(j=0U; j < (maxw & ~1U); j += 2U)
 		{
 			sycc_to_rgb(offset, upb, *y, *cb, *cr, r, g, b);
 
@@ -236,8 +236,8 @@ static void sycc420_to_rgb(opj_image_t *img)
 	img->comps[1].w = maxw; img->comps[1].h = maxh;
 	img->comps[2].w = maxw; img->comps[2].h = maxh;
 #else
-	img->comps[1].w = (OPJ_UINT32)maxw; img->comps[1].h = (OPJ_UINT32)maxh;
-	img->comps[2].w = (OPJ_UINT32)maxw; img->comps[2].h = (OPJ_UINT32)maxh;
+	img->comps[1].w = static_cast<OPJ_UINT32>(maxw); img->comps[1].h = static_cast<OPJ_UINT32>(maxh);
+	img->comps[2].w = static_cast<OPJ_UINT32>(maxw); img->comps[2].h = static_cast<OPJ_UINT32>(maxh);
 #endif
 	img->comps[1].dx = img->comps[0].dx;
 	img->comps[2].dx = img->comps[0].dx;
@@ -737,8 +737,8 @@ void color_esycc_to_rgb(opj_image_t *image)
 	w = image->comps[0].w;
 	h = image->comps[0].h;
 	
-	sign1 = (int)image->comps[1].sgnd;
-	sign2 = (int)image->comps[2].sgnd;
+	sign1 = static_cast<int>(image->comps[1].sgnd);
+	sign2 = static_cast<int>(image->comps[2].sgnd);
 	
 	max = w * h;
 	
@@ -750,20 +750,20 @@ void color_esycc_to_rgb(opj_image_t *image)
 		if( !sign1) cb -= flip_value;
 		if( !sign2) cr -= flip_value;
 		
-		val = static_cast<int>((float)y - (float)0.0000368 * (float)cb
-		 + (float)1.40199 * (float)cr + (float)0.5);
+		val = static_cast<int>(static_cast<float>(y) - static_cast<float>(0.0000368) * static_cast<float>(cb)
+		 + static_cast<float>(1.40199) * static_cast<float>(cr) + static_cast<float>(0.5));
 		
 		if(val > max_value) val = max_value; else if(val < 0) val = 0;
 		image->comps[0].data[i] = val;
 		
-		val = static_cast<int>((float)1.0003 * (float)y - (float)0.344125 * (float)cb
-		 - (float)0.7141128 * (float)cr + (float)0.5);
+		val = static_cast<int>(static_cast<float>(1.0003) * static_cast<float>(y) - static_cast<float>(0.344125) * static_cast<float>(cb)
+		 - static_cast<float>(0.7141128) * static_cast<float>(cr) + static_cast<float>(0.5));
 		
 		if(val > max_value) val = max_value; else if(val < 0) val = 0;
 		image->comps[1].data[i] = val;
 		
-		val = static_cast<int>((float)0.999823 * (float)y + (float)1.77204 * (float)cb
-		 - (float)0.000008 *(float)cr + (float)0.5);
+		val = static_cast<int>(static_cast<float>(0.999823) * static_cast<float>(y) + static_cast<float>(1.77204) * static_cast<float>(cb)
+		 - static_cast<float>(0.000008) *static_cast<float>(cr) + static_cast<float>(0.5));
 		
 		if(val > max_value) val = max_value; else if(val < 0) val = 0;
 		image->comps[2].data[i] = val;
