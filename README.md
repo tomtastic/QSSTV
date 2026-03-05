@@ -10,6 +10,8 @@ QSSTV is a program for receiving and transmitting SSTV and HAMDRM (sometimes cal
 It is compatible with most of MMSSTV and EasyPal
 
 **NB: Video capture requires V4L, which is Linux-specific so excluded on MacOS**
+
+This project is actively being modernized to Qt 6 and modern C++ standards.
 </div>
 
 ---
