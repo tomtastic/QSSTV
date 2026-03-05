@@ -26,17 +26,14 @@
 
 txWidget::txWidget(QWidget *parent) :  QWidget(parent), ui(new Ui::txWidget)
 {
-  qDebug() << "txWidget::txWidget() - Constructor started";
   int i;
   QString tmp;
   ui->setupUi(this);
-  qDebug() << "txWidget::txWidget() - setupUi completed";
   ui->previewWidget->setType(imageViewer::PREVIEW);
   txFunctionsPtr=new txFunctions(this);
   imageViewerPtr=ui->imageFrame;
 
   imageViewerPtr->displayImage();
-  qDebug() << "txWidget::txWidget() - displayImage completed";
   for(i=0;i<NUMSSTVMODES;i++)
     {
       ui->sstvModeComboBox->addItem(getSSTVModeNameLong(static_cast<esstvMode>(i)));
@@ -45,8 +42,6 @@ txWidget::txWidget(QWidget *parent) :  QWidget(parent), ui(new Ui::txWidget)
   ui->sstvResizeComboBox->addItem("Stretch");
   ui->sstvResizeComboBox->addItem("Crop");
   ui->sstvResizeComboBox->addItem("Fit");
-
-  qDebug() << "txWidget::txWidget() - Setting up connections";
   connect(ui->sstvModeComboBox, QOverload<int>::of(&QComboBox::activated), this, &txWidget::slotModeChanged);
   connect(ui->sstvResizeComboBox, QOverload<int>::of(&QComboBox::activated), this, &txWidget::slotResizeChanged);
 
@@ -95,12 +90,12 @@ txWidget::txWidget(QWidget *parent) :  QWidget(parent), ui(new Ui::txWidget)
   notifyTimer.setSingleShot(true);
   notifyTimer.setInterval(NOTIFYCHECKINTERVAL);
   repeaterTxDelayTimer.setSingleShot(true);
-  qDebug() << "txWidget::txWidget() - Constructor completed";
 
-#if defined(__APPLE__) && QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
-  // workaround for performance issue on MacOS 12.x
-  // idea courtesy
-  // https://stackoverflow.com/questions/69890284/qslider-in-qt-misbehaves-in-new-macos-monterey-v12-0-1-any-workaround
+#if defined(__APPLE__)
+  // workaround for performance issue on macOS with QSlider painting
+  // The native macOS slider rendering causes severe performance issues (20+ second hangs)
+  // in paintSiblingsRecursive. Using a custom stylesheet avoids the native rendering.
+  // See: https://stackoverflow.com/questions/69890284/qslider-in-qt-misbehaves-in-new-macos-monterey-v12-0-1-any-workaround
   ui->sizeSlider->setStyleSheet("\
                       QSlider::groove:horizontal {\
                           height: 8px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */ \
@@ -116,7 +111,7 @@ txWidget::txWidget(QWidget *parent) :  QWidget(parent), ui(new Ui::txWidget)
                           border-radius: 3px;\
                       }\
                   ");
-#endif  // __APPLE__ && Qt < 6.3
+#endif  // __APPLE__
 }
 
 txWidget::~txWidget()
@@ -128,18 +123,24 @@ txWidget::~txWidget()
   delete ui;
 }
 
+void txWidget::showEvent(QShowEvent *event)
+{
+  QWidget::showEvent(event);
+}
+
+void txWidget::paintEvent(QPaintEvent *event)
+{
+  QWidget::paintEvent(event);
+}
+
 void txWidget::init()
 {
-  qDebug() << "txWidget::init() - Started";
   splashStr+=QString( "Setting up TX" ).rightJustified(25,' ')+"\n";
   splashPtr->showMessage ( splashStr ,Qt::AlignLeft,Qt::white);
   qApp->processEvents();
 
-  qDebug() << "txWidget::init() - Calling readSettings";
   readSettings();
-  qDebug() << "txWidget::init() - Calling initView";
   initView();
-  qDebug() << "txWidget::init() - Calling setProfileNames";
   setProfileNames();
   ed=nullptr;
   repeaterIndex=0;
@@ -148,12 +149,9 @@ void txWidget::init()
   repeaterTimer->start(60000*repeaterImageInterval);
   addToLog("Reapater Timer Started",LOGTXMAIN);
   imageViewerPtr->setType(imageViewer::TXIMG);
-  qDebug() << "txWidget::init() - Calling slotModeChanged";
   slotModeChanged(sstvModeIndexTx);
-  qDebug() << "txWidget::init() - Calling changeTransmissionMode";
   changeTransmissionMode(transmissionModeIndex);
   //  setSettingsTab();
-  qDebug() << "txWidget::init() - Calling slotProfileChanged";
   slotProfileChanged(0);
   if(lowRes)
     {
@@ -161,7 +159,6 @@ void txWidget::init()
       ui->refreshPushButton->hide();
       ui->previewWidget->hide();
     }
-  qDebug() << "txWidget::init() - Completed";
 }
 
 void txWidget::readSettings()
