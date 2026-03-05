@@ -74,7 +74,7 @@ CParameter::CParameter():
  vecrRdel(0),
  vecrRdelThresholds(0),
  vecrRdelIntervals(0),
- bMeasureDoppler(0),
+ bMeasureDoppler(false),
  rRdop(0.0),
  bMeasureInterference(false),
  rIntFreq(0.0),

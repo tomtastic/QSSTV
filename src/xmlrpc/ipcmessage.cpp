@@ -76,5 +76,5 @@ bool ipcMessage::closeQueue()
       if(rc<0) errorOut() << "IPC Error" << strerror(errno);
       return false;
     }
-  return 0;
+  return false;
 }

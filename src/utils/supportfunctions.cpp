@@ -321,7 +321,7 @@ bool trash(QString filename,bool forceDelete)
       tmp=QString("%1/%2_%3.%4").arg(infoDir.path()).arg(modifiedFileInfo.completeBaseName()).arg(QString::number(counter)).arg(modifiedFileInfo.suffix());
       infoFile.setFileName(tmp+".trashinfo");
     }
-  while(1);
+  while(true);
 
   infoTxt=QString("[Trash Info]\nPath=%1\nDeletionDate=%2")
       .arg(filename).arg(QDateTime::currentDateTime().toString(Qt::ISODate));

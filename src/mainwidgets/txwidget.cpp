@@ -887,7 +887,7 @@ void txWidget::slotListingDone(bool err)
 
 void txWidget::sendRepeaterImage(esstvMode rxMode)
 {
-  useHybrid=0;
+  useHybrid=false;
   setValue(useHybrid,ui->hybridCheckBox);
   rxWidgetPtr->getImageViewerPtr()->slotToTX();
   repeaterTxDelayTimer.start(repeaterTxDelay*1000);
