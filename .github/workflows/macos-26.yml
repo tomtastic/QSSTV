@@ -15,13 +15,36 @@ jobs:
     runs-on: macos-26
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Cache Homebrew packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/Homebrew
+            /usr/local/Cellar/fftw
+            /usr/local/Cellar/hamlib
+            /usr/local/Cellar/openjpeg
+            /usr/local/Cellar/qt
+            /usr/local/Cellar/pulseaudio
+          key: ${{ runner.os }}-brew-${{ hashFiles('.github/workflows/macos-26.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-brew-
+      
       - name: Install Homebrew dependencies
         run: |
           env HOMEBREW_NO_AUTO_UPDATE=1 brew install fftw hamlib openjpeg qt pulseaudio
 
+      - name: Cache CMake build
+        uses: actions/cache@v4
+        with:
+          path: build
+          key: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt', 'src/**/*.cpp', 'src/**/*.h') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-
+
       - name: Run CMake
         run: |
-          mkdir build
+          mkdir -p build
           cd build
           cmake ..
 
