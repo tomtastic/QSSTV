@@ -310,12 +310,25 @@ if(APPLE)
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in
         MACOSX_BUNDLE_ICON_FILE qsstv.icns
+        XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES
+        XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "-"
     )
     # Add icon to bundle resources
     set_source_files_properties(qsstv.icns PROPERTIES
         MACOSX_PACKAGE_LOCATION Resources
     )
     target_sources(qsstv PRIVATE qsstv.icns)
+    
+    # Enable hardened runtime with necessary entitlements
+    if(CMAKE_BUILD_TYPE STREQUAL "Release")
+        add_custom_command(TARGET qsstv POST_BUILD
+            COMMAND codesign --force --deep --sign - 
+                --options runtime
+                --entitlements ${CMAKE_CURRENT_SOURCE_DIR}/qsstv.entitlements
+                $<TARGET_BUNDLE_DIR:qsstv>
+            COMMENT "Code signing with hardened runtime"
+        )
+    endif()
 else()
     target_link_libraries(qsstv PRIVATE
         PkgConfig::PULSEAUDIO
