@@ -18,17 +18,17 @@ jobs:
         run: |
           env HOMEBREW_NO_AUTO_UPDATE=1 brew install fftw hamlib openjpeg qt pulseaudio
 
-      - name: Run Qmake
-        run: >-
-          mkdir build;
-          cd build;
-          qmake6  ../qsstv.pro
+      - name: Run CMake
+        run: |
+          mkdir build
+          cd build
+          cmake ..
 
       - name: Build
-        run: >-
-          cd build;
-          make -j8;
-          cd src;
+        run: |
+          cd build
+          make -j$(sysctl -n hw.ncpu)
+          cd src
           zip -9 -r qsstv_arm64.app.zip qsstv.app
 
       - name: Upload zip

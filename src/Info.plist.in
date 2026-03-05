@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>
+    <string>qsstv</string>
+    <key>CFBundleIdentifier</key>
+    <string>be.telenet.on4qz.qsstv</string>
+    <key>CFBundleName</key>
+    <string>QSSTV</string>
+    <key>CFBundleVersion</key>
+    <string>10.0.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>10.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>QSSTV needs microphone access to receive and decode SSTV and DRM signals from your radio.</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+</dict>
+</plist>
