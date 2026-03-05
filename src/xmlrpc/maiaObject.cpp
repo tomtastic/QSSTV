@@ -174,8 +174,8 @@ QDomElement MaiaObject::toXml(QVariant arg)
         tagValue.appendChild(tagArray);
 
         const QList<QVariant> args = arg.toList();
-        for(int i = 0; i < args.size(); ++i) {
-            tagData.appendChild(toXml(args.at(i)));
+        for(const auto & arg : args) {
+            tagData.appendChild(toXml(arg));
         }
 
         return tagValue;
@@ -311,9 +311,9 @@ QString MaiaObject::prepareCall(QString method, QList<QVariant> args) {
 
     methodCall.appendChild(params);
 
-    for(int i = 0; i < args.size(); ++i) {
+    for(const auto & arg : args) {
         param = doc.createElement("param");
-        param.appendChild(toXml(args.at(i)));
+        param.appendChild(toXml(arg));
         params.appendChild(param);
     }
 

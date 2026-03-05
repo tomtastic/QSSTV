@@ -200,16 +200,16 @@ void CFACTransmit::Init(CParameter& Parameter)
 	size_t		iNumAudio = 0;
 	size_t		iNumData = 0;
 
-	for (set<int>::iterator i = actServ.begin(); i!=actServ.end(); i++)
+	for (int i : actServ)
 	{
-		if (Parameter.Service[*i].eAudDataFlag == CService::SF_AUDIO)
+		if (Parameter.Service[i].eAudDataFlag == CService::SF_AUDIO)
 		{
-			veciAudioServ.push_back(*i);
+			veciAudioServ.push_back(i);
 			iNumAudio++;
 		}
 		else
 		{
-			veciDataServ.push_back(*i);
+			veciDataServ.push_back(i);
 			iNumData++;
 		}
 	}
@@ -224,8 +224,8 @@ void CFACTransmit::Init(CParameter& Parameter)
 		FACNumRep = iTotNumServices;
 		FACRepetition.resize(0);
 
-		for (set<int>::iterator i = actServ.begin(); i!=actServ.end(); i++)
-			FACRepetition.push_back(*i);
+		for (int i : actServ)
+			FACRepetition.push_back(i);
 	}
 	else
 	{

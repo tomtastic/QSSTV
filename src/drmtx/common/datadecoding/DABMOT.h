@@ -147,9 +147,9 @@ public:
   {
     if (vecbHaveSegment.size () == 0)
       return false;
-    for (size_t i = 0; i < vecbHaveSegment.size (); i++)
+    for (auto && i : vecbHaveSegment)
       {
-        if (vecbHaveSegment[i] == false)
+        if (i == false)
           {
             return false;
           }
