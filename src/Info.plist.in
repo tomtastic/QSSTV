@@ -14,6 +14,8 @@
     <string>10.0</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
+    <key>CFBundleIconFile</key>
+    <string>qsstv.icns</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>QSSTV needs microphone access to receive and decode SSTV and DRM signals from your radio.</string>
     <key>NSHighResolutionCapable</key>

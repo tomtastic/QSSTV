@@ -305,11 +305,17 @@ if(APPLE)
         ${AVFOUNDATION_FRAMEWORK}
         ${PULSEAUDIO_LIBRARIES}
     )
-    # Set macOS deployment target
+    # Set macOS bundle properties
     set_target_properties(qsstv PROPERTIES
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in
+        MACOSX_BUNDLE_ICON_FILE qsstv.icns
     )
+    # Add icon to bundle resources
+    set_source_files_properties(qsstv.icns PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+    )
+    target_sources(qsstv PRIVATE qsstv.icns)
 else()
     target_link_libraries(qsstv PRIVATE
         ${PULSEAUDIO_LIBRARIES}
