@@ -8,6 +8,7 @@ on:
   pull_request:
   merge_group:
   workflow_call:
+  workflow_dispatch:
 
 jobs:
   macos_build:
