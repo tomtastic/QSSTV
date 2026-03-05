@@ -34,14 +34,6 @@ jobs:
         run: |
           env HOMEBREW_NO_AUTO_UPDATE=1 brew install fftw hamlib openjpeg qt pulseaudio
 
-      - name: Cache CMake build
-        uses: actions/cache@v4
-        with:
-          path: build
-          key: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt', 'src/**/*.cpp', 'src/**/*.h') }}
-          restore-keys: |
-            ${{ runner.os }}-cmake-
-
       - name: Run CMake
         run: |
           mkdir -p build
