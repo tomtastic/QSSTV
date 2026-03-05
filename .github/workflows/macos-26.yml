@@ -1,5 +1,5 @@
 ---
-name: Build-macOS-26
+name: build-on-macOS-26
 permissions:
   contents: read
 
