@@ -9,7 +9,7 @@ if [ ! -f "build/compile_commands.json" ]; then
     echo "Error: build/compile_commands.json not found"
     echo "Please run the following commands first:"
     echo "  mkdir -p build && cd build"
-    echo "  qmake6 ../qsstv.pro"
+    echo "  cmake .."
     echo "  compiledb make"
     exit 1
 fi

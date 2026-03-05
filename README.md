@@ -23,12 +23,12 @@ This project is actively being modernized to Qt 6 and modern C++ standards.
 For apt based distros you can install dependencies as follows:
 
 ```
-apt install pkg-config g++ libfftw3-dev qt6-base-dev qt6-svg-dev libhamlib++-dev libasound2-dev libpulse-dev libopenjp2-7 libopenjp2-7-dev libv4l-dev build-essential
+apt install cmake pkg-config g++ libfftw3-dev qt6-base-dev qt6-svg-dev libhamlib++-dev libasound2-dev libpulse-dev libopenjp2-7 libopenjp2-7-dev libv4l-dev build-essential
 ```
 
 For MacOS:
 ```
-brew install fftw hamlib openjpeg qt pulseaudio
+brew install cmake fftw hamlib openjpeg qt pulseaudio
 ```
 **Note:** You must have PulseAudio running for sound to work:
 ```bash
@@ -66,15 +66,15 @@ If you have problems compiling the software, please give as much information as 
 * QT Version (e.g. Qt 6.x)
 * Screen dump of the compile process showing the error
 
-If you want to be able to debug the program, the simplest way is to install QtCreator and from within QtCreator open a new project and point to the qsstv.pro file. Note: you will need to install doxygen and libqwt
+If you want to be able to debug the program, the simplest way is to install QtCreator and from within QtCreator open the CMakeLists.txt file as a project. Note: you will need to install doxygen and libqwt
 
 `sudo apt-get install doxygen libqwt-qt5-dev`
 
 Note: libqwt may need to be built from source for Qt 6 compatibility.
 
-You can also run qmake with the following attributes:
+You can also build with debug symbols using CMake:
 
-`qmake CONFIG+=debug`
+`cmake -DCMAKE_BUILD_TYPE=Debug ..`
 
 and use an external debugger (such as gdb)
 

@@ -23,7 +23,7 @@ pip3 install compiledb
 
 ```bash
 mkdir -p build && cd build
-qmake6 ../qsstv.pro
+cmake ..
 compiledb make
 cd ..
 ```
