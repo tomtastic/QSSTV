@@ -1,27 +1,47 @@
 ---
 # Clang-Tidy configuration for QSSTV
-# This file defines which checks to run during development
+# This file defines which checks to run during development and CI
 
 Checks: >
   bugprone-*,
   -bugprone-easily-swappable-parameters,
   -bugprone-narrowing-conversions,
+  -bugprone-reserved-identifier,
   cert-*,
   -cert-err58-cpp,
+  -cert-dcl37-c,
+  -cert-dcl51-cpp,
   google-readability-casting,
-  modernize-loop-convert,
-  modernize-use-bool-literals,
-  modernize-use-nullptr,
-  modernize-use-using,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  -modernize-use-nodiscard,
   performance-*,
-  readability-container-size-empty,
-  readability-redundant-string-cstr
+  -performance-enum-size,
+  readability-*,
+  -readability-magic-numbers,
+  -readability-identifier-length,
+  -readability-function-cognitive-complexity,
+  -readability-uppercase-literal-suffix
 
-# Treat warnings as errors in CI (empty for now, can be enabled later)
-WarningsAsErrors: ''
+# Treat these as errors (blocking issues)
+WarningsAsErrors: >
+  bugprone-use-after-move,
+  bugprone-dangling-handle,
+  cert-err34-c,
+  modernize-use-nullptr
 
 # Header filter - only check our own code
 HeaderFilterRegex: 'src/.*'
 
 # Format style
 FormatStyle: file
+
+CheckOptions:
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase
+  - key: readability-identifier-naming.FunctionCase
+    value: camelBack
+  - key: readability-identifier-naming.VariableCase
+    value: camelBack
+  - key: readability-identifier-naming.ParameterCase
+    value: camelBack
