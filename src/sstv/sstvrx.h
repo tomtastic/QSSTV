@@ -21,7 +21,7 @@ class sstvRx : public QObject {
   Q_OBJECT
  public:
   enum eSSTVState { HUNTING, PROCESSING, WAITFORSYNC, SLANTADJUST, RESTART, SYNCLOST, WAIT, END };
-  explicit sstvRx(QObject* parent = 0);
+  explicit sstvRx(QObject* parent = nullptr);
   ~sstvRx();
   void init();
   void setFilters();

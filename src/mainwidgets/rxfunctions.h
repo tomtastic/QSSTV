@@ -17,7 +17,7 @@ class rxFunctions : public QThread {
   Q_OBJECT
  public:
   enum erxState { RXIDLE, RXRUNNING, RXRESTART, RXINIT };
-  explicit rxFunctions(QObject* parent = 0);
+  explicit rxFunctions(QObject* parent = nullptr);
   ~rxFunctions();
   void run();
   void init();

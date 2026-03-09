@@ -75,7 +75,7 @@ class QFtpDTP : public QObject {
  public:
   enum ConnectState { CsHostFound, CsConnected, CsClosed, CsHostNotFound, CsConnectionRefused };
 
-  QFtpDTP(QFtpPI* p, QObject* parent = 0);
+  QFtpDTP(QFtpPI* p, QObject* parent = nullptr);
 
   void setData(QByteArray*);
   void setDevice(QIODevice*);
@@ -148,7 +148,7 @@ class QFtpPI : public QObject {
   Q_OBJECT
 
  public:
-  QFtpPI(QObject* parent = 0);
+  QFtpPI(QObject* parent = nullptr);
 
   void connectToHost(const QString& host, quint16 port);
 
@@ -215,7 +215,7 @@ class QFtpPI : public QObject {
 class QFtpCommand {
  public:
   QFtpCommand(QFtp::Command cmd, QStringList raw, const QByteArray& ba);
-  QFtpCommand(QFtp::Command cmd, QStringList raw, QIODevice* dev = 0);
+  QFtpCommand(QFtp::Command cmd, QStringList raw, QIODevice* dev = nullptr);
   ~QFtpCommand();
 
   int id;
@@ -256,7 +256,8 @@ QFtpCommand::~QFtpCommand() {
  * QFtpDTP implementation
  *
  *********************************************************************/
-QFtpDTP::QFtpDTP(QFtpPI* p, QObject* parent) : QObject(parent), socket(0), listener(this), pi(p), callWriteData(false) {
+QFtpDTP::QFtpDTP(QFtpPI* p, QObject* parent)
+    : QObject(parent), socket(nullptr), listener(this), pi(p), callWriteData(false) {
   clearData();
   listener.setObjectName(QLatin1String("QFtpDTP active state server"));
   connect(&listener, SIGNAL(newConnection()), SLOT(setupSocket()));
@@ -283,7 +284,7 @@ void QFtpDTP::connectToHost(const QString& host, quint16 port) {
 
   if (socket) {
     delete socket;
-    socket = 0;
+    socket = nullptr;
   }
   socket = new QTcpSocket(this);
 #ifndef QT_NO_BEARERMANAGEMENT
@@ -376,7 +377,7 @@ void QFtpDTP::writeData() {
     }
 
     // do we continue uploading?
-    callWriteData = data.dev != 0;
+    callWriteData = data.dev != nullptr;
   }
 }
 
@@ -672,7 +673,7 @@ void QFtpDTP::setupSocket() {
 
 void QFtpDTP::clearData() {
   is_ba = false;
-  data.dev = 0;
+  data.dev = nullptr;
 }
 
 /**********************************************************************
@@ -1901,9 +1902,9 @@ QFtp::Command QFtp::currentCommand() const {
     \sa get() put()
 */
 QIODevice* QFtp::currentDevice() const {
-  if (d->pending.isEmpty()) return 0;
+  if (d->pending.isEmpty()) return nullptr;
   QFtpCommand* c = d->pending.first();
-  if (c->is_ba) return 0;
+  if (c->is_ba) return nullptr;
   return c->data.dev;
 }
 

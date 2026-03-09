@@ -31,7 +31,7 @@ class txWidget : public QWidget {
   Q_OBJECT
 
  public:
-  explicit txWidget(QWidget* parent = 0);
+  explicit txWidget(QWidget* parent = nullptr);
   ~txWidget();
   void init();
   //  void startTX(bool st, bool check=true);

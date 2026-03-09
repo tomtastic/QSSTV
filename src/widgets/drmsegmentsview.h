@@ -8,7 +8,7 @@ class drmSegmentsView : public QLabel {
   Q_OBJECT
 
  public:
-  explicit drmSegmentsView(QWidget* parent = 0);
+  explicit drmSegmentsView(QWidget* parent = nullptr);
   ~drmSegmentsView();
   void setColorFail(QColor color);
   void setColorOK(QColor color);

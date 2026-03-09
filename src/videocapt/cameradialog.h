@@ -58,7 +58,7 @@ class cameraDialog : public QDialog {
   Q_OBJECT
 
  public:
-  explicit cameraDialog(QWidget* parent = 0);
+  explicit cameraDialog(QWidget* parent = nullptr);
   ~cameraDialog();
   int exec();
   QImage* getImage();

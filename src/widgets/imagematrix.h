@@ -12,7 +12,7 @@ class imageMatrix : public QWidget {
   Q_OBJECT
 
  public:
-  explicit imageMatrix(QWidget* parent = 0);
+  explicit imageMatrix(QWidget* parent = nullptr);
   ~imageMatrix();
   void init(int numRows, int numColumns, QString dir, imageViewer::thumbType tt);
   void setupFiles();

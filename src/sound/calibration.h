@@ -14,7 +14,7 @@ class calibration : public QDialog {
   Q_OBJECT
 
  public:
-  explicit calibration(QWidget* parent = 0);
+  explicit calibration(QWidget* parent = nullptr);
   ~calibration();
   int exec();
   /**

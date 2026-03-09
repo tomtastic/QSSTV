@@ -50,7 +50,7 @@ class graphItemBase : public QAbstractGraphicsShapeItem {
   virtual void drawItem(QPainter* painter) = 0;
   virtual QPainterPath shape() const;
   virtual QRectF boundingRect() const;
-  void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+  void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr);
   void drawBorder(QPainter* painter);
   QPainterPath qt_graphicsItem_shapeFromPath(const QPainterPath& path, const QPen& pen) const;
 

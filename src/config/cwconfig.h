@@ -17,7 +17,7 @@ class cwConfig : public baseConfig {
   Q_OBJECT
 
  public:
-  explicit cwConfig(QWidget* parent = 0);
+  explicit cwConfig(QWidget* parent = nullptr);
   ~cwConfig();
   void readSettings();
   void writeSettings();

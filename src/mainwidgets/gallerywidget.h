@@ -15,7 +15,7 @@ class galleryWidget : public QWidget {
   Q_OBJECT
 
  public:
-  explicit galleryWidget(QWidget* parent = 0);
+  explicit galleryWidget(QWidget* parent = nullptr);
   ~galleryWidget();
 
   void init();

@@ -36,7 +36,7 @@ class editorForm;
 class editorView : public QWidget, private Ui::editorForm {
   Q_OBJECT
  public:
-  editorView(QWidget* parent = 0);
+  editorView(QWidget* parent = nullptr);
   ~editorView();
   void readSettings();
   void writeSettings();

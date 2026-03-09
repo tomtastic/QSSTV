@@ -11,7 +11,7 @@ class textDisplay : public QDialog {
   Q_OBJECT
 
  public:
-  explicit textDisplay(QWidget* parent = 0);
+  explicit textDisplay(QWidget* parent = nullptr);
   ~textDisplay();
   void clear();
   void append(const QString& t);

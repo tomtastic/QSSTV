@@ -26,7 +26,7 @@ class soundConfig : public baseConfig {
   Q_OBJECT
 
  public:
-  explicit soundConfig(QWidget* parent = 0);
+  explicit soundConfig(QWidget* parent = nullptr);
   ~soundConfig();
   void readSettings();
   void writeSettings();

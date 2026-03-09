@@ -49,7 +49,7 @@ class imageViewer : public QLabel {
     PREVIEW,       /*!< preview tx. */
     EXTVIEW        /*!< extViewer. */
   };
-  imageViewer(QWidget* parent = 0);
+  imageViewer(QWidget* parent = nullptr);
   ~imageViewer();
 
 

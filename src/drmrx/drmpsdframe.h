@@ -12,7 +12,7 @@ class drmPSDFrame : public QFrame {
   Q_OBJECT
 
  public:
-  explicit drmPSDFrame(QWidget* parent = 0);
+  explicit drmPSDFrame(QWidget* parent = nullptr);
   ~drmPSDFrame();
   void setPSD();
 

@@ -55,7 +55,7 @@ class editorScene : public QGraphicsScene {
     DTRANSFORM = 64
   };
   Q_DECLARE_FLAGS(changeFlags, doChange);
-  editorScene(QGraphicsView* parent = 0);
+  editorScene(QGraphicsView* parent = nullptr);
   ~editorScene();
   QColor fillColor;
   QColor lineColor;

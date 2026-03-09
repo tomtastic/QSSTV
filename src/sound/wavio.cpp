@@ -218,7 +218,7 @@ bool wavIO::write(quint16* dPtr, uint numSamples, bool isStereo) {
   int len;
   quint16* tempBufPtr;
   len = numSamples * sizeof(quint16) * 2;  // we're outputting stereo
-  tempBufPtr = 0;
+  tempBufPtr = nullptr;
   quint16* tmpPtr;
 
   tmpPtr = dPtr;

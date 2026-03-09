@@ -157,8 +157,8 @@ void soundPulse::flushPlayback() {
 
 void soundPulse::closeDevices() {
   if (sd[0].stream) pa_simple_free(sd[0].stream);
-  sd[0].stream = 0;
+  sd[0].stream = nullptr;
   if (sd[1].stream) pa_simple_free(sd[1].stream);
-  sd[1].stream = 0;
+  sd[1].stream = nullptr;
   msleep(1000);
 }

@@ -394,7 +394,7 @@ void rigControl::getRadioList() {
   if (!radiolistLoaded) {
     capsList.clear();
     rig_load_all_backends();
-    rig_list_foreach(collect, 0);
+    rig_list_foreach(collect, nullptr);
     std::sort(capsList.begin(), capsList.end(), model_Sort);
     radiolistLoaded = true;
   }

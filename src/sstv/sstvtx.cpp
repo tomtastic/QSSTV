@@ -10,7 +10,7 @@
 
 
 sstvTx::sstvTx() {
-  currentMode = 0;
+  currentMode = nullptr;
   oldMode = NOTVALID;
 }
 sstvTx::~sstvTx() {
@@ -78,7 +78,7 @@ bool sstvTx::create(esstvMode m, DSPFLOAT clock) {
   }
   oldMode = m;
   if (currentMode) delete currentMode;
-  currentMode = 0;
+  currentMode = nullptr;
   switch (m) {
     case M1:
     case M2:

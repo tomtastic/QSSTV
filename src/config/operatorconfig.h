@@ -21,7 +21,7 @@ class operatorConfig : public baseConfig {
   Q_OBJECT
 
  public:
-  explicit operatorConfig(QWidget* parent = 0);
+  explicit operatorConfig(QWidget* parent = nullptr);
   ~operatorConfig();
   void readSettings();
   void writeSettings();

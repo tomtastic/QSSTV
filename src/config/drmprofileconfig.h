@@ -27,7 +27,7 @@ class drmProfileConfig : public baseConfig {
   Q_OBJECT
 
  public:
-  explicit drmProfileConfig(QWidget* parent = 0);
+  explicit drmProfileConfig(QWidget* parent = nullptr);
   ~drmProfileConfig();
   void readSettings();
   void writeSettings();

@@ -8,7 +8,7 @@
 
 class baseConfig : public QWidget {
  public:
-  baseConfig(QWidget* parent = 0);
+  baseConfig(QWidget* parent = nullptr);
   virtual void readSettings() = 0;
   virtual void writeSettings() = 0;
   virtual void getParams() = 0;

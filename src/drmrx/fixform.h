@@ -11,7 +11,7 @@ class fixForm : public QDialog {
   Q_OBJECT
 
  public:
-  explicit fixForm(QWidget* parent = 0);
+  explicit fixForm(QWidget* parent = nullptr);
   ~fixForm();
   void setInfoInternal(int mode, QString fileName, int missing, QByteArray* ba);
   //  void setInfoExternal(int mode, QString fileName, int missing);

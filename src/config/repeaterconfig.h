@@ -27,7 +27,7 @@ class repeaterConfig : public baseConfig {
   Q_OBJECT
 
  public:
-  explicit repeaterConfig(QWidget* parent = 0);
+  explicit repeaterConfig(QWidget* parent = nullptr);
   ~repeaterConfig();
   void readSettings();
   void writeSettings();

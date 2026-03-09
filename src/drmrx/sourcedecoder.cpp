@@ -472,7 +472,7 @@ void sourceDecoder::writeData(transportBlock* tbPtr) {
 void sourceDecoder::saveImage(transportBlock* tbPtr) {
   int i;
   QByteArray hybridBa;
-  displayMBoxEvent* stmb = 0;
+  displayMBoxEvent* stmb = nullptr;
   QString downloadF;
   modeCodeTmp = tbPtr->modeCode;
   callsignTmp = tbPtr->callsign;

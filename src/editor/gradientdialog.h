@@ -50,7 +50,7 @@ class gradientForm;
 class gradientDialog : public QDialog, private Ui::gradientForm {
   Q_OBJECT
  public:
-  gradientDialog(QWidget* parent = 0);
+  gradientDialog(QWidget* parent = nullptr);
   ~gradientDialog();
   void readSettings();
   void writeSettings();

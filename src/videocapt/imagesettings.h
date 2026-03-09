@@ -61,7 +61,7 @@ class imageSettings : public QDialog {
   Q_OBJECT
 
  public:
-  imageSettings(QString cameraDevice, QWidget* parent = 0);
+  imageSettings(QString cameraDevice, QWidget* parent = nullptr);
   ~imageSettings();
 
 

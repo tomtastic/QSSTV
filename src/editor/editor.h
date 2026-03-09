@@ -41,7 +41,7 @@ class editor : public QMainWindow {
   Q_OBJECT
 
  public:
-  editor(QWidget* parent = 0);
+  editor(QWidget* parent = nullptr);
   ~editor();
   bool openFile(QString fn);
   void readSettings();

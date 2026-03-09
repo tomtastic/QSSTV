@@ -32,7 +32,7 @@ class ftpConfig : public baseConfig {
   Q_OBJECT
 
  public:
-  explicit ftpConfig(QWidget* parent = 0);
+  explicit ftpConfig(QWidget* parent = nullptr);
   ~ftpConfig();
   void readSettings();
   void writeSettings();

@@ -11,7 +11,7 @@ class waterfallForm : public QDialog {
   Q_OBJECT
 
  public:
-  explicit waterfallForm(QWidget* parent = 0);
+  explicit waterfallForm(QWidget* parent = nullptr);
   ~waterfallForm();
   QString text() { return txt; }
 

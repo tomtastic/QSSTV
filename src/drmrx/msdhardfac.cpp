@@ -265,7 +265,7 @@ int msdhardfac(double /*@out@ */* received_real, double /*@out@ */* received_ima
   hardpoints = (msd_mem + 2 * N * sizeof(float));
   lastiter = (msd_mem + 2 * N * sizeof(float) + 2 * N * sizeof(char) + 2);
   infoout[0] = (msd_mem + 2 * N * sizeof(float) + 2 * N * sizeof(char) + 2 + 2 * N * sizeof(char));
-  infoout[1] = 0;
+  infoout[1] = nullptr;
   for (m = 1; m < no_of_levels; m++) {
     infoout[m] = infoout[m - 1] + static_cast<int>(L1_real[m - 1]) + static_cast<int>(L2_real[m - 1]) + 6 +
                  static_cast<int>(L1_imag[m - 1]) + static_cast<int>(L2_imag[m - 1]) + 6;

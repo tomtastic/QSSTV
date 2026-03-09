@@ -11,7 +11,7 @@ class configDialog : public QDialog {
   Q_OBJECT
 
  public:
-  explicit configDialog(QWidget* parent = 0);
+  explicit configDialog(QWidget* parent = nullptr);
   ~configDialog();
   void readSettings();
   void writeSettings();

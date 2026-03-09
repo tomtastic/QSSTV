@@ -19,7 +19,7 @@ class frequencySelectWidget : public baseConfig {
   Q_OBJECT
 
  public:
-  explicit frequencySelectWidget(QWidget* parent = 0);
+  explicit frequencySelectWidget(QWidget* parent = nullptr);
   ~frequencySelectWidget();
   void readSettings();
   void writeSettings();

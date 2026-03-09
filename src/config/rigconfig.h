@@ -15,7 +15,7 @@ class rigConfig : public baseConfig {
   Q_OBJECT
 
  public:
-  explicit rigConfig(QWidget* parent = 0);
+  explicit rigConfig(QWidget* parent = nullptr);
   ~rigConfig();
   void attachRigController(rigControl* rigCtrl);
   void readSettings();

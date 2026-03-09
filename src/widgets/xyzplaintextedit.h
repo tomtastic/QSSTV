@@ -7,7 +7,7 @@
 class xyzPlainTextEdit : public QPlainTextEdit {
   Q_OBJECT
  public:
-  explicit xyzPlainTextEdit(QWidget* parent = 0);
+  explicit xyzPlainTextEdit(QWidget* parent = nullptr);
   void focusOutEvent(QFocusEvent* event);
 
  signals:

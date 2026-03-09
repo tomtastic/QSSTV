@@ -198,7 +198,7 @@ bool imageViewer::openImage(QString& filename, QString start, bool ask, bool sho
 }
 
 bool imageViewer::processImageDisplay(bool success, bool showMessage, bool fromCache) {
-  displayMBoxEvent* stmb = 0;
+  displayMBoxEvent* stmb = nullptr;
   if (!success) {
     if (showMessage) {
       stmb = new displayMBoxEvent("Image Loader", QString("Unable to load image:\n%1").arg(tempFilename));
@@ -673,7 +673,7 @@ void imageViewer::slotZoomOut() { zoom(clickPos, -1); }
 
 
 void imageViewer::slotToTX() {
-  moveToTxEvent* mt = 0;
+  moveToTxEvent* mt = nullptr;
   addToLog(QString("ToTx: %1").arg(imageFileName), LOGTXMAIN);
   mt = new moveToTxEvent(imageFileName);
   QApplication::postEvent(dispatcherPtr, mt);  // Qt will delete it when done
@@ -774,7 +774,7 @@ int imageViewer::applyTemplate() {
   if (sourceImage.isNull()) return 0;
   QFile fi(templateFileName);
   if (ttype != TXIMG) return 0;
-  editorScene tscene(0);
+  editorScene tscene(nullptr);
   resultImage = &sourceImage;
   if (transmissionModeIndex == TRXDRM) {
     useCompression = true;

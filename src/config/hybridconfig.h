@@ -25,7 +25,7 @@ class hybridConfig : public baseConfig {
   Q_OBJECT
 
  public:
-  explicit hybridConfig(QWidget* parent = 0);
+  explicit hybridConfig(QWidget* parent = nullptr);
   ~hybridConfig();
   void readSettings();
   void writeSettings();

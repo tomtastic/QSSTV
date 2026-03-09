@@ -21,7 +21,7 @@ class rxWidget : public QWidget {
   Q_OBJECT
 
  public:
-  explicit rxWidget(QWidget* parent = 0);
+  explicit rxWidget(QWidget* parent = nullptr);
   ~rxWidget();
   void readSettings();
   void writeSettings();

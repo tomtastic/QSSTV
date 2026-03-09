@@ -29,7 +29,7 @@ class drmTransmitter;
 class drmTx : public QObject {
   Q_OBJECT
  public:
-  explicit drmTx(QObject* parent = 0);
+  explicit drmTx(QObject* parent = nullptr);
   ~drmTx();
   void init();
   void start();

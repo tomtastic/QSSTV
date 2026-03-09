@@ -13,7 +13,7 @@ class drmConstellationFrame : public QFrame {
   Q_OBJECT
 
  public:
-  explicit drmConstellationFrame(QWidget* parent = 0);
+  explicit drmConstellationFrame(QWidget* parent = nullptr);
   ~drmConstellationFrame();
   void setConstellation(econstellation constellation);
   void clearConstellation();

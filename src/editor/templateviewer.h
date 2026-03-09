@@ -11,7 +11,7 @@ class templateViewer : public QDialog {
   Q_OBJECT
 
  public:
-  explicit templateViewer(QWidget* parent = 0);
+  explicit templateViewer(QWidget* parent = nullptr);
   ~templateViewer();
   void setImage(QImage* image);
 

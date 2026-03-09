@@ -24,7 +24,7 @@ class waterfallConfig : public baseConfig {
   Q_OBJECT
 
  public:
-  explicit waterfallConfig(QWidget* parent = 0);
+  explicit waterfallConfig(QWidget* parent = nullptr);
   ~waterfallConfig();
   void readSettings();
   void writeSettings();

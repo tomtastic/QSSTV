@@ -10,7 +10,7 @@
 class drmRx : public QObject {
   Q_OBJECT
  public:
-  explicit drmRx(QObject* parent = 0);
+  explicit drmRx(QObject* parent = nullptr);
   ~drmRx();
   void init();
   void run(DSPFLOAT* dataPtr);

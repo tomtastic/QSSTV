@@ -22,7 +22,7 @@ class directoriesConfig : public baseConfig {
   Q_OBJECT
 
  public:
-  explicit directoriesConfig(QWidget* parent = 0);
+  explicit directoriesConfig(QWidget* parent = nullptr);
   ~directoriesConfig();
   void readSettings();
   void writeSettings();

@@ -12,7 +12,7 @@ class extViewer : public QDialog {
   Q_OBJECT
 
  public:
-  explicit extViewer(QWidget* parent = 0);
+  explicit extViewer(QWidget* parent = nullptr);
   ~extViewer();
   void setup(const QString& fn);
 

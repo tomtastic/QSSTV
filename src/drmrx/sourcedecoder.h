@@ -159,7 +159,7 @@ struct bsrBlock {
 class sourceDecoder : public QObject {
   Q_OBJECT
  public:
-  explicit sourceDecoder(QObject* parent = 0);
+  explicit sourceDecoder(QObject* parent = nullptr);
   void init();
   bool decode();
   //    bool hasStarted(){return started;}

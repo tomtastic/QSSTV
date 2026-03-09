@@ -132,7 +132,7 @@ class QUrlInfoPrivate {
     \sa isValid()
 */
 
-QUrlInfo::QUrlInfo() { d = 0; }
+QUrlInfo::QUrlInfo() { d = nullptr; }
 
 /*!
     Copy constructor, copies \a ui to this URL info object.
@@ -143,7 +143,7 @@ QUrlInfo::QUrlInfo(const QUrlInfo& ui) {
     d = new QUrlInfoPrivate;
     *d = *ui.d;
   } else {
-    d = 0;
+    d = nullptr;
   }
 }
 
@@ -414,7 +414,7 @@ QUrlInfo& QUrlInfo::operator=(const QUrlInfo& ui) {
     *d = *ui.d;
   } else {
     delete d;
-    d = 0;
+    d = nullptr;
   }
   return *this;
 }
@@ -618,7 +618,7 @@ bool QUrlInfo::equal(const QUrlInfo& i1, const QUrlInfo& i2, int sortBy) {
 */
 
 bool QUrlInfo::operator==(const QUrlInfo& other) const {
-  if (!d) return other.d == 0;
+  if (!d) return other.d == nullptr;
   if (!other.d) return false;
 
   return (d->name == other.d->name && d->permissions == other.d->permissions && d->owner == other.d->owner &&
@@ -645,6 +645,6 @@ bool QUrlInfo::operator==(const QUrlInfo& other) const {
     You should always check if the URL info is valid before relying on
     the values.
 */
-bool QUrlInfo::isValid() const { return d != 0; }
+bool QUrlInfo::isValid() const { return d != nullptr; }
 
 QT_END_NAMESPACE

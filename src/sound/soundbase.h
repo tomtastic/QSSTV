@@ -37,7 +37,7 @@ class soundBase : public QThread {
   enum eplaybackState { PBINIT, PBSTARTING, PBRUNNING, PBCALIBRATESTART, PBCALIBRATEWAIT, PBCALIBRATE, PBEND };
   enum ecaptureState { CPINIT, CPSTARTING, CPRUNNING, CPCALIBRATESTART, CPCALIBRATEWAIT, CPCALIBRATE, CPEND };
 
-  explicit soundBase(QObject* parent = 0);
+  explicit soundBase(QObject* parent = nullptr);
   ~soundBase();
   virtual bool init(int samplerate) = 0;
   void run();

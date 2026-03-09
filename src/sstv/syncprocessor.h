@@ -103,7 +103,7 @@ class syncProcessor : public QObject {
     SYNCLOST,
     RETRACEWAIT
   };
-  explicit syncProcessor(bool narrow, QObject* parent = 0);
+  explicit syncProcessor(bool narrow, QObject* parent = nullptr);
   ~syncProcessor();
   void init();
   void reset();

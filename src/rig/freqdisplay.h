@@ -11,7 +11,7 @@ class freqDisplay : public QWidget {
   Q_OBJECT
 
  public:
-  explicit freqDisplay(QWidget* parent = 0);
+  explicit freqDisplay(QWidget* parent = nullptr);
   ~freqDisplay();
   void display(double freq);
 

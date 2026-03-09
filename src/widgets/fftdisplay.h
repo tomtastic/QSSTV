@@ -17,7 +17,7 @@ class fftDisplay : public QLabel {
   Q_OBJECT
 
  public:
-  explicit fftDisplay(QWidget* parent = 0);
+  explicit fftDisplay(QWidget* parent = nullptr);
   ~fftDisplay();
   void init(int length, int slices, int isamplingrate);
   void showFFT(double* fftData);

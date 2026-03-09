@@ -54,7 +54,7 @@ class QFtp : public QObject {
   Q_OBJECT
 
  public:
-  explicit QFtp(QObject* parent = 0);
+  explicit QFtp(QObject* parent = nullptr);
   virtual ~QFtp();
 
   enum State { Unconnected, NetworkError, HostLookup, Connecting, Connected, LoggedIn, Closing };
@@ -88,7 +88,7 @@ class QFtp : public QObject {
   int setTransferMode(TransferMode mode);
   int list(const QString& dir = QString());
   int cd(const QString& dir);
-  int get(const QString& file, QIODevice* dev = 0, TransferType type = Binary);
+  int get(const QString& file, QIODevice* dev = nullptr, TransferType type = Binary);
   int put(const QByteArray& data, const QString& file, TransferType type = Binary);
   int put(QIODevice* dev, const QString& file, TransferType type = Binary);
   int remove(const QString& file);

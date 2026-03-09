@@ -6,7 +6,7 @@
 class markerWidget : public QLabel {
   Q_OBJECT
  public:
-  explicit markerWidget(QWidget* parent = 0);
+  explicit markerWidget(QWidget* parent = nullptr);
   void setMarkerLabel(QLabel* markerLabel);
   void setMarkers(int mrk1, int mrk2 = 0, int mrk3 = 0) {
     marker1 = mrk1;

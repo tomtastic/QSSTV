@@ -38,7 +38,7 @@ class QwtPlotPicker;
 class scopePlot : public QMainWindow {
   Q_OBJECT
  public:
-  scopePlot(QString title, QWidget* parent = 0);
+  scopePlot(QString title, QWidget* parent = nullptr);
   ~scopePlot();
   void setXScaleMultiplier(double mul);
   void setAlternativeScaleMultiplier(double mul);

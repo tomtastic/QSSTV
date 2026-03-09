@@ -545,7 +545,7 @@ void editorScene::slotChangeText() {
     return;
   }
   if (item->type() != graphItemBase::TEXT) return;
-  QDialog d(0);
+  QDialog d(nullptr);
   Ui::textForm t;
   t.setupUi(&d);
   t.plainTextEdit->setPlainText(item->text());

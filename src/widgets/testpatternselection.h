@@ -13,7 +13,7 @@ class testPatternSelection : public QDialog {
   Q_OBJECT
 
  public:
-  explicit testPatternSelection(QWidget* parent = 0);
+  explicit testPatternSelection(QWidget* parent = nullptr);
   ~testPatternSelection();
   etpSelect getSelection();
 

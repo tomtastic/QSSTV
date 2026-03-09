@@ -40,7 +40,7 @@ class vuMeter : public QWidget {
   double maxValue() const { return max; }
 
  public:
-  vuMeter(QWidget* parent = 0);
+  vuMeter(QWidget* parent = nullptr);
   QSize minimumSizeHint() const;
   QSize sizeHint() const;
   void setHorizontal(bool h) { horizontal = h; }

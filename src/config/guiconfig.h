@@ -23,7 +23,7 @@ class guiConfig : public baseConfig {
   Q_OBJECT
 
  public:
-  explicit guiConfig(QWidget* parent = 0);
+  explicit guiConfig(QWidget* parent = nullptr);
   ~guiConfig();
   void readSettings();
   void writeSettings();

@@ -198,7 +198,7 @@ void sstvRx::process() {
   }
 
 
-  if ((syncProcPtr != 0) && (syncProcPtr->getSyncState(syncPosition) == syncProcessor::SYNCLOST)) {
+  if ((syncProcPtr != nullptr) && (syncProcPtr->getSyncState(syncPosition) == syncProcessor::SYNCLOST)) {
     switchState(SYNCLOST);
   }
   switch (SSTVState) {
