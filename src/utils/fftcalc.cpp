@@ -28,7 +28,7 @@ void fftCalc::init(int length, int nblocks, int isamplingrate) {
   // prepare fft
   if (plan) fftw_destroy_plan(plan);
   if (out) fftw_free(out);
-  if (dataBuffer) delete[] dataBuffer;
+  delete[] dataBuffer;
 
   dataBuffer = new double[fftLength];
   for (i = 0; i < fftLength; i++) {

@@ -72,12 +72,12 @@ modeBase::~modeBase() { deleteBuffers(); }
     Deletes all buffers, and sets the pointers to nullptr;
  */
 void modeBase::deleteBuffers() {
-  if (pixelPositionTable) delete[] pixelPositionTable;
-  if (greenArrayPtr) delete[] greenArrayPtr;
-  if (blueArrayPtr) delete[] blueArrayPtr;
-  if (redArrayPtr) delete[] redArrayPtr;
-  if (yArrayPtr) delete[] yArrayPtr;
-  if (debugStatePtr) delete[] debugStatePtr;
+  delete[] pixelPositionTable;
+  delete[] greenArrayPtr;
+  delete[] blueArrayPtr;
+  delete[] redArrayPtr;
+  delete[] yArrayPtr;
+  delete[] debugStatePtr;
   greenArrayPtr = blueArrayPtr = redArrayPtr = yArrayPtr = nullptr;
   debugStatePtr = nullptr;
   pixelPositionTable = nullptr;

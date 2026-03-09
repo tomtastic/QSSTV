@@ -75,7 +75,7 @@ syncProcessor::~syncProcessor() {
   for (i = 0; i <= ENDNARROW; i++) {
     matchArray[i].clear();
   }
-  if (currentModePtr != nullptr) delete currentModePtr;
+  delete currentModePtr;
 }
 
 void syncProcessor::reset() {
@@ -790,7 +790,7 @@ void syncProcessor::resetRetraceFlag() {
 
 bool syncProcessor::createModeBase() {
   bool done = false;
-  if (currentModePtr) delete currentModePtr;
+  delete currentModePtr;
   currentModePtr = nullptr;
   switch (currentMode) {
     case M1:

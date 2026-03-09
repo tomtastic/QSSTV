@@ -18,8 +18,8 @@ reedSolomonCoder::reedSolomonCoder() {
 }
 
 reedSolomonCoder::~reedSolomonCoder() {
-  if (zeroPositions != nullptr) delete zeroPositions;
-  if (newZeroPositions != nullptr) delete newZeroPositions;
+  delete zeroPositions;
+  delete newZeroPositions;
 }
 
 void reedSolomonCoder::init() {
@@ -32,8 +32,8 @@ void reedSolomonCoder::init() {
   bep_size = 0;
   sumOfFailures = 0;
   uncorrectableFailures = 0;
-  if (zeroPositions != nullptr) delete zeroPositions;
-  if (newZeroPositions != nullptr) delete newZeroPositions;
+  delete zeroPositions;
+  delete newZeroPositions;
 }
 
 
@@ -100,8 +100,8 @@ bool reedSolomonCoder::decode(QByteArray& ba, QString fn, QString& newFileName, 
     totalSegments = erasuresArray.at(0);
     segmentLength = erasuresArray.at(1);
     numMissing = erasuresArray.size() - 2;
-    if (zeroPositions) delete zeroPositions;
-    if (newZeroPositions) delete newZeroPositions;
+    delete zeroPositions;
+    delete newZeroPositions;
     zeroPositions = new int[segmentLength * (totalSegments + 1)];
     newZeroPositions = new int[256 * bep_size];
     for (i = 0; i < (segmentLength * totalSegments); i++) zeroPositions[i] = -1;

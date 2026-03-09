@@ -29,20 +29,20 @@ waterfallText::waterfallText() {
 waterfallText::~waterfallText() {
   fftw_destroy_plan(plan);
   if (out) fftw_free(out);
-  if (outFiltered) delete[] outFiltered;
-  if (audioBuf) delete[] audioBuf;
+  delete[] outFiltered;
+  delete[] audioBuf;
   if (dataBuffer) fftw_free(dataBuffer);
-  if (txFilter) delete txFilter;
-  if (phr) delete[] phr;
-  if (phi) delete[] phi;
+  delete txFilter;
+  delete[] phr;
+  delete[] phi;
 }
 
 void waterfallText::init() {
   int i;
   double ph;
   double binSize;
-  if (phr != nullptr) delete phr;
-  if (phi != nullptr) delete phi;
+  delete phr;
+  delete phi;
   fftLength = TXSTRIPE * SUBSAMPLINGFACTOR / 2;
   samplingrate = BASESAMPLERATE;
   binSize = static_cast<double>(BASESAMPLERATE) / (static_cast<double>(fftLength));

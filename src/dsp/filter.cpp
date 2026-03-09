@@ -49,12 +49,12 @@ void filter::deleteBuffers() {
     coefZPtr = nullptr;
     coefZPtrNewed = false;
   }
-  if (sampleBufferIPtr != nullptr) delete[] sampleBufferIPtr;
-  if (sampleBufferQPtr != nullptr) delete[] sampleBufferQPtr;
-  if (sampleBufferYIPtr != nullptr) delete[] sampleBufferYIPtr;
-  if (filteredPtr != nullptr) delete[] filteredPtr;
-  if (volumePtr != nullptr) delete[] volumePtr;
-  if (demodPtr != nullptr) delete[] demodPtr;
+  delete[] sampleBufferIPtr;
+  delete[] sampleBufferQPtr;
+  delete[] sampleBufferYIPtr;
+  delete[] filteredPtr;
+  delete[] volumePtr;
+  delete[] demodPtr;
   resetPointers();
 }
 

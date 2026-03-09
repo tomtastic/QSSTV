@@ -510,7 +510,7 @@ void txWidget::slotGenerateRepeaterTone() {
 
 
 void txWidget::slotEdit() {
-  if (ed != nullptr) delete ed;
+  delete ed;
   ed = new editor(this);
   if (txFunctionsPtr->txBusy()) {
     QMessageBox::warning(this, "Editor", "Transmission busy, editor not available");

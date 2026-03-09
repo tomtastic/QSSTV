@@ -37,7 +37,7 @@ void ftpThread::slotInit() {
   disconnectTimerPtr = new QTimer(this);
   notifyTimerPtr = new QTimer(this);
   destroy();
-  if (qftpPtr) delete qftpPtr;
+  delete qftpPtr;
   addToLog(QString("FTP init '%1'").arg(idName), LOGFTPTHREAD);
 
   qftpPtr = new QFtp;
@@ -249,7 +249,7 @@ void ftpThread::uploadFile(QString source, QString destination) {
 
 void ftpThread::downloadFile(QString source, QString destination) {
   addToLog("FTP downloadFile", LOGFTPTHREAD);
-  if (destFn) delete destFn;
+  delete destFn;
   destFn = new QFile(destination);
   if (!destFn->open(QIODevice::WriteOnly)) {
     addToLog(QString("Can't open %1 for writing").arg(destination), LOGFTPTHREAD);

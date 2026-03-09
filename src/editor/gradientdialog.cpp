@@ -47,7 +47,7 @@ gradientDialog::gradientDialog(QWidget* parent) : QDialog(parent), Ui::gradientF
 
 gradientDialog::~gradientDialog() {
   writeSettings();
-  if (g == nullptr) delete g;
+  delete g;
 }
 
 void gradientDialog::readSettings() {

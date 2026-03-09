@@ -17,7 +17,7 @@ drmTransmitter::~drmTransmitter() = default;
 
 
 void drmTransmitter::init(QByteArray* ba, QString name, QString format, drmTxParams params) {
-  if (DRMTransmitter) delete DRMTransmitter;
+  delete DRMTransmitter;
   dataLength = ba->size();
   DRMTransmitter = new CDRMTransmitter;
   //  int picSize;

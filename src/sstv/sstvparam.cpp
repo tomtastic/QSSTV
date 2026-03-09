@@ -53,7 +53,7 @@ esstvMode sstvModeIndexTx;
 void setupSSTVLineTimeTable(esstvMode modeIndex, DSPFLOAT clock, bool transmit) {
   unsigned int i;
   if (transmit) {
-    if (lineTimeTableTX != nullptr) delete[] lineTimeTableTX;
+    delete[] lineTimeTableTX;
     lineTimeTableTX = new DSPFLOAT[SSTVTable[modeIndex].numberOfDataLines + 1];
     for (i = 0; i < SSTVTable[modeIndex].numberOfDataLines + 1; i++) {
       lineTimeTableTX[i] = ((SSTVTable[modeIndex].imageTime * (static_cast<DSPFLOAT>(i))) /
@@ -61,7 +61,7 @@ void setupSSTVLineTimeTable(esstvMode modeIndex, DSPFLOAT clock, bool transmit) 
                            clock;
     }
   } else {
-    if (lineTimeTableRX != nullptr) delete[] lineTimeTableRX;
+    delete[] lineTimeTableRX;
     lineTimeTableRX = new DSPFLOAT[SSTVTable[modeIndex].numberOfDataLines + 1];
     for (i = 0; i < SSTVTable[modeIndex].numberOfDataLines + 1; i++) {
       lineTimeTableRX[i] = ((SSTVTable[modeIndex].imageTime * (static_cast<DSPFLOAT>(i))) /

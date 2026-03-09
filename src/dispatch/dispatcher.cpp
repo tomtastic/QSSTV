@@ -202,7 +202,7 @@ void dispatcher::customEvent(QEvent* e) {
       (static_cast<saveDRMImageEvent*>(e))->getInfo(info);
       if (!rxWidgetPtr->getImageViewerPtr()->openImage(fn, false, false, false, false)) {
         // simply save the file if it is not an image file
-        if (mbox == nullptr) delete mbox;
+        delete mbox;
         mbox = new QMessageBox(mainWindowPtr);
         mbox->setWindowTitle("Received file");
         mbox->setText(QString("Saved file %1").arg(fn));
@@ -228,7 +228,7 @@ void dispatcher::customEvent(QEvent* e) {
       break;
 
     case displayMBox:
-      if (mbox == nullptr) delete mbox;
+      delete mbox;
       mbox = new QMessageBox(mainWindowPtr);
       mbox->setWindowTitle((static_cast<displayMBoxEvent*>(e))->getTitle());
       mbox->setText((static_cast<displayMBoxEvent*>(e))->getStr());

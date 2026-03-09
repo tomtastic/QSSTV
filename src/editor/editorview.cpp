@@ -111,11 +111,11 @@ editorView::editorView(QWidget* parent) : QWidget(parent), Ui::editorForm() {
 editorView::~editorView() {
   QMenu* menuPtr;
   menuPtr = fillToolButton->menu();
-  if (menuPtr) delete menuPtr;
+  delete menuPtr;
   menuPtr = lineToolButton->menu();
-  if (menuPtr) delete menuPtr;
+  delete menuPtr;
   menuPtr = gradientToolButton->menu();
-  if (menuPtr) delete menuPtr;
+  delete menuPtr;
   writeSettings();
 }
 

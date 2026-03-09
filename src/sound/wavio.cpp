@@ -258,12 +258,12 @@ bool wavIO::write(quint16* dPtr, uint numSamples, bool isStereo) {
   if (inopf.write(reinterpret_cast<char*>(tmpPtr), len) != len) {
     addToLog("wavio write error", LOGALL);
     closeFile();
-    if (tempBufPtr) delete[] tempBufPtr;
+    delete[] tempBufPtr;
     return false;
   }
   numberOfSamples += numSamples;
   addToLog(QString("wavio write:%1 total samples=%2").arg(numSamples).arg(numberOfSamples), LOGWAVIO);
-  if (tempBufPtr) delete[] tempBufPtr;
+  delete[] tempBufPtr;
   return true;
 }
 

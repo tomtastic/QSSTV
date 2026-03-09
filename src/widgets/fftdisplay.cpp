@@ -25,9 +25,9 @@ fftDisplay::fftDisplay(QWidget* parent) : QLabel(parent) {
 
 fftDisplay::~fftDisplay() {
   delete imagePtr;
-  if (fftArray) delete fftArray;
-  if (arMagSAvg) delete[] arMagSAvg;
-  if (arMagWAvg) delete[] arMagWAvg;
+  delete fftArray;
+  delete[] arMagSAvg;
+  delete[] arMagWAvg;
 }
 
 
@@ -36,8 +36,8 @@ void fftDisplay::init(int length, int nblocks, int isamplingrate) {
   windowSize = length;
   fftLength = windowSize * nblocks;
   samplingrate = isamplingrate;
-  if (fftArray) delete fftArray;
-  if (arMagSAvg) delete[] arMagSAvg;
+  delete fftArray;
+  delete[] arMagSAvg;
   step = static_cast<double>(samplingrate) / static_cast<double>(fftLength);  // freq step per bin
   binBegin = static_cast<int>(rint(FFTLOW / step));
   binEnd = static_cast<int>(rint(FFTHIGH / step));
@@ -73,7 +73,7 @@ void fftDisplay::showFFT(double* fftData) {
   }
   if ((imWidth != width()) || (imHeight != height())) {
     if (imWidth != width()) {
-      if (arMagWAvg != nullptr) delete[] arMagWAvg;
+      delete[] arMagWAvg;
       arMagWAvg = new double[width()];
       for (i = 0; i < width(); i++) {
         arMagWAvg[i] = 0;

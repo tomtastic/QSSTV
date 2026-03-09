@@ -24,7 +24,7 @@ imageMatrix::~imageMatrix() {
 }
 
 void imageMatrix::setupLayout() {
-  if (verticalLayout != nullptr) delete verticalLayout;
+  delete verticalLayout;
   verticalLayout = new QVBoxLayout(parentPtr);
   verticalLayout->setObjectName(QString::fromUtf8("vt1"));
   verticalLayout->setSpacing(2);

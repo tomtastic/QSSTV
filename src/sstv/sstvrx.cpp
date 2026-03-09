@@ -71,8 +71,8 @@ void sstvRx::resetParams(bool bufferReset) {
 }
 
 sstvRx::~sstvRx() {
-  if (videoFilterPtr != nullptr) delete videoFilterPtr;
-  if (syncFilterPtr != nullptr) delete syncFilterPtr;
+  delete videoFilterPtr;
+  delete syncFilterPtr;
 }
 
 void sstvRx::setFilters() {

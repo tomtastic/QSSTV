@@ -73,7 +73,7 @@ editorScene::editorScene(QGraphicsView* parent) : QGraphicsScene(parent) {
 }
 
 editorScene::~editorScene() {
-  if (localImage != nullptr) delete localImage;
+  delete localImage;
   if ((!pasted) && (copyItem != nullptr)) delete copyItem;
   delete arrange;
   delete contextMenu;
@@ -175,7 +175,7 @@ bool editorScene::load(QFile& f) {
 
 QImage* editorScene::renderImage(int w, int h) {
   clearSelection();
-  if (localImage != nullptr) delete localImage;
+  delete localImage;
   if (w == 0) {
     localImage = new QImage(border.width(), border.height(), QImage::Format_ARGB32_Premultiplied);
   } else {
@@ -205,7 +205,7 @@ QImage* editorScene::renderImage(int w, int h) {
 void editorScene::overlay(QImage* ima) {
   clearSelection();
   setSceneRect(border);
-  if (localImage != nullptr) delete localImage;
+  delete localImage;
   localImage = new QImage(ima->copy());
   addToLog(QString("localImageSize %1,%2").arg(localImage->width()).arg(localImage->height()), LOGEDIT);
   convertText();
@@ -273,7 +273,7 @@ bool editorScene::save(QFile& f, bool templ) {
 }
 
 void editorScene::flattenImage(int w, int h) {
-  if (localImage != nullptr) delete localImage;
+  delete localImage;
   setSceneRect(border);
   localImage = new QImage(w, h, QImage::Format_ARGB32_Premultiplied);
   convertText();
