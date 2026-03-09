@@ -52,7 +52,7 @@ class rxWidget : public QWidget {
   void slotResync();
   void slotGetParams();
   void slotTransmissionMode(int rxtxMode);
-  void slotNewCall(QString);
+  void slotNewCall(const QString&);
   void slotResetCall();
   void slotLogCall();
   void slotErase();

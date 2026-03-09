@@ -54,10 +54,10 @@ class imageViewer : public QLabel {
 
 
   void init(thumbType tp);
-  bool openImage(QString& filename, QString start, bool ask, bool showMessage, bool temitSignal, bool fromCache,
+  bool openImage(QString& filename, const QString& start, bool ask, bool showMessage, bool temitSignal, bool fromCache,
                  bool background);
   bool openImage(QString& filename, bool showMessage, bool emitSignal, bool fromCache, bool background);
-  bool openImage(QImage im);
+  bool openImage(const QImage& im);
   bool openImage(QByteArray* ba);
   void setParam(const QString& templateFn, bool usesTemplate, int width = 0, int height = 0);
   void clear();
@@ -186,7 +186,7 @@ class imageViewer : public QLabel {
   QString cachePath;
   bool processImageDisplay(bool success, bool showMessage, bool fromCache);
 #ifdef IMAGETESTVIEWER
-  void imageTestViewer(QImage* im, QString infoStr);
+  void imageTestViewer(QImage* im, const QString& infoStr);
 #endif
 };
 

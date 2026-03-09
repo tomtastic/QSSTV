@@ -383,7 +383,7 @@ void syncProcessor::trackSyncs() {
   }
 }
 
-void syncProcessor::slotNewCall(QString call) {
+void syncProcessor::slotNewCall(const QString& call) {
   emit callReceived(call);
   retraceFlag = true;
 }

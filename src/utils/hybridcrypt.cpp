@@ -185,7 +185,7 @@ void hybridCrypt::reverseString(QString& s) {
   s = t;
 }
 
-bool hybridCrypt::getParam(QString resultStr) {
+bool hybridCrypt::getParam(const QString& resultStr) {
   int a, b, c, d, e;
   QString tempDir;
   a = resultStr.indexOf(QChar(63));

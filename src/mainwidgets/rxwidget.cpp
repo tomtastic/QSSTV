@@ -184,7 +184,7 @@ void rxWidget::slotLogCall() {
   dispatcherPtr->logSSTV(call, false);
 }
 
-void rxWidget::slotNewCall(QString call) {
+void rxWidget::slotNewCall(const QString& call) {
   ui->callLineEdit->setText(call);
   dispatcherPtr->logSSTV(call, true);
 }

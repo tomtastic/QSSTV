@@ -14,15 +14,17 @@ class ftpFunctions : public QObject {
  public:
   ftpFunctions();
   ~ftpFunctions() override;
-  bool test(QString name, QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory, bool doSetup);
-  void uploadFile(QString source, QString destination, bool wait, bool closeWhenDone);
-  void uploadData(QByteArray ba, QString destination, bool wait, bool closeWhenDone);
-  void downloadFile(QString source, QString destination, bool wait, bool closeWhenDone);
-  void remove(QString source, bool wait, bool closeWhenDone);
-  void rename(QString tSource, QString tDestination, bool wait, bool closeDone);
-  void setupFtp(QString name, QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory);
-  void listFiles(QString mask, bool closeWhenDone);
-  void mremove(QString mask, bool wait, bool closeWhenDone);
+  bool test(const QString& name, const QString& tHost, int tPort, const QString& tUser, const QString& tPasswd,
+            const QString& tDirectory, bool doSetup);
+  void uploadFile(const QString& source, const QString& destination, bool wait, bool closeWhenDone);
+  void uploadData(const QByteArray& ba, const QString& destination, bool wait, bool closeWhenDone);
+  void downloadFile(const QString& source, const QString& destination, bool wait, bool closeWhenDone);
+  void remove(const QString& source, bool wait, bool closeWhenDone);
+  void rename(const QString& tSource, const QString& tDestination, bool wait, bool closeDone);
+  void setupFtp(const QString& name, const QString& tHost, int tPort, const QString& tUser, const QString& tPasswd,
+                const QString& tDirectory);
+  void listFiles(const QString& mask, bool closeWhenDone);
+  void mremove(const QString& mask, bool wait, bool closeWhenDone);
   void disconnectFtp();
   eftpError getLastError() { return lastError; }
   eftpError getLastErrorStr(QString& lastErrorString) {
@@ -31,14 +33,14 @@ class ftpFunctions : public QObject {
   }
   QList<QUrlInfo> getListing();
   bool isBusy() { return busy; }
-  void changePath(QString source, bool wait);
-  void changeThreadName(QString tidName);
+  void changePath(const QString& source, bool wait);
+  void changeThreadName(const QString& tidName);
 
 
  private slots:
   void slotCommandsDone(int err, QString errStr);
   void slotThreadFinished();
-  void slotDownloadFinished(bool err, QString filename);
+  void slotDownloadFinished(bool err, const QString& filename);
   void slotListingFinished(bool err);
 
 
@@ -49,8 +51,8 @@ class ftpFunctions : public QObject {
  private:
   void setupFtp();
 
-  bool checkUpload(QString fn, QString rfn);
-  bool checkRemove(QString rfn);
+  bool checkUpload(const QString& fn, const QString& rfn);
+  bool checkRemove(const QString& rfn);
   bool checkStart();
   void checkWait(bool wait);
 

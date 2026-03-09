@@ -81,7 +81,7 @@ class editorScene : public QGraphicsScene {
   void overlay(QImage* ima);
   void addBorder(int w, int h);
   QImage* getImagePtr() { return localImage; }
-  void addConversion(QChar tag, QString value, bool clear = false);
+  void addConversion(QChar tag, const QString& value, bool clear = false);
 
   // bool event(QEvent *);
 

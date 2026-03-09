@@ -78,7 +78,7 @@ void MaiaXmlRpcServerConnection::readFromSocket() {
   }
 }
 
-void MaiaXmlRpcServerConnection::sendResponse(QString content) {
+void MaiaXmlRpcServerConnection::sendResponse(const QString& content) {
   QHttpResponseHeader header(200, "OK");
   QByteArray block;
   header.setValue("Server", "MaiaXmlRpc/0.1");
@@ -91,7 +91,7 @@ void MaiaXmlRpcServerConnection::sendResponse(QString content) {
   //  clientConnection->disconnectFromHost();
 }
 
-void MaiaXmlRpcServerConnection::parseCall(QString call) {
+void MaiaXmlRpcServerConnection::parseCall(const QString& call) {
   QDomDocument doc;
   QList<QVariant> args;
   QVariant ret;

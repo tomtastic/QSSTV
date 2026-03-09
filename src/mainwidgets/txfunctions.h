@@ -55,10 +55,10 @@ class txFunctions : public QThread {
     toneLowerFrequency = lowerFreq;
     toneUpperFrequency = upperFreq;
   }
-  bool prepareFIX(QByteArray bsrByteArray);
-  bool prepareBinary(QString fileName);
+  bool prepareFIX(const QByteArray& bsrByteArray);
+  bool prepareBinary(const QString& fileName);
   void sendBSR(QByteArray* p, drmTxParams dp);
-  void applyTemplate(imageViewer* ivPtr, QString templateFilename);
+  void applyTemplate(imageViewer* ivPtr, const QString& templateFilename);
   void forgetTxFileName();
   etxState getTXState() { return txState; }
   void setDRMTxParams(drmTxParams params);

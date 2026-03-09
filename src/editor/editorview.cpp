@@ -432,7 +432,7 @@ QIcon editorView::createColorToolButtonIcon(const QString& imageFile, QColor col
   return QIcon(pixmap);
 }
 
-QMenu* editorView::createColorMenu(void (editorView::*slot)(), int type, QString text) {
+QMenu* editorView::createColorMenu(void (editorView::*slot)(), int type, const QString& text) {
   QMenu* colorMenu = new QMenu;
   QAction* action = new QAction(text, this);
   action->setData(type);

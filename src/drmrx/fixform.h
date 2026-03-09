@@ -13,12 +13,12 @@ class fixForm : public QDialog {
  public:
   explicit fixForm(QWidget* parent = nullptr);
   ~fixForm() override;
-  void setInfoInternal(int mode, QString fileName, int missing, QByteArray* ba);
+  void setInfoInternal(int mode, const QString& fileName, int missing, QByteArray* ba);
   //  void setInfoExternal(int mode, QString fileName, int missing);
 
  private:
   Ui::fixForm* ui;
-  void common(int mode, QString fileName, int missing);
+  void common(int mode, const QString& fileName, int missing);
 };
 
 #endif  // FIXFORM_H

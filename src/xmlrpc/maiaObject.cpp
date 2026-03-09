@@ -27,13 +27,15 @@
  */
 
 #include "maiaObject.h"
+
+#include <utility>
 #include "appglobal.h"
 
 MaiaObject::MaiaObject(QObject* parent) : QObject(parent) {
   QDomImplementation::setInvalidDataPolicy(QDomImplementation::DropInvalidChars);
 }
 
-QDomElement MaiaObject::toXml(QVariant arg) {
+QDomElement MaiaObject::toXml(const QVariant& arg) {
   // dummy document
   QDomDocument doc;
   // value element, we need this in each case
@@ -272,7 +274,7 @@ QVariant MaiaObject::fromXml(const QDomElement& elem) {
 }
 
 
-QString MaiaObject::prepareCall(QString method, QList<QVariant> args) {
+QString MaiaObject::prepareCall(const QString& method, QList<QVariant> args) {
   QDomDocument doc;
 
   QDomProcessingInstruction header =
@@ -299,7 +301,7 @@ QString MaiaObject::prepareCall(QString method, QList<QVariant> args) {
   return doc.toString();
 }
 
-QString MaiaObject::prepareResponse(QVariant arg) {
+QString MaiaObject::prepareResponse(const QVariant& arg) {
   QDomDocument doc;
 
   QDomProcessingInstruction header =
@@ -317,13 +319,13 @@ QString MaiaObject::prepareResponse(QVariant arg) {
   //    if(!arg.isNull())
   {
     param = doc.createElement("param");
-    param.appendChild(toXml(arg));
+    param.appendChild(toXml(std::move(arg)));
     params.appendChild(param);
   }
   return doc.toString(-1);
 }
 
-void MaiaObject::parseResponse(QString response, QNetworkReply* reply) {
+void MaiaObject::parseResponse(const QString& response, QNetworkReply* reply) {
   QDomDocument doc;
   QVariant arg;
   auto parseResult = doc.setContent(response);

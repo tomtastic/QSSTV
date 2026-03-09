@@ -68,7 +68,7 @@ class graphItemBase : public QAbstractGraphicsShapeItem {
   QRectF rect() { return param.rct; }
   void setImage(const QImage& ima) { param.im = ima; }
   sitemParam getParam();
-  void setParam(sitemParam sp);
+  void setParam(const sitemParam& sp);
   QString text() const { return param.txt; }
 
   virtual void setText(const QString&) {}

@@ -291,7 +291,7 @@ void dispatcher::startTX(txFunctions::etxState state) {
 }
 
 
-void dispatcher::startDRMFIXTx(QByteArray ba) {
+void dispatcher::startDRMFIXTx(const QByteArray& ba) {
   if (!txWidgetPtr->functionsPtr()->prepareFIX(ba)) return;
   startTX(txFunctions::TXSENDDRMFIX);
 }
@@ -341,7 +341,7 @@ void dispatcher::startDRMTxBinary() {
 }
 
 
-void dispatcher::logSSTV(QString call, bool fromFSKID) {
+void dispatcher::logSSTV(const QString& call, bool fromFSKID) {
   if (lastFileName.isEmpty()) {
     return;
   }
@@ -400,7 +400,7 @@ void dispatcher::saveRxSSTVImage(esstvMode mode) {
   }
 }
 
-void dispatcher::saveImage(QString fileName, QString infotext) {
+void dispatcher::saveImage(const QString& fileName, const QString& infotext) {
   // filename is the name of the original file in hybrid mode
   QFileInfo info(fileName);
   QString fn = "/tmp/" + info.baseName() + "." + ftpDefaultImageFormat;
@@ -466,7 +466,7 @@ void dispatcher::saveImage(QString fileName, QString infotext) {
   }
 }
 
-void dispatcher::uploadToRXServer(QString remoteDir, QString fn) {
+void dispatcher::uploadToRXServer(const QString& remoteDir, const QString& fn) {
   // todo ftp
   QString uploadDestinationFile = fn;
   uploadSourceFile = fn;
@@ -547,7 +547,7 @@ void dispatcher::timerEvent(QTimerEvent* event) {
 }
 
 
-void dispatcher::slotTXNotification(QString info) {
+void dispatcher::slotTXNotification(const QString& info) {
   if (info != "") {
     txWidgetPtr->appendDRMNotifyText(info);
   }

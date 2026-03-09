@@ -269,7 +269,7 @@ bool editor::setImage(QImage* im) {
   return true;
 }
 
-bool editor::openFile(QString fn) {
+bool editor::openFile(const QString& fn) {
   QFile f(fn);
   localFile.setFileName(fn);
   return ev->open(f);

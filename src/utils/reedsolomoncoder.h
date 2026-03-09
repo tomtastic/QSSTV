@@ -20,9 +20,9 @@ class reedSolomonCoder {
   reedSolomonCoder();
   ~reedSolomonCoder();
   void init();
-  bool decode(QByteArray& ba, QString fn, QString& newFileName, QByteArray& baFile, QString extension,
+  bool decode(QByteArray& ba, const QString& fn, QString& newFileName, QByteArray& baFile, const QString& extension,
               QList<int>& erasuresArray);
-  bool encode(QByteArray& ba, QString extension, eRSType rsType);
+  bool encode(QByteArray& ba, const QString& extension, eRSType rsType);
 
  private:
   void distribute(unsigned char* src, unsigned char* dst, int rows, int cols, int reverse);

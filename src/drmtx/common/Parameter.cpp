@@ -599,7 +599,7 @@ void CParameter::SetNumDataDecoderBits(const int iNewNumDataDecoderBits) {
   }
 }
 
-void CParameter::SetMSCProtLev(const CMSCProtLev NewMSCPrLe, const _BOOLEAN bWithHierarch) {
+void CParameter::SetMSCProtLev(const CMSCProtLev& NewMSCPrLe, const _BOOLEAN bWithHierarch) {
   //	_BOOLEAN bParamersHaveChanged = false;
 
   if ((NewMSCPrLe.iPartA != MSCPrLe.iPartA) || (NewMSCPrLe.iPartB != MSCPrLe.iPartB)) {

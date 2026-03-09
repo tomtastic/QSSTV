@@ -16,6 +16,7 @@
  ***************************************************************************/
 #include "cw.h"
 #include <cctype>
+#include <utility>
 #include "appglobal.h"
 #include "configparams.h"
 
@@ -49,10 +50,10 @@ static struct {
                  {'=', "-...-"},  {'?', "..--.."},  {'_', "..--.-"},  {0, ""}};
 
 static QString cwString;
-void initCW(QString cwTxt) {
+void initCW(const QString& cwTxt) {
   cwState = CWNEW;
   dotSpacing = 1.2 / static_cast<float>(cwWPM);
-  cwString = cwTxt;
+  cwString = std::move(cwTxt);
 }
 
 const char* charLookupCW(const char a) {

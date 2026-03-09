@@ -9,6 +9,7 @@
 #include <QFile>
 #include <QDir>
 #include <QDebug>
+#include <utility>
 
 #define JP2_RFC3745_MAGIC "\x00\x00\x00\x0c\x6a\x50\x20\x20\x0d\x0a\x87\x0a"
 #define JP2_MAGIC "\x0d\x0a\x87\x0a"
@@ -85,7 +86,7 @@ void jp2IO::init() {
   cstr_index = nullptr;
 }
 
-bool jp2IO::check(QString fileName) {
+bool jp2IO::check(const QString& fileName) {
   quint64 size;
   char data[12];
   QFile fi(fileName);
@@ -140,7 +141,7 @@ void jp2IO::slotStart() {
 }
 
 
-QImage jp2IO::decode(QString fileName) {
+QImage jp2IO::decode(const QString& fileName) {
   QImage qimage;
   int width;   // image width and height
   int wr, hr;  // taken from OpenJPEG
@@ -382,7 +383,7 @@ opj_image_t* jp2IO::convert_gray_to_rgb(opj_image_t* original) {
   return l_new_image;
 }
 
-QByteArray jp2IO::encode(QImage qimage, QImage& newImage, int& fileSize, int compressionRatio) {
+QByteArray jp2IO::encode(const QImage& qimage, QImage& newImage, int& fileSize, int compressionRatio) {
   QByteArray byteArray;
   QString fn = QString("%1/%2").arg(QDir::tempPath()).arg("qsstv.tmp");
   //  char *of=fn.toLatin1().data();
@@ -391,7 +392,7 @@ QByteArray jp2IO::encode(QImage qimage, QImage& newImage, int& fileSize, int com
   fileSize = 0;
   opj_set_default_encoder_parameters(&cparameters);
   cparameters.cp_disto_alloc = 1;
-  createImage(qimage);
+  createImage(std::move(qimage));
   cparameters.cod_format = JP2_CFMT;
   if (opj_strcpy_s(cparameters.outfile, sizeof(cparameters.outfile), fn.toLatin1().data()) != 0) {
     return byteArray;

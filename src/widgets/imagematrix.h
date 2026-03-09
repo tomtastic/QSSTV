@@ -14,7 +14,7 @@ class imageMatrix : public QWidget {
  public:
   explicit imageMatrix(QWidget* parent = nullptr);
   ~imageMatrix() override;
-  void init(int numRows, int numColumns, QString dir, imageViewer::thumbType tt);
+  void init(int numRows, int numColumns, const QString& dir, imageViewer::thumbType tt);
   void setupFiles();
   void changed();
   QFileInfoList getFileList() { return fileList; }

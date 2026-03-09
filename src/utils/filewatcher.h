@@ -10,7 +10,7 @@ class fileWatcher : public QFileSystemWatcher {
   void init();
 
  public slots:
-  void addPathRecursive(QString path);
+  void addPathRecursive(const QString& path);
 };
 
 #endif  // FILEWATCHER_H

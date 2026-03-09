@@ -82,7 +82,7 @@ void imageMatrix::setupLayout() {
 }
 
 
-void imageMatrix::init(int numRows, int numColumns, QString dir, imageViewer::thumbType tt) {
+void imageMatrix::init(int numRows, int numColumns, const QString& dir, imageViewer::thumbType tt) {
   int i, j;
   rows = numRows;
   columns = numColumns;
@@ -111,7 +111,7 @@ void imageMatrix::init(int numRows, int numColumns, QString dir, imageViewer::th
   //  displayFiles();
 }
 
-bool compareFile(QFileInfo f1, QFileInfo f2) { return f1.lastModified() > f2.lastModified(); }
+bool compareFile(const QFileInfo& f1, const QFileInfo& f2) { return f1.lastModified() > f2.lastModified(); }
 
 void imageMatrix::getList() {
   QDateTime listFileTime;

@@ -150,7 +150,7 @@ sitemParam graphItemBase::getParam() {
   return param;
 }
 
-void graphItemBase::setParam(sitemParam sp) {
+void graphItemBase::setParam(const sitemParam& sp) {
   setPen(sp.pen);
   setBrush(sp.fillColor);
   setFont(sp.font);

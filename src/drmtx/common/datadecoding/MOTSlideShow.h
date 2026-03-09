@@ -42,7 +42,7 @@ class CMOTSlideShowEncoder {
   virtual ~CMOTSlideShowEncoder() {}
   void Init(CParameter& TParam);
   void GetDataUnit(CVector<_BINARY>& vecbiNewData);
-  void AddArray(QByteArray* ba, const QString name, const QString format);
+  void AddArray(QByteArray* ba, const QString& name, const QString& format);
   void ClearAllFileNames() { vecPicFileNames.Init(0); }
   _BOOLEAN GetTransStat(string& strCurPict, _REAL& rCurPerc) const;
 

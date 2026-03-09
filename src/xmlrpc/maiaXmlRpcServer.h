@@ -43,12 +43,12 @@ class MaiaXmlRpcServer : public QObject {
   MaiaXmlRpcServer(const QHostAddress& address = QHostAddress::Any, quint16 port = 8080,
                    QList<QHostAddress>* allowedAddresses = 0, QObject* parent = 0);
   MaiaXmlRpcServer(quint16 port = 8080, QObject* parent = 0);
-  void addMethod(QString method, QObject* responseObject, const char* responseSlot);
-  void removeMethod(QString method);
+  void addMethod(const QString& method, QObject* responseObject, const char* responseSlot);
+  void removeMethod(const QString& method);
   QHostAddress getServerAddress();
 
  public slots:
-  void getMethod(QString method, QObject** responseObject, const char** responseSlot);
+  void getMethod(const QString& method, QObject** responseObject, const char** responseSlot);
 
  private slots:
   void newConnection();

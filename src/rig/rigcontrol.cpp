@@ -283,7 +283,7 @@ bool rigControl::getMode(QString& mode) {
   return false;
 }
 
-bool rigControl::setMode(QString mode, QString passBand) {
+bool rigControl::setMode(QString mode, const QString& passBand) {
   QString orgMode;
   int pb;
   int i;
@@ -380,7 +380,7 @@ bool rigControl::setPTT(bool on) {
 }
 
 
-void rigControl::errorMessage(int errorCode, QString command) {
+void rigControl::errorMessage(int errorCode, const QString& command) {
   displayMBoxEvent* stmb;
   stmb = new displayMBoxEvent("Cat interface",
                               QString("Error in connection: %1\n%2").arg(QString(rigerror(errorCode))).arg(command));
@@ -501,7 +501,7 @@ void rigControl::activatePTT(bool b) {
 }
 
 
-int rigControl::rawCommand(QByteArray ba) {
+int rigControl::rawCommand(const QByteArray& ba) {
   int i;
   bool result;
   char rxBuffer[100];

@@ -19,7 +19,7 @@
 #define CW_H
 #include <qstring.h>
 
-void initCW(QString cwTxt);
+void initCW(const QString& cwTxt);
 bool sendTextCW(float& tone, float& duration);
 float getCWDuration();
 

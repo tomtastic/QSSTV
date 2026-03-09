@@ -204,7 +204,7 @@ void dataBlock::log() {
 // B12-B0  Length of the data that follows
 
 
-bool sourceDecoder::setupDataPacket(QByteArray ba) {
+bool sourceDecoder::setupDataPacket(const QByteArray& ba) {
   double checksum;
   unsigned char lengthIndicator;
   unsigned char header;
@@ -522,7 +522,7 @@ void sourceDecoder::saveImage(transportBlock* tbPtr) {
 }
 
 
-void sourceDecoder::slotDownloadDone(bool err, QString filename) {
+void sourceDecoder::slotDownloadDone(bool err, const QString& filename) {
   if (err) return;
   displayReceivedImage(true, filename);
   // send notification
@@ -542,7 +542,7 @@ void sourceDecoder::slotDownloadDone(bool err, QString filename) {
 }
 
 
-void sourceDecoder::displayReceivedImage(bool isHybrid, QString filename) {
+void sourceDecoder::displayReceivedImage(bool isHybrid, const QString& filename) {
   bool saveOK = false;
   bool done = false;
   bool textMode = false;

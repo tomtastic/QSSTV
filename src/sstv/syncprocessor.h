@@ -148,7 +148,7 @@ class syncProcessor : public QObject {
 #endif
 
  public slots:
-  void slotNewCall(QString call);
+  void slotNewCall(const QString& call);
   void slotVisCodeDetected(int, uint visSampleCounter);
 
  signals:

@@ -25,7 +25,7 @@ ipcMessage::ipcMessage(int messageKey) {
 ipcMessage::~ipcMessage() { closeQueue(); }
 
 
-bool ipcMessage::sendMessage(QString t) {
+bool ipcMessage::sendMessage(const QString& t) {
   if (messageQId < 0) return false;
   int len;
   // message to send

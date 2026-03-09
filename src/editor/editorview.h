@@ -90,7 +90,7 @@ class editorView : public QWidget, private Ui::editorForm {
   QPlainTextEdit* textEdit;
   void setTransform();
   QIcon createColorToolButtonIcon(const QString& imageFile, QColor color);
-  QMenu* createColorMenu(void (editorView::*)(), int, QString text);
+  QMenu* createColorMenu(void (editorView::*)(), int, const QString& text);
   int canvasSizeIndex;
   int pointSize;
   QString fontFamily;

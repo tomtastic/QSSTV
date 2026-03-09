@@ -110,7 +110,7 @@ void CMOTSlideShowEncoder::AddNextPicture() {
   }
 }
 
-void CMOTSlideShowEncoder::AddArray(QByteArray* ba, const QString name, const QString format) {
+void CMOTSlideShowEncoder::AddArray(QByteArray* ba, const QString& name, const QString& format) {
   /* Only ContentSubType "JFIF" (JPEG) and ContentSubType "PNG" are allowed
      for SlideShow application (not tested here!) */
   /* Add file name to the list */

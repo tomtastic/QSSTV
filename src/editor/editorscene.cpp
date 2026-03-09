@@ -689,7 +689,7 @@ void editorScene::addBorder(int w, int h) {
 }
 
 
-void editorScene::addConversion(QChar tag, QString value, bool clear) {
+void editorScene::addConversion(QChar tag, const QString& value, bool clear) {
   if (clear) mexp.clear();
   mexp.addConversion(tag, value);
 }

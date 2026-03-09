@@ -24,12 +24,12 @@ class xmlInterface : public QObject {
 
  public slots:
   void takeControl();
-  void setName(QString t);
+  void setName(const QString& t);
   void setModes(QVariantList t);
   void setBandwidths(QVariantList t);
-  void setBandwidth(QString t);
-  void setWfSideband(QString t);
-  void setMode(QString t);
+  void setBandwidth(const QString& t);
+  void setWfSideband(const QString& t);
+  void setMode(const QString& t);
   void setFrequency(double d);
   QVariantList systemMulticall(QVariantList s);
   double getFrequency();
@@ -41,8 +41,8 @@ class xmlInterface : public QObject {
 
  private:
   MaiaXmlRpcServer* rpcServer;
-  void log(QString cmd, QString t);
-  void log(QString cmd, QVariantList t);
+  void log(const QString& cmd, const QString& t);
+  void log(const QString& cmd, QVariantList t);
   sxmlInfo rigInfo;
 };
 

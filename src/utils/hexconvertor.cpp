@@ -1,6 +1,6 @@
 #include "hexconvertor.h"
 
-bool hexFromString(QString s, QByteArray& ba, bool toHex) {
+bool hexFromString(const QString& s, QByteArray& ba, bool toHex) {
   int i, j;
   unsigned char res;
   bool ok;

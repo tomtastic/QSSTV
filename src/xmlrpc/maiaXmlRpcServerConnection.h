@@ -80,8 +80,8 @@ class MaiaXmlRpcServerConnection : public QObject {
   void slotDisconnect();
 
  private:
-  void sendResponse(QString content);
-  void parseCall(QString call);
+  void sendResponse(const QString& content);
+  void parseCall(const QString& call);
 
 
   QTcpSocket* clientConnection;

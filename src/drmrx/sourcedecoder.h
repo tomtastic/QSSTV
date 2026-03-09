@@ -170,11 +170,11 @@ class sourceDecoder : public QObject {
   //  bool rxNotifySetup();
   //  bool rxNotifyCheck(QString fn);
  private slots:
-  void slotDownloadDone(bool err, QString filename);
+  void slotDownloadDone(bool err, const QString& filename);
 
  private:
   bool setupDataBlock(unsigned char* buffer, bool crcIsOK, int len);
-  bool setupDataPacket(QByteArray ba);
+  bool setupDataPacket(const QByteArray& ba);
   void addDataSegment();
   bool addHeaderSegment();
   void loadParams(transportBlock* tbPtr, unsigned char paramID, int len);
@@ -195,7 +195,7 @@ class sourceDecoder : public QObject {
   hybridCrypt hc;
   bool alreadyDisplayed;
   ftpFunctions* ff;
-  void displayReceivedImage(bool isHybrid, QString filename);
+  void displayReceivedImage(bool isHybrid, const QString& filename);
   uint modeCodeTmp;
   QString callsignTmp;
 };

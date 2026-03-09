@@ -78,7 +78,7 @@ class wavIO {
   wavIO(unsigned int samplingR = BASESAMPLERATE);
   ~wavIO();
   bool openFileForRead(QString fname, bool ask);
-  bool openFileForWrite(QString fname, bool ask, bool isStereo);
+  bool openFileForWrite(const QString& fname, bool ask, bool isStereo);
   int read(short int* dPtr, uint len);
   bool write(quint16* dPtr, uint len, bool isStereo);
   void setSamplingrate(int sr) { samplingrate = sr; }

@@ -75,9 +75,9 @@ class jp2IO : public QObject {
   Q_OBJECT
  public:
   jp2IO();
-  bool check(QString fileName);
-  QImage decode(QString fileName);
-  QByteArray encode(QImage qimage, QImage& newImage, int& fileSize, int compressionRatio = 0);
+  bool check(const QString& fileName);
+  QImage decode(const QString& fileName);
+  QByteArray encode(const QImage& qimage, QImage& newImage, int& fileSize, int compressionRatio = 0);
   void setParams(QImage* im, QString filename, bool tFromCache) {
     threadImage = im;
     threadFilename = filename;

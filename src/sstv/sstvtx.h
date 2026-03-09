@@ -16,7 +16,7 @@ class sstvTx {
   bool sendImage(imageViewer* ivPtr);
   void abort();
   bool aborted();
-  void applyTemplate(QString templateFilename, bool useTemplate, imageViewer* ivPtr);
+  void applyTemplate(const QString& templateFilename, bool useTemplate, imageViewer* ivPtr);
   void createTestPattern(imageViewer* ivPtr, etpSelect sel);
 
 

@@ -15,7 +15,7 @@ void fileWatcher::init() {
   connect(this, &QFileSystemWatcher::directoryChanged, galleryWidgetPtr, &galleryWidget::slotDirChanged);
 }
 
-void fileWatcher::addPathRecursive(QString path) {
+void fileWatcher::addPathRecursive(const QString& path) {
   addPath(path);
   if (recursiveScanDirs) {
     QDirIterator it(path, QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);

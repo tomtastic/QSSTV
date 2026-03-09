@@ -39,7 +39,7 @@ QString monthArray[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"
 logBook::logBook() { ipcQueue = new ipcMessage(1238); }
 
 
-void logBook::logQSO(QString call, QString mode, QString comment) {
+void logBook::logQSO(const QString& call, const QString& mode, const QString& comment) {
   int i;
   QDateTime dt(QDateTime::currentDateTimeUtc());
   QString tmp;

@@ -31,7 +31,7 @@ class galleryWidget : public QWidget {
   QString getLastRxImage();
 
  public slots:
-  void slotDirChanged(QString);
+  void slotDirChanged(const QString&);
 
 
  private:

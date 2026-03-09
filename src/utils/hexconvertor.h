@@ -5,5 +5,5 @@
 #include <QByteArray>
 
 
-bool hexFromString(QString s, QByteArray& ba, bool toHex);
+bool hexFromString(const QString& s, QByteArray& ba, bool toHex);
 #endif  // HEXCONVERTOR_H

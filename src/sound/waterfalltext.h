@@ -31,8 +31,8 @@ class waterfallText {
   DSPFLOAT* outFiltered;
   DSPFLOAT* audioBuf;
   fftw_plan plan;
-  void setupImage(QString txt);
-  QString convert(QString txt);
+  void setupImage(const QString& txt);
+  QString convert(const QString& txt);
   int imageWidth;
   int width;
   int height;

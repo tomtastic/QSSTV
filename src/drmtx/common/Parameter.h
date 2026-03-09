@@ -896,7 +896,7 @@ class CParameter {
   CDataParam GetDataParam(const int iShortID);
   void SetDataParam(const int iShortID, const CDataParam& NewDataParam);
 
-  void SetMSCProtLev(const CMSCProtLev NewMSCPrLe, const _BOOLEAN bWithHierarch);
+  void SetMSCProtLev(const CMSCProtLev& NewMSCPrLe, const _BOOLEAN bWithHierarch);
   void SetStreamLen(const int iStreamID, const int iNewLenPartA, const int iNewLenPartB);
   void GetStreamLen(const int iStreamID, int& iLenPartA, int& iLenPartB);
   int GetStreamLen(const int iStreamID);

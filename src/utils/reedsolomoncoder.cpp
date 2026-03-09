@@ -39,8 +39,8 @@ void reedSolomonCoder::init() {
 
 // if the extension is not rs1,rs2 or rs3 then newFilename is set to fn and return value is true
 
-bool reedSolomonCoder::decode(QByteArray& ba, QString fn, QString& newFileName, QByteArray& baFile, QString extension,
-                              QList<int>& erasuresArray) {
+bool reedSolomonCoder::decode(QByteArray& ba, const QString& fn, QString& newFileName, QByteArray& baFile,
+                              const QString& extension, QList<int>& erasuresArray) {
   int i, j;
   int startOfSegment, row;
   //  QByteArray *t;
@@ -220,7 +220,7 @@ bool reedSolomonCoder::decode_and_write() {
   return true;
 }
 
-bool reedSolomonCoder::encode(QByteArray& ba, QString extension, eRSType rsType) {
+bool reedSolomonCoder::encode(QByteArray& ba, const QString& extension, eRSType rsType) {
   int i, j;
   unsigned char dataByte;
   QByteArray temp;

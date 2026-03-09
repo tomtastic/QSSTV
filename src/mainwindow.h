@@ -64,7 +64,7 @@ class mainWindow : public QMainWindow {
   void readSettings();
   void writeSettings();
   void restartSound(bool inStartUp);
-  void cleanUpCache(QString dirPath);
+  void cleanUpCache(const QString& dirPath);
   //  void setupFtp(ftpThread *&ptr, QString idName);
   QComboBox* transmissionModeComboBox;
   QPushButton* wfTextPushButton;

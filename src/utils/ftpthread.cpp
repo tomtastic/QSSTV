@@ -15,7 +15,7 @@ QString commandStr[15] = {"None", "SetTxMode", "SetProxy", "ConnectToHost", "Log
                           "Get",  "Put",       "Remove",   "Mkdir",         "Rmdir", "Rename", "RawCommand"};
 
 
-ftpThread::ftpThread(QString id) : QObject() {
+ftpThread::ftpThread(const QString& id) : QObject() {
   qftpPtr = nullptr;
   addToLog(QString("FTP Created: %1").arg(id), LOGFTPTHREAD);
   idName = id;
@@ -62,7 +62,8 @@ void ftpThread::slotInit() {
   disconnectTimerPtr->setInterval(2000);
 }
 
-void ftpThread::setHostParams(QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory) {
+void ftpThread::setHostParams(const QString& tHost, int tPort, const QString& tUser, const QString& tPasswd,
+                              const QString& tDirectory) {
   host = tHost;
   port = tPort;
   user = tUser;
@@ -129,7 +130,8 @@ void ftpThread::customEvent(QEvent* e) {
 }
 
 
-void ftpThread::setupConnection(QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory) {
+void ftpThread::setupConnection(const QString& tHost, int tPort, const QString& tUser, const QString& tPasswd,
+                                const QString& tDirectory) {
   addToLog(QString("'%1' host: %2, User: %3,directory: %4").arg(idName).arg(tHost).arg(tUser).arg(tDirectory),
            LOGFTPTHREAD);
   if (host != tHost || user != tUser || passwd != tPasswd || port != tPort) {
@@ -203,14 +205,14 @@ void ftpThread::changePath(const QString& newPath) {
   }
 }
 
-int ftpThread::listFiles(QString mask) {
+int ftpThread::listFiles(const QString& mask) {
   int id;
   doConnect();
   id = qftpPtr->list(mask);
   return id;
 }
 
-void ftpThread::uploadFile(QString source, QString destination) {
+void ftpThread::uploadFile(const QString& source, const QString& destination) {
   int id;
   Q_UNUSED(id);
   addToLog("uploadFile", LOGFTPTHREAD);
@@ -247,7 +249,7 @@ void ftpThread::uploadFile(QString source, QString destination) {
 }
 
 
-void ftpThread::downloadFile(QString source, QString destination) {
+void ftpThread::downloadFile(const QString& source, const QString& destination) {
   addToLog("FTP downloadFile", LOGFTPTHREAD);
   delete destFn;
   destFn = new QFile(destination);
@@ -275,7 +277,7 @@ void ftpThread::downloadFile(QString source, QString destination) {
 }
 
 
-void ftpThread::remove(QString source) {
+void ftpThread::remove(const QString& source) {
   int id;
   Q_UNUSED(id);
   ftpDone = false;
@@ -284,7 +286,7 @@ void ftpThread::remove(QString source) {
   addToLog(QString("Name=%1 source=%2  id:%3").arg(idName).arg(source).arg(id), LOGFTPTHREAD);
 }
 
-void ftpThread::rename(QString source, QString destination) {
+void ftpThread::rename(const QString& source, const QString& destination) {
   int id;
   Q_UNUSED(id);
   ftpDone = false;

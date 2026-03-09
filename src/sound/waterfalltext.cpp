@@ -118,7 +118,7 @@ DSPFLOAT* waterfallText::nextLine() {
 }
 
 
-void waterfallText::setupImage(QString txt) {
+void waterfallText::setupImage(const QString& txt) {
   QRect rct;
   QPainter p;
   QPen pen;
@@ -150,7 +150,7 @@ void waterfallText::setupImage(QString txt) {
 }
 
 
-QString waterfallText::convert(QString txt) {
+QString waterfallText::convert(const QString& txt) {
   mexp.clear();
   mexp.addConversion('m', myCallsign);
   mexp.addConversion('s', QString::number(lastAvgSNR, 'g', 2));

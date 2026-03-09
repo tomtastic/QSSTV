@@ -23,12 +23,12 @@ xmlInterface::xmlInterface(QObject* parent) : QObject(parent) {
 
 void xmlInterface::takeControl() { log("takeControl", ""); }
 
-void xmlInterface::setName(QString t) {
+void xmlInterface::setName(const QString& t) {
   rigInfo.rigName = t;
   log("setName", t);
 }
 
-void xmlInterface::setMode(QString t) {
+void xmlInterface::setMode(const QString& t) {
   rigInfo.mode = t;
   log("setMode", t);
 }
@@ -37,12 +37,12 @@ void xmlInterface::setModes(QVariantList t) { log("setModes", t); }
 
 void xmlInterface::setBandwidths(QVariantList t) { log("setBandwidths", t); }
 
-void xmlInterface::setBandwidth(QString t) {
+void xmlInterface::setBandwidth(const QString& t) {
   rigInfo.bandWidth = t;
   log("setBandwidth", t);
 }
 
-void xmlInterface::setWfSideband(QString t) { log("setWfSideband", t); }
+void xmlInterface::setWfSideband(const QString& t) { log("setWfSideband", t); }
 void xmlInterface::setFrequency(double d) {
   rigInfo.frequency = d;
   log("setFrequency", QString::number(d, 'g', 9));
@@ -121,7 +121,7 @@ void xmlInterface::activatePTT(bool b) {
 }
 
 
-void xmlInterface::log(QString cmd, QString t) {
+void xmlInterface::log(const QString& cmd, const QString& t) {
   Q_UNUSED(cmd);
   Q_UNUSED(t);
 
@@ -129,7 +129,7 @@ void xmlInterface::log(QString cmd, QString t) {
 }
 
 
-void xmlInterface::log(QString cmd, QVariantList t) {
+void xmlInterface::log(const QString& cmd, QVariantList t) {
   int i;
   QString tmp;
   for (i = 0; i < t.length(); i++) tmp += t.at(i).toString();

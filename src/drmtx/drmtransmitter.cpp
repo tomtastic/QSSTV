@@ -16,7 +16,7 @@ drmTransmitter::drmTransmitter() { DRMTransmitter = nullptr; }
 drmTransmitter::~drmTransmitter() = default;
 
 
-void drmTransmitter::init(QByteArray* ba, QString name, QString format, drmTxParams params) {
+void drmTransmitter::init(QByteArray* ba, const QString& name, const QString& format, drmTxParams params) {
   delete DRMTransmitter;
   dataLength = ba->size();
   DRMTransmitter = new CDRMTransmitter;

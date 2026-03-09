@@ -38,13 +38,13 @@ class MaiaObject : public QObject {
 
  public:
   MaiaObject(QObject* parent = 0);
-  static QDomElement toXml(QVariant arg);
+  static QDomElement toXml(const QVariant& arg);
   static QVariant fromXml(const QDomElement& elem);
-  QString prepareCall(QString method, QList<QVariant> args);
-  static QString prepareResponse(QVariant arg);
+  QString prepareCall(const QString& method, QList<QVariant> args);
+  static QString prepareResponse(const QVariant& arg);
 
  public slots:
-  void parseResponse(QString response, QNetworkReply* reply);
+  void parseResponse(const QString& response, QNetworkReply* reply);
 
  signals:
   void aresponse(QVariant&, QNetworkReply* reply);

@@ -20,10 +20,11 @@ enum eftpError { FTPOK, FTPERROR, FTPTIMEOUT };
 class ftpThread : public QObject {
   Q_OBJECT
  public:
-  explicit ftpThread(QString id);
+  explicit ftpThread(const QString& id);
   ~ftpThread() override;
 
-  void setHostParams(QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory);
+  void setHostParams(const QString& tHost, int tPort, const QString& tUser, const QString& tPasswd,
+                     const QString& tDirectory);
  public slots:
   //  void slotStart();
   void customEvent(QEvent* ev) override;
@@ -55,16 +56,17 @@ class ftpThread : public QObject {
   bool displayProgress;
   QFtp* qftpPtr;
 
-  void setupConnection(QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory);
+  void setupConnection(const QString& tHost, int tPort, const QString& tUser, const QString& tPasswd,
+                       const QString& tDirectory);
   void destroy();
   void doConnect();
   void connectToHost();
   void changePath(const QString& newPath);
-  int listFiles(QString mask);
-  void uploadFile(QString source, QString destination);
-  void downloadFile(QString source, QString destination);
-  void rename(QString source, QString destination);
-  void remove(QString source);
+  int listFiles(const QString& mask);
+  void uploadFile(const QString& source, const QString& destination);
+  void downloadFile(const QString& source, const QString& destination);
+  void rename(const QString& source, const QString& destination);
+  void remove(const QString& source);
   void wait(int timeout);
 
   QString host;

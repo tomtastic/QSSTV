@@ -460,7 +460,7 @@ void txFunctions::sendBSR(QByteArray* p, drmTxParams dp) {
 //   drmTxPtr->sendHybrid(fn);
 // }
 
-bool txFunctions::prepareFIX(QByteArray bsrByteArray) {
+bool txFunctions::prepareFIX(const QByteArray& bsrByteArray) {
   int trID;
   displayMBoxEvent* stce;
   txSession* sessionPtr;
@@ -482,13 +482,13 @@ bool txFunctions::prepareFIX(QByteArray bsrByteArray) {
   return true;
 }
 
-bool txFunctions::prepareBinary(QString fileName) {
+bool txFunctions::prepareBinary(const QString& fileName) {
   binaryFilename = fileName;
   return true;
 }
 
 
-void txFunctions::applyTemplate(imageViewer* ivPtr, QString templateFilename) {
+void txFunctions::applyTemplate(imageViewer* ivPtr, const QString& templateFilename) {
   if (transmissionModeIndex == TRXSSTV) {
     sstvTxPtr->applyTemplate(templateFilename, useTemplate, ivPtr);
   } else {

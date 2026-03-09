@@ -39,7 +39,7 @@ class logBook {
     LPWR
   };
   logBook();
-  void logQSO(QString call, QString mode, QString comment);
+  void logQSO(const QString& call, const QString& mode, const QString& comment);
 
  private:
   void getFrequency();

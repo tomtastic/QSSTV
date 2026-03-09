@@ -175,7 +175,7 @@ int wavIO::read(short int* dPtr, uint numSamples) {
   \sa write
 */
 
-bool wavIO::openFileForWrite(QString fname, bool ask, bool isStereo) {
+bool wavIO::openFileForWrite(const QString& fname, bool ask, bool isStereo) {
   QFileInfo fin;
   if (ask) {
     dirDialog d(reinterpret_cast<QWidget*>(mainWindowPtr), "wave IO");

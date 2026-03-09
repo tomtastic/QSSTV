@@ -10,7 +10,7 @@ class drmTransmitter {
  public:
   drmTransmitter();
   ~drmTransmitter();
-  void init(QByteArray* ba, QString name, QString format, drmTxParams params);
+  void init(QByteArray* ba, const QString& name, const QString& format, drmTxParams params);
   void start(bool startTx);
   double getDuration() { return duration; }  // expressed in seconds
   double transmissionTime;

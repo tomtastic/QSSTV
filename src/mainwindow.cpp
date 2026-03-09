@@ -483,7 +483,7 @@ void mainWindow::timerEvent(QTimerEvent*) {
   }
 }
 
-void mainWindow::cleanUpCache(QString dirPath) {
+void mainWindow::cleanUpCache(const QString& dirPath) {
   int i, j;
   bool found;
   QFileInfoList orgFileList;

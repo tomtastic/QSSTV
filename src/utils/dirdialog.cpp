@@ -4,7 +4,7 @@
 
 static QString lastPath;
 
-dirDialog::dirDialog(QWidget* parent, QString title) {
+dirDialog::dirDialog(QWidget* parent, const QString& title) {
   parentPtr = parent;
   dialogTitle = title;
 }
@@ -97,7 +97,7 @@ QString dirDialog::openDirName(const QString& path) {
     \return if canceled or no selection then return an empty string else return string containing absolute filename.
 */
 
-QString dirDialog::saveFileName(const QString& path, const QString& filter, QString extension) {
+QString dirDialog::saveFileName(const QString& path, const QString& filter, const QString& extension) {
   QString fn;
   if ((path.isEmpty()) && lastPath.isEmpty()) {
     lastPath = QDir::currentPath();

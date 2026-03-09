@@ -20,8 +20,8 @@ ftpFunctions::ftpFunctions() {
 
 ftpFunctions::~ftpFunctions() = default;
 
-bool ftpFunctions::test(QString name, QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory,
-                        bool doSetup) {
+bool ftpFunctions::test(const QString& name, const QString& tHost, int tPort, const QString& tUser,
+                        const QString& tPasswd, const QString& tDirectory, bool doSetup) {
   bool result = false;
   QString fn;
   QString rfn;
@@ -62,7 +62,7 @@ bool ftpFunctions::test(QString name, QString tHost, int tPort, QString tUser, Q
   return result;
 }
 
-bool ftpFunctions::checkUpload(QString fn, QString rfn) {
+bool ftpFunctions::checkUpload(const QString& fn, const QString& rfn) {
   endOfCommands = false;
   ftp_uploadEvent* ftpUpl = new ftp_uploadEvent(fn, rfn, false);
   QApplication::postEvent(ftpThr, ftpUpl);
@@ -71,7 +71,7 @@ bool ftpFunctions::checkUpload(QString fn, QString rfn) {
 }
 
 
-bool ftpFunctions::checkRemove(QString rfn) {
+bool ftpFunctions::checkRemove(const QString& rfn) {
   endOfCommands = false;
   ftp_removeEvent* ftpRemove = new ftp_removeEvent(rfn, true);
   QApplication::postEvent(ftpThr, ftpRemove);
@@ -87,7 +87,7 @@ bool ftpFunctions::checkStart() {
   return false;
 }
 
-void ftpFunctions::uploadFile(QString source, QString destination, bool wait, bool closeWhenDone) {
+void ftpFunctions::uploadFile(const QString& source, const QString& destination, bool wait, bool closeWhenDone) {
   if (!checkStart()) return;
   ftp_uploadEvent* ftpUpl = new ftp_uploadEvent(source, destination, closeWhenDone);
   QApplication::postEvent(ftpThr, ftpUpl);
@@ -95,7 +95,7 @@ void ftpFunctions::uploadFile(QString source, QString destination, bool wait, bo
 }
 
 
-void ftpFunctions::downloadFile(QString source, QString destination, bool wait, bool closeWhenDone) {
+void ftpFunctions::downloadFile(const QString& source, const QString& destination, bool wait, bool closeWhenDone) {
   if (!checkStart()) return;
   ftp_downloadEvent* ftpDwnl = new ftp_downloadEvent(source, destination, closeWhenDone);
   QApplication::postEvent(ftpThr, ftpDwnl);
@@ -103,7 +103,7 @@ void ftpFunctions::downloadFile(QString source, QString destination, bool wait, 
 }
 
 
-void ftpFunctions::uploadData(QByteArray ba, QString destination, bool wait, bool closeWhenDone) {
+void ftpFunctions::uploadData(const QByteArray& ba, const QString& destination, bool wait, bool closeWhenDone) {
   QString fileName;
   if (!ftmp.open()) return;
   ftmp.write(ba);
@@ -112,14 +112,14 @@ void ftpFunctions::uploadData(QByteArray ba, QString destination, bool wait, boo
   uploadFile(fileName, destination, wait, closeWhenDone);
 }
 
-void ftpFunctions::remove(QString source, bool wait, bool closeWhenDone) {
+void ftpFunctions::remove(const QString& source, bool wait, bool closeWhenDone) {
   if (!checkStart()) return;
   ftp_removeEvent* ftpRemove = new ftp_removeEvent(source, closeWhenDone);
   QApplication::postEvent(ftpThr, ftpRemove);
   checkWait(wait);
 }
 
-void ftpFunctions::mremove(QString mask, bool wait, bool closeWhenDone) {
+void ftpFunctions::mremove(const QString& mask, bool wait, bool closeWhenDone) {
   if (!checkStart()) return;
   mremoveCmd = true;
   addToLog("mremove cmd", LOGFTPFUNC);
@@ -129,14 +129,14 @@ void ftpFunctions::mremove(QString mask, bool wait, bool closeWhenDone) {
 }
 
 
-void ftpFunctions::rename(QString source, QString destination, bool wait, bool closeWhenDone) {
+void ftpFunctions::rename(const QString& source, const QString& destination, bool wait, bool closeWhenDone) {
   if (!checkStart()) return;
   ftp_renameEvent* ftpRename = new ftp_renameEvent(source, destination, closeWhenDone);
   QApplication::postEvent(ftpThr, ftpRename);
   checkWait(wait);
 }
 
-void ftpFunctions::changePath(QString source, bool wait) {
+void ftpFunctions::changePath(const QString& source, bool wait) {
   if (!checkStart()) return;
   addToLog(QString("changePath %1").arg(source), LOGFTPFUNC);
   ftp_cdEvent* ftpCd = new ftp_cdEvent(source);
@@ -145,14 +145,14 @@ void ftpFunctions::changePath(QString source, bool wait) {
 }
 
 
-void ftpFunctions::listFiles(QString mask, bool closeWhenDone) {
+void ftpFunctions::listFiles(const QString& mask, bool closeWhenDone) {
   if (!checkStart()) return;
   ftp_listEvent* ftpList = new ftp_listEvent(mask, closeWhenDone);
   QApplication::postEvent(ftpThr, ftpList);
 }
 
-void ftpFunctions::setupFtp(QString name, QString tHost, int tPort, QString tUser, QString tPasswd,
-                            QString tDirectory) {
+void ftpFunctions::setupFtp(const QString& name, const QString& tHost, int tPort, const QString& tUser,
+                            const QString& tPasswd, const QString& tDirectory) {
   // create an ftp thread;
   host = tHost;
   port = tPort;
@@ -163,7 +163,7 @@ void ftpFunctions::setupFtp(QString name, QString tHost, int tPort, QString tUse
   setupFtp();
 }
 
-void ftpFunctions::changeThreadName(QString tidName) { idName = tidName; }
+void ftpFunctions::changeThreadName(const QString& tidName) { idName = tidName; }
 
 void ftpFunctions::setupFtp() {
   thread = new QThread;
@@ -204,7 +204,7 @@ void ftpFunctions::slotThreadFinished() {
   busy = false;
 }
 
-void ftpFunctions::slotDownloadFinished(bool err, QString filename) { emit downloadDone(err, filename); }
+void ftpFunctions::slotDownloadFinished(bool err, const QString& filename) { emit downloadDone(err, filename); }
 
 void ftpFunctions::slotListingFinished(bool err) {
   int i;

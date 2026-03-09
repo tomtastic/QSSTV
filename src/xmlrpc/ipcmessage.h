@@ -18,7 +18,7 @@ class ipcMessage {
   ipcMessage(int messageKey);
   ~ipcMessage();
   void essage();
-  bool sendMessage(QString t);
+  bool sendMessage(const QString& t);
   bool receiveMessage(QString& t);
   bool closeQueue();
 

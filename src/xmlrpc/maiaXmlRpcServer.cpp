@@ -48,17 +48,17 @@ MaiaXmlRpcServer::MaiaXmlRpcServer(const QHostAddress& address, quint16 port, QL
   server.listen(address, port);
 }
 
-void MaiaXmlRpcServer::addMethod(QString method, QObject* responseObject, const char* responseSlot) {
+void MaiaXmlRpcServer::addMethod(const QString& method, QObject* responseObject, const char* responseSlot) {
   objectMap[method] = responseObject;
   slotMap[method] = responseSlot;
 }
 
-void MaiaXmlRpcServer::removeMethod(QString method) {
+void MaiaXmlRpcServer::removeMethod(const QString& method) {
   objectMap.remove(method);
   slotMap.remove(method);
 }
 
-void MaiaXmlRpcServer::getMethod(QString method, QObject** responseObject, const char** responseSlot) {
+void MaiaXmlRpcServer::getMethod(const QString& method, QObject** responseObject, const char** responseSlot) {
   if (!objectMap.contains(method)) {
     *responseObject = nullptr;
     *responseSlot = nullptr;

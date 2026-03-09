@@ -39,11 +39,11 @@ class MaiaXmlRpcClient : public QObject {
 
  public:
   MaiaXmlRpcClient(QObject* parent = 0);
-  MaiaXmlRpcClient(QUrl url, QObject* parent = 0);
-  MaiaXmlRpcClient(QUrl url, QString userAgent, QObject* parent = 0);
-  void setUrl(QUrl url);
-  void setUserAgent(QString userAgent);
-  QNetworkReply* call(QString method, QList<QVariant> args, QObject* responseObject, const char* responseSlot,
+  MaiaXmlRpcClient(const QUrl& url, QObject* parent = 0);
+  MaiaXmlRpcClient(const QUrl& url, const QString& userAgent, QObject* parent = 0);
+  void setUrl(const QUrl& url);
+  void setUserAgent(const QString& userAgent);
+  QNetworkReply* call(const QString& method, QList<QVariant> args, QObject* responseObject, const char* responseSlot,
                       QObject* faultObject, const char* faultSlot);
   void setSslConfiguration(const QSslConfiguration& config);
   QSslConfiguration sslConfiguration() const;

@@ -26,20 +26,22 @@
  */
 
 #include "maiaXmlRpcClient.h"
+
+#include <utility>
 #include "maiaFault.h"
 
 MaiaXmlRpcClient::MaiaXmlRpcClient(QObject* parent) : QObject(parent), manager(this), request() { init(); }
 
-MaiaXmlRpcClient::MaiaXmlRpcClient(QUrl url, QObject* parent) : QObject(parent), manager(this), request(url) {
+MaiaXmlRpcClient::MaiaXmlRpcClient(const QUrl& url, QObject* parent) : QObject(parent), manager(this), request(url) {
   init();
-  setUrl(url);
+  setUrl(std::move(url));
 }
 
-MaiaXmlRpcClient::MaiaXmlRpcClient(QUrl url, QString userAgent, QObject* parent) : QObject(parent) {
+MaiaXmlRpcClient::MaiaXmlRpcClient(const QUrl& url, const QString& userAgent, QObject* parent) : QObject(parent) {
   // userAgent should adhere to RFC 1945 http://tools.ietf.org/html/rfc1945
   init();
   request.setRawHeader("User-Agent", userAgent.toLatin1());
-  setUrl(url);
+  setUrl(std::move(url));
 }
 
 void MaiaXmlRpcClient::init() {
@@ -50,15 +52,17 @@ void MaiaXmlRpcClient::init() {
   connect(&manager, &QNetworkAccessManager::sslErrors, this, &MaiaXmlRpcClient::sslErrors);
 }
 
-void MaiaXmlRpcClient::setUrl(QUrl url) {
+void MaiaXmlRpcClient::setUrl(const QUrl& url) {
   if (!url.isValid()) return;
 
   request.setUrl(url);
 }
 
-void MaiaXmlRpcClient::setUserAgent(QString userAgent) { request.setRawHeader("User-Agent", userAgent.toLatin1()); }
+void MaiaXmlRpcClient::setUserAgent(const QString& userAgent) {
+  request.setRawHeader("User-Agent", userAgent.toLatin1());
+}
 
-QNetworkReply* MaiaXmlRpcClient::call(QString method, QList<QVariant> args, QObject* responseObject,
+QNetworkReply* MaiaXmlRpcClient::call(const QString& method, QList<QVariant> args, QObject* responseObject,
                                       const char* responseSlot, QObject* faultObject, const char* faultSlot) {
   MaiaObject* call = new MaiaObject(this);
   connect(call, SIGNAL(aresponse(QVariant&, QNetworkReply*)), responseObject, responseSlot);

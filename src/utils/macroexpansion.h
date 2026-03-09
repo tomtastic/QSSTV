@@ -12,7 +12,7 @@ struct sconvert {
 class macroExpansion {
  public:
   macroExpansion();
-  QString convert(QString txt);
+  QString convert(const QString& txt);
   void addConversion(QChar tag, QString value);
   void clear() { convertList.clear(); }
 

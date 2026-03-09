@@ -55,7 +55,7 @@ class rigControl : public QObject {
   bool getFrequency(double& frequency);
   bool setFrequency(double frequency);
   bool getMode(QString& mode);
-  bool setMode(QString mode, QString passBand);
+  bool setMode(QString mode, const QString& passBand);
   int getModelNumber(int idx);
   int getRadioModelIndex();
   bool getRadioList(QComboBox* cb);
@@ -63,7 +63,7 @@ class rigControl : public QObject {
   scatParams* params() { return &catParams; }
   void activatePTT(bool b);
   double getTxDelay() { return catParams.txOnDelay; }
-  int rawCommand(QByteArray ba);
+  int rawCommand(const QByteArray& ba);
   QString initError;
 
  private:
@@ -76,7 +76,7 @@ class rigControl : public QObject {
   int retcode;   // generic return code from functions
   rig_model_t myrig_model;
   bool rigControlEnabled;
-  void errorMessage(int errorCode, QString command);
+  void errorMessage(int errorCode, const QString& command);
   void getRadioList();
   scatParams catParams;
   int serialP;

@@ -30,7 +30,7 @@
 
 MaiaFault::MaiaFault(const MaiaFault& other) : QObject(other.parent()) { fault = other.fault; }
 
-MaiaFault::MaiaFault(int faultCode, QString faultString, QObject* parent) : QObject(parent) {
+MaiaFault::MaiaFault(int faultCode, const QString& faultString, QObject* parent) : QObject(parent) {
   fault["faultCode"] = faultCode;
   fault["faultString"] = faultString;
 }

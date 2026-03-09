@@ -10,7 +10,7 @@ fixForm::fixForm(QWidget* parent) : QDialog(parent), ui(new Ui::fixForm) { ui->s
 
 fixForm::~fixForm() { delete ui; }
 
-void fixForm::setInfoInternal(int mode, QString fileName, int missing, QByteArray* ba) {
+void fixForm::setInfoInternal(int mode, const QString& fileName, int missing, QByteArray* ba) {
   common(mode, fileName, missing);
   //  ui->infoTextEdit->appendPlainText("BSR for a picture you send");
   ui->previewWidget->openImage(ba);
@@ -23,7 +23,7 @@ void fixForm::setInfoInternal(int mode, QString fileName, int missing, QByteArra
 //   ui->previewWidget->openImage(fileName,false,false,false);
 // }
 
-void fixForm::common(int mode, QString fileName, int missing) {
+void fixForm::common(int mode, const QString& fileName, int missing) {
   ui->filenameLineEdit->setText("Filename: " + fileName + "\n");
   if (callsignValid) {
     ui->infoTextEdit->appendPlainText("From: " + QString(drmCallsign));

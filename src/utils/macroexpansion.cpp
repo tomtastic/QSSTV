@@ -4,7 +4,7 @@
 macroExpansion::macroExpansion() { convertList.clear(); }
 
 
-QString macroExpansion::convert(QString txt) {
+QString macroExpansion::convert(const QString& txt) {
   int i, j;
   bool special = false;
   QChar c;

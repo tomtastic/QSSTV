@@ -26,8 +26,8 @@ bool getValue(int& val, QLineEdit* input);
 /** get double value from a QLinedit */
 bool getValue(double& val, QLineEdit* input);
 /** get int value from a QString */
-bool getValue(int& val, QString input);
-bool getValue(double& val, QString input);
+bool getValue(int& val, const QString& input);
+bool getValue(double& val, const QString& input);
 void getValue(bool& val, QCheckBox* input);
 void getValue(int& val, QSpinBox* input);
 void getValue(uint& val, QSpinBox* input);
@@ -54,22 +54,22 @@ void setValue(int val, QSpinBox* input);
 void setValue(uint val, QSpinBox* input);
 void setValue(double val, QDoubleSpinBox* input);
 void setValue(const QString& s, QLineEdit* input);
-void setValue(QString s, QPlainTextEdit* input);
+void setValue(const QString& s, QPlainTextEdit* input);
 void setValue(int s, QComboBox* input);
 void setIndex(int s, QComboBox* input);
-void setValue(QString s, QComboBox* input);
+void setValue(const QString& s, QComboBox* input);
 void setValue(bool val, QPushButton* input);
 void setValue(int s, QButtonGroup* input);
 void setValue(bool val, QRadioButton* input);
 void setValue(int val, QSlider* input);
 
 
-bool browseGetFile(QLineEdit* le, QString deflt, const QString& filter = "*");
-bool browseSaveFile(QLineEdit* le, QString deflt, const QString& filter = "*");
-bool browseDir(QLineEdit* le, QString deflt);
-void deleteFiles(QString dirPath, QString extension);
+bool browseGetFile(QLineEdit* le, const QString& deflt, const QString& filter = "*");
+bool browseSaveFile(QLineEdit* le, const QString& deflt, const QString& filter = "*");
+bool browseDir(QLineEdit* le, const QString& deflt);
+void deleteFiles(const QString& dirPath, QString extension);
 
-bool trash(QString filename, bool forceDelete);
+bool trash(const QString& filename, bool forceDelete);
 
 
 class timingAnalyser {

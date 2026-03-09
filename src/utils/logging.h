@@ -41,13 +41,13 @@ class logFile {
   logFile();
   logFile(QString logname);
   ~logFile();
-  bool open(QString logname);
+  bool open(const QString& logname);
 
-  void add(const char* fileName, const char* functionName, int line, QString t, short unsigned int posMask);
+  void add(const char* fileName, const char* functionName, int line, const QString& t, short unsigned int posMask);
   void dummyAdd(QString, int) {}
-  void addToAux(QString t);
+  void addToAux(const QString& t);
   bool setEnabled(bool e);
-  void setLogMask(QBitArray logMask);
+  void setLogMask(const QBitArray& logMask);
   void maskSelect(QWidget* wPtr = nullptr);
   void readSettings();
   void writeSettings();
@@ -73,7 +73,7 @@ class logFile {
   bool deduplicate;
   bool debugRef;
   bool timestamp;
-  void add(QString message, short unsigned int posMask);
+  void add(const QString& message, short unsigned int posMask);
 };
 
 #endif

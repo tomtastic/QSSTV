@@ -211,7 +211,7 @@ bool sstvTx::sendImage(imageViewer* ivPtr) {
     return true;
 }
 
-void sstvTx::applyTemplate(QString templateFilename, bool useTemplate, imageViewer* ivPtr) {
+void sstvTx::applyTemplate(const QString& templateFilename, bool useTemplate, imageViewer* ivPtr) {
   create(sstvModeIndexTx, txClock);
 
   ivPtr->setParam(templateFilename, useTemplate, txSSTVParam.numberOfPixels, txSSTVParam.numberOfDisplayLines);

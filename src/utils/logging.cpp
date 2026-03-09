@@ -65,7 +65,7 @@ bool logFile::open(QString logname) {
   return reopen();
 }
 #else
-bool logFile::open(QString) { return true; }
+bool logFile::open(const QString&) { return true; }
 #endif
 
 
@@ -196,10 +196,11 @@ void logFile::add(QString message, short unsigned int posMask) {
   mutex.unlock();
 }
 #else
-void logFile::add(QString, short unsigned int) {}
+void logFile::add(const QString&, short unsigned int) {}
 #endif
 
-void logFile::add(const char* fileName, const char* functionName, int line, QString t, short unsigned int posMask) {
+void logFile::add(const char* fileName, const char* functionName, int line, const QString& t,
+                  short unsigned int posMask) {
   QString s;
   QFileInfo finfo(fileName);
 
@@ -224,7 +225,7 @@ void logFile::addToAux(QString t) {
   mutex.unlock();
 }
 #else
-void logFile::addToAux(QString) {}
+void logFile::addToAux(const QString&) {}
 #endif
 /*!
   if enable=true logging will be performed
@@ -237,7 +238,7 @@ bool logFile::setEnabled(bool enable) {
   return t;
 }
 
-void logFile::setLogMask(QBitArray logMask) { maskBA = logMask; }
+void logFile::setLogMask(const QBitArray& logMask) { maskBA = logMask; }
 
 void logFile::maskSelect(QWidget* wPtr) {
   int i, j;

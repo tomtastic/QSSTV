@@ -30,14 +30,14 @@ class dispatcher : public QObject {
   void readSettings();
   void writeSettings();
   void customEvent(QEvent* e) override;
-  void startDRMFIXTx(QByteArray ba);
+  void startDRMFIXTx(const QByteArray& ba);
   void startDRMTxBinary();
   //  void startDRMHybridTx(QString fn);
   //  void startDRMHybridText(QString txt);
   //  void sendSweepTone(double duration,double lowerFreq,double upperFreq);
-  void saveImage(QString fileName, QString infotext);
-  void uploadToRXServer(QString remoteDir, QString fn);
-  void logSSTV(QString call, bool fromFSKID);
+  void saveImage(const QString& fileName, const QString& infotext);
+  void uploadToRXServer(const QString& remoteDir, const QString& fn);
+  void logSSTV(const QString& call, bool fromFSKID);
   void showOffLine();
   //  eftpResult notifyRXDone;
   //  eftpResult hybridTxDone;
@@ -47,7 +47,7 @@ class dispatcher : public QObject {
 
  private slots:
   //  void slotRXNotification(QString info);
-  void slotTXNotification(QString);
+  void slotTXNotification(const QString&);
   void slotRenameListing(bool err);
 
  private:

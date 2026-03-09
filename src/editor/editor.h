@@ -43,7 +43,7 @@ class editor : public QMainWindow {
  public:
   editor(QWidget* parent = nullptr);
   ~editor() override;
-  bool openFile(QString fn);
+  bool openFile(const QString& fn);
   void readSettings();
   bool setImage(QImage* im);
 

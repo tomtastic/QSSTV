@@ -112,7 +112,7 @@ void imageViewer::init(thumbType tp) {
   clear();
 }
 
-bool imageViewer::openImage(QString& filename, QString start, bool ask, bool showMessage, bool temitSignal,
+bool imageViewer::openImage(QString& filename, const QString& start, bool ask, bool showMessage, bool temitSignal,
                             bool fromCache, bool background) {
   // background=false;
   tempFilename = filename;
@@ -273,7 +273,7 @@ bool imageViewer::openImage(QString& filename, bool showMessage, bool emitSignal
   return openImage(filename, "", false, showMessage, emitSignal, fromCache, background);
 }
 
-bool imageViewer::openImage(QImage im) {
+bool imageViewer::openImage(const QImage& im) {
   imageFileName = "";
   if (!im.isNull()) {
     validImage = true;
@@ -961,7 +961,7 @@ QImage* imageViewer::getDisplayedImage() { return &displayedImage; }
 
 
 #ifdef IMAGETESTVIEWER
-void imageViewer::imageTestViewer(QImage* im, QString infoStr) {
+void imageViewer::imageTestViewer(QImage* im, const QString& infoStr) {
   Q_UNUSED(infoStr);
   if (inStartup) return;
   //  QImage imc=*im;

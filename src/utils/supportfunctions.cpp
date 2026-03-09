@@ -46,12 +46,12 @@ bool getValue(double& val, QLineEdit* input) {
   return ok;
 }
 
-bool getValue(int& val, QString input) {
+bool getValue(int& val, const QString& input) {
   bool ok;
   val = input.toInt(&ok);
   return ok;
 }
-bool getValue(double& val, QString input) {
+bool getValue(double& val, const QString& input) {
   bool ok;
   val = input.toDouble(&ok);
   return ok;
@@ -116,7 +116,7 @@ void setValue(double val, QDoubleSpinBox* input) { input->setValue(val); }
 
 void setValue(const QString& s, QLineEdit* input) { input->setText(s); }
 
-void setValue(QString s, QPlainTextEdit* input) { input->setPlainText(s); }
+void setValue(const QString& s, QPlainTextEdit* input) { input->setPlainText(s); }
 
 void setValue(int s, QComboBox* input) {
   int i;
@@ -131,7 +131,7 @@ void setValue(int s, QComboBox* input) {
 
 void setIndex(int s, QComboBox* input) { input->setCurrentIndex(s); }
 
-void setValue(QString s, QComboBox* input) {
+void setValue(const QString& s, QComboBox* input) {
   int i;
   for (i = 0; i < input->count(); i++) {
     if (input->itemText(i) == s) {
@@ -151,7 +151,7 @@ void setValue(bool s, QRadioButton* input) { input->setChecked(s); }
 void setValue(int val, QSlider* input) { input->setValue(val); }
 
 
-bool browseGetFile(QLineEdit* le, QString deflt, const QString& filter) {
+bool browseGetFile(QLineEdit* le, const QString& deflt, const QString& filter) {
   dirDialog d((QWidget*)le, "Browse");
   QString s = d.openFileName(deflt, filter);
   if (s.isNull()) return false;
@@ -160,7 +160,7 @@ bool browseGetFile(QLineEdit* le, QString deflt, const QString& filter) {
   return true;
 }
 
-bool browseSaveFile(QLineEdit* le, QString deflt, const QString& filter) {
+bool browseSaveFile(QLineEdit* le, const QString& deflt, const QString& filter) {
   dirDialog d((QWidget*)le, "Browse");
   QString s = d.saveFileName(deflt, filter, "");
   if (s.isNull()) return false;
@@ -169,7 +169,7 @@ bool browseSaveFile(QLineEdit* le, QString deflt, const QString& filter) {
   return true;
 }
 
-bool browseDir(QLineEdit* le, QString deflt) {
+bool browseDir(QLineEdit* le, const QString& deflt) {
   dirDialog d((QWidget*)le, "Browse");
   QString s = d.openDirName(deflt);
   if (s.isNull()) return false;
@@ -179,7 +179,7 @@ bool browseDir(QLineEdit* le, QString deflt) {
 }
 
 
-void deleteFiles(QString dirPath, QString extension) {
+void deleteFiles(const QString& dirPath, QString extension) {
   int i;
   QDir dir(dirPath);
   QStringList filters;
@@ -193,7 +193,7 @@ void deleteFiles(QString dirPath, QString extension) {
   }
 }
 
-bool trash(QString filename, bool forceDelete) {
+bool trash(const QString& filename, bool forceDelete) {
   QString tmp;
   QFile orgFile(filename);
   QFileInfo modifiedFileInfo(filename);

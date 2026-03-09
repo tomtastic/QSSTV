@@ -35,7 +35,7 @@ void galleryWidget::changedMatrix() {
   changedMatrix(imageViewer::TEMPLATETHUMB);
 }
 
-void galleryWidget::slotDirChanged(QString dn) {
+void galleryWidget::slotDirChanged(const QString& dn) {
   if (recursiveScanDirs) {
     fileWatcherPtr->addPathRecursive(dn);
   }
