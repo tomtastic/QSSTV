@@ -34,7 +34,7 @@ modeRGB::modeRGB(esstvMode m, unsigned int len, bool tx, bool narrowMode) : mode
 
 #define MODERGBDEBUG
 
-modeRGB::~modeRGB() {}
+modeRGB::~modeRGB() = default;
 
 void modeRGB::setupParams(double clock) {
   visibleLineLength = (getLineLength(mode, clock) - fp - bp - 2 * blank - syncDuration) / 3.;

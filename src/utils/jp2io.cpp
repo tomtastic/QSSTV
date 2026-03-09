@@ -76,7 +76,7 @@ static void info_callback(const char* msg, void* client_data) {
 static inline int int_ceildivpow2(int a, int b) { return (a + (1 << b) - 1) >> b; }
 // ---------------------------------------------------------------------------
 
-jp2IO::jp2IO() {}
+jp2IO::jp2IO() = default;
 
 void jp2IO::init() {
   jp2Image = nullptr;

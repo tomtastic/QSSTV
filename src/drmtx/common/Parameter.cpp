@@ -135,7 +135,7 @@ void CParameter::init() {
 }
 
 
-CParameter::~CParameter() {}
+CParameter::~CParameter() = default;
 
 CParameter::CParameter(const CParameter& p)
     :  // pDRMRec(p.pDRMRec),

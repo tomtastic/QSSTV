@@ -150,7 +150,7 @@ class CFString {
   CFStringRef s = nullptr;
 
  public:
-  CFString() {}
+  CFString() = default;
   explicit CFString(CFStringRef s) : s(s) {};
   explicit CFString(const char* s) : s(CFStringCreateWithCString(kCFAllocatorDefault, s, kCFStringEncodingUTF8)) {}
 

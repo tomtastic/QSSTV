@@ -120,4 +120,4 @@ iTotPacketSize, iCurStreamID ); */
 }
 
 
-CAudioSourceEncoderImplementation::~CAudioSourceEncoderImplementation() {}
+CAudioSourceEncoderImplementation::~CAudioSourceEncoderImplementation() = default;

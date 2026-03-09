@@ -3,9 +3,9 @@
 #include "synthes.h"
 #include "vector.h"
 
-CSoundOut::CSoundOut() {}
+CSoundOut::CSoundOut() = default;
 
-CSoundOut::~CSoundOut() {}
+CSoundOut::~CSoundOut() = default;
 
 
 // void CSoundOut::Init(int iNewBufferSize, bool bNewBlocking)

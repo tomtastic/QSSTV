@@ -34,7 +34,7 @@
 modeRobot2::modeRobot2(esstvMode m, unsigned int len, bool tx, bool narrowMode) : modeBase(m, len, tx, narrowMode) {}
 
 
-modeRobot2::~modeRobot2() {}
+modeRobot2::~modeRobot2() = default;
 
 void modeRobot2::setupParams(double clock) {
   // double tmp=(activeSSTVParam->imageTime/(double)activeSSTVParam->numberOfDataLines)*clock;

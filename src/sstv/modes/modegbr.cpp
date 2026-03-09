@@ -26,7 +26,7 @@
 modeGBR::modeGBR(esstvMode m, unsigned int len, bool tx, bool narrowMode) : modeBase(m, len, tx, narrowMode) {}
 
 
-modeGBR::~modeGBR() {}
+modeGBR::~modeGBR() = default;
 
 
 void modeGBR::setupParams(double clock) {

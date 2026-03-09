@@ -36,7 +36,7 @@ modeAVT::modeAVT(esstvMode m, unsigned int len, bool tx, bool narrowMode) : mode
 }
 
 
-modeAVT::~modeAVT() {}
+modeAVT::~modeAVT() = default;
 
 
 void modeAVT::setupParams(double clock) { visibleLineLength = (getLineLength(mode, clock)) / 3.; }

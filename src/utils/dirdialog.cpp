@@ -9,7 +9,7 @@ dirDialog::dirDialog(QWidget* parent, QString title) {
   dialogTitle = title;
 }
 
-dirDialog::~dirDialog() {}
+dirDialog::~dirDialog() = default;
 
 
 /*!

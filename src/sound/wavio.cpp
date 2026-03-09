@@ -41,7 +41,7 @@ wavIO::wavIO(unsigned int samplingRate) {
 }
 
 
-wavIO::~wavIO() {}
+wavIO::~wavIO() = default;
 
 void wavIO::closeFile() {
   if (inopf.isOpen() && writing) {

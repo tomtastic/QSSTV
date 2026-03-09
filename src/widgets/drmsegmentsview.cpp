@@ -20,7 +20,7 @@ drmSegmentsView::drmSegmentsView(QWidget* parent)
   blockListCount = -1;
 }
 
-drmSegmentsView::~drmSegmentsView() {}
+drmSegmentsView::~drmSegmentsView() = default;
 
 void drmSegmentsView::paintEvent(QPaintEvent* e) {
   int i;

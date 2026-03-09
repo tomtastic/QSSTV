@@ -34,7 +34,7 @@
 modeBW::modeBW(esstvMode m, unsigned int len, bool tx, bool narrowMode) : modeBase(m, len, tx, narrowMode) {}
 
 
-modeBW::~modeBW() {}
+modeBW::~modeBW() = default;
 
 
 void modeBW::setupParams(double clock) { visibleLineLength = (getLineLength(mode, clock) - fp - bp - syncDuration); }

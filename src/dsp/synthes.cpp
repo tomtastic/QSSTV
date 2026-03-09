@@ -52,7 +52,7 @@ synthesizer::synthesizer(double txSmpClock) {
   pttToneCounter = 0;
 }
 
-synthesizer::~synthesizer() {}
+synthesizer::~synthesizer() = default;
 
 void synthesizer::sendTone(double duration, double lowerFrequency, double upperFrequency, bool concat) {
   //  fillBuffer();

@@ -35,7 +35,7 @@
 modeRobot1::modeRobot1(esstvMode m, unsigned int len, bool tx, bool narrowMode) : modeBase(m, len, tx, narrowMode) {}
 
 
-modeRobot1::~modeRobot1() {}
+modeRobot1::~modeRobot1() = default;
 
 void modeRobot1::setupParams(double clock) {
   visibleLineLength = (getLineLength(mode, clock) - fp - bp - blank - syncDuration) / 3.;

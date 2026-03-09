@@ -2,7 +2,7 @@
 #include "configparams.h"
 #include "gallerywidget.h"
 
-fileWatcher::fileWatcher() {}
+fileWatcher::fileWatcher() = default;
 
 void fileWatcher::init() {
   if (directories().count() > 0) {

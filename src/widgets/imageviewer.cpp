@@ -99,7 +99,7 @@ imageViewer::imageViewer(QWidget* parent) : QLabel(parent) {
   //
 }
 
-imageViewer::~imageViewer() {}
+imageViewer::~imageViewer() = default;
 
 void imageViewer::init(thumbType tp) {
   setScaledContents(false);

@@ -35,7 +35,7 @@
 modeGBR2::modeGBR2(esstvMode m, unsigned int len, bool tx, bool narrowMode) : modeBase(m, len, tx, narrowMode) {}
 
 
-modeGBR2::~modeGBR2() {}
+modeGBR2::~modeGBR2() = default;
 
 void modeGBR2::setupParams(double clock) {
   visibleLineLength = (getLineLength(mode, clock) - fp - bp - 2 * blank - syncDuration) / 3.;

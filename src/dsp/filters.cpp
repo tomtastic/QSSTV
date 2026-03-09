@@ -12,7 +12,7 @@ syncFilter::syncFilter(uint maxLength)
   init();
 }
 
-syncFilter::~syncFilter() {}
+syncFilter::~syncFilter() = default;
 
 void syncFilter::init() {
   // setup the syncFilters
@@ -62,7 +62,7 @@ videoFilter::videoFilter(uint maxLength) : videoFltr(filter::FTFIR, maxLength), 
   init();
 }
 
-videoFilter::~videoFilter() {}
+videoFilter::~videoFilter() = default;
 
 void videoFilter::init() {
   videoFltr.init();
@@ -86,7 +86,7 @@ void videoFilter::process(FILTERPARAMTYPE* dataPtr) {
 
 wfFilter::wfFilter(uint maxLength) : wfFltr(filter::FTFIR, maxLength) { init(); }
 
-wfFilter::~wfFilter() {}
+wfFilter::~wfFilter() = default;
 
 void wfFilter::init() {
   wfFltr.init();
@@ -106,7 +106,7 @@ void wfFilter::process(double* dataPtr, uint dataLength) {
 
 drmHilbertFilter::drmHilbertFilter(uint maxLength) : drmFltr(filter::FTFIR, maxLength) { init(); }
 
-drmHilbertFilter::~drmHilbertFilter() {}
+drmHilbertFilter::~drmHilbertFilter() = default;
 
 void drmHilbertFilter::init() {
   drmFltr.init();

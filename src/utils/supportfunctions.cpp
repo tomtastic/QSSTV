@@ -257,9 +257,9 @@ bool trash(QString filename, bool forceDelete) {
 }
 
 
-timingAnalyser::timingAnalyser() {}
+timingAnalyser::timingAnalyser() = default;
 
-timingAnalyser::~timingAnalyser() {}
+timingAnalyser::~timingAnalyser() = default;
 void timingAnalyser::start() { tm.start(); }
 
 unsigned long timingAnalyser::result() { return tm.elapsed(); }

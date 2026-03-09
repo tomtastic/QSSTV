@@ -53,7 +53,7 @@ dispatcher::dispatcher() {
 
 /*! delete dispatcher instance  */
 
-dispatcher::~dispatcher() {}
+dispatcher::~dispatcher() = default;
 
 void dispatcher::init() {
   editorActive = false;

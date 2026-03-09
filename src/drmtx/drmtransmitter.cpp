@@ -13,7 +13,7 @@ int partTable[BWs][MODES][PROTECTIONS][QAMS] = {
 
 drmTransmitter::drmTransmitter() { DRMTransmitter = nullptr; }
 
-drmTransmitter::~drmTransmitter() {}
+drmTransmitter::~drmTransmitter() = default;
 
 
 void drmTransmitter::init(QByteArray* ba, QString name, QString format, drmTxParams params) {

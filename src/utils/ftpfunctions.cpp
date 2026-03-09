@@ -18,7 +18,7 @@ ftpFunctions::ftpFunctions() {
   busy = false;
 }
 
-ftpFunctions::~ftpFunctions() {}
+ftpFunctions::~ftpFunctions() = default;
 
 bool ftpFunctions::test(QString name, QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory,
                         bool doSetup) {

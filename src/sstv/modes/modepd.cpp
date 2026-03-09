@@ -33,7 +33,7 @@
 modePD::modePD(esstvMode m, unsigned int len, bool tx, bool narrowMode) : modeBase(m, len, tx, narrowMode) {}
 
 
-modePD::~modePD() {}
+modePD::~modePD() = default;
 
 void modePD::setupParams(double clock) {
   visibleLineLength = (getLineLength(mode, clock) - fp - bp - syncDuration) / 4;
