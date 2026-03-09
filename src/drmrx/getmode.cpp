@@ -121,13 +121,13 @@ void getmode(float* input, int n, smode_info* result) {
     /* initialize arrays with zero's */
     for (i = 0; i < Ts; i++) {
       gamma[i * 2] = 0.0;
-      gamma[i * 2 + 1] = 0.0;
+      gamma[(i * 2) + 1] = 0.0;
       Phi[i] = 0.0;
     }
     for (i = 0; i < n - Tu; i++) /* complex mult */
     {
-      in_[2 * i] = input[2 * i] * input[(i + Tu) * 2] + input[2 * i + 1] * input[(i + Tu) * 2 + 1];
-      in_[2 * i + 1] = -input[2 * i] * input[(i + Tu) * 2 + 1] + input[2 * i + 1] * input[(i + Tu) * 2];
+      in_[2 * i] = (input[2 * i] * input[(i + Tu) * 2]) + (input[(2 * i) + 1] * input[((i + Tu) * 2) + 1]);
+      in_[(2 * i) + 1] = (-input[2 * i] * input[((i + Tu) * 2) + 1]) + (input[(2 * i) + 1] * input[(i + Tu) * 2]);
     }
     //      arrayDump("gM1",input,16,true);
     my_rect[0] = 0.5;  // ON4QZ
@@ -138,7 +138,7 @@ void getmode(float* input, int n, smode_info* result) {
 
     drmfilter1c(in_, conv_in_, my_rect, n - Tu, Tg);
     for (i = 0; i < n; i++) {
-      abs_in_[i] = input[i * 2] * input[i * 2] + input[i * 2 + 1] * input[i * 2 + 1];
+      abs_in_[i] = (input[i * 2] * input[i * 2]) + (input[(i * 2) + 1] * input[(i * 2) + 1]);
     }
     for (i = 0; i < n - Tu; i++) {
       abs_in_in_[i] = abs_in_[i] + abs_in_[i + Tu];
@@ -147,7 +147,7 @@ void getmode(float* input, int n, smode_info* result) {
     for (j = 0; j < N_symbols_mode_det; j++) {
       for (i = 0; i < Ts; i++) {
         gamma[i * 2] = gamma[i * 2] + conv_in_[(t_smp + Tg + i - 1) * 2]; /* pa0mbo -1 ios nieuw */
-        gamma[i * 2 + 1] = gamma[i * 2 + 1] + conv_in_[(t_smp + Tg + i - 1) * 2 + 1];
+        gamma[(i * 2) + 1] = gamma[(i * 2) + 1] + conv_in_[((t_smp + Tg + i - 1) * 2) + 1];
         Phi[i] = Phi[i] + static_cast<float>(0.5 * (EPSILON + conv_abs_in_in_[t_smp + Tg + i - 1]));
       }
       t_smp += Ts;
@@ -159,7 +159,7 @@ void getmode(float* input, int n, smode_info* result) {
     /* debugging
        printf("==== mode %d === gamma\n",mode);   */
     for (i = 0; i < Ts; i++) {
-      tmpmax = sqrt(gamma[2 * i] * gamma[2 * i] + gamma[2 * i + 1] * gamma[2 * i + 1]);
+      tmpmax = sqrt((gamma[2 * i] * gamma[2 * i]) + (gamma[(2 * i) + 1] * gamma[(2 * i) + 1]));
 
       /* printf("%g\n", tmpmax);  */
       tmpmax -= rho * Phi[i];
@@ -172,8 +172,9 @@ void getmode(float* input, int n, smode_info* result) {
 
     /*  printf("===============\n");    */
     max_abs_gamma_rel =
-        sqrt(gamma[theta * 2] * gamma[theta * 2] + gamma[theta * 2 + 1] * gamma[theta * 2 + 1]) / (rho * Phi[theta]);
-    epsilon_ML = atan2(gamma[2 * theta], gamma[2 * theta + 1]);
+        sqrt((gamma[theta * 2] * gamma[theta * 2]) + (gamma[(theta * 2) + 1] * gamma[(theta * 2) + 1])) /
+        (rho * Phi[theta]);
+    epsilon_ML = atan2(gamma[2 * theta], gamma[(2 * theta) + 1]);
     max_abs_gamma_rel_list[mode] = max_abs_gamma_rel;
     theta_list[mode] = theta;
     epsilon_ML_list[mode] = epsilon_ML;
@@ -224,8 +225,8 @@ void getmode(float* input, int n, smode_info* result) {
     //      frequency_offset_fract = epsilon_ML_list[mode];
     /* now recalculate several vars with the established mode */
     for (i = 0; i < n - Tu; i++) {
-      in_[2 * i] = input[2 * i] * input[(i + Tu) * 2] + input[2 * i + 1] * input[(i + Tu) * 2 + 1];
-      in_[2 * i + 1] = -input[2 * i] * input[(i + Tu) * 2 + 1] + input[2 * i + 1] * input[(i + Tu) * 2];
+      in_[2 * i] = (input[2 * i] * input[(i + Tu) * 2]) + (input[(2 * i) + 1] * input[((i + Tu) * 2) + 1]);
+      in_[(2 * i) + 1] = (-input[2 * i] * input[((i + Tu) * 2) + 1]) + (input[(2 * i) + 1] * input[(i + Tu) * 2]);
     }
     my_rect[0] = 0.5;
     for (i = 1; i < Tg; i++) {
@@ -234,22 +235,22 @@ void getmode(float* input, int n, smode_info* result) {
     my_rect[Tg - 1] = 0.5;
     drmfilter1c(in_, conv_in_, my_rect, n - Tu, Tg);
     for (i = 0; i < n; i++) {
-      abs_in_[i] = input[i * 2] * input[i * 2] + input[i * 2 + 1] * input[i * 2 + 1];
+      abs_in_[i] = (input[i * 2] * input[i * 2]) + (input[(i * 2) + 1] * input[(i * 2) + 1]);
     }
     for (i = 0; i < n - Tu; i++) {
       abs_in_in_[i] = abs_in_[i] + abs_in_[i + Tu];
     }
     drmfilter1(abs_in_in_, conv_abs_in_in_, my_rect, n - Tu, Tg);
-    t_smp = Tg + time_offset_mean + Ts / 2;
+    t_smp = Tg + time_offset_mean + (Ts / 2);
     for (j = 0; j < (N_symbols_mode_det - 2); j++) {
       max_abs_gamma_rel = -1.0E20;
       for (i = 0; i < Ts; i++) {
         gamma[i * 2] = conv_in_[(t_smp + i) * 2];
-        gamma[i * 2 + 1] = conv_in_[(t_smp + i) * 2 + 1];
+        gamma[(i * 2) + 1] = conv_in_[((t_smp + i) * 2) + 1];
         Phi[i] = static_cast<float>(0.5 * (EPSILON + conv_abs_in_in_[t_smp + i]));
 
         /* detmn max and its indx */
-        tmpmax = sqrt(gamma[2 * i] * gamma[2 * i] + gamma[2 * i + 1] * gamma[2 * i + 1]) - rho * Phi[i];
+        tmpmax = sqrt((gamma[2 * i] * gamma[2 * i]) + (gamma[(2 * i) + 1] * gamma[(2 * i) + 1])) - rho * Phi[i];
         if (tmpmax > max_abs_gamma_rel)
 
         {
@@ -274,9 +275,10 @@ void getmode(float* input, int n, smode_info* result) {
       sumxx += static_cast<float>(i) * static_cast<float>(i);
       sumxy += static_cast<float>(i) * static_cast<float>(b[i]);
     }
-    slope = static_cast<float>(((N_symbols_mode_det - 2) * sumxy - sumx * sumy) /
-                               ((N_symbols_mode_det - 2) * sumxx - sumx * sumx));
-    boffs = static_cast<float>((sumy * sumxx - sumx * sumxy) / ((N_symbols_mode_det - 2) * sumxx - sumx * sumx));
+    slope = static_cast<float>((((N_symbols_mode_det - 2) * sumxy) - (sumx * sumy)) /
+                               (((N_symbols_mode_det - 2) * sumxx) - (sumx * sumx)));
+    boffs =
+        static_cast<float>(((sumy * sumxx) - (sumx * sumxy)) / (((N_symbols_mode_det - 2) * sumxx) - (sumx * sumx)));
   }
   /* printf("in getmode N_symbols_mode_det %d \n", N_symbols_mode_det);
   printf("mode is %d toffs %g samplroffs %g f_offs_fract %g\n", mode, fmod((boffs + Ts / 2 + time_offset_mean - 1),
@@ -285,7 +287,7 @@ void getmode(float* input, int n, smode_info* result) {
   /* pa0mbo todo reliability check */
   result->mode_indx = mode;
   result->time_offset =
-      fmodf((boffs + Ts / 2 + time_offset_mean - 1), static_cast<float>(Ts)); /* fp rest pa0mbo was -2  */
+      fmodf((boffs + (Ts / 2) + time_offset_mean - 1), static_cast<float>(Ts)); /* fp rest pa0mbo was -2  */
   result->sample_rate_offset = slope / (static_cast<float>(Ts));
   result->freq_offset_fract = epsilon_ML_list[mode];
   // logfile->addToAux(QString("%1 %2 %3 %4").arg(

@@ -73,11 +73,11 @@ void psdmean(float* input, float* psd, int lblock, int nblocks) {
     for (i = 1; i < lblock / 2; ++i)
 
     {
-      psd[i] += sqrt(tmpinbuf[i * 2] * tmpinbuf[i * 2] + tmpinbuf[2 * i + 1] * tmpinbuf[2 * i + 1]);
+      psd[i] += sqrt((tmpinbuf[i * 2] * tmpinbuf[i * 2]) + (tmpinbuf[(2 * i) + 1] * tmpinbuf[(2 * i) + 1]));
     }
     pinput += lblock; /* update pointer in input data */
   }
   for (i = 1; i < lblock / 2; ++i) {
-    psd[i] = static_cast<float>(10.0 * log(psd[i] + 1.0e-8) / 2.3025 - 14.0);
+    psd[i] = static_cast<float>((10.0 * log(psd[i] + 1.0e-8) / 2.3025) - 14.0);
   }
 }

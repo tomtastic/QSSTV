@@ -78,10 +78,10 @@ void soundConfig::readSettings() {
   qSettings.beginGroup("SOUND");
   rxClock = qSettings.value("rxclock", BASESAMPLERATE).toDouble();
   txClock = qSettings.value("txclock", BASESAMPLERATE).toDouble();
-  if (fabs(1 - rxClock / BASESAMPLERATE) > 0.002) {
+  if (fabs(1 - (rxClock / BASESAMPLERATE)) > 0.002) {
     rxClock = BASESAMPLERATE;
   }
-  if (fabs(1 - txClock / BASESAMPLERATE) > 0.002) {
+  if (fabs(1 - (txClock / BASESAMPLERATE)) > 0.002) {
     txClock = BASESAMPLERATE;
   }
   samplingrate = BASESAMPLERATE;

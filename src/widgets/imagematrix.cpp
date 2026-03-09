@@ -159,7 +159,7 @@ void imageMatrix::displayFiles() {
   pageLabel->setText(QString("   Page %1 of %2").arg(currentPage + 1).arg(numPages).leftJustified(17, ' '));
   for (i = 0; i < rows; i++) {
     for (j = 0; j < columns;) {
-      k = offset + i * columns + j;
+      k = offset + (i * columns) + j;
       if (k >= fileList.count()) {
         qobject_cast<imageViewer*>(gridLayout->itemAtPosition(i, j)->widget())->clear();
         j++;

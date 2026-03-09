@@ -270,8 +270,9 @@ void CMLC::CalculateParam(CParameter& Parameter, int iNewChannelType) {
           iM[0][0] = 0;
 
           /* M_p,2 = RX_p * floor((2 * N_2 - 12) / RY_p) */
-          iM[0][1] = iPuncturingPatterns[iCodRateCombMSC4SM][0] *
-                     static_cast<int>(static_cast<_REAL>(2 * iN_mux - 12) / iPuncturingPatterns[iCodRateCombMSC4SM][1]);
+          iM[0][1] =
+              iPuncturingPatterns[iCodRateCombMSC4SM][0] *
+              static_cast<int>(static_cast<_REAL>((2 * iN_mux) - 12) / iPuncturingPatterns[iCodRateCombMSC4SM][1]);
 
           /* iL: Number of bits each protection level ------------------------- */
           /* Higher protected part */
@@ -347,7 +348,7 @@ void CMLC::CalculateParam(CParameter& Parameter, int iNewChannelType) {
 
             /* M_p,2 = RX_p * floor((2 * N_2 - 12) / RY_p) */
             iM[i][1] = iPuncturingPatterns[iCodRateCombMSC16SM[Parameter.MSCPrLe.iPartB][i]][0] *
-                       static_cast<int>(static_cast<_REAL>(2 * iN[1] - 12) /
+                       static_cast<int>(static_cast<_REAL>((2 * iN[1]) - 12) /
                                         iPuncturingPatterns[iCodRateCombMSC16SM[Parameter.MSCPrLe.iPartB][i]][1]);
             // printf("In calcparam iM[%d][0] = %d  iM[%d][1] = %d \n", i, iM[i][0], i, iM[i][1]);
           }
@@ -413,7 +414,7 @@ void CMLC::CalculateParam(CParameter& Parameter, int iNewChannelType) {
 
             /* M_p,2 = RX_p * floor((2 * N_2 - 12) / RY_p) */
             iM[i][1] = iPuncturingPatterns[iCodRateCombMSC64SM[Parameter.MSCPrLe.iPartB][i]][0] *
-                       static_cast<int>(static_cast<_REAL>(2 * iN[1] - 12) /
+                       static_cast<int>(static_cast<_REAL>((2 * iN[1]) - 12) /
                                         iPuncturingPatterns[iCodRateCombMSC64SM[Parameter.MSCPrLe.iPartB][i]][1]);
           }
 

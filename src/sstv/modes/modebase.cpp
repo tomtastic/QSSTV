@@ -347,9 +347,9 @@ void modeBase::yuvConversion(unsigned char* array) {
   int r, g, b;
   QRgb* pixelArray = rxWidgetPtr->getImageViewerPtr()->getScanLineAddress(displayLineCounter);
   for (i = 0; i < activeSSTVParam->numberOfPixels; i++) {
-    r = (100 * array[i] + 140 * redArrayPtr[i] - 17850) / 100;
-    b = (100 * array[i] + 178 * blueArrayPtr[i] - 22695) / 100;
-    g = (100 * array[i] - 71 * redArrayPtr[i] - 33 * blueArrayPtr[i] + 13260) / 100;
+    r = ((100 * array[i]) + (140 * redArrayPtr[i]) - 17850) / 100;
+    b = ((100 * array[i]) + (178 * blueArrayPtr[i]) - 22695) / 100;
+    g = ((100 * array[i]) - (71 * redArrayPtr[i]) - (33 * blueArrayPtr[i]) + 13260) / 100;
     //      r=b=g=array[i]; //test
     r = (r > 255 ? 255 : r);
     r = (r < 0 ? 0 : r);
@@ -480,13 +480,13 @@ void modeBase::getLineY(bool evenodd) {
     unsigned int* pixelArrayO = txImPtr->getScanLineAddress(displayLineCounter + 1);
     for (unsigned int i = 0; i < activeSSTVParam->numberOfPixels; i++) {
       tE = pixelArrayE[i];
-      ye = (59 * qGreen(tE) + 30 * qRed(tE) + 11 * qBlue(tE)) / 100;
+      ye = ((59 * qGreen(tE)) + (30 * qRed(tE)) + (11 * qBlue(tE))) / 100;
       tO = pixelArrayO[i];
-      yo = (59 * qGreen(tO) + 30 * qRed(tO) + 11 * qBlue(tO)) / 100;
+      yo = ((59 * qGreen(tO)) + (30 * qRed(tO)) + (11 * qBlue(tO))) / 100;
       r = (qRed(tO) + qRed(tE)) / 2;
       b = (qBlue(tO) + qBlue(tE)) / 2;
-      r = (10 * r - 5 * (yo + ye) + 7 * 255) / 14;
-      b = (100 * b - 50 * (yo + ye) + 89 * 255) / 178;
+      r = ((10 * r) - (5 * (yo + ye)) + (7 * 255)) / 14;
+      b = ((100 * b) - (50 * (yo + ye)) + (89 * 255)) / 178;
       redArrayPtr[i] = (r > 255 ? 255 : r);
       redArrayPtr[i] = (r < 0 ? 0 : r);
       blueArrayPtr[i] = (b > 255 ? 255 : b);
@@ -501,11 +501,11 @@ void modeBase::getLineY(bool evenodd) {
     //			addToLog(QString("getline=%1").arg(lineCounter),LOGMODES);
     for (unsigned int i = 0; i < activeSSTVParam->numberOfPixels; i++) {
       tE = pixelArrayE[i];
-      ye = (59 * qGreen(tE) + 30 * qRed(tE) + 11 * qBlue(tE)) / 100;
+      ye = ((59 * qGreen(tE)) + (30 * qRed(tE)) + (11 * qBlue(tE))) / 100;
       r = qRed(tE);
       b = qBlue(tE);
-      r = (10 * r - 10 * (ye) + 7 * 255) / 14;
-      b = (100 * b - 100 * (ye) + 89 * 255) / 178;
+      r = ((10 * r) - (10 * (ye)) + (7 * 255)) / 14;
+      b = ((100 * b) - (100 * (ye)) + (89 * 255)) / 178;
       redArrayPtr[i] = (r > 255 ? 255 : r < 0 ? 0 : r);
       blueArrayPtr[i] = (b > 255 ? 255 : b < 0 ? 0 : b);
       yArrayPtr[i] = (ye > 255 ? 255 : ye < 0 ? 0 : ye);

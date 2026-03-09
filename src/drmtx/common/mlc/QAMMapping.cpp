@@ -62,7 +62,7 @@ void CQAMMapping::Map(CVector<_DECISION>& vecInputData1, CVector<_DECISION>& vec
          {i_0  i_1  q_0  q_1} = (y_0,0  y_1,0  y_0,1  y_1,1) */
       for (i = 0; i < iOutputBlockSize; i++) {
         const int i2i = 2 * i;
-        const int i2ip1 = 2 * i + 1;
+        const int i2ip1 = (2 * i) + 1;
 
         /* Filling indices [y_0,0, y_1,0]. Incoming bits are shifted to
            their desired positions in the integer variables "iIndexImag"
@@ -84,7 +84,7 @@ void CQAMMapping::Map(CVector<_DECISION>& vecInputData1, CVector<_DECISION>& vec
          (y_0,0  y_1,0  y_2,0  y_0,1  y_1,1  y_2,1) */
       for (i = 0; i < iOutputBlockSize; i++) {
         const int i2i = 2 * i;
-        const int i2ip1 = 2 * i + 1;
+        const int i2ip1 = (2 * i) + 1;
 
         /* Filling indices [y_0,0, y_1,0, y_2,0]. Incoming bits
            are shifted to their desired positions in the integer variables
@@ -108,7 +108,7 @@ void CQAMMapping::Map(CVector<_DECISION>& vecInputData1, CVector<_DECISION>& vec
          (y_0,0  y_1,0  y_2,0  y_0,1  y_1,1  y_2,1) */
       for (i = 0; i < iOutputBlockSize; i++) {
         const int i2i = 2 * i;
-        const int i2ip1 = 2 * i + 1;
+        const int i2ip1 = (2 * i) + 1;
 
         /* Filling indices [y_0,0, y_1,0, y_2,0]. Incoming bits
            are shifted to their desired positions in the integer variables

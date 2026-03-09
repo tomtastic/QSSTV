@@ -512,8 +512,8 @@ bool jp2IO::createImage(QImage qimage) {
   /* set image offset and reference grid */
   jp2Image->x0 = static_cast<OPJ_UINT32>(cparameters.image_offset_x0);
   jp2Image->y0 = static_cast<OPJ_UINT32>(cparameters.image_offset_y0);
-  jp2Image->x1 = jp2Image->x0 + (qimage.width() - 1U) * static_cast<OPJ_UINT32>(cparameters.subsampling_dx) + 1U;
-  jp2Image->y1 = jp2Image->y0 + (qimage.height() - 1U) * static_cast<OPJ_UINT32>(cparameters.subsampling_dy) + 1U;
+  jp2Image->x1 = jp2Image->x0 + ((qimage.width() - 1U) * static_cast<OPJ_UINT32>(cparameters.subsampling_dx)) + 1U;
+  jp2Image->y1 = jp2Image->y0 + ((qimage.height() - 1U) * static_cast<OPJ_UINT32>(cparameters.subsampling_dy)) + 1U;
 
 
   int width = jp2Image->comps[0].w;
@@ -526,7 +526,7 @@ bool jp2IO::createImage(QImage qimage) {
   bits = reinterpret_cast<QRgb*>(qimage.bits());
   for (y = 0; y < height; y++) {
     for (x = 0; x < width; x++) {
-      color = bits[x + y * width];
+      color = bits[x + (y * width)];
       jp2Image->comps[0].data[index] = static_cast<OPJ_INT32>(qRed(color));   /* R */
       jp2Image->comps[1].data[index] = static_cast<OPJ_INT32>(qGreen(color)); /* G */
       jp2Image->comps[2].data[index] = static_cast<OPJ_INT32>(qBlue(color));  /* B */

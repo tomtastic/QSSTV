@@ -116,7 +116,7 @@ void CMOTDABEnc::SetMOTObject(CMOTObject& NewMOTObject, int bytesAvailable) {
       addfname += strFileName[k];
       addfname ^= static_cast<unsigned char>(k);
     }
-    txTransportID = 256 * static_cast<int>(addfname) + static_cast<int>(xorfname);
+    txTransportID = (256 * static_cast<int>(addfname)) + static_cast<int>(xorfname);
     if (txTransportID <= 2) {
       txTransportID += iFileNameSize;
     }
@@ -294,7 +294,7 @@ void CMOTDABEnc::PartitionUnits(CVector<_BINARY>& vecbiSource, CVector<CVector<_
   const int iNumSeg = static_cast<int>(ceil(static_cast<_REAL>(iSourceSize) / iPartiSize)); /* Bytes */
   iNumSegStore = iNumSeg;
   const int iSizeLastSeg =
-      iSourceSize - static_cast<int>(floor(static_cast<_REAL>(iSourceSize) / iPartiSize)) * iPartiSize;
+      iSourceSize - (static_cast<int>(floor(static_cast<_REAL>(iSourceSize) / iPartiSize)) * iPartiSize);
 
   /*      printf("In PartitionUnits  iParti %d  iSource %d iNumSeg %d iSizlast %d\n",
                   iPartiSize, iSourceSize, iNumSeg, iSizeLastSeg); */

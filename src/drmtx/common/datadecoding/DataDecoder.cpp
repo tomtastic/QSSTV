@@ -130,7 +130,7 @@ void CDataEncoder::GeneratePacket(CVector<_BINARY>& vecbiPacket) {
   CRCObject.Reset(16);
 
   /* "byLengthBody" was defined in the header */
-  for (i = 0; i < (iTotalPacketSize / SIZEOF__BYTE - 2); i++) {
+  for (i = 0; i < ((iTotalPacketSize / SIZEOF__BYTE) - 2); i++) {
     CRCObject.AddByte(static_cast<_BYTE>(vecbiPacket.Separate(SIZEOF__BYTE)));
   }
   // printf("adding crc16 to packet  iTotalPacketSize is %d\n", iTotalPacketSize);

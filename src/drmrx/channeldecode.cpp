@@ -323,7 +323,7 @@ void channel_decoding(void) {
     if ((symbol_period != -1) & (symbols_per_frame != -1))
 
     {
-      transmission_frame_buffer_wptr = (transmission_frame_buffer_wptr + symbol_period * symbols_per_frame) %
+      transmission_frame_buffer_wptr = (transmission_frame_buffer_wptr + (symbol_period * symbols_per_frame)) %
                                        (symbol_period * symbols_per_frame * 6);
     }
     SNR_estimation_valid = 0;
@@ -347,13 +347,13 @@ void channel_decoding(void) {
   for (i = 0; i < lFAC; i++)
 
   {
-    trxfrmbufptr = (frame_index - 1) * symbol_period * symbols_per_frame + FAC_cells_k[i];
+    trxfrmbufptr = ((frame_index - 1) * symbol_period * symbols_per_frame) + FAC_cells_k[i];
     received_real[i] = static_cast<double>(transmission_frame_buffer[2 * trxfrmbufptr]);
-    received_imag[i] = static_cast<double>(transmission_frame_buffer[2 * trxfrmbufptr + 1]);
+    received_imag[i] = static_cast<double>(transmission_frame_buffer[(2 * trxfrmbufptr) + 1]);
     transfer_function_FAC[i * 2] = channel_transfer_function_buffer[2 * trxfrmbufptr];
-    transfer_function_FAC[i * 2 + 1] = channel_transfer_function_buffer[2 * trxfrmbufptr + 1];
-    snr[i] = sqrt(transfer_function_FAC[i * 2] * transfer_function_FAC[i * 2] +
-                  transfer_function_FAC[i * 2 + 1] * transfer_function_FAC[i * 2 + 1]);
+    transfer_function_FAC[(i * 2) + 1] = channel_transfer_function_buffer[(2 * trxfrmbufptr) + 1];
+    snr[i] = sqrt((transfer_function_FAC[i * 2] * transfer_function_FAC[i * 2]) +
+                  (transfer_function_FAC[(i * 2) + 1] * transfer_function_FAC[(i * 2) + 1]));
   }
   received_real[9] = 0.0;
   received_imag[9] = 0.0;
@@ -384,7 +384,7 @@ void channel_decoding(void) {
   }
   msc_parameters_valid = 1;
   /* frame alignment */
-  temp = 2.0 * channel_parameters[0] + channel_parameters[1];
+  temp = (2.0 * channel_parameters[0]) + channel_parameters[1];
   identity = static_cast<int>(temp) % 3;
   if (identity != ((frame_index - 1) % 3)) {
     old_ptr = transmission_frame_buffer_wptr;
@@ -392,16 +392,17 @@ void channel_decoding(void) {
     for (i = 0; i < symbol_period * symbols_per_frame; i++) {
       trxfrmbufptr = transmission_frame_buffer_wptr + i;
       transmission_frame_buffer[2 * trxfrmbufptr] = transmission_frame_buffer[2 * (old_ptr + i)];
-      transmission_frame_buffer[2 * trxfrmbufptr + 1] = transmission_frame_buffer[2 * (old_ptr + i) + 1];
+      transmission_frame_buffer[(2 * trxfrmbufptr) + 1] = transmission_frame_buffer[(2 * (old_ptr + i)) + 1];
       channel_transfer_function_buffer[2 * trxfrmbufptr] = channel_transfer_function_buffer[2 * (old_ptr + i)];
-      channel_transfer_function_buffer[2 * trxfrmbufptr + 1] = channel_transfer_function_buffer[2 * (old_ptr + i) + 1];
+      channel_transfer_function_buffer[(2 * trxfrmbufptr) + 1] =
+          channel_transfer_function_buffer[(2 * (old_ptr + i)) + 1];
     }
     frame_index = identity + 1;
   }
   interleaver_depth_new = static_cast<int>(channel_parameters[3]);
   msc_mode_new = static_cast<int>(channel_parameters[4]);
   if (fabs(channel_parameters[6] - 1.0) < DBL_EPSILON) {
-    msc_mode_new = msc_mode_new + 2 * static_cast<int>(channel_parameters[9]);
+    msc_mode_new = msc_mode_new + (2 * static_cast<int>(channel_parameters[9]));
   }
   spectrum_occupancy_new = static_cast<int>(channel_parameters[2]);
   if (spectrum_occupancy_new > 1) {
@@ -416,9 +417,9 @@ void channel_decoding(void) {
 
   /* decoding of text in fac data */
   localDrmCallsign[3 * identity] = getfacchar(&facblock[10]);
-  localDrmCallsign[3 * identity + 1] = getfacchar(&facblock[17]);
-  localDrmCallsign[3 * identity + 2] = getfacchar(&facblock[24]);
-  localDrmCallsign[3 * identity + 3] = '\0';
+  localDrmCallsign[(3 * identity) + 1] = getfacchar(&facblock[17]);
+  localDrmCallsign[(3 * identity) + 2] = getfacchar(&facblock[24]);
+  localDrmCallsign[(3 * identity) + 3] = '\0';
   if ((identity == 2) && (identityCount >= 3)) {
     identityCount = 0;
     drmCallsign = localDrmCallsign;
@@ -492,18 +493,18 @@ void channel_decoding(void) {
   /* frame count : deinterleaving possible after 2 received frames
      for short and after 6 received frames for long interleaving */
   frame_count++;
-  if (frame_count >= 6 - 4 * interleaver_depth) {
+  if (frame_count >= 6 - (4 * interleaver_depth)) {
     enough_frames = 1;
   } else {
     if (frame_count == 1) {
       min_index_equal_samples = transmission_frame_buffer_wptr;
-      max_index_equal_samples = transmission_frame_buffer_wptr + symbol_period * symbols_per_frame;
+      max_index_equal_samples = transmission_frame_buffer_wptr + (symbol_period * symbols_per_frame);
     } else {
       if (transmission_frame_buffer_wptr < min_index_equal_samples) {
         min_index_equal_samples = transmission_frame_buffer_wptr;
       }
-      if (transmission_frame_buffer_wptr + symbol_period * symbols_per_frame > max_index_equal_samples) {
-        max_index_equal_samples = transmission_frame_buffer_wptr + symbol_period * symbols_per_frame;
+      if (transmission_frame_buffer_wptr + (symbol_period * symbols_per_frame) > max_index_equal_samples) {
+        max_index_equal_samples = transmission_frame_buffer_wptr + (symbol_period * symbols_per_frame);
       }
     }
   }
@@ -561,7 +562,7 @@ void channel_decoding(void) {
       }
       for (i = 0; i < 3; i++) {
         L[i] = 2 * N1 * (RX[ratesA[i]] / RY[ratesA[i]]);
-        L[i + 3] = (RX[ratesB[i]] * floor((2 * N2 - 12) / RY[ratesB[i]]));
+        L[i + 3] = (RX[ratesB[i]] * floor(((2 * N2) - 12) / RY[ratesB[i]]));
       }
       Lvspp = 0;
       rowdimL = 3;
@@ -581,7 +582,7 @@ void channel_decoding(void) {
       free(Part_Deinterleaver);
       Part_Deinterleaver = deinterleaver(xin1, 21, xin2, 21);
       for (i = 0; i < xin1 + xin2; i++) {
-        Deinterleaver[i + 2 * (xin1 + xin2)] = Part_Deinterleaver[i];
+        Deinterleaver[i + (2 * (xin1 + xin2))] = Part_Deinterleaver[i];
       }
 
       for (i = 0; i < 3; i++) {
@@ -605,7 +606,7 @@ void channel_decoding(void) {
       }
       for (i = 0; i < 2; i++) {
         L[i] = 2 * N1 * (RX[ratesA[i]] / RY[ratesA[i]]);
-        L[i + 2] = (RX[ratesB[i]] * floor((2 * N2 - 12) / RY[ratesB[i]]));
+        L[i + 2] = (RX[ratesB[i]] * floor(((2 * N2) - 12) / RY[ratesB[i]]));
       }
       rowdimL = 2;
       coldimL = 2;
@@ -689,12 +690,12 @@ void channel_decoding(void) {
     for (i = 0; i < lMSC; i++) {
       trxfrmbufptr = MSC_Demapper[frame_index - 1][i];
       received_real[i] = static_cast<double>(transmission_frame_buffer[2 * trxfrmbufptr]);
-      received_imag[i] = static_cast<double>(transmission_frame_buffer[2 * trxfrmbufptr + 1]);
+      received_imag[i] = static_cast<double>(transmission_frame_buffer[(2 * trxfrmbufptr) + 1]);
 
       MSC_cells_sequence[2 * i] = static_cast<float>(received_real[i]);
-      MSC_cells_sequence[2 * i + 1] = static_cast<float>(received_imag[i]);
+      MSC_cells_sequence[(2 * i) + 1] = static_cast<float>(received_imag[i]);
       transfer_function_MSC[i * 2] = channel_transfer_function_buffer[2 * trxfrmbufptr];
-      transfer_function_MSC[i * 2 + 1] = channel_transfer_function_buffer[2 * trxfrmbufptr + 1];
+      transfer_function_MSC[(i * 2) + 1] = channel_transfer_function_buffer[(2 * trxfrmbufptr) + 1];
     }
     if (enough_frames == 0) {
       for (i = 0; i < lMSC; i++) {
@@ -703,10 +704,10 @@ void channel_decoding(void) {
 
         {
           transfer_function_MSC[2 * i] = 0.0;
-          transfer_function_MSC[2 * i + 1] = 0.0;
+          transfer_function_MSC[(2 * i) + 1] = 0.0;
         }
-        SNR_estimation[i] = sqrt(transfer_function_MSC[2 * i] * transfer_function_MSC[i * 2] +
-                                 transfer_function_MSC[i * 2 + 1] * transfer_function_MSC[i * 2 + 1]);
+        SNR_estimation[i] = sqrt((transfer_function_MSC[2 * i] * transfer_function_MSC[i * 2]) +
+                                 (transfer_function_MSC[(i * 2) + 1] * transfer_function_MSC[(i * 2) + 1]));
       }
 
       n_SPPhard =
@@ -721,8 +722,8 @@ void channel_decoding(void) {
       SNR_estimation_valid = 0;
       if (SNR_estimation_valid < 1) {
         for (i = 0; i < lMSC; i++) {
-          SNR_estimation[i] = sqrt(transfer_function_MSC[2 * i] * transfer_function_MSC[i * 2] +
-                                   transfer_function_MSC[i * 2 + 1] * transfer_function_MSC[i * 2 + 1]);
+          SNR_estimation[i] = sqrt((transfer_function_MSC[2 * i] * transfer_function_MSC[i * 2]) +
+                                   (transfer_function_MSC[(i * 2) + 1] * transfer_function_MSC[(i * 2) + 1]));
         }
       } else {
         for (i = 0; i < 461; i++) {
@@ -734,8 +735,8 @@ void channel_decoding(void) {
           if (noise_power_density[MSC_Demapper_symbolwise[frame_index - 1][i]] <= 0.0) {
             exit(EXIT_FAILURE);
           }
-          part1 = sqrt(transfer_function_MSC[i * 2] * transfer_function_MSC[i * 2] +
-                       transfer_function_MSC[i * 2 + 1] * transfer_function_MSC[i * 2 + 1]);
+          part1 = sqrt((transfer_function_MSC[i * 2] * transfer_function_MSC[i * 2]) +
+                       (transfer_function_MSC[(i * 2) + 1] * transfer_function_MSC[(i * 2) + 1]));
           part2 = sqrt(noise_power_density[MSC_Demapper_symbolwise[frame_index - 1][i]]);
           SNR_estimation[i] = part1 / part2;
         }
@@ -749,9 +750,9 @@ void channel_decoding(void) {
       sum1 = 0.0;
       for (i = 0; i < lMSC; i++) {
         squared_noise_signal[i] =
-            noise_signal[2 * i] * noise_signal[2 * i] + noise_signal[2 * i + 1] * noise_signal[2 * i + 1];
-        sum1 += (transfer_function_MSC[2 * i] * transfer_function_MSC[2 * i] +
-                 transfer_function_MSC[2 * i + 1] * transfer_function_MSC[2 * i + 1]) *
+            (noise_signal[2 * i] * noise_signal[2 * i]) + (noise_signal[(2 * i) + 1] * noise_signal[(2 * i) + 1]);
+        sum1 += ((transfer_function_MSC[2 * i] * transfer_function_MSC[2 * i]) +
+                 (transfer_function_MSC[(2 * i) + 1] * transfer_function_MSC[(2 * i) + 1])) *
                 squared_noise_signal[i];
       }
 
@@ -763,7 +764,7 @@ void channel_decoding(void) {
       for (i = 0; i < symbol_period; i++) {
         weighted_noise_power_density[i] = 0.0;
         for (j = 0; j < 6 * symbols_per_frame; j++) {
-          weighted_noise_power_density[i] += squared_noise_signal_buffer[i + j * symbol_period];
+          weighted_noise_power_density[i] += squared_noise_signal_buffer[i + (j * symbol_period)];
         }
       }
 
@@ -778,16 +779,16 @@ void channel_decoding(void) {
         posrow = totindex % symbol_period;
         poscolumn = totindex / symbol_period;
         samples_resorted[posrow][poscolumn] =
-            squared_noise_signal[i] * (transfer_function_MSC[i * 2] * transfer_function_MSC[i * 2] +
-                                       transfer_function_MSC[i * 2 + 1] * transfer_function_MSC[i * 2 + 1]);
+            squared_noise_signal[i] * ((transfer_function_MSC[i * 2] * transfer_function_MSC[i * 2]) +
+                                       (transfer_function_MSC[(i * 2) + 1] * transfer_function_MSC[(i * 2) + 1]));
       }
       for (i = 0; i < cnt_MSC_used_carriers; i++) {
         sum1 = 0.0;
         for (j = 0; j < symbols_per_frame; j++) {
           sum1 += samples_resorted[MSC_used_carriers[i]][j];
         }
-        noise_power_density[MSC_used_carriers[i]] = noise_power_density[MSC_used_carriers[i]] * (1.0 - 0.2) +
-                                                    0.2 * sum1 / MSC_carrier_usage[MSC_used_carriers[i]];
+        noise_power_density[MSC_used_carriers[i]] = (noise_power_density[MSC_used_carriers[i]] * (1.0 - 0.2)) +
+                                                    (0.2 * sum1 / MSC_carrier_usage[MSC_used_carriers[i]]);
       }
       if (SNR_estimation_valid < 1) {
         SNR_estimation_valid++;
@@ -795,7 +796,7 @@ void channel_decoding(void) {
       channel_decoded_data_buffer_data_valid = 1;
     }
     if (Lvspp != 0) {
-      VSPPlength = multiplex_description.stream_lengths[0][0] * 8 + multiplex_description.stream_lengths[1][0] * 8;
+      VSPPlength = (multiplex_description.stream_lengths[0][0] * 8) + (multiplex_description.stream_lengths[1][0] * 8);
       HPPlength = 0;
       for (i = 0; i < no_of_streams; i++) {
         HPPlength += 8 * multiplex_description.stream_lengths[0][i];
@@ -817,8 +818,8 @@ void channel_decoding(void) {
     }
   }
   frame_index = (frame_index % 6) + 1;
-  transmission_frame_buffer_wptr =
-      ((transmission_frame_buffer_wptr + symbol_period * symbols_per_frame) % (symbol_period * symbols_per_frame * 6));
+  transmission_frame_buffer_wptr = ((transmission_frame_buffer_wptr + (symbol_period * symbols_per_frame)) %
+                                    (symbol_period * symbols_per_frame * 6));
   return;
 }
 

@@ -169,7 +169,7 @@ void modeRobot1::calcPixelPositionTable(unsigned int colorLine, bool tx) {
       break;
     case REDLINE:
     case BLUELINE:
-      lineStart += bp + blank + visibleLineLength * 2;
+      lineStart += bp + blank + (visibleLineLength * 2);
       for (i = 0; i < activeSSTVParam->numberOfPixels; i++) {
         //          pixelPositionTable[i]=(unsigned
         //          int)round(markerFloat+((static_cast<float>(i+ofx)*visibleLineLength)/activeSSTVParam->numberOfPixels));

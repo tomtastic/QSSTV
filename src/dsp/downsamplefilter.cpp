@@ -67,7 +67,7 @@ void downsampleFilter::allocate(unsigned int len) {
   length = len;
   delete[] filteredDataBuffer;
   filteredDataBuffer = new FILTERPARAMTYPE[length / 4];
-  volumeBuffer = new FILTERPARAMTYPE[length / 4 + CONVDELAY];
+  volumeBuffer = new FILTERPARAMTYPE[(length / 4) + CONVDELAY];
 }
 
 
@@ -84,7 +84,7 @@ void downsampleFilter::init() {
   for (i = 0; i < CONVLENGTH; i++) {
     volSamples[i] = 0;
   }
-  for (i = 0; i < length / 4 + CONVDELAY; i++) {
+  for (i = 0; i < (length / 4) + CONVDELAY; i++) {
     volumeBuffer[i] = 0.;
   }
   avgVolumeDb = 0;
@@ -130,7 +130,7 @@ void downsampleFilter::downSample4(short int* data) {
   //  arrayDump("DownIn",data,RXSTRIPE,true,false);
 
 
-  memmove(volumeBuffer, volumeBuffer + length / 4, CONVDELAY * sizeof(FILTERPARAMTYPE));
+  memmove(volumeBuffer, volumeBuffer + (length / 4), CONVDELAY * sizeof(FILTERPARAMTYPE));
 
   for (k = 0; k < length; k += 4) {
     res0 = res1 = res2 = res3 = 0;
@@ -156,7 +156,7 @@ void downsampleFilter::downSample4(short int* data) {
     for (i = 0; i < CONVLENGTH; i++) {
       tmpVol += volSamples[i];
     }
-    volumeBuffer[k / 4 + CONVDELAY] = tmpVol / CONVLENGTH;
+    volumeBuffer[(k / 4) + CONVDELAY] = tmpVol / CONVLENGTH;
     //      volumeDataBuffer[k/4]=tmpVol/(CONVLENGTH);
   }
   avgVolumeDb = 20 * log(volumeBuffer[length / 8]) - 110;

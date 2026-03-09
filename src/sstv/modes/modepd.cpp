@@ -114,14 +114,14 @@ void modePD::calcPixelPositionTable(unsigned int colorLine, bool tx) {
       }
       break;
     case BLUELINE:
-      lineStart += (bp + 2 * visibleLineLength);
+      lineStart += (bp + (2 * visibleLineLength));
       for (i = 0; i < activeSSTVParam->numberOfPixels; i++) {
         pixelPositionTable[i] = static_cast<unsigned int>(
             round(lineStart + ((static_cast<float>(i + ofx) * visibleLineLength) / activeSSTVParam->numberOfPixels)));
       }
       break;
     case YLINEEVEN:
-      lineStart += (bp + 3 * visibleLineLength);
+      lineStart += (bp + (3 * visibleLineLength));
       for (i = 0; i < activeSSTVParam->numberOfPixels; i++) {
         pixelPositionTable[i] = static_cast<unsigned int>(
             round(lineStart + ((static_cast<float>(i + ofx) * visibleLineLength) / activeSSTVParam->numberOfPixels)));

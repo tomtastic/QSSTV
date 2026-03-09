@@ -38,12 +38,12 @@ void drmfilter1c(float* sigin, float* y, float* coef, int dataLen, int coefLen) 
 
   {
     y[i * 2] = 0.0;
-    y[i * 2 + 1] = 0.0;
+    y[(i * 2) + 1] = 0.0;
     for (j = 0; ((j <= i) && (j < coefLen)); j++)
 
     {
       y[i * 2] += coef[j] * sigin[(i - j) * 2];
-      y[i * 2 + 1] += coef[j] * sigin[(i - j) * 2 + 1];
+      y[(i * 2) + 1] += coef[j] * sigin[((i - j) * 2) + 1];
     }
   }
 }

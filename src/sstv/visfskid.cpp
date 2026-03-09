@@ -457,7 +457,7 @@ void visDecoder::extractWide() {
         }
         break;
       case WAITEND1200: {
-        if (waitEndFreq(1100, 1300, VISBITWIDE / 2 - 50, timeout)) {
+        if (waitEndFreq(1100, 1300, (VISBITWIDE / 2) - 50, timeout)) {
           switchState(VISINIT, i);  // too short
         }
         if (timeout) {
@@ -530,7 +530,7 @@ void streamDecoder::reset() {
 void streamDecoder::process(quint16* freqPtr, unsigned int syncSampleCtr) {
   int i;
   for (i = 0; i < RXSTRIPE; i++) {
-    avgFreq = avgFreq * (1 - FREQAVG) + FREQAVG * static_cast<DSPFLOAT>(freqPtr[i]);
+    avgFreq = (avgFreq * (1 - FREQAVG)) + (FREQAVG * static_cast<DSPFLOAT>(freqPtr[i]));
     avgBuffer[i] = avgFreq;
   }
 

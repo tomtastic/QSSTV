@@ -69,27 +69,27 @@ void psdcmean(float* rsbuf, float* cpsd, int lblock, int nblocks) {
 
     {
       tmpinbuf[i * 2] = pinput[2 * i];
-      tmpinbuf[i * 2 + 1] = pinput[2 * i + 1];
+      tmpinbuf[(i * 2) + 1] = pinput[(2 * i) + 1];
     }
     cfft(tmpinbuf, lblock / 2, 1);
     for (i = 1; i < lblock / 2; ++i)
 
     {
-      result[i] += sqrt(tmpinbuf[i * 2] * tmpinbuf[i * 2] + tmpinbuf[i * 2 + 1] * tmpinbuf[i * 2 + 1]);
+      result[i] += sqrt((tmpinbuf[i * 2] * tmpinbuf[i * 2]) + (tmpinbuf[(i * 2) + 1] * tmpinbuf[(i * 2) + 1]));
     }
     pinput += 2 * lblock; /* update pointer in input data */
   }
   for (i = 0; i < lblock / 2; i++)
 
   {
-    result[i] = static_cast<float>(10.0 * log(result[i] + 1.0e-8) / 2.305 - 14.0);
+    result[i] = static_cast<float>((10.0 * log(result[i] + 1.0e-8) / 2.305) - 14.0);
   }
   /* interchange halfs of cpsd buffer as in matlab code from
      plot_input_spectrum in diorama */
   for (i = 1; i < lblock / 4; i++)
 
   {
-    cpsd[i] = result[lblock / 4 + i];
-    cpsd[i + lblock / 4 - 1] = result[i];
+    cpsd[i] = result[(lblock / 4) + i];
+    cpsd[i + (lblock / 4) - 1] = result[i];
   }
 }

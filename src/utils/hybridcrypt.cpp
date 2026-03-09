@@ -141,16 +141,16 @@ bool hybridCrypt::deCrypt(QByteArray* ba) {
       }
       switch (bufI) {
         case 0:
-          res1 = r1 * 256 + r2;
+          res1 = (r1 * 256) + r2;
           break;
         case 1:
-          res2 = r1 * 256 + r2;
+          res2 = (r1 * 256) + r2;
           break;
         case 2:
-          res3 = r1 * 256 + r2;
+          res3 = (r1 * 256) + r2;
           break;
         case 3:
-          res4 = r1 * 256 + r2;
+          res4 = (r1 * 256) + r2;
           break;
       }
     }

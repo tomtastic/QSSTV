@@ -42,7 +42,7 @@ void CTransmitData::ProcessDataInternal(CParameter&) {
   const int iNs2 = iInputBlockSize * 2;
   rNormFactor = 1000.0;  // pa0mbo (was 16000)
   for (i = 0; i < iNs2; i += 2) {
-    const int iCurIndex = iBlockCnt * iNs2 + i;
+    const int iCurIndex = (iBlockCnt * iNs2) + i;
 
     /* Imaginary, real */
     const short sCurOutReal = static_cast<short>((*pvecInputData)[i / 2].real() * rNormFactor);

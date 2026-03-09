@@ -186,8 +186,8 @@ void filter::processFIRDemod(FILTERPARAMTYPE* dataPtr, FILTERPARAMTYPE* dataOutp
     }
     resI /= gain;
     resQ /= gain;
-    discRe = resI * resIprev + resQ * resQprev;
-    discIm = -resQ * resIprev + resQprev * resI;
+    discRe = (resI * resIprev) + (resQ * resQprev);
+    discIm = (-resQ * resIprev) + (resQprev * resI);
     resIprev = resI;
     resQprev = resQ;
     if (discRe == 0) {
@@ -231,7 +231,7 @@ void filter::processHILBVolume(FILTERPARAMTYPE* dataPtr) {
     };
     resQ /= gain;
     resI = sampleBufferIPtr[nZeroes / 2];
-    volumePtr[k] = sqrt(resQ * resQ + resI * resI);
+    volumePtr[k] = sqrt((resQ * resQ) + (resI * resI));
   }
 }
 
@@ -274,7 +274,7 @@ void filter::processIQ(FILTERPARAMTYPE* dataPtr, float* dataOutputPtr) {
     for (i = 0; i <= nZeroes; i++, fp1++, cf1++) {
       resQ += (*fp1) * (*cf1);
     }
-    dataOutputPtr[2 * k + 1] = sampleBufferIPtr[(nZeroes + 1) / 2];  // just delay
+    dataOutputPtr[(2 * k) + 1] = sampleBufferIPtr[(nZeroes + 1) / 2];  // just delay
     dataOutputPtr[2 * k] = resQ / gain;
   }
 }

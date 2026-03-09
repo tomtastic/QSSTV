@@ -348,7 +348,7 @@ bool sourceDecoder::addHeaderSegment() {
       case 3:
         extBit = dataPtr[0] & 0x80;
         if (extBit) {
-          dataFieldLength = 256 * (dataPtr[0] & 0x7F) + dataPtr[1];
+          dataFieldLength = (256 * (dataPtr[0] & 0x7F)) + dataPtr[1];
           currentDataPacket.advance(2);
         } else {
           dataFieldLength = dataPtr[0] & 0x7F;
@@ -796,8 +796,8 @@ transportBlock* sourceDecoder::getTransporPtr(unsigned short tId, bool create) {
     if (multiplex_description.PL_PartB == 1) {
       protection = 1;
     }
-    lastTransportBlockPtr->modeCode =
-        robustness_mode * 10000 + spectrum_occupancy_new * 1000 + protection * 100 + mCode * 10 + interleaver_depth_new;
+    lastTransportBlockPtr->modeCode = (robustness_mode * 10000) + (spectrum_occupancy_new * 1000) + (protection * 100) +
+                                      (mCode * 10) + interleaver_depth_new;
   } else {
     return nullptr;
   }

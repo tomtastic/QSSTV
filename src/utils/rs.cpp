@@ -174,13 +174,13 @@ static void gen_poly(void) {
      */
     for (j = i; j > 0; j--) {
       if (Gg[j] != 0) {
-        Gg[j] = Gg[j - 1] ^ Alpha_to[modnn((Index_of[Gg[j]]) + (B0 + i) * PRIM)];
+        Gg[j] = Gg[j - 1] ^ Alpha_to[modnn((Index_of[Gg[j]]) + ((B0 + i) * PRIM))];
       } else {
         Gg[j] = Gg[j - 1];
       }
     }
     /* Gg[0] can never be zero */
-    Gg[0] = Alpha_to[modnn(Index_of[Gg[0]] + (B0 + i) * PRIM)];
+    Gg[0] = Alpha_to[modnn(Index_of[Gg[0]] + ((B0 + i) * PRIM))];
   }
   /* convert Gg[] to index form for quicker encoding */
   for (i = 0; i <= NN - KK; i++) {
@@ -269,7 +269,7 @@ int eras_dec_rs(dtype data[], int eras_pos[], int no_eras) {
 
     /*	s[i] ^= Alpha_to[modnn(tmp + (B0+i-1)*j)]; */
     for (i = 1; i <= NN - KK; i++) {
-      s[i] ^= Alpha_to[modnn(tmp + (B0 + i - 1) * PRIM * j)];
+      s[i] ^= Alpha_to[modnn(tmp + ((B0 + i - 1) * PRIM * j))];
     }
   }
   /* Convert syndromes to index form, checking for nonzero condition */
@@ -424,16 +424,16 @@ int eras_dec_rs(dtype data[], int eras_pos[], int no_eras) {
     num1 = 0;
     for (i = deg_omega; i >= 0; i--) {
       if (omega[i] != A0) {
-        num1 ^= Alpha_to[modnn(omega[i] + i * root[j])];
+        num1 ^= Alpha_to[modnn(omega[i] + (i * root[j]))];
       }
     }
-    num2 = Alpha_to[modnn(root[j] * (B0 - 1) + NN)];
+    num2 = Alpha_to[modnn((root[j] * (B0 - 1)) + NN)];
     den = 0;
 
     /* lambda[i+1] for i even is the formal derivative lambda_pr of lambda[i] */
     for (i = min(deg_lambda, NN - KK - 1) & ~1; i >= 0; i -= 2) {
       if (lambda[i + 1] != A0) {
-        den ^= Alpha_to[modnn(lambda[i + 1] + i * root[j])];
+        den ^= Alpha_to[modnn(lambda[i + 1] + (i * root[j]))];
       }
     }
     if (den == 0) {

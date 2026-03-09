@@ -117,7 +117,7 @@ CMatlibVector<CReal> Nuttallwin(const int iLen) {
   const CReal rArg = static_cast<CReal>(2.0) * crPi / (iLen - 1);
 
   for (int i = 0; i < iLen; i++) {
-    fvRet[i] = rA0 - rA1 * Cos(rArg * i) + rA2 * Cos(rArg * i * 2) - rA3 * Cos(rArg * i * 3);
+    fvRet[i] = rA0 - (rA1 * Cos(rArg * i)) + (rA2 * Cos(rArg * i * 2)) - (rA3 * Cos(rArg * i * 3));
   }
 
   return fvRet;
@@ -156,7 +156,7 @@ CMatlibVector<CReal> Triang(const int iLen) {
     fvRet.Merge(fvHalfWin, fvHalfWin(iHalf - 1, -1, 1)); /* Odd */
   } else {
     for (int i = 0; i < iHalf; i++) {
-      fvHalfWin[i] = (static_cast<CReal>(2.0) * (i + 1) - 1) / iLen;
+      fvHalfWin[i] = ((static_cast<CReal>(2.0) * (i + 1)) - 1) / iLen;
     }
 
     fvRet.Merge(fvHalfWin, fvHalfWin(iHalf, -1, 1)); /* Even */
@@ -183,7 +183,7 @@ CMatlibVector<CReal> Kaiser(const int iLen, const CReal rBeta) {
 
   for (int i = 0; i < n; i++) {
     fvW[i] = Besseli(static_cast<CReal>(0.0),
-                     rBeta * Sqrt(static_cast<CReal>(1.0) - static_cast<CReal>(4.0) * rX * rX / rXind)) /
+                     rBeta * Sqrt(static_cast<CReal>(1.0) - (static_cast<CReal>(4.0) * rX * rX / rXind))) /
              rNorm;
     rX += static_cast<CReal>(1.0);
   }
@@ -326,12 +326,12 @@ CMatlibVector<CComplex> FirFiltDec(const CMatlibVector<CComplex>& cvB, const CMa
   } else {
     /* Calculate the number of output bits which can be generated from the
        provided input vector */
-    iDecSizeY = static_cast<int>((static_cast<CReal>(iSizeXNew) - iSizeFiltHist - 1) / iDecFact + 1);
+    iDecSizeY = static_cast<int>(((static_cast<CReal>(iSizeXNew) - iSizeFiltHist - 1) / iDecFact) + 1);
 
     /* Since the input vector length must not be a multiple of "iDecFact",
        some input bits will be unused. To store this number, the size of
        the state vector "Z" is adapted */
-    iNewLenZ = iSizeFiltHist - (iDecSizeY * iDecFact - (iSizeXNew - iSizeFiltHist));
+    iNewLenZ = iSizeFiltHist - ((iDecSizeY * iDecFact) - (iSizeXNew - iSizeFiltHist));
   }
 
   CMatlibVector<CComplex> cvY(iDecSizeY, VTY_TEMP);
@@ -342,7 +342,7 @@ CMatlibVector<CComplex> FirFiltDec(const CMatlibVector<CComplex>& cvB, const CMa
 
   /* FIR filter */
   for (m = 0; m < iDecSizeY; m++) {
-    iCurPos = m * iDecFact + iSizeFiltHist;
+    iCurPos = (m * iDecFact) + iSizeFiltHist;
 
     cvY[m] = static_cast<CReal>(0.0);
 
@@ -417,7 +417,7 @@ CMatlibVector<CReal> Levinson(const CMatlibVector<CReal>& vecrRx, const CMatlibV
     }
 
     // (e) Update the prediction error power
-    rE = rE * (static_cast<CReal>(1.0) - rGammaCap * rGammaCap);
+    rE = rE * (static_cast<CReal>(1.0) - (rGammaCap * rGammaCap));
 
     // (f)
     rDelta = static_cast<CReal>(0.0);

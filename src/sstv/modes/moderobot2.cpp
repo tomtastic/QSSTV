@@ -39,7 +39,7 @@ modeRobot2::~modeRobot2() = default;
 void modeRobot2::setupParams(double clock) {
   // double tmp=(activeSSTVParam->imageTime/(double)activeSSTVParam->numberOfDataLines)*clock;
   // visibleLineLength=(tmp-fp-bp-2*blank-syncDuration)/4;
-  visibleLineLength = (getLineLength(mode, clock) - fp - bp - 2 * blank - syncDuration) / 4.;
+  visibleLineLength = (getLineLength(mode, clock) - fp - bp - (2 * blank) - syncDuration) / 4.;
 }
 
 
@@ -112,10 +112,10 @@ void modeRobot2::calcPixelPositionTable(unsigned int colorLine, bool tx) {
       lineStart += bp;
       break;
     case REDLINE:
-      lineStart += (bp + 2 * visibleLineLength + blank);
+      lineStart += (bp + (2 * visibleLineLength) + blank);
       break;
     case BLUELINE:
-      lineStart += bp + 2 * blank + 3 * visibleLineLength;
+      lineStart += bp + (2 * blank) + (3 * visibleLineLength);
       // addToLog(QString("gbr2: redstart=%1").arg(start),DBMODES);
 
       break;

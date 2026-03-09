@@ -53,7 +53,7 @@ void CBlockInterleaver::MakeTable(CVector<int>& veciIntTable, int iFrameSize, in
     is >>= 1;
   }
 
-  iq = is / 4 - 1;
+  iq = (is / 4) - 1;
 
   veciIntTable[0] = 0;
 

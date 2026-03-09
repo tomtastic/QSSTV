@@ -95,14 +95,14 @@ void fftDisplay::showFFT(double* fftData) {
     for (i = binBegin, j = 0; i < binEnd; i++, j++) {
       re = fftData[i] / fftLength;
       imag = fftData[fftLength - i] / fftLength;
-      tmp = 10 * log10((re * re + imag * imag)) - 77.27;  // 0.5 Vtt is 0db
+      tmp = 10 * log10(((re * re) + (imag * imag))) - 77.27;  // 0.5 Vtt is 0db
       if (arMagSAvg[j] < -100) {
         arMagSAvg[j] = -100;
       }
       if (arMagSAvg[j] < tmp) {
-        arMagSAvg[j] = arMagSAvg[j] * (1 - 0.4) + 0.4 * tmp;
+        arMagSAvg[j] = (arMagSAvg[j] * (1 - 0.4)) + (0.4 * tmp);
       } else {
-        arMagSAvg[j] = arMagSAvg[j] * (1 - avgVal) + avgVal * tmp;
+        arMagSAvg[j] = (arMagSAvg[j] * (1 - avgVal)) + (avgVal * tmp);
       }
       tmp = (fftMax - arMagSAvg[j]) / range;
       if (tmp < 0) {
@@ -123,23 +123,23 @@ void fftDisplay::showFFT(double* fftData) {
       repCnt++;
       re = fftData[i] / fftLength;
       imag = fftData[fftLength - i] / fftLength;
-      tmp1 += (re * re + imag * imag);
+      tmp1 += ((re * re) + (imag * imag));
       if (((i - binBegin) * imWidth) / (binEnd - binBegin) >= j) {
         tmp1 /= repCnt;
         repCnt = 0;
         tmp = 10 * log10((tmp1)) - 77.27;  // 0.5 Vtt is 0db
-        arMagWAvg[j] = arMagWAvg[j] * (1 - avgVal) + avgVal * tmp;
+        arMagWAvg[j] = (arMagWAvg[j] * (1 - avgVal)) + (avgVal * tmp);
         if (arMagWAvg[j] < -100) {
           arMagWAvg[j] = -100;
         }
-        tmp = 1 - (fftMax - arMagWAvg[j]) / range;
+        tmp = 1 - ((fftMax - arMagWAvg[j]) / range);
         if (tmp < 0) {
           tmp = 0;
         }
         if (tmp > 1) {
           tmp = 1;
         }
-        c.setHsv(240 - tmp * 60, 255, tmp * 255);
+        c.setHsv(240 - (tmp * 60), 255, tmp * 255);
         ptr[j] = c.rgb();
         tmp1 = 0;
         j++;

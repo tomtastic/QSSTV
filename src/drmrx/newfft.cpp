@@ -97,10 +97,10 @@ void rfft(float* buf, int N2, int forward) {
       h1i = c1 * (*(buf + i2) - *(buf + i4));
       h2r = -c2 * (*(buf + i2) + *(buf + i4));
       h2i = c2 * (*(buf + i1) - *(buf + i3));
-      *(buf + i1) = h1r + wr * h2r - wi * h2i;
-      *(buf + i2) = h1i + wr * h2i + wi * h2r;
-      *(buf + i3) = h1r - wr * h2r + wi * h2i;
-      *(buf + i4) = -h1i + wr * h2i + wi * h2r;
+      *(buf + i1) = h1r + (wr * h2r) - (wi * h2i);
+      *(buf + i2) = h1i + (wr * h2i) + (wi * h2r);
+      *(buf + i3) = h1r - (wr * h2r) + (wi * h2i);
+      *(buf + i4) = -h1i + (wr * h2i) + (wi * h2r);
     }
     wr = ((temp = wr) * wpr) - (wi * wpi) + wr;
     wi = (wi * wpr) + (temp * wpi) + wi;

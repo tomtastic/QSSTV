@@ -124,7 +124,7 @@ bool reedSolomonCoder::decode(QByteArray& ba, const QString& fn, QString& newFil
   int* pointzero = newZeroPositions;
   for (i = 0; i < bep_size; i++) {
     for (j = 0; j < 255; j++) {
-      *(pointzero++) = *(zeroPositions + j * bep_size + i);
+      *(pointzero++) = *(zeroPositions + (j * bep_size) + i);
     }
   }
 
@@ -146,8 +146,8 @@ bool reedSolomonCoder::decode(QByteArray& ba, const QString& fn, QString& newFil
     errorOut() << "problems with bep_size coded in file";
     errorOut() << "bep_size: " << bep_size << " coded size: "
                << ((static_cast<unsigned char>(tr_buf[1])) + (static_cast<unsigned char>(tr_buf[2])) * 256);
-    errorOut() << "bep_sizeaa: " << bep_size
-               << " coded size: " << ((static_cast<unsigned char>(ba[1])) + (static_cast<unsigned char>(ba[2])) * 256);
+    errorOut() << "bep_sizeaa: " << bep_size << " coded size: "
+               << ((static_cast<unsigned char>(ba[1])) + ((static_cast<unsigned char>(ba[2])) * 256));
     return false;
   }
   coded_file_size = bep_size * rs_dsize - static_cast<int>(tr_buf[0]);
@@ -204,8 +204,8 @@ bool reedSolomonCoder::decode_and_write() {
     /* get the erasure positions and their number */
     nr_erasures = 0;
     for (j = 0; j < rs_bsize; j++) {
-      if (newZeroPositions[i * rs_bsize + j] != -1) {
-        eras_pos[nr_erasures++] = newZeroPositions[i * rs_bsize + j];
+      if (newZeroPositions[(i * rs_bsize) + j] != -1) {
+        eras_pos[nr_erasures++] = newZeroPositions[(i * rs_bsize) + j];
         if (nr_erasures > (rs_bsize - rs_dsize)) {
           return false;
         }

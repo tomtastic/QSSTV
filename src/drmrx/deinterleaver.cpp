@@ -83,7 +83,7 @@ int* deinterleaver(int xinA, int tA, int xinB, int tB) {
     part3 = ceil(part1 / part2);
     sA = static_cast<int>(pow(2, part3));
   }
-  qA = sA / 4 - 1;
+  qA = (sA / 4) - 1;
   if (xinB == 0) {
     sB = 0;
 
@@ -95,17 +95,17 @@ int* deinterleaver(int xinA, int tA, int xinB, int tB) {
     part3 = ceil(part1 / part2);
     sB = static_cast<int>(pow(2, part3));
   }
-  qB = sB / 4 - 1;
+  qB = (sB / 4) - 1;
   deinterl[0] = 0;
   PIofi = 0;
   for (i = 1; i <= xinA - 1; i++)
 
   {
-    PIofi = (tA * PIofi + qA) % sA;
+    PIofi = ((tA * PIofi) + qA) % sA;
     while (PIofi >= xinA)
 
     {
-      PIofi = (tA * PIofi + qA) % sA;
+      PIofi = ((tA * PIofi) + qA) % sA;
     }
     deinterl[PIofi] = i;
   }
@@ -114,11 +114,11 @@ int* deinterleaver(int xinA, int tA, int xinB, int tB) {
   for (i = 1; i <= xinB - 1; i++)
 
   {
-    PIofi = (tB * PIofi + qB) % sB;
+    PIofi = ((tB * PIofi) + qB) % sB;
     while (PIofi >= xinB)
 
     {
-      PIofi = (tB * PIofi + qB) % sB;
+      PIofi = ((tB * PIofi) + qB) % sB;
     }
     deinterl[PIofi + xinA] = i + xinA;
   }

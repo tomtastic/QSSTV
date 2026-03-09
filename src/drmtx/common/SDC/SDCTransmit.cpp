@@ -43,7 +43,7 @@ void CSDCTransmit::SDCParam(CVector<_BINARY>* pbiData, CParameter& Parameter) {
   const int iLengthDataFieldBytes = static_cast<int>(static_cast<_REAL>(Parameter.iNumSDCBitsPerSFrame - 20) / 8);
 
   /* 20 bits from AFS index and CRC */
-  const int iUsefulBitsSDC = 20 + iLengthDataFieldBytes * 8;
+  const int iUsefulBitsSDC = 20 + (iLengthDataFieldBytes * 8);
 
   /* "- 20" for the AFS-index and CRC! */
   const int iMaxNumBitsDataBlocks = iUsefulBitsSDC - 20;
@@ -146,7 +146,7 @@ void CSDCTransmit::SDCParam(CVector<_BINARY>* pbiData, CParameter& Parameter) {
 \******************************************************************************/
 void CSDCTransmit::DataEntityType0(CVector<_BINARY>& vecbiData, CParameter& Parameter) {
   /* 24 bits for each stream description + 4 bits for protection levels */
-  const int iNumBitsTotal = 4 + Parameter.GetTotNumServices() * 24;
+  const int iNumBitsTotal = 4 + (Parameter.GetTotNumServices() * 24);
 
   /* Init return vector (storing this data block) */
   vecbiData.Init(iNumBitsTotal + NUM_BITS_HEADER_SDC);
@@ -210,7 +210,7 @@ void CSDCTransmit::DataEntityType1(CVector<_BINARY>& vecbiData, int ServiceID, C
   }
 
   /* Number in bits (* 8) plus initial 4 bits (+ 4) */
-  const int iNumBitsTotal = iLenLabel * 8 + 4;
+  const int iNumBitsTotal = (iLenLabel * 8) + 4;
 
   /* Init return vector (storing this data block) */
   vecbiData.Init(iNumBitsTotal + NUM_BITS_HEADER_SDC);
@@ -269,7 +269,7 @@ void CSDCTransmit::DataEntityType5(CVector<_BINARY>& vecbiData, int ServiceID, C
 
   /* Length of the body, excluding the initial 4 bits ("- 4"),
      measured in bytes ("/ 8") */
-  vecbiData.Enqueue(static_cast<uint32_t>(iNumBitsTotal - 4) / 8, 7);
+  vecbiData.Enqueue(static_cast<uint32_t>((iNumBitsTotal - 4)) / 8, 7);
 
   /* Version flag (not used in this implementation) */
   vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
@@ -358,7 +358,7 @@ void CSDCTransmit::DataEntityType9(CVector<_BINARY>& vecbiData, int ServiceID, C
 
   /* Length of the body, excluding the initial 4 bits ("- 4"),
      measured in bytes ("/ 8") */
-  vecbiData.Enqueue(static_cast<uint32_t>(iNumBitsTotal - 4) / 8, 7);
+  vecbiData.Enqueue(static_cast<uint32_t>((iNumBitsTotal - 4)) / 8, 7);
 
   /* Version flag (not used in this implementation) */
   vecbiData.Enqueue(static_cast<uint32_t>(0), 1);

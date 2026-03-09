@@ -94,8 +94,8 @@ int viterbi_decode(float* llr, int N, int N_PartA, signed char* puncturing1, sig
      printf("viterbidecoder: N = %d, N_PartA = %d , L = %d, N_tail= %d  STATES = %d\n",
      N, N_PartA, L, N_tail, STATES );   */
   old_metrics = reinterpret_cast<float*>(memory_ptr + 0);
-  new_metrics = reinterpret_cast<float*>(memory_ptr + STATES * sizeof(float));
-  path_reg = (memory_ptr + STATES * sizeof(float) + STATES * sizeof(float));
+  new_metrics = reinterpret_cast<float*>(memory_ptr + (STATES * sizeof(float)));
+  path_reg = (memory_ptr + (STATES * sizeof(float)) + (STATES * sizeof(float)));
   for (j = 1; j < STATES; j++) {
     old_metrics[j] = -inf;
   }
@@ -179,18 +179,18 @@ int viterbi_decode(float* llr, int N, int N_PartA, signed char* puncturing1, sig
         metric_s2 = old_metrics[butterfly + NOOFBF];
         metric_inc = symbols_acc[static_cast<int>(CODER_OUTPUT[butterfly])];
         new_metrics[2 * butterfly] = metric_s1 + metric_inc;
-        path_reg[path_reg_index + 2 * butterfly] = 0;
+        path_reg[path_reg_index + (2 * butterfly)] = 0;
         metric_path2 = metric_s2 - metric_inc;           /* Add */
         if (metric_path2 > new_metrics[2 * butterfly]) { /* Compare */
           new_metrics[2 * butterfly] = metric_path2;
-          path_reg[path_reg_index + 2 * butterfly] = 1; /* Select */
+          path_reg[path_reg_index + (2 * butterfly)] = 1; /* Select */
         }
-        new_metrics[2 * butterfly + 1] = metric_s1 - metric_inc;
-        path_reg[path_reg_index + 2 * butterfly + 1] = 0;
+        new_metrics[(2 * butterfly) + 1] = metric_s1 - metric_inc;
+        path_reg[path_reg_index + (2 * butterfly) + 1] = 0;
         metric_path2 = metric_s2 + metric_inc;               /* Add */
-        if (metric_path2 > new_metrics[2 * butterfly + 1]) { /* Compare */
-          new_metrics[2 * butterfly + 1] = metric_path2;
-          path_reg[path_reg_index + 2 * butterfly + 1] = 1; /* Select */
+        if (metric_path2 > new_metrics[(2 * butterfly) + 1]) { /* Compare */
+          new_metrics[(2 * butterfly) + 1] = metric_path2;
+          path_reg[path_reg_index + (2 * butterfly) + 1] = 1; /* Select */
         }
       }
 

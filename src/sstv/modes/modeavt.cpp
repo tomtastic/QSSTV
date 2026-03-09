@@ -159,7 +159,8 @@ modeBase::eModeBase modeAVT::process(quint16* demod, unsigned int, bool, unsigne
             break;
           }
           a &= 0x1F;
-          delay = static_cast<unsigned int>((((31 - a) * WORDTIME + BITTIME / 2) * rxClock / SUBSAMPLINGFACTOR) + 15);
+          delay =
+              static_cast<unsigned int>(((((31 - a) * WORDTIME) + (BITTIME / 2)) * rxClock / SUBSAMPLINGFACTOR) + 15);
           switchTrailerState(WAITSTART);
           break;
         case WAITSTART:

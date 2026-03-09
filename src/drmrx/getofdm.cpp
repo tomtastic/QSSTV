@@ -119,7 +119,7 @@ int getofdm(/*@null@ */ float* rs, float time_offset_fractional_init, float freq
     threshold_freq_small_large = 0.5;
     kI_freq_controller = 0.0008;
     Tg = Ts - Tu;
-    Tgh = static_cast<int>(floor(Tg / 2 + 0.5));
+    Tgh = static_cast<int>(floor((Tg / 2) + 0.5));
     if (Zi[0] < 0.0)
 
     {
@@ -159,12 +159,12 @@ int getofdm(/*@null@ */ float* rs, float time_offset_fractional_init, float freq
       {
         //              logfile->addToAux(QString("tm1 %1 %2 %3 %4 %5").arg(rs[i * 2] ).arg(rs[(Tu + i) * 2]).arg(rs[i *
         //              2 + 1]).arg(rs[(Tu + i) * 2 + 1]).arg(temp1[0]));
-        temp1[0] += rs[i * 2] * rs[(Tu + i) * 2] + rs[i * 2 + 1] * rs[(Tu + i) * 2 + 1];  /* real part */
-        temp1[1] += -rs[i * 2] * rs[(Tu + i) * 2 + 1] + rs[i * 2 + 1] * rs[(Tu + i) * 2]; /* imag part */
-        temp2 += rs[i * 2] * rs[i * 2] + rs[i * 2 + 1] * rs[i * 2 + 1];
-        temp3 += rs[(i + Tu) * 2] * rs[(i + Tu) * 2] + rs[(i + Tu) * 2 + 1] * rs[(i + Tu) * 2 + 1];
+        temp1[0] += (rs[i * 2] * rs[(Tu + i) * 2]) + (rs[(i * 2) + 1] * rs[((Tu + i) * 2) + 1]);  /* real part */
+        temp1[1] += (-rs[i * 2] * rs[((Tu + i) * 2) + 1]) + (rs[(i * 2) + 1] * rs[(Tu + i) * 2]); /* imag part */
+        temp2 += (rs[i * 2] * rs[i * 2]) + (rs[(i * 2) + 1] * rs[(i * 2) + 1]);
+        temp3 += (rs[(i + Tu) * 2] * rs[(i + Tu) * 2]) + (rs[((i + Tu) * 2) + 1] * rs[((i + Tu) * 2) + 1]);
       }
-      temp4 = static_cast<float>(EPSILON + 0.5 * (temp2 + temp3));
+      temp4 = static_cast<float>(EPSILON + (0.5 * (temp2 + temp3)));
       //          logfile->addToAux(QString("tmp %1 %2 %3 %4
       //          %5").arg(temp1[0]).arg(temp1[1]).arg(temp2).arg(temp3).arg(temp4));
 
@@ -172,23 +172,25 @@ int getofdm(/*@null@ */ float* rs, float time_offset_fractional_init, float freq
       for (i = 0; i < 5; i++)
 
       {
-        temp5[0] += rs[i * 2] * rs[(Tu + i) * 2] + rs[i * 2 + 1] * rs[(Tu + i) * 2 + 1]; /* 1-5 * Tu_1_5 */
-        temp5[1] += -rs[i * 2] * rs[(Tu + i) * 2 + 1] + rs[i * 2 + 1] * rs[(Tu + i) * 2];
-        temp6 += rs[i * 2] * rs[i * 2] + rs[i * 2 + 1] * rs[i * 2 + 1]; /* 1-5 * 1-5' */
-        temp7 += rs[(i + Tu) * 2] * rs[(i + Tu) * 2] + rs[(i + Tu) * 2 + 1] * rs[(i + Tu) * 2 + 1];
+        temp5[0] += (rs[i * 2] * rs[(Tu + i) * 2]) + (rs[(i * 2) + 1] * rs[((Tu + i) * 2) + 1]); /* 1-5 * Tu_1_5 */
+        temp5[1] += (-rs[i * 2] * rs[((Tu + i) * 2) + 1]) + (rs[(i * 2) + 1] * rs[(Tu + i) * 2]);
+        temp6 += (rs[i * 2] * rs[i * 2]) + (rs[(i * 2) + 1] * rs[(i * 2) + 1]); /* 1-5 * 1-5' */
+        temp7 += (rs[(i + Tu) * 2] * rs[(i + Tu) * 2]) + (rs[((i + Tu) * 2) + 1] * rs[((i + Tu) * 2) + 1]);
         /* Tu_1_5 * Tu_1_5' */ /* pa0mbo check for OK */
-        temp8[0] += rs[(i + Tg - 3) * 2] * rs[(i + Tu + Tg - 3) * 2] +
-                    rs[(i + Tg - 3) * 2 + 1] * rs[(i + Tu + Tg - 3) * 2 + 1]; /* Tg -2 +2 * Tg + Tu -2 +2 */
-        temp8[1] += -rs[(i + Tg - 3) * 2] * rs[(i + Tu + Tg - 3) * 2 + 1] + rs[(i + Tg - 3) * 2 + 1] +
+        temp8[0] += (rs[(i + Tg - 3) * 2] * rs[(i + Tu + Tg - 3) * 2]) +
+                    (rs[((i + Tg - 3) * 2) + 1] * rs[((i + Tu + Tg - 3) * 2) + 1]); /* Tg -2 +2 * Tg + Tu -2 +2 */
+        temp8[1] += (-rs[(i + Tg - 3) * 2] * rs[((i + Tu + Tg - 3) * 2) + 1]) + rs[((i + Tg - 3) * 2) + 1] +
                     rs[(i + Tu + Tg - 3) * 2];
-        temp9 += rs[(i + Tg - 3) * 2] * rs[(i + Tg - 3) * 2] +
-                 rs[(i + Tg - 3) * 2 + 1] * rs[(i + Tg - 3) * 2 + 1]; /* Tg-2+2 * Tg-2+2 */
-        temp10 += rs[(i + Tg + Tu - 3) * 2] * rs[(i + Tg + Tu - 3) * 2] +
-                  rs[(i + Tg + Tu - 3) * 2 + 1] * rs[(i + Tg + Tu - 3) * 2 + 1]; /* TG+Tu-2+2 * Tg+Tu-2+2 */
+        temp9 += (rs[(i + Tg - 3) * 2] * rs[(i + Tg - 3) * 2]) +
+                 (rs[((i + Tg - 3) * 2) + 1] * rs[((i + Tg - 3) * 2) + 1]); /* Tg-2+2 * Tg-2+2 */
+        temp10 += (rs[(i + Tg + Tu - 3) * 2] * rs[(i + Tg + Tu - 3) * 2]) +
+                  (rs[((i + Tg + Tu - 3) * 2) + 1] * rs[((i + Tg + Tu - 3) * 2) + 1]); /* TG+Tu-2+2 * Tg+Tu-2+2 */
       }
-      theta_plus = sqrt((temp1[0] - temp5[0]) * (temp1[0] - temp5[0]) + (temp1[1] - temp5[1]) * (temp1[1] - temp5[1]));
+      theta_plus =
+          sqrt(((temp1[0] - temp5[0]) * (temp1[0] - temp5[0])) + ((temp1[1] - temp5[1]) * (temp1[1] - temp5[1])));
       theta_plus -= (0.5 * (-temp6 - temp7));
-      theta_minus = sqrt((temp1[0] - temp8[0]) * (temp1[0] - temp8[0]) + (temp1[1] - temp8[1]) * (temp1[1] - temp8[1]));
+      theta_minus =
+          sqrt(((temp1[0] - temp8[0]) * (temp1[0] - temp8[0])) + ((temp1[1] - temp8[1]) * (temp1[1] - temp8[1])));
       theta_minus -= (0.5 * (temp9 - temp10));
       delta_theta = (theta_plus - theta_minus) * Tgh / temp4;
 
@@ -243,11 +245,12 @@ int getofdm(/*@null@ */ float* rs, float time_offset_fractional_init, float freq
       for (i = 0; i < Tg; i++)
 
       {
-        temp[0] +=
-            rs[(i + 1 + delta_time_offset_integer) * 2] * rs[(i + 1 + delta_time_offset_integer + Tu) * 2] +
-            rs[(i + 1 + delta_time_offset_integer) * 2 + 1] * rs[(i + 1 + delta_time_offset_integer + Tu) * 2 + 1];
-        temp[1] += rs[(i + 1 + delta_time_offset_integer) * 2 + 1] * rs[(i + 1 + delta_time_offset_integer + Tu) * 2] -
-                   rs[(i + 1 + delta_time_offset_integer) * 2] * rs[(i + 1 + delta_time_offset_integer + Tu) * 2 + 1];
+        temp[0] += (rs[(i + 1 + delta_time_offset_integer) * 2] * rs[(i + 1 + delta_time_offset_integer + Tu) * 2]) +
+                   (rs[((i + 1 + delta_time_offset_integer) * 2) + 1] *
+                    rs[((i + 1 + delta_time_offset_integer + Tu) * 2) + 1]);
+        temp[1] +=
+            (rs[((i + 1 + delta_time_offset_integer) * 2) + 1] * rs[(i + 1 + delta_time_offset_integer + Tu) * 2]) -
+            (rs[(i + 1 + delta_time_offset_integer) * 2] * rs[((i + 1 + delta_time_offset_integer + Tu) * 2) + 1]);
       }
       epsilon_ML = static_cast<float>(atan2(temp[1], temp[0]));
 
@@ -273,19 +276,19 @@ int getofdm(/*@null@ */ float* rs, float time_offset_fractional_init, float freq
     for (i = 0; i < Tu; i++)
 
     {
-      tmptheta = (freq_offset / Tu) * i + phi_freq_correction_last;
+      tmptheta = ((freq_offset / Tu) * i) + phi_freq_correction_last;
       exp_temp[i * 2] = cos(tmptheta);
-      exp_temp[i * 2 + 1] = sin(tmptheta);
+      exp_temp[(i * 2) + 1] = sin(tmptheta);
     }
 
     for (i = 0; i < Tu; i++) {
-      (s[i]).re = rs[(1 + delta_time_offset_integer + Tgh + i) * 2] * exp_temp[i * 2] -
-                  rs[(1 + delta_time_offset_integer + Tgh + i) * 2 + 1] * exp_temp[i * 2 + 1];
-      (s[i]).im = rs[(1 + delta_time_offset_integer + Tgh + i) * 2] * exp_temp[i * 2 + 1] +
-                  rs[(1 + delta_time_offset_integer + Tgh + i) * 2 + 1] * exp_temp[i * 2];
+      (s[i]).re = (rs[(1 + delta_time_offset_integer + Tgh + i) * 2] * exp_temp[i * 2]) -
+                  (rs[((1 + delta_time_offset_integer + Tgh + i) * 2) + 1] * exp_temp[(i * 2) + 1]);
+      (s[i]).im = (rs[(1 + delta_time_offset_integer + Tgh + i) * 2] * exp_temp[(i * 2) + 1]) +
+                  (rs[((1 + delta_time_offset_integer + Tgh + i) * 2) + 1] * exp_temp[i * 2]);
     }
     phi_freq_correction_last =
-        fmod(phi_freq_correction_last + static_cast<float>(Ts) / static_cast<float>(Tu) * freq_offset,
+        fmod(phi_freq_correction_last + (static_cast<float>(Ts) / static_cast<float>(Tu) * freq_offset),
              static_cast<float>(2.0 * PI));
 
     /* Now do fft and output symbol */
@@ -295,25 +298,27 @@ int getofdm(/*@null@ */ float* rs, float time_offset_fractional_init, float freq
     {
       term1 = static_cast<float>(i * 2.0 * PI * (Tgh + time_offset_fractional) / Tu); /* Euler */
       exp_temp[i * 2] = cos(term1);
-      exp_temp[i * 2 + 1] = sin(term1);
+      exp_temp[(i * 2) + 1] = sin(term1);
     }
     /* now calc out */
     for (i = 0; i < Tu / 2; i++)
 
     {
-      out1[i * 2] = static_cast<float>(((S[(Tu - 1 - i)]).re) * exp_temp[(i + 1) * 2] +
-                                       ((S[(Tu - 1 - i)]).im) * exp_temp[(i + 1) * 2 + 1]); /* real = ac+bd */
-      out1[i * 2 + 1] = static_cast<float>(((S[(Tu - 1 - i)]).im) * exp_temp[(i + 1) * 2] -
-                                           ((S[(Tu - 1 - i)]).re) * exp_temp[(i + 1) * 2 + 1]); /* imag bc -ad */
+      out1[i * 2] = static_cast<float>((((S[(Tu - 1 - i)]).re) * exp_temp[(i + 1) * 2]) +
+                                       (((S[(Tu - 1 - i)]).im) * exp_temp[((i + 1) * 2) + 1])); /* real = ac+bd */
+      out1[(i * 2) + 1] = static_cast<float>((((S[(Tu - 1 - i)]).im) * exp_temp[(i + 1) * 2]) -
+                                             (((S[(Tu - 1 - i)]).re) * exp_temp[((i + 1) * 2) + 1])); /* imag bc -ad */
     }
     /* Now flip out1 to out */
     for (i = 0; i < Tu / 2; i++)
 
     {
-      out[i * 2] = out1[(Tu / 2 - 1 - i) * 2];
-      out[i * 2 + 1] = out1[(Tu / 2 - i - 1) * 2 + 1];
-      out[(Tu / 2 + i) * 2] = static_cast<float>(((S[i]).re) * exp_temp[i * 2] - ((S[i]).im) * exp_temp[i * 2 + 1]);
-      out[(Tu / 2 + i) * 2 + 1] = static_cast<float>(((S[i]).im) * exp_temp[i * 2] + ((S[i]).re) * exp_temp[i * 2 + 1]);
+      out[i * 2] = out1[((Tu / 2) - 1 - i) * 2];
+      out[(i * 2) + 1] = out1[(((Tu / 2) - i - 1) * 2) + 1];
+      out[((Tu / 2) + i) * 2] =
+          static_cast<float>((((S[i]).re) * exp_temp[i * 2]) - (((S[i]).im) * exp_temp[(i * 2) + 1]));
+      out[(((Tu / 2) + i) * 2) + 1] =
+          static_cast<float>((((S[i]).im) * exp_temp[i * 2]) + (((S[i]).re) * exp_temp[(i * 2) + 1]));
     }
     Zi[0] = 1.0;
     Zi[1] = phi_freq_correction_last;

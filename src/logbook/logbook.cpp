@@ -52,7 +52,7 @@ void logBook::logQSO(const QString& call, const QString& mode, const QString& co
   tmp = QString::number(dt.date().day()) + " " + monthArray[dt.date().month() - 1] + " " +
         QString::number(dt.date().year());
   setParam(LDATE, tmp);
-  tmp = QString::number(dt.time().hour() * 100 + dt.time().minute()).rightJustified(4, '0');
+  tmp = QString::number((dt.time().hour() * 100) + dt.time().minute()).rightJustified(4, '0');
   setParam(LTIME, tmp);
   setParam(LENDTIME, tmp);
   setParam(LMODE, mode);

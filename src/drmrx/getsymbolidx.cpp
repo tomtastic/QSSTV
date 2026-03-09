@@ -58,8 +58,8 @@ int getsymbolidx(float* symbol_buffer, int symbols_per_frame, int* time_ref_cell
     for (j = 0; j < K_modulo; j++)
 
     {
-      (S[j][i]).re = symbol_buffer[(j + i * K_modulo) * 2];
-      (S[j][i]).im = symbol_buffer[(j + i * K_modulo) * 2 + 1];
+      (S[j][i]).re = symbol_buffer[(j + (i * K_modulo)) * 2];
+      (S[j][i]).im = symbol_buffer[((j + (i * K_modulo)) * 2) + 1];
     }
   }
 
@@ -94,11 +94,11 @@ int getsymbolidx(float* symbol_buffer, int symbols_per_frame, int* time_ref_cell
       for (j = 0; j < symbols_per_frame; j++)
 
       {
-        tmp1real = (S[k1_index][j]).re * cos(phi1) + (S[k1_index][j]).im * sin(phi1);
-        tmp1imag = (S[k1_index][j]).im * cos(phi1) - (S[k1_index][j]).re * sin(phi1);
-        tmp2real = (S[k2_index][j]).re * cos(phi2) + (S[k2_index][j]).im * sin(phi2);
-        tmp2imag = (S[k2_index][j]).im * cos(phi2) - (S[k2_index][j]).re * sin(phi2);
-        sum_real_xx[j] += tmp1real * tmp2real + tmp1imag * tmp2imag;
+        tmp1real = ((S[k1_index][j]).re * cos(phi1)) + ((S[k1_index][j]).im * sin(phi1));
+        tmp1imag = ((S[k1_index][j]).im * cos(phi1)) - ((S[k1_index][j]).re * sin(phi1));
+        tmp2real = ((S[k2_index][j]).re * cos(phi2)) + ((S[k2_index][j]).im * sin(phi2));
+        tmp2imag = ((S[k2_index][j]).im * cos(phi2)) - ((S[k2_index][j]).re * sin(phi2));
+        sum_real_xx[j] += (tmp1real * tmp2real) + (tmp1imag * tmp2imag);
 
 
         /*           sum_imag_xx[j]  += tmp1imag*tmp2real - tmp1real*tmp2imag; */

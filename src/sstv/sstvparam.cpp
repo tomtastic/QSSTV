@@ -250,8 +250,8 @@ esstvMode modeLookup(unsigned int lineLength, DSPFLOAT clock) {
   totalError = 9999999;
   esstvMode lmode = NOTVALID;
   for (i = M1; i < NOTVALID; i++) {
-    errLine = 1. - static_cast<DSPFLOAT>(lineLength) /
-                       ((SSTVTable[i].imageTime / (static_cast<DSPFLOAT>(SSTVTable[i].numberOfDataLines))) * clock);
+    errLine = 1. - (static_cast<DSPFLOAT>(lineLength) /
+                    ((SSTVTable[i].imageTime / (static_cast<DSPFLOAT>(SSTVTable[i].numberOfDataLines))) * clock));
     errLine *= errLine;
     if (errLine < totalError) {
       lmode = static_cast<esstvMode>(i);
@@ -266,8 +266,8 @@ esstvMode modeLookup(unsigned int lineLength, DSPFLOAT clock) {
 
 bool lineIsValid(esstvMode mode, unsigned int lineLength, DSPFLOAT clock) {
   DSPFLOAT errLine;
-  errLine = 1. - static_cast<DSPFLOAT>(lineLength) /
-                     ((SSTVTable[mode].imageTime / (static_cast<DSPFLOAT>(SSTVTable[mode].numberOfDataLines))) * clock);
+  errLine = 1. - (static_cast<DSPFLOAT>(lineLength) /
+                  ((SSTVTable[mode].imageTime / (static_cast<DSPFLOAT>(SSTVTable[mode].numberOfDataLines))) * clock));
   errLine *= errLine;
   return (errLine < 0.001);
 }

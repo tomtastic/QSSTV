@@ -136,10 +136,10 @@ void graphItemBase::setTransform(int rot, double hs, double vs) {
 
 void graphItemBase::setTransform() {
   QTransform tx;
-  tx.translate(rect().x() + rect().width() / 2, rect().y() + rect().height() / 2);
+  tx.translate(rect().x() + (rect().width() / 2), rect().y() + (rect().height() / 2));
   tx.shear(param.hShear, param.vShear);
   tx.rotate(param.rotation);
-  tx.translate(-rect().x() - rect().width() / 2, -rect().y() - rect().height() / 2);
+  tx.translate(-rect().x() - (rect().width() / 2), -rect().y() - (rect().height() / 2));
   QGraphicsItem::setTransform(tx, false);
   update();
 }

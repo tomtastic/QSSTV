@@ -256,7 +256,7 @@ bool wavIO::write(quint16* dPtr, uint numSamples, bool isStereo) {
     tmpPtr = tempBufPtr;
     for (i = 0; i < numSamples; i++) {
       tempBufPtr[i * 2] = dPtr[i];
-      tempBufPtr[i * 2 + 1] = 0;
+      tempBufPtr[(i * 2) + 1] = 0;
     }
   } else {
     tempBufPtr = new quint16[numSamples * 2];
@@ -311,7 +311,7 @@ void wavIO::initHeader() {
   waveHeader.blockAlign = 4;
   waveHeader.bitsPerSample = 16;
   waveHeader.subChunk2Size = numberOfSamples * sizeof(short int);
-  waveHeader.chunkSize = 36 + numberOfSamples * sizeof(short int);
+  waveHeader.chunkSize = 36 + (numberOfSamples * sizeof(short int));
 }
 
 bool wavIO::checkString(char* str, const char* cstr) {

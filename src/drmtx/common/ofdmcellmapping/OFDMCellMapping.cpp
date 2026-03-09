@@ -51,7 +51,7 @@ void COFDMCellMapping::ProcessDataInternal(CParameter& TransmParam) {
 
   /* Mapping of the data and pilot cells on the OFDM symbol --------------- */
   /* Set absolute symbol position */
-  iSymbolCounterAbs = TransmParam.iFrameIDTransm * iNumSymPerFrame + iSymbolCounter;
+  iSymbolCounterAbs = (TransmParam.iFrameIDTransm * iNumSymPerFrame) + iSymbolCounter;
 
   /* Init temporary counter */
   iDummyCellCounter = 0;
@@ -105,7 +105,7 @@ void COFDMCellMapping::ProcessDataInternal(CParameter& TransmParam) {
   }
 
   /* Set absolute symbol position (for updated relative positions) */
-  iSymbolCounterAbs = TransmParam.iFrameIDTransm * iNumSymPerFrame + iSymbolCounter;
+  iSymbolCounterAbs = (TransmParam.iFrameIDTransm * iNumSymPerFrame) + iSymbolCounter;
 
   /* Set input block-sizes for next symbol */
   iInputBlockSize = Param.veciNumMSCSym[iSymbolCounterAbs];

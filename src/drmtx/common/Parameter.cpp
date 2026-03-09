@@ -1026,14 +1026,14 @@ string CServiceDefinition::Frequency(size_t n) const {
     case 4:
     case 5:
       /* 'FM1 frequency' - 87.5 to 107.9 MHz (100 kHz steps) */
-      ss << 87.5 + 0.1 * static_cast<float>(iFrequency);
+      ss << 87.5 + (0.1 * static_cast<float>(iFrequency));
       break;
 
     case 6:
     case 7:
     case 8:
       /* 'FM2 frequency'- 76.0 to 90.0 MHz (100 kHz steps) */
-      ss << 76.0 + 0.1 * static_cast<float>(iFrequency);
+      ss << 76.0 + (0.1 * static_cast<float>(iFrequency));
       break;
 
     case 9:
@@ -1041,23 +1041,23 @@ string CServiceDefinition::Frequency(size_t n) const {
     case 11:
       if (iFrequency <= 11) {
         int chan = iFrequency / 4;
-        char subchan = 'A' + iFrequency % 4;
+        char subchan = 'A' + (iFrequency % 4);
         ss << "Band I channel " << (chan + 2) << subchan;
       } else if (64 <= iFrequency && iFrequency <= 95) {
         int chan = iFrequency / 4;
-        char subchan = 'A' + iFrequency % 4;
+        char subchan = 'A' + (iFrequency % 4);
         ss << "Band III channel " << (chan - 11) << subchan;
       } else if (96 <= iFrequency && iFrequency <= 101) {
         int chan = iFrequency / 6;
-        char subchan = 'A' + iFrequency % 6;
+        char subchan = 'A' + (iFrequency % 6);
         ss << "Band III+ channel " << (chan - 3) << subchan;
       } else if (128 <= iFrequency && iFrequency <= 143) {
         char chan = iFrequency - 128;
-        double m = 1452.96 + 1.712 * static_cast<double>(chan);
+        double m = 1452.96 + (1.712 * static_cast<double>(chan));
         ss << "European L-Band channel L" << ('A' + chan) << ", " << m << " MHz";
       } else if (160 <= iFrequency && iFrequency <= 182) {
         int chan = iFrequency - 159;
-        double m = 1451.072 + 1.744 * static_cast<double>(chan);
+        double m = 1451.072 + (1.744 * static_cast<double>(chan));
         ss << "Canadian L-Band channel " << chan << ", " << m << " MHz";
       } else {
         ss << "unknown channel " << iFrequency;

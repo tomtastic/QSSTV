@@ -885,7 +885,7 @@ bool QFtpPI::processReply() {
   } else {
     addToLog(QString("recv: %1 (text skipped)").arg(100 * replyCode[0] + 10 * replyCode[1] + replyCode[2]), LOGQFTP);
   }
-  int replyCodeInt = 100 * replyCode[0] + 10 * replyCode[1] + replyCode[2];
+  int replyCodeInt = (100 * replyCode[0]) + (10 * replyCode[1]) + replyCode[2];
 
   // process 226 replies ("Closing Data Connection") only when the data
   // connection is really closed to avoid short reads of the DTP

@@ -230,14 +230,14 @@ void syncProcessor::extractSync() {
       switchProcessState(SYNCLOST);
     } else {
       lastSync = syncArray[activeChainPtr->last()->to].end;
-      if ((sampleCounter + RXSTRIPE - RXSTRIPE / 7) >
-          (lastSync + sensitivityArray[sensitivity].maxTempOutOfSyncLines * samplesPerLine)) {
+      if ((sampleCounter + RXSTRIPE - (RXSTRIPE / 7)) >
+          (lastSync + (sensitivityArray[sensitivity].maxTempOutOfSyncLines * samplesPerLine))) {
         if (sensitivity != (NUMBEROFSENSITIVITIES - 1)) {
           tempOutOfSync = true;  // no temp out of sync if DX
         }
       }
       missingLines = static_cast<uint>(
-          round(((sampleCounter + RXSTRIPE - RXSTRIPE / 7) - (lastSync + samplesPerLine)) / samplesPerLine + 1));
+          round((((sampleCounter + RXSTRIPE - (RXSTRIPE / 7)) - (lastSync + samplesPerLine)) / samplesPerLine) + 1));
       calcSyncQuality();
     }
   }
@@ -317,7 +317,7 @@ bool syncProcessor::validateSync() {
             if (syncArray[0].retrace) {
               syncCorrected = syncArray[0].end;
             } else {
-              syncCorrected = (syncArray[0].start + syncArray[0].end) / 2 + syncWidth / 2;
+              syncCorrected = ((syncArray[0].start + syncArray[0].end) / 2) + (syncWidth / 2);
             }
 
             syncPosition = currentModePtr->adjustSyncPosition(syncCorrected, syncArray[0].retrace) +
@@ -784,8 +784,8 @@ bool syncProcessor::lineCompare(DSPFLOAT samPerLine, int srcIdx, int dstIdx, qui
   double delta;
   delta = static_cast<double>(syncArray[dstIdx].end - syncArray[srcIdx].end);
 
-  lineNumber = (delta + samPerLine / 2.) / samPerLine;
-  fraction = static_cast<double>(lineNumber) - delta / samPerLine;
+  lineNumber = (delta + (samPerLine / 2.)) / samPerLine;
+  fraction = static_cast<double>(lineNumber) - (delta / samPerLine);
   if (fraction < 0) {
     fraction = -fraction;
   }
@@ -932,8 +932,8 @@ void syncProcessor::regression(DSPFLOAT& a, DSPFLOAT& b, bool initial) {
     lastValidSyncCounter = syncArray[activeChainPtr->at(j)->to].end;
     tempCount++;
   }
-  b = ((tempCount)*sum_xy - (sum_x * sum_y)) / ((tempCount)*sum_xx - (sum_x * sum_x));
-  a = sum_y / (tempCount) - (b * sum_x) / (tempCount);
+  b = (((tempCount)*sum_xy) - (sum_x * sum_y)) / (((tempCount)*sum_xx) - (sum_x * sum_x));
+  a = (sum_y / (tempCount)) - ((b * sum_x) / (tempCount));
 }
 
 
@@ -981,7 +981,7 @@ bool syncProcessor::slantAdjust(bool initial) {
     if (syncArray[0].retrace) {
       syncCorrected = syncArray[0].end;
     } else {
-      syncCorrected = (syncArray[0].start + syncArray[0].end) / 2 + getSyncWidth(currentMode, modifiedClock) / 2;
+      syncCorrected = ((syncArray[0].start + syncArray[0].end) / 2) + (getSyncWidth(currentMode, modifiedClock) / 2);
     }
 
     syncPosition = currentModePtr->adjustSyncPosition(syncCorrected, syncArray[0].retrace) +

@@ -191,7 +191,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
      with robustness mode D: pilots in all carriers! BUT: DC carrier is
      counted as a pilot in that case!!! Be aware of that! */
   if (iScatPilFreqInt > 1) {
-    iNumIntpFreqPil = static_cast<int>(static_cast<_REAL>(iNumCarrier) / iScatPilFreqInt + 1);
+    iNumIntpFreqPil = static_cast<int>((static_cast<_REAL>(iNumCarrier) / iScatPilFreqInt) + 1);
   } else {
     iNumIntpFreqPil = iNumCarrier;
   }
@@ -229,8 +229,8 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
     /* Calculate the start value of "p" in equation for gain reference
      cells in Table 90 (8.4.4.1) */
     iScatPilotsCounter = static_cast<int>(
-        static_cast<_REAL>(iCarrierKmin - static_cast<int>(static_cast<_REAL>(iScatPilFreqInt) / 2 + .5) -
-                           iScatPilFreqInt * mod(iFrameSym, iScatPilTimeInt)) /
+        static_cast<_REAL>(iCarrierKmin - static_cast<int>((static_cast<_REAL>(iScatPilFreqInt) / 2) + .5) -
+                           (iScatPilFreqInt * mod(iFrameSym, iScatPilTimeInt))) /
         (iScatPilFreqInt * iScatPilTimeInt));
 
     for (iCar = iCarrierKmin; iCar < iCarrierKmax + 1; iCar++) {
@@ -249,8 +249,8 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
       if (iFACCounter <= NUM_FAC_CELLS) {
         /* piTableFAC[x * 2]: first column; piTableFAC[x * 2 + 1]:
      second column */
-        if (piTableFAC[iFACCounter * 2] * iNumCarrier + piTableFAC[iFACCounter * 2 + 1] ==
-            iFrameSym * iNumCarrier + iCar) {
+        if ((piTableFAC[iFACCounter * 2] * iNumCarrier) + piTableFAC[(iFACCounter * 2) + 1] ==
+            (iFrameSym * iNumCarrier) + iCar) {
           iFACCounter++;
           matiMapTab[iSym][iCarArrInd] = CM_FAC;
         }
@@ -272,9 +272,9 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
      (TimeInt). In this example, "4" is the FreqInt and "5" is the
      TimeInt. The first term "2" is the half of the FreqInt, rounded
      towards infinity. The parameter "20" is FreqInt * TimeInt */
-      if (iCar == static_cast<int>(static_cast<_REAL>(iScatPilFreqInt) / 2 + .5) +
-                      iScatPilFreqInt * mod(iFrameSym, iScatPilTimeInt) +
-                      iScatPilFreqInt * iScatPilTimeInt * iScatPilotsCounter) {
+      if (iCar == static_cast<int>((static_cast<_REAL>(iScatPilFreqInt) / 2) + .5) +
+                      (iScatPilFreqInt * mod(iFrameSym, iScatPilTimeInt)) +
+                      (iScatPilFreqInt * iScatPilTimeInt * iScatPilotsCounter)) {
         iScatPilotsCounter++;
 
         /* Set flag in mapping table */
@@ -289,15 +289,15 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
         in = mod(iFrameSym, ScatPilots.piConst[1] /* "y" */);
         im = static_cast<int>(static_cast<_REAL>(iFrameSym) / ScatPilots.piConst[1] /* "y" */);
         ip = static_cast<int>(
-            static_cast<_REAL>(iCar - ScatPilots.piConst[2] /* "k_0" */ - in * ScatPilots.piConst[0] /* "x" */) /
+            static_cast<_REAL>(iCar - ScatPilots.piConst[2] /* "k_0" */ - (in * ScatPilots.piConst[0]) /* "x" */) /
             (ScatPilots.piConst[0] /* "x" */ * ScatPilots.piConst[1] /* "y" */));
 
         /* Phase_1024[s,k] =
          (4Z_256[n,m]pW_1024[n,m] + p^2(1 + s)Q_1024) mod 1024 */
-        iScatPilPhase =
-            mod(4 * ScatPilots.piZ[in * ScatPilots.iColSizeWZ + im] +
-                    ip * ScatPilots.piW[in * ScatPilots.iColSizeWZ + im] + ip * ip * (1 + iFrameSym) * ScatPilots.iQ,
-                1024);
+        iScatPilPhase = mod((4 * ScatPilots.piZ[(in * ScatPilots.iColSizeWZ) + im]) +
+                                (ip * ScatPilots.piW[(in * ScatPilots.iColSizeWZ) + im]) +
+                                (ip * ip * (1 + iFrameSym) * ScatPilots.iQ),
+                            1024);
 
 
         /* Gain calculation and applying of complex value ----------- */
@@ -465,7 +465,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
   iNumUsefMSCCellsPerFrame = static_cast<int>(iMSCCounter / NUM_FRAMES_IN_SUPERFRAME);
 
   /* Calculate dummy cells for MSC */
-  iNoMSCDummyCells = iMSCCounter - iNumUsefMSCCellsPerFrame * NUM_FRAMES_IN_SUPERFRAME;
+  iNoMSCDummyCells = iMSCCounter - (iNumUsefMSCCellsPerFrame * NUM_FRAMES_IN_SUPERFRAME);
 
   /* Correct last MSC count (because of dummy cells) */
   veciNumMSCSym[iNumSymbolsPerSuperframe - 1] -= iNoMSCDummyCells;
@@ -572,7 +572,7 @@ _COMPLEX CCellMappingTable::Polar2Cart(const _REAL rAbsolute, const int iPhase) 
 int CCellMappingTable::mod(const int ix, const int iy) const {
   /* Modulus definition for integer numbers */
   if (ix < 0) {
-    return ix % iy + iy;
+    return (ix % iy) + iy;
   } else {
     return ix % iy;
   }

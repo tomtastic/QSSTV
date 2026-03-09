@@ -551,7 +551,7 @@ void txWidget::updateTxTime() {
   }
   seconds = txFunctionsPtr->calcTxTime(false, 0);
   minutes = seconds / 60;
-  seconds = seconds - minutes * 60;
+  seconds = seconds - (minutes * 60);
   if (minutes == 0) {
     ui->sizeDurationLabel->setText(QString("%1 s").arg(seconds));
   } else {

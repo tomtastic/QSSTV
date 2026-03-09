@@ -88,7 +88,7 @@ int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int
 
   {
     Tg = Ts - Tu;
-    Tgh = static_cast<int>(floor(Tg / 2 + 0.5));
+    Tgh = static_cast<int>(floor((Tg / 2) + 0.5));
     Tc = static_cast<int>(pow(2, ceil(log(static_cast<double>(lH)) / log(2.0))));
     Tgs = static_cast<int>(floor(static_cast<float>(Tg) / static_cast<float>(Tu) * static_cast<float>(Tc)));
     Tgsh = static_cast<int>(floor(static_cast<float>(Tg) / static_cast<float>(Tu) / 2.0 * static_cast<float>(Tc)));
@@ -103,7 +103,7 @@ int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int
       free(out1);
     }
 
-    if ((exp_temp = static_cast<float*>(malloc((Tu * 2 + 2) * sizeof(float)))) == nullptr)
+    if ((exp_temp = static_cast<float*>(malloc(((Tu * 2) + 2) * sizeof(float)))) == nullptr)
 
     {
       printf("cannot malloc space for exp_temp in get_ofdm_symbol\n");
@@ -144,7 +144,7 @@ int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int
   {
     /* fixed parameters */
     Tg = Ts - Tu;
-    Tgh = static_cast<int>(floor(Tg / 2 + 0.5));
+    Tgh = static_cast<int>(floor((Tg / 2) + 0.5));
     Tc = static_cast<int>(pow(2, ceil(log(static_cast<double>(lH)) / log(2.0))));
     Tgs = static_cast<int>(floor(static_cast<float>(Tg) / static_cast<float>(Tu) * static_cast<float>(Tc)));
     Tgsh = static_cast<int>(floor(static_cast<float>(Tg) / static_cast<float>(Tu) / 2.0 * static_cast<float>(Tc)));
@@ -179,7 +179,7 @@ int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int
       //          pinput = H;
       for (i = 0; i < lH; i++) {
         s[i].re = H[i * 2];
-        s[i].im = H[i * 2 + 1];
+        s[i].im = H[(i * 2) + 1];
       }
 
       /* zero fill to power of 2 elements */
@@ -194,8 +194,8 @@ int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int
       for (i = 0; i < Tc; i++)
 
       {
-        h_absq[i] = static_cast<float>(S[i].re * S[i].re + S[i].im * S[i].im);
-        h_absq[i + Tc] = static_cast<float>(S[i].re * S[i].re + S[i].im * S[i].im); /* needed 2 times */
+        h_absq[i] = static_cast<float>((S[i].re * S[i].re) + (S[i].im * S[i].im));
+        h_absq[i + Tc] = static_cast<float>((S[i].re * S[i].re) + (S[i].im * S[i].im)); /* needed 2 times */
 
         /*   printf(" %g\n", h_absq[i]); */
       }
@@ -223,7 +223,7 @@ int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int
       /* debugging
    printf("ofdmsync: dummy= %g delta_theta=%g\n", dummy, delta_theta);  */
       delta_theta = static_cast<float>(
-          ((((Tc + Tgsh - static_cast<int>(delta_theta) + static_cast<int>(Tc * 1.5)) % Tc) - Tc / 2) * Tu) /
+          ((((Tc + Tgsh - static_cast<int>(delta_theta) + static_cast<int>(Tc * 1.5)) % Tc) - (Tc / 2)) * Tu) /
           static_cast<float>(Tc));
 
       /* printf("delta_theta rescaled %g\n", delta_theta);   */
@@ -305,18 +305,18 @@ int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int
 
     {
       indexin = i + symbol_position_offset;
-      tmptheta = (freq_offset / Tu) * indexin + phi_freq_correction_last;
+      tmptheta = ((freq_offset / Tu) * indexin) + phi_freq_correction_last;
       exp_temp[i * 2] = cos(tmptheta);
-      exp_temp[i * 2 + 1] = sin(tmptheta);
+      exp_temp[(i * 2) + 1] = sin(tmptheta);
     }
 
     for (i = 0; i < Tu; i++) {
       indexin = i + 1 + delta_time_offset_integer + Tgh + symbol_position_offset;
-      s1[i].re = rs[indexin * 2] * exp_temp[i * 2] - rs[indexin * 2 + 1] * exp_temp[i * 2 + 1];
-      s1[i].im = rs[indexin * 2] * exp_temp[i * 2 + 1] + rs[indexin * 2 + 1] * exp_temp[i * 2];
+      s1[i].re = (rs[indexin * 2] * exp_temp[i * 2]) - (rs[(indexin * 2) + 1] * exp_temp[(i * 2) + 1]);
+      s1[i].im = (rs[indexin * 2] * exp_temp[(i * 2) + 1]) + (rs[(indexin * 2) + 1] * exp_temp[i * 2]);
     }
     phi_freq_correction_last =
-        fmodf(phi_freq_correction_last + static_cast<float>(Ts) / static_cast<float>(Tu) * freq_offset, 2.0 * PI);
+        fmodf(phi_freq_correction_last + (static_cast<float>(Ts) / static_cast<float>(Tu) * freq_offset), 2.0 * PI);
 
     /* Now do fft and output symbol */
     fftwf_execute(p2);
@@ -328,7 +328,7 @@ int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int
       term1 = static_cast<float>((i * 2.0 * PI / static_cast<float>(Tu)) *
                                  (Tgh + time_offset_fractional - symbol_position_offset)); /* Euler */
       exp_temp[i * 2] = cos(term1);
-      exp_temp[i * 2 + 1] = sin(term1);
+      exp_temp[(i * 2) + 1] = sin(term1);
 
       /*    printf(" %g %g \n", exp_temp[i*2], exp_temp[i*2+1]); */
     }
@@ -336,26 +336,27 @@ int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int
     for (i = 0; i < Tu / 2; i++)
 
     {
-      out1[i * 2] = static_cast<float>(((S1[(Tu - 1 - i)]).re) * exp_temp[(i + 1) * 2] +
-                                       ((S1[(Tu - 1 - i)]).im) * exp_temp[(i + 1) * 2 + 1]); /* real = ac+bd */
-      out1[i * 2 + 1] = static_cast<float>(((S1[(Tu - 1 - i)]).im) * exp_temp[(i + 1) * 2] -
-                                           ((S1[(Tu - 1 - i)]).re) * exp_temp[(i + 1) * 2 + 1]); /* imag bc -ad */
+      out1[i * 2] = static_cast<float>((((S1[(Tu - 1 - i)]).re) * exp_temp[(i + 1) * 2]) +
+                                       (((S1[(Tu - 1 - i)]).im) * exp_temp[((i + 1) * 2) + 1])); /* real = ac+bd */
+      out1[(i * 2) + 1] = static_cast<float>((((S1[(Tu - 1 - i)]).im) * exp_temp[(i + 1) * 2]) -
+                                             (((S1[(Tu - 1 - i)]).re) * exp_temp[((i + 1) * 2) + 1])); /* imag bc -ad */
     }
-    for (i = 0; i < (Tu / 2 - 1); i++) {
-      out1[(Tu / 2 + i) * 2] = static_cast<float>(((S1[i]).re) * exp_temp[i * 2] - ((S1[i]).im) * exp_temp[i * 2 + 1]);
-      out1[(Tu / 2 + i) * 2 + 1] =
-          static_cast<float>(((S1[i]).im) * exp_temp[i * 2] + ((S1[i]).re) * exp_temp[i * 2 + 1]);
+    for (i = 0; i < ((Tu / 2) - 1); i++) {
+      out1[((Tu / 2) + i) * 2] =
+          static_cast<float>((((S1[i]).re) * exp_temp[i * 2]) - (((S1[i]).im) * exp_temp[(i * 2) + 1]));
+      out1[(((Tu / 2) + i) * 2) + 1] =
+          static_cast<float>((((S1[i]).im) * exp_temp[i * 2]) + (((S1[i]).re) * exp_temp[(i * 2) + 1]));
     }
     /* Now flip out1 to out */
     for (i = 0; i < Tu / 2; i++) {
-      out[i * 2] = out1[(Tu / 2 - 1 - i) * 2];
-      out[i * 2 + 1] = out1[(Tu / 2 - 1 - i) * 2 + 1];
+      out[i * 2] = out1[((Tu / 2) - 1 - i) * 2];
+      out[(i * 2) + 1] = out1[(((Tu / 2) - 1 - i) * 2) + 1];
     }
 
     /* now put in the rest */
     for (i = Tu / 2; i < Tu; i++) {
       out[i * 2] = out1[i * 2];
-      out[i * 2 + 1] = out1[i * 2 + 1];
+      out[(i * 2) + 1] = out1[(i * 2) + 1];
     }
     Zi[1] = phi_freq_correction_last;
     Zi[2] = delta_time_offset_I;

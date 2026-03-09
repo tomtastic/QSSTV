@@ -85,24 +85,24 @@ void vuMeter::paintBorder() {
   if (horizontal) {
     linGrad.setStart(250, BW);
     linGrad.setFinalStop(250, 2 * BW);
-    linGrad1.setStart(1, SG - 3 * BW);
+    linGrad1.setStart(1, SG - (3 * BW));
     linGrad1.setFinalStop(1, SG - BW);
-    border1 = QRectF(5, 20, w - 2 * BW, h - 5 * BW);
-    rct = QRectF(2 * BW, h / 2 - 10, 20, 25);
+    border1 = QRectF(5, 20, w - (2 * BW), h - (5 * BW));
+    rct = QRectF(2 * BW, (h / 2) - 10, 20, 25);
   } else {
     linGrad.setStart(BW, 1);
     linGrad.setFinalStop(2 * BW, 1);
-    linGrad1.setStart(SG - 3 * BW, 1);
+    linGrad1.setStart(SG - (3 * BW), 1);
     linGrad1.setFinalStop(SG - BW, 1);
-    border1 = QRectF(20, 5, w - 5 * BW, h - 2 * BW);
-    rct = QRectF(w / 2 - 10, h - 4 * BW - 10, 20, 25);
+    border1 = QRectF(20, 5, w - (5 * BW), h - (2 * BW));
+    rct = QRectF((w / 2) - 10, h - (4 * BW) - 10, 20, 25);
   }
   painter.setWindow(0, 0, w, h);
   linGrad.setColorAt(0, light);
   linGrad.setColorAt(1, colBack);
   linGrad.setSpread(QGradient::PadSpread);
   painter.setBrush(linGrad);
-  QRectF border(5, 5, w - 2 * BW, h - 2 * BW);
+  QRectF border(5, 5, w - (2 * BW), h - (2 * BW));
   painter.drawRoundedRect(border, rw, rh);
   linGrad1.setColorAt(0, colBack);
   linGrad1.setColorAt(1, dark);
@@ -132,14 +132,14 @@ void vuMeter::paintBar() {
   if (horizontal) {
     linGrad.setStart(w, h);
     linGrad.setFinalStop(0, h);
-    bar2 = QRectF(OFFSET, 3 * BW, w - OFFSET - 3 * BW, h - 6 * BW);
+    bar2 = QRectF(OFFSET, 3 * BW, w - OFFSET - (3 * BW), h - (6 * BW));
     length = bar2.width();
-    bar = abs(length * (1 - (val - min) / (max - min)));
+    bar = abs(length * (1 - ((val - min) / (max - min))));
     bar1 = QRectF(bar2.x() + bar2.width() - bar, bar2.y(), bar, bar2.height());
   } else {
     linGrad.setStart(w, 0);
     linGrad.setFinalStop(w, h);
-    bar2 = QRectF(3 * BW, 4 * BW, w - 6 * BW, h - 1 * OFFSET);
+    bar2 = QRectF(3 * BW, 4 * BW, w - (6 * BW), h - (1 * OFFSET));
     length = bar2.height();
     bar = abs(length * (val - min) / (max - min));
     bar1 = QRectF(bar2.x(), bar2.y(), bar2.width(), bar2.height() - bar);
@@ -160,11 +160,11 @@ void vuMeter::paintBar() {
   painter.setPen(QPen(Qt::black, 2));
   for (i = 0; i <= divisions; i++) {
     if (horizontal) {
-      painter.drawLine(bar2.left() + bar2.width() * i / divisions, bar2.top(),
-                       bar2.left() + bar2.width() * i / divisions, bar2.bottom());
+      painter.drawLine(bar2.left() + (bar2.width() * i / divisions), bar2.top(),
+                       bar2.left() + (bar2.width() * i / divisions), bar2.bottom());
     } else {
-      painter.drawLine(bar2.left(), bar2.top() + bar2.height() * i / divisions, bar2.right(),
-                       bar2.top() + bar2.height() * i / divisions);
+      painter.drawLine(bar2.left(), bar2.top() + (bar2.height() * i / divisions), bar2.right(),
+                       bar2.top() + (bar2.height() * i / divisions));
     }
   }
 }

@@ -249,8 +249,8 @@ void logFile::maskSelect(QWidget* wPtr) {
   ui.setupUi(&lf);
   ui.maskTableWidget->setRowCount((NUMDEBUGLEVELS + 1) / 2);
   for (i = 0; i < ui.maskTableWidget->rowCount(); i++) {
-    for (j = 0; (j < 2) & (i * 2 + j < NUMDEBUGLEVELS); j++) {
-      cb = new QCheckBox(levelStr[i * 2 + j]);
+    for (j = 0; (j < 2) & ((i * 2) + j < NUMDEBUGLEVELS); j++) {
+      cb = new QCheckBox(levelStr[(i * 2) + j]);
       cb->setChecked(maskBA[i * 2 + j]);
       ui.maskTableWidget->setCellWidget(i, j, cb);
     }
@@ -262,7 +262,7 @@ void logFile::maskSelect(QWidget* wPtr) {
 
   if (lf.exec() == QDialog::Accepted) {
     for (i = 0; i < ui.maskTableWidget->rowCount(); i++) {
-      for (j = 0; (j < 2) & (i * 2 + j < NUMDEBUGLEVELS); j++) {
+      for (j = 0; (j < 2) & ((i * 2) + j < NUMDEBUGLEVELS); j++) {
         cb = static_cast<QCheckBox*>(ui.maskTableWidget->cellWidget(i, j));
         maskBA[i * 2 + j] = cb->isChecked();
       }

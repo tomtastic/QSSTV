@@ -30,7 +30,7 @@ modeGBR::~modeGBR() = default;
 
 
 void modeGBR::setupParams(double clock) {
-  visibleLineLength = (getLineLength(mode, clock) - fp - bp - 2 * blank - syncDuration) / 3.;
+  visibleLineLength = (getLineLength(mode, clock) - fp - bp - (2 * blank) - syncDuration) / 3.;
 }
 
 modeBase::embState modeGBR::rxSetupLine() {
@@ -107,7 +107,7 @@ void modeGBR::calcPixelPositionTable(unsigned int colorLine, bool tx) {
       //       addToLog(QString("calcPixelPosition: startBlue %1").arg(start+rxSampleCounter),DBMODES);
       break;
     case REDLINE:
-      lineStart += (bp + 2. * visibleLineLength + 2. * blank);
+      lineStart += (bp + (2. * visibleLineLength) + (2. * blank));
       //        addToLog(QString("calcPixelPosition: startRed %1").arg(start+rxSampleCounter),DBMODES);
       break;
   }

@@ -72,7 +72,7 @@ static void sycc_to_rgb(int offset, int upb, int y, int cb, int cr, int* out_r, 
   }
   *out_r = r;
 
-  g = y - static_cast<int>(0.344 * static_cast<float>(cb) + 0.714 * static_cast<float>(cr));
+  g = y - static_cast<int>((0.344 * static_cast<float>(cb)) + (0.714 * static_cast<float>(cr)));
   if (g < 0) {
     g = 0;
   } else if (g > upb) {
@@ -797,8 +797,8 @@ void color_esycc_to_rgb(opj_image_t* image) {
       cr -= flip_value;
     }
 
-    val = static_cast<int>(static_cast<float>(y) - static_cast<float>(0.0000368) * static_cast<float>(cb) +
-                           static_cast<float>(1.40199) * static_cast<float>(cr) + static_cast<float>(0.5));
+    val = static_cast<int>(static_cast<float>(y) - (static_cast<float>(0.0000368) * static_cast<float>(cb)) +
+                           (static_cast<float>(1.40199) * static_cast<float>(cr)) + static_cast<float>(0.5));
 
     if (val > max_value) {
       val = max_value;
@@ -807,9 +807,9 @@ void color_esycc_to_rgb(opj_image_t* image) {
     }
     image->comps[0].data[i] = val;
 
-    val = static_cast<int>(static_cast<float>(1.0003) * static_cast<float>(y) -
-                           static_cast<float>(0.344125) * static_cast<float>(cb) -
-                           static_cast<float>(0.7141128) * static_cast<float>(cr) + static_cast<float>(0.5));
+    val = static_cast<int>((static_cast<float>(1.0003) * static_cast<float>(y)) -
+                           (static_cast<float>(0.344125) * static_cast<float>(cb)) -
+                           (static_cast<float>(0.7141128) * static_cast<float>(cr)) + static_cast<float>(0.5));
 
     if (val > max_value) {
       val = max_value;
@@ -818,9 +818,9 @@ void color_esycc_to_rgb(opj_image_t* image) {
     }
     image->comps[1].data[i] = val;
 
-    val = static_cast<int>(static_cast<float>(0.999823) * static_cast<float>(y) +
-                           static_cast<float>(1.77204) * static_cast<float>(cb) -
-                           static_cast<float>(0.000008) * static_cast<float>(cr) + static_cast<float>(0.5));
+    val = static_cast<int>((static_cast<float>(0.999823) * static_cast<float>(y)) +
+                           (static_cast<float>(1.77204) * static_cast<float>(cb)) -
+                           (static_cast<float>(0.000008) * static_cast<float>(cr)) + static_cast<float>(0.5));
 
     if (val > max_value) {
       val = max_value;

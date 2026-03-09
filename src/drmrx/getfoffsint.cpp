@@ -58,8 +58,8 @@ float getfoffsint(float* symbolbuf, int N_symbols, int K_dc, int K_modulo, int T
     for (j = 0; j < K_modulo; j++)
 
     {
-      (S[j][i]).re = symbolbuf[(j + i * K_modulo) * 2];
-      (S[j][i]).im = symbolbuf[(j + i * K_modulo) * 2 + 1];
+      (S[j][i]).re = symbolbuf[(j + (i * K_modulo)) * 2];
+      (S[j][i]).im = symbolbuf[((j + (i * K_modulo)) * 2) + 1];
     }
   }
 
@@ -68,7 +68,7 @@ float getfoffsint(float* symbolbuf, int N_symbols, int K_dc, int K_modulo, int T
 
   {
     dS_sum[i * 2] = 0.0;
-    dS_sum[i * 2 + 1] = 0.0;
+    dS_sum[(i * 2) + 1] = 0.0;
   }
   for (i = 1; i < N_symbols; i++)
 
@@ -76,12 +76,12 @@ float getfoffsint(float* symbolbuf, int N_symbols, int K_dc, int K_modulo, int T
     for (j = 0; j < Tu; j++)
 
     {
-      tmp1 = (S[j][i - 1]).re * (S[j][i]).re + /* real ac + bd */
-             (S[j][i - 1]).im * (S[j][i]).im;
-      tmp2 = (S[j][i - 1]).im * (S[j][i]).re - /* imag. bc - ad */
-             (S[j][i - 1]).re * (S[j][i]).im;
+      tmp1 = ((S[j][i - 1]).re * (S[j][i]).re) + /* real ac + bd */
+             ((S[j][i - 1]).im * (S[j][i]).im);
+      tmp2 = ((S[j][i - 1]).im * (S[j][i]).re) - /* imag. bc - ad */
+             ((S[j][i - 1]).re * (S[j][i]).im);
       dS_sum[j * 2] += cos(atan2(tmp2, tmp1));
-      dS_sum[j * 2 + 1] += sin(atan2(tmp2, tmp1));
+      dS_sum[(j * 2) + 1] += sin(atan2(tmp2, tmp1));
     }
   }
 
@@ -96,7 +96,7 @@ float getfoffsint(float* symbolbuf, int N_symbols, int K_dc, int K_modulo, int T
   for (i = 0; i < Tu; i++)
 
   {
-    abs_dS_sum[i] = sqrt(dS_sum[i * 2] * dS_sum[i * 2] + dS_sum[i * 2 + 1] * dS_sum[i * 2 + 1]);
+    abs_dS_sum[i] = sqrt((dS_sum[i * 2] * dS_sum[i * 2]) + (dS_sum[(i * 2) + 1] * dS_sum[(i * 2) + 1]));
   }
 
   for (i = 0; i < Tu - k_pilot1; i++)
@@ -146,7 +146,7 @@ float getfoffsint(float* symbolbuf, int N_symbols, int K_dc, int K_modulo, int T
     }
   }
 
-  K_dc_offset = ((K_dc_offset - K_dc + Tu / 2 + Tu) % Tu) - Tu / 2;
+  K_dc_offset = ((K_dc_offset - K_dc + (Tu / 2) + Tu) % Tu) - (Tu / 2);
   freq_offset_integer = static_cast<float>(2 * PI * K_dc_offset);
   return (freq_offset_integer);
 }

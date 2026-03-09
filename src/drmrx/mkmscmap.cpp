@@ -86,9 +86,9 @@ int mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
   int MSC_cells_3_superframes[3 * 8877];
 
   //  Tu = Tu_list[robustness_mode];
-  K_min = K_min_K_max_list[0][spectrum_occupancy + robustness_mode * 6];
-  K_max = K_min_K_max_list[1][spectrum_occupancy + robustness_mode * 6];
-  mode_and_occupancy_code = mode_and_occupancy_code_table[robustness_mode * 6 + spectrum_occupancy];
+  K_min = K_min_K_max_list[0][spectrum_occupancy + (robustness_mode * 6)];
+  K_max = K_min_K_max_list[1][spectrum_occupancy + (robustness_mode * 6)];
+  mode_and_occupancy_code = mode_and_occupancy_code_table[(robustness_mode * 6) + spectrum_occupancy];
   if (mode_and_occupancy_code < 0)
 
   {
@@ -105,13 +105,13 @@ int mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
   {
     n = s % y;
     m = s / y;
-    p_min = static_cast<int>(ceil(static_cast<double>((K_min - k0 - x * n) / (x * y))));
-    p_max = (K_max - k0 - x * n) / (x * y);
+    p_min = static_cast<int>(ceil(static_cast<double>((K_min - k0 - (x * n)) / (x * y))));
+    p_max = (K_max - k0 - (x * n)) / (x * y);
     for (p = p_min; p <= p_max; p++)
 
     {
-      k = k0 + x * n + x * y * p;
-      gain_ref_cells_k[rndcnt++] = k + s * K_modulo;
+      k = k0 + (x * n) + (x * y * p);
+      gain_ref_cells_k[rndcnt++] = k + (s * K_modulo);
 
       /* printf("gain_ref_cells_k[%d] = %d\n", rndcnt-1, gain_ref_cells_k[rndcnt-1]);  */
     }
@@ -145,7 +145,7 @@ int mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
     for (i = 0; i < lFAC; i++)
 
     {
-      control_cells_k[i] = FAC_cells_k[i] + K_modulo * symbols_per_frame * m;
+      control_cells_k[i] = FAC_cells_k[i] + (K_modulo * symbols_per_frame * m);
 
       /* printf("control_cells_k[%d] = %d  FAC_cells_k %d K_modulo %d symbols_per_frame %d m %d \n",
          i, control_cells_k[i], FAC_cells_k[i], K_modulo, symbols_per_frame, m);   */
@@ -153,12 +153,12 @@ int mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
     for (j = 3; j < cnt_time_ref_cells + 3; j++)
 
     {
-      pilot_cells_k[j] = K_modulo * symbols_per_frame * m + time_ref_cells_k[j - 3];
+      pilot_cells_k[j] = (K_modulo * symbols_per_frame * m) + time_ref_cells_k[j - 3];
     }
     for (j = 3 + cnt_time_ref_cells; j < 3 + cnt_time_ref_cells + rndcnt; j++)
 
     {
-      pilot_cells_k[j] = K_modulo * symbols_per_frame * m + gain_ref_cells_k[j - 3 - cnt_time_ref_cells];
+      pilot_cells_k[j] = (K_modulo * symbols_per_frame * m) + gain_ref_cells_k[j - 3 - cnt_time_ref_cells];
     }
     for (s = first_symbol; s < symbols_per_frame; s++)
 
@@ -166,13 +166,13 @@ int mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
       for (j = 0; j < 3; j++)
 
       {
-        pilot_cells_k[j] = K_modulo * symbols_per_frame * m + K_modulo * s + freq_ref_cells_k[j];
+        pilot_cells_k[j] = (K_modulo * symbols_per_frame * m) + (K_modulo * s) + freq_ref_cells_k[j];
       }
       for (k = K_min; k <= K_max; k++)
 
       {
         contains = 0;
-        term = k + K_modulo * symbols_per_frame * m + K_modulo * s;
+        term = k + (K_modulo * symbols_per_frame * m) + (K_modulo * s);
         for (j = 0; j < 3 + cnt_time_ref_cells + rndcnt; j++)
 
         {
@@ -199,7 +199,7 @@ int mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
           for (j = 0; j < 1; j++)
 
           {
-            if (term == K_modulo * symbols_per_frame * m + K_modulo * s + unused_carriers_k[j])
+            if (term == (K_modulo * symbols_per_frame * m) + (K_modulo * s) + unused_carriers_k[j])
 
             {
               contains = 1;
@@ -212,7 +212,7 @@ int mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
 
         {
           if (term ==
-              K_modulo * symbols_per_frame * m + K_modulo * s) /* pa0mbo 29-11-2007 was + unused_carriers_k[0] */
+              (K_modulo * symbols_per_frame * m) + (K_modulo * s)) /* pa0mbo 29-11-2007 was + unused_carriers_k[0] */
 
           {
             contains = 1;
@@ -248,13 +248,13 @@ int mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
 
   {
     MSC_cells_3_superframes[cnt_msc_cells_3_superframes++] =
-        K_dc + symbols_per_frame * frames_per_superframe * K_modulo + MSC_cells_k[i];
+        K_dc + (symbols_per_frame * frames_per_superframe * K_modulo) + MSC_cells_k[i];
   }
   for (i = 0; i < N_SFA - N_L; i++)
 
   {
     MSC_cells_3_superframes[cnt_msc_cells_3_superframes++] =
-        K_dc + 2 * symbols_per_frame * frames_per_superframe * K_modulo + MSC_cells_k[i];
+        K_dc + (2 * symbols_per_frame * frames_per_superframe * K_modulo) + MSC_cells_k[i];
   }
 
   /*  for (i=0; i < cnt_msc_cells_3_superframes; i++)
@@ -328,19 +328,19 @@ int mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
       MSC_Demapper[0][i] = ((MSC_cells_3_superframes[N_MUX + Cell_Deinterleaver[i] - 1] + 1) %
                             (2 * symbols_per_frame * frames_per_superframe * K_modulo)) -
                            1;
-      MSC_Demapper[1][i] = ((MSC_cells_3_superframes[2 * N_MUX + Cell_Deinterleaver[i] - 1] + 1) %
+      MSC_Demapper[1][i] = ((MSC_cells_3_superframes[(2 * N_MUX) + Cell_Deinterleaver[i] - 1] + 1) %
                             (2 * symbols_per_frame * frames_per_superframe * K_modulo)) -
                            1;
-      MSC_Demapper[2][i] = ((symbols_per_frame * frames_per_superframe * K_modulo +
+      MSC_Demapper[2][i] = (((symbols_per_frame * frames_per_superframe * K_modulo) +
                              MSC_cells_3_superframes[Cell_Deinterleaver[i] - 1] + 1) %
                             (2 * symbols_per_frame * frames_per_superframe * K_modulo)) -
                            1;
-      MSC_Demapper[3][i] = ((symbols_per_frame * frames_per_superframe * K_modulo +
+      MSC_Demapper[3][i] = (((symbols_per_frame * frames_per_superframe * K_modulo) +
                              MSC_cells_3_superframes[N_MUX + Cell_Deinterleaver[i] - 1] + 1) %
                             (2 * symbols_per_frame * frames_per_superframe * K_modulo)) -
                            1;
-      MSC_Demapper[4][i] = ((symbols_per_frame * frames_per_superframe * K_modulo +
-                             MSC_cells_3_superframes[2 * N_MUX + Cell_Deinterleaver[i] - 1] + 1) %
+      MSC_Demapper[4][i] = (((symbols_per_frame * frames_per_superframe * K_modulo) +
+                             MSC_cells_3_superframes[(2 * N_MUX) + Cell_Deinterleaver[i] - 1] + 1) %
                             (2 * symbols_per_frame * frames_per_superframe * K_modulo)) -
                            1;
     }
@@ -368,16 +368,16 @@ int mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
       /* printf("%d \n", MSC_Demapper[1][i]);  */
       MSC_Demapper[2][i] = (MSC_cells_3_superframes[N_MUX + Cell_Deinterleaver[i]]) %
                            (2 * symbols_per_frame * frames_per_superframe * K_modulo);
-      MSC_Demapper[3][i] = (MSC_cells_3_superframes[2 * N_MUX + Cell_Deinterleaver[i]]) %
+      MSC_Demapper[3][i] = (MSC_cells_3_superframes[(2 * N_MUX) + Cell_Deinterleaver[i]]) %
                            (2 * symbols_per_frame * frames_per_superframe * K_modulo);
       MSC_Demapper[4][i] =
-          (symbols_per_frame * frames_per_superframe * K_modulo + MSC_cells_3_superframes[Cell_Deinterleaver[i]]) %
+          ((symbols_per_frame * frames_per_superframe * K_modulo) + MSC_cells_3_superframes[Cell_Deinterleaver[i]]) %
           (2 * symbols_per_frame * frames_per_superframe * K_modulo);
-      MSC_Demapper[5][i] = (symbols_per_frame * frames_per_superframe * K_modulo +
+      MSC_Demapper[5][i] = ((symbols_per_frame * frames_per_superframe * K_modulo) +
                             MSC_cells_3_superframes[N_MUX + Cell_Deinterleaver[i]]) %
                            (2 * symbols_per_frame * frames_per_superframe * K_modulo);
-      MSC_Demapper[0][i] = (symbols_per_frame * frames_per_superframe * K_modulo +
-                            MSC_cells_3_superframes[2 * N_MUX + Cell_Deinterleaver[i]]) %
+      MSC_Demapper[0][i] = ((symbols_per_frame * frames_per_superframe * K_modulo) +
+                            MSC_cells_3_superframes[(2 * N_MUX) + Cell_Deinterleaver[i]]) %
                            (2 * symbols_per_frame * frames_per_superframe * K_modulo);
     }
   }

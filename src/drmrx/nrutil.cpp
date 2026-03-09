@@ -79,7 +79,7 @@ float** matrix(long nrl, long nrh, long ncl, long nch) {
   m -= nrl;
 
   /* allocate rows and set pointers to them */
-  m[nrl] = static_cast<float*>(malloc(static_cast<size_t>((nrow * ncol + NR_END) * sizeof(float))));
+  m[nrl] = static_cast<float*>(malloc(static_cast<size_t>(((nrow * ncol) + NR_END) * sizeof(float))));
   if (!m[nrl]) {
     nrerror("allocation failure 2 in matrix()");
   }
@@ -105,7 +105,7 @@ double** dmatrix(long nrl, long nrh, long ncl, long nch) {
   m -= nrl;
 
   /* allocate rows and set pointers to them */
-  m[nrl] = static_cast<double*>(malloc(static_cast<size_t>((nrow * ncol + NR_END) * sizeof(double))));
+  m[nrl] = static_cast<double*>(malloc(static_cast<size_t>(((nrow * ncol) + NR_END) * sizeof(double))));
   if (!m[nrl]) {
     nrerror("allocation failure 2 in matrix()");
   }
@@ -135,7 +135,7 @@ int** imatrix(long nrl, long nrh, long ncl, long nch) {
   m -= nrl;
 
   /* allocate rows and set pointers to them */
-  m[nrl] = static_cast<int*>(malloc(static_cast<size_t>((nrow * ncol + NR_END) * sizeof(int))));
+  m[nrl] = static_cast<int*>(malloc(static_cast<size_t>(((nrow * ncol) + NR_END) * sizeof(int))));
   if (!m[nrl]) {
     nrerror("allocation failure 2 in matrix()");
   }
@@ -213,7 +213,7 @@ float*** f3tensor(long nrl, long nrh, long ncl, long nch, long ndl, long ndh)
   t -= nrl;
 
   /* allocate pointers to rows and set pointers to them */
-  t[nrl] = static_cast<float**>(malloc(static_cast<size_t>((nrow * ncol + NR_END) * sizeof(float*))));
+  t[nrl] = static_cast<float**>(malloc(static_cast<size_t>(((nrow * ncol) + NR_END) * sizeof(float*))));
   if (!t[nrl]) {
     nrerror("allocation failure 2 in f3tensor()");
   }
@@ -221,7 +221,7 @@ float*** f3tensor(long nrl, long nrh, long ncl, long nch, long ndl, long ndh)
   t[nrl] -= ncl;
 
   /* allocate rows and set pointers to them */
-  t[nrl][ncl] = static_cast<float*>(malloc(static_cast<size_t>((nrow * ncol * ndep + NR_END) * sizeof(float))));
+  t[nrl][ncl] = static_cast<float*>(malloc(static_cast<size_t>(((nrow * ncol * ndep) + NR_END) * sizeof(float))));
   if (!t[nrl][ncl]) {
     nrerror("allocation failure 3 in f3tensor()");
   }
@@ -232,7 +232,7 @@ float*** f3tensor(long nrl, long nrh, long ncl, long nch, long ndl, long ndh)
   }
   for (i = nrl + 1; i <= nrh; i++) {
     t[i] = t[i - 1] + ncol;
-    t[i][ncl] = t[i - 1][ncl] + ncol * ndep;
+    t[i][ncl] = t[i - 1][ncl] + (ncol * ndep);
     for (j = ncl + 1; j <= nch; j++) {
       t[i][j] = t[i][j - 1] + ndep;
     }

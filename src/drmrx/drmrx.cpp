@@ -43,7 +43,7 @@ void drmRx::run(DSPFLOAT* dataPtr) {
     temp = 0;
   }
   if (avgSNRAvailable) {
-    avgSNR = (1 - 0.05) * avgSNR + 0.05 * temp;
+    avgSNR = ((1 - 0.05) * avgSNR) + (0.05 * temp);
     ce1 = new displayDRMStatEvent(avgSNR);
     ce1->waitFor(&done);
     QApplication::postEvent(dispatcherPtr, ce1);

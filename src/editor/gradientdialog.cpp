@@ -242,10 +242,10 @@ QGradient buildGradient(sgradientParam prm, QRectF f) {
     return g;
   }
   if (prm.type == sgradientParam::LINEAR) {
-    if (fabs(w / 2 * tan(M_PI / 2 - d * M_PI / 180)) <= (w / 2)) {
-      x1 = f.x() + w / 2 - (w / 2 * tan(M_PI / 2 - d * M_PI / 180.));
+    if (fabs(w / 2 * tan(M_PI / 2 - (d * M_PI / 180))) <= (w / 2)) {
+      x1 = f.x() + (w / 2) - (w / 2 * tan(M_PI / 2 - (d * M_PI / 180.)));
       y1 = f.y() + h;
-      x2 = f.x() + w / 2 + (w / 2 * tan(M_PI / 2 - d * M_PI / 180.));
+      x2 = f.x() + (w / 2) + (w / 2 * tan(M_PI / 2 - (d * M_PI / 180.)));
       y2 = f.y();
       if ((prm.direction > 180) && (prm.direction <= 359)) {
         temp = x1;
@@ -257,9 +257,9 @@ QGradient buildGradient(sgradientParam prm, QRectF f) {
       }
     } else {
       x1 = f.x();
-      y1 = f.y() + h / 2 + (h / 2 * tan(d * M_PI / 180.));
+      y1 = f.y() + (h / 2) + (h / 2 * tan(d * M_PI / 180.));
       x2 = f.x() + w;
-      y2 = f.y() + h / 2 - (h / 2 * tan(d * M_PI / 180.));
+      y2 = f.y() + (h / 2) - (h / 2 * tan(d * M_PI / 180.));
       if ((prm.direction > 90) && (prm.direction <= 270)) {
         temp = x1;
         x1 = x2;
@@ -274,11 +274,11 @@ QGradient buildGradient(sgradientParam prm, QRectF f) {
     grSetup(prm, g);
     return g;
   } else if (prm.type == sgradientParam::RADIAL) {
-    QRadialGradient g(QPointF(f.x() + f.width() / 2, f.y() + f.height() / 2), f.width() / 2);
+    QRadialGradient g(QPointF(f.x() + (f.width() / 2), f.y() + (f.height() / 2)), f.width() / 2);
     grSetup(prm, g);
     return g;
   } else {
-    QConicalGradient g(QPointF(f.x() + f.width() / 2, f.y() + f.height() / 2), prm.direction);
+    QConicalGradient g(QPointF(f.x() + (f.width() / 2), f.y() + (f.height() / 2)), prm.direction);
     grSetup(prm, g);
     return g;
   }

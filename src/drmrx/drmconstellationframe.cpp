@@ -36,7 +36,7 @@ void drmConstellationFrame::paintEvent(QPaintEvent* e) {
   for (i = 0; i < lmsc / 2; i++) {
     posx = rint(((ConstellationArray[2 * i] + CSTRANGE) / CSTSPAN) * static_cast<float>(contentsRect().width()));
     posy = contentsRect().height() -
-           rint(((ConstellationArray[2 * i + 1] + CSTRANGE) / CSTSPAN) * static_cast<float>(contentsRect().height()));
+           rint(((ConstellationArray[(2 * i) + 1] + CSTRANGE) / CSTSPAN) * static_cast<float>(contentsRect().height()));
     qpainter.drawEllipse(posx, posy, 2, 2);
   }
   QFrame::paintEvent(e);

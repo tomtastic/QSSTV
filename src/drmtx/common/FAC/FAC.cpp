@@ -147,7 +147,7 @@ void CFACTransmit::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Parameter)
       iLenLabel = iLenLabelTmp;
     }
     /* Set all characters of label string */
-    for (int i = 3 * iframet; i < 3 * iframet + 3; i++) {
+    for (int i = 3 * iframet; i < (3 * iframet) + 3; i++) {
       char cNewChar;
       if (i >= iLenLabel) {
         cNewChar = 0;

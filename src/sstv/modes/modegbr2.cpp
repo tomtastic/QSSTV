@@ -38,7 +38,7 @@ modeGBR2::modeGBR2(esstvMode m, unsigned int len, bool tx, bool narrowMode) : mo
 modeGBR2::~modeGBR2() = default;
 
 void modeGBR2::setupParams(double clock) {
-  visibleLineLength = (getLineLength(mode, clock) - fp - bp - 2 * blank - syncDuration) / 3.;
+  visibleLineLength = (getLineLength(mode, clock) - fp - bp - (2 * blank) - syncDuration) / 3.;
 }
 
 modeBase::embState modeGBR2::rxSetupLine() {
@@ -119,7 +119,7 @@ void modeGBR2::calcPixelPositionTable(unsigned int colorLine, bool tx) {
 
       break;
     case REDLINE:
-      lineStart += 2 * blank + fp + syncDuration + bp + 2. * visibleLineLength;
+      lineStart += (2 * blank) + fp + syncDuration + bp + (2. * visibleLineLength);
       // addToLog(QString("gbr2: redstart=%1").arg(start),DBMODES);
 
       break;
@@ -136,10 +136,10 @@ unsigned long modeGBR2::adjustSyncPosition(unsigned long syncPos0, bool isRetrac
   if (isRetrace) {
     return syncPos0 + SCOTTYCOMPENSATION;
   }
-  if (syncPos0 < static_cast<unsigned long>(fp + 2 * visibleLineLength + 2 * blank + syncDuration / 2)) {
+  if (syncPos0 < static_cast<unsigned long>(fp + (2 * visibleLineLength) + (2 * blank) + (syncDuration / 2))) {
     return syncPos0 + static_cast<unsigned long>(bp + visibleLineLength) + SCOTTYCOMPENSATION;
   } else {
-    return syncPos0 - static_cast<unsigned long>(fp + 2 * visibleLineLength + 2 * blank + syncDuration) +
+    return syncPos0 - static_cast<unsigned long>(fp + (2 * visibleLineLength) + (2 * blank) + syncDuration) +
            SCOTTYCOMPENSATION;
   }
 }
