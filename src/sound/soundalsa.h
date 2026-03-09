@@ -10,18 +10,18 @@ void getCardList(QStringList& alsaInputList, QStringList& alsaOutputList);
 class soundAlsa : public soundBase {
  public:
   soundAlsa();
-  ~soundAlsa();
-  bool init(int samplerate);
-  void prepareCapture();
-  void preparePlayback();
-  int read(int& countAvailable);
-  int write(uint numFrames);
+  ~soundAlsa() override;
+  bool init(int samplerate) override;
+  void prepareCapture() override;
+  void preparePlayback() override;
+  int read(int& countAvailable) override;
+  int write(uint numFrames) override;
 
  protected:
-  void flushCapture();
-  void flushPlayback();
-  void closeDevices();
-  void waitPlaybackEnd();
+  void flushCapture() override;
+  void flushPlayback() override;
+  void closeDevices() override;
+  void waitPlaybackEnd() override;
 
  private:
   bool setupSoundParams(bool isCapture);

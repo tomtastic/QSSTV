@@ -12,7 +12,7 @@ class templateViewer : public QDialog {
 
  public:
   explicit templateViewer(QWidget* parent = nullptr);
-  ~templateViewer();
+  ~templateViewer() override;
   void setImage(QImage* image);
 
  private:

@@ -27,11 +27,11 @@ class soundConfig : public baseConfig {
 
  public:
   explicit soundConfig(QWidget* parent = nullptr);
-  ~soundConfig();
-  void readSettings();
-  void writeSettings();
-  void getParams();
-  void setParams();
+  ~soundConfig() override;
+  void readSettings() override;
+  void writeSettings() override;
+  void getParams() override;
+  void setParams() override;
 
 
  private:

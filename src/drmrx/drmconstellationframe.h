@@ -14,13 +14,13 @@ class drmConstellationFrame : public QFrame {
 
  public:
   explicit drmConstellationFrame(QWidget* parent = nullptr);
-  ~drmConstellationFrame();
+  ~drmConstellationFrame() override;
   void setConstellation(econstellation constellation);
   void clearConstellation();
 
  private:
   Ui::drmConstellationFrame* ui;
-  void paintEvent(QPaintEvent*);
+  void paintEvent(QPaintEvent*) override;
   float ConstellationArray[2 * 2959];
   int lmsc;
 };

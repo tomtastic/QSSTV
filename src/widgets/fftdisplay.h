@@ -18,7 +18,7 @@ class fftDisplay : public QLabel {
 
  public:
   explicit fftDisplay(QWidget* parent = nullptr);
-  ~fftDisplay();
+  ~fftDisplay() override;
   void init(int length, int slices, int isamplingrate);
   void showFFT(double* fftData);
   void setMaxDb(int mb) { fftMax = mb; }
@@ -30,7 +30,7 @@ class fftDisplay : public QLabel {
 
  private:
   void drawMarkers(QPainter* painter, int top, int bot);
-  void paintEvent(QPaintEvent* p);
+  void paintEvent(QPaintEvent* p) override;
   //  void mousePressEvent( QMouseEvent *e );
   int windowSize;
   int fftLength;

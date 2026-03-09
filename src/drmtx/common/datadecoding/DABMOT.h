@@ -35,7 +35,7 @@
 #include "../GlobalDefinitions.h"
 #include "vector.h"
 #include "../util/CRC.h"
-#include <time.h>
+#include <ctime>
 #include <map>
 #include <queue>
 #include <iostream>
@@ -226,9 +226,9 @@ class CBitReassembler : public CReassembler {
   CBitReassembler(const CBitReassembler& r) : CReassembler(r) {}
 
  protected:
-  virtual void copyin(CVector<_BYTE>& vecDataIn, size_t iSegNum, size_t bytes);
-  virtual void cachelast(CVector<_BYTE>& vecDataIn, size_t iSegSize);
-  virtual void copylast();
+  void copyin(CVector<_BYTE>& vecDataIn, size_t iSegNum, size_t bytes) override;
+  void cachelast(CVector<_BYTE>& vecDataIn, size_t iSegSize) override;
+  void copylast() override;
 };
 
 typedef CReassembler CByteReassembler;
@@ -366,7 +366,7 @@ class CMOTObject : public CMOTObjectBase {
     vecbRawData = nO.vecbRawData;
   }
 
-  virtual ~CMOTObject() {}
+  ~CMOTObject() override {}
 
   inline CMOTObject& operator=(const CMOTObject& nO) {
     TransportID = nO.TransportID;
@@ -401,7 +401,7 @@ class CMOTObject : public CMOTObjectBase {
   }
 
 
-  void Reset() {
+  void Reset() override {
     vecbRawData.Init(0);
     bComplete = false;
     bHasHeader = false;

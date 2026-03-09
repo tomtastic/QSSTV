@@ -1,7 +1,7 @@
 #include "fftdisplay.h"
 #include "appglobal.h"
 #include "configparams.h"
-#include "math.h"
+#include <cmath>
 // #include "arraydumper.h"
 #include <QPainter>
 

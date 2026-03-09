@@ -2,7 +2,7 @@
 #include "ui_drmconstellationframe.h"
 #include <QPainter>
 #include "drm.h"
-#include "math.h"
+#include <cmath>
 #include "appdefs.h"
 
 

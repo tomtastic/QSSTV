@@ -25,8 +25,8 @@
  *************************************************************************/
 
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 int mkfacmap(int robustness_mode, int K_dc, int K_modulo, int /*@out@ */* FACmap) {
   int elem_cnt, i;
 

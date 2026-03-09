@@ -12,7 +12,7 @@ class textDisplay : public QDialog {
 
  public:
   explicit textDisplay(QWidget* parent = nullptr);
-  ~textDisplay();
+  ~textDisplay() override;
   void clear();
   void append(const QString& t);
 

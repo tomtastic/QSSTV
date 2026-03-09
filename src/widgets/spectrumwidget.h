@@ -13,7 +13,7 @@ class spectrumWidget : public QFrame {
 
  public:
   spectrumWidget(QWidget* parent = nullptr);
-  ~spectrumWidget();
+  ~spectrumWidget() override;
   void init(int length, int numBlocks, int isamplingrate);
   //  void realFFT(short int *iBuffer);
   //  void realFFT(float *iBuffer);

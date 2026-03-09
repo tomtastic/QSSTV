@@ -31,7 +31,7 @@
 
 #include "Parameter.h"
 #include "soundinterface.h"
-#include <math.h>
+#include <cmath>
 #include "matlib/Matlib.h"
 // #include "IQInputFilter.h"
 #include "util/Modul.h"

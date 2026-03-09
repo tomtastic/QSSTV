@@ -40,13 +40,13 @@
 class modeRGB : public modeBase {
  public:
   modeRGB(esstvMode m, unsigned int len, bool tx, bool narrowMode);
-  ~modeRGB();
+  ~modeRGB() override;
 
  private:
-  embState rxSetupLine();
+  embState rxSetupLine() override;
   void calcPixelPositionTable(unsigned int colorLine, bool tx);
-  void setupParams(double clock);
-  embState txSetupLine();
+  void setupParams(double clock) override;
+  embState txSetupLine() override;
 };
 
 #endif

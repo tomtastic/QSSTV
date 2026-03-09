@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <QApplication>
 #include <unistd.h>
-#include <time.h>
+#include <ctime>
 #include <sys/time.h>
 
 #define FASTCAPTURE

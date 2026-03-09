@@ -14,7 +14,7 @@ class testPatternSelection : public QDialog {
 
  public:
   explicit testPatternSelection(QWidget* parent = nullptr);
-  ~testPatternSelection();
+  ~testPatternSelection() override;
   etpSelect getSelection();
 
  private:

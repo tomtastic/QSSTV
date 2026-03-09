@@ -18,11 +18,11 @@ class cwConfig : public baseConfig {
 
  public:
   explicit cwConfig(QWidget* parent = nullptr);
-  ~cwConfig();
-  void readSettings();
-  void writeSettings();
-  void getParams();
-  void setParams();
+  ~cwConfig() override;
+  void readSettings() override;
+  void writeSettings() override;
+  void getParams() override;
+  void setParams() override;
 
  private:
   Ui::cwConfig* ui;

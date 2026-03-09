@@ -1,7 +1,7 @@
 #ifndef FFTCALC_H
 #define FFTCALC_H
 #include <fftw3.h>
-#include <math.h>
+#include <cmath>
 
 class fftCalc {
  public:

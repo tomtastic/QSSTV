@@ -11,7 +11,7 @@
  * Copyright 1999 Phil Karn, KA9Q
  * May be used under the terms of the GNU public license
  */
-#include <stdio.h>
+#include <cstdio>
 #include "rs.h"
 
 static int KK;

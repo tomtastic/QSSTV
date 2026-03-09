@@ -35,10 +35,10 @@ class V4L2IntegerControl : public V4L2Control {
   V4L2IntegerControl(int fd, const struct v4l2_queryctrl& ctrl, QWidget* parent);
 
  public slots:
-  void setValue(int val);
+  void setValue(int val) override;
 
  public:
-  int getValue();
+  int getValue() override;
 
  private slots:
   void SetValueFromSlider(void);
@@ -58,10 +58,10 @@ class V4L2BooleanControl : public V4L2Control {
   V4L2BooleanControl(int fd, const struct v4l2_queryctrl& ctrl, QWidget* parent);
 
  public slots:
-  void setValue(int val);
+  void setValue(int val) override;
 
  public:
-  int getValue();
+  int getValue() override;
 
  private:
   QCheckBox* cb;
@@ -73,10 +73,10 @@ class V4L2MenuControl : public V4L2Control {
   V4L2MenuControl(int fd, const struct v4l2_queryctrl& ctrl, QWidget* parent);
 
  public slots:
-  void setValue(int val);
+  void setValue(int val) override;
 
  public:
-  int getValue();
+  int getValue() override;
 
  private:
   QComboBox* cb;
@@ -89,15 +89,15 @@ class V4L2MenuControl : public V4L2Control {
 class V4L2ButtonControl : public V4L2Control {
   Q_OBJECT
  public slots:
-  void updateStatus();
-  void resetToDefault();
+  void updateStatus() override;
+  void resetToDefault() override;
 
  public:
   V4L2ButtonControl(int fd, const struct v4l2_queryctrl& ctrl, QWidget* parent);
 
  public slots:
-  void setValue(int) {};
-  int getValue() { return 0; };
+  void setValue(int) override {};
+  int getValue() override { return 0; };
 };
 
 #endif  // V4L2CONTROL_H

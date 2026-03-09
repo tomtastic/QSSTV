@@ -22,7 +22,7 @@
 #include "appglobal.h"
 #include "supportfunctions.h"
 #include "configparams.h"
-#include <math.h>
+#include <cmath>
 
 
 bool autoSlantAdjust;

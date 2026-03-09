@@ -12,7 +12,7 @@ class waterfallForm : public QDialog {
 
  public:
   explicit waterfallForm(QWidget* parent = nullptr);
-  ~waterfallForm();
+  ~waterfallForm() override;
   QString text() { return txt; }
 
  private slots:
@@ -32,7 +32,7 @@ class waterfallForm : public QDialog {
   void writeSettings();
   void getParams();
   void setParams();
-  void accept();
+  void accept() override;
 };
 
 #endif  // WATERFALLFORM_H

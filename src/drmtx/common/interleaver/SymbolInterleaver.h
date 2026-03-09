@@ -47,7 +47,7 @@
 class CSymbInterleaver : public CTransmitterModul<_COMPLEX, _COMPLEX>, public CBlockInterleaver {
  public:
   CSymbInterleaver() {}
-  virtual ~CSymbInterleaver() {}
+  ~CSymbInterleaver() override {}
 
  protected:
   int iN_MUX;

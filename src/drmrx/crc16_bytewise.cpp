@@ -48,8 +48,8 @@
  *   Date Dec 9th 2007
  */
 
-#include <math.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdlib>
 
 
 /******************************************************************************/

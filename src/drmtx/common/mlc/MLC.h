@@ -73,7 +73,7 @@ class CMLC {
 class CMLCEncoder : public CTransmitterModul<_BINARY, _COMPLEX>, public CMLC {
  public:
   CMLCEncoder() {}
-  virtual ~CMLCEncoder() {}
+  ~CMLCEncoder() override {}
 
  protected:
   CConvEncoder ConvEncoder[MC_MAX_NUM_LEVELS];
@@ -96,7 +96,7 @@ class CMLCEncoder : public CTransmitterModul<_BINARY, _COMPLEX>, public CMLC {
 \******************************************************************************/
 class CMSCMLCEncoder : public CMLCEncoder {
  protected:
-  virtual void InitInternal(CParameter& TransmParam) {
+  void InitInternal(CParameter& TransmParam) override {
     /* Set corresponding type */
     eChannelType = CT_MSC;
 
@@ -107,7 +107,7 @@ class CMSCMLCEncoder : public CMLCEncoder {
 
 class CSDCMLCEncoder : public CMLCEncoder {
  protected:
-  virtual void InitInternal(CParameter& TransmParam) {
+  void InitInternal(CParameter& TransmParam) override {
     /* Set corresponding type */
     eChannelType = CT_SDC;
 
@@ -118,7 +118,7 @@ class CSDCMLCEncoder : public CMLCEncoder {
 
 class CFACMLCEncoder : public CMLCEncoder {
  protected:
-  virtual void InitInternal(CParameter& TransmParam) {
+  void InitInternal(CParameter& TransmParam) override {
     /* Set corresponding type */
     eChannelType = CT_FAC;
 

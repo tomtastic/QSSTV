@@ -2,7 +2,7 @@
 #include "appglobal.h"
 #include "logging.h"
 
-#include <string.h>
+#include <cstring>
 
 fftCalc::fftCalc() {
   plan = nullptr;

@@ -28,11 +28,11 @@ class repeaterConfig : public baseConfig {
 
  public:
   explicit repeaterConfig(QWidget* parent = nullptr);
-  ~repeaterConfig();
-  void readSettings();
-  void writeSettings();
-  void getParams();
-  void setParams();
+  ~repeaterConfig() override;
+  void readSettings() override;
+  void writeSettings() override;
+  void getParams() override;
+  void setParams() override;
 
  private slots:
   void slotRp1Browse();

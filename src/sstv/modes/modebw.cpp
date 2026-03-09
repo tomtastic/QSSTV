@@ -29,7 +29,7 @@
  *   your version.                                                         *
  ***************************************************************************/
 #include "modebw.h"
-#include "math.h"
+#include <cmath>
 
 modeBW::modeBW(esstvMode m, unsigned int len, bool tx, bool narrowMode) : modeBase(m, len, tx, narrowMode) {}
 

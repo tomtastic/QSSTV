@@ -2,7 +2,7 @@
 #include "ui_drmstatusframe.h"
 #include "appglobal.h"
 #include "drmrx/demodulator.h"
-#include <math.h>
+#include <cmath>
 #include "configparams.h"
 
 drmStatusFrame::drmStatusFrame(QWidget* parent) : QFrame(parent), ui(new Ui::drmStatusFrame) {

@@ -31,8 +31,8 @@
 #include <condition_variable>
 #include <future>
 
-#include <stdio.h>
-#include <stdarg.h>
+#include <cstdio>
+#include <cstdarg>
 
 #include <AudioToolbox/AudioToolbox.h>
 #include <CoreFoundation/CFString.h>

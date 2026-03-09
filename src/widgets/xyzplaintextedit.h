@@ -8,7 +8,7 @@ class xyzPlainTextEdit : public QPlainTextEdit {
   Q_OBJECT
  public:
   explicit xyzPlainTextEdit(QWidget* parent = nullptr);
-  void focusOutEvent(QFocusEvent* event);
+  void focusOutEvent(QFocusEvent* event) override;
 
  signals:
   void editingFinished();

@@ -29,8 +29,8 @@
 \******************************************************************************/
 
 #include "MOTSlideShow.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "drm.h"
 #include "drmtransmitter.h"
 // #include"supportfunctions.h"

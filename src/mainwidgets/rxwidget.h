@@ -22,7 +22,7 @@ class rxWidget : public QWidget {
 
  public:
   explicit rxWidget(QWidget* parent = nullptr);
-  ~rxWidget();
+  ~rxWidget() override;
   void readSettings();
   void writeSettings();
   void startRX(bool st);

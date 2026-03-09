@@ -22,7 +22,7 @@
 #define VUMETER_H
 
 #include <QtGui>
-#include <math.h>
+#include <cmath>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtWidgets>
 #endif
@@ -41,8 +41,8 @@ class vuMeter : public QWidget {
 
  public:
   vuMeter(QWidget* parent = nullptr);
-  QSize minimumSizeHint() const;
-  QSize sizeHint() const;
+  QSize minimumSizeHint() const override;
+  QSize sizeHint() const override;
   void setHorizontal(bool h) { horizontal = h; }
   void setLabelText(const QString& t);
 
@@ -66,7 +66,7 @@ class vuMeter : public QWidget {
 
 
  protected:
-  void paintEvent(QPaintEvent*);
+  void paintEvent(QPaintEvent*) override;
   void paintBorder();
   void paintBar();
 

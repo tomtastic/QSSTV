@@ -22,11 +22,11 @@ class operatorConfig : public baseConfig {
 
  public:
   explicit operatorConfig(QWidget* parent = nullptr);
-  ~operatorConfig();
-  void readSettings();
-  void writeSettings();
-  void getParams();
-  void setParams();
+  ~operatorConfig() override;
+  void readSettings() override;
+  void writeSettings() override;
+  void getParams() override;
+  void setParams() override;
 
  private:
   Ui::operatorConfig* ui;

@@ -62,7 +62,7 @@ class imageSettings : public QDialog {
 
  public:
   imageSettings(QString cameraDevice, QWidget* parent = nullptr);
-  ~imageSettings();
+  ~imageSettings() override;
 
 
  private:
@@ -75,7 +75,7 @@ class imageSettings : public QDialog {
   QWidget* grid;
   QGridLayout* gridLayout;
   int row;
-  void showEvent(QShowEvent* event);
+  void showEvent(QShowEvent* event) override;
 };
 
 #endif  // IMAGESETTINGS_H

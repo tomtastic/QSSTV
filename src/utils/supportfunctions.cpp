@@ -23,7 +23,7 @@
 #include "appglobal.h"
 #include <QDateTime>
 #include <QDebug>
-#include <stdarg.h>
+#include <cstdarg>
 #include "dirdialog.h"
 
 

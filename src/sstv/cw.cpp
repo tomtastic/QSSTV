@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "cw.h"
-#include <ctype.h>
+#include <cctype>
 #include "appglobal.h"
 #include "configparams.h"
 

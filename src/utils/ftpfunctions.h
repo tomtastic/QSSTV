@@ -13,7 +13,7 @@ class ftpFunctions : public QObject {
   Q_OBJECT
  public:
   ftpFunctions();
-  ~ftpFunctions();
+  ~ftpFunctions() override;
   bool test(QString name, QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory, bool doSetup);
   void uploadFile(QString source, QString destination, bool wait, bool closeWhenDone);
   void uploadData(QByteArray ba, QString destination, bool wait, bool closeWhenDone);

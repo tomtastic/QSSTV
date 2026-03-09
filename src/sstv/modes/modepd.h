@@ -40,15 +40,15 @@
 class modePD : public modeBase {
  public:
   modePD(esstvMode m, unsigned int len, bool tx, bool narrowMode);
-  ~modePD();
+  ~modePD() override;
 
  protected:
-  embState rxSetupLine();
+  embState rxSetupLine() override;
   void calcPixelPositionTable(unsigned int colorLine, bool tx);
-  void setupParams(double clock);
-  void showLine();
-  embState txSetupLine();
-  void getLine();
+  void setupParams(double clock) override;
+  void showLine() override;
+  embState txSetupLine() override;
+  void getLine() override;
 };
 
 #endif

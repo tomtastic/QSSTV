@@ -26,11 +26,11 @@ class hybridConfig : public baseConfig {
 
  public:
   explicit hybridConfig(QWidget* parent = nullptr);
-  ~hybridConfig();
-  void readSettings();
-  void writeSettings();
-  void getParams();
-  void setParams();
+  ~hybridConfig() override;
+  void readSettings() override;
+  void writeSettings() override;
+  void getParams() override;
+  void setParams() override;
  private slots:
   void slotTestHybridPushButton();
 

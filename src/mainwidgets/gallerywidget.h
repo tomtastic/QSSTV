@@ -16,7 +16,7 @@ class galleryWidget : public QWidget {
 
  public:
   explicit galleryWidget(QWidget* parent = nullptr);
-  ~galleryWidget();
+  ~galleryWidget() override;
 
   void init();
   void writeSettings();

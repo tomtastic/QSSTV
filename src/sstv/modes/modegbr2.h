@@ -39,17 +39,17 @@
 class modeGBR2 : public modeBase {
  public:
   modeGBR2(esstvMode m, unsigned int len, bool tx, bool narrowMode);
-  ~modeGBR2();
+  ~modeGBR2() override;
 
  protected:
-  embState rxSetupLine();
+  embState rxSetupLine() override;
   void calcPixelPositionTable(unsigned int colorLine, bool tx);
-  void setupParams(double clock);
-  unsigned long adjustSyncPosition(unsigned long syncPos0, bool isRetrace);
+  void setupParams(double clock) override;
+  unsigned long adjustSyncPosition(unsigned long syncPos0, bool isRetrace) override;
   //  unsigned long retraceAdjust(unsigned long syncPos);
 
   //	int adaptStartPosition(bool vertRetrace);
-  embState txSetupLine();
+  embState txSetupLine() override;
 };
 
 #endif

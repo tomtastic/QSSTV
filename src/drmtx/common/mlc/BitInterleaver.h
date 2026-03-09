@@ -38,7 +38,7 @@
 class CBitInterleaver : public CBlockInterleaver {
  public:
   CBitInterleaver() {}
-  virtual ~CBitInterleaver() {}
+  ~CBitInterleaver() override {}
 
   void Init(int iNewx_in1, int iNewx_in2, int it_0);
   void Interleave(CVector<_DECISION>& InputData);
@@ -55,7 +55,7 @@ class CBitInterleaver : public CBlockInterleaver {
 class CBitDeinterleaver : public CBlockInterleaver {
  public:
   CBitDeinterleaver() {}
-  virtual ~CBitDeinterleaver() {}
+  ~CBitDeinterleaver() override {}
 
   void Init(int iNewx_in1, int iNewx_in2, int it_0);
   void Deinterleave(CVector<CDistance>& vecInput);

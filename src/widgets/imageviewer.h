@@ -50,7 +50,7 @@ class imageViewer : public QLabel {
     EXTVIEW        /*!< extViewer. */
   };
   imageViewer(QWidget* parent = nullptr);
-  ~imageViewer();
+  ~imageViewer() override;
 
 
   void init(thumbType tp);
@@ -105,7 +105,7 @@ class imageViewer : public QLabel {
 
 
  protected:
-  void resizeEvent(QResizeEvent*);
+  void resizeEvent(QResizeEvent*) override;
 
  public slots:
   void slotToTX();
@@ -138,7 +138,7 @@ class imageViewer : public QLabel {
   QByteArray compressedImageData;
 
 
-  void mousePressEvent(QMouseEvent* e);
+  void mousePressEvent(QMouseEvent* e) override;
   bool validImage;
   QString imageFileName;
   QString compressedFilename;

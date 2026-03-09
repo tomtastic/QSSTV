@@ -11,7 +11,7 @@
 #include <QStyleOptionGraphicsItem>
 #include <QString>
 #include <QDebug>
-#include <math.h>
+#include <cmath>
 
 
 QString itemTypeStr[NUMITEMTYPES] = {"Base", "Rectangle", "Ellipse", "Image", "Line", "Text", "Replay", "Border"};

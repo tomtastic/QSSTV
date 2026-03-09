@@ -12,7 +12,7 @@ class scopeOffset : public QDialog {
 
  public:
   explicit scopeOffset(QWidget* parent = nullptr);
-  ~scopeOffset();
+  ~scopeOffset() override;
   void setNumSamples(uint numSamples);
   uint getNumSamples();
   void setOffset(uint offset);

@@ -7,9 +7,9 @@
  *
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 void crc8_c(/*@out@ */ double checksum[], double in[], int N) {
   int i;
   unsigned int b = 0xFF;

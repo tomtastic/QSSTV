@@ -40,16 +40,16 @@
 class modeRobot1 : public modeBase {
  public:
   modeRobot1(esstvMode m, unsigned int len, bool tx, bool narrowMode);
-  ~modeRobot1();
+  ~modeRobot1() override;
 
  private:
-  embState rxSetupLine();
+  embState rxSetupLine() override;
   void calcPixelPositionTable(unsigned int colorLine, bool tx);
   //  unsigned long adjustSyncPosition(unsigned long syncPos0);
-  void setupParams(double clock);
-  void showLine();
-  embState txSetupLine();
-  void getLine();
+  void setupParams(double clock) override;
+  void showLine() override;
+  embState txSetupLine() override;
+  void getLine() override;
 };
 
 #endif

@@ -24,11 +24,11 @@
  *************************************************************************/
 
 #include "appglobal.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <sys/types.h>
-#include <math.h>
-#include <float.h>
+#include <cmath>
+#include <cfloat>
 #include "drmproto.h"
 #include "drmdefs.h"
 #include "drm.h"

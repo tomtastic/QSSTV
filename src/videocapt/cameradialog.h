@@ -59,8 +59,8 @@ class cameraDialog : public QDialog {
 
  public:
   explicit cameraDialog(QWidget* parent = nullptr);
-  ~cameraDialog();
-  int exec();
+  ~cameraDialog() override;
+  int exec() override;
   QImage* getImage();
  private slots:
   void slotSettings();
@@ -77,7 +77,7 @@ class cameraDialog : public QDialog {
   void getCameraInfo(QStringList devList);
   videoCapture* videoCapturePtr;
   bool cameraActive;
-  void timerEvent(QTimerEvent* event);
+  void timerEvent(QTimerEvent* event) override;
   QString pixelFormatStr(int pixelFormat);
   QList<sformats> getFormatList(int fd);
   void setupFormatComboBox(scameraDevice cd);

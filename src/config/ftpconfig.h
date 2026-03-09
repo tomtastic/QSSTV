@@ -33,11 +33,11 @@ class ftpConfig : public baseConfig {
 
  public:
   explicit ftpConfig(QWidget* parent = nullptr);
-  ~ftpConfig();
-  void readSettings();
-  void writeSettings();
-  void getParams();
-  void setParams();
+  ~ftpConfig() override;
+  void readSettings() override;
+  void writeSettings() override;
+  void getParams() override;
+  void setParams() override;
 
  private slots:
   void slotTestFTPPushButton();

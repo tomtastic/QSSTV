@@ -22,7 +22,7 @@ class sstvRx : public QObject {
  public:
   enum eSSTVState { HUNTING, PROCESSING, WAITFORSYNC, SLANTADJUST, RESTART, SYNCLOST, WAIT, END };
   explicit sstvRx(QObject* parent = nullptr);
-  ~sstvRx();
+  ~sstvRx() override;
   void init();
   void setFilters();
   void run(DSPFLOAT* dataPtr, DSPFLOAT* volumePtr);

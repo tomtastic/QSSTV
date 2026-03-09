@@ -31,9 +31,9 @@
  *************************************************************************/
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 
 #define PI (4.0 * atan(1.0))
 struct cmplxnmbr {

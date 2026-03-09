@@ -11,7 +11,7 @@ class drmRx : public QObject {
   Q_OBJECT
  public:
   explicit drmRx(QObject* parent = nullptr);
-  ~drmRx();
+  ~drmRx() override;
   void init();
   void run(DSPFLOAT* dataPtr);
   void eraseImage() {}

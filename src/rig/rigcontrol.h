@@ -49,7 +49,7 @@ class rigControl : public QObject {
   Q_OBJECT
  public:
   rigControl(int radioIndex);
-  ~rigControl();
+  ~rigControl() override;
   bool init();
   bool enabled() { return rigControlEnabled; }
   bool getFrequency(double& frequency);

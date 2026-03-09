@@ -49,7 +49,7 @@ enum ecurve { SCDATA1, SCDATA2, SCDATA3, SCDATA4 };
 class scopeView : public scopePlot {
  public:
   scopeView(QString title);
-  ~scopeView();
+  ~scopeView() override;
   void init();
   void clear();
   void setOffset(uint xoffset);

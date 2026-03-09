@@ -38,9 +38,9 @@ class soundBase : public QThread {
   enum ecaptureState { CPINIT, CPSTARTING, CPRUNNING, CPCALIBRATESTART, CPCALIBRATEWAIT, CPCALIBRATE, CPEND };
 
   explicit soundBase(QObject* parent = nullptr);
-  ~soundBase();
+  ~soundBase() override;
   virtual bool init(int samplerate) = 0;
-  void run();
+  void run() override;
   void idleRX();
   void idleTX();
   void stopSoundThread();

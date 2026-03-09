@@ -34,7 +34,7 @@ class videoCapture : public QObject {
 
  public:
   videoCapture();
-  ~videoCapture();
+  ~videoCapture() override;
 
   void close();
   bool open(QString videoDev);

@@ -40,7 +40,7 @@
 class CConvEncoder : public CChannelCode {
  public:
   CConvEncoder() {}
-  virtual ~CConvEncoder() {}
+  ~CConvEncoder() override {}
 
   int Encode(CVector<_DECISION>& vecInputData, CVector<_DECISION>& vecOutputData);
 

@@ -16,12 +16,12 @@ class rigConfig : public baseConfig {
 
  public:
   explicit rigConfig(QWidget* parent = nullptr);
-  ~rigConfig();
+  ~rigConfig() override;
   void attachRigController(rigControl* rigCtrl);
-  void readSettings();
-  void writeSettings();
-  void getParams();
-  void setParams();
+  void readSettings() override;
+  void writeSettings() override;
+  void getParams() override;
+  void setParams() override;
 
  public slots:
   void slotEnableCAT();

@@ -12,10 +12,10 @@ class configDialog : public QDialog {
 
  public:
   explicit configDialog(QWidget* parent = nullptr);
-  ~configDialog();
+  ~configDialog() override;
   void readSettings();
   void writeSettings();
-  int exec();
+  int exec() override;
   bool soundNeedsRestart;
   bool guiNeedsRestart;
 

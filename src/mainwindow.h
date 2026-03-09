@@ -20,7 +20,7 @@ class mainWindow : public QMainWindow {
 
  public:
   explicit mainWindow(QWidget* parent = nullptr);
-  ~mainWindow();
+  ~mainWindow() override;
   void init();
   void startRunning();
   void setNewFont();
@@ -60,7 +60,7 @@ class mainWindow : public QMainWindow {
 
  private:
   Ui::MainWindow* ui;
-  void closeEvent(QCloseEvent* e);
+  void closeEvent(QCloseEvent* e) override;
   void readSettings();
   void writeSettings();
   void restartSound(bool inStartUp);
@@ -76,7 +76,7 @@ class mainWindow : public QMainWindow {
   QLabel pttText;
   QLabel* pttIcon;
   QLabel* freqDisplay;
-  void timerEvent(QTimerEvent*);
+  void timerEvent(QTimerEvent*) override;
   QStringList modModeList;
   QStringList modPassBandList;
 };

@@ -44,7 +44,7 @@
 #include "GlobalDefinitions.h"
 #include "ofdmcellmapping/CellMappingTable.h"
 #include "matlib/Matlib.h"
-#include <time.h>
+#include <ctime>
 // #include "GPSData.h"
 // #include "ServiceInformation.h"
 #include <set>

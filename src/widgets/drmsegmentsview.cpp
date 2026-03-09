@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QPaintEvent>
 
-#include <math.h>
+#include <cmath>
 
 
 drmSegmentsView::drmSegmentsView(QWidget* parent)

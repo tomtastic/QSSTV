@@ -24,7 +24,7 @@
 #include <QDebug>
 
 
-#include <math.h>
+#include <cmath>
 
 #define VOLINTEGRATOR 0.5
 

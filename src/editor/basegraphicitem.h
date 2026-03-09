@@ -46,21 +46,21 @@ class graphItemBase : public QAbstractGraphicsShapeItem {
  public:
   enum egraphType { BASE = QGraphicsItem::UserType + 1, RECTANGLE, ELLIPSE, IMAGE, LINE, TEXT, REPLAY, SBORDER };
   graphItemBase(QMenu* cntxtMenu);
-  ~graphItemBase();
+  ~graphItemBase() override;
   virtual void drawItem(QPainter* painter) = 0;
-  virtual QPainterPath shape() const;
-  virtual QRectF boundingRect() const;
-  void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr);
+  QPainterPath shape() const override;
+  QRectF boundingRect() const override;
+  void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
   void drawBorder(QPainter* painter);
   QPainterPath qt_graphicsItem_shapeFromPath(const QPainterPath& path, const QPen& pen) const;
 
-  void mousePressEvent(QGraphicsSceneMouseEvent* event);
-  void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-  void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-  void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
-  void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
-  void hoverMoveEvent(QGraphicsSceneHoverEvent* event);
-  void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
+  void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+  void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
+  void hoverEnterEvent(QGraphicsSceneHoverEvent* event) override;
+  void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+  void hoverMoveEvent(QGraphicsSceneHoverEvent* event) override;
+  void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
   bool mousePosOnHandles(QPointF pos);
   void load(QDataStream& str);
   void save(QDataStream& str);
@@ -94,7 +94,7 @@ class graphItemBase : public QAbstractGraphicsShapeItem {
     param.rct = QRectF(x, y, width, height);
     param.modified = true;
   }
-  int type() const { return param.type; }
+  int type() const override { return param.type; }
   sitemParam* getParamPtr() { return &param; }
   bool markedForDeletion;
 
@@ -114,7 +114,7 @@ class graphItemBase : public QAbstractGraphicsShapeItem {
   ResizeCorners m_ResizeCorner;
 
   sitemParam param;
-  void contextMenuEvent(QGraphicsSceneContextMenuEvent* event);
+  void contextMenuEvent(QGraphicsSceneContextMenuEvent* event) override;
 
  private:
   void setTransform();

@@ -15,16 +15,16 @@
 class soundPulse : public soundBase {
  public:
   soundPulse();
-  ~soundPulse();
-  bool init(int samplerate);
-  int read(int& countAvailable);
-  int write(uint numFrames);
+  ~soundPulse() override;
+  bool init(int samplerate) override;
+  int read(int& countAvailable) override;
+  int write(uint numFrames) override;
 
  protected:
-  void flushCapture();
-  void flushPlayback();
-  void closeDevices();
-  void waitPlaybackEnd();
+  void flushCapture() override;
+  void flushPlayback() override;
+  void closeDevices() override;
+  void waitPlaybackEnd() override;
 
  private:
   struct stream_data {

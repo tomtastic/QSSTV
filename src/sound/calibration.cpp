@@ -24,7 +24,7 @@
 #include "appglobal.h"
 #include "soundbase.h"
 #include "dispatcher.h"
-#include <math.h>
+#include <cmath>
 
 #include "QMessageBox"
 #include <QPushButton>

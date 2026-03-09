@@ -21,7 +21,7 @@
 
 #ifndef BUFFERMANAG_H
 #define BUFFERMANAG_H
-#include <string.h>
+#include <cstring>
 
 #include <QMutex>
 #include <QDebug>

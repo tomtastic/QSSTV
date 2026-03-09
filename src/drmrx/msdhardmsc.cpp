@@ -13,11 +13,11 @@
  */
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <math.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cerrno>
+#include <cmath>
+#include <cstring>
 
 /* #include "viterbi_decode.h" */
 #include "msd_hard_sdc.h"

@@ -42,7 +42,7 @@ class editor : public QMainWindow {
 
  public:
   editor(QWidget* parent = nullptr);
-  ~editor();
+  ~editor() override;
   bool openFile(QString fn);
   void readSettings();
   bool setImage(QImage* im);
@@ -58,7 +58,7 @@ class editor : public QMainWindow {
 
  private:
   editorView* ev;
-  void closeEvent(QCloseEvent*);
+  void closeEvent(QCloseEvent*) override;
   void initActions();
   void initMenubar();
 

@@ -13,12 +13,12 @@ class drmPSDFrame : public QFrame {
 
  public:
   explicit drmPSDFrame(QWidget* parent = nullptr);
-  ~drmPSDFrame();
+  ~drmPSDFrame() override;
   void setPSD();
 
  private:
   Ui::drmPSDFrame* ui;
-  void paintEvent(QPaintEvent*);
+  void paintEvent(QPaintEvent*) override;
   float psdArray[PSDSPAN];
   float psdCArray[PSDSPAN / 4];
 };

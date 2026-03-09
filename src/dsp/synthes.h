@@ -21,7 +21,7 @@
 #ifndef SYNTHES_H
 #define SYNTHES_H
 
-#include <math.h>
+#include <cmath>
 #include "filterparam.h"
 #include "waterfalltext.h"
 

@@ -32,9 +32,9 @@
  *************************************************************************/
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 #include <sys/types.h>
 void rfft(float*, int, int);
 void psdmean(float* input, float* psd, int lblock, int nblocks) {

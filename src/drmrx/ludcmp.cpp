@@ -1,4 +1,4 @@
-#include <math.h>
+#include <cmath>
 #define NRANSI
 #include "nrutil.h"
 #define TINY 1.0e-20;

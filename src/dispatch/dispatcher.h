@@ -22,14 +22,14 @@ class dispatcher : public QObject {
 
  public:
   dispatcher();
-  ~dispatcher();
+  ~dispatcher() override;
   void init();
   void idleAll();
   void startRX();
   void startTX(txFunctions::etxState state);
   void readSettings();
   void writeSettings();
-  void customEvent(QEvent* e);
+  void customEvent(QEvent* e) override;
   void startDRMFIXTx(QByteArray ba);
   void startDRMTxBinary();
   //  void startDRMHybridTx(QString fn);
@@ -53,7 +53,7 @@ class dispatcher : public QObject {
  private:
   void saveRxSSTVImage(esstvMode mode);
   bool inList(QList<QUrlInfo> lst, QString fn);
-  void timerEvent(QTimerEvent* event);
+  void timerEvent(QTimerEvent* event) override;
   bool editorActive;
   editor* ed;
   imageViewer* iv;

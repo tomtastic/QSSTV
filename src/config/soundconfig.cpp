@@ -32,7 +32,7 @@
 
 #include <QSettings>
 
-#include <math.h>
+#include <cmath>
 
 int samplingrate;
 double rxClock;

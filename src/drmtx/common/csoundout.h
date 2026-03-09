@@ -6,9 +6,9 @@
 class CSoundOut : public CSoundOutInterface {
  public:
   CSoundOut();
-  ~CSoundOut();
+  ~CSoundOut() override;
   //  void Init(int iNewBufferSize, bool bNewBlocking);
-  bool Write(CVector<_SAMPLE>& psData);
+  bool Write(CVector<_SAMPLE>& psData) override;
 };
 
 #endif  // CSOUNDOUT_H

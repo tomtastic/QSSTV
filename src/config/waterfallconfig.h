@@ -25,11 +25,11 @@ class waterfallConfig : public baseConfig {
 
  public:
   explicit waterfallConfig(QWidget* parent = nullptr);
-  ~waterfallConfig();
-  void readSettings();
-  void writeSettings();
-  void getParams();
-  void setParams();
+  ~waterfallConfig() override;
+  void readSettings() override;
+  void writeSettings() override;
+  void getParams() override;
+  void setParams() override;
 
  public slots:
   void slotFontChanged();

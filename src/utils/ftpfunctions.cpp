@@ -9,7 +9,7 @@
 #include <QDebug>
 #include <QTemporaryFile>
 #include <QMessageBox>
-#include <errno.h>
+#include <cerrno>
 
 
 ftpFunctions::ftpFunctions() {

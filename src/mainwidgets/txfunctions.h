@@ -43,9 +43,9 @@ class txFunctions : public QThread {
 
   };
   txFunctions(QObject* parent);
-  ~txFunctions();
+  ~txFunctions() override;
   void init();
-  void run();
+  void run() override;
   void stopThread();
   void startTX(etxState state);
   void prepareTX(etxState state);

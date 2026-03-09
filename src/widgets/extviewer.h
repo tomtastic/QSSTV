@@ -13,7 +13,7 @@ class extViewer : public QDialog {
 
  public:
   explicit extViewer(QWidget* parent = nullptr);
-  ~extViewer();
+  ~extViewer() override;
   void setup(const QString& fn);
 
  private:

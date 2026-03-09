@@ -7,7 +7,7 @@
 #include "supportfunctions.h"
 #include "drm.h"
 
-#include "math.h"
+#include <cmath>
 
 #include <QPainter>
 #include <QDebug>

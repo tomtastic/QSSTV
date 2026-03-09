@@ -56,7 +56,7 @@ class editorScene : public QGraphicsScene {
   };
   Q_DECLARE_FLAGS(changeFlags, doChange);
   editorScene(QGraphicsView* parent = nullptr);
-  ~editorScene();
+  ~editorScene() override;
   QColor fillColor;
   QColor lineColor;
   QGradient gradient;
@@ -115,9 +115,9 @@ class editorScene : public QGraphicsScene {
   void colorSelected(const QPointF& p);
 
  protected:
-  void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent);
-  void mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent);
-  void mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent);
+  void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
+  void mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
 
 
  private:

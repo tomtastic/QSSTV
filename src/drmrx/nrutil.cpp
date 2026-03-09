@@ -1,8 +1,8 @@
 #if defined(__STDC__) || defined(ANSI) || defined(NRANSI) /* ANSI */
 
-#include <stdio.h>
-#include <stddef.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstddef>
+#include <cstdlib>
 #define NR_END 1
 #define FREE_ARG char*
 

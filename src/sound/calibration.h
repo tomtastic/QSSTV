@@ -15,8 +15,8 @@ class calibration : public QDialog {
 
  public:
   explicit calibration(QWidget* parent = nullptr);
-  ~calibration();
-  int exec();
+  ~calibration() override;
+  int exec() override;
   /**
    ** @brief get calibrated receive clock
    *

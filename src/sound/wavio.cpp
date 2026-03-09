@@ -27,7 +27,7 @@
 #include <qfiledialog.h>
 #include "dispatcher.h"
 
-#include <errno.h>
+#include <cerrno>
 
 /**
   constructor: creates a waveIO instance

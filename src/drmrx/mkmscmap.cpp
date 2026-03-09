@@ -28,10 +28,10 @@
  *************************************************************************/
 
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <sys/types.h>
-#include <math.h>
+#include <cmath>
 #include "drmdefs.h"
 #include "structtemplates.h"
 #include "drmproto.h"

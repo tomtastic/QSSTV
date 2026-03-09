@@ -9,7 +9,7 @@ class drmSegmentsView : public QLabel {
 
  public:
   explicit drmSegmentsView(QWidget* parent = nullptr);
-  ~drmSegmentsView();
+  ~drmSegmentsView() override;
   void setColorFail(QColor color);
   void setColorOK(QColor color);
   void setMaxBlocks(int mb) {
@@ -21,7 +21,7 @@ class drmSegmentsView : public QLabel {
   void setBlocks(QList<short unsigned int> blkList);
 
  protected:
-  void paintEvent(QPaintEvent* e);
+  void paintEvent(QPaintEvent* e) override;
 
  private:
   QColor colFail;

@@ -22,7 +22,7 @@
 #define MODEBASE_H
 #include "../sstvparam.h"
 #include "imageviewer.h"
-#include <math.h>
+#include <cmath>
 
 #define MODESTATESCALER 10
 

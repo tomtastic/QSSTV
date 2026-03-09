@@ -39,7 +39,7 @@ class scopePlot : public QMainWindow {
   Q_OBJECT
  public:
   scopePlot(QString title, QWidget* parent = nullptr);
-  ~scopePlot();
+  ~scopePlot() override;
   void setXScaleMultiplier(double mul);
   void setAlternativeScaleMultiplier(double mul);
   void setOffset(unsigned int offset) { xOffset = offset; }

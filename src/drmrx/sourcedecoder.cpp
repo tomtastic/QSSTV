@@ -37,8 +37,8 @@
 #include <QApplication>
 #include <QFileInfo>
 #include <QFile>
-#include <math.h>
-#include <float.h>
+#include <cmath>
+#include <cfloat>
 
 sourceDecoder::sourceDecoder(QObject* parent) : QObject(parent) {
   transportBlockPtrList.clear();

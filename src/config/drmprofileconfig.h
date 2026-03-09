@@ -28,11 +28,11 @@ class drmProfileConfig : public baseConfig {
 
  public:
   explicit drmProfileConfig(QWidget* parent = nullptr);
-  ~drmProfileConfig();
-  void readSettings();
-  void writeSettings();
-  void getParams();
-  void setParams();
+  ~drmProfileConfig() override;
+  void readSettings() override;
+  void writeSettings() override;
+  void getParams() override;
+  void setParams() override;
   bool getDRMParams(int idx, drmTxParams& d);
   bool getName(int idx, QString& n);
 

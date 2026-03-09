@@ -21,12 +21,12 @@ class ftpThread : public QObject {
   Q_OBJECT
  public:
   explicit ftpThread(QString id);
-  ~ftpThread();
+  ~ftpThread() override;
 
   void setHostParams(QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory);
  public slots:
   //  void slotStart();
-  void customEvent(QEvent* ev);
+  void customEvent(QEvent* ev) override;
   QList<QUrlInfo> getList() { return listingResults; }
   void disconnectFtp();
 

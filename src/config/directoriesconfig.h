@@ -23,11 +23,11 @@ class directoriesConfig : public baseConfig {
 
  public:
   explicit directoriesConfig(QWidget* parent = nullptr);
-  ~directoriesConfig();
-  void readSettings();
-  void writeSettings();
-  void getParams();
-  void setParams();
+  ~directoriesConfig() override;
+  void readSettings() override;
+  void writeSettings() override;
+  void getParams() override;
+  void setParams() override;
 
  private slots:
   void slotBrowseRxSSTVImagesPath();

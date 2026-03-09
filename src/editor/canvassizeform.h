@@ -12,7 +12,7 @@ class canvasSizeForm : public QDialog {
 
  public:
   explicit canvasSizeForm(QWidget* parent = nullptr);
-  ~canvasSizeForm();
+  ~canvasSizeForm() override;
   QRect getSize();
   void setSize(int x, int y);
 

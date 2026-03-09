@@ -32,7 +32,7 @@ class txWidget : public QWidget {
 
  public:
   explicit txWidget(QWidget* parent = nullptr);
-  ~txWidget();
+  ~txWidget() override;
   void init();
   //  void startTX(bool st, bool check=true);
   void prepareTx();

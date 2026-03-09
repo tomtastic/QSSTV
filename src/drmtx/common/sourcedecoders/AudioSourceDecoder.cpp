@@ -30,7 +30,7 @@
 
 #include "AudioSourceDecoder.h"
 #include <iostream>
-#include <time.h>
+#include <ctime>
 #define AUD_DEC_TRANSFROM_LENGTH 960
 
 /******************************************************************************\

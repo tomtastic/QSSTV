@@ -30,7 +30,7 @@
  *    More details can be found in the accompanying file COPYING
  *************************************************************************/
 
-#include <stdio.h>
+#include <cstdio>
 void drmfilter1c(float* sigin, float* y, float* coef, int dataLen, int coefLen) {
   int i, j;
 

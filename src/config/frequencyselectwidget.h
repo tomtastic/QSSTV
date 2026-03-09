@@ -20,11 +20,11 @@ class frequencySelectWidget : public baseConfig {
 
  public:
   explicit frequencySelectWidget(QWidget* parent = nullptr);
-  ~frequencySelectWidget();
-  void readSettings();
-  void writeSettings();
-  void getParams();
-  void setParams();
+  ~frequencySelectWidget() override;
+  void readSettings() override;
+  void writeSettings() override;
+  void getParams() override;
+  void setParams() override;
 
  private slots:
   void slotFreqAdd();

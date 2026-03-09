@@ -1,8 +1,8 @@
 #include "demodulator.h"
 #include "appglobal.h"
 #include "drm.h"
-#include <math.h>
-#include <float.h>
+#include <cmath>
+#include <cfloat>
 #include "nrutil.h"
 #include "supportfunctions.h"
 

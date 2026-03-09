@@ -24,11 +24,11 @@ class guiConfig : public baseConfig {
 
  public:
   explicit guiConfig(QWidget* parent = nullptr);
-  ~guiConfig();
-  void readSettings();
-  void writeSettings();
-  void getParams();
-  void setParams();
+  ~guiConfig() override;
+  void readSettings() override;
+  void writeSettings() override;
+  void getParams() override;
+  void setParams() override;
   bool backGroundColorChanged;
  private slots:
   void slotBGColorSelect();

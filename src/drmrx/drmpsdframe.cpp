@@ -2,7 +2,7 @@
 #include "ui_drmpsdframe.h"
 #include <QPainter>
 #include "drm.h"
-#include "math.h"
+#include <cmath>
 
 #define PSDRANGE 70.
 #define PSDLOW 0.

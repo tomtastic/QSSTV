@@ -30,7 +30,7 @@ class drmTx : public QObject {
   Q_OBJECT
  public:
   explicit drmTx(QObject* parent = nullptr);
-  ~drmTx();
+  ~drmTx() override;
   void init();
   void start();
   void forgetTxFileName();

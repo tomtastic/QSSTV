@@ -32,7 +32,7 @@
 #include "dispatcher.h"
 #include "cw.h"
 #include <QApplication>
-#include <assert.h>
+#include <cassert>
 #include "txwidget.h"
 #include "soundbase.h"
 #include "waterfalltext.h"

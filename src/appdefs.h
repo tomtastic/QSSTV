@@ -1,6 +1,6 @@
 #ifndef APPDEFS_H
 #define APPDEFS_H
-#include <stdint.h>
+#include <cstdint>
 #include <complex>
 using namespace std; /* Because of the library: "complex" */
 

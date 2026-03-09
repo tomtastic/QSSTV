@@ -70,8 +70,8 @@
 
 /******************************************************************************/
 
-#include <stdlib.h>
-#include <errno.h>
+#include <cstdlib>
+#include <cerrno>
 #include "viterbi_decode.h"
 int viterbi_decode(float* llr, int N, int N_PartA, signed char* puncturing1, signed char* puncturing2,
                    signed char* puncturing3, char* infoout, char* cwout, int bitpos, int* Deinterleaver, int L,

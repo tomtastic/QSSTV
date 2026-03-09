@@ -66,8 +66,8 @@ class fskIdDecoder : public fskDecoder {
  public:
   enum efskState { FSKINIT, WAITSTART1500, WAITEND1500, WAITSTART1900, WAITEND1900, WAITSTART2100, WAITEND2100, GETID };
   fskIdDecoder();
-  void extract(unsigned int syncSampleCtr, bool narrow);
-  void reset();
+  void extract(unsigned int syncSampleCtr, bool narrow) override;
+  void reset() override;
   QString getFSKId();
 
  signals:
@@ -102,10 +102,10 @@ class visDecoder : public fskDecoder {
     GETCODE
   };
   visDecoder();
-  void extract(unsigned int syncSampleCtr, bool narrow);
+  void extract(unsigned int syncSampleCtr, bool narrow) override;
   void extractNarrow();
   void extractWide();
-  void reset();
+  void reset() override;
   uint getCode();
   esstvMode mode;
  signals:

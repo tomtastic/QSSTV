@@ -112,11 +112,11 @@
  *  changed memory alignment of lastiter and malloc to prevent IRIX problem
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <math.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cerrno>
+#include <cmath>
+#include <cstring>
 #include "viterbi_decode.h"
 #include "msd_hard.h"
 

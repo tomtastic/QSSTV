@@ -19,7 +19,7 @@ class markerWidget : public QLabel {
 
  public slots:
  private:
-  void paintEvent(QPaintEvent* p);
+  void paintEvent(QPaintEvent* p) override;
   int marker1;
   int marker2;
   int marker3;

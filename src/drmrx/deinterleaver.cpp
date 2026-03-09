@@ -27,9 +27,9 @@
  *************************************************************************/
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 int* deinterleaver(int xinA, int tA, int xinB, int tB) {
   int* deinterl;
   int i;

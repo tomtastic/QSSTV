@@ -28,7 +28,7 @@
 
 #include "DataIO.h"
 #include <iomanip>
-#include <time.h>
+#include <ctime>
 
 
 /******************************************************************************\

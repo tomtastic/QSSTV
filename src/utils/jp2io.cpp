@@ -3,8 +3,8 @@
 #include "appglobal.h"
 #include "loggingparams.h"
 
-#include <errno.h>
-#include <string.h>
+#include <cerrno>
+#include <cstring>
 
 #include <QFile>
 #include <QDir>

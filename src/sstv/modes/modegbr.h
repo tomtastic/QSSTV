@@ -29,13 +29,13 @@
 class modeGBR : public modeBase {
  public:
   modeGBR(esstvMode m, unsigned int len, bool tx, bool narrowMode);
-  ~modeGBR();
+  ~modeGBR() override;
 
  protected:
-  embState rxSetupLine();
+  embState rxSetupLine() override;
   void calcPixelPositionTable(unsigned int colorLine, bool tx);
-  void setupParams(double clock);
-  embState txSetupLine();
+  void setupParams(double clock) override;
+  embState txSetupLine() override;
 };
 
 

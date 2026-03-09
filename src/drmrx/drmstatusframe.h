@@ -16,7 +16,7 @@ class drmStatusFrame : public QFrame {
 
  public:
   explicit drmStatusFrame(QWidget* parent = nullptr);
-  ~drmStatusFrame();
+  ~drmStatusFrame() override;
   void init();
   void setStatus();
 

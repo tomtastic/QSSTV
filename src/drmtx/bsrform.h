@@ -16,7 +16,7 @@ class bsrForm : public QDialog {
  public:
   enum eResult { CANCEL, EASYPAL, COMPAT };
   explicit bsrForm(QWidget* parent = nullptr);
-  ~bsrForm();
+  ~bsrForm() override;
   void init();
   QByteArray* getBA(bool compat);
   bool hasBSR();

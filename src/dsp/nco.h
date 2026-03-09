@@ -20,7 +20,7 @@
  ***************************************************************************/
 #ifndef NCO_H
 #define NCO_H
-#include <math.h>
+#include <cmath>
 // #include "appglobal.h"
 #include "appdefs.h"
 

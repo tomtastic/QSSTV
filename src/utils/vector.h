@@ -33,8 +33,8 @@
 #include "appdefs.h"
 using namespace std; /* Because of the library: "complex" */
 #include <string>
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 #include <vector>
 
 
