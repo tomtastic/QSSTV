@@ -19,8 +19,8 @@ if [ ! -f "build/compile_commands.json" ]; then
     exit 1
 fi
 
-# Get list of staged C++ files
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(cpp|cc|cxx|c\+\+|h|hpp)$' || true)
+# Get list of staged C++ files (excluding xmlrpc third-party code)
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(cpp|cc|cxx|c\+\+|h|hpp)$' | grep -v "/xmlrpc/" || true)
 
 if [ -z "$STAGED_FILES" ]; then
     echo -e "${GREEN}No C++ files to check${NC}"

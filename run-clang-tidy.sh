@@ -54,8 +54,8 @@ if [ -z "$FIX_FLAG" ]; then
     echo "Use --fix to automatically apply fixes"
 fi
 
-# Find all C++ source files
-FILES=$(find src -name "*.cpp" -o -name "*.cc" -o -name "*.cxx")
+# Find all C++ source and header files (excluding xmlrpc third-party code)
+FILES=$(find src -name "*.cpp" -o -name "*.h" -o -name "*.hpp" -o -name "*.cc" -o -name "*.cxx" | grep -v "/xmlrpc/")
 
 # Run clang-tidy on each file
 TOTAL=0

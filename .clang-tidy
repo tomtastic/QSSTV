@@ -32,8 +32,8 @@ WarningsAsErrors: >
   modernize-use-nullptr
 
 # Header filter - ONLY check our own code in src/
-# This excludes Qt, system headers, and third-party libraries
-HeaderFilterRegex: '^.*/(src|include)/.*\.(h|hpp)$'
+# This excludes Qt, system headers, third-party libraries, and xmlrpc (third-party)
+HeaderFilterRegex: '^.*/(src|include)/(?!xmlrpc).*\.(h|hpp)$'
 
 # System headers to ignore (suppress warnings from these paths)
 SystemHeaders: false
