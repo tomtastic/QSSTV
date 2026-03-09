@@ -64,17 +64,26 @@ for FILE in $FILES; do
     TOTAL=$((TOTAL + 1))
     echo -e "${YELLOW}[$TOTAL] Checking $FILE...${NC}"
     
-    OUTPUT=$($CLANG_TIDY "$FILE" -p build $FIX_FLAG 2>&1 || true)
+    OUTPUT=$($CLANG_TIDY "$FILE" -p build $FIX_FLAG --system-headers=false 2>&1 || true)
+    
+    # Filter out warnings from system headers and third-party libraries
+    FILTERED=$(echo "$OUTPUT" | grep -v "/usr/local/" | \
+                                grep -v "/usr/include/" | \
+                                grep -v "/Library/Frameworks/" | \
+                                grep -v "Qt[A-Z]" | \
+                                grep -v "warning:.*generated" || true)
     
     if [ "$ERRORS_ONLY" = true ]; then
         # Show only critical errors
-        if echo "$OUTPUT" | grep -q "error:"; then
-            echo "$OUTPUT" | grep "error:"
+        if echo "$FILTERED" | grep -q "error:"; then
+            echo "$FILTERED" | grep "error:"
             ERRORS=$((ERRORS + 1))
         fi
     else
-        # Show all output except Qt and system warnings
-        echo "$OUTPUT" | grep -v "warning.*Qt" | grep -v "warning.*/usr/local" || true
+        # Show filtered output
+        if [ -n "$FILTERED" ]; then
+            echo "$FILTERED"
+        fi
     fi
 done
 

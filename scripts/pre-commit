@@ -41,11 +41,20 @@ for FILE in $STAGED_FILES; do
         echo "Checking $FILE..."
         
         # Run clang-tidy and capture critical errors only
-        OUTPUT=$(clang-tidy "$FILE" -p build --warnings-as-errors='bugprone-use-after-move,bugprone-dangling-handle,cert-err34-c,modernize-use-nullptr' 2>&1 || true)
+        OUTPUT=$(clang-tidy "$FILE" -p build --system-headers=false \
+                 --warnings-as-errors='bugprone-use-after-move,bugprone-dangling-handle,cert-err34-c,modernize-use-nullptr' \
+                 2>&1 || true)
         
-        # Check for actual errors (not just warnings)
-        if echo "$OUTPUT" | grep -q "error:"; then
-            echo "$OUTPUT"
+        # Filter out system headers and third-party libraries
+        FILTERED=$(echo "$OUTPUT" | grep -v "/usr/local/" | \
+                                    grep -v "/usr/include/" | \
+                                    grep -v "/Library/Frameworks/" | \
+                                    grep -v "Qt[A-Z]" | \
+                                    grep -v "warning:.*generated" || true)
+        
+        # Check for actual errors (not just warnings) in our code
+        if echo "$FILTERED" | grep -q "error:"; then
+            echo "$FILTERED"
             ERRORS=$((ERRORS + 1))
         fi
     fi

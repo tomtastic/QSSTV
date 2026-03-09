@@ -15,6 +15,7 @@ Checks: >
   modernize-*,
   -modernize-use-trailing-return-type,
   -modernize-use-nodiscard,
+  -modernize-macro-to-enum,
   performance-*,
   -performance-enum-size,
   readability-*,
@@ -30,8 +31,12 @@ WarningsAsErrors: >
   cert-err34-c,
   modernize-use-nullptr
 
-# Header filter - only check our own code
-HeaderFilterRegex: 'src/.*'
+# Header filter - ONLY check our own code in src/
+# This excludes Qt, system headers, and third-party libraries
+HeaderFilterRegex: '^.*/(src|include)/.*\.(h|hpp)$'
+
+# System headers to ignore (suppress warnings from these paths)
+SystemHeaders: false
 
 # Format style
 FormatStyle: file

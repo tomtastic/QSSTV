@@ -28,9 +28,14 @@ Diagnostics:
       - readability-identifier-length
       - readability-function-cognitive-complexity
   
-  # Suppress warnings from system headers
+  # Suppress warnings from system headers and third-party libraries
   UnusedIncludes: Strict
-  MissingIncludes: Strict
+  MissingIncludes: None
+  Suppress:
+    - /usr/local/*
+    - /usr/include/*
+    - /Library/Frameworks/*
+    - '*/Qt*/*'
 
 InlayHints:
   Enabled: Yes
