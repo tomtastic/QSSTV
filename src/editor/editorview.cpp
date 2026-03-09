@@ -20,9 +20,7 @@
  ***************************************************************************/
 
 #include "editorview.h"
-#include "appglobal.h"
 #include "dirdialog.h"
-#include "graphicitems.h"
 #include "gradientdialog.h"
 #include "canvassizeform.h"
 #include "ui_textform.h"
