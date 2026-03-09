@@ -106,13 +106,17 @@ void txFunctions::run() {
 
       case TXPREPAREDRMBINARY: {
         bool ok = true;
-        if (useHybrid) ok = drmTxPtr->ftpDRMHybrid(binaryFilename, drmTxPtr->getTxFileName(binaryFilename));
+        if (useHybrid) {
+          ok = drmTxPtr->ftpDRMHybrid(binaryFilename, drmTxPtr->getTxFileName(binaryFilename));
+        }
         switchTxState(TXIDLE);
         prepareTXComplete(ok);
       } break;
       case TXPREPAREDRMPIC: {
         bool ok = true;
-        if (useHybrid) ok = drmTxPtr->ftpDRMHybrid("", drmTxPtr->getTxFileName(""));
+        if (useHybrid) {
+          ok = drmTxPtr->ftpDRMHybrid("", drmTxPtr->getTxFileName(""));
+        }
         switchTxState(TXIDLE);
         prepareTXComplete(ok);
       } break;
@@ -129,8 +133,9 @@ void txFunctions::run() {
         if (drmTxPtr->initDRMImage(false, "")) {
           drmTxPtr->updateTxList();
           switchTxState(TXSENDDRM);
-        } else
+        } else {
           switchTxState(TXIDLE);
+        }
         break;
 
       case TXSENDDRMBINARY:
@@ -139,8 +144,9 @@ void txFunctions::run() {
         if (drmTxPtr->initDRMImage(true, binaryFilename)) {
           drmTxPtr->updateTxList();
           switchTxState(TXSENDDRM);
-        } else
+        } else {
           switchTxState(TXIDLE);
+        }
         break;
 
       case TXSENDDRMBSR:
@@ -163,7 +169,9 @@ void txFunctions::run() {
 
         startProgress(drmTxPtr->calcTxTime(waterfallTime));
         addToLog("start of wf", LOGTXFUNC);
-        if (useVOX) synthesPtr->sendTone(1., 1700., 0, false);
+        if (useVOX) {
+          synthesPtr->sendTone(1., 1700., 0, false);
+        }
         waterfallPtr->setText(startWFTxt);
         synthesPtr->sendWFText();
         addToLog("start of txDrm", LOGTXFUNC);
@@ -190,7 +198,9 @@ void txFunctions::run() {
         waitTxOn();
         addToLog("after txon TXSENDID", LOGTXFUNC);
         startProgress(waterfallPtr->getDuration());
-        if (useVOX) synthesPtr->sendTone(1., 1700., 0, false);
+        if (useVOX) {
+          synthesPtr->sendTone(1., 1700., 0, false);
+        }
         synthesPtr->sendWFText();
         addToLog("TXSENDID waiting for end", LOGTXFUNC);
         waitEnd();
@@ -200,7 +210,9 @@ void txFunctions::run() {
 
       case TXSENDCWID:
         waitTxOn();
-        if (useVOX) synthesPtr->sendTone(1., 1700., 0, false);
+        if (useVOX) {
+          synthesPtr->sendTone(1., 1700., 0, false);
+        }
         sendCW();
         waitEnd();
         switchTxState(TXIDLE);
@@ -257,7 +269,9 @@ int txFunctions::calcTxTime(bool binary, int overhead) {
     } else {
       ok = drmTxPtr->initDRMImage(false, "");
     }
-    if (ok) txTime = drmTxPtr->calcTxTime(overhead);
+    if (ok) {
+      txTime = drmTxPtr->calcTxTime(overhead);
+    }
     addToLog(QString("ok=%1, time=%2").arg(ok).arg(txTime), LOGTXFUNC);
   }
   return txTime;
@@ -274,7 +288,9 @@ void txFunctions::startProgress(double duration) {
 
 void txFunctions::stopThread() {
   abort = true;
-  if (!isRunning()) return;
+  if (!isRunning()) {
+    return;
+  }
   while (abort && isRunning()) {
     qApp->processEvents();
   }
@@ -351,7 +367,9 @@ void txFunctions::stopAndWait() {
   while (txState != TXIDLE) {
     qApp->processEvents();
   }
-  if (soundIOPtr) soundIOPtr->idleTX();
+  if (soundIOPtr) {
+    soundIOPtr->idleTX();
+  }
   addToLog("txFunc: stop executed", LOGTXFUNC);
 }
 
@@ -390,10 +408,11 @@ void txFunctions::sendFSKChar(int IDChar) {
   for (int i = 0; i < 6; i++) {
     TxBit = IDChar & 0x01;
     IDChar = IDChar >> 1;
-    if (TxBit == 0x01)
+    if (TxBit == 0x01) {
       synthesPtr->sendTone(0.022, 1900., 0, true);
-    else
+    } else {
       synthesPtr->sendTone(0.022, 2100., 0, true);
+    }
   }
 }
 
@@ -407,7 +426,9 @@ void txFunctions::sendFSKID() {
   int Checksum;
 
 
-  if (myCallsign.isEmpty()) return;
+  if (myCallsign.isEmpty()) {
+    return;
+  }
   // addToLog("txFunc:sendFSKID",LOGFSKID);
 
   l = myCallsign.size();
@@ -450,7 +471,9 @@ void txFunctions::sendFSKID() {
 }
 
 void txFunctions::sendBSR(QByteArray* p, drmTxParams dp) {
-  if (p == nullptr) return;
+  if (p == nullptr) {
+    return;
+  }
   drmTxPtr->sendBSR(p, dp);
 }
 
@@ -466,7 +489,9 @@ bool txFunctions::prepareFIX(const QByteArray& bsrByteArray) {
   txSession* sessionPtr;
   fixForm fx(mainWindowPtr);
   trID = drmTxPtr->processFIX(bsrByteArray);
-  if (trID < 0) return false;
+  if (trID < 0) {
+    return false;
+  }
   sessionPtr = drmTxPtr->getSessionPtr(static_cast<uint>(trID));
   if (sessionPtr == nullptr) {
     stce = new displayMBoxEvent("BSR Received", "This BSR is not for you");
@@ -476,7 +501,9 @@ bool txFunctions::prepareFIX(const QByteArray& bsrByteArray) {
     // take it from the transmitlist
     fx.setInfoInternal(paramsToMode(sessionPtr->drmParams), sessionPtr->filename, fixBlockList.count(),
                        &sessionPtr->ba);
-    if (fx.exec() == QDialog::Rejected) return false;
+    if (fx.exec() == QDialog::Rejected) {
+      return false;
+    }
     drmTxPtr->initDRMFIX(sessionPtr);
   }
   return true;

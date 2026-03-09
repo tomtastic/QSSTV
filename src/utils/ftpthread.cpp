@@ -135,7 +135,9 @@ void ftpThread::setupConnection(const QString& tHost, int tPort, const QString& 
   addToLog(QString("'%1' host: %2, User: %3,directory: %4").arg(idName).arg(tHost).arg(tUser).arg(tDirectory),
            LOGFTPTHREAD);
   if (host != tHost || user != tUser || passwd != tPasswd || port != tPort) {
-    if (qftpPtr) destroy();
+    if (qftpPtr) {
+      destroy();
+    }
   }
   host = tHost;
   port = tPort;
@@ -327,11 +329,14 @@ void ftpThread::dumpState(int state) {
 
 void ftpThread::wait(int timeout) {
   timeoutTimerPtr->stop();
-  if (timeout < 0)
+  if (timeout < 0) {
     timeoutValue = FTPTIMEOUTTIME * (0 - timeout);
-  else
+  } else {
     timeoutValue = timeout;
-  if (timeoutValue) timeoutTimerPtr->setInterval(timeoutValue);
+  }
+  if (timeoutValue) {
+    timeoutTimerPtr->setInterval(timeoutValue);
+  }
   addToLog(QString("'%1' tim.start timeout=%2").arg(idName).arg(timeoutValue), LOGFTPTHREAD);
   timeoutTimerPtr->start();
   timeoutExpired = false;

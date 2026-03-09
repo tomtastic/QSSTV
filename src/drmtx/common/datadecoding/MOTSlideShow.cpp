@@ -42,7 +42,9 @@
 \******************************************************************************/
 void CMOTSlideShowEncoder::GetDataUnit(CVector<_BINARY>& vecbiNewData) {
   if (allDataSend) {
-    if (extraBlocks-- <= 0) stopDRM = true;
+    if (extraBlocks-- <= 0) {
+      stopDRM = true;
+    }
   }
 
   /* Get new data group from MOT encoder. If the last MOT object was
@@ -63,10 +65,11 @@ _BOOLEAN CMOTSlideShowEncoder::GetTransStat(string& strCurPict, _REAL& rCurPerc)
   strCurPict = strCurObjName;
   rCurPerc = MOTDAB.GetProgPerc();
 
-  if (vecPicFileNames.Size() != 0)
+  if (vecPicFileNames.Size() != 0) {
     return true;
-  else
+  } else {
     return false;
+  }
 }
 
 void CMOTSlideShowEncoder::Init(CParameter& TParam) {
@@ -106,7 +109,9 @@ void CMOTSlideShowEncoder::AddNextPicture() {
     MOTDAB.SetMOTObject(MOTPicture, bytesToBeUsed);
     /* Set file counter to next picture, test for wrap around */
     iPictureCnt++;
-    if (iPictureCnt == vecPicFileNames.Size()) iPictureCnt = 0;
+    if (iPictureCnt == vecPicFileNames.Size()) {
+      iPictureCnt = 0;
+    }
   }
 }
 

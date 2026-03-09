@@ -413,8 +413,9 @@ void CParameter::GetActiveServices(set<int>& actServ) {
 
   /* Get active services */
   for (int i = 0; i < MAX_NUM_SERVICES; i++) {
-    if (Service[i].IsActive()) /* A service is active, add ID to set */
+    if (Service[i].IsActive()) { /* A service is active, add ID to set */
       actServ.insert(i);
+    }
   }
 }
 
@@ -426,10 +427,14 @@ void CParameter::GetActiveStreams(set<int>& actStr) {
   for (int i = 0; i < MAX_NUM_SERVICES; i++) {
     if (Service[i].IsActive()) {
       /* Audio stream */
-      if (Service[i].AudioParam.iStreamID != STREAM_ID_NOT_USED) actStr.insert(Service[i].AudioParam.iStreamID);
+      if (Service[i].AudioParam.iStreamID != STREAM_ID_NOT_USED) {
+        actStr.insert(Service[i].AudioParam.iStreamID);
+      }
 
       /* Data stream */
-      if (Service[i].DataParam.iStreamID != STREAM_ID_NOT_USED) actStr.insert(Service[i].DataParam.iStreamID);
+      if (Service[i].DataParam.iStreamID != STREAM_ID_NOT_USED) {
+        actStr.insert(Service[i].DataParam.iStreamID);
+      }
     }
   }
 }
@@ -477,10 +482,11 @@ _REAL CParameter::PartABLenRatio(const int iShortID) {
 
   const int iTotLen = iLenA + iLenB;
 
-  if (iTotLen != 0)
+  if (iTotLen != 0) {
     return static_cast<_REAL>(iLenA) / iTotLen;
-  else
+  } else {
     return static_cast<_REAL>(0.0);
+  }
 }
 
 void CParameter::InitCellMapTable(const ERobMode eNewWaveMode, const ESpecOcc eNewSpecOcc) {
@@ -511,8 +517,9 @@ _BOOLEAN CParameter::SetWaveMode(const ERobMode eNewWaveMode) {
 
     /* Signal that parameter has changed */
     return true;
-  } else
+  } else {
     return false;
+  }
 }
 
 void CParameter::SetSpectrumOccup(ESpecOcc eNewSpecOcc) {
@@ -549,10 +556,11 @@ void CParameter::SetStreamLen(const int iStreamID, const int iNewLenPartA, const
 }
 
 int CParameter::GetStreamLen(const int iStreamID) {
-  if (iStreamID != STREAM_ID_NOT_USED)
+  if (iStreamID != STREAM_ID_NOT_USED) {
     return Stream[iStreamID].iLenPartA + Stream[iStreamID].iLenPartB;
-  else
+  } else {
     return 0;
+  }
 }
 
 void CParameter::SetNumDecodedBitsMSC(const int iNewNumDecodedBitsMSC) {
@@ -753,7 +761,9 @@ void CParameter::SetAudDataFlag(const int iShortID, const CService::ETyOServ iNe
 void CParameter::SetServiceID(const int iShortID, const uint32_t iNewServiceID) {
   if (Service[iShortID].iServiceID != iNewServiceID) {
     /* JFBC - what is this for? */
-    if ((iShortID == 0) && (Service[0].iServiceID > 0)) ResetServicesStreams();
+    if ((iShortID == 0) && (Service[0].iServiceID > 0)) {
+      ResetServicesStreams();
+    }
 
     Service[iShortID].iServiceID = iNewServiceID;
 
@@ -889,7 +899,9 @@ _REAL CParameter::GetIFSignalLevel() { return rIFSigStr; }
 void CRxStatus::SetStatus(const ETypeRxStatus OK) {
   status = OK;
   iNum++;
-  if (OK == RX_OK) iNumOK++;
+  if (OK == RX_OK) {
+    iNumOK++;
+  }
 }
 
 // void CParameter::GenerateReceiverID()
@@ -937,10 +949,11 @@ void CParameter::GenerateRandomSerialNumber() {
   char randomChars[36];
 
   for (size_t q = 0; q < 36; q++) {
-    if (q < 26)
+    if (q < 26) {
       randomChars[q] = static_cast<char>(q) + 97;
-    else
+    } else {
       randomChars[q] = (static_cast<char>(q) - 26) + 48;
+    }
   }
 
   char serialNumTemp[7];
@@ -959,8 +972,12 @@ void CMinMaxMean::addSample(_REAL r) {
   rCur = r;
   rSum += r;
   iNum++;
-  if (r > rMax) rMax = r;
-  if (r < rMin) rMin = r;
+  if (r > rMax) {
+    rMax = r;
+  }
+  if (r < rMin) {
+    rMin = r;
+  }
 }
 
 _REAL
@@ -969,7 +986,9 @@ CMinMaxMean::getCurrent() { return rCur; }
 _REAL
 CMinMaxMean::getMean() {
   _REAL rMean = 0.0;
-  if (iNum > 0) rMean = rSum / iNum;
+  if (iNum > 0) {
+    rMean = rSum / iNum;
+  }
   rSum = 0.0;
   iNum = 0;
   return rMean;
@@ -988,7 +1007,9 @@ void CMinMaxMean::getMinMax(_REAL& rMinOut, _REAL& rMaxOut) {
 }
 
 string CServiceDefinition::Frequency(size_t n) const {
-  if (n >= veciFrequencies.size()) return "";  // not in the list
+  if (n >= veciFrequencies.size()) {
+    return "";  // not in the list
+  }
 
   stringstream ss;
   int iFrequency = veciFrequencies[n];
@@ -1146,7 +1167,9 @@ CAltFreqSched::IsActive(const time_t ltime) {
   int iWeekDay;
 
   /* Empty schedule is always active */
-  if (iDuration == 0) return true;
+  if (iDuration == 0) {
+    return true;
+  }
 
   /* Calculate time in UTC */
   struct tm* gmtCur = gmtime(&ltime);
@@ -1155,10 +1178,11 @@ CAltFreqSched::IsActive(const time_t ltime) {
      tm_wday: day of week (0 - 6; Sunday = 0)
      I must normalize so Monday = 0   */
 
-  if (gmtCur->tm_wday == 0)
+  if (gmtCur->tm_wday == 0) {
     iWeekDay = 6;
-  else
+  } else {
     iWeekDay = gmtCur->tm_wday - 1;
+  }
 
   /* iTimeWeek minutes since last Monday 00:00 in UTC */
   /* the value is in the range 0 <= iTimeWeek < 60 * 24 * 7)   */
@@ -1177,14 +1201,18 @@ CAltFreqSched::IsActive(const time_t ltime) {
       iScheduleEnd = iScheduleStart + iDuration;
 
       /* the normal check (are we inside start and end?) */
-      if ((iTimeWeek >= iScheduleStart) && (iTimeWeek <= iScheduleEnd)) return true;
+      if ((iTimeWeek >= iScheduleStart) && (iTimeWeek <= iScheduleEnd)) {
+        return true;
+      }
 
       /* the wrap-around check */
       const int iMinutesPerWeek = 7 * 24 * 60;
 
       if (iScheduleEnd > iMinutesPerWeek) {
         /* our duration wraps into next Monday (or even later) */
-        if (iTimeWeek < (iScheduleEnd - iMinutesPerWeek)) return true;
+        if (iTimeWeek < (iScheduleEnd - iMinutesPerWeek)) {
+          return true;
+        }
       }
     }
   }

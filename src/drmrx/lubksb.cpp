@@ -6,15 +6,20 @@ void lubksb(float** a, int n, int* indx, float b[]) {
     ip = indx[i];
     sum = b[ip];
     b[ip] = b[i];
-    if (ii)
-      for (j = ii; j <= i - 1; j++) sum -= a[i][j] * b[j];
-    else if (sum)
+    if (ii) {
+      for (j = ii; j <= i - 1; j++) {
+        sum -= a[i][j] * b[j];
+      }
+    } else if (sum) {
       ii = i;
+    }
     b[i] = sum;
   }
   for (i = n; i >= 1; i--) {
     sum = b[i];
-    for (j = i + 1; j <= n; j++) sum -= a[i][j] * b[j];
+    for (j = i + 1; j <= n; j++) {
+      sum -= a[i][j] * b[j];
+    }
     b[i] = sum / a[i][i];
   }
 }

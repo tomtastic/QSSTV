@@ -23,13 +23,16 @@ QPainterPath graphItemBase::qt_graphicsItem_shapeFromPath(const QPainterPath& pa
   // if we pass a value of 0.0 to QPainterPathStroker::setWidth()
 
 
-  if (path == QPainterPath()) return path;
+  if (path == QPainterPath()) {
+    return path;
+  }
   QPainterPathStroker ps;
   ps.setCapStyle(pen.capStyle());
-  if (pen.widthF() <= 0.0)
+  if (pen.widthF() <= 0.0) {
     ps.setWidth(penWidthZero);
-  else
+  } else {
     ps.setWidth(pen.widthF());
+  }
   ps.setJoinStyle(pen.joinStyle());
   ps.setMiterLimit(pen.miterLimit());
   QPainterPath p = ps.createStroke(path);
@@ -180,7 +183,9 @@ void graphItemBase::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
   } else {
     selected = false;
   }
-  if (!scene()) return;
+  if (!scene()) {
+    return;
+  }
   if (scene()->views().isEmpty()) {
     scale = 1;
   } else {
@@ -233,7 +238,9 @@ void graphItemBase::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     qreal arrowSize = ARROWSIZE / scale;
     QPointF point = m_RotateLine.p2();
     double angle = ::acos(m_RotateLine.dx() / m_RotateLine.length());
-    if (m_RotateLine.dy() >= 0) angle = (2.0 * M_PI) - angle;
+    if (m_RotateLine.dy() >= 0) {
+      angle = (2.0 * M_PI) - angle;
+    }
     QPointF destArrowP1 = point + QPointF(sin(angle - M_PI / 3.0) * arrowSize, cos(angle - M_PI / 3.0) * arrowSize);
     QPointF destArrowP2 =
         point + QPointF(sin(angle - M_PI + M_PI / 3.0) * arrowSize, cos(angle - M_PI + M_PI / 3.0) * arrowSize);
@@ -293,7 +300,9 @@ void graphItemBase::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void graphItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-  if (param.locked) return;
+  if (param.locked) {
+    return;
+  }
 
   QRectF m_BoundingRect(boundingRect());
 
@@ -373,8 +382,12 @@ void graphItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
       param.rotation = round(rotation());
     }
     if (changed) {
-      if (m_BoundingRect.width() < 4 * HSIZE) m_BoundingRect.setWidth(4 * HSIZE);
-      if (m_BoundingRect.height() < 4 * HSIZE) m_BoundingRect.setHeight(4 * HSIZE);
+      if (m_BoundingRect.width() < 4 * HSIZE) {
+        m_BoundingRect.setWidth(4 * HSIZE);
+      }
+      if (m_BoundingRect.height() < 4 * HSIZE) {
+        m_BoundingRect.setHeight(4 * HSIZE);
+      }
       param.rct = m_BoundingRect.adjusted(2 * HSIZE, 2 * HSIZE, -2 * HSIZE, -2 * HSIZE);
       qreal penw = pen().widthF() / 2;
       param.rct = param.rct.adjusted(penw, penw, -penw, -penw);
@@ -410,7 +423,9 @@ void graphItemBase::hoverEnterEvent(QGraphicsSceneHoverEvent*) {}
 void graphItemBase::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {}
 
 void graphItemBase::hoverMoveEvent(QGraphicsSceneHoverEvent*) {
-  if (param.type == SBORDER) return;
+  if (param.type == SBORDER) {
+    return;
+  }
   if (param.locked) {
     setCursor(Qt::ForbiddenCursor);
   } else {
@@ -421,7 +436,9 @@ void graphItemBase::hoverMoveEvent(QGraphicsSceneHoverEvent*) {
 void graphItemBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) {}
 
 void graphItemBase::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-  if (param.type == SBORDER) return;
+  if (param.type == SBORDER) {
+    return;
+  }
   setSelected(true);
   param.menu->exec(event->screenPos());
 }

@@ -61,9 +61,15 @@ void drmStatusFrame::setStatus() {
       ui->timeLED->setPixmap(*greenPXM);
     } else {
       ui->timeLED->setPixmap(*redPXM);
-      if (prevFacValid) ui->facLED->setPixmap(*redPXM);
-      if (prevFrameSync) ui->frameLED->setPixmap(*redPXM);
-      if (prevMscValid != INVALID) ui->mscLED->setPixmap(*redPXM);
+      if (prevFacValid) {
+        ui->facLED->setPixmap(*redPXM);
+      }
+      if (prevFrameSync) {
+        ui->frameLED->setPixmap(*redPXM);
+      }
+      if (prevMscValid != INVALID) {
+        ui->mscLED->setPixmap(*redPXM);
+      }
       prevFacValid = 0;
       prevFrameSync = false;
       prevMscValid = INVALID;
@@ -73,12 +79,16 @@ void drmStatusFrame::setStatus() {
   tmp = demodulatorPtr->isFrameSync();
   if (tmp != prevFrameSync) {
     prevFrameSync = tmp;
-    if (tmp)
+    if (tmp) {
       ui->frameLED->setPixmap(*greenPXM);
-    else {
+    } else {
       ui->frameLED->setPixmap(*redPXM);
-      if (prevFacValid == 1) ui->facLED->setPixmap(*redPXM);
-      if (prevMscValid != INVALID) ui->mscLED->setPixmap(*redPXM);
+      if (prevFacValid == 1) {
+        ui->facLED->setPixmap(*redPXM);
+      }
+      if (prevMscValid != INVALID) {
+        ui->mscLED->setPixmap(*redPXM);
+      }
       prevFacValid = 0;
       prevMscValid = INVALID;
       return;
@@ -92,7 +102,9 @@ void drmStatusFrame::setStatus() {
       ui->facLED->setPixmap(*greenPXM);
     } else {
       ui->facLED->setPixmap(*redPXM);
-      if (prevMscValid != INVALID) ui->mscLED->setPixmap(*redPXM);
+      if (prevMscValid != INVALID) {
+        ui->mscLED->setPixmap(*redPXM);
+      }
       prevMscValid = INVALID;
     }
   }
@@ -121,7 +133,9 @@ void drmStatusFrame::setStatus() {
       mode = "";
       break;
   }
-  if (mode == "") return;
+  if (mode == "") {
+    return;
+  }
   if (prevRobustnessMode != robustness_mode) {
     prevRobustnessMode = robustness_mode;
     ui->modeEdit->setText(mode);

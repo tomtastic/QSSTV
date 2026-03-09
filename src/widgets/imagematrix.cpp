@@ -137,15 +137,18 @@ void imageMatrix::getList() {
   }
   std::sort(fileList.begin(), fileList.end(), compareFile);
   numPages = ceil(static_cast<double>(fileList.count()) / static_cast<double>(rows * columns));
-  if (numPages == 0) numPages = 1;
+  if (numPages == 0) {
+    numPages = 1;
+  }
   slotBegin();
 }
 
 QString imageMatrix::getLastFile() {
   if (fileList.count() > 0) {
     return fileList.last().absoluteFilePath();
-  } else
+  } else {
     return QString();
+  }
 }
 
 void imageMatrix::displayFiles() {
@@ -180,7 +183,9 @@ void imageMatrix::changed() {
 
 
 void imageMatrix::slotPrev() {
-  if (currentPage != 0) currentPage--;
+  if (currentPage != 0) {
+    currentPage--;
+  }
   displayFiles();
 }
 
@@ -199,7 +204,9 @@ void imageMatrix::slotBegin() {
 
 void imageMatrix::slotEnd() {
   currentPage = numPages - 1;
-  if (currentPage < 0) currentPage = 0;
+  if (currentPage < 0) {
+    currentPage = 0;
+  }
   displayFiles();
 }
 
@@ -207,7 +214,9 @@ void imageMatrix::slotLayoutChanged() {
   int curPag = currentPage;
   getList();
   if (curPag >= numPages) {
-    if (curPag > 0) curPag--;
+    if (curPag > 0) {
+      curPag--;
+    }
   }
   currentPage = curPag;
   displayFiles();

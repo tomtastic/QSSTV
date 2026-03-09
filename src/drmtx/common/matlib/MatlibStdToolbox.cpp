@@ -101,10 +101,11 @@ CMatlibMatrix<CReal> Eye(const int iLen) {
   /* Set all values except of the diagonal to zero, diagonal entries = 1 */
   for (int i = 0; i < iLen; i++) {
     for (int j = 0; j < iLen; j++) {
-      if (i == j)
+      if (i == j) {
         matrRet[i][j] = static_cast<CReal>(1.0);
-      else
+      } else {
         matrRet[i][j] = static_cast<CReal>(0.0);
+      }
     }
   }
 
@@ -118,10 +119,11 @@ CMatlibMatrix<CComplex> Diag(const CMatlibVector<CComplex>& cvI) {
   /* Set the diagonal to the values of the input vector */
   for (int i = 0; i < iSize; i++) {
     for (int j = 0; j < iSize; j++) {
-      if (i == j)
+      if (i == j) {
         matcRet[i][j] = cvI[i];
-      else
+      } else {
         matcRet[i][j] = static_cast<CReal>(0.0);
+      }
     }
   }
 
@@ -144,10 +146,11 @@ CMatlibMatrix<CComplex> Toeplitz(const CMatlibVector<CComplex>& cvI) {
   /* Create Toeplitz matrix */
   for (int i = 0; i < iSize; i++) {
     for (int j = 0; j < iSize; j++) {
-      if (i < j)
+      if (i < j) {
         matcRet[i][j] = cvI[j - i];
-      else
+      } else {
         matcRet[i][j] = Conj(cvI[i - j]);
+      }
     }
   }
 
@@ -194,7 +197,9 @@ CMatlibMatrix<CComplex> Inv(const CMatlibMatrix<CComplex>& matrI) {
       /* Swap with a row below this one that has a non-zero element
          in the same column */
       for (row = i + 1; row < iSize; row++) {
-        if ((Real(work[i][i]) != 0) || (Imag(work[i][i]) != 0)) break;
+        if ((Real(work[i][i]) != 0) || (Imag(work[i][i]) != 0)) {
+          break;
+        }
       }
 
       // TEST
@@ -260,7 +265,9 @@ CComplex _integral(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b, const C
   CComplex fa, fb, v1, v2, error, value;
   int m1, jend, mstart, j;
 
-  if (integralError) return _MAXREAL; /* NaN */
+  if (integralError) {
+    return _MAXREAL; /* NaN */
+  }
 
   /* Integrate over [a,b]. Initialize */
   const int max = 1024;
@@ -319,10 +326,12 @@ CComplex _integral(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b, const C
       v2 = h6 * (f2[j] + static_cast<CReal>(4.0) * fb + f3[j]);
       error = (v[j] - v1 - v2) / static_cast<CReal>(15.0);
 
-      if ((Abs(error) <= bound) || (Abs(v1 + v2) < Abs(value) * ru))
+      if ((Abs(error) <= bound) || (Abs(v1 + v2) < Abs(value) * ru)) {
         value = ((v1 + v2) + value) - error;
-      else {
-        if (integralError) return _MAXREAL; /* NaN */
+      } else {
+        if (integralError) {
+          return _MAXREAL; /* NaN */
+        }
 
         /* Are we out of memory? */
         if (m == j) {
@@ -365,10 +374,11 @@ CComplex _integral(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b, const C
     } while (j != jend);
   } while (m != mstart);
 
-  if (integralError)
+  if (integralError) {
     return _MAXREAL; /* NaN */
-  else
+  } else {
     return value;
+  }
 }
 
 CComplex Quad(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b, const CReal errorBound) {
@@ -401,7 +411,9 @@ CMatlibVector<CComplex> Fft(const CMatlibVector<CComplex>& cvI, const CFftPlans&
   CMatlibVector<CComplex> cvReturn(n, VTY_TEMP);
 
   /* If input vector has zero length, return */
-  if (n == 0) return cvReturn;
+  if (n == 0) {
+    return cvReturn;
+  }
 
   /* Check, if plans are already created, else: create it */
   if (!FftPlans.IsInitialized()) {
@@ -426,9 +438,13 @@ CMatlibVector<CComplex> Fft(const CMatlibVector<CComplex>& cvI, const CFftPlans&
   /* Actual fftw call */
   fftw_execute(pCurPlan->FFTPlForw);
 
-  for (i = 0; i < n; i++) cvReturn[i] = CComplex(pFftwComplexOut[i][0], pFftwComplexOut[i][1]);
+  for (i = 0; i < n; i++) {
+    cvReturn[i] = CComplex(pFftwComplexOut[i][0], pFftwComplexOut[i][1]);
+  }
 
-  if (!FftPlans.IsInitialized()) delete pCurPlan;
+  if (!FftPlans.IsInitialized()) {
+    delete pCurPlan;
+  }
 
   return cvReturn;
 }
@@ -443,7 +459,9 @@ CMatlibVector<CComplex> Ifft(const CMatlibVector<CComplex>& cvI, const CFftPlans
   CMatlibVector<CComplex> cvReturn(n, VTY_TEMP);
 
   /* If input vector has zero length, return */
-  if (n == 0) return cvReturn;
+  if (n == 0) {
+    return cvReturn;
+  }
 
   /* Check, if plans are already created, else: create it */
   if (!FftPlans.IsInitialized()) {
@@ -476,7 +494,9 @@ CMatlibVector<CComplex> Ifft(const CMatlibVector<CComplex>& cvI, const CFftPlans
     //         printf("returnvalue %d is %g %g \n", i, pFftwComplexOut[i][0], pFftwComplexOut[i][1]);
   }
 
-  if (!FftPlans.IsInitialized()) delete pCurPlan;
+  if (!FftPlans.IsInitialized()) {
+    delete pCurPlan;
+  }
 
   return cvReturn;
 }
@@ -498,7 +518,9 @@ CMatlibVector<CComplex> rfft(const CMatlibVector<CReal>& fvI, const CFftPlans& F
                                    VTY_TEMP);
 
   /* If input vector has zero length, return */
-  if (iLongLength == 0) return cvReturn;
+  if (iLongLength == 0) {
+    return cvReturn;
+  }
 
   /* Check, if plans are already created, else: create it */
   if (!FftPlans.IsInitialized()) {
@@ -523,12 +545,18 @@ CMatlibVector<CComplex> rfft(const CMatlibVector<CReal>& fvI, const CFftPlans& F
   /* Now build complex output vector */
   /* Zero frequency */
   cvReturn[0] = pFftwRealOut[0];
-  for (i = 1; i < iUpRoundShortLength; i++) cvReturn[i] = CComplex(pFftwRealOut[i], pFftwRealOut[iLongLength - i]);
+  for (i = 1; i < iUpRoundShortLength; i++) {
+    cvReturn[i] = CComplex(pFftwRealOut[i], pFftwRealOut[iLongLength - i]);
+  }
 
   /* If N is even, include Nyquist frequency */
-  if (iLongLength % 2 == 0) cvReturn[iShortLength] = pFftwRealOut[iShortLength];
+  if (iLongLength % 2 == 0) {
+    cvReturn[iShortLength] = pFftwRealOut[iShortLength];
+  }
 
-  if (!FftPlans.IsInitialized()) delete pCurPlan;
+  if (!FftPlans.IsInitialized()) {
+    delete pCurPlan;
+  }
 
   return cvReturn;
 }
@@ -549,7 +577,9 @@ CMatlibVector<CReal> rifft(const CMatlibVector<CComplex>& cvI, const CFftPlans& 
   CMatlibVector<CReal> fvReturn(iLongLength, VTY_TEMP);
 
   /* If input vector is too short, return */
-  if (iShortLength <= 0) return fvReturn;
+  if (iShortLength <= 0) {
+    return fvReturn;
+  }
 
   /* Check, if plans are already created, else: create it */
   if (!FftPlans.IsInitialized()) {
@@ -579,9 +609,13 @@ CMatlibVector<CReal> rifft(const CMatlibVector<CComplex>& cvI, const CFftPlans& 
 
   /* Scale output vector */
   const CReal scale = static_cast<CReal>(1.0) / iLongLength;
-  for (i = 0; i < iLongLength; i++) fvReturn[i] = pFftwRealOut[i] * scale;
+  for (i = 0; i < iLongLength; i++) {
+    fvReturn[i] = pFftwRealOut[i] * scale;
+  }
 
-  if (!FftPlans.IsInitialized()) delete pCurPlan;
+  if (!FftPlans.IsInitialized()) {
+    delete pCurPlan;
+  }
 
   return fvReturn;
 }

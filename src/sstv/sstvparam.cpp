@@ -124,10 +124,11 @@ esstvMode initializeParametersVIS(unsigned int viscode, bool tx) {
 */
 bool initializeSSTVParametersIndex(esstvMode modeIndex, bool tx) {
   if (modeIndex < NUMSSTVMODES) {
-    if (tx)
+    if (tx) {
       txSSTVParam = SSTVTable[modeIndex];
-    else
+    } else {
       rxSSTVParam = SSTVTable[modeIndex];
+    }
     printActiveSSTVParam(tx);
     return true;
   }
@@ -175,7 +176,9 @@ void printActiveSSTVParam(bool) {}
  * @return Returns the modeIndex if successful else NOTVALID
  */
 esstvMode lookupVIS(unsigned int vc) {
-  if (vc == 0) return NOTVALID;
+  if (vc == 0) {
+    return NOTVALID;
+  }
   esstvMode t = M1;
   do {
     if (SSTVTable[static_cast<int>(t)].VISCode == vc) {
@@ -183,7 +186,9 @@ esstvMode lookupVIS(unsigned int vc) {
     }
     t = static_cast<esstvMode>(t + 1);
   } while (t < NUMSSTVMODES);
-  if (t >= NUMSSTVMODES) return NOTVALID;
+  if (t >= NUMSSTVMODES) {
+    return NOTVALID;
+  }
   return t;
 }
 
@@ -196,7 +201,9 @@ esstvMode lookupVIS(unsigned int vc) {
 */
 
 QString getSSTVModeNameLong(esstvMode modeIndex) {
-  if (modeIndex == NOTVALID) return QString("");
+  if (modeIndex == NOTVALID) {
+    return QString("");
+  }
   return (SSTVTable[static_cast<int>(modeIndex)].name);
 }
 
@@ -209,7 +216,9 @@ QString getSSTVModeNameLong(esstvMode modeIndex) {
 */
 
 QString getSSTVModeNameShort(esstvMode modeIndex) {
-  if (modeIndex == NOTVALID) return QString("");
+  if (modeIndex == NOTVALID) {
+    return QString("");
+  }
   return (SSTVTable[static_cast<int>(modeIndex)].shortName);
 }
 
@@ -249,7 +258,9 @@ esstvMode modeLookup(unsigned int lineLength, DSPFLOAT clock) {
       totalError = errLine;
     }
   }
-  if (totalError < 0.001) return lmode;
+  if (totalError < 0.001) {
+    return lmode;
+  }
   return NOTVALID;
 }
 
@@ -270,7 +281,9 @@ DSPFLOAT longestLine(DSPFLOAT clock) {
   DSPFLOAT length;
   for (i = 0; i < static_cast<int>(AVT24); i++) {
     length = (SSTVTable[i].imageTime / static_cast<DSPFLOAT>(SSTVTable[i].numberOfDataLines)) * clock;
-    if (length > highest) highest = length;
+    if (length > highest) {
+      highest = length;
+    }
   }
   return highest;
 }
@@ -491,7 +504,9 @@ quint32 getMaxLineSamples() {
   DSPFLOAT time;
   for (i = M1; i <= FAX480; i++) {
     time = SSTVTable[i].imageTime / static_cast<DSPFLOAT>(SSTVTable[i].numberOfDataLines);
-    if (time > maxTime) maxTime = time;
+    if (time > maxTime) {
+      maxTime = time;
+    }
   }
   return rint(maxTime * SAMPLERATE);
 }

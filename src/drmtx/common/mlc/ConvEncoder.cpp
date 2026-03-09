@@ -52,7 +52,9 @@ int CConvEncoder::Encode(CVector<_DECISION>& vecInputData, CVector<_DECISION>& v
        reached and no more bits must be added */
     if (i < iNumInBits) {
       /* Add new bit at the beginning */
-      if (ExtractBit(vecInputData[i]) != 0) byStateShiftReg |= 1;
+      if (ExtractBit(vecInputData[i]) != 0) {
+        byStateShiftReg |= 1;
+      }
 
 #ifdef USE_MAX_LOG_MAP
       /* Update shift register for soft information. We assume here that

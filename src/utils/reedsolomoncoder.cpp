@@ -49,15 +49,15 @@ bool reedSolomonCoder::decode(QByteArray& ba, const QString& fn, QString& newFil
   origFileName = fn;
   fpin.setFileName(fn);
 
-  if (extension == "rs1")
+  if (extension == "rs1") {
     fileType = RST1;
-  else if (extension == "rs2")
+  } else if (extension == "rs2") {
     fileType = RST2;
-  else if (extension == "rs3")
+  } else if (extension == "rs3") {
     fileType = RST3;
-  else if (extension == "rs4")
+  } else if (extension == "rs4") {
     fileType = RST4;
-  else {
+  } else {
     return false;
   }
   tr_buf = ba;
@@ -104,7 +104,9 @@ bool reedSolomonCoder::decode(QByteArray& ba, const QString& fn, QString& newFil
     delete newZeroPositions;
     zeroPositions = new int[segmentLength * (totalSegments + 1)];
     newZeroPositions = new int[256 * bep_size];
-    for (i = 0; i < (segmentLength * totalSegments); i++) zeroPositions[i] = -1;
+    for (i = 0; i < (segmentLength * totalSegments); i++) {
+      zeroPositions[i] = -1;
+    }
   } else {
     errorOut() << "no erasure info";
     return false;
@@ -135,7 +137,9 @@ bool reedSolomonCoder::decode(QByteArray& ba, const QString& fn, QString& newFil
   //  fpin.close();
   //  fpout.close();
   //  tr_buf=ec_buf;
-  if (uncorrectableFailures > 0) return false;
+  if (uncorrectableFailures > 0) {
+    return false;
+  }
   //  if(fpout.open(QIODevice::ReadOnly)<=0) return false;
   //  tr_buf=fpout.readAll();
   if (bep_size != ((static_cast<unsigned char>(tr_buf[1])) + (static_cast<unsigned char>(tr_buf[2])) * 256)) {
@@ -207,7 +211,9 @@ bool reedSolomonCoder::decode_and_write() {
         }
       }
     }
-    if (nr_erasures > (rs_bsize - rs_dsize)) nr_erasures = rs_bsize - rs_dsize - 1;
+    if (nr_erasures > (rs_bsize - rs_dsize)) {
+      nr_erasures = rs_bsize - rs_dsize - 1;
+    }
     int failure = rsd32((reinterpret_cast<dtype*>(ec_buf.data()) + (i * rs_bsize)), eras_pos, nr_erasures);
     if (failure > 0) {
       sumOfFailures += failure;
@@ -247,7 +253,9 @@ bool reedSolomonCoder::encode(QByteArray& ba, const QString& extension, eRSType 
   init_rs(rs_dsize);
   got = tr_buf.size();
   chunks = (got + 7) / rs_dsize;
-  if (((got + 7) % rs_dsize) > 0) chunks++;
+  if (((got + 7) % rs_dsize) > 0) {
+    chunks++;
+  }
   bep_size = chunks;
   //  ec_buf.resize(bep_size*RSBSIZE);
   ec_buf.clear();
@@ -269,7 +277,9 @@ bool reedSolomonCoder::encode(QByteArray& ba, const QString& extension, eRSType 
   rse32((reinterpret_cast<dtype*>(ec_buf.data())), (reinterpret_cast<dtype*>(ec_buf.data()) + (rs_dsize)));
   for (i = 1; i < bep_size; i++) {
     temp = tr_buf.mid(i * rs_dsize - 7, rs_dsize);
-    if (temp.size() == 0) break;
+    if (temp.size() == 0) {
+      break;
+    }
     ec_buf.append(temp);
     if (temp.size() < rs_dsize) {
       for (j = 0; j < (rs_dsize - temp.size()); j++) {

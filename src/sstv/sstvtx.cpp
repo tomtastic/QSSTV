@@ -45,23 +45,26 @@ void sstvTx::sendVIS() {
     synthesPtr->sendTone(0.100, 2100, 0, true);
     synthesPtr->sendTone(0.022, 1900, 0, true);  // startbit
     for (i = 0; i < l; i++) {
-      if ((t & 1) == 1)
+      if ((t & 1) == 1) {
         synthesPtr->sendTone(0.022, 1900, 0, true);
-      else
+      } else {
         synthesPtr->sendTone(0.022, 2100, 0, true);
+      }
       t >>= 1;
     }
   } else {
-    if ((t & 0xFF) == 0x23)
+    if ((t & 0xFF) == 0x23) {
       l = 16;
-    else
+    } else {
       l = 8;
+    }
     synthesPtr->sendTone(0.030, 1200, 0, true);  // startbit
     for (i = 0; i < l; i++) {
-      if ((t & 1) == 1)
+      if ((t & 1) == 1) {
         synthesPtr->sendTone(0.030, 1100, 0, true);
-      else
+      } else {
         synthesPtr->sendTone(0.030, 1300, 0, true);
+      }
       t >>= 1;
     }
     synthesPtr->sendTone(0.030, 1200, 0, true);  // stopbit
@@ -172,10 +175,11 @@ double sstvTx::calcTxTime(int overheadTime) {
   initializeSSTVParametersIndex(sstvModeIndexTx, true);
   int t = txSSTVParam.VISCode;
   tim += 1.41;  // preamble;
-  if ((t & 0xFF) == 0x23)
+  if ((t & 0xFF) == 0x23) {
     tim += 18. * 0.03;
-  else
+  } else {
     tim += 10. * 0.03;
+  }
   tim += txSSTVParam.imageTime;
 
   //  if(enableCW)
@@ -193,7 +197,9 @@ double sstvTx::calcTxTime(int overheadTime) {
 
 bool sstvTx::sendImage(imageViewer* ivPtr) {
   modeBase::eModeBase mb;
-  if (useVOX) synthesPtr->sendTone(1., 1700., 0, false);
+  if (useVOX) {
+    synthesPtr->sendTone(1., 1700., 0, false);
+  }
   if (txSSTVParam.mode == FAX480) {
     for (int i = 0; i < 1220; i++) {
       synthesPtr->sendTone(0.00205, 1500, 0, true);
@@ -205,10 +211,11 @@ bool sstvTx::sendImage(imageViewer* ivPtr) {
   }
   addToLog("txFunc: sendImage", LOGTXFUNC);
   mb = currentMode->transmitImage(ivPtr);
-  if (mb == modeBase::MBABORTED)
+  if (mb == modeBase::MBABORTED) {
     return false;
-  else
+  } else {
     return true;
+  }
 }
 
 void sstvTx::applyTemplate(const QString& templateFilename, bool useTemplate, imageViewer* ivPtr) {
@@ -225,10 +232,11 @@ void sstvTx::abort() {
 
 
 bool sstvTx::aborted() {
-  if (currentMode)
+  if (currentMode) {
     return currentMode->aborted();
-  else
+  } else {
     return true;
+  }
 }
 
 void sstvTx::createTestPattern(imageViewer* ivPtr, etpSelect sel) {
@@ -245,12 +253,16 @@ void sstvTx::createTestPattern(imageViewer* ivPtr, etpSelect sel) {
         if (i < 2) {
           int val = 0;
           ;
-          for (j = 0; j < nb; j++) pixelPtr[j] = qRgb(val, val, val);
+          for (j = 0; j < nb; j++) {
+            pixelPtr[j] = qRgb(val, val, val);
+          }
         } else if (i >= (nl - 2)) {
           {
             int val = 0;
             ;
-            for (j = 0; j < nb; j++) pixelPtr[j] = qRgb(val, val, val);
+            for (j = 0; j < nb; j++) {
+              pixelPtr[j] = qRgb(val, val, val);
+            }
           }
         }
 

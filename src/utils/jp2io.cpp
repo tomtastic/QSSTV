@@ -22,7 +22,9 @@ static size_t opj_strnlen_s(const char* src, size_t max_len) {
   if (src == nullptr) {
     return 0U;
   }
-  for (len = 0U; (*src != '\0') && (len < max_len); src++, len++);
+  for (len = 0U; (*src != '\0') && (len < max_len); src++, len++) {
+    ;
+  }
   return len;
 }
 
@@ -91,7 +93,9 @@ bool jp2IO::check(const QString& fileName) {
   char data[12];
   QFile fi(fileName);
   set_default_parameters(&parameters);  // set decoding parameters to default values
-  if (!fi.open(QIODevice::ReadOnly)) return false;
+  if (!fi.open(QIODevice::ReadOnly)) {
+    return false;
+  }
   size = fi.read(data, 12);
   fi.close();
   if (size != 12) {
@@ -103,8 +107,9 @@ bool jp2IO::check(const QString& fileName) {
   } else if (memcmp(data, J2K_CODESTREAM_MAGIC, 4) == 0) {
     magicFormat = J2K_CFMT;
     magicStr = ".j2k or .jpc or .j2c";
-  } else
+  } else {
     return false;
+  }
   parameters.decod_format = magicFormat;
   return true;
 }
@@ -237,10 +242,11 @@ QImage jp2IO::decode(const QString& fileName) {
   opj_stream_destroy(l_stream);
 
   if (jp2Image->color_space != OPJ_CLRSPC_SYCC && jp2Image->numcomps == 3 &&
-      jp2Image->comps[0].dx == jp2Image->comps[0].dy && jp2Image->comps[1].dx != 1)
+      jp2Image->comps[0].dx == jp2Image->comps[0].dy && jp2Image->comps[1].dx != 1) {
     jp2Image->color_space = OPJ_CLRSPC_SYCC;
-  else if (jp2Image->numcomps <= 2)
+  } else if (jp2Image->numcomps <= 2) {
     jp2Image->color_space = OPJ_CLRSPC_GRAY;
+  }
 
   if (jp2Image->color_space == OPJ_CLRSPC_SYCC) {
     color_sycc_to_rgb(jp2Image);
@@ -458,9 +464,15 @@ QByteArray jp2IO::encode(const QImage& qimage, QImage& newImage, int& fileSize, 
   opj_image_destroy(jp2Image);
 
   /* free user parameters structure */
-  if (cparameters.cp_comment) free(cparameters.cp_comment);
-  if (cparameters.cp_matrice) free(cparameters.cp_matrice);
-  if (raw_cp.rawComps) free(raw_cp.rawComps);
+  if (cparameters.cp_comment) {
+    free(cparameters.cp_comment);
+  }
+  if (cparameters.cp_matrice) {
+    free(cparameters.cp_matrice);
+  }
+  if (raw_cp.rawComps) {
+    free(raw_cp.rawComps);
+  }
   QFile fi(fn);
   if (fi.open(QIODevice::ReadOnly)) {
     byteArray = fi.readAll();
@@ -490,7 +502,9 @@ bool jp2IO::createImage(QImage qimage) {
   }
 
   jp2Image = opj_image_create(numcmpts, &cmptparm[0], OPJ_CLRSPC_SRGB);
-  if (!jp2Image) return false;
+  if (!jp2Image) {
+    return false;
+  }
   if (numcmpts == 4) {
     jp2Image->comps[3].alpha = 1;
   }

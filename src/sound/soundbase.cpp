@@ -48,7 +48,9 @@ void soundBase::run() {
         switchCaptureState(CPRUNNING);
         break;
       case CPRUNNING:
-        if (capture() == 0) msleep(1);
+        if (capture() == 0) {
+          msleep(1);
+        }
         break;
       case CPCALIBRATESTART:
         prepareCapture();
@@ -56,10 +58,14 @@ void soundBase::run() {
         switchCaptureState(CPCALIBRATEWAIT);
         break;
       case CPCALIBRATEWAIT:
-        if (captureCalibration(true) == 0) msleep(0);
+        if (captureCalibration(true) == 0) {
+          msleep(0);
+        }
         break;
       case CPCALIBRATE:
-        if (captureCalibration(false) == 0) msleep(0);
+        if (captureCalibration(false) == 0) {
+          msleep(0);
+        }
         break;
       case CPEND:
         switchCaptureState(CPINIT);
@@ -72,9 +78,9 @@ void soundBase::run() {
         preparePlayback();
         flushPlayback();
         prebuf = true;
-        if (play() == 0)
+        if (play() == 0) {
           msleep(10);
-        else {
+        } else {
           prebuf = false;
           switchPlaybackState(PBRUNNING);
           addToLog("playback started", LOGSOUND);
@@ -115,7 +121,9 @@ void soundBase::run() {
 
 int soundBase::capture() {
   int count = 0;
-  if (rxBuffer.spaceLeft() < RXSTRIPE) return 0;
+  if (rxBuffer.spaceLeft() < RXSTRIPE) {
+    return 0;
+  }
   if (soundRoutingInput == SNDINFROMFILE) {
     count = waveIn.read((qint16*)tempRXBuffer, DOWNSAMPLESIZE);
     // delay to give realtime feeling
@@ -131,7 +139,9 @@ int soundBase::capture() {
   } else if (soundDriverOK) {
     // read from soundcard
     count = read(countAvailable);
-    if (count == 0) return 0;
+    if (count == 0) {
+      return 0;
+    }
     if (count != DOWNSAMPLESIZE) {
       switchCaptureState(CPINIT);
     }
@@ -155,7 +165,9 @@ int soundBase::captureCalibration(bool leadIn) {
   int count;
   count = read(countAvailable);
 
-  if (count == 0) return 0;
+  if (count == 0) {
+    return 0;
+  }
   if (leadIn) {
     leadInCounter++;
     if (leadInCounter == CALIBRATIONLEADIN) {
@@ -187,7 +199,9 @@ int soundBase::captureCalibration(bool leadIn) {
 }
 
 bool soundBase::calibrate(bool isCapture) {
-  if (!soundDriverOK) return false;
+  if (!soundDriverOK) {
+    return false;
+  }
   switchCaptureState(CPINIT);
   switchPlaybackState(PBINIT);
   calibrationFrames = 0;
@@ -195,7 +209,9 @@ bool soundBase::calibrate(bool isCapture) {
   ucalibrationTime = 0;
   leadInCounter = 0;
   prevFrames = 0;
-  if (!isRunning()) start();
+  if (!isRunning()) {
+    start();
+  }
   if (isCapture) {
     switchCaptureState(CPCALIBRATESTART);
   } else {
@@ -240,7 +256,9 @@ bool soundBase::calibrationCount(unsigned int& frames, double& elapsedTime) {
   frames = calibrationFrames;
   elapsedTime = ucalibrationTime;
   mutex.unlock();
-  if (frames == prevFrames) return false;
+  if (frames == prevFrames) {
+    return false;
+  }
   prevFrames = frames;
   //  addToLog(QString("calib ok time %1 frames %2").arg(elapsedTime).arg(frames),LOGCALIB);
   return true;
@@ -316,7 +334,9 @@ int soundBase::play() {
       return 0;
     }
   }
-  if ((numFrames = txBuffer.count()) >= DOWNSAMPLESIZE) numFrames = DOWNSAMPLESIZE;
+  if ((numFrames = txBuffer.count()) >= DOWNSAMPLESIZE) {
+    numFrames = DOWNSAMPLESIZE;
+  }
   if (numFrames > 0) {
     framesWritten = 0;
   }
@@ -413,10 +433,11 @@ void soundBase::applyAGC(qint16* buffer, int count) {
     sample *= agcCurrentGain;
 
     // Clamp the output to prevent overflow
-    if (sample > 32767.0f)
+    if (sample > 32767.0f) {
       sample = 32767.0f;
-    else if (sample < -32768.0f)
+    } else if (sample < -32768.0f) {
       sample = -32768.0f;
+    }
 
     buffer[i] = static_cast<qint16>(sample);
   }

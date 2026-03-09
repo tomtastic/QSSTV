@@ -68,8 +68,12 @@ bool wavIO::openFileForRead(QString fname, bool ask) {
   if (ask) {
     dirDialog d(reinterpret_cast<QWidget*>(mainWindowPtr), "Wave file");
     QString s = d.openFileName(audioPath, "*");
-    if (s.isNull()) return false;
-    if (s.isEmpty()) return false;
+    if (s.isNull()) {
+      return false;
+    }
+    if (s.isEmpty()) {
+      return false;
+    }
     inopf.setFileName(s);
   } else {
     inopf.setFileName(fname);
@@ -180,7 +184,9 @@ bool wavIO::openFileForWrite(const QString& fname, bool ask, bool isStereo) {
   if (ask) {
     dirDialog d(reinterpret_cast<QWidget*>(mainWindowPtr), "wave IO");
     QString fn = d.saveFileName(audioPath, "*.wav", "wav");
-    if (fn.isEmpty()) return false;
+    if (fn.isEmpty()) {
+      return false;
+    }
     inopf.setFileName(fn);
 
   } else {
@@ -190,14 +196,17 @@ bool wavIO::openFileForWrite(const QString& fname, bool ask, bool isStereo) {
     return false;
   }
   numberOfSamples = 0;
-  if (isStereo)
+  if (isStereo) {
     numberOfChannels = 2;
-  else
+  } else {
     numberOfChannels = 1;
+  }
 
   initHeader();
 
-  if (!writeHeader()) return false;
+  if (!writeHeader()) {
+    return false;
+  }
   writing = true;
   numberOfSamples = 0;
   return true;
@@ -228,7 +237,9 @@ bool wavIO::write(quint16* dPtr, uint numSamples, bool isStereo) {
     addToLog("wavio not open during write", LOGALL);
     return true;
   }
-  if ((!writing) && (numSamples == 0)) return true;
+  if ((!writing) && (numSamples == 0)) {
+    return true;
+  }
   if (numSamples == 0) {
     addToLog(QString("wavio write close samples=%1").arg(numberOfSamples), LOGWAVIO);
     inopf.flush();
@@ -305,7 +316,9 @@ void wavIO::initHeader() {
 
 bool wavIO::checkString(char* str, const char* cstr) {
   for (int i = 0; i < 4; i++) {
-    if (str[i] != cstr[i]) return false;
+    if (str[i] != cstr[i]) {
+      return false;
+    }
   }
   return true;
 }

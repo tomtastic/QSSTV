@@ -78,14 +78,15 @@ CVector<int> CChannelCode::GenPuncPatTable(ECodScheme eNewCodingScheme, EChanTyp
 
   /* Tailbit pattern calculated according DRM-standard. We have to consider
      two cases because in HSYM "N1 + N2" is used instead of only "N2" */
-  if (iLevel == 0)
+  if (iLevel == 0) {
     iTailbitPattern = iTailbitParamL0 - 12 -
                       iPuncturingPatterns[iPunctPatPartB][1] *
                           static_cast<int>((iTailbitParamL0 - 12) / iPuncturingPatterns[iPunctPatPartB][1]);
-  else
+  } else {
     iTailbitPattern = iTailbitParamL1 - 12 -
                       iPuncturingPatterns[iPunctPatPartB][1] *
                           static_cast<int>((iTailbitParamL1 - 12) / iPuncturingPatterns[iPunctPatPartB][1]);
+  }
 
 
   /* Set puncturing bit patterns and lengths ------------------------------ */
@@ -95,15 +96,21 @@ CVector<int> CChannelCode::GenPuncPatTable(ECodScheme eNewCodingScheme, EChanTyp
 
   /* Vector, storing patterns for part A. Patterns begin at [][2 + x] */
   veciPuncPatPartA.Init(iPartAPatLen);
-  for (i = 0; i < iPartAPatLen; i++) veciPuncPatPartA[i] = iPuncturingPatterns[iPunctPatPartA][2 + i];
+  for (i = 0; i < iPartAPatLen; i++) {
+    veciPuncPatPartA[i] = iPuncturingPatterns[iPunctPatPartA][2 + i];
+  }
 
   /* Vector, storing patterns for part B. Patterns begin at [][2 + x] */
   veciPuncPatPartB.Init(iPartBPatLen);
-  for (i = 0; i < iPartBPatLen; i++) veciPuncPatPartB[i] = iPuncturingPatterns[iPunctPatPartB][2 + i];
+  for (i = 0; i < iPartBPatLen; i++) {
+    veciPuncPatPartB[i] = iPuncturingPatterns[iPunctPatPartB][2 + i];
+  }
 
   /* Vector, storing patterns for tailbit pattern */
   veciTailBitPat.Init(LENGTH_TAIL_BIT_PAT);
-  for (i = 0; i < LENGTH_TAIL_BIT_PAT; i++) veciTailBitPat[i] = iPunctPatTailbits[iTailbitPattern][i];
+  for (i = 0; i < LENGTH_TAIL_BIT_PAT; i++) {
+    veciTailBitPat[i] = iPunctPatTailbits[iTailbitPattern][i];
+  }
 
 
   /* Generate actual table for puncturing pattern ------------------------- */
@@ -118,24 +125,32 @@ CVector<int> CChannelCode::GenPuncPatTable(ECodScheme eNewCodingScheme, EChanTyp
 
       /* Increment index and take care of wrap around */
       iPunctCounter++;
-      if (iPunctCounter == iPartAPatLen) iPunctCounter = 0;
+      if (iPunctCounter == iPartAPatLen) {
+        iPunctCounter = 0;
+      }
     } else {
       /* In case of FAC do not use special tailbit-pattern! */
       if ((i < iNumOutBits) || (eNewChannelType == CT_FAC)) {
         /* Puncturing patterns part B */
         /* Reset counter when beginning of part B is reached */
-        if (i == iNewNumOutBitsPartA) iPunctCounter = 0;
+        if (i == iNewNumOutBitsPartA) {
+          iPunctCounter = 0;
+        }
 
         /* Get current pattern */
         veciReturn[i] = veciPuncPatPartB[iPunctCounter];
 
         /* Increment index and take care of wrap around */
         iPunctCounter++;
-        if (iPunctCounter == iPartBPatLen) iPunctCounter = 0;
+        if (iPunctCounter == iPartBPatLen) {
+          iPunctCounter = 0;
+        }
       } else {
         /* Tailbits */
         /* Check when tailbit pattern starts */
-        if (i == iNumOutBits) iPunctCounter = 0;
+        if (i == iNumOutBits) {
+          iPunctCounter = 0;
+        }
 
         /* Set tailbit pattern */
         veciReturn[i] = veciTailBitPat[iPunctCounter];
@@ -159,6 +174,8 @@ CChannelCode::CChannelCode() {
        until it reaches the mask (at zero) by using operator ">> i". The
        actual XOR operation is done by "^=" */
     vecbiParity[j] = 0;
-    for (int i = 0; i < MC_CONSTRAINT_LENGTH; i++) vecbiParity[j] ^= (j >> i) & 1;
+    for (int i = 0; i < MC_CONSTRAINT_LENGTH; i++) {
+      vecbiParity[j] ^= (j >> i) & 1;
+    }
   }
 }

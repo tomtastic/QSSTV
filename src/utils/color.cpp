@@ -65,24 +65,27 @@ static void sycc_to_rgb(int offset, int upb, int y, int cb, int cr, int* out_r, 
   cb -= offset;
   cr -= offset;
   r = y + static_cast<int>(1.402 * static_cast<float>(cr));
-  if (r < 0)
+  if (r < 0) {
     r = 0;
-  else if (r > upb)
+  } else if (r > upb) {
     r = upb;
+  }
   *out_r = r;
 
   g = y - static_cast<int>(0.344 * static_cast<float>(cb) + 0.714 * static_cast<float>(cr));
-  if (g < 0)
+  if (g < 0) {
     g = 0;
-  else if (g > upb)
+  } else if (g > upb) {
     g = upb;
+  }
   *out_g = g;
 
   b = y + static_cast<int>(1.772 * static_cast<float>(cb));
-  if (b < 0)
+  if (b < 0) {
     b = 0;
-  else if (b > upb)
+  } else if (b > upb) {
     b = upb;
+  }
   *out_b = b;
 }
 
@@ -717,7 +720,9 @@ void color_cmyk_to_rgb(opj_image_t* image) {
   w = image->comps[0].w;
   h = image->comps[0].h;
 
-  if (image->numcomps < 4) return;
+  if (image->numcomps < 4) {
+    return;
+  }
 
   max = w * h;
 
@@ -768,7 +773,9 @@ void color_esycc_to_rgb(opj_image_t* image) {
   int flip_value = (1 << (image->comps[0].prec - 1));
   int max_value = (1 << image->comps[0].prec) - 1;
 
-  if (image->numcomps < 3) return;
+  if (image->numcomps < 3) {
+    return;
+  }
 
   w = image->comps[0].w;
   h = image->comps[0].h;
@@ -783,36 +790,43 @@ void color_esycc_to_rgb(opj_image_t* image) {
     cb = image->comps[1].data[i];
     cr = image->comps[2].data[i];
 
-    if (!sign1) cb -= flip_value;
-    if (!sign2) cr -= flip_value;
+    if (!sign1) {
+      cb -= flip_value;
+    }
+    if (!sign2) {
+      cr -= flip_value;
+    }
 
     val = static_cast<int>(static_cast<float>(y) - static_cast<float>(0.0000368) * static_cast<float>(cb) +
                            static_cast<float>(1.40199) * static_cast<float>(cr) + static_cast<float>(0.5));
 
-    if (val > max_value)
+    if (val > max_value) {
       val = max_value;
-    else if (val < 0)
+    } else if (val < 0) {
       val = 0;
+    }
     image->comps[0].data[i] = val;
 
     val = static_cast<int>(static_cast<float>(1.0003) * static_cast<float>(y) -
                            static_cast<float>(0.344125) * static_cast<float>(cb) -
                            static_cast<float>(0.7141128) * static_cast<float>(cr) + static_cast<float>(0.5));
 
-    if (val > max_value)
+    if (val > max_value) {
       val = max_value;
-    else if (val < 0)
+    } else if (val < 0) {
       val = 0;
+    }
     image->comps[1].data[i] = val;
 
     val = static_cast<int>(static_cast<float>(0.999823) * static_cast<float>(y) +
                            static_cast<float>(1.77204) * static_cast<float>(cb) -
                            static_cast<float>(0.000008) * static_cast<float>(cr) + static_cast<float>(0.5));
 
-    if (val > max_value)
+    if (val > max_value) {
       val = max_value;
-    else if (val < 0)
+    } else if (val < 0) {
       val = 0;
+    }
     image->comps[2].data[i] = val;
   }
   image->color_space = OPJ_CLRSPC_SRGB;

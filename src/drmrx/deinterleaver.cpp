@@ -72,10 +72,10 @@ int* deinterleaver(int xinA, int tA, int xinB, int tB) {
     free(deinterl);
     exit(EXIT_FAILURE);
   }
-  if (xinA == 0)
+  if (xinA == 0) {
     sA = 0;
 
-  else
+  } else
 
   {
     part1 = log(static_cast<double>(xinA));
@@ -84,10 +84,10 @@ int* deinterleaver(int xinA, int tA, int xinB, int tB) {
     sA = static_cast<int>(pow(2, part3));
   }
   qA = sA / 4 - 1;
-  if (xinB == 0)
+  if (xinB == 0) {
     sB = 0;
 
-  else
+  } else
 
   {
     part1 = log(static_cast<double>(xinB));

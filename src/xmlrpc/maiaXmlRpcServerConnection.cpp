@@ -149,7 +149,9 @@ void MaiaXmlRpcServerConnection::parseCall(const QString& call) {
 bool invokeMethodWithVariants(QObject* obj, const QByteArray& method, const QVariantList& args, QVariant* ret,
                               Qt::ConnectionType type) {
   // QMetaObject::invokeMethod() has a 10 argument maximum
-  if (args.count() > 10) return false;
+  if (args.count() > 10) {
+    return false;
+  }
   QList<QByteArray> argTypes;
   for (int n = 0; n < args.count(); ++n) argTypes += args[n].typeName();
 
@@ -162,8 +164,9 @@ bool invokeMethodWithVariants(QObject* obj, const QByteArray& method, const QVar
 #else
     metatype = QMetaType::type(retTypeName.data());
 #endif
-    if (metatype == 0)  // lookup failed
+    if (metatype == 0) {  // lookup failed
       return false;
+    }
   }
 
   QGenericArgument arg[10];
@@ -193,15 +196,19 @@ bool invokeMethodWithVariants(QObject* obj, const QByteArray& method, const QVar
   if (retTypeName.isEmpty()) {
     /* void */
     if (!QMetaObject::invokeMethod(obj, method.data(), type, arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], arg[6],
-                                   arg[7], arg[8], arg[9]))
+                                   arg[7], arg[8], arg[9])) {
       return false;
+    }
   } else {
     if (!QMetaObject::invokeMethod(obj, method.data(), type, retarg, arg[0], arg[1], arg[2], arg[3], arg[4], arg[5],
-                                   arg[6], arg[7], arg[8], arg[9]))
+                                   arg[6], arg[7], arg[8], arg[9])) {
       return false;
+    }
   }
 
-  if (retval.isValid() && ret) *ret = retval;
+  if (retval.isValid() && ret) {
+    *ret = retval;
+  }
   return true;
 }
 
@@ -214,10 +221,16 @@ QByteArray getReturnType(const QMetaObject* obj, const QByteArray& method, const
     QByteArray sig = m.signature();
 #endif
     int offset = sig.indexOf('(');
-    if (offset == -1) continue;
+    if (offset == -1) {
+      continue;
+    }
     QByteArray name = sig.mid(0, offset);
-    if (name != method) continue;
-    if (m.parameterTypes() != argTypes) continue;
+    if (name != method) {
+      continue;
+    }
+    if (m.parameterTypes() != argTypes) {
+      continue;
+    }
 
     return m.typeName();
   }
@@ -235,7 +248,9 @@ QHttpRequestHeader::QHttpRequestHeader(QString headerString) {
   QStringList hdrs = headerString.split("\r\n");
   QStringList hdrkv;
   for (int i = 0; i < hdrs.size(); i++) {
-    if (hdrs.at(i).trimmed().isEmpty()) break;
+    if (hdrs.at(i).trimmed().isEmpty()) {
+      break;
+    }
     if (i == 0) {
       hdrkv = hdrs.at(i).split(" ");
       this->mMethod = hdrkv.at(0);
@@ -247,9 +262,15 @@ QHttpRequestHeader::QHttpRequestHeader(QString headerString) {
 }
 
 bool QHttpRequestHeader::isValid() {
-  if (this->mHeaderString.isEmpty()) return false;
-  if (this->mMethod != "GET" && this->mMethod != "POST") return false;
-  if (this->mHeaders.size() < 2) return false;
+  if (this->mHeaderString.isEmpty()) {
+    return false;
+  }
+  if (this->mMethod != "GET" && this->mMethod != "POST") {
+    return false;
+  }
+  if (this->mHeaders.size() < 2) {
+    return false;
+  }
   return true;
 }
 

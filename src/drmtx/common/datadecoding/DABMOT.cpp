@@ -99,11 +99,14 @@ void CMOTDABEnc::SetMOTObject(CMOTObject& NewMOTObject, int bytesAvailable) {
     bsrTransportId = bsrTransportId % 3;
     txTransportID = bsrTransportId;
   } else {
-    if (iFileNameSize > 80)  // was 128
-      iFileNameSize = 80;    // was 128
+    if (iFileNameSize > 80) {  // was 128
+      iFileNameSize = 80;      // was 128
+    }
 
     // printf("Binnenkomst SetMOTObject file %s \n", strFileName.c_str());
-    if (iFileNameSize == 0) return;
+    if (iFileNameSize == 0) {
+      return;
+    }
 
     /* special hamcode */
     xorfname = 0;
@@ -114,7 +117,9 @@ void CMOTDABEnc::SetMOTObject(CMOTObject& NewMOTObject, int bytesAvailable) {
       addfname ^= static_cast<unsigned char>(k);
     }
     txTransportID = 256 * static_cast<int>(addfname) + static_cast<int>(xorfname);
-    if (txTransportID <= 2) txTransportID += iFileNameSize;
+    if (txTransportID <= 2) {
+      txTransportID += iFileNameSize;
+    }
   }
 
   /* end special hamcode */
@@ -264,7 +269,9 @@ void CMOTDABEnc::SetMOTObject(CMOTObject& NewMOTObject, int bytesAvailable) {
   MOTObjectRaw.Header.Enqueue(static_cast<uint32_t>(0), 4);
 
   /* Character field */
-  for (i = 0; i < iFileNameSize; i++) MOTObjectRaw.Header.Enqueue(static_cast<uint32_t>(strFileName[i]), 8);
+  for (i = 0; i < iFileNameSize; i++) {
+    MOTObjectRaw.Header.Enqueue(static_cast<uint32_t>(strFileName[i]), 8);
+  }
 
   /* Generate segments ---------------------------------------------------- */
   /* Header (header should not be partitioned! TODO) */
@@ -301,10 +308,11 @@ void CMOTDABEnc::PartitionUnits(CVector<_BINARY>& vecbiSource, CVector<CVector<_
      "iPartSizeHeader". If "iSizeLastSeg" is =, the source data size is
      a multiple of the partitions size. In this case, all units have
      the same size (-> "|| (iSizeLastSeg == 0)") */
-    if ((i < iNumSeg - 1) || (iSizeLastSeg == 0))
+    if ((i < iNumSeg - 1) || (iSizeLastSeg == 0)) {
       iActSegSize = iPartiSize;
-    else
+    } else {
       iActSegSize = iSizeLastSeg;
+    }
 
     /* Add segment data ------------------------------------------------- */
     /* Header */
@@ -344,14 +352,20 @@ void CMOTDABEnc::GenMOTObj(CVector<_BINARY>& vecbiData, CVector<_BINARY>& vecbiS
 
   /* Total length of object in bits */
   int iTotLenMOTObj = 16 /* group header */;
-  if (bSegFieldUsed == true) iTotLenMOTObj += 16;
+  if (bSegFieldUsed == true) {
+    iTotLenMOTObj += 16;
+  }
   if (bUsAccFieldUsed == true) {
     iTotLenMOTObj += 8;
-    if (bTransIDFieldUsed == true) iTotLenMOTObj += 16;
+    if (bTransIDFieldUsed == true) {
+      iTotLenMOTObj += 16;
+    }
   }
   // printf("DABMOT vecbiSrg.size %d\n", vecbiSeg.Size());
   iTotLenMOTObj += vecbiSeg.Size();
-  if (bCRCUsed == true) iTotLenMOTObj += 16;
+  if (bCRCUsed == true) {
+    iTotLenMOTObj += 16;
+  }
 
   /* Init data vector */
   vecbiData.Init(iTotLenMOTObj);
@@ -364,33 +378,37 @@ void CMOTDABEnc::GenMOTObj(CVector<_BINARY>& vecbiData, CVector<_BINARY>& vecbiS
 
   /* CRC flag: this 1-bit flag shall indicate whether there is a CRC at the
      end of the MSC data group */
-  if (bCRCUsed == true)
+  if (bCRCUsed == true) {
     vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
-  else
+  } else {
     vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
+  }
 
   /* Segment flag: this 1-bit flag shall indicate whether the segment field is
      present, or not */
-  if (bSegFieldUsed == true)
+  if (bSegFieldUsed == true) {
     vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
-  else
+  } else {
     vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
+  }
 
   /* User access flag: this 1-bit flag shall indicate whether the user access
      field is present, or not. We always use this field -> 1 */
-  if (bUsAccFieldUsed == true)
+  if (bUsAccFieldUsed == true) {
     vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
-  else
+  } else {
     vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
+  }
 
   /* Data group type: this 4-bit field shall define the type of data carried
      in the data group data field. Data group types:
      3: MOT header information
      4: MOT data */
-  if (bHeader == true)
+  if (bHeader == true) {
     vecbiData.Enqueue(static_cast<uint32_t>(3), 4);
-  else
+  } else {
     vecbiData.Enqueue(static_cast<uint32_t>(4), 4);
+  }
 
   /* Continuity index: the binary value of this 4-bit field shall be
      incremented each time a MSC data group of a particular type, with a
@@ -401,13 +419,17 @@ void CMOTDABEnc::GenMOTObj(CVector<_BINARY>& vecbiData, CVector<_BINARY>& vecbiS
 
     /* Increment modulo 16 */
     iContIndexHeader++;
-    if (iContIndexHeader == 16) iContIndexHeader = 0;
+    if (iContIndexHeader == 16) {
+      iContIndexHeader = 0;
+    }
   } else {
     vecbiData.Enqueue(static_cast<uint32_t>(iContIndexBody), 4);
 
     /* Increment modulo 16 */
     iContIndexBody++;
-    if (iContIndexBody == 16) iContIndexBody = 0;
+    if (iContIndexBody == 16) {
+      iContIndexBody = 0;
+    }
   }
 
   /* Repetition index: the binary value of this 4-bit field shall signal the
@@ -429,10 +451,11 @@ void CMOTDABEnc::GenMOTObj(CVector<_BINARY>& vecbiData, CVector<_BINARY>& vecbiS
   if (bSegFieldUsed == true) {
     /* Last: this 1-bit flag shall indicate whether the segment number field
        is the last or whether there are more to be transmitted */
-    if (bLastSeg == true)
+    if (bLastSeg == true) {
       vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
-    else
+    } else {
       vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
+    }
 
     /* Segment number: this 15-bit field, coded as an unsigned binary number
        (in the range 0 to 32767), shall indicate the segment number.
@@ -450,31 +473,37 @@ void CMOTDABEnc::GenMOTObj(CVector<_BINARY>& vecbiData, CVector<_BINARY>& vecbiS
 
     /* Transport Id flag: this 1-bit flag shall indicate whether the
        Transport Id field is present, or not */
-    if (bTransIDFieldUsed == true)
+    if (bTransIDFieldUsed == true) {
       vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
-    else
+    } else {
       vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
+    }
 
     /* Length indicator: this 4-bit field, coded as an unsigned binary
        number (in the range 0 to 15), shall indicate the length n in bytes
        of the Transport Id and End user address fields.
        We do not use end user address field, only transport ID -> 2 */
-    if (bTransIDFieldUsed == true)
+    if (bTransIDFieldUsed == true) {
       vecbiData.Enqueue(static_cast<uint32_t>(2), 4);
-    else
+    } else {
       vecbiData.Enqueue(static_cast<uint32_t>(0), 4);
+    }
 
     /* Transport Id (Identifier): this 16-bit field shall uniquely identify
        one data object (file and header information) from a stream of such
        objects, It may be used to indicate the object to which the
        information carried in the data group belongs or relates */
-    if (bTransIDFieldUsed == true) vecbiData.Enqueue(static_cast<uint32_t>(iTranspID), 16);
+    if (bTransIDFieldUsed == true) {
+      vecbiData.Enqueue(static_cast<uint32_t>(iTranspID), 16);
+    }
   }
 
   /* MSC data group data field -------------------------------------------- */
   vecbiSeg.ResetBitAccess();
 
-  for (i = 0; i < vecbiSeg.Size(); i++) vecbiData.Enqueue(vecbiSeg.Separate(1), 1);
+  for (i = 0; i < vecbiSeg.Size(); i++) {
+    vecbiData.Enqueue(vecbiSeg.Separate(1), 1);
+  }
 
   /* MSC data group CRC --------------------------------------------------- */
   /* The data group CRC shall be a 16-bit CRC word calculated on the data
@@ -492,8 +521,9 @@ void CMOTDABEnc::GenMOTObj(CVector<_BINARY>& vecbiData, CVector<_BINARY>& vecbiS
     CRCObject.Reset(16);
     // printf("iTotLenMOTObj = %d \n", iTotLenMOTObj);
     /* "byLengthBody" was defined in the header */
-    for (i = 0; i < ((iTotLenMOTObj / SIZEOF__BYTE) - 2) /* CRC */; i++)
+    for (i = 0; i < ((iTotLenMOTObj / SIZEOF__BYTE) - 2) /* CRC */; i++) {
       CRCObject.AddByte(static_cast<_BYTE>(vecbiData.Separate(SIZEOF__BYTE)));
+    }
 
     /* Now, pointer in "enqueue"-function is back at the same place,
        add CRC */
@@ -590,17 +620,19 @@ _BOOLEAN CMOTDABEnc::GetDataGroup(CVector<_BINARY>& vecbiNewData) {
   if (segmentNumber < 0) {
     // its a header
     headerNumber = -1 - segmentNumber;
-    if ((headerNumber + 1) == MOTObjSegments.vvbiHeader.Size())
+    if ((headerNumber + 1) == MOTObjSegments.vvbiHeader.Size()) {
       bLastSegment = true;
-    else
+    } else {
       bLastSegment = false;
+    }
     GenMOTObj(vecbiNewData, MOTObjSegments.vvbiHeader[headerNumber], true, headerNumber, txTransportID, bLastSegment);
   } else {
     // its a body segment
-    if ((segmentNumber + 1) == MOTObjSegments.vvbiBody.Size())
+    if ((segmentNumber + 1) == MOTObjSegments.vvbiBody.Size()) {
       bLastSegment = true;
-    else
+    } else {
       bLastSegment = false;
+    }
     GenMOTObj(vecbiNewData, MOTObjSegments.vvbiBody[segmentNumber], false, segmentNumber, txTransportID, bLastSegment);
   }
   segmentListIdx++;
@@ -1211,7 +1243,9 @@ void CDateAndTime::extract_absolute(CVector<_BINARY>& vecbiData) {
     vecbiData.Separate(2); /* rfa */
     int sign = static_cast<int>(vecbiData.Separate(1));
     half_hours = static_cast<int>(vecbiData.Separate(5));
-    if (sign == 1) half_hours = 0 - half_hours;
+    if (sign == 1) {
+      half_hours = 0 - half_hours;
+    }
   } else {
     half_hours = 0;
   }

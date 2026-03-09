@@ -66,7 +66,9 @@ int main(int argc, char** argv) {
   mainWindowPtr->setWindowIcon(QPixmap(":/icons/qsstv.png"));
   while (true) {
     app.processEvents();
-    if (!tm.isActive()) break;
+    if (!tm.isActive()) {
+      break;
+    }
   }
   mainWindowPtr
       ->init();  // this must follow show() because window has to be drawn first to determine fftframe window size
@@ -74,7 +76,9 @@ int main(int argc, char** argv) {
   tm.start(100);
   while (true) {
     app.processEvents();
-    if (!tm.isActive()) break;
+    if (!tm.isActive()) {
+      break;
+    }
   }
   splash.finish(mainWindowPtr);
   mainWindowPtr->show();

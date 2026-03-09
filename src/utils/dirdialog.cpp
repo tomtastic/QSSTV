@@ -106,7 +106,9 @@ QString dirDialog::saveFileName(const QString& path, const QString& filter, cons
   }
   QString exten(extension);
   fn = QFileDialog::getSaveFileName(parentPtr, dialogTitle, lastPath, filter);
-  if (fn.isEmpty()) return fn;
+  if (fn.isEmpty()) {
+    return fn;
+  }
   QFileInfo fi(fn);
   if (!exten.isEmpty()) {
     if (fi.suffix() == "") {

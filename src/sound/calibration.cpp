@@ -70,13 +70,19 @@ int calibration::exec() {
   init();
   show();
   ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-  if (!start(true)) return QDialog::Rejected;
-  if (!start(false)) return QDialog::Rejected;
+  if (!start(true)) {
+    return QDialog::Rejected;
+  }
+  if (!start(false)) {
+    return QDialog::Rejected;
+  }
   ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
   while (!stopped) {
     qApp->processEvents();
   }
-  if (!canceled) return QDialog::Accepted;
+  if (!canceled) {
+    return QDialog::Accepted;
+  }
   return QDialog::Rejected;
 }
 
@@ -110,7 +116,9 @@ void calibration::init() {
 
 void calibration::hasFinished(int result) {
   stopped = true;
-  if (result == QDialog::Rejected) canceled = true;
+  if (result == QDialog::Rejected) {
+    canceled = true;
+  }
 }
 
 

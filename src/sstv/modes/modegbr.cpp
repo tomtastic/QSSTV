@@ -94,7 +94,9 @@ void modeGBR::calcPixelPositionTable(unsigned int colorLine, bool tx) {
   unsigned int i;
   DSPFLOAT lineStart = start;
   int ofx = 0;
-  if (tx) ofx = 1;
+  if (tx) {
+    ofx = 1;
+  }
   switch (colorLine) {
     case GREENLINE:
       lineStart += bp;

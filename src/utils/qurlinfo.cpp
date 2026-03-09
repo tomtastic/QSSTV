@@ -222,7 +222,9 @@ QUrlInfo::QUrlInfo(const QUrl& url, int permissions, const QString& owner, const
 */
 
 void QUrlInfo::setName(const QString& name) {
-  if (!d) d = new QUrlInfoPrivate;
+  if (!d) {
+    d = new QUrlInfoPrivate;
+  }
   d->name = name;
 }
 
@@ -240,7 +242,9 @@ void QUrlInfo::setName(const QString& name) {
 */
 
 void QUrlInfo::setDir(bool b) {
-  if (!d) d = new QUrlInfoPrivate;
+  if (!d) {
+    d = new QUrlInfoPrivate;
+  }
   d->isDir = b;
 }
 
@@ -258,7 +262,9 @@ void QUrlInfo::setDir(bool b) {
 */
 
 void QUrlInfo::setFile(bool b) {
-  if (!d) d = new QUrlInfoPrivate;
+  if (!d) {
+    d = new QUrlInfoPrivate;
+  }
   d->isFile = b;
 }
 
@@ -274,7 +280,9 @@ void QUrlInfo::setFile(bool b) {
 */
 
 void QUrlInfo::setSymLink(bool b) {
-  if (!d) d = new QUrlInfoPrivate;
+  if (!d) {
+    d = new QUrlInfoPrivate;
+  }
   d->isSymLink = b;
 }
 
@@ -290,7 +298,9 @@ void QUrlInfo::setSymLink(bool b) {
 */
 
 void QUrlInfo::setWritable(bool b) {
-  if (!d) d = new QUrlInfoPrivate;
+  if (!d) {
+    d = new QUrlInfoPrivate;
+  }
   d->isWritable = b;
 }
 
@@ -306,7 +316,9 @@ void QUrlInfo::setWritable(bool b) {
 */
 
 void QUrlInfo::setReadable(bool b) {
-  if (!d) d = new QUrlInfoPrivate;
+  if (!d) {
+    d = new QUrlInfoPrivate;
+  }
   d->isReadable = b;
 }
 
@@ -320,7 +332,9 @@ void QUrlInfo::setReadable(bool b) {
 */
 
 void QUrlInfo::setOwner(const QString& s) {
-  if (!d) d = new QUrlInfoPrivate;
+  if (!d) {
+    d = new QUrlInfoPrivate;
+  }
   d->owner = s;
 }
 
@@ -334,7 +348,9 @@ void QUrlInfo::setOwner(const QString& s) {
 */
 
 void QUrlInfo::setGroup(const QString& s) {
-  if (!d) d = new QUrlInfoPrivate;
+  if (!d) {
+    d = new QUrlInfoPrivate;
+  }
   d->group = s;
 }
 
@@ -348,7 +364,9 @@ void QUrlInfo::setGroup(const QString& s) {
 */
 
 void QUrlInfo::setSize(qint64 size) {
-  if (!d) d = new QUrlInfoPrivate;
+  if (!d) {
+    d = new QUrlInfoPrivate;
+  }
   d->size = size;
 }
 
@@ -362,7 +380,9 @@ void QUrlInfo::setSize(qint64 size) {
 */
 
 void QUrlInfo::setPermissions(int p) {
-  if (!d) d = new QUrlInfoPrivate;
+  if (!d) {
+    d = new QUrlInfoPrivate;
+  }
   d->permissions = p;
 }
 
@@ -377,7 +397,9 @@ void QUrlInfo::setPermissions(int p) {
 */
 
 void QUrlInfo::setLastModified(const QDateTime& dt) {
-  if (!d) d = new QUrlInfoPrivate;
+  if (!d) {
+    d = new QUrlInfoPrivate;
+  }
   d->lastModified = dt;
 }
 
@@ -394,7 +416,9 @@ void QUrlInfo::setLastModified(const QDateTime& dt) {
 */
 
 void QUrlInfo::setLastRead(const QDateTime& dt) {
-  if (!d) d = new QUrlInfoPrivate;
+  if (!d) {
+    d = new QUrlInfoPrivate;
+  }
   d->lastRead = dt;
 }
 
@@ -410,7 +434,9 @@ QUrlInfo::~QUrlInfo() { delete d; }
 
 QUrlInfo& QUrlInfo::operator=(const QUrlInfo& ui) {
   if (ui.d) {
-    if (!d) d = new QUrlInfoPrivate;
+    if (!d) {
+      d = new QUrlInfoPrivate;
+    }
     *d = *ui.d;
   } else {
     delete d;
@@ -426,7 +452,9 @@ QUrlInfo& QUrlInfo::operator=(const QUrlInfo& ui) {
 */
 
 QString QUrlInfo::name() const {
-  if (!d) return QString();
+  if (!d) {
+    return QString();
+  }
   return d->name;
 }
 
@@ -438,7 +466,9 @@ QString QUrlInfo::name() const {
 */
 
 int QUrlInfo::permissions() const {
-  if (!d) return 0;
+  if (!d) {
+    return 0;
+  }
   return d->permissions;
 }
 
@@ -449,7 +479,9 @@ int QUrlInfo::permissions() const {
 */
 
 QString QUrlInfo::owner() const {
-  if (!d) return QString();
+  if (!d) {
+    return QString();
+  }
   return d->owner;
 }
 
@@ -460,7 +492,9 @@ QString QUrlInfo::owner() const {
 */
 
 QString QUrlInfo::group() const {
-  if (!d) return QString();
+  if (!d) {
+    return QString();
+  }
   return d->group;
 }
 
@@ -471,7 +505,9 @@ QString QUrlInfo::group() const {
 */
 
 qint64 QUrlInfo::size() const {
-  if (!d) return 0;
+  if (!d) {
+    return 0;
+  }
   return d->size;
 }
 
@@ -482,7 +518,9 @@ qint64 QUrlInfo::size() const {
 */
 
 QDateTime QUrlInfo::lastModified() const {
-  if (!d) return QDateTime();
+  if (!d) {
+    return QDateTime();
+  }
   return d->lastModified;
 }
 
@@ -493,7 +531,9 @@ QDateTime QUrlInfo::lastModified() const {
 */
 
 QDateTime QUrlInfo::lastRead() const {
-  if (!d) return QDateTime();
+  if (!d) {
+    return QDateTime();
+  }
   return d->lastRead;
 }
 
@@ -504,7 +544,9 @@ QDateTime QUrlInfo::lastRead() const {
 */
 
 bool QUrlInfo::isDir() const {
-  if (!d) return false;
+  if (!d) {
+    return false;
+  }
   return d->isDir;
 }
 
@@ -515,7 +557,9 @@ bool QUrlInfo::isDir() const {
 */
 
 bool QUrlInfo::isFile() const {
-  if (!d) return false;
+  if (!d) {
+    return false;
+  }
   return d->isFile;
 }
 
@@ -526,7 +570,9 @@ bool QUrlInfo::isFile() const {
 */
 
 bool QUrlInfo::isSymLink() const {
-  if (!d) return false;
+  if (!d) {
+    return false;
+  }
   return d->isSymLink;
 }
 
@@ -537,7 +583,9 @@ bool QUrlInfo::isSymLink() const {
 */
 
 bool QUrlInfo::isWritable() const {
-  if (!d) return false;
+  if (!d) {
+    return false;
+  }
   return d->isWritable;
 }
 
@@ -548,7 +596,9 @@ bool QUrlInfo::isWritable() const {
 */
 
 bool QUrlInfo::isReadable() const {
-  if (!d) return false;
+  if (!d) {
+    return false;
+  }
   return d->isReadable;
 }
 
@@ -559,7 +609,9 @@ bool QUrlInfo::isReadable() const {
 */
 
 bool QUrlInfo::isExecutable() const {
-  if (!d) return false;
+  if (!d) {
+    return false;
+  }
   return d->isExecutable;
 }
 
@@ -618,8 +670,12 @@ bool QUrlInfo::equal(const QUrlInfo& i1, const QUrlInfo& i2, int sortBy) {
 */
 
 bool QUrlInfo::operator==(const QUrlInfo& other) const {
-  if (!d) return other.d == nullptr;
-  if (!other.d) return false;
+  if (!d) {
+    return other.d == nullptr;
+  }
+  if (!other.d) {
+    return false;
+  }
 
   return (d->name == other.d->name && d->permissions == other.d->permissions && d->owner == other.d->owner &&
           d->group == other.d->group && d->size == other.d->size && d->lastModified == other.d->lastModified &&

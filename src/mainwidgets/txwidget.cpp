@@ -252,8 +252,12 @@ void txWidget::setParams() {
   setIndex(drmParams.qam, ui->drmTxQAMComboBox);
   setIndex(drmParams.robMode, ui->drmTxModeComboBox);
   setIndex(drmParams.reedSolomon, ui->drmTxReedSolomonComboBox);
-  if (compressedSize < MINDRMSIZE) compressedSize = MINDRMSIZE;
-  if (compressedSize > MAXDRMSIZE) compressedSize = MAXDRMSIZE;
+  if (compressedSize < MINDRMSIZE) {
+    compressedSize = MINDRMSIZE;
+  }
+  if (compressedSize > MAXDRMSIZE) {
+    compressedSize = MAXDRMSIZE;
+  }
   setValue(compressedSize, ui->sizeSlider);
   ui->uploadToolButton->setEnabled(useHybrid && (transmissionModeIndex != TRXSSTV));
   updateTxTime();
@@ -414,7 +418,9 @@ void txWidget::sendBSR() {
   bsrForm bsrf;
   bsrf.init();
   res = static_cast<bsrForm::eResult>(bsrf.exec());
-  if (res == bsrForm::CANCEL) return;
+  if (res == bsrForm::CANCEL) {
+    return;
+  }
   p = bsrf.getBA(res == bsrForm::COMPAT);
   txFunctionsPtr->sendBSR(p, bsrf.getDRMParams());
 }
@@ -540,7 +546,9 @@ void txWidget::applyTemplate() {
 
 void txWidget::updateTxTime() {
   int sizeKb, seconds, minutes;
-  if (!imageViewerPtr->hasValidImage()) return;
+  if (!imageViewerPtr->hasValidImage()) {
+    return;
+  }
   seconds = txFunctionsPtr->calcTxTime(false, 0);
   minutes = seconds / 60;
   seconds = seconds - minutes * 60;
@@ -659,7 +667,9 @@ void txWidget::changeTransmissionMode(int rxtxMode) {
   transmissionModeIndex = static_cast<etransmissionMode>(rxtxMode);
   if ((transmissionModeIndex >= 0) && (transmissionModeIndex < TRXNOMODE)) {
     for (i = 0; i < TRXNOMODE; i++) {
-      if (i != transmissionModeIndex) ui->settingsTableWidget->widget(i)->setEnabled(false);
+      if (i != transmissionModeIndex) {
+        ui->settingsTableWidget->widget(i)->setEnabled(false);
+      }
     }
     ui->settingsTableWidget->widget(transmissionModeIndex)->setEnabled(true);
     ui->settingsTableWidget->blockSignals(true);
@@ -702,11 +712,17 @@ void txWidget::slotImageChanged() {
   uint temp;
   if (transmissionModeIndex == TRXDRM) {
     maxSize = imageViewerPtr->setSize(imageViewerPtr->diplayedImageBytecount(), transmissionModeIndex == TRXDRM);
-    if (maxSize > MAXDRMSIZE) maxSize = MAXDRMSIZE;
+    if (maxSize > MAXDRMSIZE) {
+      maxSize = MAXDRMSIZE;
+    }
     ui->sizeSlider->setMaximum(maxSize);
     ui->sizeSlider->setMinimum(MINDRMSIZE);
-    if (compressedSize > MAXDRMSIZE) compressedSize = MAXDRMSIZE;
-    if (compressedSize < MINDRMSIZE) compressedSize = MINDRMSIZE;
+    if (compressedSize > MAXDRMSIZE) {
+      compressedSize = MAXDRMSIZE;
+    }
+    if (compressedSize < MINDRMSIZE) {
+      compressedSize = MINDRMSIZE;
+    }
     temp = compressedSize;
     compressedSize = 0;
     slotSize(temp);
@@ -758,7 +774,9 @@ void txWidget::slotListingDone(bool err) {
   QString info;
   QString tmp;
   QList<QUrlInfo> notifications;
-  if (err) return;
+  if (err) {
+    return;
+  }
   notifications = ff.getListing();
 
   for (i = 0; i < notifications.count(); i++) {
@@ -782,10 +800,11 @@ void txWidget::sendRepeaterImage(esstvMode rxMode) {
   repeaterTxDelayTimer.start(repeaterTxDelay * 1000);
 
   if (transmissionModeIndex == TRXSSTV) {
-    if (repeaterTxMode == 0)
+    if (repeaterTxMode == 0) {
       txMode = rxMode;  // 0 index = Same as RX
-    else
+    } else {
       txMode = static_cast<esstvMode>(repeaterTxMode - 1);
+    }
     slotModeChanged(txMode);
   }
 }
@@ -840,5 +859,7 @@ void txWidget::slotRepeaterTimer() {
     prepareTx();
   }
   repeaterIndex++;
-  if (repeaterIndex > 3) repeaterIndex = 0;
+  if (repeaterIndex > 3) {
+    repeaterIndex = 0;
+  }
 }

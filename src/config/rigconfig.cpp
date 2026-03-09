@@ -112,7 +112,9 @@ void rigConfig::getParams() {
   scatParams* cpCopy = new scatParams;
   *cpCopy = *cp;
   getValue(cp->serialPort, ui->serialPortLineEdit);
-  if (ui->radioModelComboBox->count() != 0) getValue(cp->radioModel, ui->radioModelComboBox);
+  if (ui->radioModelComboBox->count() != 0) {
+    getValue(cp->radioModel, ui->radioModelComboBox);
+  }
   getValue(cp->civAddress, ui->civAddressLineEdit);
   getValue(cp->baudrate, ui->baudrateComboBox);
   getValue(cp->parity, ui->parityComboBox);
@@ -126,11 +128,21 @@ void rigConfig::getParams() {
   getValue(cp->activeDTR, ui->DTRCheckBox);
   getValue(cp->nactiveRTS, ui->nRTSCheckBox);
   getValue(cp->nactiveDTR, ui->nDTRCheckBox);
-  if (ui->noPttRadioButton->isChecked()) cp->pttType = RIG_PTT_NONE;
-  if (ui->catVoiceRadioButton->isChecked()) cp->pttType = RIG_PTT_RIG;
-  if (ui->catDataRadioButton->isChecked()) cp->pttType = RIG_PTT_RIG_MICDATA;
-  if (ui->rtsRadioButton->isChecked()) cp->pttType = RIG_PTT_SERIAL_RTS;
-  if (ui->dtrRadioButton->isChecked()) cp->pttType = RIG_PTT_SERIAL_DTR;
+  if (ui->noPttRadioButton->isChecked()) {
+    cp->pttType = RIG_PTT_NONE;
+  }
+  if (ui->catVoiceRadioButton->isChecked()) {
+    cp->pttType = RIG_PTT_RIG;
+  }
+  if (ui->catDataRadioButton->isChecked()) {
+    cp->pttType = RIG_PTT_RIG_MICDATA;
+  }
+  if (ui->rtsRadioButton->isChecked()) {
+    cp->pttType = RIG_PTT_SERIAL_RTS;
+  }
+  if (ui->dtrRadioButton->isChecked()) {
+    cp->pttType = RIG_PTT_SERIAL_DTR;
+  }
   getValue(cp->txOnDelay, ui->txOnDelayDoubleSpinBox);
   getValue(cp->enableXMLRPC, ui->enableXMLRPCCheckBox);
   getValue(cp->XMLRPCPort, ui->XMLRPCPortLineEdit);
@@ -153,7 +165,9 @@ void rigConfig::getParams() {
 
 
 void rigConfig::setParams() {
-  if (rigController->getRadioList(ui->radioModelComboBox)) setValue(cp->radioModel, ui->radioModelComboBox);
+  if (rigController->getRadioList(ui->radioModelComboBox)) {
+    setValue(cp->radioModel, ui->radioModelComboBox);
+  }
   setValue(cp->serialPort, ui->serialPortLineEdit);
   setValue(cp->civAddress, ui->civAddressLineEdit);
   setValue(cp->baudrate, ui->baudrateComboBox);
@@ -164,8 +178,12 @@ void rigConfig::setParams() {
   setValue(cp->enableCAT, ui->enableCATCheckBox);
   setValue(cp->enableSerialPTT, ui->enablePTTCheckBox);
   setValue(cp->pttSerialPort, ui->pttSerialPortLineEdit);
-  if (cp->activeRTS) cp->nactiveRTS = false;
-  if (cp->activeDTR) cp->nactiveDTR = false;
+  if (cp->activeRTS) {
+    cp->nactiveRTS = false;
+  }
+  if (cp->activeDTR) {
+    cp->nactiveDTR = false;
+  }
 
   setValue(cp->activeRTS, ui->RTSCheckBox);
   setValue(cp->activeDTR, ui->DTRCheckBox);
@@ -267,7 +285,9 @@ void rigConfig::slotCheckPTT2() { checkPTT(2, ui->nRTSCheckBox->isChecked()); }
 void rigConfig::slotCheckPTT3() { checkPTT(3, ui->nDTRCheckBox->isChecked()); }
 
 void rigConfig::checkPTT(int p, bool b) {
-  if (!b) return;
+  if (!b) {
+    return;
+  }
   switch (p) {
     case 0:
       setValue(false, ui->nRTSCheckBox);

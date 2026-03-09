@@ -42,7 +42,9 @@ void modeRobot1::setupParams(double clock) {
 }
 
 modeBase::embState modeRobot1::rxSetupLine() {
-  if (lineCounter >= activeSSTVParam->numberOfDataLines) return MBENDOFLINE;
+  if (lineCounter >= activeSSTVParam->numberOfDataLines) {
+    return MBENDOFLINE;
+  }
   start = lineTimeTableRX[lineCounter];
 
   switch (subLine) {
@@ -150,7 +152,9 @@ void modeRobot1::showLine() {
 void modeRobot1::calcPixelPositionTable(unsigned int colorLine, bool tx) {
   unsigned int i;
   int ofx = 0;
-  if (tx) ofx = 1;
+  if (tx) {
+    ofx = 1;
+  }
   DSPFLOAT lineStart = start;
   switch (colorLine) {
     case YLINEODD:

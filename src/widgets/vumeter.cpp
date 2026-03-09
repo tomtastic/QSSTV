@@ -47,10 +47,11 @@ void vuMeter::setLabelText(const QString& t) { labelText = t; }
 
 
 void vuMeter::paintEvent(QPaintEvent*) {
-  if (width() > height())
+  if (width() > height()) {
     horizontal = true;
-  else
+  } else {
     horizontal = false;
+  }
   if (horizontal) {
     w = LG;
     h = SG;

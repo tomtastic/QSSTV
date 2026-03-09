@@ -24,10 +24,11 @@ QString macroExpansion::convert(const QString& txt) {
           }
         }
       } else {
-        if (txt.at(i) != '%')
+        if (txt.at(i) != '%') {
           convertedText.append(txt.at(i));
-        else
+        } else {
           special = true;
+        }
       }
     }
   }

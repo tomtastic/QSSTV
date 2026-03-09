@@ -328,7 +328,9 @@ void CMLC::CalculateParam(CParameter& Parameter, int iNewChannelType) {
           */
           /* Check if result can be possible, if not -> correct. This can
              happen, if a wrong number is in "Param.Stream[x].iLenPartA" */
-          if (iN[0] > iN_mux) iN[0] = 0;
+          if (iN[0] > iN_mux) {
+            iN[0] = 0;
+          }
 
           iN[1] = iN_mux - iN[0];
 
@@ -392,7 +394,9 @@ void CMLC::CalculateParam(CParameter& Parameter, int iNewChannelType) {
 
           /* Check if result can be possible, if not -> correct. This can
              happen, if a wrong number is in "Param.Stream[x].iLenPartA" */
-          if (iN[0] > iN_mux) iN[0] = 0;
+          if (iN[0] > iN_mux) {
+            iN[0] = 0;
+          }
 
           iN[1] = iN_mux - iN[0];
 

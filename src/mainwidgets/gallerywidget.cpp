@@ -138,8 +138,9 @@ QString galleryWidget::getTemplateFileName(int tm) {
     }
     slTemp.sort();
     return slTemp.at(tm);
-  } else
+  } else {
     return QString();
+  }
 }
 
 const QStringList& galleryWidget::getFilenames() {

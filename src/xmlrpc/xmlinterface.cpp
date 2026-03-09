@@ -95,10 +95,11 @@ QVariantList xmlInterface::systemMulticall(QVariantList s) {
     if (responseObject != 0) {
       args = m["params"].toList();
       for (j = 0; j < args.count();) {
-        if (args.at(j).isValid())
+        if (args.at(j).isValid()) {
           args.takeAt(j);
-        else
+        } else {
           j++;
+        }
       }
       if (!invokeMethodWithVariants(responseObject, responseSlot, args, &ret)) { /* error invoking... */
         continue;
@@ -132,6 +133,8 @@ void xmlInterface::log(const QString& cmd, const QString& t) {
 void xmlInterface::log(const QString& cmd, QVariantList t) {
   int i;
   QString tmp;
-  for (i = 0; i < t.length(); i++) tmp += t.at(i).toString();
+  for (i = 0; i < t.length(); i++) {
+    tmp += t.at(i).toString();
+  }
   log(cmd, tmp);
 }

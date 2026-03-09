@@ -8,11 +8,12 @@ testPatternSelection::testPatternSelection(QWidget* parent) : QDialog(parent), u
 testPatternSelection::~testPatternSelection() { delete ui; }
 
 etpSelect testPatternSelection::getSelection() {
-  if (ui->rasterRadioButton->isChecked())
+  if (ui->rasterRadioButton->isChecked()) {
     return TPRASTER;
-  else if (ui->whiteRadioButton->isChecked())
+  } else if (ui->whiteRadioButton->isChecked()) {
     return TPWHITE;
-  else if (ui->blackRadioButton->isChecked())
+  } else if (ui->blackRadioButton->isChecked()) {
     return TPBLACK;
+  }
   return TPGRAY;
 }

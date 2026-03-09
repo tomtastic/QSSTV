@@ -196,7 +196,9 @@ void syncProcessor::extractSync() {
     switch (syncState) {
       case SYNCVALID:
       case SYNCOFF:
-        if (inputVolumePtr[i] < sensitivityArray[sensitivity].minVolume) break;
+        if (inputVolumePtr[i] < sensitivityArray[sensitivity].minVolume) {
+          break;
+        }
         if (syncVolumePtr[i] > sensitivityArray[sensitivity].onRatio * inputVolumePtr[i]) {
           syncArray[syncArrayIndex].start = sampleCounter + i;
           syncArray[syncArrayIndex].startVolume = syncVolumePtr[i];
@@ -230,7 +232,9 @@ void syncProcessor::extractSync() {
       lastSync = syncArray[activeChainPtr->last()->to].end;
       if ((sampleCounter + RXSTRIPE - RXSTRIPE / 7) >
           (lastSync + sensitivityArray[sensitivity].maxTempOutOfSyncLines * samplesPerLine)) {
-        if (sensitivity != (NUMBEROFSENSITIVITIES - 1)) tempOutOfSync = true;  // no temp out of sync if DX
+        if (sensitivity != (NUMBEROFSENSITIVITIES - 1)) {
+          tempOutOfSync = true;  // no temp out of sync if DX
+        }
       }
       missingLines = static_cast<uint>(
           round(((sampleCounter + RXSTRIPE - RXSTRIPE / 7) - (lastSync + samplesPerLine)) / samplesPerLine + 1));
@@ -329,7 +333,9 @@ bool syncProcessor::validateSync() {
         }
         break;
       case INSYNC:
-        if (enableSyncDetection) trackSyncs();
+        if (enableSyncDetection) {
+          trackSyncs();
+        }
         break;
       case SYNCLOSTNEWMODE:
       case SYNCLOSTFALSESYNC:
@@ -427,7 +433,9 @@ void syncProcessor::calcSyncQuality() {
   }
   syncQuality -= (falseSlantSync * 2);
   str += QString("falseSlantSync: %1").arg(falseSlantSync);
-  if (syncQuality < 0) syncQuality = 0;
+  if (syncQuality < 0) {
+    syncQuality = 0;
+  }
   if ((syncQuality <= 0) && (sensitivity != (NUMBEROFSENSITIVITIES - 1)))  // i.e DX Mode
   {
     addToLog(QString("syncQuality SYNCLOST %1").arg(str), LOGSYNCQUALITY);
@@ -580,7 +588,9 @@ double syncProcessor::calcTotalFract(modeMatchList* mlPtr) {
 bool syncProcessor::addToMatch(esstvMode mode) {
   int i;
 
-  if (syncArrayIndex < 1) return false;
+  if (syncArrayIndex < 1) {
+    return false;
+  }
   for (i = syncArrayIndex - 1; i >= 0; i--) {
     if (addToChain(mode, i)) {
       return true;
@@ -712,7 +722,9 @@ void syncProcessor::deleteSyncArrayEntry(uint entry) {
   int i, j, k;
   modeMatchList* ml;
   //  smatchEntry *tempPtr;
-  if (entry >= syncArrayIndex) return;
+  if (entry >= syncArrayIndex) {
+    return;
+  }
   // delete or adapt the matchArrays
   for (i = idxStart; i <= idxEnd; i++)  // all modes
   {
@@ -774,7 +786,9 @@ bool syncProcessor::lineCompare(DSPFLOAT samPerLine, int srcIdx, int dstIdx, qui
 
   lineNumber = (delta + samPerLine / 2.) / samPerLine;
   fraction = static_cast<double>(lineNumber) - delta / samPerLine;
-  if (fraction < 0) fraction = -fraction;
+  if (fraction < 0) {
+    fraction = -fraction;
+  }
   //  if(fraction<lineTolerance)
   //  addToLog(QString("Lnbr: %1, fract: %2, delta: %3 src: %4,dest: %5, OK %6")
   //           .arg(lineNumber).arg(fraction).arg(delta).arg(srcIdx).arg(dstIdx).arg(fraction<lineTolerance)
@@ -925,22 +939,34 @@ void syncProcessor::regression(DSPFLOAT& a, DSPFLOAT& b, bool initial) {
 
 bool syncProcessor::slantAdjust(bool initial) {
   DSPFLOAT a, b;
-  if ((currentMode >= AVT24) && (currentMode <= AVT94)) return true;
-  if (currentMode == NOTVALID) return true;
+  if ((currentMode >= AVT24) && (currentMode <= AVT94)) {
+    return true;
+  }
+  if (currentMode == NOTVALID) {
+    return true;
+  }
   falseSlantSync = 0;
   if (!initial) {
-    if (syncArray[activeChainPtr->last()->to].lineNumber < slantAdjustLine) return false;
+    if (syncArray[activeChainPtr->last()->to].lineNumber < slantAdjustLine) {
+      return false;
+    }
   }
 
   regression(a, b, initial);
 
   //  addToLog(QString("regr. params line %1 a:%2 b:%3").arg(slantAdjustLine).arg(a).arg(b),LOGSLANT);
   slantAdjustLine += 5;
-  if (!autoSlantAdjust) return false;
+  if (!autoSlantAdjust) {
+    return false;
+  }
   if (initial) {
-    if ((fabs(1. - b) > 0.02) || (fabs(a) > 100)) return false;
+    if ((fabs(1. - b) > 0.02) || (fabs(a) > 100)) {
+      return false;
+    }
   } else {
-    if ((fabs(1. - b) > 0.005) || (fabs(a) > 50)) return false;
+    if ((fabs(1. - b) > 0.005) || (fabs(a) > 50)) {
+      return false;
+    }
   }
   if (((fabs(1. - b) > 0.00001) || (fabs(a) > 1)) && autoSlantAdjust) {
     newClock = true;

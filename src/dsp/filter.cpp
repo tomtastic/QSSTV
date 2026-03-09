@@ -72,7 +72,9 @@ void filter::allocate() {
 
   if (nPoles > 0) {
     sampleBufferYIPtr = new FILTERPARAMTYPE[nPoles + 1];
-    for (i = 0; i <= nPoles; i++) sampleBufferYIPtr[i] = 0;
+    for (i = 0; i <= nPoles; i++) {
+      sampleBufferYIPtr[i] = 0;
+    }
   }
   volumePtr = new FILTERPARAMTYPE[dataLen];
   demodPtr = new quint16[dataLen];
@@ -98,7 +100,9 @@ void filter::processFIR(FILTERPARAMTYPE* dataPtr, double* dataOutputPtr) {
   for (k = 0; k < dataLen; k++) {
     sampleBufferIPtr[fltrIndex] = dataPtr[k];
     fi = fltrIndex--;
-    if (fltrIndex < 0) fltrIndex = nZeroes;
+    if (fltrIndex < 0) {
+      fltrIndex = nZeroes;
+    }
     resI = 0;
     cf1 = coefZPtr;
     for (i = 0; i <= nZeroes; i++, cf1++) {
@@ -139,7 +143,9 @@ void filter::processFIRInt(FILTERPARAMTYPE* dataPtr, quint16* dataOutputPtr) {
   for (k = 0; k < dataLen; k++) {
     sampleBufferIPtr[fltrIndex] = dataPtr[k];
     fi = fltrIndex--;
-    if (fltrIndex < 0) fltrIndex = nZeroes;
+    if (fltrIndex < 0) {
+      fltrIndex = nZeroes;
+    }
     resI = 0;
     cf1 = coefZPtr;
     for (i = 0; i <= nZeroes; i++, cf1++) {
@@ -164,7 +170,9 @@ void filter::processFIRDemod(FILTERPARAMTYPE* dataPtr, FILTERPARAMTYPE* dataOutp
   for (k = 0; k < dataLen; k++) {
     nco.multiply(sampleBufferIPtr[fltrIndex], sampleBufferQPtr[fltrIndex], dataPtr[k]);
     fi = fltrIndex--;
-    if (fltrIndex < 0) fltrIndex = nZeroes;
+    if (fltrIndex < 0) {
+      fltrIndex = nZeroes;
+    }
     resI = 0;
     resQ = 0;
     cf1 = coefZPtr;
@@ -182,10 +190,16 @@ void filter::processFIRDemod(FILTERPARAMTYPE* dataPtr, FILTERPARAMTYPE* dataOutp
     discIm = -resQ * resIprev + resQprev * resI;
     resIprev = resI;
     resQprev = resQ;
-    if (discRe == 0) discRe = 0.0001;
+    if (discRe == 0) {
+      discRe = 0.0001;
+    }
     temp = frCenter - atan2(discIm, discRe) * angleToFc;
-    if (temp < 500) temp = prevTemp;
-    if (temp > 2600) temp = prevTemp;
+    if (temp < 500) {
+      temp = prevTemp;
+    }
+    if (temp > 2600) {
+      temp = prevTemp;
+    }
     prevTemp = temp;
     dataOutputPtr[k] = temp;
     //      double vol=sqrt(resI*resI+resQ*resQ);
@@ -284,9 +298,10 @@ void filter::setupMatchedFilter(FILTERPARAMTYPE freq, uint numTaps) {
       coefZPtr[i] = sin(i * 2 * M_PI / (SAMPLERATE / freq));
     }
   }
-  if (freq == 0)
+  if (freq == 0) {
     gain = numTaps;
-  else
+  } else {
     gain = numTaps / 2;
+  }
   allocate();
 }

@@ -212,7 +212,9 @@ void rxWidget::slotSave() {
 
   info = "";
   QString fileName = d.saveFileName(path, "*", "png");
-  if (fileName.isNull()) return;
+  if (fileName.isNull()) {
+    return;
+  }
   getImageViewerPtr()->save(fileName, defaultImageFormat, true, false);
   dispatcherPtr->saveImage(fileName, info);
 }
@@ -220,7 +222,9 @@ void rxWidget::slotSave() {
 void rxWidget::setOnlineStatus(bool online, const QString& info) {
   QString fn;
 
-  if (!online) dispatcherPtr->showOffLine();
+  if (!online) {
+    dispatcherPtr->showOffLine();
+  }
 
   if (ff.isBusy()) {
     return;
@@ -230,7 +234,9 @@ void rxWidget::setOnlineStatus(bool online, const QString& info) {
   //  ftpFunctions ff;
   // we can use onlineStatusInt directly because this function is only used from the main thread
 
-  if (hybridFtpRemoteHost.isEmpty()) return;
+  if (hybridFtpRemoteHost.isEmpty()) {
+    return;
+  }
 
   if (online && onlineStatusEnabled && transmissionModeIndex == TRXDRM) {
     ff.setupFtp("OnlineStatus", hybridFtpRemoteHost, hybridFtpPort, hybridFtpLogin, hybridFtpPassword,
@@ -279,7 +285,9 @@ void rxWidget::slotWhoResult(bool err) {
   QDateTime now = QDateTime::currentDateTime();
   QList<QUrlInfo> users;
 
-  if (err) return;
+  if (err) {
+    return;
+  }
 
   users = ff.getListing();
 
@@ -296,7 +304,9 @@ void rxWidget::setSettingsTab() {
   int i;
   if ((transmissionModeIndex >= 0) && (transmissionModeIndex < TRXNOMODE)) {
     for (i = 0; i < TRXNOMODE; i++) {
-      if (i != transmissionModeIndex) ui->settingsTableWidget->widget(i)->setEnabled(false);
+      if (i != transmissionModeIndex) {
+        ui->settingsTableWidget->widget(i)->setEnabled(false);
+      }
     }
     ui->settingsTableWidget->widget(transmissionModeIndex)->setEnabled(true);
     ui->settingsTableWidget->setCurrentIndex(transmissionModeIndex);

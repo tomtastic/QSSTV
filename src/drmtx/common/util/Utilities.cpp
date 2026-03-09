@@ -133,10 +133,11 @@ void CDRMBandpassFilt::Init(const int iNewBlockSize, const _REAL rOffsetHz, cons
   CReal rBPFiltBW = (static_cast<CReal>(10000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;
 
   /* Negative margin for receiver filter for better interferer rejection */
-  if (eNFiTy == FT_TRANSMITTER)
+  if (eNFiTy == FT_TRANSMITTER) {
     rMargin = static_cast<CReal>(0.0); /* Hz was 300 */
-  else
+  } else {
     rMargin = static_cast<CReal>(0.0); /* Hz */
+  }
 
   switch (eSpecOcc) {
     case SO_0:
@@ -245,9 +246,9 @@ void CModJulDate::Set(const uint32_t iModJulDate) {
   // 2. If Z < 2299161, take A = Z
   // If Z >= 2299161, calculate alpha = INT((Z-1867216.25)/36524.25)
   // and A = Z + 1 + alpha - INT(alpha/4).
-  if (iZ < 2299161)
+  if (iZ < 2299161) {
     iA = iZ;
-  else {
+  } else {
     iAlpha = static_cast<int>((static_cast<_REAL>(iZ) - static_cast<_REAL>(1867216.25)) / static_cast<_REAL>(36524.25));
     iA = iZ + 1 + iAlpha - static_cast<int>(static_cast<_REAL>(iAlpha) / static_cast<_REAL>(4.0));
   }
@@ -270,17 +271,19 @@ void CModJulDate::Set(const uint32_t iModJulDate) {
   // mm = E - 1, if E < 13.5
   // or
   // mm = E - 13, if E > 13.5
-  if (static_cast<_REAL>(iE) < 13.5)
+  if (static_cast<_REAL>(iE) < 13.5) {
     iMonth = iE - 1;
-  else
+  } else {
     iMonth = iE - 13;
+  }
 
   // The year yyyy is:
   // yyyy = C - 4716   if m > 2.5
   // or
   // yyyy = C - 4715   if m < 2.5
-  if (static_cast<_REAL>(iMonth) > 2.5)
+  if (static_cast<_REAL>(iMonth) > 2.5) {
     iYear = iC - 4716;
-  else
+  } else {
     iYear = iC - 4715;
+  }
 }

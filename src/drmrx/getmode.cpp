@@ -45,7 +45,9 @@ static /*@only@ */ float *conv_in_, *conv_abs_in_in_;
 static bool initDone = false;
 
 void initGetmode(int n) {
-  if (initDone) return;
+  if (initDone) {
+    return;
+  }
   initDone = true;
   /* create and initialize  arrays */
   in_ = static_cast<float*>(malloc((n - Tu_D) * 2 * sizeof(float))); /* complex data */
@@ -292,11 +294,21 @@ void getmode(float* input, int n, smode_info* result) {
 
 void cleanupGetmode() {
   if (initDone) {
-    if (in_) free(in_);
-    if (conv_in_) free(conv_in_);
-    if (abs_in_) free(abs_in_);
-    if (abs_in_in_) free(abs_in_in_);
-    if (conv_abs_in_in_) free(conv_abs_in_in_);
+    if (in_) {
+      free(in_);
+    }
+    if (conv_in_) {
+      free(conv_in_);
+    }
+    if (abs_in_) {
+      free(abs_in_);
+    }
+    if (abs_in_in_) {
+      free(abs_in_in_);
+    }
+    if (conv_abs_in_in_) {
+      free(conv_abs_in_in_);
+    }
     in_ = nullptr;
     conv_in_ = nullptr;
     abs_in_ = nullptr;

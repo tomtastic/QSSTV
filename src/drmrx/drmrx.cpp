@@ -39,7 +39,9 @@ void drmRx::run(DSPFLOAT* dataPtr) {
   displayDRMInfoEvent* ce2;
 
   temp = WMERFAC;
-  if (temp < 0) temp = 0;
+  if (temp < 0) {
+    temp = 0;
+  }
   if (avgSNRAvailable) {
     avgSNR = (1 - 0.05) * avgSNR + 0.05 * temp;
     ce1 = new displayDRMStatEvent(avgSNR);

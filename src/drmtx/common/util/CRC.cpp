@@ -90,10 +90,11 @@ uint32_t CCRC::GetCRC() {
 }
 
 _BOOLEAN CCRC::CheckCRC(const uint32_t iCRC) {
-  if (iCRC == GetCRC())
+  if (iCRC == GetCRC()) {
     return true;
-  else
+  } else {
     return false;
+  }
 }
 
 CCRC::CCRC() {
@@ -177,11 +178,12 @@ void CCRC::crc16_bytewise(double checksum[], unsigned char in[], long N) {
   {
     for (j = 7; j >= 0; j--) {
       y = (((b >> 15) + static_cast<unsigned int>(in[i] >> j)) & 0x01) & 0x01; /* extra parenth pa0mbo */
-      if (y == 1)
+      if (y == 1) {
         b = ((b << 1) ^ x);
 
-      else
+      } else {
         b = (b << 1);
+      }
     }
   }
   for (i = N - 2; i < N; i++)
@@ -189,11 +191,12 @@ void CCRC::crc16_bytewise(double checksum[], unsigned char in[], long N) {
   {
     for (j = 7; j >= 0; j--) {
       y = (((b >> 15) + static_cast<unsigned int>((in[i] >> j) & 0x01)) ^ 0x01) & 0x01; /* extra parent pa0mbo */
-      if (y == 1)
+      if (y == 1) {
         b = ((b << 1) ^ x);
 
-      else
+      } else {
         b = (b << 1);
+      }
     }
   }
   *checksum = static_cast<double>(b & 0xFFFF);

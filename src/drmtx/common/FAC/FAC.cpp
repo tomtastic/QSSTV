@@ -129,10 +129,11 @@ void CFACTransmit::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Parameter)
       /* Packet Id */
       (*pbiFACData).Enqueue(static_cast<uint32_t>(Parameter.Service[0].DataParam.iPacketID), 2);
       /* Extended MSC mode 1 bit */
-      if (Parameter.eMSCCodingScheme == CS_1_SM)
+      if (Parameter.eMSCCodingScheme == CS_1_SM) {
         (*pbiFACData).Enqueue(1 /* 1 */, 1);  // QAM 4
-      else
+      } else {
         (*pbiFACData).Enqueue(0 /* 0 */, 1);  // others
+      }
       break;
   }
 
@@ -140,17 +141,19 @@ void CFACTransmit::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Parameter)
     int iLenLabel;
     int iframet = Parameter.iFrameIDTransm;
     const int iLenLabelTmp = Parameter.Service[0].strLabel.length();
-    if (iLenLabelTmp > 9)
+    if (iLenLabelTmp > 9) {
       iLenLabel = 9;
-    else
+    } else {
       iLenLabel = iLenLabelTmp;
+    }
     /* Set all characters of label string */
     for (int i = 3 * iframet; i < 3 * iframet + 3; i++) {
       char cNewChar;
-      if (i >= iLenLabel)
+      if (i >= iLenLabel) {
         cNewChar = 0;
-      else
+      } else {
         cNewChar = Parameter.Service[0].strLabel[i];
+      }
       cNewChar &= 127;
       /* Set character */
       (*pbiFACData).Enqueue(static_cast<uint32_t>(cNewChar), 7);
@@ -430,9 +433,13 @@ _BOOLEAN CFACReceive::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Paramet
     /* Number of services */
     /* Search table for entry */
     int iNumServTabEntry = (*pbiFACData).Separate(4);
-    for (int i = 0; i < 5; i++)
-      for (int j = 0; j < 5; j++)
-        if (iNumServTabEntry == iTableNumOfServices[i][j]) Parameter.SetNumOfServices(i, j);
+    for (int i = 0; i < 5; i++) {
+      for (int j = 0; j < 5; j++) {
+        if (iNumServTabEntry == iTableNumOfServices[i][j]) {
+          Parameter.SetNumOfServices(i, j);
+        }
+      }
+    }
 
     /* Reconfiguration index (not used, yet) */
     (*pbiFACData).Separate(3);

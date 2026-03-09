@@ -12,9 +12,15 @@ fftCalc::fftCalc() {
 }
 
 fftCalc::~fftCalc() {
-  if (plan) fftw_destroy_plan(plan);
-  if (out) fftw_free(out);
-  if (dataBuffer) fftw_free(dataBuffer);
+  if (plan) {
+    fftw_destroy_plan(plan);
+  }
+  if (out) {
+    fftw_free(out);
+  }
+  if (dataBuffer) {
+    fftw_free(dataBuffer);
+  }
 }
 
 void fftCalc::init(int length, int nblocks, int isamplingrate) {
@@ -26,15 +32,21 @@ void fftCalc::init(int length, int nblocks, int isamplingrate) {
   createHamming();
   samplingrate = isamplingrate;
   // prepare fft
-  if (plan) fftw_destroy_plan(plan);
-  if (out) fftw_free(out);
+  if (plan) {
+    fftw_destroy_plan(plan);
+  }
+  if (out) {
+    fftw_free(out);
+  }
   delete[] dataBuffer;
 
   dataBuffer = new double[fftLength];
   for (i = 0; i < fftLength; i++) {
     dataBuffer[i] = 0.;
   }
-  if (dataBufferWindowed) fftw_free(dataBufferWindowed);
+  if (dataBufferWindowed) {
+    fftw_free(dataBufferWindowed);
+  }
   out = static_cast<double*>(fftw_malloc(fftLength * sizeof(double)));
   dataBufferWindowed = static_cast<double*>(fftw_malloc(fftLength * sizeof(double)));
   // create the fftw plan

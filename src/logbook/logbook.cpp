@@ -44,7 +44,9 @@ void logBook::logQSO(const QString& call, const QString& mode, const QString& co
   QDateTime dt(QDateTime::currentDateTimeUtc());
   QString tmp;
   getFrequency();
-  if (frequency != -1) setParam(LFREQ, QString::number(frequency / 1000000., 'g', 9));
+  if (frequency != -1) {
+    setParam(LFREQ, QString::number(frequency / 1000000., 'g', 9));
+  }
   setParam(LCALL, call);
   setParam(LNOTES, comment);
   tmp = QString::number(dt.date().day()) + " " + monthArray[dt.date().month() - 1] + " " +

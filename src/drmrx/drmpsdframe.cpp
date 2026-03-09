@@ -27,7 +27,9 @@ void drmPSDFrame::paintEvent(QPaintEvent* e) {
   y1 = contentsRect().height();
   for (i = 0; i < PSDSPAN / 4; i++) {
     y = psd[i] - PSDLOW;
-    if (y > PSDRANGE) y = PSDRANGE;
+    if (y > PSDRANGE) {
+      y = PSDRANGE;
+    }
     y2 = contentsRect().height() - rint((y / PSDRANGE) * static_cast<float>(contentsRect().height()));
     x2 = (i * contentsRect().width()) / (PSDSPAN / 4);
     qpainter.drawLine(x1, y1, x2, y2);
@@ -39,7 +41,9 @@ void drmPSDFrame::paintEvent(QPaintEvent* e) {
   y1 = contentsRect().height();
   for (i = 0; i < PSDSPAN / 4; i++) {
     y = cpsd[i] - PSDLOW;
-    if (y > PSDRANGE) y = PSDRANGE;
+    if (y > PSDRANGE) {
+      y = PSDRANGE;
+    }
     y2 = contentsRect().height() - rint((y / PSDRANGE) * static_cast<float>(contentsRect().height()));
     x2 = (i * contentsRect().width()) / (PSDSPAN / 4);
     qpainter.drawLine(x1, y1, x2, y2);

@@ -63,7 +63,9 @@ void editor::readSettings() {
   int windowHeight = qSettings.value("windowHeight", 480).toInt();
   int windowX = qSettings.value("windowX", -1).toInt();
   int windowY = qSettings.value("windowY", -1).toInt();
-  if (windowX != -1 || windowY != -1) move(windowX, windowY);
+  if (windowX != -1 || windowY != -1) {
+    move(windowX, windowY);
+  }
   resize(windowWidth, windowHeight);
   qSettings.endGroup();
 }
@@ -170,8 +172,12 @@ void editor::slotFileOpen() {
   fd->show();*/
   dirDialog d(this, 0);
   QString s = d.openFileName(templatesPath, "*.png *.gif *.jpg *.templ");
-  if (s.isNull()) return;
-  if (s.isEmpty()) return;
+  if (s.isNull()) {
+    return;
+  }
+  if (s.isEmpty()) {
+    return;
+  }
   localFile.setFileName(s);
   if (ev->open(localFile)) {
     setWindowTitle(QString("Template Editor: %1").arg(s));
@@ -204,8 +210,12 @@ void editor::slotFileSaveImage() {
     s = txStockImagesPath;
   }
   s = d.saveFileName(s, "*.png", "png");
-  if (s.isNull()) return;
-  if (s.isEmpty()) return;
+  if (s.isNull()) {
+    return;
+  }
+  if (s.isEmpty()) {
+    return;
+  }
   localFile.setFileName(s);
   setWindowTitle(QString("Template Editor: %1").arg(s));
   ev->save(localFile, false);
@@ -218,8 +228,12 @@ void editor::slotFileSaveTemplate() {
     s = templatesPath;
   }
   s = d.saveFileName(s, "*.templ", "templ");
-  if (s.isNull()) return;
-  if (s.isEmpty()) return;
+  if (s.isNull()) {
+    return;
+  }
+  if (s.isEmpty()) {
+    return;
+  }
   localFile.setFileName(s);
   setWindowTitle(QString("Template Editor: %1").arg(s));
   ev->save(localFile, true);

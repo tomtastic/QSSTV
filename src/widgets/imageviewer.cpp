@@ -129,7 +129,9 @@ bool imageViewer::openImage(QString& filename, const QString& start, bool ask, b
     activeMovie = false;
     qm.stop();
   }
-  if (tempFilename.isEmpty() && !ask) return false;
+  if (tempFilename.isEmpty() && !ask) {
+    return false;
+  }
   if (ask) {
     dirDialog dd(static_cast<QWidget*>(this), "Browse");
     tempFilename = dd.openFileName(start, "*");
@@ -257,7 +259,9 @@ bool imageViewer::processImageDisplay(bool success, bool showMessage, bool fromC
     displayImage();
   }
   validImage = true;
-  if (emitSignal) emit imageChanged();
+  if (emitSignal) {
+    emit imageChanged();
+  }
   return true;
 }
 
@@ -533,13 +537,16 @@ void imageViewer::mousePressEvent(QMouseEvent* e) {
         //              if (pixmap())
         if (hasValidImage()) {
           QPoint c = mapToImage(e->pos());
-          if (e->modifiers() & Qt::ShiftModifier)
+          if (e->modifiers() & Qt::ShiftModifier) {
             zoom(c, -1);
-          else
+          } else {
             zoom(c, +1);
+          }
         }
       } else {
-        if (hasValidImage()) slotView();
+        if (hasValidImage()) {
+          slotView();
+        }
       }
     } else if (e->type() == QEvent::MouseButtonPress) {
       if (ttype == EXTVIEW) {
@@ -571,7 +578,9 @@ void imageViewer::slotLeftClick() {
 
 void imageViewer::slotDelete() {
   int exit = QMessageBox::Yes;
-  if (imageFileName.isEmpty()) return;
+  if (imageFileName.isEmpty()) {
+    return;
+  }
   if (confirmDeletion) {
     exit =
         QMessageBox::question(this, "Delete file", "Do you want to delete the file and\n move it to the trash folder?",
@@ -588,7 +597,9 @@ void imageViewer::slotDelete() {
 void imageViewer::slotEdit() {
   if (imageFileName.isEmpty()) {
     slotLoad();
-    if (imageFileName.isEmpty()) return;
+    if (imageFileName.isEmpty()) {
+      return;
+    }
   }
   callEditorEvent* ce = new callEditorEvent(this, imageFileName);
   QApplication::postEvent(dispatcherPtr, ce);  // Qt will delete it when done
@@ -632,7 +643,9 @@ void imageViewer::slotUploadFTP() {
     default:
       break;
   }
-  if (!remoteDir.isEmpty()) dispatcherPtr->uploadToRXServer(remoteDir, imageFileName);
+  if (!remoteDir.isEmpty()) {
+    dispatcherPtr->uploadToRXServer(remoteDir, imageFileName);
+  }
 }
 
 
@@ -683,20 +696,26 @@ void imageViewer::slotToTX() {
 void imageViewer::save(const QString& fileName, const QString& fmt, bool convertRGB, bool source) {
   QImage im;
   if (source) {
-    if (sourceImage.isNull()) return;
+    if (sourceImage.isNull()) {
+      return;
+    }
   } else {
-    if (displayedImage.isNull()) return;
+    if (displayedImage.isNull()) {
+      return;
+    }
   }
   if (!convertRGB) {
-    if (source)
+    if (source) {
       im = sourceImage;
-    else
+    } else {
       im = displayedImage;
+    }
   } else {
-    if (source)
+    if (source) {
       im = sourceImage.convertToFormat(QImage::Format_RGB32);
-    else
+    } else {
       im = displayedImage.convertToFormat(QImage::Format_RGB32);
+    }
   }
   im.save(fileName, fmt.toUpper().toLatin1().data());
 }
@@ -771,9 +790,13 @@ int imageViewer::applyTemplate() {
   int compRatio;
   int byteCount;
 
-  if (sourceImage.isNull()) return 0;
+  if (sourceImage.isNull()) {
+    return 0;
+  }
   QFile fi(templateFileName);
-  if (ttype != TXIMG) return 0;
+  if (ttype != TXIMG) {
+    return 0;
+  }
   editorScene tscene(nullptr);
   resultImage = &sourceImage;
   if (transmissionModeIndex == TRXDRM) {
@@ -963,7 +986,9 @@ QImage* imageViewer::getDisplayedImage() { return &displayedImage; }
 #ifdef IMAGETESTVIEWER
 void imageViewer::imageTestViewer(QImage* im, const QString& infoStr) {
   Q_UNUSED(infoStr);
-  if (inStartup) return;
+  if (inStartup) {
+    return;
+  }
   //  QImage imc=*im;
 
   //  QPainter painter(im);

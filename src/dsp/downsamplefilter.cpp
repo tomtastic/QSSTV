@@ -110,10 +110,11 @@ void downsampleFilter::setFilterParams(bool scaled) {
     gain += downSampleFilterParam[i];
   }
   for (i = 0; i < filterLength; i++) {
-    if (scaled)
+    if (scaled) {
       filterParams[i] = downSampleFilterParam[i] / gain;
-    else
+    } else {
       filterParams[i] = downSampleFilterParam[i];
+    }
   }
   addToLog(QString("filtergain:=%1").arg(gain), LOGPERFORM);
 }

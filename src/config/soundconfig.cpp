@@ -78,8 +78,12 @@ void soundConfig::readSettings() {
   qSettings.beginGroup("SOUND");
   rxClock = qSettings.value("rxclock", BASESAMPLERATE).toDouble();
   txClock = qSettings.value("txclock", BASESAMPLERATE).toDouble();
-  if (fabs(1 - rxClock / BASESAMPLERATE) > 0.002) rxClock = BASESAMPLERATE;
-  if (fabs(1 - txClock / BASESAMPLERATE) > 0.002) txClock = BASESAMPLERATE;
+  if (fabs(1 - rxClock / BASESAMPLERATE) > 0.002) {
+    rxClock = BASESAMPLERATE;
+  }
+  if (fabs(1 - txClock / BASESAMPLERATE) > 0.002) {
+    txClock = BASESAMPLERATE;
+  }
   samplingrate = BASESAMPLERATE;
   inputAudioDevice = qSettings.value("inputAudioDevice", "default").toString();
   outputAudioDevice = qSettings.value("outputAudioDevice", "default").toString();
@@ -119,9 +123,13 @@ void soundConfig::setParams() {
 #ifdef __APPLE__
   int i;
   i = ui->inputPCMNameComboBox->findData(inputAudioDevice);
-  if (i >= 0) ui->inputPCMNameComboBox->setCurrentIndex(i);
+  if (i >= 0) {
+    ui->inputPCMNameComboBox->setCurrentIndex(i);
+  }
   i = ui->outputPCMNameComboBox->findData(outputAudioDevice);
-  if (i >= 0) ui->outputPCMNameComboBox->setCurrentIndex(i);
+  if (i >= 0) {
+    ui->outputPCMNameComboBox->setCurrentIndex(i);
+  }
 #else
   setValue(inputAudioDevice, ui->inputPCMNameComboBox);
   setValue(outputAudioDevice, ui->outputPCMNameComboBox);
@@ -130,17 +138,19 @@ void soundConfig::setParams() {
   setValue(pulseSelected, ui->pulseRadioButton);
   setValue(swapChannel, ui->swapChannelCheckBox);
   setValue(pttToneOtherChannel, ui->pttToneCheckBox);
-  if (soundRoutingInput == soundBase::SNDINCARD)
+  if (soundRoutingInput == soundBase::SNDINCARD) {
     ui->inFromCard->setChecked(true);
-  else if (soundRoutingInput == soundBase::SNDINFROMFILE)
+  } else if (soundRoutingInput == soundBase::SNDINFROMFILE) {
     ui->inFromFile->setChecked(true);
-  else
+  } else {
     ui->inRecordFromCard->setChecked(true);
+  }
 
-  if (soundRoutingOutput == soundBase::SNDOUTCARD)
+  if (soundRoutingOutput == soundBase::SNDOUTCARD) {
     ui->outToCard->setChecked(true);
-  else
+  } else {
     ui->outRecord->setChecked(true);
+  }
   setValue(recordingSize, ui->mbSpinBox);
 }
 
@@ -167,17 +177,19 @@ void soundConfig::getParams() {
   getValue(swapChannel, ui->swapChannelCheckBox);
   getValue(pttToneOtherChannel, ui->pttToneCheckBox);
 
-  if (ui->inFromCard->isChecked())
+  if (ui->inFromCard->isChecked()) {
     soundRoutingInput = soundBase::SNDINCARD;
-  else if (ui->inFromFile->isChecked())
+  } else if (ui->inFromFile->isChecked()) {
     soundRoutingInput = soundBase::SNDINFROMFILE;
-  else
+  } else {
     soundRoutingInput = soundBase::SNDINCARDTOFILE;
+  }
 
-  if (ui->outToCard->isChecked())
+  if (ui->outToCard->isChecked()) {
     soundRoutingOutput = soundBase::SNDOUTCARD;
-  else
+  } else {
     soundRoutingOutput = soundBase::SNDOUTTOFILE;
+  }
   getValue(recordingSize, ui->mbSpinBox);
   changed = false;
   if (inputAudioDeviceCopy != inputAudioDevice || outputAudioDeviceCopy != outputAudioDevice ||

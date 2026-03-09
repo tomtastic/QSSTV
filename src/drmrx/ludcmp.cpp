@@ -12,21 +12,30 @@ void ludcmp(float** a, int n, int* indx, float* d) {
   *d = 1.0;
   for (i = 1; i <= n; i++) {
     big = 0.0;
-    for (j = 1; j <= n; j++)
-      if ((temp = fabs(a[i][j])) > big) big = temp;
-    if (big == 0.0) nrerror("Singular matrix in routine ludcmp");
+    for (j = 1; j <= n; j++) {
+      if ((temp = fabs(a[i][j])) > big) {
+        big = temp;
+      }
+    }
+    if (big == 0.0) {
+      nrerror("Singular matrix in routine ludcmp");
+    }
     vv[i] = 1.0 / big;
   }
   for (j = 1; j <= n; j++) {
     for (i = 1; i < j; i++) {
       sum = a[i][j];
-      for (k = 1; k < i; k++) sum -= a[i][k] * a[k][j];
+      for (k = 1; k < i; k++) {
+        sum -= a[i][k] * a[k][j];
+      }
       a[i][j] = sum;
     }
     big = 0.0;
     for (i = j; i <= n; i++) {
       sum = a[i][j];
-      for (k = 1; k < j; k++) sum -= a[i][k] * a[k][j];
+      for (k = 1; k < j; k++) {
+        sum -= a[i][k] * a[k][j];
+      }
       a[i][j] = sum;
       if ((dum = vv[i] * fabs(sum)) >= big) {
         big = dum;
@@ -46,7 +55,9 @@ void ludcmp(float** a, int n, int* indx, float* d) {
     if (a[j][j] == 0.0) a[j][j] = TINY;
     if (j != n) {
       dum = 1.0 / (a[j][j]);
-      for (i = j + 1; i <= n; i++) a[i][j] *= dum;
+      for (i = j + 1; i <= n; i++) {
+        a[i][j] *= dum;
+      }
     }
   }
   free_fvector(vv, 1, n);

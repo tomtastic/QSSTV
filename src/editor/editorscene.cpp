@@ -74,7 +74,9 @@ editorScene::editorScene(QGraphicsView* parent) : QGraphicsScene(parent) {
 
 editorScene::~editorScene() {
   delete localImage;
-  if ((!pasted) && (copyItem != nullptr)) delete copyItem;
+  if ((!pasted) && (copyItem != nullptr)) {
+    delete copyItem;
+  }
   delete arrange;
   delete contextMenu;
 }
@@ -88,8 +90,12 @@ bool editorScene::load(QFile& f) {
   QString version;
   quint16 streamVersion;
   int type;
-  if (f.fileName().isEmpty()) return false;
-  if (!f.open(QIODevice::ReadOnly)) return false;
+  if (f.fileName().isEmpty()) {
+    return false;
+  }
+  if (!f.open(QIODevice::ReadOnly)) {
+    return false;
+  }
   QDataStream str(&f);
   str >> magic;
   if (magic != MAGICNUMBER) {
@@ -160,7 +166,9 @@ bool editorScene::load(QFile& f) {
     addItem(item);
   }
   optimizeDepth();
-  if (!borderSet) border = QRectF(0, 0, 320, 256);
+  if (!borderSet) {
+    border = QRectF(0, 0, 320, 256);
+  }
   addToLog(QString("border position %1,%2 size: %3 x %4 border set=%5")
                .arg(border.topLeft().x())
                .arg(border.topLeft().y())
@@ -254,7 +262,9 @@ bool editorScene::save(QFile& f, bool templ) {
     im.save(&f, "PNG");
     return true;
   }
-  if (!f.open(QIODevice::WriteOnly)) return false;
+  if (!f.open(QIODevice::WriteOnly)) {
+    return false;
+  }
   QDataStream str(&f);
   str.setVersion(QDataStream::Qt_4_4);
   // Header with a "magic number" and a version
@@ -291,7 +301,9 @@ void editorScene::convertReplayImage() {
   imageViewer imv;
 
   fn = txWidgetPtr->getPreviewFilename();
-  if (fn.isEmpty()) return;
+  if (fn.isEmpty()) {
+    return;
+  }
   if (imv.openImage(fn, false, false, false, false)) {
     foreach (QGraphicsItem* t, items()) {
       if (t->type() == graphItemBase::REPLAY) {
@@ -316,7 +328,9 @@ void editorScene::convertText() {
 
 void editorScene::setMode(eMode m) {
   mode = m;
-  if (mode == INSERT) clearSelection();
+  if (mode == INSERT) {
+    clearSelection();
+  }
 }
 
 void editorScene::setItemType(graphItemBase::egraphType tp) { itemType = tp; }
@@ -324,7 +338,9 @@ void editorScene::setItemType(graphItemBase::egraphType tp) { itemType = tp; }
 void editorScene::apply(changeFlags cf) {
   QPen p;
   graphItemBase* it;
-  if (selectedItems().isEmpty()) return;  // nothing to do
+  if (selectedItems().isEmpty()) {
+    return;  // nothing to do
+  }
   foreach (QGraphicsItem* t, selectedItems()) {
     it = qgraphicsitem_cast<graphItemBase*>(t);
     if (cf & DFILLCOLOR) {
@@ -352,8 +368,12 @@ void editorScene::apply(changeFlags cf) {
     }
     if (t->type() == graphItemBase::TEXT) {
       itemText* itt = qgraphicsitem_cast<itemText*>(t);
-      if (cf & DFONT) itt->setFont(font);
-      if (cf & DTEXT) itt->setText(text);
+      if (cf & DFONT) {
+        itt->setFont(font);
+      }
+      if (cf & DTEXT) {
+        itt->setText(text);
+      }
     }
     it->update();
   }
@@ -434,7 +454,9 @@ void editorScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent) {
             }
             break;
           case graphItemBase::IMAGE:
-            if (fl.isEmpty()) break;
+            if (fl.isEmpty()) {
+              break;
+            }
             if (im.load(fl)) {
               item = new itemImage(contextMenu);
               item->setImage(im);
@@ -481,8 +503,12 @@ void editorScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent) {
 
 void editorScene::slotCopy() {
   graphItemBase* item;
-  if ((!pasted) && (copyItem != nullptr)) delete copyItem;
-  if (selectedItems().isEmpty()) return;  // nothing to do
+  if ((!pasted) && (copyItem != nullptr)) {
+    delete copyItem;
+  }
+  if (selectedItems().isEmpty()) {
+    return;  // nothing to do
+  }
   item = qgraphicsitem_cast<graphItemBase*>(selectedItems().first());
   makeCopy(item);
 }
@@ -528,7 +554,9 @@ void editorScene::slotPaste() {
 
 void editorScene::slotExpand() {
   graphItemBase* it;
-  if (selectedItems().isEmpty()) return;  // nothing to do
+  if (selectedItems().isEmpty()) {
+    return;  // nothing to do
+  }
   foreach (QGraphicsItem* t, selectedItems()) {
     it = qgraphicsitem_cast<graphItemBase*>(t);
     if (it->type() != graphItemBase::TEXT) {
@@ -539,12 +567,16 @@ void editorScene::slotExpand() {
 }
 
 void editorScene::slotChangeText() {
-  if (selectedItems().isEmpty()) return;  // nothing to do
+  if (selectedItems().isEmpty()) {
+    return;  // nothing to do
+  }
   itemText* item = qgraphicsitem_cast<itemText*>(selectedItems().first());
   if (!item) {
     return;
   }
-  if (item->type() != graphItemBase::TEXT) return;
+  if (item->type() != graphItemBase::TEXT) {
+    return;
+  }
   QDialog d(nullptr);
   Ui::textForm t;
   t.setupUi(&d);
@@ -594,7 +626,9 @@ void editorScene::slotProperties() {
 
 void editorScene::slotDeleteItem() {
   graphItemBase* r;
-  if (selectedItems().isEmpty()) return;  // nothing to do
+  if (selectedItems().isEmpty()) {
+    return;  // nothing to do
+  }
   foreach (QGraphicsItem* t, selectedItems()) {
     r = qgraphicsitem_cast<graphItemBase*>(t);
     if ((r->getParamPtr()->type > graphItemBase::BASE) && (r->getParamPtr()->type != graphItemBase::SBORDER)) {
@@ -609,7 +643,9 @@ void editorScene::slotDeleteItem() {
 
 void editorScene::slotLock() {
   graphItemBase* it;
-  if (selectedItems().isEmpty()) return;  // nothing to do
+  if (selectedItems().isEmpty()) {
+    return;  // nothing to do
+  }
   foreach (QGraphicsItem* t, selectedItems()) {
     it = qgraphicsitem_cast<graphItemBase*>(t);
     it->setLocked(true);
@@ -618,7 +654,9 @@ void editorScene::slotLock() {
 
 void editorScene::slotUnlock() {
   graphItemBase* it;
-  if (selectedItems().isEmpty()) return;  // nothing to do
+  if (selectedItems().isEmpty()) {
+    return;  // nothing to do
+  }
   foreach (QGraphicsItem* t, selectedItems()) {
     it = qgraphicsitem_cast<graphItemBase*>(t);
     it->setLocked(false);
@@ -627,7 +665,9 @@ void editorScene::slotUnlock() {
 
 
 void editorScene::slotBringToFront() {
-  if (selectedItems().isEmpty()) return;  // nothing to do
+  if (selectedItems().isEmpty()) {
+    return;  // nothing to do
+  }
   foreach (QGraphicsItem* t, selectedItems()) {
     zMax += 1;
     t->setZValue(zMax);
@@ -636,7 +676,9 @@ void editorScene::slotBringToFront() {
 }
 
 void editorScene::slotSendToBack() {
-  if (selectedItems().isEmpty()) return;  // nothing to do
+  if (selectedItems().isEmpty()) {
+    return;  // nothing to do
+  }
   foreach (QGraphicsItem* t, selectedItems()) {
     t->setZValue(0.5);
   }
@@ -645,7 +687,9 @@ void editorScene::slotSendToBack() {
 
 
 void editorScene::slotSendBackward() {
-  if (selectedItems().isEmpty()) return;  // nothing to do
+  if (selectedItems().isEmpty()) {
+    return;  // nothing to do
+  }
   foreach (QGraphicsItem* t, selectedItems()) {
     t->setZValue(t->zValue() - 1.5);
   }
@@ -653,7 +697,9 @@ void editorScene::slotSendBackward() {
 }
 
 void editorScene::slotSendForward() {
-  if (selectedItems().isEmpty()) return;  // nothing to do
+  if (selectedItems().isEmpty()) {
+    return;  // nothing to do
+  }
   foreach (QGraphicsItem* t, selectedItems()) {
     t->setZValue(t->zValue() + 1.5);
   }

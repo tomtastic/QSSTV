@@ -16,11 +16,13 @@ void markerWidget::paintEvent(QPaintEvent* p) {
     painter.drawLine((((marker1 - FFTLOW) * width()) / FFTSPAN), 0, (((marker1 - FFTLOW) * width()) / FFTSPAN),
                      height());
   }
-  if ((marker2 > FFTLOW) && (marker2 < (FFTLOW + FFTSPAN)))
+  if ((marker2 > FFTLOW) && (marker2 < (FFTLOW + FFTSPAN))) {
     painter.drawLine((((marker2 - FFTLOW) * width()) / FFTSPAN), 0, (((marker2 - FFTLOW) * width()) / FFTSPAN),
                      height());
-  if ((marker3 > FFTLOW) && (marker3 < (FFTLOW + FFTSPAN)))
+  }
+  if ((marker3 > FFTLOW) && (marker3 < (FFTLOW + FFTSPAN))) {
     painter.drawLine((((marker3 - FFTLOW) * width()) / FFTSPAN), 0, (((marker3 - FFTLOW) * width()) / FFTSPAN),
                      height());
+  }
   QLabel::paintEvent(p);
 }

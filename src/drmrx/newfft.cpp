@@ -105,11 +105,12 @@ void rfft(float* buf, int N2, int forward) {
     wr = ((temp = wr) * wpr) - (wi * wpi) + wr;
     wi = (wi * wpr) + (temp * wpi) + wi;
   }
-  if (forward == 1)
+  if (forward == 1) {
     *(buf + 1) = br;
 
-  else
+  } else {
     cfft(buf, N2, forward);
+  }
 }
 
 
@@ -162,7 +163,9 @@ void cfft(float* buf, int N2, int forward) {
   if ((fabs(scale) - 1.0) < DBL_EPSILON) {
     bi = buf;
     be = buf + ND;
-    while (bi < be) *bi++ *= scale;
+    while (bi < be) {
+      *bi++ *= scale;
+    }
   }
 }
 
@@ -182,6 +185,8 @@ void bitreverse(float* buf, int N) {
       *(buf + i) = rtemp;
       *(buf + i + 1) = itemp;
     }
-    for (m = N >> 1; m >= 2 && j >= m; m >>= 1) j -= m;
+    for (m = N >> 1; m >= 2 && j >= m; m >>= 1) {
+      j -= m;
+    }
   }
 }

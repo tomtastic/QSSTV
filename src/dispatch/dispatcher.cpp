@@ -118,7 +118,9 @@ void dispatcher::customEvent(QEvent* e) {
       statusBarPtr->showMessage((static_cast<statusBarMsgEvent*>(e))->getStr());
       break;
     case callEditor:
-      if (editorActive) break;
+      if (editorActive) {
+        break;
+      }
       editorActive = true;
       ed = new editor();
       ed->show();
@@ -139,7 +141,9 @@ void dispatcher::customEvent(QEvent* e) {
       break;
 
     case editorFinished:
-      if (!editorActive) break;
+      if (!editorActive) {
+        break;
+      }
       if ((static_cast<editorFinishedEvent*>(e))->isOK()) {
         addToLog(QString(" editorFinishedEvent imageViewPtr: %1").arg(QString::number((ulong)iv, 16)), LOGDISPATCH);
         iv->reload();
@@ -292,7 +296,9 @@ void dispatcher::startTX(txFunctions::etxState state) {
 
 
 void dispatcher::startDRMFIXTx(const QByteArray& ba) {
-  if (!txWidgetPtr->functionsPtr()->prepareFIX(ba)) return;
+  if (!txWidgetPtr->functionsPtr()->prepareFIX(ba)) {
+    return;
+  }
   startTX(txFunctions::TXSENDDRMFIX);
 }
 
@@ -307,13 +313,19 @@ void dispatcher::startDRMTxBinary() {
 
   dirDialog d((QWidget*)mainWindowPtr, "Binary File");
   QString filename = d.openFileName("", "*");
-  if (filename.isEmpty()) return;
-  if (!txWidgetPtr->functionsPtr()->prepareBinary(filename)) return;
+  if (filename.isEmpty()) {
+    return;
+  }
+  if (!txWidgetPtr->functionsPtr()->prepareBinary(filename)) {
+    return;
+  }
 
   txtime = txWidgetPtr->functionsPtr()->calcTxTime(true, 0);
   finfo.setFile(filename);
 
-  if (txtime > (3 * 60)) mbox.setIcon(QMessageBox::Warning);
+  if (txtime > (3 * 60)) {
+    mbox.setIcon(QMessageBox::Warning);
+  }
 
   mbox.setWindowTitle("TX Binary File");
   mbox.setText(QString("'%1'").arg(filename));
@@ -328,10 +340,11 @@ void dispatcher::startDRMTxBinary() {
 
   mbox.setInformativeText(QString("The file is %1 and will take %2 seconds on air to send").arg(sizeStr).arg(txtime));
 
-  if (useHybrid)
+  if (useHybrid) {
     sendButton = mbox.addButton(tr("Upload ready to transmit"), QMessageBox::AcceptRole);
-  else
+  } else {
     sendButton = mbox.addButton(tr("Start Transmitting"), QMessageBox::AcceptRole);
+  }
   mbox.setStandardButtons(QMessageBox::Cancel);
 
   mbox.exec();
@@ -386,11 +399,14 @@ void dispatcher::saveRxSSTVImage(esstvMode mode) {
 
     info = "";
     m = 0;
-    while (m <= NUMSSTVMODES && shortModeName != SSTVTable[m].shortName) m++;
-    if (m <= NUMSSTVMODES)
+    while (m <= NUMSSTVMODES && shortModeName != SSTVTable[m].shortName) {
+      m++;
+    }
+    if (m <= NUMSSTVMODES) {
       info += SSTVTable[m].name;
-    else
+    } else {
       info += shortModeName;
+    }
 
     if (!lastCallsign.isEmpty()) info += " de " + lastCallsign;
 
@@ -434,7 +450,9 @@ void dispatcher::saveImage(const QString& fileName, const QString& infotext) {
     } else {
       remoteDir = ftpRemoteDRMDirectory;
     }
-    if (!infotext.isEmpty()) text += " " + infotext;
+    if (!infotext.isEmpty()) {
+      text += " " + infotext;
+    }
     // Limit uploaded size
     if ((im.width() > 960) || (im.height() > 768)) {
       im = im.scaled(960, 768, Qt::KeepAspectRatio);
@@ -444,7 +462,9 @@ void dispatcher::saveImage(const QString& fileName, const QString& infotext) {
     // font would be unreadable
     QFont font("Arial");
     pixelSize = 9 * im.width() / 320;
-    if (pixelSize < 8) pixelSize = 8;
+    if (pixelSize < 8) {
+      pixelSize = 8;
+    }
     font.setPixelSize(pixelSize);
     QFontMetrics fontm(font);
 #if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
@@ -470,7 +490,9 @@ void dispatcher::uploadToRXServer(const QString& remoteDir, const QString& fn) {
   // todo ftp
   QString uploadDestinationFile = fn;
   uploadSourceFile = fn;
-  if (ff.isBusy()) return;
+  if (ff.isBusy()) {
+    return;
+  }
   ff.setupFtp("FTP Upload to server", ftpRemoteHost, ftpPort, ftpLogin, ftpPassword, remoteDir);
 
   QImage im(1, QDateTime::currentDateTime().time().minute(), QImage::Format_RGB32);
@@ -490,11 +512,15 @@ void dispatcher::uploadToRXServer(const QString& remoteDir, const QString& fn) {
 
 void dispatcher::slotRenameListing(bool err) {
   int i;
-  if (err) return;
+  if (err) {
+    return;
+  }
   QList<QUrlInfo> images;
   QString extension = "";
 
-  if (addExtension) extension = "." + ftpDefaultImageFormat.toLower();
+  if (addExtension) {
+    extension = "." + ftpDefaultImageFormat.toLower();
+  }
   images = ff.getListing();
   QString src, dst;
   for (i = ftpNumImages; i > 1; i--) {
@@ -511,14 +537,18 @@ void dispatcher::slotRenameListing(bool err) {
 bool dispatcher::inList(QList<QUrlInfo> lst, QString fn) {
   int i;
   for (i = 0; i < lst.count(); i++) {
-    if (lst.at(i).name() == fn) return true;
+    if (lst.at(i).name() == fn) {
+      return true;
+    }
   }
   return false;
 }
 
 
 void dispatcher::showOffLine() {
-  if (!enableFTP) return;
+  if (!enableFTP) {
+    return;
+  }
   ff.setupFtp("FTP Show Offline", ftpRemoteHost, ftpPort, ftpLogin, ftpPassword, ftpRemoteSSTVDirectory);
   QImage im(2, QDateTime::currentDateTime().time().minute(), QImage::Format_RGB32);
   im.fill(Qt::black);

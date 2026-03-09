@@ -135,5 +135,7 @@ void CTransmitData::InitInternal(CParameter& TransmParam) {
 
 CTransmitData::~CTransmitData() {
   /* Close file */
-  if (pFileTransmitter != nullptr) fclose(pFileTransmitter);
+  if (pFileTransmitter != nullptr) {
+    fclose(pFileTransmitter);
+  }
 }

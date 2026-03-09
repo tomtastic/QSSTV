@@ -24,14 +24,16 @@ fskDecoder::fskDecoder() {
 
 bool fskDecoder::waitStartFreq(unsigned int freqL, unsigned int freqH) {
   if ((avgFreq >= freqL) && (avgFreq <= freqH)) {
-    if (avgCounter < avgCount)
+    if (avgCounter < avgCount) {
       avgCounter++;
-    else {
+    } else {
       timeoutCounter = 0;
       return true;
     }
   } else {
-    if (avgCounter) avgCounter--;
+    if (avgCounter) {
+      avgCounter--;
+    }
   }
   return false;
 }
@@ -45,7 +47,9 @@ bool fskDecoder::waitStartFreq(unsigned int freqL, unsigned int freqH, unsigned 
       return true;
     }
   } else {
-    if (avgCounter) avgCounter--;
+    if (avgCounter) {
+      avgCounter--;
+    }
   }
   if (timeoutCounter++ > maxWait) {
     timeout = true;
@@ -57,26 +61,31 @@ bool fskDecoder::waitStartFreq(unsigned int freqL, unsigned int freqH, unsigned 
 
 bool fskDecoder::waitEndFreq(unsigned int freqL, unsigned int freqH) {
   if ((avgFreq < freqL) || (avgFreq > freqH)) {
-    if (avgCounter)
+    if (avgCounter) {
       avgCounter--;
-    else
+    } else {
       return true;
+    }
   } else {
-    if (avgCounter < avgCount) avgCounter++;
+    if (avgCounter < avgCount) {
+      avgCounter++;
+    }
   }
   return false;
 }
 
 bool fskDecoder::waitEndFreq(unsigned int freqL, unsigned int freqH, unsigned long maxWait, bool& timeout) {
   if ((avgFreq < freqL) || (avgFreq > freqH)) {
-    if (avgCounter < avgCount)
+    if (avgCounter < avgCount) {
       avgCounter++;
-    else {
+    } else {
       timeoutCounter = 0;
       return true;
     }
   } else {
-    if (avgCounter) avgCounter--;
+    if (avgCounter) {
+      avgCounter--;
+    }
   }
   if (timeoutCounter++ > maxWait) {
     timeout = true;
@@ -166,7 +175,9 @@ void fskIdDecoder::switchState(efskState newState, unsigned int i) {
 
 void fskIdDecoder::extract(unsigned int syncSampleCtr, bool narrow) {
   int i;
-  if (narrow) return;
+  if (narrow) {
+    return;
+  }
   syncSampleCounter = syncSampleCtr;
   bool timeout;
   for (i = 0; i < RXSTRIPE; i++) {
@@ -189,8 +200,9 @@ void fskIdDecoder::extract(unsigned int syncSampleCtr, bool narrow) {
           if (((sampleCounter + i - startSampleCounter) >= FSKMIN1500)) {
             switchState(WAITSTART2100, i);
             timeoutCounter = 0;
-          } else
+          } else {
             switchState(FSKINIT, i);
+          }
         }
       } break;
 
@@ -210,8 +222,9 @@ void fskIdDecoder::extract(unsigned int syncSampleCtr, bool narrow) {
               ((sampleCounter + i - startSampleCounter) < 2 * FSKMIN2100)) {
             switchState(WAITSTART1900, i);
             timeoutCounter = 0;
-          } else
+          } else {
             switchState(FSKINIT, i);
+          }
         }
       } break;
 
@@ -292,10 +305,11 @@ void visDecoder::switchState(evisState newState, unsigned int i) {
 
 void visDecoder::extract(unsigned int syncSampleCtr, bool narrow) {
   syncSampleCounter = syncSampleCtr;
-  if (narrow)
+  if (narrow) {
     extractNarrow();
-  else
+  } else {
     extractWide();
+  }
 }
 
 
@@ -325,8 +339,9 @@ void visDecoder::extractNarrow() {
           if (((sampleCounter + i - startSampleCounter) >= VISMIN1900) &&
               ((sampleCounter + i - startSampleCounter) < 2 * VISMIN1900)) {
             switchState(WAITSTART2100, i);
-          } else
+          } else {
             switchState(VISINIT, i);
+          }
         }
       } break;
       case WAITSTART2100:
@@ -426,8 +441,9 @@ void visDecoder::extractWide() {
             addToLog(QString("end1900 at %1").arg(syncSampleCounter + i), LOGVISCODE);
             switchState(WAITSTART1200, i);
             timeoutCounter = 0;
-          } else
+          } else {
             switchState(VISINIT, i);
+          }
         }
       } break;
       case WAITSTART1200:

@@ -61,8 +61,12 @@ bool drmTx::initDRMImage(bool binary, QString fileName) {
   QFile inf;
   setTxParams(drmParams);
 
-  if (binary && fileName.isEmpty()) return false;
-  if (!binary && !txWidgetPtr->getImageViewerPtr()->hasValidImage()) return false;
+  if (binary && fileName.isEmpty()) {
+    return false;
+  }
+  if (!binary && !txWidgetPtr->getImageViewerPtr()->hasValidImage()) {
+    return false;
+  }
 
   addToLog(QString("bin=%1, fileName=%2").arg(binary).arg(fileName), LOGDRMTX);
 
@@ -112,7 +116,9 @@ bool drmTx::initDRMImage(bool binary, QString fileName) {
 
 void drmTx::updateTxList() {
   fixBlockList.clear();
-  if ((txList.count() > 0) && (txList.last().transportID == txTransportID)) return;
+  if ((txList.count() > 0) && (txList.last().transportID == txTransportID)) {
+    return;
+  }
 
   if (txList.count() > 5) txList.removeFirst();
 
@@ -145,7 +151,9 @@ bool drmTx::ftpDRMHybrid(QString fileName, QString destName) {
 
   if (fileName.isEmpty()) {
     txWidgetPtr->getImageViewerPtr()->copyToBuffer(&ba);
-    if (!ftmp.open()) return false;
+    if (!ftmp.open()) {
+      return false;
+    }
     ftmp.write(ba);
     ftmp.close();
     fileName = ftmp.fileName();
@@ -166,7 +174,9 @@ void drmTx::clearLastHybridUpload() {
 }
 
 void drmTx::ftpDRMHybridNotifyCheck(QString mask) {
-  if (!enableHybridNotify) return;
+  if (!enableHybridNotify) {
+    return;
+  }
   notifyCheckEvent* ce;
   ce = new notifyCheckEvent(mask);
   QApplication::postEvent(dispatcherPtr, ce);
@@ -218,12 +228,14 @@ int drmTx::processFIX(QByteArray bsrByteArray) {
       i++;
       break;
     }
-    if (block < 0)
+    if (block < 0) {
       inSeries = true;
-    else {
+    } else {
       if (inSeries) {
         inSeries = false;
-        for (j = lastBlock; j < block; j++) fixBlockList.append(j);
+        for (j = lastBlock; j < block; j++) {
+          fixBlockList.append(j);
+        }
       }
       fixBlockList.append(block);
       lastBlock = block + 1;

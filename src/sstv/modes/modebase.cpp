@@ -153,7 +153,9 @@ modeBase::eModeBase modeBase::process(quint16* demod, unsigned int syncPos, bool
       addToLog(QString("modebase:process: syncPos: %1 > length %2").arg(syncPos).arg(length), LOGMODES);
       return MBENDOFIMAGE;
     } else {
-      for (i = 0; i < syncPos; i++);  // debugStatePtr[i]=debugState;
+      for (i = 0; i < syncPos; i++) {
+        ;  // debugStatePtr[i]=debugState;
+      }
     }
     rxSampleCounter += syncPos;
   }
@@ -216,7 +218,9 @@ modeBase::eModeBase modeBase::process(quint16* demod, unsigned int syncPos, bool
           }
           switchState(MBSETUPLINE);
         } else {
-          if (avgFreqGapCounter >= AVGFRQOFFSET) avgFreqGap += demod[i];
+          if (avgFreqGapCounter >= AVGFRQOFFSET) {
+            avgFreqGap += demod[i];
+          }
           avgFreqGapCounter++;
           logFilePtr->addToAux(QString("m15\t%1\t%2\t%3").arg(demod[i]).arg(avgFreqGapCounter).arg(avgFreqGap));
         }
@@ -239,7 +243,9 @@ modeBase::eModeBase modeBase::process(quint16* demod, unsigned int syncPos, bool
           }
           switchState(MBSETUPLINE);
         } else {
-          if (avgFreqGapCounter >= AVGFRQOFFSET) avgFreqGap += demod[i];
+          if (avgFreqGapCounter >= AVGFRQOFFSET) {
+            avgFreqGap += demod[i];
+          }
           avgFreqGapCounter++;
           logFilePtr->addToAux(QString("m23\t%1\t%2\t%3").arg(demod[i]).arg(avgFreqGapCounter).arg(avgFreqGap));
         }
@@ -270,13 +276,19 @@ bool modeBase::getPixels() {
     //      addToLog(QString("modebase:getPixels[0] =%1").arg(sampleCounter+rxSampleCounter),LOGMODES);
     //      color=128+lround(((double)avgSample/(double)avgSampleCounter-fc)*255./dev);
     color = 128 + lround((static_cast<double>(sample) - fc) * 255. / dev);
-    if (color < 0) color = 0;
-    if (color > 255) color = 255;
+    if (color < 0) {
+      color = 0;
+    }
+    if (color > 255) {
+      color = 255;
+    }
     pixelArrayPtr[pixelCounter] = static_cast<unsigned char>(color);
     pixelCounter++;
     avgSample = 0;
     avgSampleCounter = 0;
-    if (pixelCounter >= activeSSTVParam->numberOfPixels) return true;
+    if (pixelCounter >= activeSSTVParam->numberOfPixels) {
+      return true;
+    }
   }
   return false;  // indicate, it's not the end of the line
 }
@@ -352,7 +364,9 @@ void modeBase::yuvConversion(unsigned char* array) {
 
 modeBase::eModeBase modeBase::transmitImage(imageViewer* iv) {
   txImPtr = iv;
-  if (!iv->hasValidImage()) return MBENDOFIMAGE;
+  if (!iv->hasValidImage()) {
+    return MBENDOFIMAGE;
+  }
   addToLog(QString("Starting Transmit Image"), LOGMODES);
   displayLineCounter = 0;
   lineCounter = 0;
@@ -384,9 +398,9 @@ modeBase::eModeBase modeBase::transmitImage(imageViewer* iv) {
       } break;
       case MBENDOFLINE: {
         //     addToLog(QString("MBENDOFLINE samplcntr=%1 line: %2").arg(sampleCounter).arg(lineCounter),LOGMODES);
-        if (++lineCounter >= activeSSTVParam->numberOfDataLines)
+        if (++lineCounter >= activeSSTVParam->numberOfDataLines) {
           state = MBEOIMAGE;
-        else {
+        } else {
           getLine();
           switchState(MBSETUPLINE);
           subLine = 0;
@@ -430,8 +444,12 @@ void modeBase::sendPixelBuffer() {
     f = lowerFreq + (static_cast<double>(pixelArrayPtr[pixelCounter]) * (2300 - lowerFreq) / 255.);
 
     while (sampleCounter < pixelPositionTable[pixelCounter]) {
-      if (f > 2300) f = 2300;
-      if (f < lowerFreq) f = lowerFreq;
+      if (f > 2300) {
+        f = 2300;
+      }
+      if (f < lowerFreq) {
+        f = lowerFreq;
+      }
       synthesPtr->sendSample(f);
       sampleCounter++;
     }
@@ -453,7 +471,9 @@ void modeBase::getLineY(bool evenodd) {
   //	QColor c;
   int tO, tE;
   int r, yo, ye, b;
-  if ((displayLineCounter & 1) && (evenodd)) return;  // only even lines accepted
+  if ((displayLineCounter & 1) && (evenodd)) {
+    return;  // only even lines accepted
+  }
   //  txImPtr->createImage(QSize(activeSSTVParam->numberOfPixels,activeSSTVParam->numberOfDisplayLines),QColor(128,128,128),imageStretch);
   unsigned int* pixelArrayE = txImPtr->getScanLineAddress(displayLineCounter);
   if (evenodd) {

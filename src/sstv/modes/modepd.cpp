@@ -94,7 +94,9 @@ modeBase::embState modePD::rxSetupLine() {
 void modePD::calcPixelPositionTable(unsigned int colorLine, bool tx) {
   unsigned int i;
   int ofx = 0;
-  if (tx) ofx = 1;
+  if (tx) {
+    ofx = 1;
+  }
   DSPFLOAT lineStart = start;
   switch (colorLine) {
     case YLINEODD:

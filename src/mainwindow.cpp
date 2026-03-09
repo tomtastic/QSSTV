@@ -210,7 +210,9 @@ void mainWindow::init() {
     splashPtr->showMessage(splashStr, Qt::AlignLeft, Qt::white);
   }
   startTimer(1000);
-  if (fileWatcherPtr == nullptr) fileWatcherPtr = new fileWatcher;
+  if (fileWatcherPtr == nullptr) {
+    fileWatcherPtr = new fileWatcher;
+  }
   fileWatcherPtr->init();
 }
 
@@ -310,10 +312,11 @@ void mainWindow::slotSaveWaterfallImage() {
 
     // TODO: rig frequency etc
     rigControllerPtr->getFrequency(freq);
-    if (freq > 0)
+    if (freq > 0) {
       p.drawText(1, 15, QString("%1 MHz").arg(freq / 1000000.0, 1, 'f', 6));
-    else
+    } else {
       p.drawText(1, 15, "no freq");
+    }
 
     if (im.save(fn, "jpg")) {
       statusBarPtr->showMessage("Saved " + fn);
@@ -337,7 +340,9 @@ void mainWindow::slotExit() {
     rxWidgetPtr->setOnlineStatus(false);
     rxWidgetPtr->functionsPtr()->stopThread();
     txWidgetPtr->functionsPtr()->stopThread();
-    if (soundIOPtr) soundIOPtr->stopSoundThread();
+    if (soundIOPtr) {
+      soundIOPtr->stopSoundThread();
+    }
     writeSettings();
     QApplication::quit();
   }
@@ -395,10 +400,11 @@ void mainWindow::slotAboutQSSTV() {
 void mainWindow::slotAboutQt() { QMessageBox::aboutQt(this, tr("About...")); }
 
 void mainWindow::setPTT(bool p) {
-  if (p)
+  if (p) {
     pttIcon->setPixmap(*redPXMPtr);
-  else
+  } else {
     pttIcon->setPixmap(*greenPXMPtr);
+  }
 }
 
 void mainWindow::setSSTVDRMPushButton(bool inDRM) {
@@ -406,10 +412,11 @@ void mainWindow::setSSTVDRMPushButton(bool inDRM) {
   QString modeStr;
   bsrPushButton->setEnabled(inDRM);
   freqComboBox->clear();
-  if (inDRM)
+  if (inDRM) {
     modeStr = "DRM";
-  else
+  } else {
     modeStr = "SSTV";
+  }
   modModeList.clear();
   modPassBandList.clear();
   for (i = 0; i < freqList.count(); i++) {
@@ -451,7 +458,9 @@ void mainWindow::slotSetFrequency(int freqIndex) {
   freqStr = freqComboBox->itemText(freqIndex);
   mode = modModeList.at(freqIndex);
   passBand = modPassBandList.at(freqIndex);
-  if (freqStr.isEmpty()) return;
+  if (freqStr.isEmpty()) {
+    return;
+  }
   bool ok;
   double fr = freqStr.toDouble(&ok);
   if (!ok) {
@@ -477,7 +486,9 @@ void mainWindow::timerEvent(QTimerEvent*) {
   double fr;
   if (rigControllerPtr->getFrequency(fr)) {
     fr /= 1000000.;
-    if (fr > 1) freqDisplay->setText(QString::number(fr, 'f', 6));
+    if (fr > 1) {
+      freqDisplay->setText(QString::number(fr, 'f', 6));
+    }
   } else {
     freqDisplay->setText("No Rig");
   }

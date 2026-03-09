@@ -101,7 +101,9 @@ void modeGBR2::calcPixelPositionTable(unsigned int colorLine, bool tx) {
   unsigned int i;
   DSPFLOAT lineStart = start;
   int ofx = 0;
-  if (tx) ofx = 1;
+  if (tx) {
+    ofx = 1;
+  }
   //  debugState=colorLine;
   switch (colorLine) {
     case GREENLINE:
@@ -131,7 +133,9 @@ void modeGBR2::calcPixelPositionTable(unsigned int colorLine, bool tx) {
 
 unsigned long modeGBR2::adjustSyncPosition(unsigned long syncPos0, bool isRetrace) {
 #define SCOTTYCOMPENSATION 15
-  if (isRetrace) return syncPos0 + SCOTTYCOMPENSATION;
+  if (isRetrace) {
+    return syncPos0 + SCOTTYCOMPENSATION;
+  }
   if (syncPos0 < static_cast<unsigned long>(fp + 2 * visibleLineLength + 2 * blank + syncDuration / 2)) {
     return syncPos0 + static_cast<unsigned long>(bp + visibleLineLength) + SCOTTYCOMPENSATION;
   } else {

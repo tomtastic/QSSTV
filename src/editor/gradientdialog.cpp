@@ -138,16 +138,24 @@ void gradientDialog::slotColorDialog() {
   QPushButton* act = qobject_cast<QPushButton*>(sender());
   if (act == color1Button) {
     c = QColorDialog::getColor(gParam.color1, this, "", QColorDialog::ShowAlphaChannel);
-    if (c.isValid()) gParam.color1 = c;
+    if (c.isValid()) {
+      gParam.color1 = c;
+    }
   } else if (act == color2Button) {
     c = QColorDialog::getColor(gParam.color2, this, "", QColorDialog::ShowAlphaChannel);
-    if (c.isValid()) gParam.color2 = c;
+    if (c.isValid()) {
+      gParam.color2 = c;
+    }
   } else if (act == color3Button) {
     c = QColorDialog::getColor(gParam.color3, this, "", QColorDialog::ShowAlphaChannel);
-    if (c.isValid()) gParam.color3 = c;
+    if (c.isValid()) {
+      gParam.color3 = c;
+    }
   } else if (act == color4Button) {
     c = QColorDialog::getColor(gParam.color4, this, "", QColorDialog::ShowAlphaChannel);
-    if (c.isValid()) gParam.color4 = c;
+    if (c.isValid()) {
+      gParam.color4 = c;
+    }
   }
   slotUpdate();
 }
@@ -165,14 +173,15 @@ void gradientDialog::slotUpdate() {
   gParam.pos3 = pos3SpinBox->value();
   gParam.pos4 = pos4SpinBox->value();
 
-  if (noGradientButton->isChecked())
+  if (noGradientButton->isChecked()) {
     gParam.type = sgradientParam::NONE;
-  else if (linearGradientButton->isChecked())
+  } else if (linearGradientButton->isChecked()) {
     gParam.type = sgradientParam::LINEAR;
-  else if (radialGradientButton->isChecked())
+  } else if (radialGradientButton->isChecked()) {
     gParam.type = sgradientParam::RADIAL;
-  else if (conicalGradientButton->isChecked())
+  } else if (conicalGradientButton->isChecked()) {
     gParam.type = sgradientParam::CONICAL;
+  }
 
   s = gParam.color1.name();
   color1Button->setStyleSheet(
@@ -207,11 +216,17 @@ void gradientDialog::selectGradient() { exec(); }
 
 void grSetup(sgradientParam prm, QGradient& g) {
   g.setColorAt(prm.pos1 / 100., prm.color1);
-  if (prm.pos2 <= prm.pos1) return;
+  if (prm.pos2 <= prm.pos1) {
+    return;
+  }
   g.setColorAt(prm.pos2 / 100., prm.color2);
-  if (prm.pos3 <= prm.pos2) return;
+  if (prm.pos3 <= prm.pos2) {
+    return;
+  }
   g.setColorAt(prm.pos3 / 100., prm.color3);
-  if (prm.pos4 <= prm.pos3) return;
+  if (prm.pos4 <= prm.pos3) {
+    return;
+  }
   g.setColorAt(prm.pos4 / 100., prm.color4);
 }
 

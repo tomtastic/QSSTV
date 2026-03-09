@@ -69,8 +69,9 @@ void COFDMCellMapping::ProcessDataInternal(CParameter& TransmParam) {
 
         iDummyCellCounter++;
 
-      } else
+      } else {
         (*pvecOutputData)[iCar] = (*pvecInputData)[iMSCCounter];
+      }
 
       iMSCCounter++;
     }
@@ -98,7 +99,9 @@ void COFDMCellMapping::ProcessDataInternal(CParameter& TransmParam) {
 
     /* Increase frame-counter (ID) (Used also in FAC.cpp) */
     TransmParam.iFrameIDTransm++;
-    if (TransmParam.iFrameIDTransm == NUM_FRAMES_IN_SUPERFRAME) TransmParam.iFrameIDTransm = 0;
+    if (TransmParam.iFrameIDTransm == NUM_FRAMES_IN_SUPERFRAME) {
+      TransmParam.iFrameIDTransm = 0;
+    }
   }
 
   /* Set absolute symbol position (for updated relative positions) */

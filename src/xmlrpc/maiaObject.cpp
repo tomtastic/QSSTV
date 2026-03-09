@@ -232,24 +232,25 @@ QVariant MaiaObject::fromXml(const QDomElement& elem) {
   const QDomElement typeElement = elem.firstChild().toElement();
   const QString typeName = typeElement.tagName().toLower();
 
-  if (typeName == "string")
+  if (typeName == "string") {
     return QVariant(typeElement.text());
-  else if (typeName == "i4" || typeName == "int") {
+  } else if (typeName == "i4" || typeName == "int") {
     return QVariant(typeElement.text().toInt());
-  } else if (typeName == "double")
+  } else if (typeName == "double") {
     return QVariant(typeElement.text().toDouble());
-  else if (typeName == "boolean") {
-    if (typeElement.text().toLower() == "true" || typeElement.text() == "1")
+  } else if (typeName == "boolean") {
+    if (typeElement.text().toLower() == "true" || typeElement.text() == "1") {
       return QVariant(true);
-    else
+    } else {
       return QVariant(false);
-  } else if (typeName == "base64")
+    }
+  } else if (typeName == "base64") {
     return QVariant(QByteArray::fromBase64(typeElement.text().toLatin1()));
-  else if (typeName == "datetime" || typeName == "datetime.iso8601")
+  } else if (typeName == "datetime" || typeName == "datetime.iso8601") {
     return QVariant(QDateTime::fromString(typeElement.text(), "yyyyMMddThh:mm:ss"));
-  else if (typeName == "nil")
+  } else if (typeName == "nil") {
     return QVariant();  // Non-standard extension: http://ontosys.com/xml-rpc/extensions.php
-  else if (typeName == "array") {
+  } else if (typeName == "array") {
     QList<QVariant> values;
     QDomNode valueNode = typeElement.firstChild().firstChild();
     while (!valueNode.isNull()) {

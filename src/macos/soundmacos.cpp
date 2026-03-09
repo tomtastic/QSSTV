@@ -95,14 +95,20 @@ static bool DeviceHasBuffersInScope(AudioObjectID deviceID, AudioObjectPropertyS
 
   UInt32 dataSize = 0;
   OSStatus result = AudioObjectGetPropertyDataSize(deviceID, &propertyAddress, 0, nullptr, &dataSize);
-  if (result != kAudioHardwareNoError) return false;
+  if (result != kAudioHardwareNoError) {
+    return false;
+  }
 
   std::vector<char> buffer(dataSize);
   AudioBufferList* bufferList = reinterpret_cast<AudioBufferList*>(buffer.data());
-  if (!bufferList) return false;
+  if (!bufferList) {
+    return false;
+  }
 
   result = AudioObjectGetPropertyData(deviceID, &propertyAddress, 0, nullptr, &dataSize, bufferList);
-  if (result != kAudioHardwareNoError) return false;
+  if (result != kAudioHardwareNoError) {
+    return false;
+  }
 
   return bufferList->mNumberBuffers > 0;
 }
@@ -140,9 +146,13 @@ static std::vector<AudioObjectID> getAudioDevices() {
 
 std::string to_string(CFStringRef s) {
   auto ptr = CFStringGetCStringPtr(s, kCFStringEncodingUTF8);
-  if (ptr) return ptr;
+  if (ptr) {
+    return ptr;
+  }
   std::vector<char> buffer(CFStringGetMaximumSizeForEncoding(CFStringGetLength(s), kCFStringEncodingUTF8) + 1);
-  if (!CFStringGetCString(s, buffer.data(), buffer.size(), kCFStringEncodingUTF8)) return "";
+  if (!CFStringGetCString(s, buffer.data(), buffer.size(), kCFStringEncodingUTF8)) {
+    return "";
+  }
   return buffer.data();
 }
 
@@ -173,12 +183,16 @@ class CFString {
   }
 
   void reset() {
-    if (s) CFRelease(s);
+    if (s) {
+      CFRelease(s);
+    }
   }
 
   void reset(CFStringRef other) {
     reset();
-    if (other) s = other;
+    if (other) {
+      s = other;
+    }
   }
 
   const CFStringRef* operator&() const { return &s; }
@@ -274,7 +288,9 @@ class audio_channel {
   virtual ~audio_channel() {
     if (queue) {
       auto ret = AudioQueueDispose(queue, 1);
-      if (ret) fprintf(stderr, "%s: AudioQueueDispose() failed: %d", __FUNCTION__, ret);
+      if (ret) {
+        fprintf(stderr, "%s: AudioQueueDispose() failed: %d", __FUNCTION__, ret);
+      }
     }
   }
 
@@ -284,7 +300,9 @@ class audio_channel {
     for (unsigned i = 0; i < n; i++) {
       AudioQueueBufferRef buffer;
       auto ret = AudioQueueAllocateBuffer(queue, buffer_size_in_bytes, &buffer);
-      if (ret) throw exception("AudioQueueAllocateBuffer", ret);
+      if (ret) {
+        throw exception("AudioQueueAllocateBuffer", ret);
+      }
 
       buffers.push_front(buffer);
     }
@@ -303,7 +321,9 @@ class input_channel : public audio_channel {
     EnableAudioInput();
     auto ret =
         AudioQueueNewInput(&format, staticCallback, this, CFRunLoopGetCurrent(), kCFRunLoopCommonModes, 0, &queue);
-    if (ret) throw exception("AudioQueueNewInput", ret);
+    if (ret) {
+      throw exception("AudioQueueNewInput", ret);
+    }
 
     for (auto buffer : make_buffers(buffers_for_one_second)) {
       auto ret = AudioQueueEnqueueBuffer(queue, buffer, 0, nullptr);
@@ -314,7 +334,9 @@ class input_channel : public audio_channel {
     AudioQueueSetProperty(queue, kAudioQueueProperty_CurrentDevice, &UID, sizeof(UID));
 
     ret = AudioQueueStart(queue, nullptr);
-    if (ret) throw exception("AudioQueueStart", ret);
+    if (ret) {
+      throw exception("AudioQueueStart", ret);
+    }
   }
 
  private:
@@ -364,7 +386,9 @@ class input_channel : public audio_channel {
     auto bytes_avail = queued_size - bytes_consumed;
     Lock.unlock();
     auto lost = overruns.exchange(0);
-    if (lost) printf("%s: %zu bytes available, lost %u\n", __FUNCTION__, bytes_avail, lost);
+    if (lost) {
+      printf("%s: %zu bytes available, lost %u\n", __FUNCTION__, bytes_avail, lost);
+    }
     //			else
     // 				printf("%s: %u usecs\n", __FUNCTION__, ret);
     return bytes_avail;
@@ -393,13 +417,17 @@ class input_channel : public audio_channel {
       bytes_consumed += n;
       bytes -= n;
       data = static_cast<char*>(data) + n;
-      if (bytes_consumed >= buffer->mAudioDataByteSize) recyle_buffer();
+      if (bytes_consumed >= buffer->mAudioDataByteSize) {
+        recyle_buffer();
+      }
     }
   }
 
   void drain() {
     std::unique_lock<std::mutex> Lock(buffers_mutex);
-    while (!buffers.empty()) recyle_buffer();
+    while (!buffers.empty()) {
+      recyle_buffer();
+    }
     overruns.exchange(0);
   }
 };
@@ -414,7 +442,9 @@ class output_channel : public audio_channel {
 
     auto ret =
         AudioQueueNewOutput(&format, staticCallback, this, CFRunLoopGetCurrent(), kCFRunLoopCommonModes, 0, &queue);
-    if (ret) throw exception("AudioQueueNewOutput", ret);
+    if (ret) {
+      throw exception("AudioQueueNewOutput", ret);
+    }
 
     for (auto buffer : make_buffers(10)) buffers.push_front(buffer);
 
@@ -478,7 +508,9 @@ class output_channel : public audio_channel {
       data = static_cast<const char*>(data) + n;
       if (!started) {
         auto ret = AudioQueueStart(queue, nullptr);
-        if (ret) throw exception("AudioQueueStart", ret);
+        if (ret) {
+          throw exception("AudioQueueStart", ret);
+        }
         printf("XXX: mac_output_channelwrite(): started\n");
         started = true;
       }
@@ -486,7 +518,9 @@ class output_channel : public audio_channel {
   }
 
   void stop(bool wait_queue_empty) {
-    if (!started) return;
+    if (!started) {
+      return;
+    }
 
     if (wait_queue_empty) {
       std::unique_lock<std::mutex> Lock(buffers_mutex);
@@ -494,7 +528,9 @@ class output_channel : public audio_channel {
     }
 
     auto ret = AudioQueueStop(queue, true);
-    if (ret) throw exception("AudioQueueStop", ret);
+    if (ret) {
+      throw exception("AudioQueueStop", ret);
+    }
     started = false;
   }
 };
@@ -530,10 +566,14 @@ struct impl : public soundBase {
 
 
   int read(int& countAvailable) override {
-    if (!input) return 0;
+    if (!input) {
+      return 0;
+    }
     try {
       countAvailable = static_cast<int>(input->bytes_available());
-      if (static_cast<size_t>(countAvailable) < sizeof(qint16) * DOWNSAMPLESIZE) return 0;
+      if (static_cast<size_t>(countAvailable) < sizeof(qint16) * DOWNSAMPLESIZE) {
+        return 0;
+      }
 
       //			printf("XXX: %s(%d bytes available)\n", __FUNCTION__, countAvailable);
 
@@ -547,8 +587,12 @@ struct impl : public soundBase {
 
   int write(uint numFrames) override {
     //		printf("XXX: %s(numFrames=%u)\n", __FUNCTION__, numFrames);
-    if (!output) return 0;
-    if (!numFrames) return 0;
+    if (!output) {
+      return 0;
+    }
+    if (!numFrames) {
+      return 0;
+    }
     try {
       output->write(tempTXBuffer, sizeof(qint16) * 2 * numFrames);
       return numFrames;

@@ -96,8 +96,12 @@ int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int
     /* printf("Tg %d, Tgh %d, Tc %d,Tu %d,  Tgs %d, Tgsh %d\n",
        Tg, Tgh, Tc, Tu, Tgs, Tgsh);   */
     /* malloc space for arrays */
-    if (exp_temp != nullptr) free(exp_temp);
-    if (out1 != nullptr) free(out1);
+    if (exp_temp != nullptr) {
+      free(exp_temp);
+    }
+    if (out1 != nullptr) {
+      free(out1);
+    }
 
     if ((exp_temp = static_cast<float*>(malloc((Tu * 2 + 2) * sizeof(float)))) == nullptr)
 
@@ -223,16 +227,18 @@ int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int
           static_cast<float>(Tc));
 
       /* printf("delta_theta rescaled %g\n", delta_theta);   */
-      if (delta_theta >= static_cast<float>(max_delta_theta))
+      if (delta_theta >= static_cast<float>(max_delta_theta)) {
         delta_theta_tmp = static_cast<float>(max_delta_theta);
 
-      else
+      } else {
         delta_theta_tmp = delta_theta;
-      if (delta_theta_tmp > static_cast<float>(-max_delta_theta))
+      }
+      if (delta_theta_tmp > static_cast<float>(-max_delta_theta)) {
         delta_theta = delta_theta_tmp;
 
-      else
+      } else {
         delta_theta = static_cast<float>(-max_delta_theta);
+      }
 
       /* filter theta: P-I controller */
       time_offset_ctrl = delta_theta - time_offset_fractional;
@@ -242,16 +248,18 @@ int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int
                                 tanhf(time_offset_ctrl / threshold_timing_small_large);
       delta_time_offset = delta_time_offset_P + delta_time_offset_I + time_offset_fractional;
       delta_time_offset_integer = static_cast<int>(floor(delta_time_offset + 0.5));
-      if (delta_time_offset_integer > -max_delta_time_offset_integer)
+      if (delta_time_offset_integer > -max_delta_time_offset_integer) {
         dftmp = delta_time_offset_integer;
 
-      else
+      } else {
         dftmp = -max_delta_time_offset_integer;
-      if (dftmp > max_delta_time_offset_integer)
+      }
+      if (dftmp > max_delta_time_offset_integer) {
         delta_time_offset_integer = max_delta_time_offset_integer;
 
-      else
+      } else {
         delta_time_offset_integer = dftmp; /* only +/- one symbol */
+      }
       time_offset_fractional = delta_time_offset - delta_time_offset_integer;
 
       /* debugging
@@ -261,14 +269,16 @@ int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int
       /* get best time window */
       symbol_position_offset = static_cast<int>(floor(delta_theta - delta_time_offset_integer + 0.5));
 
-      if (symbol_position_offset > -max_symbol_position_offset)
+      if (symbol_position_offset > -max_symbol_position_offset) {
         spotmp = symbol_position_offset;
-      else
+      } else {
         spotmp = -max_symbol_position_offset;
-      if (spotmp < max_symbol_position_offset)
+      }
+      if (spotmp < max_symbol_position_offset) {
         symbol_position_offset = spotmp;
-      else
+      } else {
         symbol_position_offset = max_symbol_position_offset;
+      }
 
       /* do integer time offset correction and comp phase shift */
       phi_freq_correction_last += (static_cast<float>(delta_time_offset_integer) / Tu) * freq_offset;

@@ -154,8 +154,12 @@ void setValue(int val, QSlider* input) { input->setValue(val); }
 bool browseGetFile(QLineEdit* le, const QString& deflt, const QString& filter) {
   dirDialog d((QWidget*)le, "Browse");
   QString s = d.openFileName(deflt, filter);
-  if (s.isNull()) return false;
-  if (s.isEmpty()) return false;
+  if (s.isNull()) {
+    return false;
+  }
+  if (s.isEmpty()) {
+    return false;
+  }
   le->setText(s);
   return true;
 }
@@ -163,8 +167,12 @@ bool browseGetFile(QLineEdit* le, const QString& deflt, const QString& filter) {
 bool browseSaveFile(QLineEdit* le, const QString& deflt, const QString& filter) {
   dirDialog d((QWidget*)le, "Browse");
   QString s = d.saveFileName(deflt, filter, "");
-  if (s.isNull()) return false;
-  if (s.isEmpty()) return false;
+  if (s.isNull()) {
+    return false;
+  }
+  if (s.isEmpty()) {
+    return false;
+  }
   le->setText(s);
   return true;
 }
@@ -172,8 +180,12 @@ bool browseSaveFile(QLineEdit* le, const QString& deflt, const QString& filter) 
 bool browseDir(QLineEdit* le, const QString& deflt) {
   dirDialog d((QWidget*)le, "Browse");
   QString s = d.openDirName(deflt);
-  if (s.isNull()) return false;
-  if (s.isEmpty()) return false;
+  if (s.isNull()) {
+    return false;
+  }
+  if (s.isEmpty()) {
+    return false;
+  }
   le->setText(s);
   return true;
 }
@@ -205,14 +217,18 @@ bool trash(const QString& filename, bool forceDelete) {
   QDir filesDir;
   QString infoTxt;
   trDir.setPath(getenv("XDG_DATA_HOME"));
-  if (trDir.path().isEmpty()) trDir.setPath(QDir::homePath() + "/.local/share/Trash");
+  if (trDir.path().isEmpty()) {
+    trDir.setPath(QDir::homePath() + "/.local/share/Trash");
+  }
   infoDir.setPath(trDir.path() + "/info");
   filesDir.setPath(trDir.path() + "/files");
   infoFile.setFileName(infoDir.path() + "/" + info.fileName() + ".trashinfo");
   modifiedFile.setFileName(filesDir.path() + "/" + modifiedFileInfo.fileName());
   int counter = 0;
   do {
-    if (!modifiedFile.exists()) break;
+    if (!modifiedFile.exists()) {
+      break;
+    }
     counter++;
     tmp = QString("%1/%2_%3.%4")
               .arg(filesDir.path())
@@ -234,13 +250,17 @@ bool trash(const QString& filename, bool forceDelete) {
 
   if ((!trDir.exists()) || (!infoDir.exists()) || (!filesDir.exists())) {
     errorOut() << "Trash folder or one of its components does not exist";
-    if (forceDelete) orgFile.remove();
+    if (forceDelete) {
+      orgFile.remove();
+    }
     return false;
   }
 
   if (!infoFile.open(QIODevice::WriteOnly)) {
     errorOut() << QString("Trash folder: can't open %1 for writing").arg(infoFile.fileName());
-    if (forceDelete) orgFile.remove();
+    if (forceDelete) {
+      orgFile.remove();
+    }
     return false;
   }
   infoFile.write(infoTxt.toLatin1().data());
@@ -250,7 +270,9 @@ bool trash(const QString& filename, bool forceDelete) {
   target = QString("%1").arg(modifiedFile.fileName());
   if (!trashFile.rename(filename, target)) {
     errorOut() << QString("Trash folder: can't rename %1 to %2").arg(filename).arg(target);
-    if (forceDelete) orgFile.remove();
+    if (forceDelete) {
+      orgFile.remove();
+    }
     return false;
   }
   return true;

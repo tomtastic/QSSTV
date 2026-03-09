@@ -193,8 +193,12 @@ int getofdm(/*@null@ */ float* rs, float time_offset_fractional_init, float freq
       delta_theta = (theta_plus - theta_minus) * Tgh / temp4;
 
       /* now limit the delta_theta value */
-      if (delta_theta < -max_theta) delta_theta = -max_theta;
-      if (delta_theta > max_theta) delta_theta = max_theta;
+      if (delta_theta < -max_theta) {
+        delta_theta = -max_theta;
+      }
+      if (delta_theta > max_theta) {
+        delta_theta = max_theta;
+      }
 
       /* P-I controller for theta */
       time_offset_ctrl = delta_theta - time_offset_fractional;
@@ -208,8 +212,12 @@ int getofdm(/*@null@ */ float* rs, float time_offset_fractional_init, float freq
       //          %5").arg(time_offset_ctrl).arg(delta_time_offset_I).arg(delta_time_offset_P).arg(delta_time_offset).arg(delta_time_offset_integer));
 
       /* now limit delta_time_offset_integer */
-      if (delta_time_offset_integer < -1) delta_time_offset_integer = -1;
-      if (delta_time_offset_integer > 1) delta_time_offset_integer = 1;
+      if (delta_time_offset_integer < -1) {
+        delta_time_offset_integer = -1;
+      }
+      if (delta_time_offset_integer > 1) {
+        delta_time_offset_integer = 1;
+      }
       time_offset_fractional = delta_time_offset - delta_time_offset_integer;
 
       /* printf("delta_time_offset_integer as used in phi_freq_corr %d phifcl %g \n",

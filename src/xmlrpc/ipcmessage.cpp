@@ -18,7 +18,9 @@
 ipcMessage::ipcMessage(int messageKey) {
   key = messageKey;
   messageQId = msgget(key, MSGPERM | IPC_CREAT);
-  if (messageQId < 0) errorOut() << "IPC Error" << strerror(errno);
+  if (messageQId < 0) {
+    errorOut() << "IPC Error" << strerror(errno);
+  }
 }
 
 
@@ -26,7 +28,9 @@ ipcMessage::~ipcMessage() { closeQueue(); }
 
 
 bool ipcMessage::sendMessage(const QString& t) {
-  if (messageQId < 0) return false;
+  if (messageQId < 0) {
+    return false;
+  }
   int len;
   // message to send
   msgBuf.mtype = MTYPE;  // set the type of message
@@ -36,7 +40,9 @@ bool ipcMessage::sendMessage(const QString& t) {
   // send the message to queue
   rc = msgsnd(messageQId, &msgBuf, len + 1, IPC_NOWAIT);
   if (rc < 0) {
-    if (rc < 0) errorOut() << "IPC Error" << strerror(errno);
+    if (rc < 0) {
+      errorOut() << "IPC Error" << strerror(errno);
+    }
     return false;
   }
 
@@ -44,11 +50,15 @@ bool ipcMessage::sendMessage(const QString& t) {
 }
 
 bool ipcMessage::receiveMessage(QString& t) {
-  if (messageQId < 0) return false;
+  if (messageQId < 0) {
+    return false;
+  }
   // read the message from queue
   rc = msgrcv(messageQId, &msgBuf, sizeof(msgBuf.mtext), 0, IPC_NOWAIT);
   if (rc < -1) {
-    if (rc < 0) errorOut() << "IPC Error" << strerror(errno);
+    if (rc < 0) {
+      errorOut() << "IPC Error" << strerror(errno);
+    }
     return false;
   }
   if (rc >= 0) {
@@ -62,7 +72,9 @@ bool ipcMessage::closeQueue() {
   // remove the queue
   rc = msgctl(messageQId, IPC_RMID, nullptr);
   if (rc < 0) {
-    if (rc < 0) errorOut() << "IPC Error" << strerror(errno);
+    if (rc < 0) {
+      errorOut() << "IPC Error" << strerror(errno);
+    }
     return false;
   }
   return false;

@@ -82,7 +82,9 @@ bool hybridCrypt::enCrypt(QByteArray* ba) {
         r1 = 0xFF;
         r2 = 0xFF;
       }
-      if (r1 == 0xFF) r1 = 0xFE;
+      if (r1 == 0xFF) {
+        r1 = 0xFE;
+      }
       if (r2 == 0) {
         r2 = r1;
         r1 = 0xFD;
@@ -109,14 +111,20 @@ bool hybridCrypt::deCrypt(QByteArray* ba) {
   divzr = key1 * key4;
   bufI2 = key3 * key2;
   divzr -= bufI2;
-  if (divzr == 0) return false;
+  if (divzr == 0) {
+    return false;
+  }
   baSize = ba->size();
   if (baSize != 3) {
     baSize = ba->size() - 2;  // drop /r/n
-    if (baSize % 2 != 0) return false;
+    if (baSize % 2 != 0) {
+      return false;
+    }
   }
 
-  if (baSize < 20) return false;
+  if (baSize < 20) {
+    return false;
+  }
   do {
     for (bufI = 0; bufI < 4; bufI++, charCount += 2) {
       r1 = ba->at(charCount);
@@ -215,6 +223,8 @@ bool hybridCrypt::getParam(const QString& resultStr) {
 QString hybridCrypt::charToHex(QChar c) {
   QString hb;
   hb = QString::number(c.toLatin1(), 16);
-  if (hb.length() < 2) hb.prepend("0");
+  if (hb.length() < 2) {
+    hb.prepend("0");
+  }
   return hb;
 }

@@ -66,10 +66,11 @@ void fftDisplay::showFFT(double* fftData) {
   QColor c;
   double re, imag, tmp, tmp1;
   if ((!showWaterfall) && (slowCPU)) {
-    if (displayCounter++ < 1)
+    if (displayCounter++ < 1) {
       return;
-    else
+    } else {
       displayCounter = 0;
+    }
   }
   if ((imWidth != width()) || (imHeight != height())) {
     if (imWidth != width()) {
@@ -98,13 +99,18 @@ void fftDisplay::showFFT(double* fftData) {
       if (arMagSAvg[j] < -100) {
         arMagSAvg[j] = -100;
       }
-      if (arMagSAvg[j] < tmp)
+      if (arMagSAvg[j] < tmp) {
         arMagSAvg[j] = arMagSAvg[j] * (1 - 0.4) + 0.4 * tmp;
-      else
+      } else {
         arMagSAvg[j] = arMagSAvg[j] * (1 - avgVal) + avgVal * tmp;
+      }
       tmp = (fftMax - arMagSAvg[j]) / range;
-      if (tmp < 0) tmp = 0;
-      if (tmp > 1) tmp = 1;
+      if (tmp < 0) {
+        tmp = 0;
+      }
+      if (tmp > 1) {
+        tmp = 1;
+      }
       int pos = static_cast<int>(rint(static_cast<double>(j * (imWidth - 1)) / static_cast<double>(binDiff)));
       fftArray->setPoint(j, pos, (imHeight - 1) * tmp);  // range 0 -> -1
     }
@@ -127,8 +133,12 @@ void fftDisplay::showFFT(double* fftData) {
           arMagWAvg[j] = -100;
         }
         tmp = 1 - (fftMax - arMagWAvg[j]) / range;
-        if (tmp < 0) tmp = 0;
-        if (tmp > 1) tmp = 1;
+        if (tmp < 0) {
+          tmp = 0;
+        }
+        if (tmp > 1) {
+          tmp = 1;
+        }
         c.setHsv(240 - tmp * 60, 255, tmp * 255);
         ptr[j] = c.rgb();
         tmp1 = 0;

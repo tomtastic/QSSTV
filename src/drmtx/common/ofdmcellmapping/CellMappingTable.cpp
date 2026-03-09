@@ -190,10 +190,11 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
   /* Calculate number of time-interploated frequency pilots. Special case
      with robustness mode D: pilots in all carriers! BUT: DC carrier is
      counted as a pilot in that case!!! Be aware of that! */
-  if (iScatPilFreqInt > 1)
+  if (iScatPilFreqInt > 1) {
     iNumIntpFreqPil = static_cast<int>(static_cast<_REAL>(iNumCarrier) / iScatPilFreqInt + 1);
-  else
+  } else {
     iNumIntpFreqPil = iNumCarrier;
+  }
 
   // printf("CellMappingTable Maktable iNumCarrier %d iShiftedKmin %d iIndexDCFreq %d iShiftedKmax %d fftsize %d\n",
   //		iNumCarrier, iShiftedKmin, iIndexDCFreq, iShiftedKmax, iFFTSizeN);
@@ -221,7 +222,9 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
     iFrameSym = iSym % iNumSymPerFrame;
 
     /* Reset FAC counter at the beginning of each new frame */
-    if (iFrameSym == 0) iFACCounter = 0;
+    if (iFrameSym == 0) {
+      iFACCounter = 0;
+    }
 
     /* Calculate the start value of "p" in equation for gain reference
      cells in Table 90 (8.4.4.1) */
@@ -303,7 +306,9 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
         _BOOLEAN bIsBoostedPilot = false;
         for (i = 0; i < NUM_BOOSTED_SCAT_PILOTS; i++) {
           /* In case of match set flag */
-          if (ScatPilots.piGainTable[i] == iCar) bIsBoostedPilot = true;
+          if (ScatPilots.piGainTable[i] == iCar) {
+            bIsBoostedPilot = true;
+          }
         }
 
         /* Boosted pilot: Gain = 2, Regular pilot: Gain = sqrt(2) */
@@ -334,10 +339,11 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
           matcPilotCells[iSym][iCarArrInd] =
               Polar2Cart(sqrt(static_cast<_REAL>(2.0)), piTableTimePilots[iTimePilotsCounter * 2 + 1]);
 
-          if (iTimePilotsCounter == iNumTimePilots - 1)
+          if (iTimePilotsCounter == iNumTimePilots - 1) {
             iTimePilotsCounter = 0;
-          else
+          } else {
             iTimePilotsCounter++;
+          }
         }
       }
 
@@ -352,8 +358,9 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
      definitions of pilot-mapping */
         if (_IsTiPil(matiMapTab[iSym][iCarArrInd]) || _IsScatPil(matiMapTab[iSym][iCarArrInd])) {
           matiMapTab[iSym][iCarArrInd] |= CM_FRE_PI;
-        } else
+        } else {
           matiMapTab[iSym][iCarArrInd] = CM_FRE_PI;
+        }
 
         /* Set complex value for this pilot */
         /* Test for "special case" defined in drm-standard */
@@ -363,7 +370,9 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
      and second pilot, not No. 28 (NUM_FREQ_PILOTS - 1) */
           if (iFreqPilotsCounter != NUM_FREQ_PILOTS - 1) {
             /* Test for odd values of "s" (iSym) */
-            if ((iFrameSym % 2) == 1) bIsFreqPilSpeciCase = true;
+            if ((iFrameSym % 2) == 1) {
+              bIsFreqPilSpeciCase = true;
+            }
           }
         }
 
@@ -376,10 +385,11 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
               Polar2Cart(sqrt(static_cast<_REAL>(2.0)), piTableFreqPilots[iFreqPilotsCounter * 2 + 1]);
 
         /* Increase counter and wrap if needed */
-        if (iFreqPilotsCounter == NUM_FREQ_PILOTS - 1)
+        if (iFreqPilotsCounter == NUM_FREQ_PILOTS - 1) {
           iFreqPilotsCounter = 0;
-        else
+        } else {
           iFreqPilotsCounter++;
+        }
       }
 
 
@@ -561,8 +571,9 @@ _COMPLEX CCellMappingTable::Polar2Cart(const _REAL rAbsolute, const int iPhase) 
 
 int CCellMappingTable::mod(const int ix, const int iy) const {
   /* Modulus definition for integer numbers */
-  if (ix < 0)
+  if (ix < 0) {
     return ix % iy + iy;
-  else
+  } else {
     return ix % iy;
+  }
 }

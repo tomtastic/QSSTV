@@ -111,8 +111,9 @@ iTotPacketSize, iCurStreamID ); */
     /* Equal error protection was chosen or protection part A was chosen too high, set to equal error protection! */
     TransmParam.Stream[iCurStreamID].iLenPartA = 0;
     TransmParam.Stream[iCurStreamID].iLenPartB = iTotNumBytesForUsage;
-  } else
+  } else {
     TransmParam.Stream[iCurStreamID].iLenPartB = iTotNumBytesForUsage - TransmParam.Stream[iCurStreamID].iLenPartA;
+  }
 
   /* Define input and output block size */
   iOutputBlockSize = TransmParam.iNumDecodedBitsMSC;

@@ -76,14 +76,16 @@ sstvRx::~sstvRx() {
 }
 
 void sstvRx::setFilters() {
-  if (videoFilterPtr == nullptr)
+  if (videoFilterPtr == nullptr) {
     videoFilterPtr = new videoFilter(RXSTRIPE);
-  else
+  } else {
     videoFilterPtr->init();
-  if (syncFilterPtr == nullptr)
+  }
+  if (syncFilterPtr == nullptr) {
     syncFilterPtr = new syncFilter(RXSTRIPE);
-  else
+  } else {
     syncFilterPtr->init();
+  }
 }
 
 

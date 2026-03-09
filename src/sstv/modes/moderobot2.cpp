@@ -103,7 +103,9 @@ void modeRobot2::calcPixelPositionTable(unsigned int colorLine, bool tx) {
   unsigned int i;
   DSPFLOAT lineStart = start;
   int ofx = 0;
-  if (tx) ofx = 1;
+  if (tx) {
+    ofx = 1;
+  }
   //  debugState=colorLine;
   switch (colorLine) {
     case YLINEODD:

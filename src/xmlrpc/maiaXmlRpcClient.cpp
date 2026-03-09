@@ -53,7 +53,9 @@ void MaiaXmlRpcClient::init() {
 }
 
 void MaiaXmlRpcClient::setUrl(const QUrl& url) {
-  if (!url.isValid()) return;
+  if (!url.isValid()) {
+    return;
+  }
 
   request.setUrl(url);
 }
@@ -80,7 +82,9 @@ QSslConfiguration MaiaXmlRpcClient::sslConfiguration() const { return request.ss
 
 void MaiaXmlRpcClient::replyFinished(QNetworkReply* reply) {
   QString response;
-  if (!callmap.contains(reply)) return;
+  if (!callmap.contains(reply)) {
+    return;
+  }
   if (reply->error() != QNetworkReply::NoError) {
     MaiaFault fault(-32300, reply->errorString());
     response = fault.toString();

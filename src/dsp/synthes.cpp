@@ -60,7 +60,9 @@ void synthesizer::sendTone(double duration, double lowerFrequency, double upperF
     sendSweep(duration, lowerFrequency, upperFrequency);
     return;
   }
-  if (!concat) adjust = 0.;
+  if (!concat) {
+    adjust = 0.;
+  }
   // convert duration to number of samples
   unsigned int ns = static_cast<unsigned int>((duration + adjust) * txSamplingClock + 0.5);
   adjust += duration - (static_cast<double>(ns)) / txSamplingClock;

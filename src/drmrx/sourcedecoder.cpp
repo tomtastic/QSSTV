@@ -71,7 +71,9 @@ bool sourceDecoder::decode() {
   int N_partB;
   //  if(!demodulatorPtr->isTimeSync())
 
-  if (channel_decoded_data_buffer_data_valid != 1) return false;
+  if (channel_decoded_data_buffer_data_valid != 1) {
+    return false;
+  }
   if (audio_data_flag == 0) {
     addToLog("audio decoding not implemented in qsstv !\n", LOGDRMSRC);
     return false;
@@ -289,9 +291,9 @@ bool sourceDecoder::addHeaderSegment() {
   transportBlock* tbPtr;
   addToLog(QString("Header segsize: %1").arg(currentDataPacket.segmentSize), LOGDRMSRC);
   tbPtr = getTransporPtr(currentDataPacket.transportID, true);
-  if (!tbPtr->alreadyReceived)
+  if (!tbPtr->alreadyReceived) {
     msc_valid = VALID;
-  else {
+  } else {
     msc_valid = ALREADYRECEIVED;
     if (!alreadyDisplayed) {
       alreadyDisplayed = true;
@@ -387,15 +389,17 @@ void sourceDecoder::addDataSegment() {
   transportBlock* tbPtr;
   tbPtr = getTransporPtr(currentDataPacket.transportID, true);
   rxTransportID = currentDataPacket.transportID;
-  if (callsignValid) tbPtr->callsign = drmCallsign;
+  if (callsignValid) {
+    tbPtr->callsign = drmCallsign;
+  }
   addToLog(
       QString("Data segsize: %1 segment# %2").arg(currentDataPacket.segmentSize).arg(currentDataPacket.segmentNumber),
       LOGDRMSRC);
 
 
-  if (!tbPtr->alreadyReceived)
+  if (!tbPtr->alreadyReceived) {
     msc_valid = VALID;
-  else {
+  } else {
     msc_valid = ALREADYRECEIVED;
     //      return;
   }
@@ -482,8 +486,12 @@ void sourceDecoder::saveImage(transportBlock* tbPtr) {
     addToLog("Image already received", LOGDRMSRC);
     return;
   }
-  if (tbPtr->fileName.isEmpty()) return;
-  if (tbPtr->retrieveTries == 0) lastAvgSNR = avgSNR;
+  if (tbPtr->fileName.isEmpty()) {
+    return;
+  }
+  if (tbPtr->retrieveTries == 0) {
+    lastAvgSNR = avgSNR;
+  }
   isHybrid = false;
   if ((tbPtr->fileName.left(3) == ".de") || (tbPtr->fileName.left(3) == "de_")) {
     isHybrid = true;
@@ -523,7 +531,9 @@ void sourceDecoder::saveImage(transportBlock* tbPtr) {
 
 
 void sourceDecoder::slotDownloadDone(bool err, const QString& filename) {
-  if (err) return;
+  if (err) {
+    return;
+  }
   displayReceivedImage(true, filename);
   // send notification
 
@@ -550,13 +560,17 @@ void sourceDecoder::displayReceivedImage(bool isHybrid, const QString& filename)
   displayTextEvent* stce;
 
   QImage test;
-  if (filename.isEmpty()) return;
+  if (filename.isEmpty()) {
+    return;
+  }
   if (!test.load(filename)) {
     // maybe text
     QFileInfo finfo(filename);
     if ((finfo.suffix() == "txt") || (finfo.suffix() == "chat")) {
       QFile fi(filename);
-      if (!fi.open(QIODevice::ReadOnly)) return;
+      if (!fi.open(QIODevice::ReadOnly)) {
+        return;
+      }
       t = fi.readAll();
       stce = new displayTextEvent(t);
       QApplication::postEvent(dispatcherPtr, stce);  // Qt will delete it when done
@@ -570,17 +584,20 @@ void sourceDecoder::displayReceivedImage(bool isHybrid, const QString& filename)
     QFileInfo tfi(filename);
     QString modestr(tfi.fileName());
     modestr += QString(" %1dB ").arg(lastAvgSNR, 0, 'f', 0);
-    if (isHybrid) modestr += "Hybrid ";
+    if (isHybrid) {
+      modestr += "Hybrid ";
+    }
     modestr += compactModeToString(modeCodeTmp);
     logBookPtr->logQSO(callsignTmp, "DSSTV", modestr);
   }
 
   if (!textMode) {
     QString info = "";
-    if (isHybrid)
+    if (isHybrid) {
       info += "Hybrid";
-    else
+    } else {
       info += compactModeToString(modeCodeTmp);
+    }
 
     info += QString(" %2dB de %3").arg(lastAvgSNR, 0, 'f', 0).arg(callsignTmp);
     //    slotRXNotification("*** "+info);
@@ -607,18 +624,26 @@ bool sourceDecoder::checkSaveImage(QByteArray ba, transportBlock* tbPtr) {
   QByteArray baFile;
   QByteArray* baFilePtr;
 
-  if (!checkIt) return false;
+  if (!checkIt) {
+    return false;
+  }
   QFileInfo qfinf(fileName);
   extension = qfinf.suffix().toLower();
   if ((extension == "rs1") || (extension == "rs2") || (extension == "rs3") || (extension == "rs4")) {
     // try to decode
     addToLog("Try to decode", LOGDRMSRC);
-    if (tbPtr->alreadyReceived) return false;
-    if (!rsd.decode(ba, fileName, tbPtr->newFileName, baFile, extension, erasureList)) return false;
+    if (tbPtr->alreadyReceived) {
+      return false;
+    }
+    if (!rsd.decode(ba, fileName, tbPtr->newFileName, baFile, extension, erasureList)) {
+      return false;
+    }
     baFilePtr = &baFile;
   } else {
     addToLog("Check complete", LOGDRMSRC);
-    if (!tbPtr->isComplete()) return false;
+    if (!tbPtr->isComplete()) {
+      return false;
+    }
     tbPtr->newFileName = fileName;
     if ((tbPtr->fileName == "bsr.bin") && (!tbPtr->alreadyReceived)) {
       tbPtr->setAlreadyReceived(true);
@@ -649,8 +674,12 @@ QList<bsrBlock>* sourceDecoder::getBSR() {
 
   for (i = 0; i < transportBlockPtrList.size(); i++) {
     tbPtr = transportBlockPtrList.at(i);
-    if (tbPtr->alreadyReceived) continue;
-    if (tbPtr->fileName == "bsr.bin") continue;
+    if (tbPtr->alreadyReceived) {
+      continue;
+    }
+    if (tbPtr->fileName == "bsr.bin") {
+      continue;
+    }
     bsrList.append(bsrBlock(tbPtr));
   }
   return &bsrList;
@@ -670,7 +699,9 @@ bool sourceDecoder::storeBSR(transportBlock* tb, bool compat) {
     }
   }
   tb->baBSR.clear();
-  if (erasureList.size() < 3) return false;  // erasurelist has already totalSegments and defaultSegmentSize
+  if (erasureList.size() < 3) {
+    return false;  // erasurelist has already totalSegments and defaultSegmentSize
+  }
   tb->baBSR.append(QString::number(tb->transportID).toLatin1().data());
   tb->baBSR.append("\n");
   tb->baBSR.append("H_OK\n");
@@ -708,7 +739,9 @@ bool sourceDecoder::storeBSR(transportBlock* tb, bool compat) {
     QString temp;
     tb->baBSR.append(tb->fileName.toLatin1() + "\n");
     temp = QString::number(tb->modeCode);
-    while (temp.length() < 5) temp.prepend("0");
+    while (temp.length() < 5) {
+      temp.prepend("0");
+    }
     tb->baBSR.append(temp.toLatin1());
   }
   return true;
@@ -725,9 +758,9 @@ transportBlock* sourceDecoder::getTransporPtr(unsigned short tId, bool create) {
       break;
     }
   }
-  if (found)
+  if (found) {
     lastTransportBlockPtr = transportBlockPtrList.at(i);
-  else if (create) {
+  } else if (create) {
     callsignValid = false;
     bodyTotalSegments = 0;
     drmBlockList.clear();
@@ -740,8 +773,9 @@ transportBlock* sourceDecoder::getTransporPtr(unsigned short tId, bool create) {
     for (i = 0; i < transportBlockPtrList.size();) {
       if (transportBlockPtrList.at(i)->fileName == "bsr.bin") {
         transportBlockPtrList.takeAt(i);
-      } else
+      } else {
         i++;
+      }
     }
     transportBlockPtrList.append(new transportBlock(tId));
     lastTransportBlockPtr = transportBlockPtrList.last();
@@ -752,10 +786,16 @@ transportBlock* sourceDecoder::getTransporPtr(unsigned short tId, bool create) {
     lastTransportBlockPtr->spectrum = spectrum_occupancy_new;
     // remap msc_new to modeCode
     int mCode = 1;  // default QAM16
-    if (msc_mode_new == 3) mCode = 0;
-    if (msc_mode_new == 0) mCode = 2;
+    if (msc_mode_new == 3) {
+      mCode = 0;
+    }
+    if (msc_mode_new == 0) {
+      mCode = 2;
+    }
     int protection = 0;
-    if (multiplex_description.PL_PartB == 1) protection = 1;
+    if (multiplex_description.PL_PartB == 1) {
+      protection = 1;
+    }
     lastTransportBlockPtr->modeCode =
         robustness_mode * 10000 + spectrum_occupancy_new * 1000 + protection * 100 + mCode * 10 + interleaver_depth_new;
   } else {

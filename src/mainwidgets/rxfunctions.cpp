@@ -83,7 +83,9 @@ void rxFunctions::run() {
 
 void rxFunctions::stopThread() {
   abort = true;
-  if (!isRunning()) return;
+  if (!isRunning()) {
+    return;
+  }
   while (abort) {
     qApp->processEvents();
   }
@@ -116,7 +118,9 @@ bool rxFunctions::rxBusy() {
 
 
 void rxFunctions::stopAndWait() {
-  if (soundIOPtr) soundIOPtr->idleRX();
+  if (soundIOPtr) {
+    soundIOPtr->idleRX();
+  }
   switchRxState(RXINIT);
   if (!isRunning()) {
     return;

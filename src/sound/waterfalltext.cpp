@@ -28,10 +28,14 @@ waterfallText::waterfallText() {
 
 waterfallText::~waterfallText() {
   fftw_destroy_plan(plan);
-  if (out) fftw_free(out);
+  if (out) {
+    fftw_free(out);
+  }
   delete[] outFiltered;
   delete[] audioBuf;
-  if (dataBuffer) fftw_free(dataBuffer);
+  if (dataBuffer) {
+    fftw_free(dataBuffer);
+  }
   delete txFilter;
   delete[] phr;
   delete[] phi;
@@ -128,10 +132,11 @@ void waterfallText::setupImage(const QString& txt) {
   image.fill(Qt::black);
   p.begin(&image);
   p.setPen(pen);
-  if (wfBold)
+  if (wfBold) {
     p.setFont(QFont(wfFont, wfFontSize, QFont::Bold));
-  else
+  } else {
     p.setFont(QFont(wfFont, wfFontSize, QFont::Light));
+  }
   rct = p.boundingRect(QRect(0, 0, imageWidth, 30), Qt::AlignTop | Qt::AlignCenter, txt);
   p.end();
   height = rct.height();
@@ -140,10 +145,11 @@ void waterfallText::setupImage(const QString& txt) {
   image.fill(Qt::black);
   p.begin(&image);
   p.setPen(pen);
-  if (wfBold)
+  if (wfBold) {
     p.setFont(QFont(wfFont, wfFontSize, QFont::Bold));
-  else
+  } else {
     p.setFont(QFont(wfFont, wfFontSize, QFont::Light));
+  }
   p.drawText(QRectF(0, 0, width, height), Qt::AlignCenter, txt);
   p.end();
   line = image.height();

@@ -91,7 +91,9 @@ rigControl::~rigControl() {
 
 bool rigControl::init() {
   int retcode;
-  if (!catParams.enableCAT) return false;
+  if (!catParams.enableCAT) {
+    return false;
+  }
 
   catParams.radioModelNumber = getModelNumber(getRadioModelIndex());
   my_rig = rig_init(catParams.radioModelNumber);
@@ -112,17 +114,21 @@ bool rigControl::init() {
   my_rig->state.rigport.parm.serial.rate = catParams.baudrate;
   my_rig->state.rigport.parm.serial.data_bits = catParams.databits;
   my_rig->state.rigport.parm.serial.stop_bits = catParams.stopbits;
-  if (catParams.parity == "Even")
+  if (catParams.parity == "Even") {
     my_rig->state.rigport.parm.serial.parity = RIG_PARITY_EVEN;
-  else if (catParams.parity == "Odd")
+  } else if (catParams.parity == "Odd") {
     my_rig->state.rigport.parm.serial.parity = RIG_PARITY_ODD;
-  else
+  } else {
     my_rig->state.rigport.parm.serial.parity = RIG_PARITY_NONE;
-  if (catParams.handshake == "XOn/Xoff") my_rig->state.rigport.parm.serial.handshake = RIG_HANDSHAKE_XONXOFF;
-  if (catParams.handshake == "Hardware")
+  }
+  if (catParams.handshake == "XOn/Xoff") {
+    my_rig->state.rigport.parm.serial.handshake = RIG_HANDSHAKE_XONXOFF;
+  }
+  if (catParams.handshake == "Hardware") {
     my_rig->state.rigport.parm.serial.handshake = RIG_HANDSHAKE_HARDWARE;
-  else
+  } else {
     my_rig->state.rigport.parm.serial.handshake = RIG_HANDSHAKE_NONE;
+  }
   my_rig->state.pttport.type.ptt = catParams.pttType;
 
   addToLog(QString("rigcontrol:init rigport.pathname: %1").arg(my_rig->state.rigport.pathname), LOGRIGCTRL);
@@ -182,7 +188,9 @@ bool rigControl::getFrequency(double& frequency) {
     return true;
   }
 
-  if (!rigControlEnabled || !canGetFreq) return false;
+  if (!rigControlEnabled || !canGetFreq) {
+    return false;
+  }
   retcode = rig_get_freq(my_rig, RIG_VFO_CURR, &frequency);
   for (int i = 0; i < RIGCMDTRIES; i++) {
     //      qDebug() << "getFreq";
@@ -219,7 +227,9 @@ bool rigControl::setFrequency(double frequency) {
     xmlIntfPtr->setFrequency(frequency);
     return true;
   }
-  if (!rigControlEnabled || !canSetFreq) return false;
+  if (!rigControlEnabled || !canSetFreq) {
+    return false;
+  }
   //        retcode = rig_set_vfo(my_rig, RIG_VFO_CURR);
   //        if (retcode != RIG_OK ) {errorMessage(retcode,"setVFO"); return false; }
 
@@ -269,7 +279,9 @@ bool rigControl::getMode(QString& mode) {
   rmode_t rmode;
   pbwidth_t width;
   int retcode;
-  if (!rigControlEnabled || !canGetMode) return false;
+  if (!rigControlEnabled || !canGetMode) {
+    return false;
+  }
 
   for (int i = 0; i < RIGCMDTRIES; i++) {
     retcode = rig_get_mode(my_rig, RIG_VFO_CURR, &rmode, &width);
@@ -293,10 +305,11 @@ bool rigControl::setMode(QString mode, const QString& passBand) {
   if (catParams.enableHamlibNetworkControl) {
     // Convert passband to numeric value (0 for normal)
     int pbValue = 0;
-    if (passBand == "Narrow")
+    if (passBand == "Narrow") {
       pbValue = 200;  // Narrow passband
-    else if (passBand == "Wide")
+    } else if (passBand == "Wide") {
       pbValue = 3000;  // Wide passband
+    }
 
     QString cmd = QString("M %1 %2").arg(mode).arg(pbValue);
     if (sendHamlibCommand(cmd)) {
@@ -318,7 +331,9 @@ bool rigControl::setMode(QString mode, const QString& passBand) {
         break;
       }
     }
-    if (pos >= 0) xmlIntfPtr->setMode(orgMode);
+    if (pos >= 0) {
+      xmlIntfPtr->setMode(orgMode);
+    }
     return true;
   }
 
@@ -331,7 +346,9 @@ bool rigControl::setMode(QString mode, const QString& passBand) {
     pb = rig_passband_normal(my_rig, rmode);
   }
   int retcode;
-  if (!rigControlEnabled || !canSetMode) return false;
+  if (!rigControlEnabled || !canSetMode) {
+    return false;
+  }
 
   for (int i = 0; i < RIGCMDTRIES; i++) {
     retcode = rig_set_mode(my_rig, RIG_VFO_CURR, rmode, pb);
@@ -363,11 +380,14 @@ bool rigControl::setPTT(bool on) {
   int retcode;
   ptt_t ptt;
   /* Hamlib will fall back to RIG_PTT_ON if RIG_PTT_ON_DATA is not available in current hamlib configuration */
-  if (on)
+  if (on) {
     ptt = RIG_PTT_ON_DATA;
-  else
+  } else {
     ptt = RIG_PTT_OFF;
-  if (!rigControlEnabled || !canSetPTT) return false;
+  }
+  if (!rigControlEnabled || !canSetPTT) {
+    return false;
+  }
 
   for (int i = 0; i < RIGCMDTRIES; i++) {
     retcode = rig_set_ptt(my_rig, RIG_VFO_CURR, ptt);
@@ -402,7 +422,9 @@ void rigControl::getRadioList() {
 
 bool rigControl::getRadioList(QComboBox* cb) {
   int i;
-  if (capsList.size() == 0) return false;
+  if (capsList.size() == 0) {
+    return false;
+  }
   QStringList sl;
   for (i = 0; i < capsList.size(); i++) {
     QString t;
@@ -418,7 +440,9 @@ bool rigControl::getRadioList(QComboBox* cb) {
 }
 
 int rigControl::getModelNumber(int idx) {
-  if (idx < 0) return 0;
+  if (idx < 0) {
+    return 0;
+  }
   return capsList.at(idx)->rig_model;
 }
 
@@ -428,7 +452,9 @@ int rigControl::getRadioModelIndex() {
   t = t.remove(0, 5);
   t = t.simplified();
   QStringList sl = t.split(",");
-  if (sl.size() == 1) sl.append("");
+  if (sl.size() == 1) {
+    sl.append("");
+  }
   for (i = 0; i < capsList.size(); i++) {
     if ((capsList.at(i)->mfg_name == sl.at(0)) && (capsList.at(i)->model_name == sl.at(1))) {
       return i;
@@ -439,17 +465,23 @@ int rigControl::getRadioModelIndex() {
 
 bool model_Sort(const rig_caps* caps1, const rig_caps* caps2) {
   if (caps1->mfg_name == caps2->mfg_name) {
-    if (QString::compare(caps1->model_name, caps2->model_name) < 0) return true;
+    if (QString::compare(caps1->model_name, caps2->model_name) < 0) {
+      return true;
+    }
     return false;
   }
-  if (QString::compare(caps1->mfg_name, caps2->mfg_name) < 0) return true;
+  if (QString::compare(caps1->mfg_name, caps2->mfg_name) < 0) {
+    return true;
+  }
   return false;
 }
 
 void rigControl::activatePTT(bool b) {
   int modemlines;
   if (catParams.enableSerialPTT) {
-    if (catParams.pttSerialPort.isEmpty()) return;
+    if (catParams.pttSerialPort.isEmpty()) {
+      return;
+    }
     if (serialP == 0) {
       serialP = ::open(catParams.pttSerialPort.toLatin1().data(), O_RDWR | O_NONBLOCK);
       if (serialP <= 0) {
@@ -490,8 +522,9 @@ void rigControl::activatePTT(bool b) {
     }
   } else if (catParams.enableXMLRPC) {
     xmlIntfPtr->activatePTT(b);
-  } else
+  } else {
     setPTT(b);  // does nothing if rigController is disabled
+  }
   mainWindowPtr->setPTT(b);
   if (b) {
     addToLog("dispatcher: PTT activated", LOGDISPATCH);
@@ -508,7 +541,9 @@ int rigControl::rawCommand(const QByteArray& ba) {
 
   QString command = "w ";
   QByteArray cmdBa;
-  if (!rigControlEnabled) return 0;
+  if (!rigControlEnabled) {
+    return 0;
+  }
   struct rig_state* rs;
   rs = &my_rig->state;
   // check if backend via rigctld
