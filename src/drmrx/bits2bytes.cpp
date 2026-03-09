@@ -42,35 +42,31 @@
 
 
 /*
-*   modified for use directly in  C-language without Matlab interface
-*   M.Bos - PA0MBO
-*   Date Nov 15th 2007
-*
-*/
+ *   modified for use directly in  C-language without Matlab interface
+ *   M.Bos - PA0MBO
+ *   Date Nov 15th 2007
+ *
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
 
-void bits2bytes(double *inbits, int N, unsigned char /*@out@ */ *outbytes)
+void bits2bytes(double* inbits, int N, unsigned char /*@out@ */* outbytes)
 {
   unsigned char single_byte;
   int m, n;
 
-  if (N % 8 != 0)
-    {
-      return;
+  if (N % 8 != 0) {
+    return;
+  }
+  for (m = 0; m < N / 8; m++) {
+    single_byte = '\0';
+    for (n = 7; n >= 0; n--) {
+      single_byte |= ((fabs(inbits[8 * m + 7 - n]) > DBL_EPSILON) & 0x01) << n;
     }
-  for (m = 0; m < N / 8; m++)
-    {
-      single_byte = '\0';
-      for (n = 7; n >= 0; n--)
-	{
-	  single_byte |=
-	    ((fabs(inbits[8 * m + 7 - n]) > DBL_EPSILON) & 0x01) << n;
-	}
-      outbytes[m] = single_byte;
-    }
+    outbytes[m] = single_byte;
+  }
   return;
 }

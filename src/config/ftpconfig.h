@@ -7,7 +7,7 @@
 
 #define NUMFTPRXIMAGES 30
 
-enum eftpSaveFormat {FTPIMAGESEQUENCE,FTPFILENAME};
+enum eftpSaveFormat { FTPIMAGESEQUENCE, FTPFILENAME };
 
 extern bool enableFTP;
 extern int ftpPort;
@@ -24,16 +24,17 @@ extern bool addExtension;
 extern int ftpNumImages;
 
 
-namespace Ui {
+namespace Ui
+{
 class ftpConfig;
 }
 
 class ftpConfig : public baseConfig
 {
   Q_OBJECT
-  
+
 public:
-  explicit ftpConfig(QWidget *parent = 0);
+  explicit ftpConfig(QWidget* parent = 0);
   ~ftpConfig();
   void readSettings();
   void writeSettings();
@@ -42,9 +43,9 @@ public:
 
 private slots:
   void slotTestFTPPushButton();
-  
+
 private:
-  Ui::ftpConfig *ui;
+  Ui::ftpConfig* ui;
 };
 
 #endif // FTPCONFIG_H

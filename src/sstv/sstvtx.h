@@ -14,24 +14,21 @@ public:
   ~sstvTx();
   void init();
   double calcTxTime(int overheadTime);
-  bool sendImage(imageViewer *ivPtr);
+  bool sendImage(imageViewer* ivPtr);
   void abort();
   bool aborted();
-  void applyTemplate(QString templateFilename, bool useTemplate, imageViewer *ivPtr);
-  void createTestPattern(imageViewer *ivPtr, etpSelect sel);
+  void applyTemplate(QString templateFilename, bool useTemplate, imageViewer* ivPtr);
+  void createTestPattern(imageViewer* ivPtr, etpSelect sel);
 
 
 private:
-  modeBase *currentMode;
-  bool create(esstvMode m,DSPFLOAT clock);
+  modeBase* currentMode;
+  bool create(esstvMode m, DSPFLOAT clock);
   void sendPreamble();
   void sendVIS();
   esstvMode oldMode;
   unsigned long sampleCounter;
   double FSKIDTime();
-
-
-
 };
 
 #endif // SSTVTX_H

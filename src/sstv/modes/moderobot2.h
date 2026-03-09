@@ -34,18 +34,19 @@
 #include "modebase.h"
 
 /**
-	@author Johan Maes <on4qz@telenet.be>
+  @author Johan Maes <on4qz@telenet.be>
 */
 class modeRobot2 : public modeBase
 {
 public:
   modeRobot2(esstvMode m, unsigned int len, bool tx, bool narrowMode);
-	~modeRobot2();
+  ~modeRobot2();
+
 private:
   embState rxSetupLine();
-	void calcPixelPositionTable(unsigned int colorLine,bool tx);
-	void setupParams(double clock);
-	void showLine();
+  void calcPixelPositionTable(unsigned int colorLine, bool tx);
+  void setupParams(double clock);
+  void showLine();
   embState txSetupLine();
   void getLine();
 };

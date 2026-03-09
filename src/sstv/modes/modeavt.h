@@ -22,22 +22,22 @@
 #define MODEAVT_H
 
 #include "modebase.h"
-enum eTrailerState {D1900,D1900END,DELAYHALF,DELAYFULL,BITS,CALCDELAY,WAITSTART};
+enum eTrailerState { D1900, D1900END, DELAYHALF, DELAYFULL, BITS, CALCDELAY, WAITSTART };
 
 /**
-	@author Johan Maes <on4qz@telenet.be>
+  @author Johan Maes <on4qz@telenet.be>
 */
 class modeAVT : public modeBase
 {
-
 public:
-  modeAVT(esstvMode m,unsigned int len,bool tx,bool narrowMode);
+  modeAVT(esstvMode m, unsigned int len, bool tx, bool narrowMode);
   ~modeAVT();
-  eModeBase process(quint16 *demod, unsigned int, bool, unsigned int rxPos);
+  eModeBase process(quint16* demod, unsigned int, bool, unsigned int rxPos);
+
 protected:
   embState rxSetupLine();
-	void calcPixelPositionTable(unsigned int colorLine,bool tx);
-	void setupParams(double clock);
+  void calcPixelPositionTable(unsigned int colorLine, bool tx);
+  void setupParams(double clock);
   embState txSetupLine();
   bool avtTrailerDetect;
   unsigned int duration;
@@ -47,6 +47,7 @@ protected:
   eTrailerState trailerState;
   DSPFLOAT avgSample;
   unsigned int delay;
+
 private:
   void switchTrailerState(eTrailerState newState);
 };

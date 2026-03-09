@@ -2,17 +2,13 @@
 #include "configparams.h"
 #include "gallerywidget.h"
 
-fileWatcher::fileWatcher()
-{
-
-}
+fileWatcher::fileWatcher() {}
 
 void fileWatcher::init()
 {
-  if(directories().count()>0)
-    {
-      removePaths(directories());
-    }
+  if (directories().count() > 0) {
+    removePaths(directories());
+  }
 
   addPathRecursive(txStockImagesPath);
   addPathRecursive(templatesPath);
@@ -23,13 +19,13 @@ void fileWatcher::init()
 void fileWatcher::addPathRecursive(QString path)
 {
   addPath(path);
-  if(recursiveScanDirs) {
+  if (recursiveScanDirs) {
     QDirIterator it(path, QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
 
     while (it.hasNext()) {
       it.next();
       QString f(it.filePath());
-      if(!f.endsWith("cache")) {
+      if (!f.endsWith("cache")) {
         addPath(f);
       }
     }

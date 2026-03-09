@@ -3,9 +3,10 @@
 
 #include <QDialog>
 
-enum etpSelect {TPBLACK,TPWHITE,TPGRAY,TPRASTER};
+enum etpSelect { TPBLACK, TPWHITE, TPGRAY, TPRASTER };
 
-namespace Ui {
+namespace Ui
+{
 class testPatternSelection;
 }
 
@@ -14,12 +15,12 @@ class testPatternSelection : public QDialog
   Q_OBJECT
 
 public:
-  explicit testPatternSelection(QWidget *parent = 0);
+  explicit testPatternSelection(QWidget* parent = 0);
   ~testPatternSelection();
   etpSelect getSelection();
 
 private:
-  Ui::testPatternSelection *ui;
+  Ui::testPatternSelection* ui;
 };
 
 #endif // TESTPATTERNSELECTION_H

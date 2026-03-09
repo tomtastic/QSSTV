@@ -6,7 +6,7 @@
 #include "drmparams.h"
 #include "testpatternselection.h"
 
-#define SILENCEDELAY 0.600           // send silence after transmission
+#define SILENCEDELAY 0.600 // send silence after transmission
 
 extern int templateIndex;
 extern bool useTemplate;
@@ -18,14 +18,12 @@ class drmTx;
 class imageViewer;
 
 
-
-class txFunctions  : public QThread
+class txFunctions : public QThread
 {
   Q_OBJECT
 public:
-  enum etxState
-  {
-    TXIDLE,	//!< in idle loop
+  enum etxState {
+    TXIDLE, //!< in idle loop
     TXACTIVE,
     TXSENDTONE,
     TXSENDWFID,
@@ -45,7 +43,7 @@ public:
     TXTEST
 
   };
-  txFunctions(QObject *parent);
+  txFunctions(QObject* parent);
   ~txFunctions();
   void init();
   void run();
@@ -53,23 +51,26 @@ public:
   void startTX(etxState state);
   void prepareTX(etxState state);
   void stopAndWait();
-  void setToneParam(double duration,double lowerFreq,double upperFreq=0)
+  void setToneParam(double duration, double lowerFreq, double upperFreq = 0)
   {
-    toneDuration=duration;
-    toneLowerFrequency=lowerFreq;
-    toneUpperFrequency=upperFreq;
+    toneDuration = duration;
+    toneLowerFrequency = lowerFreq;
+    toneUpperFrequency = upperFreq;
   }
   bool prepareFIX(QByteArray bsrByteArray);
   bool prepareBinary(QString fileName);
-  void sendBSR(QByteArray *p,drmTxParams dp);
-  void applyTemplate(imageViewer *ivPtr,QString templateFilename);
+  void sendBSR(QByteArray* p, drmTxParams dp);
+  void applyTemplate(imageViewer* ivPtr, QString templateFilename);
   void forgetTxFileName();
-  etxState getTXState() { return txState;}
+  etxState getTXState()
+  {
+    return txState;
+  }
   void setDRMTxParams(drmTxParams params);
-//  void setOnlineStatus(bool online, QString info="");
+  //  void setOnlineStatus(bool online, QString info="");
   //  bool initDRMFIX(txSession *sessionPtr);
   int calcTxTime(bool binary, int overhead);
-  void txTestPattern(imageViewer *ivPtr, etpSelect sel);
+  void txTestPattern(imageViewer* ivPtr, etpSelect sel);
   bool txBusy();
 
 private:
@@ -90,8 +91,8 @@ private:
   double toneLowerFrequency;
   double toneUpperFrequency;
   QString binaryFilename;
-  sstvTx *sstvTxPtr;
-  drmTx *drmTxPtr;
+  sstvTx* sstvTxPtr;
+  drmTx* drmTxPtr;
 };
 
 #endif // TXFUNCTIONS_H

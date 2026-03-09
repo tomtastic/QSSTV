@@ -8,14 +8,15 @@ class fftCalc
 public:
   fftCalc();
   ~fftCalc();
-  void init(int length,int nblocks,int isamplingrate);
-  void realFFT(double *data);
-  double *out;
+  void init(int length, int nblocks, int isamplingrate);
+  void realFFT(double* data);
+  double* out;
+
 private:
   void createHamming();
-  double *hammingBuffer;
-  double *dataBuffer;
-  double *dataBufferWindowed;
+  double* hammingBuffer;
+  double* dataBuffer;
+  double* dataBufferWindowed;
   int windowSize;
   int fftLength;
   int samplingrate;

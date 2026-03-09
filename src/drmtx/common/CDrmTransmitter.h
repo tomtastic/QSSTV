@@ -42,7 +42,6 @@
 #include "soundinterface.h"
 
 
-
 /* Classes ********************************************************************/
 class CDRMTransmitter
 {
@@ -57,12 +56,24 @@ public:
 
   /* Get pointer to internal modules */
   //	CSoundInInterface*		GetSoundInInterface() {return pSoundInInterface;}
-  CSoundOutInterface*		GetSoundOutInterface() {return pSoundOutInterface;}
-  CAudioSourceEncoder*	GetAudSrcEnc() {return &AudioSourceEncoder;}
-  CTransmitData*			GetTransData() {return &TransmitData;}
+  CSoundOutInterface* GetSoundOutInterface()
+  {
+    return pSoundOutInterface;
+  }
+  CAudioSourceEncoder* GetAudSrcEnc()
+  {
+    return &AudioSourceEncoder;
+  }
+  CTransmitData* GetTransData()
+  {
+    return &TransmitData;
+  }
   //	CReadData*				GetReadData() {return &ReadData;}
 
-  CParameter*				GetParameters() {return &TransmParam;}
+  CParameter* GetParameters()
+  {
+    return &TransmParam;
+  }
 
   void SetCarOffset(const _REAL rNewCarOffset)
   {
@@ -71,48 +82,51 @@ public:
     TransmitData.SetCarOffset(rNewCarOffset);
     rDefCarOffset = rNewCarOffset;
   }
-  _REAL GetCarOffset() {return rDefCarOffset;}
+  _REAL GetCarOffset()
+  {
+    return rDefCarOffset;
+  }
 
 protected:
   void Run();
 
   /* Parameters */
-  CParameter				TransmParam;
+  CParameter TransmParam;
 
   /* Buffers */
-  CSingleBuffer<_SAMPLE>	DataBuf;
-  CSingleBuffer<_BINARY>	AudSrcBuf;
+  CSingleBuffer<_SAMPLE> DataBuf;
+  CSingleBuffer<_BINARY> AudSrcBuf;
 
-  CSingleBuffer<_COMPLEX>	MLCEncBuf;
-  CCyclicBuffer<_COMPLEX>	IntlBuf;
+  CSingleBuffer<_COMPLEX> MLCEncBuf;
+  CCyclicBuffer<_COMPLEX> IntlBuf;
 
-  CSingleBuffer<_BINARY>	GenFACDataBuf;
-  CCyclicBuffer<_COMPLEX>	FACMapBuf;
+  CSingleBuffer<_BINARY> GenFACDataBuf;
+  CCyclicBuffer<_COMPLEX> FACMapBuf;
 
-  CSingleBuffer<_BINARY>	GenSDCDataBuf;
-  CCyclicBuffer<_COMPLEX>	SDCMapBuf;
+  CSingleBuffer<_BINARY> GenSDCDataBuf;
+  CCyclicBuffer<_COMPLEX> SDCMapBuf;
 
-  CSingleBuffer<_COMPLEX>	CarMapBuf;
-  CSingleBuffer<_COMPLEX>	OFDMModBuf;
+  CSingleBuffer<_COMPLEX> CarMapBuf;
+  CSingleBuffer<_COMPLEX> OFDMModBuf;
 
   //	CSoundInInterface*		pSoundInInterface;
-  CSoundOutInterface*		pSoundOutInterface;
+  CSoundOutInterface* pSoundOutInterface;
 
   /* Modules */
   //	CReadData				ReadData;
-  CAudioSourceEncoder		AudioSourceEncoder;
-  CMSCMLCEncoder			MSCMLCEncoder;
-  CSymbInterleaver		SymbInterleaver;
-  CGenerateFACData		GenerateFACData;
-  CFACMLCEncoder			FACMLCEncoder;
-  CGenerateSDCData		GenerateSDCData;
-  CSDCMLCEncoder			SDCMLCEncoder;
-  COFDMCellMapping		OFDMCellMapping;
-  COFDMModulation			OFDMModulation;
-  CTransmitData			  TransmitData;
+  CAudioSourceEncoder AudioSourceEncoder;
+  CMSCMLCEncoder MSCMLCEncoder;
+  CSymbInterleaver SymbInterleaver;
+  CGenerateFACData GenerateFACData;
+  CFACMLCEncoder FACMLCEncoder;
+  CGenerateSDCData GenerateSDCData;
+  CSDCMLCEncoder SDCMLCEncoder;
+  COFDMCellMapping OFDMCellMapping;
+  COFDMModulation OFDMModulation;
+  CTransmitData TransmitData;
 
-  _REAL					rDefCarOffset;
-  _BOOLEAN				bUseUEP;
+  _REAL rDefCarOffset;
+  _BOOLEAN bUseUEP;
 };
 
 #define BWs 2
@@ -120,8 +134,6 @@ protected:
 #define PROTECTIONS 2
 #define QAMS 3
 extern int partTable[BWs][MODES][PROTECTIONS][QAMS];
-
-
 
 
 #endif // !defined(DRMTRANSM_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)

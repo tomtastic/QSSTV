@@ -20,211 +20,146 @@
 #include "configparams.h"
 
 
-
-
-enum eCWState {CWNEW,CWNEXTDOT,CWDOTSPACING,CWNEXTCHAR,CWCHARSPACING,CWWORDSPACING,CWEND,CWFINISHED};
-enum  eCWResult {CWIDLE,CWfalse,CWtrue};
+enum eCWState { CWNEW, CWNEXTDOT, CWDOTSPACING, CWNEXTCHAR, CWCHARSPACING, CWWORDSPACING, CWEND, CWFINISHED };
+enum eCWResult { CWIDLE, CWfalse, CWtrue };
 
 static int dotIndex;
-static const char *dotPtr;
+static const char* dotPtr;
 
 static int charIndex;
 static float dotSpacing;
 
-static  eCWState cwState;
-static  eCWResult result;
+static eCWState cwState;
+static eCWResult result;
 //  const char *charLookupCW(char a);
 //  bool sendChar(float &duration);
 //  const char *s;
 
 static struct {
   char key;
-  const char	*cw;
-} charTable[] = 
-{
-  {'A',	".-"	}, {'B',"-..."  },{'C',	"-.-." },
-  {'D',	"-.."	}, {'E',"."	},{'F',"..-."  },
-  {'G',	"--."	}, {'H',"...."	},{'I',".."    },
-  {'J',	".---"	}, {'K',"-.-"	},{'L',".-.."  },
-  {'M',	"--"	}, {'N',"-."	},{'O',"---"   },
-  {'P',	".--."	}, {'Q',"--.-"	},{'R',".-."   },
-  {'S',	"..."	}, {'T',"-"	},{'U',"..-"   },
-  {'V',	"...-"	}, {'W',".--"	},{'X',"-..-"  },
-  {'Y',	"-.--"	}, {'Z',"--.."	},
-  {'0',	"-----"	}, {'1',".----"	},{'2',	"..---"},
-  {'3',	"...--"	}, {'4',"....-"	},{'5',"....." },
-  {'6',	"-...."	}, {'7',"--..."	},{'8',"---.." },
-  {'9',	"----."	},
-  {'"',	".-..-."}, {'\'', ".----." },{'$',"...-..-"},
-  {'(',	"-.--." }, { ')', "-.--.-" },{'+',".-.-."},
-  {',',	"--..--"}, {'-',  "-....-" },{'.',".-.-.-"},
-  {'/',	"-..-." }, { ':', "---..." },{';',"-.-.-."},
-  {'=',	"-...-" }, { '?', "..--.." },{'_',"..--.-"},
-  {0,	""	}
-};
+  const char* cw;
+} charTable[] = {{'A', ".-"},     {'B', "-..."},    {'C', "-.-."},    {'D', "-.."},   {'E', "."},      {'F', "..-."},
+                 {'G', "--."},    {'H', "...."},    {'I', ".."},      {'J', ".---"},  {'K', "-.-"},    {'L', ".-.."},
+                 {'M', "--"},     {'N', "-."},      {'O', "---"},     {'P', ".--."},  {'Q', "--.-"},   {'R', ".-."},
+                 {'S', "..."},    {'T', "-"},       {'U', "..-"},     {'V', "...-"},  {'W', ".--"},    {'X', "-..-"},
+                 {'Y', "-.--"},   {'Z', "--.."},    {'0', "-----"},   {'1', ".----"}, {'2', "..---"},  {'3', "...--"},
+                 {'4', "....-"},  {'5', "....."},   {'6', "-...."},   {'7', "--..."}, {'8', "---.."},  {'9', "----."},
+                 {'"', ".-..-."}, {'\'', ".----."}, {'$', "...-..-"}, {'(', "-.--."}, {')', "-.--.-"}, {'+', ".-.-."},
+                 {',', "--..--"}, {'-', "-....-"},  {'.', ".-.-.-"},  {'/', "-..-."}, {':', "---..."}, {';', "-.-.-."},
+                 {'=', "-...-"},  {'?', "..--.."},  {'_', "..--.-"},  {0, ""}};
 
 static QString cwString;
 void initCW(QString cwTxt)
-{ 
-  cwState=CWNEW;
-  dotSpacing=1.2/static_cast<float>(cwWPM);
-  cwString=cwTxt;
+{
+  cwState = CWNEW;
+  dotSpacing = 1.2 / static_cast<float>(cwWPM);
+  cwString = cwTxt;
 }
 
-const char *charLookupCW(const char a)
+const char* charLookupCW(const char a)
 {
   char b;
-  int i=0;;
-  b=toupper(a);
-  dotIndex=0;
-  while (charTable[i].key!=0)
-    {
-      if(charTable[i].key==b)
-        {
-
-          return (charTable[i].cw);
-        }
-      i++;
+  int i = 0;
+  ;
+  b = toupper(a);
+  dotIndex = 0;
+  while (charTable[i].key != 0) {
+    if (charTable[i].key == b) {
+      return (charTable[i].cw);
     }
+    i++;
+  }
   return nullptr;
 }
 
-bool nextSymbolCW(float &duration)
+bool nextSymbolCW(float& duration)
 {
-  if (dotPtr[dotIndex]==0)
-    {
-      return false;
-    }
-  else if(dotPtr[dotIndex]=='.')
-    {
-      duration=dotSpacing;
-    }
-  else
-    {
-      duration=3*dotSpacing;
-    }
+  if (dotPtr[dotIndex] == 0) {
+    return false;
+  } else if (dotPtr[dotIndex] == '.') {
+    duration = dotSpacing;
+  } else {
+    duration = 3 * dotSpacing;
+  }
   dotIndex++;
   return true;
 }
 
 float getCWDuration()
 {
-  float tim=0;
-  float tone,duration;
-  tone=0;
-  while(sendTextCW(tone,duration))
-    {
-      tim+=duration;
-    }
+  float tim = 0;
+  float tone, duration;
+  tone = 0;
+  while (sendTextCW(tone, duration)) {
+    tim += duration;
+  }
   return tim;
 }
 
-bool sendTextCW(float &tone,float &duration)
+bool sendTextCW(float& tone, float& duration)
 {
-  result=CWIDLE;
-  do
-    {
-      switch (cwState)
-        {
-        case CWNEW:
-          {
-            charIndex=0;
-            if (cwString[0]==0)
-              {
-                result=CWfalse;
-              }
-            cwState=CWNEXTCHAR;
-          }
-        break;
-        case CWNEXTCHAR:
-          {
-            if(cwString[charIndex]==' ')
-              {
-                charIndex++;
-                cwState=CWWORDSPACING;
-              }
-            else
-              {
-                dotPtr=charLookupCW(cwString[charIndex++].toLatin1());
-                if (dotPtr==nullptr)
-                  {
-                    cwState=CWEND;
-                  }
-                else
-                  {
-                    dotIndex=0;
-                    cwState=CWNEXTDOT;
-                  }
-              }
-          }
-        break;
-        case CWNEXTDOT:
-          {
-            if(nextSymbolCW(duration))
-              {
-                tone=static_cast<float>(cwTone);
-                cwState=CWDOTSPACING;
-                result=CWtrue;
-              }
-            else
-              {
-                cwState=CWCHARSPACING;
-              }
-          }
-        break;
-        case CWDOTSPACING:
-          {
-            tone=0;
-            duration=dotSpacing;
-            cwState=CWNEXTDOT;
-            result=CWtrue;
-          }
-        break;
-        case CWCHARSPACING:
-          {
-            tone=0;
-            duration=2*dotSpacing;  // we already had a dotspace
-            cwState=CWNEXTCHAR;
-            result=CWtrue;
-          }
-        break;
-        case CWWORDSPACING:
-          {
-            tone=0;
-            duration=4*dotSpacing; // we already had a charspace
-            cwState=CWNEXTCHAR;
-            result=CWtrue;
-          }
-        break;
-
-        case CWEND:
-          {
-            tone=0;
-            duration=7*dotSpacing;
-            cwState=CWFINISHED;
-            result=CWtrue;
-          }
-        break;
-        case CWFINISHED:
-          {
-            result=CWfalse;
-          }
-        break;
-
+  result = CWIDLE;
+  do {
+    switch (cwState) {
+    case CWNEW: {
+      charIndex = 0;
+      if (cwString[0] == 0) {
+        result = CWfalse;
+      }
+      cwState = CWNEXTCHAR;
+    } break;
+    case CWNEXTCHAR: {
+      if (cwString[charIndex] == ' ') {
+        charIndex++;
+        cwState = CWWORDSPACING;
+      } else {
+        dotPtr = charLookupCW(cwString[charIndex++].toLatin1());
+        if (dotPtr == nullptr) {
+          cwState = CWEND;
+        } else {
+          dotIndex = 0;
+          cwState = CWNEXTDOT;
         }
+      }
+    } break;
+    case CWNEXTDOT: {
+      if (nextSymbolCW(duration)) {
+        tone = static_cast<float>(cwTone);
+        cwState = CWDOTSPACING;
+        result = CWtrue;
+      } else {
+        cwState = CWCHARSPACING;
+      }
+    } break;
+    case CWDOTSPACING: {
+      tone = 0;
+      duration = dotSpacing;
+      cwState = CWNEXTDOT;
+      result = CWtrue;
+    } break;
+    case CWCHARSPACING: {
+      tone = 0;
+      duration = 2 * dotSpacing; // we already had a dotspace
+      cwState = CWNEXTCHAR;
+      result = CWtrue;
+    } break;
+    case CWWORDSPACING: {
+      tone = 0;
+      duration = 4 * dotSpacing; // we already had a charspace
+      cwState = CWNEXTCHAR;
+      result = CWtrue;
+    } break;
+
+    case CWEND: {
+      tone = 0;
+      duration = 7 * dotSpacing;
+      cwState = CWFINISHED;
+      result = CWtrue;
+    } break;
+    case CWFINISHED: {
+      result = CWfalse;
+    } break;
     }
-  while(result==CWIDLE);
-  return (result==CWtrue);
+  } while (result == CWIDLE);
+  return (result == CWtrue);
 }
-
-
-
-
-
-
-
-
-
-
-
-

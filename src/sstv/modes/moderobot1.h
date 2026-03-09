@@ -35,23 +35,22 @@
 
 
 /**
-	@author Johan Maes <on4qz@telenet.be>
+  @author Johan Maes <on4qz@telenet.be>
 */
 class modeRobot1 : public modeBase
 {
 public:
-  modeRobot1 (esstvMode m, unsigned int len, bool tx, bool narrowMode);
+  modeRobot1(esstvMode m, unsigned int len, bool tx, bool narrowMode);
   ~modeRobot1();
 
 private:
   embState rxSetupLine();
-	void calcPixelPositionTable(unsigned int colorLine,bool tx);
-//  unsigned long adjustSyncPosition(unsigned long syncPos0);
-	void setupParams(double clock);
-	void showLine();
+  void calcPixelPositionTable(unsigned int colorLine, bool tx);
+  //  unsigned long adjustSyncPosition(unsigned long syncPos0);
+  void setupParams(double clock);
+  void showLine();
   embState txSetupLine();
-	void getLine();
-
+  void getLine();
 };
 
 #endif

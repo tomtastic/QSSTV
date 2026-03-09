@@ -37,15 +37,14 @@
 /* Implementation *************************************************************/
 void CDRMTransmitter::Start()
 {
-
   TransmParam.bRunThread = true; // Set run flag
-//  Init(); // Initialization of the modules
+                                 //  Init(); // Initialization of the modules
   Run();
 }
 
 void CDRMTransmitter::Stop()
 {
-	TransmParam.bRunThread = false;
+  TransmParam.bRunThread = false;
 }
 
 void CDRMTransmitter::Run()
@@ -55,51 +54,49 @@ void CDRMTransmitter::Run()
   convention is always "input-buffer, output-buffer". Additional, the
   DRM-parameters are fed to the function
 */
-  while (TransmParam.bRunThread)
-    {
-      addToLog("AudioSourceEncoder",LOGDRMTX);
-      AudioSourceEncoder.ProcessData(TransmParam,  AudSrcBuf);
+  while (TransmParam.bRunThread) {
+    addToLog("AudioSourceEncoder", LOGDRMTX);
+    AudioSourceEncoder.ProcessData(TransmParam, AudSrcBuf);
 
-      //arrayBinDump(QString("audiosrc %1").arg(runCounter++),AudSrcBuf,32,true);
-      addToLog("MSCMLCEncoder",LOGPERFORM);
-      MSCMLCEncoder.ProcessData(TransmParam, AudSrcBuf, MLCEncBuf);
-      addToLog("SymbInterleaver",LOGPERFORM);
-      SymbInterleaver.ProcessData(TransmParam, MLCEncBuf, IntlBuf);
-      addToLog("GenerateFACData",LOGPERFORM);
-      GenerateFACData.ReadData(TransmParam, GenFACDataBuf);
-      addToLog("FACMLCEncoder",LOGPERFORM);
-      FACMLCEncoder.ProcessData(TransmParam, GenFACDataBuf, FACMapBuf);
-      addToLog("OFDMCellMapping",LOGPERFORM);
-      OFDMCellMapping.ProcessData(TransmParam, IntlBuf, FACMapBuf, CarMapBuf);
-      addToLog("OFDMModulation",LOGPERFORM);
-      OFDMModulation.ProcessData(TransmParam, CarMapBuf, OFDMModBuf);
-      addToLog("TransmitData",LOGPERFORM);
-      TransmitData.WriteData(TransmParam, OFDMModBuf);
-//      arrayComplexDump(QString("cd "),OFDMModBuf.getVecBuffer(),8,true);
+    // arrayBinDump(QString("audiosrc %1").arg(runCounter++),AudSrcBuf,32,true);
+    addToLog("MSCMLCEncoder", LOGPERFORM);
+    MSCMLCEncoder.ProcessData(TransmParam, AudSrcBuf, MLCEncBuf);
+    addToLog("SymbInterleaver", LOGPERFORM);
+    SymbInterleaver.ProcessData(TransmParam, MLCEncBuf, IntlBuf);
+    addToLog("GenerateFACData", LOGPERFORM);
+    GenerateFACData.ReadData(TransmParam, GenFACDataBuf);
+    addToLog("FACMLCEncoder", LOGPERFORM);
+    FACMLCEncoder.ProcessData(TransmParam, GenFACDataBuf, FACMapBuf);
+    addToLog("OFDMCellMapping", LOGPERFORM);
+    OFDMCellMapping.ProcessData(TransmParam, IntlBuf, FACMapBuf, CarMapBuf);
+    addToLog("OFDMModulation", LOGPERFORM);
+    OFDMModulation.ProcessData(TransmParam, CarMapBuf, OFDMModBuf);
+    addToLog("TransmitData", LOGPERFORM);
+    TransmitData.WriteData(TransmParam, OFDMModBuf);
+    //      arrayComplexDump(QString("cd "),OFDMModBuf.getVecBuffer(),8,true);
 
-      if (stopDRM)
-        {
-          TransmParam.bRunThread=false;
-          addToLog("stopping drm",LOGPERFORM);
-        }
+    if (stopDRM) {
+      TransmParam.bRunThread = false;
+      addToLog("stopping drm", LOGPERFORM);
     }
+  }
 }
 
 void CDRMTransmitter::Init()
 {
-  int PacLen, nr_decoded_bits  ;   // added pa0mbo
+  int PacLen, nr_decoded_bits; // added pa0mbo
 
   OFDMCellMapping.Init(TransmParam, CarMapBuf); // Defines number of cells, important!
   //	SDCMLCEncoder.Init(TransmParam, SDCMapBuf); // Defines number of SDC bits per super-frame
   MSCMLCEncoder.Init(TransmParam, MLCEncBuf);
-  nr_decoded_bits = TransmParam.iNumDecodedBitsMSC ;
-  PacLen = (nr_decoded_bits/8) - 3 ;
+  nr_decoded_bits = TransmParam.iNumDecodedBitsMSC;
+  PacLen = (nr_decoded_bits / 8) - 3;
   // printf("PacLen is %d\n", PacLen);
-  TransmParam.Service[0].DataParam.iPacketLen=PacLen;
+  TransmParam.Service[0].DataParam.iPacketLen = PacLen;
 
   // added Oct 19th 2011 pa0mbo
-  TransmParam.iNumAudioService=0;
-  TransmParam.iNumDataService =1 ;
+  TransmParam.iNumAudioService = 0;
+  TransmParam.iNumDataService = 1;
   TransmParam.Service[0].eAudDataFlag = CService::SF_DATA;
   TransmParam.Service[0].DataParam.iStreamID = 0;
   TransmParam.Service[0].DataParam.eDataUnitInd = CDataParam::DU_DATA_UNITS;
@@ -113,19 +110,18 @@ void CDRMTransmitter::Init()
   TransmitData.Init(TransmParam);
 }
 
-CDRMTransmitter::CDRMTransmitter() :
-  pSoundOutInterface(new CSoundOut),
-  TransmitData(pSoundOutInterface),
+CDRMTransmitter::CDRMTransmitter()
+    : pSoundOutInterface(new CSoundOut), TransmitData(pSoundOutInterface),
 
-  // UEP only works with Dream receiver, FIXME! -> disabled for now
-  bUseUEP(false)
+      // UEP only works with Dream receiver, FIXME! -> disabled for now
+      bUseUEP(false)
 {
 }
 
 void CDRMTransmitter::init_base()
 {
   TransmParam.init();
-   /* Init streams */
+  /* Init streams */
   TransmParam.ResetServicesStreams();
 
   /* Init frame ID counter (index) */
@@ -153,7 +149,7 @@ void CDRMTransmitter::init_base()
      SO_5: 20 kHz
 
            PA0MBO: for ham use now only modes A, B and E */
-  TransmParam.InitCellMapTable(RM_ROBUSTNESS_MODE_E, SO_1);                            // was B pa0mbo 21-10-2011
+  TransmParam.InitCellMapTable(RM_ROBUSTNESS_MODE_E, SO_1); // was B pa0mbo 21-10-2011
 
   /* Protection levels for MSC. Depend on the modulation scheme. Look at
      TableMLC.h, iCodRateCombMSC16SM, iCodRateCombMSC64SM,
@@ -163,7 +159,7 @@ void CDRMTransmitter::init_base()
   TransmParam.MSCPrLe.iHierarch = 0;
 
   /* Either one audio or one data service can be chosen */
-//  _BOOLEAN bIsAudio = false;
+  //  _BOOLEAN bIsAudio = false;
 
   CService Service;
 
@@ -172,9 +168,9 @@ void CDRMTransmitter::init_base()
 
 
   /* Data Service only, no Audio*/
-  TransmParam.SetNumOfServices(0,1);
+  TransmParam.SetNumOfServices(0, 1);
   TransmParam.SetCurSelDataService(0);
-  TransmParam.SetAudDataFlag(0,  CService::SF_DATA);
+  TransmParam.SetAudDataFlag(0, CService::SF_DATA);
   CDataParam DataParam;
   DataParam.iStreamID = 0;
   /* Init SlideShow application */
@@ -206,7 +202,7 @@ void CDRMTransmitter::init_base()
      64-QAM standard mapping (SM): CS_3_SM,
      64-QAM symmetrical hierarchical mapping (HMsym): CS_3_HMSYM,
      64-QAM mixture of the previous two mappings (HMmix): CS_3_HMMIX */
-  TransmParam.eMSCCodingScheme = CS_2_SM;      // was CS_3_SM pa0mbo 21-11-2011
+  TransmParam.eMSCCodingScheme = CS_2_SM; // was CS_3_SM pa0mbo 21-11-2011
 
   /* SDC modulation scheme. Available modes:
      4-QAM standard mapping (SM): CS_1_SM,
@@ -215,19 +211,15 @@ void CDRMTransmitter::init_base()
 
   /* Set desired intermedia frequency (IF) in Hertz */
   SetCarOffset(350.0); /* Default: "VIRTUAL_INTERMED_FREQ" was 12000.0  pa0mbo */
-  rDefCarOffset=static_cast<_REAL>(VIRTUAL_INTERMED_FREQ);
+  rDefCarOffset = static_cast<_REAL>(VIRTUAL_INTERMED_FREQ);
 
-  if (bUseUEP == true)
-    {
-      // TEST
-      TransmParam.SetStreamLen(0, 80, 0);
-    }
-  else
-    {
-      /* Length of part B is set automatically (equal error protection (EEP),
-       if "= 0"). Sets the number of bytes, should not exceed total number
-       of bytes available in MSC block */
-      TransmParam.SetStreamLen(0, 0, 0);
-    }
+  if (bUseUEP == true) {
+    // TEST
+    TransmParam.SetStreamLen(0, 80, 0);
+  } else {
+    /* Length of part B is set automatically (equal error protection (EEP),
+     if "= 0"). Sets the number of bytes, should not exceed total number
+     of bytes available in MSC block */
+    TransmParam.SetStreamLen(0, 0, 0);
+  }
 }
-

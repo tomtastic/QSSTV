@@ -1,23 +1,23 @@
 /*
-*    File drmdefs.h
-*
-*    M.Bos - PA0MBO
-*    Date Feb 21st 2009
-*/
+ *    File drmdefs.h
+ *
+ *    M.Bos - PA0MBO
+ *    Date Feb 21st 2009
+ */
 
 /*************************************************************************
-*
-*                           PA0MBO
-*
-*    COPYRIGHT (C)  2009  M.Bos 
-*
-*    This file is part of the distribution package RXAMADRM
-*
-*    This package is free software and you can redistribute is
-*    and/or modify it under the terms of the GNU General Public License
-*
-*    More details can be found in the accompanying file COPYING
-*************************************************************************/
+ *
+ *                           PA0MBO
+ *
+ *    COPYRIGHT (C)  2009  M.Bos
+ *
+ *    This file is part of the distribution package RXAMADRM
+ *
+ *    This package is free software and you can redistribute is
+ *    and/or modify it under the terms of the GNU General Public License
+ *
+ *    More details can be found in the accompanying file COPYING
+ *************************************************************************/
 
 
 #define DRMBUFSIZE 50000
@@ -36,5 +36,4 @@
 #define RUN_STATE_POWER_ON -2
 #define RUN_STATE_INIT -1
 #define RUN_STATE_FIRST 0
-#define RUN_STATE_NORMAL  1
-
+#define RUN_STATE_NORMAL 1

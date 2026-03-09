@@ -8,48 +8,42 @@
 #define NUMBEROFPROFILES 3
 
 
-
-struct sprofile
-{
-    QString name;
-    drmTxParams params;
-
+struct sprofile {
+  QString name;
+  drmTxParams params;
 };
 
 extern sprofile drmPFArray[NUMBEROFPROFILES];
 
-bool getDRMParams(int idx, drmTxParams &d);
-bool getName(int idx,QString &n);
+bool getDRMParams(int idx, drmTxParams& d);
+bool getName(int idx, QString& n);
 
 
-
-
-namespace Ui {
+namespace Ui
+{
 class drmProfileConfig;
 }
 
 class drmProfileConfig : public baseConfig
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit drmProfileConfig(QWidget *parent = 0);
-    ~drmProfileConfig();
-    void readSettings();
-    void writeSettings();
-    void getParams();
-    void setParams();
-    bool getDRMParams(int idx,drmTxParams &d);
-    bool getName(int idx, QString &n);
+  explicit drmProfileConfig(QWidget* parent = 0);
+  ~drmProfileConfig();
+  void readSettings();
+  void writeSettings();
+  void getParams();
+  void setParams();
+  bool getDRMParams(int idx, drmTxParams& d);
+  bool getName(int idx, QString& n);
 
 private:
-    Ui::drmProfileConfig *ui;
-    bool diff(sprofile a,sprofile b);
-
+  Ui::drmProfileConfig* ui;
+  bool diff(sprofile a, sprofile b);
 };
 
-extern drmProfileConfig *drmProfileConfigPtr;
-
+extern drmProfileConfig* drmProfileConfigPtr;
 
 
 #endif // DRMPROFILECONFIG

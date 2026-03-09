@@ -38,49 +38,49 @@
 extern unsigned int scopeXOffset;
 extern unsigned int scopeArraySize;
 
-//#define SCOPEMAXDATA	30000
+// #define SCOPEMAXDATA	30000
 /**
-	@author Johan Maes <on4qz@telenet.be>
+  @author Johan Maes <on4qz@telenet.be>
 */
 
-enum ecurve{SCDATA1,SCDATA2,SCDATA3,SCDATA4};
+enum ecurve { SCDATA1, SCDATA2, SCDATA3, SCDATA4 };
 #define NUMCURVES 4
 
-class scopeView: public scopePlot
+class scopeView : public scopePlot
 {
 public:
   scopeView(QString title);
   ~scopeView();
   void init();
   void clear();
-  void setOffset (uint xoffset);
+  void setOffset(uint xoffset);
   void setSize(uint numSamples);
 
-  void addData(ecurve idx,double  *data,unsigned int position,unsigned int len);
-  void addData(ecurve idx,float   *data,unsigned int position,unsigned int len);
-  void addData(ecurve idx,qint8   *data,unsigned int position,unsigned int len);
-  void addData(ecurve idx,quint8  *data,unsigned int position,unsigned int len);
-  void addData(ecurve idx,qint16  *data,unsigned int position,unsigned int len);
-  void addData(ecurve idx,quint16 *data,unsigned int position,unsigned int len);
-  void addData(ecurve idx,qint32  *data,unsigned int position,unsigned int len);
-  void addData(ecurve idx,quint32 *data,unsigned int position,unsigned int len);
+  void addData(ecurve idx, double* data, unsigned int position, unsigned int len);
+  void addData(ecurve idx, float* data, unsigned int position, unsigned int len);
+  void addData(ecurve idx, qint8* data, unsigned int position, unsigned int len);
+  void addData(ecurve idx, quint8* data, unsigned int position, unsigned int len);
+  void addData(ecurve idx, qint16* data, unsigned int position, unsigned int len);
+  void addData(ecurve idx, quint16* data, unsigned int position, unsigned int len);
+  void addData(ecurve idx, qint32* data, unsigned int position, unsigned int len);
+  void addData(ecurve idx, quint32* data, unsigned int position, unsigned int len);
 
 
-  void show(bool data,bool sync,bool state,bool d4);
-  void setCurveName(QString title,int idx);
-  void setAxisTitles(QString x,QString yData1,QString yData2)
+  void show(bool data, bool sync, bool state, bool d4);
+  void setCurveName(QString title, int idx);
+  void setAxisTitles(QString x, QString yData1, QString yData2)
   {
-    xTitle=x;
-    yLeftTitle=yData1;
-    yRightTitle=yData2;
+    xTitle = x;
+    yLeftTitle = yData1;
+    yRightTitle = yData2;
   }
 
 private:
   void allocateArray();
-  double *array1Ptr;
-  double *array2Ptr;
-  double *array3Ptr;
-  double *array4Ptr;
+  double* array1Ptr;
+  double* array2Ptr;
+  double* array3Ptr;
+  double* array4Ptr;
   unsigned int index;
   QString curveNameArray[NUMCURVES];
   QString xTitle;
@@ -89,4 +89,3 @@ private:
 };
 
 #endif
-

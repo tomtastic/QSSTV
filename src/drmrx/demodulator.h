@@ -6,7 +6,7 @@
 #include "sourcedecoder.h"
 
 
-#define SNR_TIMEOUT  10
+#define SNR_TIMEOUT 10
 #define FACVALIDCNTR 10
 #define SNR_MIN_DB 3
 #define DRMNUMMODES 4
@@ -23,11 +23,24 @@ public:
   demodulator();
   ~demodulator();
   void init();
-  bool demodulate(float *sigin, int  numSamples);
-  bool isTimeSync() {return timeSyncFlag;}
-  bool isFrequencySync() {return frequencySyncFlag;}
-  bool isFrameSync() {return frameSyncFlag;}
-  bool isFACAvailable() {return FACAvailable;}
+  bool demodulate(float* sigin, int numSamples);
+  bool isTimeSync()
+  {
+    return timeSyncFlag;
+  }
+  bool isFrequencySync()
+  {
+    return frequencySyncFlag;
+  }
+  bool isFrameSync()
+  {
+    return frameSyncFlag;
+  }
+  bool isFACAvailable()
+  {
+    return FACAvailable;
+  }
+
 private:
   int iterationCounter;
   bool timeSync();
@@ -46,8 +59,8 @@ private:
   int smp_rate_conv_in_out_delay;
   fftwf_plan p1;
   drmComplex ss[256], S[256];
-//  float rs_buffer[DRMBUFSIZE];
-  float rs_buffer[10*8000];
+  //  float rs_buffer[DRMBUFSIZE];
+  float rs_buffer[10 * 8000];
   bool doSynchronize;
   bool timeSyncFlag;
   bool frequencySyncFlag;
@@ -60,7 +73,7 @@ private:
   int counter;
   int Ts, Tu, Tg, Tgh;
   float freq_offset_integer;
-  int x,y, k0;
+  int x, y, k0;
   int symbols_per_2D_window;
   int delta_time_offset_integer;
   float time_offset_fractional_init;
@@ -82,8 +95,8 @@ private:
   int cnt_tr_cells[5];
   int gain_ref_cells_per_frame;
   int gain_ref_cells_per_y_symbols;
-  float next_pilots[2*70];	/* complex */   //joma
-  int K_min,K_max;
+  float next_pilots[2 * 70]; /* complex */ // joma
+  int K_min, K_max;
   float W_symbol_blk[5][208][229];
   float W_symbol[208];
   float W_pilots_blk[5][208][205];

@@ -35,25 +35,25 @@
 #define UTILITIES_H__3B0BA660_CA63_4344_B3452345D31912__INCLUDED_
 
 #include "../GlobalDefinitions.h"
-//#include "Settings.h"
+// #include "Settings.h"
 #include "vector.h"
 #include "../matlib/Matlib.h"
 #include <map>
 #include <iostream>
 
 #ifdef HAVE_LIBHAMLIB
-# include <hamlib/rig.h>
+#include <hamlib/rig.h>
 #endif
 
 
 /* Definitions ****************************************************************/
-#define	METER_FLY_BACK					15
+#define METER_FLY_BACK 15
 
 /* Classes ********************************************************************/
 /* Signal level meter ------------------------------------------------------- */
-//class CSignalLevelMeter
+// class CSignalLevelMeter
 //{
-//public:
+// public:
 //	CSignalLevelMeter() : rCurLevel((_REAL) 0.0) {}
 //	virtual ~CSignalLevelMeter() {}
 
@@ -63,32 +63,31 @@
 //	void Update(const CVector<_SAMPLE> vecsVal);
 //	_REAL Level();
 
-//protected:
+// protected:
 //	_REAL rCurLevel;
-//};
+// };
 
 
 /* Bandpass filter ---------------------------------------------------------- */
 class CDRMBandpassFilt
 {
 public:
-	enum EFiltType {FT_TRANSMITTER, FT_RECEIVER};
+  enum EFiltType { FT_TRANSMITTER, FT_RECEIVER };
 
-	void Init(const int iNewBlockSize, const _REAL rOffsetHz,
-		const ESpecOcc eSpecOcc, const EFiltType eNFiTy);
-	void Process(CVector<_COMPLEX>& veccData);
+  void Init(const int iNewBlockSize, const _REAL rOffsetHz, const ESpecOcc eSpecOcc, const EFiltType eNFiTy);
+  void Process(CVector<_COMPLEX>& veccData);
 
 protected:
-	int				iBlockSize;
+  int iBlockSize;
 
-	CComplexVector	cvecDataTmp;
+  CComplexVector cvecDataTmp;
 
-	CRealVector		rvecZReal; /* State memory real part */
-	CRealVector		rvecZImag; /* State memory imaginary part */
-	CRealVector		rvecDataReal;
-	CRealVector		rvecDataImag;
-	CFftPlans		FftPlanBP;
-	CComplexVector	cvecB;
+  CRealVector rvecZReal; /* State memory real part */
+  CRealVector rvecZImag; /* State memory imaginary part */
+  CRealVector rvecDataReal;
+  CRealVector rvecDataImag;
+  CFftPlans FftPlanBP;
+  CComplexVector cvecB;
 };
 
 
@@ -96,28 +95,35 @@ protected:
 class CModJulDate
 {
 public:
-	CModJulDate() : iYear(0), iDay(0), iMonth(0) {}
-	CModJulDate(const uint32_t iModJulDate) {Set(iModJulDate);}
+  CModJulDate() : iYear(0), iDay(0), iMonth(0) {}
+  CModJulDate(const uint32_t iModJulDate)
+  {
+    Set(iModJulDate);
+  }
 
-	void Set(const uint32_t iModJulDate);
+  void Set(const uint32_t iModJulDate);
 
-	int GetYear() {return iYear;}
-	int GetDay() {return iDay;}
-	int GetMonth() {return iMonth;}
+  int GetYear()
+  {
+    return iYear;
+  }
+  int GetDay()
+  {
+    return iDay;
+  }
+  int GetMonth()
+  {
+    return iMonth;
+  }
 
 protected:
-	int iYear, iDay, iMonth;
+  int iYear, iDay, iMonth;
 };
 
 
-
-
-struct CHamlib
-{
-	enum ESMeterState {SS_VALID, SS_NOTVALID, SS_TIMEOUT};
+struct CHamlib {
+  enum ESMeterState { SS_VALID, SS_NOTVALID, SS_TIMEOUT };
 };
-
-
 
 
 #endif // !defined(UTILITIES_H__3B0BA660_CA63_4344_B3452345D31912__INCLUDED_)

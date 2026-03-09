@@ -5,18 +5,17 @@
 #include "soundbase.h"
 #include <alsa/asoundlib.h>
 
-void getCardList(QStringList &alsaInputList, QStringList &alsaOutputList);
+void getCardList(QStringList& alsaInputList, QStringList& alsaOutputList);
 
-class soundAlsa:public soundBase
+class soundAlsa : public soundBase
 {
-
 public:
   soundAlsa();
   ~soundAlsa();
   bool init(int samplerate);
   void prepareCapture();
   void preparePlayback();
-  int read(int &countAvailable);
+  int read(int& countAvailable);
   int write(uint numFrames);
 
 protected:
@@ -27,15 +26,15 @@ protected:
 
 private:
   bool setupSoundParams(bool isCapture);
-  bool alsaErrorHandler(int err,QString Info);
+  bool alsaErrorHandler(int err, QString Info);
   snd_pcm_uframes_t playbackPeriodSize;
   snd_pcm_uframes_t playbackBufferSize;
   snd_pcm_uframes_t capturePeriodSize;
   snd_pcm_uframes_t captureBufferSize;
-  snd_pcm_hw_params_t *hwparams;
-  snd_pcm_sw_params_t *swparams;
-  snd_pcm_t      *playbackHandle;
-  snd_pcm_t      *captureHandle;
+  snd_pcm_hw_params_t* hwparams;
+  snd_pcm_sw_params_t* swparams;
+  snd_pcm_t* playbackHandle;
+  snd_pcm_t* captureHandle;
   unsigned int minChannelsCapture;
   unsigned int maxChannelsCapture;
   unsigned int minChannelsPlayback;

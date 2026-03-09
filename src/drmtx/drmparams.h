@@ -7,8 +7,7 @@
 #define MINDRMSIZE 4000
 #define MAXDRMSIZE 100000
 
-struct drmTxParams
-{
+struct drmTxParams {
   int robMode;
   int qam;
   int bandwith;
@@ -19,11 +18,10 @@ struct drmTxParams
 };
 
 
-
 drmTxParams modeToParams(unsigned int mode);
 unsigned int paramsToMode(drmTxParams prm);
 extern int numTxFrames;
-extern   drmTxParams drmParams;
+extern drmTxParams drmParams;
 extern QList<short unsigned int> fixBlockList;
 
 

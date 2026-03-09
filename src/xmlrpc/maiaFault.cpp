@@ -28,23 +28,27 @@
 #include "maiaObject.h"
 
 
-MaiaFault::MaiaFault(const MaiaFault &other) : QObject(other.parent()) {
-	fault = other.fault;
+MaiaFault::MaiaFault(const MaiaFault& other) : QObject(other.parent())
+{
+  fault = other.fault;
 }
 
-MaiaFault::MaiaFault(int faultCode, QString faultString, QObject *parent) : QObject(parent) {
-	fault["faultCode"] = faultCode;
-	fault["faultString"] = faultString;
+MaiaFault::MaiaFault(int faultCode, QString faultString, QObject* parent) : QObject(parent)
+{
+  fault["faultCode"] = faultCode;
+  fault["faultString"] = faultString;
 }
 
-QString MaiaFault::toString() {
-	QDomDocument doc;
-	QDomProcessingInstruction header = doc.createProcessingInstruction( "xml", QString("version=\"1.0\" encoding=\"UTF-8\"" )); 
-	doc.appendChild(header);
-	QDomElement methodResponse = doc.createElement("methodResponse");
-	doc.appendChild(methodResponse);
-	QDomElement faultelement = doc.createElement("fault");
-	methodResponse.appendChild(faultelement);
-	faultelement.appendChild(MaiaObject::toXml(fault));
-	return doc.toString();
+QString MaiaFault::toString()
+{
+  QDomDocument doc;
+  QDomProcessingInstruction header =
+      doc.createProcessingInstruction("xml", QString("version=\"1.0\" encoding=\"UTF-8\""));
+  doc.appendChild(header);
+  QDomElement methodResponse = doc.createElement("methodResponse");
+  doc.appendChild(methodResponse);
+  QDomElement faultelement = doc.createElement("fault");
+  methodResponse.appendChild(faultelement);
+  faultelement.appendChild(MaiaObject::toXml(fault));
+  return doc.toString();
 }

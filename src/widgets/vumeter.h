@@ -30,71 +30,92 @@
 
 class vuMeter : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
-    QColor colorBg() const { return colBack; }
-    QColor colorValue() const { return colValue;}
-    QColor colorLow() const { return colLow;}
-    QColor colorHigh() const { return colHigh;}
-    double value() const { return val; }
-    double minValue() const {return min;}
-    double maxValue() const {return max; }
+  QColor colorBg() const
+  {
+    return colBack;
+  }
+  QColor colorValue() const
+  {
+    return colValue;
+  }
+  QColor colorLow() const
+  {
+    return colLow;
+  }
+  QColor colorHigh() const
+  {
+    return colHigh;
+  }
+  double value() const
+  {
+    return val;
+  }
+  double minValue() const
+  {
+    return min;
+  }
+  double maxValue() const
+  {
+    return max;
+  }
 
 public:
-
-    vuMeter(QWidget *parent = 0);
-    QSize minimumSizeHint() const;
-    QSize sizeHint() const;
-    void setHorizontal(bool h) {horizontal=h;}
-    void setLabelText(const QString &t);
+  vuMeter(QWidget* parent = 0);
+  QSize minimumSizeHint() const;
+  QSize sizeHint() const;
+  void setHorizontal(bool h)
+  {
+    horizontal = h;
+  }
+  void setLabelText(const QString& t);
 
 
 signals:
 
-    void valueChanged(double);
+  void valueChanged(double);
 
 public slots:
 
-    void setColorBg(QColor);
-    void setColorValue(QColor);
-    void setColorHigh(QColor);
-    void setColorMid(QColor);
-    void setColorLow(QColor);
-    void setColors(QColor,QColor ,QColor);
-    void setDivisions(int div) {divisions=div;}
-    void setValue(double);
-    void setMaximum(double);
-    void setMinimum(double);
+  void setColorBg(QColor);
+  void setColorValue(QColor);
+  void setColorHigh(QColor);
+  void setColorMid(QColor);
+  void setColorLow(QColor);
+  void setColors(QColor, QColor, QColor);
+  void setDivisions(int div)
+  {
+    divisions = div;
+  }
+  void setValue(double);
+  void setMaximum(double);
+  void setMinimum(double);
 
 
 protected:
-
-    void paintEvent(QPaintEvent *);
-    void paintBorder();
-    void paintBar();
-
+  void paintEvent(QPaintEvent*);
+  void paintBorder();
+  void paintBar();
 
 
 private:
-
-    double min;
-    double max;
-    double val;
-    QColor colBack;
-    QColor colValue;
-    QColor colHigh;
-    QColor colLow;
-    QColor colMid;
-    bool horizontal;
-    qreal w;
-    qreal h;
-    int rw;
-    int rh;
-    int divisions;
-    QString labelText;
-    double prevValue;
-
-
+  double min;
+  double max;
+  double val;
+  QColor colBack;
+  QColor colValue;
+  QColor colHigh;
+  QColor colLow;
+  QColor colMid;
+  bool horizontal;
+  qreal w;
+  qreal h;
+  int rw;
+  int rh;
+  int divisions;
+  QString labelText;
+  double prevValue;
 };
 
 #endif

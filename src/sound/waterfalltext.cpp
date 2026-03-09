@@ -12,7 +12,7 @@
 #include <QPainter>
 #include <QDebug>
 
-//#define FREQ_AMPLITUDE 16E3
+// #define FREQ_AMPLITUDE 16E3
 #define FREQ_AMPLITUDE 6E3
 #define FREQ_OFFSET 300.0
 #define FREQ_MAX 2600.
@@ -20,23 +20,30 @@
 
 waterfallText::waterfallText()
 {
-  out=nullptr;
-  outFiltered=nullptr;
-  dataBuffer=nullptr;
-  txFilter=nullptr;
-  phr=phi=nullptr;
+  out = nullptr;
+  outFiltered = nullptr;
+  dataBuffer = nullptr;
+  txFilter = nullptr;
+  phr = phi = nullptr;
 }
 
 waterfallText::~waterfallText()
 {
   fftw_destroy_plan(plan);
-  if(out) fftw_free(out);
-  if(outFiltered) delete[] outFiltered;
-  if(audioBuf) delete[] audioBuf;
-  if(dataBuffer) fftw_free(dataBuffer);
-  if(txFilter) delete txFilter;
-  if(phr) delete[] phr;
-  if(phi) delete[] phi;
+  if (out)
+    fftw_free(out);
+  if (outFiltered)
+    delete[] outFiltered;
+  if (audioBuf)
+    delete[] audioBuf;
+  if (dataBuffer)
+    fftw_free(dataBuffer);
+  if (txFilter)
+    delete txFilter;
+  if (phr)
+    delete[] phr;
+  if (phi)
+    delete[] phi;
 }
 
 void waterfallText::init()
@@ -44,96 +51,86 @@ void waterfallText::init()
   int i;
   double ph;
   double binSize;
-  if(phr!=nullptr) delete phr;
-  if(phi!=nullptr) delete phi;
-  fftLength=TXSTRIPE*SUBSAMPLINGFACTOR/2;
-  samplingrate=BASESAMPLERATE;
-  binSize=static_cast<double>(BASESAMPLERATE)/(static_cast<double>(fftLength));
-  txFilter= new wfFilter(TXSTRIPE);
-  out = static_cast<fftw_complex *>(fftw_malloc(sizeof(fftw_complex)*fftLength));
-  dataBuffer = static_cast<fftw_complex *>(fftw_malloc(sizeof(fftw_complex)*fftLength));
-  outFiltered = new DSPFLOAT [fftLength];
-  audioBuf = new DSPFLOAT [fftLength];
+  if (phr != nullptr)
+    delete phr;
+  if (phi != nullptr)
+    delete phi;
+  fftLength = TXSTRIPE * SUBSAMPLINGFACTOR / 2;
+  samplingrate = BASESAMPLERATE;
+  binSize = static_cast<double>(BASESAMPLERATE) / (static_cast<double>(fftLength));
+  txFilter = new wfFilter(TXSTRIPE);
+  out = static_cast<fftw_complex*>(fftw_malloc(sizeof(fftw_complex) * fftLength));
+  dataBuffer = static_cast<fftw_complex*>(fftw_malloc(sizeof(fftw_complex) * fftLength));
+  outFiltered = new DSPFLOAT[fftLength];
+  audioBuf = new DSPFLOAT[fftLength];
   // create the fftw plan
-  addToLog("fftw_plan waterfall start",LOGFFT);
+  addToLog("fftw_plan waterfall start", LOGFFT);
   plan = fftw_plan_dft_1d(fftLength, dataBuffer, out, FFTW_BACKWARD, FFTW_ESTIMATE);
-  addToLog("fftw_plan waterfall stop",LOGFFT);
-  imageWidth=(FREQ_MAX-FREQ_OFFSET)/binSize;
+  addToLog("fftw_plan waterfall stop", LOGFFT);
+  imageWidth = (FREQ_MAX - FREQ_OFFSET) / binSize;
 
   //  imageWidth=200;
-  startFreqIndex=static_cast<int>(round(FREQ_OFFSET/binSize));
+  startFreqIndex = static_cast<int>(round(FREQ_OFFSET / binSize));
 
-  //Chirp
-  phr=new double[imageWidth];
-  phi=new double[imageWidth];
-  amplitude=FREQ_AMPLITUDE/sqrt(imageWidth);
-  for(i=0;i<imageWidth;i++)
-  {
-    ph=(-M_PI/imageWidth)*i*i;
-    phr[i]=amplitude*cos(ph);
-    phi[i]=amplitude*sin(ph);
+  // Chirp
+  phr = new double[imageWidth];
+  phi = new double[imageWidth];
+  amplitude = FREQ_AMPLITUDE / sqrt(imageWidth);
+  for (i = 0; i < imageWidth; i++) {
+    ph = (-M_PI / imageWidth) * i * i;
+    phr[i] = amplitude * cos(ph);
+    phi[i] = amplitude * sin(ph);
   }
-
-
-
 }
 
-double waterfallText::getDuration(const QString &txt)
+double waterfallText::getDuration(const QString& txt)
 {
-  if(!txt.isNull())
-    {
-      setupImage(convert(txt));
-    }
-  return (static_cast<double>(line*3*fftLength))/static_cast<double>(samplingrate);
+  if (!txt.isNull()) {
+    setupImage(convert(txt));
+  }
+  return (static_cast<double>(line * 3 * fftLength)) / static_cast<double>(samplingrate);
 }
 
-void waterfallText::setText(const QString &txt)
+void waterfallText::setText(const QString& txt)
 {
-  QString t=convert(txt);
+  QString t = convert(txt);
   setupImage(t);
 }
 
 
-DSPFLOAT * waterfallText::nextLine()
+DSPFLOAT* waterfallText::nextLine()
 {
-  QRgb *cPtr;
-  int i,freqIndex;
+  QRgb* cPtr;
+  int i, freqIndex;
 
-  if(dLine%3==0)
-  {
+  if (dLine % 3 == 0) {
     line--;
-    if(line<0)
-    {
+    if (line < 0) {
       return nullptr;
     }
 
-    addToLog(QString("sendingline %1").arg(line),LOGSYNTHES);
-    cPtr=reinterpret_cast<QRgb *>(image.scanLine(line));
-    for(i=0;i<fftLength;i++)
-    {
-      dataBuffer[i][0]=0.0;
-      dataBuffer[i][1]=0.0;
+    addToLog(QString("sendingline %1").arg(line), LOGSYNTHES);
+    cPtr = reinterpret_cast<QRgb*>(image.scanLine(line));
+    for (i = 0; i < fftLength; i++) {
+      dataBuffer[i][0] = 0.0;
+      dataBuffer[i][1] = 0.0;
     }
 
-    for(i=0;i<imageWidth;i++)
-    {
-      freqIndex=i+startFreqIndex;
-      if((cPtr[i]&0xffffff)!=0)
-      {
-        dataBuffer[freqIndex][0]= phr[i];
-        dataBuffer[freqIndex][1]= phi[i];
+    for (i = 0; i < imageWidth; i++) {
+      freqIndex = i + startFreqIndex;
+      if ((cPtr[i] & 0xffffff) != 0) {
+        dataBuffer[freqIndex][0] = phr[i];
+        dataBuffer[freqIndex][1] = phi[i];
       }
     }
     fftw_execute(plan);
-    for(i=0;i<fftLength;i++)
-    {
-      outFiltered[i]=static_cast<DSPFLOAT>(out[i][0]);
+    for (i = 0; i < fftLength; i++) {
+      outFiltered[i] = static_cast<DSPFLOAT>(out[i][0]);
     }
   }
   dLine++;
   return outFiltered;
 }
-
 
 
 void waterfallText::setupImage(QString txt)
@@ -142,36 +139,40 @@ void waterfallText::setupImage(QString txt)
   QPainter p;
   QPen pen;
   pen.setColor(Qt::white);
-  dLine=0;
-  image=QImage(QSize(imageWidth,80),QImage::Format_ARGB32_Premultiplied);
+  dLine = 0;
+  image = QImage(QSize(imageWidth, 80), QImage::Format_ARGB32_Premultiplied);
   image.fill(Qt::black);
   p.begin(&image);
   p.setPen(pen);
-  if(wfBold) p.setFont(QFont(wfFont,wfFontSize,QFont::Bold));
-  else p.setFont(QFont(wfFont,wfFontSize,QFont::Light));
-  rct=p.boundingRect(QRect(0,0,imageWidth,30),Qt::AlignTop|Qt::AlignCenter,txt);
+  if (wfBold)
+    p.setFont(QFont(wfFont, wfFontSize, QFont::Bold));
+  else
+    p.setFont(QFont(wfFont, wfFontSize, QFont::Light));
+  rct = p.boundingRect(QRect(0, 0, imageWidth, 30), Qt::AlignTop | Qt::AlignCenter, txt);
   p.end();
-  height=rct.height();
-  width=imageWidth;
-  image=QImage(QSize(width,height),QImage::Format_ARGB32_Premultiplied);
+  height = rct.height();
+  width = imageWidth;
+  image = QImage(QSize(width, height), QImage::Format_ARGB32_Premultiplied);
   image.fill(Qt::black);
   p.begin(&image);
   p.setPen(pen);
-  if(wfBold) p.setFont(QFont(wfFont,wfFontSize,QFont::Bold));
-  else p.setFont(QFont(wfFont,wfFontSize,QFont::Light));
-  p.drawText(QRectF(0,0,width,height),Qt::AlignCenter,txt);
+  if (wfBold)
+    p.setFont(QFont(wfFont, wfFontSize, QFont::Bold));
+  else
+    p.setFont(QFont(wfFont, wfFontSize, QFont::Light));
+  p.drawText(QRectF(0, 0, width, height), Qt::AlignCenter, txt);
   p.end();
-  line=image.height();
+  line = image.height();
 }
 
 
-QString  waterfallText::convert(QString txt)
+QString waterfallText::convert(QString txt)
 {
   mexp.clear();
-  mexp.addConversion('m',myCallsign);
-  mexp.addConversion('s',QString::number(lastAvgSNR,'g',2));
-  mexp.addConversion('c',lastReceivedCall);
+  mexp.addConversion('m', myCallsign);
+  mexp.addConversion('s', QString::number(lastAvgSNR, 'g', 2));
+  mexp.addConversion('c', lastReceivedCall);
 
-  QString t=mexp.convert(txt);
+  QString t = mexp.convert(txt);
   return t;
 }

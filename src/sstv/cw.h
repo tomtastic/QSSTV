@@ -20,9 +20,8 @@
 #include <qstring.h>
 
 void initCW(QString cwTxt);
-bool sendTextCW(float &tone,float &duration);
+bool sendTextCW(float& tone, float& duration);
 float getCWDuration();
-
 
 
 #endif

@@ -20,12 +20,12 @@ namespace Ui
 class guiConfig;
 }
 
-class guiConfig :public baseConfig
+class guiConfig : public baseConfig
 {
   Q_OBJECT
-  
+
 public:
-  explicit guiConfig(QWidget *parent = 0);
+  explicit guiConfig(QWidget* parent = 0);
   ~guiConfig();
   void readSettings();
   void writeSettings();
@@ -37,9 +37,8 @@ private slots:
   void slotIBGColorSelect();
 
 private:
-  Ui::guiConfig *ui;
+  Ui::guiConfig* ui;
   void setColorLabel(QColor c, bool image);
-
 };
 
 #endif // GUICONFIG_H

@@ -11,17 +11,17 @@ class drmRx : public QObject
 {
   Q_OBJECT
 public:
-  explicit drmRx(QObject *parent = 0);
+  explicit drmRx(QObject* parent = 0);
   ~drmRx();
   void init();
-  void run(DSPFLOAT *dataPtr);
-  void eraseImage(){}
+  void run(DSPFLOAT* dataPtr);
+  void eraseImage() {}
 
 signals:
 
 public slots:
-  private:
-  int n,im;
+private:
+  int n, im;
   float rRation;
   float resamp_signal[2 * DRMBUFSIZE];
   drmHilbertFilter iqFilter;

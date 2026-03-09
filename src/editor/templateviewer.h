@@ -3,7 +3,8 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class templateViewer;
 }
 
@@ -12,12 +13,12 @@ class templateViewer : public QDialog
   Q_OBJECT
 
 public:
-  explicit templateViewer(QWidget *parent = 0);
+  explicit templateViewer(QWidget* parent = 0);
   ~templateViewer();
-  void setImage (QImage *image);
+  void setImage(QImage* image);
 
 private:
-  Ui::templateViewer *ui;
+  Ui::templateViewer* ui;
 };
 
 #endif // TEMPLATEVIEWER_H

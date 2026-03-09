@@ -13,37 +13,53 @@ class spectrumWidget;
 class vuMeter;
 
 
-namespace Ui {
+namespace Ui
+{
 class rxWidget;
 }
 
 class rxWidget : public QWidget
 {
   Q_OBJECT
-  
+
 public:
-  explicit rxWidget(QWidget *parent = 0);
+  explicit rxWidget(QWidget* parent = 0);
   ~rxWidget();
   void readSettings();
   void writeSettings();
   void startRX(bool st);
-  rxFunctions *functionsPtr() {return rxFunctionsPtr;}
-  imageViewer *getImageViewerPtr(){ return imageViewerPtr;}
+  rxFunctions* functionsPtr()
+  {
+    return rxFunctionsPtr;
+  }
+  imageViewer* getImageViewerPtr()
+  {
+    return imageViewerPtr;
+  }
   //  spectrumWidget *fftDisplayPtr() ;
-  vuMeter *vMeterPtr();
-  vuMeter *sMeterPtr();
-  drmConstellationFrame *mscWdg() {return ui->drmMSCWidget;}
-  drmConstellationFrame *facWdg() {return ui->drmFACWidget;}
-  void setDRMStatusText(const QString &txt)
+  vuMeter* vMeterPtr();
+  vuMeter* sMeterPtr();
+  drmConstellationFrame* mscWdg()
+  {
+    return ui->drmMSCWidget;
+  }
+  drmConstellationFrame* facWdg()
+  {
+    return ui->drmFACWidget;
+  }
+  void setDRMStatusText(const QString& txt)
   {
     ui->drmStatusLineEdit->clear();
     ui->drmStatusLineEdit->appendPlainText(txt);
   }
-  void setOnlineStatus(bool online, const QString &info="");
-  drmStatusFrame *statusWdg() {return ui->drmStatusWidget;}
+  void setOnlineStatus(bool online, const QString& info = "");
+  drmStatusFrame* statusWdg()
+  {
+    return ui->drmStatusWidget;
+  }
   //  int getFilterIndex();
   void init();
-  void setSSTVStatusText(const QString &txt);
+  void setSSTVStatusText(const QString& txt);
   void setSettingsTab();
   void changeTransmissionMode(int rxtxMode);
   bool rxBusy();
@@ -67,9 +83,9 @@ signals:
 
 
 private:
-  Ui::rxWidget *ui;
-  rxFunctions *rxFunctionsPtr;
-  imageViewer *imageViewerPtr;
+  Ui::rxWidget* ui;
+  rxFunctions* rxFunctionsPtr;
+  imageViewer* imageViewerPtr;
   void getParams();
   void setParams();
   ftpFunctions ff;

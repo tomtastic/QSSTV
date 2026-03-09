@@ -10,25 +10,25 @@
 #define MAXROWSIZE 52
 
 
-imageMatrix::imageMatrix(QWidget *parent) :  QWidget(parent)
+imageMatrix::imageMatrix(QWidget* parent) : QWidget(parent)
 {
-
-  parentPtr=parent;
+  parentPtr = parent;
   parentPtr->resize(511, 300);
   verticalLayout = nullptr;
-  horizontalLayout=nullptr;
-  sortFlags=QDir::Time;
+  horizontalLayout = nullptr;
+  sortFlags = QDir::Time;
 }
 
 imageMatrix::~imageMatrix()
 {
-// if(verticalLayout!=nullptr) delete verticalLayout;
-// if( horizontalLayout!=nullptr) delete horizontalLayout;
+  // if(verticalLayout!=nullptr) delete verticalLayout;
+  // if( horizontalLayout!=nullptr) delete horizontalLayout;
 }
 
 void imageMatrix::setupLayout()
 {
-  if(verticalLayout!=nullptr) delete verticalLayout;
+  if (verticalLayout != nullptr)
+    delete verticalLayout;
   verticalLayout = new QVBoxLayout(parentPtr);
   verticalLayout->setObjectName(QString::fromUtf8("vt1"));
   verticalLayout->setSpacing(2);
@@ -57,11 +57,11 @@ void imageMatrix::setupLayout()
   icon.addFile(QString::fromUtf8(":/icons/left.png"), QSize(), QIcon::Normal, QIcon::Off);
   prevPushButton->setIcon(icon);
   horizontalLayout->addWidget(prevPushButton);
-  pageLabel=new QLabel;
+  pageLabel = new QLabel;
   horizontalLayout->addWidget(pageLabel);
 
-//  horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-//  horizontalLayout->addItem(horizontalSpacer_2);
+  //  horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+  //  horizontalLayout->addItem(horizontalSpacer_2);
   nextPushButton = new QPushButton(this);
   nextPushButton->setObjectName(QString::fromUtf8("nextPushButton"));
   QIcon icon1;
@@ -86,159 +86,150 @@ void imageMatrix::setupLayout()
 }
 
 
-void imageMatrix::init(int numRows, int numColumns, QString dir,imageViewer::thumbType tt)
+void imageMatrix::init(int numRows, int numColumns, QString dir, imageViewer::thumbType tt)
 {
-  int i,j;
-  rows=numRows;
-  columns=numColumns;
-  dirPath=dir;
-  imageViewer *imv;
+  int i, j;
+  rows = numRows;
+  columns = numColumns;
+  dirPath = dir;
+  imageViewer* imv;
   setupLayout();
-  for(i=0;i<rows;i++)
-    {
-      for(j=0;j<columns;j++)
-        {
-          imv = new imageViewer(this);
-          imv->setType(tt);
-          gridLayout->addWidget(imv, i, j, 1, 1);
-          connect(imv, &imageViewer::layoutChanged, this, &imageMatrix::slotLayoutChanged);
-        }
+  for (i = 0; i < rows; i++) {
+    for (j = 0; j < columns; j++) {
+      imv = new imageViewer(this);
+      imv->setType(tt);
+      gridLayout->addWidget(imv, i, j, 1, 1);
+      connect(imv, &imageViewer::layoutChanged, this, &imageMatrix::slotLayoutChanged);
     }
-  for (i=0;i<rows;i++)
-    {
-      gridLayout->setRowMinimumHeight(i,MINROWSIZE);
-      gridLayout->setRowStretch(i,0);
-    }
+  }
+  for (i = 0; i < rows; i++) {
+    gridLayout->setRowMinimumHeight(i, MINROWSIZE);
+    gridLayout->setRowStretch(i, 0);
+  }
 
-  for (i=0;i<columns;i++)
-    {
-      gridLayout->setColumnMinimumWidth(i,MINCOLSIZE);
-      gridLayout->setColumnStretch(i,1);
-    }
-  currentPage=0;
+  for (i = 0; i < columns; i++) {
+    gridLayout->setColumnMinimumWidth(i, MINCOLSIZE);
+    gridLayout->setColumnStretch(i, 1);
+  }
+  currentPage = 0;
   getList();
-//  displayFiles();
+  //  displayFiles();
 }
 
-bool compareFile(QFileInfo f1, QFileInfo f2) {
-    return f1.lastModified() > f2.lastModified();
+bool compareFile(QFileInfo f1, QFileInfo f2)
+{
+  return f1.lastModified() > f2.lastModified();
 }
 
 void imageMatrix::getList()
 {
-    QDateTime listFileTime;
-    QDirIterator::IteratorFlags flags = QDirIterator::NoIteratorFlags;
+  QDateTime listFileTime;
+  QDirIterator::IteratorFlags flags = QDirIterator::NoIteratorFlags;
 
-    if(!fileList.isEmpty()) {
-        fileList.erase(fileList.begin(), fileList.end());
+  if (!fileList.isEmpty()) {
+    fileList.erase(fileList.begin(), fileList.end());
+  }
+
+  if (recursiveScanDirs) {
+    flags = QDirIterator::Subdirectories;
+  }
+
+  QDirIterator it(dirPath, QDir::Files | QDir::NoSymLinks, flags);
+
+
+  while (it.hasNext()) {
+    it.next();
+    QFileInfo f(it.fileInfo());
+    if (!f.canonicalPath().endsWith("cache")) {
+      fileList.append(f);
     }
-
-    if(recursiveScanDirs) {
-      flags = QDirIterator::Subdirectories;
-    }
-
-    QDirIterator it(dirPath, QDir::Files | QDir::NoSymLinks, flags);
-
-
-    while (it.hasNext()) {
-      it.next();
-      QFileInfo f(it.fileInfo());
-      if(!f.canonicalPath().endsWith("cache")) {
-        fileList.append(f);
-      }
-    }
-    std::sort(fileList.begin(), fileList.end(), compareFile);
-  numPages=ceil(static_cast<double>(fileList.count())/static_cast<double>(rows*columns));
-  if(numPages==0) numPages=1;
+  }
+  std::sort(fileList.begin(), fileList.end(), compareFile);
+  numPages = ceil(static_cast<double>(fileList.count()) / static_cast<double>(rows * columns));
+  if (numPages == 0)
+    numPages = 1;
   slotBegin();
 }
 
 QString imageMatrix::getLastFile()
 {
-  if (fileList.count()>0)
-    {
-      return fileList.last().absoluteFilePath();
-    }
-  else return QString();
+  if (fileList.count() > 0) {
+    return fileList.last().absoluteFilePath();
+  } else
+    return QString();
 }
 
 void imageMatrix::displayFiles()
 {
-  int i,j,k;
+  int i, j, k;
 
   QString tempStr;
-  int offset=currentPage*rows*columns;
-  pageLabel->setText(QString("   Page %1 of %2").arg(currentPage+1).arg(numPages).leftJustified(17,' '));
-  for(i=0;i<rows;i++)
-    {
-      for(j=0;j<columns;)
-        {
-          k=offset+i*columns+j;
-          if(k>=fileList.count())
-            {
-              qobject_cast<imageViewer *>(gridLayout->itemAtPosition(i,j)->widget())->clear();
-              j++;
-            }
-          else
-            {
-           tempStr=fileList.at(k).absoluteFilePath();
-           if(qobject_cast<imageViewer *>(gridLayout->itemAtPosition(i,j)->widget())->openImage(tempStr,false,false,true,true))
-             {
-                j++;
-             }
-           else
-             {
-               fileList.removeAt(k);
-             }
-            }
+  int offset = currentPage * rows * columns;
+  pageLabel->setText(QString("   Page %1 of %2").arg(currentPage + 1).arg(numPages).leftJustified(17, ' '));
+  for (i = 0; i < rows; i++) {
+    for (j = 0; j < columns;) {
+      k = offset + i * columns + j;
+      if (k >= fileList.count()) {
+        qobject_cast<imageViewer*>(gridLayout->itemAtPosition(i, j)->widget())->clear();
+        j++;
+      } else {
+        tempStr = fileList.at(k).absoluteFilePath();
+        if (qobject_cast<imageViewer*>(gridLayout->itemAtPosition(i, j)->widget())
+                ->openImage(tempStr, false, false, true, true)) {
+          j++;
+        } else {
+          fileList.removeAt(k);
         }
+      }
     }
+  }
 }
 
 void imageMatrix::changed()
 {
-    getList();
-//    displayFiles();
+  getList();
+  //    displayFiles();
 }
 
 
 void imageMatrix::slotPrev()
 {
-  if(currentPage!=0) currentPage--;
+  if (currentPage != 0)
+    currentPage--;
   displayFiles();
 }
 
 void imageMatrix::slotNext()
 {
   currentPage++;
-  if(currentPage>=numPages)
-    {
-      currentPage--;
-    }
+  if (currentPage >= numPages) {
+    currentPage--;
+  }
   displayFiles();
 }
 
 void imageMatrix::slotBegin()
 {
-  currentPage=0;
+  currentPage = 0;
   displayFiles();
 }
 
 void imageMatrix::slotEnd()
 {
-  currentPage=numPages-1;
-  if(currentPage<0) currentPage=0;
+  currentPage = numPages - 1;
+  if (currentPage < 0)
+    currentPage = 0;
   displayFiles();
 }
 
 void imageMatrix::slotLayoutChanged()
 {
-  int curPag=currentPage;
+  int curPag = currentPage;
   getList();
-  if(curPag>=numPages)
-    {
-      if(curPag>0) curPag--;
-    }
-  currentPage=curPag;
+  if (curPag >= numPages) {
+    if (curPag > 0)
+      curPag--;
+  }
+  currentPage = curPag;
   displayFiles();
 }

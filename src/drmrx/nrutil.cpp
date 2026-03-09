@@ -1,4 +1,4 @@
-#if defined(__STDC__) || defined(ANSI) || defined(NRANSI)	/* ANSI */
+#if defined(__STDC__) || defined(ANSI) || defined(NRANSI) /* ANSI */
 
 #include <stdio.h>
 #include <stddef.h>
@@ -7,8 +7,7 @@
 #define FREE_ARG char*
 
 
-
-void nrerror(const char *error_text)
+void nrerror(const char* error_text)
 /* Numerical Recipes standard error handler */
 {
   fprintf(stderr, "Numerical Recipes run-time error...\n");
@@ -18,87 +17,93 @@ void nrerror(const char *error_text)
 }
 
 // allocate a float vector with subscript range v[nl..nh]
-float *fvector(long nl, long nh)
+float* fvector(long nl, long nh)
 {
-  float *v;
-  v = static_cast<float *>(malloc(static_cast<size_t>((nh - nl + 1 + NR_END) * sizeof(float))));
-  if (!v) nrerror("allocation failure in vector()");
+  float* v;
+  v = static_cast<float*>(malloc(static_cast<size_t>((nh - nl + 1 + NR_END) * sizeof(float))));
+  if (!v)
+    nrerror("allocation failure in vector()");
   return v - nl + NR_END;
 }
 
 // allocate an int vector with subscript range v[nl..nh]
-int *ivector(long nl, long nh)
+int* ivector(long nl, long nh)
 {
-  int *v;
-  v = static_cast<int *>(malloc(static_cast<size_t>((nh - nl + 1 + NR_END) * sizeof(int))));
+  int* v;
+  v = static_cast<int*>(malloc(static_cast<size_t>((nh - nl + 1 + NR_END) * sizeof(int))));
   if (!v)
     nrerror("allocation failure in ivector()");
   return v - nl + NR_END;
 }
 
 // allocate an unsigned char vector with subscript range v[nl..nh]
-unsigned char *cvector(long nl, long nh)
+unsigned char* cvector(long nl, long nh)
 {
-  unsigned char *v;
-  v = static_cast<unsigned char *>(malloc(static_cast<size_t>((nh - nl + 1 + NR_END) * sizeof(unsigned char))));
-  if (!v) nrerror("allocation failure in cvector()");
+  unsigned char* v;
+  v = static_cast<unsigned char*>(malloc(static_cast<size_t>((nh - nl + 1 + NR_END) * sizeof(unsigned char))));
+  if (!v)
+    nrerror("allocation failure in cvector()");
   return v - nl + NR_END;
 }
 
 // allocate an unsigned long vector with subscript range v[nl..nh]
-unsigned long *lvector(long nl, long nh)
+unsigned long* lvector(long nl, long nh)
 {
-  unsigned long *v;
-  v = static_cast<unsigned long *>(malloc(static_cast<size_t>((nh - nl + 1 + NR_END) * sizeof(long))));
-  if (!v) nrerror("allocation failure in lvector()");
+  unsigned long* v;
+  v = static_cast<unsigned long*>(malloc(static_cast<size_t>((nh - nl + 1 + NR_END) * sizeof(long))));
+  if (!v)
+    nrerror("allocation failure in lvector()");
   return v - nl + NR_END;
 }
 
 // allocate a double vector with subscript range v[nl..nh]
-double *dvector(long nl, long nh)
+double* dvector(long nl, long nh)
 {
-  double *v;
-  v = static_cast<double *>(malloc(static_cast<size_t>((nh - nl + 1 + NR_END) * sizeof(double))));
-  if (!v) nrerror("allocation failure in dvector()");
+  double* v;
+  v = static_cast<double*>(malloc(static_cast<size_t>((nh - nl + 1 + NR_END) * sizeof(double))));
+  if (!v)
+    nrerror("allocation failure in dvector()");
   return v - nl + NR_END;
 }
 
 // allocate a float matrix with subscript range m[nrl..nrh][ncl..nch]
-float **matrix(long nrl, long nrh, long ncl, long nch)
+float** matrix(long nrl, long nrh, long ncl, long nch)
 {
   long i, nrow = nrh - nrl + 1, ncol = nch - ncl + 1;
-  float **m;
+  float** m;
   /* allocate pointers to rows */
-  m = static_cast<float **>(malloc(static_cast<size_t>((nrow + NR_END) * sizeof(float *))));
-  if (!m) nrerror("allocation failure 1 in matrix()");
-  m += NR_END;
-  m -= nrl;
-
-  /* allocate rows and set pointers to them */
-  m[nrl] = static_cast<float *>(malloc(static_cast<size_t>((nrow * ncol + NR_END) * sizeof(float))));
-  if (!m[nrl]) nrerror("allocation failure 2 in matrix()");
-  m[nrl] += NR_END;
-  m[nrl] -= ncl;
-  for (i = nrl + 1; i <= nrh; i++) m[i] = m[i - 1] + ncol;
-  /* return pointer to array of pointers to rows */
-  return m;
-}
-
-// allocate a double matrix with subscript range m[nrl..nrh][ncl..nch]
-double **dmatrix(long nrl, long nrh, long ncl, long nch)
-{
-  long i, nrow = nrh - nrl + 1, ncol = nch - ncl + 1;
-  double **m;
-  /* allocate pointers to rows */
-  m = static_cast<double **>(malloc(static_cast<size_t>((nrow + NR_END) * sizeof(double *))));
+  m = static_cast<float**>(malloc(static_cast<size_t>((nrow + NR_END) * sizeof(float*))));
   if (!m)
     nrerror("allocation failure 1 in matrix()");
   m += NR_END;
   m -= nrl;
 
   /* allocate rows and set pointers to them */
-  m[nrl] =
-    static_cast<double *>(malloc(static_cast<size_t>((nrow * ncol + NR_END) * sizeof(double))));
+  m[nrl] = static_cast<float*>(malloc(static_cast<size_t>((nrow * ncol + NR_END) * sizeof(float))));
+  if (!m[nrl])
+    nrerror("allocation failure 2 in matrix()");
+  m[nrl] += NR_END;
+  m[nrl] -= ncl;
+  for (i = nrl + 1; i <= nrh; i++)
+    m[i] = m[i - 1] + ncol;
+  /* return pointer to array of pointers to rows */
+  return m;
+}
+
+// allocate a double matrix with subscript range m[nrl..nrh][ncl..nch]
+double** dmatrix(long nrl, long nrh, long ncl, long nch)
+{
+  long i, nrow = nrh - nrl + 1, ncol = nch - ncl + 1;
+  double** m;
+  /* allocate pointers to rows */
+  m = static_cast<double**>(malloc(static_cast<size_t>((nrow + NR_END) * sizeof(double*))));
+  if (!m)
+    nrerror("allocation failure 1 in matrix()");
+  m += NR_END;
+  m -= nrl;
+
+  /* allocate rows and set pointers to them */
+  m[nrl] = static_cast<double*>(malloc(static_cast<size_t>((nrow * ncol + NR_END) * sizeof(double))));
   if (!m[nrl])
     nrerror("allocation failure 2 in matrix()");
   m[nrl] += NR_END;
@@ -112,21 +117,21 @@ double **dmatrix(long nrl, long nrh, long ncl, long nch)
 
 
 // allocate a int matrix with subscript range m[nrl..nrh][ncl..nch]
-int **imatrix(long nrl, long nrh, long ncl, long nch)
+int** imatrix(long nrl, long nrh, long ncl, long nch)
 {
   long i, nrow = nrh - nrl + 1, ncol = nch - ncl + 1;
-  int **m;
+  int** m;
 
 
   /* allocate pointers to rows */
-  m = static_cast<int **>(malloc(static_cast<size_t>((nrow + NR_END) * sizeof(int *))));
+  m = static_cast<int**>(malloc(static_cast<size_t>((nrow + NR_END) * sizeof(int*))));
   if (!m)
     nrerror("allocation failure 1 in matrix()");
   m += NR_END;
   m -= nrl;
 
   /* allocate rows and set pointers to them */
-  m[nrl] = static_cast<int *>(malloc(static_cast<size_t>((nrow * ncol + NR_END) * sizeof(int))));
+  m[nrl] = static_cast<int*>(malloc(static_cast<size_t>((nrow * ncol + NR_END) * sizeof(int))));
   if (!m[nrl])
     nrerror("allocation failure 2 in matrix()");
   m[nrl] += NR_END;
@@ -137,14 +142,14 @@ int **imatrix(long nrl, long nrh, long ncl, long nch)
   /* return pointer to array of pointers to rows */
   return m;
 }
-float **submatrix(float **a, long oldrl, long oldrh, long oldcl, long ,long newrl, long newcl)
+float** submatrix(float** a, long oldrl, long oldrh, long oldcl, long, long newrl, long newcl)
 /* point a submatrix [newrl..][newcl..] to a[oldrl..oldrh][oldcl..oldch] */
 {
   long i, j, nrow = oldrh - oldrl + 1, ncol = oldcl - newcl;
-  float **m;
+  float** m;
 
   /* allocate array of pointers to rows */
-  m = static_cast<float **>(malloc(static_cast<size_t>((nrow + NR_END) * sizeof(float *))));
+  m = static_cast<float**>(malloc(static_cast<size_t>((nrow + NR_END) * sizeof(float*))));
   if (!m)
     nrerror("allocation failure in submatrix()");
   m += NR_END;
@@ -157,18 +162,18 @@ float **submatrix(float **a, long oldrl, long oldrh, long oldcl, long ,long newr
   /* return pointer to array of pointers to rows */
   return m;
 }
-float **convert_matrix(float *a, long nrl, long nrh, long ncl, long nch)
+float** convert_matrix(float* a, long nrl, long nrh, long ncl, long nch)
 /* allocate a float matrix m[nrl..nrh][ncl..nch] that points to the matrix
 declared in the standard C manner as a[nrow][ncol], where nrow=nrh-nrl+1
 and ncol=nch-ncl+1. The routine should be called with the address
 &a[0][0] as the first argument. */
 {
   long i, j, nrow = nrh - nrl + 1, ncol = nch - ncl + 1;
-  float **m;
+  float** m;
 
 
   /* allocate pointers to rows */
-  m = static_cast<float **>(malloc(static_cast<size_t>((nrow + NR_END) * sizeof(float *))));
+  m = static_cast<float**>(malloc(static_cast<size_t>((nrow + NR_END) * sizeof(float*))));
   if (!m)
     nrerror("allocation failure in convert_matrix()");
   m += NR_END;
@@ -182,111 +187,108 @@ and ncol=nch-ncl+1. The routine should be called with the address
   /* return pointer to array of pointers to rows */
   return m;
 }
-float ***f3tensor(long nrl, long nrh, long ncl, long nch, long ndl, long ndh)
+float*** f3tensor(long nrl, long nrh, long ncl, long nch, long ndl, long ndh)
 /* allocate a float 3tensor with range t[nrl..nrh][ncl..nch][ndl..ndh] */
 {
   long i, j, nrow = nrh - nrl + 1, ncol = nch - ncl + 1, ndep = ndh - ndl + 1;
-  float ***t;
+  float*** t;
 
 
   /* allocate pointers to pointers to rows */
-  t = static_cast<float ***>(malloc(static_cast<size_t>((nrow + NR_END) * sizeof(float **))));
+  t = static_cast<float***>(malloc(static_cast<size_t>((nrow + NR_END) * sizeof(float**))));
   if (!t)
     nrerror("allocation failure 1 in f3tensor()");
   t += NR_END;
   t -= nrl;
 
   /* allocate pointers to rows and set pointers to them */
-  t[nrl] =
-    static_cast<float **>(malloc(static_cast<size_t>((nrow * ncol + NR_END) * sizeof(float *))));
+  t[nrl] = static_cast<float**>(malloc(static_cast<size_t>((nrow * ncol + NR_END) * sizeof(float*))));
   if (!t[nrl])
     nrerror("allocation failure 2 in f3tensor()");
   t[nrl] += NR_END;
   t[nrl] -= ncl;
 
   /* allocate rows and set pointers to them */
-  t[nrl][ncl] =
-    static_cast<float *>(malloc(static_cast<size_t>((nrow * ncol * ndep + NR_END) * sizeof(float))));
+  t[nrl][ncl] = static_cast<float*>(malloc(static_cast<size_t>((nrow * ncol * ndep + NR_END) * sizeof(float))));
   if (!t[nrl][ncl])
     nrerror("allocation failure 3 in f3tensor()");
   t[nrl][ncl] += NR_END;
   t[nrl][ncl] -= ndl;
   for (j = ncl + 1; j <= nch; j++)
     t[nrl][j] = t[nrl][j - 1] + ndep;
-  for (i = nrl + 1; i <= nrh; i++)
-    {
-      t[i] = t[i - 1] + ncol;
-      t[i][ncl] = t[i - 1][ncl] + ncol * ndep;
-      for (j = ncl + 1; j <= nch; j++)
-	t[i][j] = t[i][j - 1] + ndep;
-    }
+  for (i = nrl + 1; i <= nrh; i++) {
+    t[i] = t[i - 1] + ncol;
+    t[i][ncl] = t[i - 1][ncl] + ncol * ndep;
+    for (j = ncl + 1; j <= nch; j++)
+      t[i][j] = t[i][j - 1] + ndep;
+  }
 
   /* return pointer to array of pointers to rows */
   return t;
 }
-void free_fvector(float *v, long nl, long )
+void free_fvector(float* v, long nl, long)
 /* free a float vector allocated with vector() */
 {
   free(reinterpret_cast<FREE_ARG>(v + nl - NR_END));
 }
 
-void free_ivector(int *v, long nl, long )
+void free_ivector(int* v, long nl, long)
 /* free an int vector allocated with ivector() */
 {
   free(reinterpret_cast<FREE_ARG>(v + nl - NR_END));
 }
-void free_cvector(unsigned char *v, long nl, long )
+void free_cvector(unsigned char* v, long nl, long)
 /* free an unsigned char vector allocated with cvector() */
 {
   free(reinterpret_cast<FREE_ARG>(v + nl - NR_END));
 }
 
-void free_lvector(unsigned long *v, long nl, long )
+void free_lvector(unsigned long* v, long nl, long)
 /* free an unsigned long vector allocated with lvector() */
 {
   free(reinterpret_cast<FREE_ARG>(v + nl - NR_END));
 }
 
-void free_dvector(double *v, long nl, long )
+void free_dvector(double* v, long nl, long)
 /* free a double vector allocated with dvector() */
 {
   free(reinterpret_cast<FREE_ARG>(v + nl - NR_END));
 }
 
-void free_matrix(float **m, long nrl, long , long ncl, long )
+void free_matrix(float** m, long nrl, long, long ncl, long)
 /* free a float matrix allocated by matrix() */
 {
   free(reinterpret_cast<FREE_ARG>(m[nrl] + ncl - NR_END));
   free(reinterpret_cast<FREE_ARG>(m + nrl - NR_END));
 }
 
-void free_dmatrix(double **m, long nrl, long , long ncl, long )
+void free_dmatrix(double** m, long nrl, long, long ncl, long)
 /* free a double matrix allocated by dmatrix() */
 {
   free(reinterpret_cast<FREE_ARG>(m[nrl] + ncl - NR_END));
   free(reinterpret_cast<FREE_ARG>(m + nrl - NR_END));
 }
 
-void free_imatrix(int **m, long nrl, long , long ncl, long )
+void free_imatrix(int** m, long nrl, long, long ncl, long)
 /* free an int matrix allocated by imatrix() */
 {
   free(reinterpret_cast<FREE_ARG>(m[nrl] + ncl - NR_END));
   free(reinterpret_cast<FREE_ARG>(m + nrl - NR_END));
 }
 
-void free_submatrix(float **b, long nrl, long , long , long )
+void free_submatrix(float** b, long nrl, long, long, long)
 /* free a submatrix allocated by submatrix() */
 {
   free(reinterpret_cast<FREE_ARG>(b + nrl - NR_END));
 }
 
-void free_convert_matrix(float **b, long nrl, long , long , long )
+void free_convert_matrix(float** b, long nrl, long, long, long)
 /* free a matrix allocated by convert_matrix() */
 {
   free(reinterpret_cast<FREE_ARG>(b + nrl - NR_END));
 }
 
-void free_f3tensor(float ***t, long nrl, long , long ncl, long , long ndl,long )
+void free_f3tensor(float*** t, long nrl, long, long ncl, long, long ndl, long)
 /* free a float f3tensor allocated by f3tensor() */
 {
   free(reinterpret_cast<FREE_ARG>(t[nrl][ncl] + ndl - NR_END));
@@ -301,9 +303,7 @@ void free_f3tensor(float ***t, long nrl, long , long ncl, long , long ndl,long )
 #include <stdio.h>
 #define NR_END 1
 #define FREE_ARG char*
-void nrerror(error_text)
-     char error_text[];
-
+void nrerror(error_text) char error_text[];
 
 
 /* Numerical Recipes standard error handler */
@@ -314,102 +314,89 @@ void nrerror(error_text)
   fprintf(stderr, "%s\n", error_text);
   fprintf(stderr, "...now exiting to system...\n");
   exit(1);
-} float *vector(nl, nh)
-     long nh, nl;
-
+}
+float* vector(nl, nh)
+long nh, nl;
 
 
 /* allocate a float vector with subscript range v[nl..nh] */
 {
-  float *v;
-  v =
-    (float *) malloc(static_cast<unsigned int>((nh - nl + 1 + NR_END) * sizeof(float)));
+  float* v;
+  v = (float*) malloc(static_cast<unsigned int>((nh - nl + 1 + NR_END) * sizeof(float)));
   if (!v)
     nrerror("allocation failure in vector()");
   return v - nl + NR_END;
 }
 
-int *ivector(nl, nh)
-     long nh, nl;
-
+int* ivector(nl, nh)
+long nh, nl;
 
 
 /* allocate an int vector with subscript range v[nl..nh] */
 {
-  int *v;
-  v = (int *) malloc(static_cast<unsigned int>((nh - nl + 1 + NR_END) * sizeof(int)));
+  int* v;
+  v = (int*) malloc(static_cast<unsigned int>((nh - nl + 1 + NR_END) * sizeof(int)));
   if (!v)
     nrerror("allocation failure in ivector()");
   return v - nl + NR_END;
 }
-unsigned char *cvector(nl, nh)
-     long nh, nl;
-
+unsigned char* cvector(nl, nh)
+long nh, nl;
 
 
 /* allocate an unsigned char vector with subscript range v[nl..nh] */
 {
-  unsigned char *v;
-  v =
-    (unsigned char *)
-    malloc(static_cast<unsigned int>((nh - nl + 1 + NR_END) * sizeof(unsigned char)));
+  unsigned char* v;
+  v = (unsigned char*) malloc(static_cast<unsigned int>((nh - nl + 1 + NR_END) * sizeof(unsigned char)));
   if (!v)
     nrerror("allocation failure in cvector()");
   return v - nl + NR_END;
 }
-unsigned long *lvector(nl, nh)
-     long nh, nl;
-
+unsigned long* lvector(nl, nh)
+long nh, nl;
 
 
 /* allocate an unsigned long vector with subscript range v[nl..nh] */
 {
-  unsigned long *v;
-  v =
-    (unsigned long *)
-    malloc(static_cast<unsigned int>((nh - nl + 1 + NR_END) * sizeof(long)));
+  unsigned long* v;
+  v = (unsigned long*) malloc(static_cast<unsigned int>((nh - nl + 1 + NR_END) * sizeof(long)));
   if (!v)
     nrerror("allocation failure in lvector()");
   return v - nl + NR_END;
 }
 
-double *dvector(nl, nh)
-     long nh, nl;
-
+double* dvector(nl, nh)
+long nh, nl;
 
 
 /* allocate a double vector with subscript range v[nl..nh] */
 {
-  double *v;
-  v =
-    (double *)
-    malloc(static_cast<unsigned int>((nh - nl + 1 + NR_END) * sizeof(double)));
+  double* v;
+  v = (double*) malloc(static_cast<unsigned int>((nh - nl + 1 + NR_END) * sizeof(double)));
   if (!v)
     nrerror("allocation failure in dvector()");
   return v - nl + NR_END;
 }
 
-float **matrix(nrl, nrh, ncl, nch)
-     long nch, ncl, nrh, nrl;
-
+float** matrix(nrl, nrh, ncl, nch)
+long nch, ncl, nrh, nrl;
 
 
 /* allocate a float matrix with subscript range m[nrl..nrh][ncl..nch] */
 {
   long i, nrow = nrh - nrl + 1, ncol = nch - ncl + 1;
-  float **m;
+  float** m;
 
 
   /* allocate pointers to rows */
-  m = (float **) malloc(static_cast<unsigned int>((nrow + NR_END) * sizeof(float *)));
+  m = (float**) malloc(static_cast<unsigned int>((nrow + NR_END) * sizeof(float*)));
   if (!m)
     nrerror("allocation failure 1 in matrix()");
   m += NR_END;
   m -= nrl;
 
   /* allocate rows and set pointers to them */
-  m[nrl] =
-    (float *) malloc(static_cast<unsigned int>((nrow * ncol + NR_END) * sizeof(float)));
+  m[nrl] = (float*) malloc(static_cast<unsigned int>((nrow * ncol + NR_END) * sizeof(float)));
   if (!m[nrl])
     nrerror("allocation failure 2 in matrix()");
   m[nrl] += NR_END;
@@ -421,28 +408,25 @@ float **matrix(nrl, nrh, ncl, nch)
   return m;
 }
 
-double **dmatrix(nrl, nrh, ncl, nch)
-     long nch, ncl, nrh, nrl;
-
+double** dmatrix(nrl, nrh, ncl, nch)
+long nch, ncl, nrh, nrl;
 
 
 /* allocate a double matrix with subscript range m[nrl..nrh][ncl..nch] */
 {
   long i, nrow = nrh - nrl + 1, ncol = nch - ncl + 1;
-  double **m;
+  double** m;
 
 
   /* allocate pointers to rows */
-  m = (double **) malloc(static_cast<unsigned int>((nrow + NR_END) * sizeof(double *)));
+  m = (double**) malloc(static_cast<unsigned int>((nrow + NR_END) * sizeof(double*)));
   if (!m)
     nrerror("allocation failure 1 in matrix()");
   m += NR_END;
   m -= nrl;
 
   /* allocate rows and set pointers to them */
-  m[nrl] =
-    (double *)
-    malloc(static_cast<unsigned int>((nrow * ncol + NR_END) * sizeof(double)));
+  m[nrl] = (double*) malloc(static_cast<unsigned int>((nrow * ncol + NR_END) * sizeof(double)));
   if (!m[nrl])
     nrerror("allocation failure 2 in matrix()");
   m[nrl] += NR_END;
@@ -454,27 +438,25 @@ double **dmatrix(nrl, nrh, ncl, nch)
   return m;
 }
 
-int **imatrix(nrl, nrh, ncl, nch)
-     long nch, ncl, nrh, nrl;
-
+int** imatrix(nrl, nrh, ncl, nch)
+long nch, ncl, nrh, nrl;
 
 
 /* allocate a int matrix with subscript range m[nrl..nrh][ncl..nch] */
 {
   long i, nrow = nrh - nrl + 1, ncol = nch - ncl + 1;
-  int **m;
+  int** m;
 
 
   /* allocate pointers to rows */
-  m = (int **) malloc(static_cast<unsigned int>((nrow + NR_END) * sizeof(int *)));
+  m = (int**) malloc(static_cast<unsigned int>((nrow + NR_END) * sizeof(int*)));
   if (!m)
     nrerror("allocation failure 1 in matrix()");
   m += NR_END;
   m -= nrl;
 
   /* allocate rows and set pointers to them */
-  m[nrl] =
-    (int *) malloc(static_cast<unsigned int>((nrow * ncol + NR_END) * sizeof(int)));
+  m[nrl] = (int*) malloc(static_cast<unsigned int>((nrow * ncol + NR_END) * sizeof(int)));
   if (!m[nrl])
     nrerror("allocation failure 2 in matrix()");
   m[nrl] += NR_END;
@@ -486,20 +468,19 @@ int **imatrix(nrl, nrh, ncl, nch)
   return m;
 }
 
-float **submatrix(a, oldrl, oldrh, oldcl, oldch, newrl, newcl)
-     float **a;
-     long newcl, newrl, oldch, oldcl, oldrh, oldrl;
-
+float** submatrix(a, oldrl, oldrh, oldcl, oldch, newrl, newcl)
+float** a;
+long newcl, newrl, oldch, oldcl, oldrh, oldrl;
 
 
 /* point a submatrix [newrl..][newcl..] to a[oldrl..oldrh][oldcl..oldch] */
 {
   long i, j, nrow = oldrh - oldrl + 1, ncol = oldcl - newcl;
-  float **m;
+  float** m;
 
 
   /* allocate array of pointers to rows */
-  m = (float **) malloc(static_cast<unsigned int>((nrow + NR_END) * sizeof(float *)));
+  m = (float**) malloc(static_cast<unsigned int>((nrow + NR_END) * sizeof(float*)));
   if (!m)
     nrerror("allocation failure in submatrix()");
   m += NR_END;
@@ -513,10 +494,9 @@ float **submatrix(a, oldrl, oldrh, oldcl, oldch, newrl, newcl)
   return m;
 }
 
-float **convert_matrix(a, nrl, nrh, ncl, nch)
-     float *a;
-     long nch, ncl, nrh, nrl;
-
+float** convert_matrix(a, nrl, nrh, ncl, nch)
+float* a;
+long nch, ncl, nrh, nrl;
 
 
 /* allocate a float matrix m[nrl..nrh][ncl..nch] that points to the matrix
@@ -525,11 +505,11 @@ and ncol=nch-ncl+1. The routine should be called with the address
 &a[0][0] as the first argument. */
 {
   long i, j, nrow = nrh - nrl + 1, ncol = nch - ncl + 1;
-  float **m;
+  float** m;
 
 
   /* allocate pointers to rows */
-  m = (float **) malloc(static_cast<unsigned int>((nrow + NR_END) * sizeof(float *)));
+  m = (float**) malloc(static_cast<unsigned int>((nrow + NR_END) * sizeof(float*)));
   if (!m)
     nrerror("allocation failure in convert_matrix()");
   m += NR_END;
@@ -544,152 +524,134 @@ and ncol=nch-ncl+1. The routine should be called with the address
   return m;
 }
 
-float ***f3tensor(nrl, nrh, ncl, nch, ndl, ndh)
-     long nch, ncl, ndh, ndl, nrh, nrl;
-
+float*** f3tensor(nrl, nrh, ncl, nch, ndl, ndh)
+long nch, ncl, ndh, ndl, nrh, nrl;
 
 
 /* allocate a float 3tensor with range t[nrl..nrh][ncl..nch][ndl..ndh] */
 {
   long i, j, nrow = nrh - nrl + 1, ncol = nch - ncl + 1, ndep = ndh - ndl + 1;
-  float ***t;
+  float*** t;
 
 
   /* allocate pointers to pointers to rows */
-  t = (float ***) malloc(static_cast<unsigned int>((nrow + NR_END) * sizeof(float **)));
+  t = (float***) malloc(static_cast<unsigned int>((nrow + NR_END) * sizeof(float**)));
   if (!t)
     nrerror("allocation failure 1 in f3tensor()");
   t += NR_END;
   t -= nrl;
 
   /* allocate pointers to rows and set pointers to them */
-  t[nrl] =
-    (float **)
-    malloc(static_cast<unsigned int>((nrow * ncol + NR_END) * sizeof(float *)));
+  t[nrl] = (float**) malloc(static_cast<unsigned int>((nrow * ncol + NR_END) * sizeof(float*)));
   if (!t[nrl])
     nrerror("allocation failure 2 in f3tensor()");
   t[nrl] += NR_END;
   t[nrl] -= ncl;
 
   /* allocate rows and set pointers to them */
-  t[nrl][ncl] =
-    (float *)
-    malloc(static_cast<unsigned int>((nrow * ncol * ndep + NR_END) * sizeof(float)));
+  t[nrl][ncl] = (float*) malloc(static_cast<unsigned int>((nrow * ncol * ndep + NR_END) * sizeof(float)));
   if (!t[nrl][ncl])
     nrerror("allocation failure 3 in f3tensor()");
   t[nrl][ncl] += NR_END;
   t[nrl][ncl] -= ndl;
   for (j = ncl + 1; j <= nch; j++)
     t[nrl][j] = t[nrl][j - 1] + ndep;
-  for (i = nrl + 1; i <= nrh; i++)
-    {
-      t[i] = t[i - 1] + ncol;
-      t[i][ncl] = t[i - 1][ncl] + ncol * ndep;
-      for (j = ncl + 1; j <= nch; j++)
-	t[i][j] = t[i][j - 1] + ndep;
-    }
+  for (i = nrl + 1; i <= nrh; i++) {
+    t[i] = t[i - 1] + ncol;
+    t[i][ncl] = t[i - 1][ncl] + ncol * ndep;
+    for (j = ncl + 1; j <= nch; j++)
+      t[i][j] = t[i][j - 1] + ndep;
+  }
 
   /* return pointer to array of pointers to rows */
   return t;
 }
 
-void free_vector(v, nl, nh)
-     float *v;
-     long nh, nl;
-
+void free_vector(v, nl, nh) float* v;
+long nh, nl;
 
 
 /* free a float vector allocated with vector() */
 {
   free((FREE_ARG) (v + nl - NR_END));
-} void free_ivector(v, nl, nh)
-     int *v;
-     long nh, nl;
-
+}
+void free_ivector(v, nl, nh) int* v;
+long nh, nl;
 
 
 /* free an int vector allocated with ivector() */
 {
   free((FREE_ARG) (v + nl - NR_END));
-} void free_cvector(v, nl, nh)
-     long nh, nl;
-     unsigned char *v;
-
+}
+void free_cvector(v, nl, nh) long nh, nl;
+unsigned char* v;
 
 
 /* free an unsigned char vector allocated with cvector() */
 {
   free((FREE_ARG) (v + nl - NR_END));
-} void free_lvector(v, nl, nh)
-     long nh, nl;
-     unsigned long *v;
-
+}
+void free_lvector(v, nl, nh) long nh, nl;
+unsigned long* v;
 
 
 /* free an unsigned long vector allocated with lvector() */
 {
   free((FREE_ARG) (v + nl - NR_END));
-} void free_dvector(v, nl, nh)
-     double *v;
-     long nh, nl;
-
+}
+void free_dvector(v, nl, nh) double* v;
+long nh, nl;
 
 
 /* free a double vector allocated with dvector() */
 {
   free((FREE_ARG) (v + nl - NR_END));
-} void free_matrix(m, nrl, nrh, ncl, nch)
-     float **m;
-     long nch, ncl, nrh, nrl;
-
+}
+void free_matrix(m, nrl, nrh, ncl, nch) float** m;
+long nch, ncl, nrh, nrl;
 
 
 /* free a float matrix allocated by matrix() */
 {
   free((FREE_ARG) (m[nrl] + ncl - NR_END));
   free((FREE_ARG) (m + nrl - NR_END));
-} void free_dmatrix(m, nrl, nrh, ncl, nch)
-     double **m;
-     long nch, ncl, nrh, nrl;
-
+}
+void free_dmatrix(m, nrl, nrh, ncl, nch) double** m;
+long nch, ncl, nrh, nrl;
 
 
 /* free a double matrix allocated by dmatrix() */
 {
   free((FREE_ARG) (m[nrl] + ncl - NR_END));
   free((FREE_ARG) (m + nrl - NR_END));
-} void free_imatrix(m, nrl, nrh, ncl, nch)
-     int **m;
-     long nch, ncl, nrh, nrl;
-
+}
+void free_imatrix(m, nrl, nrh, ncl, nch) int** m;
+long nch, ncl, nrh, nrl;
 
 
 /* free an int matrix allocated by imatrix() */
 {
   free((FREE_ARG) (m[nrl] + ncl - NR_END));
   free((FREE_ARG) (m + nrl - NR_END));
-} void free_submatrix(b, nrl, nrh, ncl, nch)
-     float **b;
-     long nch, ncl, nrh, nrl;
-
+}
+void free_submatrix(b, nrl, nrh, ncl, nch) float** b;
+long nch, ncl, nrh, nrl;
 
 
 /* free a submatrix allocated by submatrix() */
 {
   free((FREE_ARG) (b + nrl - NR_END));
-} void free_convert_matrix(b, nrl, nrh, ncl, nch)
-     float **b;
-     long nch, ncl, nrh, nrl;
-
+}
+void free_convert_matrix(b, nrl, nrh, ncl, nch) float** b;
+long nch, ncl, nrh, nrl;
 
 
 /* free a matrix allocated by convert_matrix() */
 {
   free((FREE_ARG) (b + nrl - NR_END));
-} void free_f3tensor(t, nrl, nrh, ncl, nch, ndl, ndh)
-     float ***t;
-     long nch, ncl, ndh, ndl, nrh, nrl;
-
+}
+void free_f3tensor(t, nrl, nrh, ncl, nch, ndl, ndh) float*** t;
+long nch, ncl, ndh, ndl, nrh, nrl;
 
 
 /* free a float f3tensor allocated by f3tensor() */

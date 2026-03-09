@@ -11,23 +11,24 @@ class configDialog;
 class spectrumWidget;
 class ftpThread;
 
-namespace Ui {
-  class MainWindow;
-  }
+namespace Ui
+{
+class MainWindow;
+}
 
 class mainWindow : public QMainWindow
 {
   Q_OBJECT
-  
+
 public:
-  explicit mainWindow(QWidget *parent = 0);
+  explicit mainWindow(QWidget* parent = 0);
   ~mainWindow();
   void init();
   void startRunning();
   void setNewFont();
   void setPTT(bool p);
   void setSSTVDRMPushButton(bool inDRM);
-  spectrumWidget *spectrumFramePtr;
+  spectrumWidget* spectrumFramePtr;
 
 private slots:
   void slotConfigure();
@@ -49,7 +50,6 @@ private slots:
   void slotSetFrequency(int freqIndex);
 
 
-
 #ifdef ENABLESCOPE
   void slotShowDataScope();
   void slotShowSyncScopeNarrow();
@@ -61,24 +61,24 @@ private slots:
 #endif
 
 private:
-  Ui::MainWindow *ui;
-  void closeEvent ( QCloseEvent *e );
+  Ui::MainWindow* ui;
+  void closeEvent(QCloseEvent* e);
   void readSettings();
   void writeSettings();
   void restartSound(bool inStartUp);
   void cleanUpCache(QString dirPath);
-//  void setupFtp(ftpThread *&ptr, QString idName);
-  QComboBox *transmissionModeComboBox;
-  QPushButton *wfTextPushButton;
-  QPushButton *fixPushButton;
-  QPushButton *bsrPushButton;
-  QPushButton *idPushButton;
-  QPushButton *cwPushButton;
-  QComboBox *freqComboBox;
+  //  void setupFtp(ftpThread *&ptr, QString idName);
+  QComboBox* transmissionModeComboBox;
+  QPushButton* wfTextPushButton;
+  QPushButton* fixPushButton;
+  QPushButton* bsrPushButton;
+  QPushButton* idPushButton;
+  QPushButton* cwPushButton;
+  QComboBox* freqComboBox;
   QLabel pttText;
-  QLabel *pttIcon;
-  QLabel *freqDisplay;
-  void timerEvent(QTimerEvent *);
+  QLabel* pttIcon;
+  QLabel* freqDisplay;
+  void timerEvent(QTimerEvent*);
   QStringList modModeList;
   QStringList modPassBandList;
 };

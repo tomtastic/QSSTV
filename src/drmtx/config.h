@@ -6,7 +6,6 @@
 #define HAVE_INTTYPES_H 1
 
 
-
 /* Define if you have libsndfile */
 /* #undef HAVE_LIBSNDFILE */
 
@@ -35,7 +34,7 @@
 #define HAVE_UNISTD_H 1
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
+ */
 #define LT_OBJDIR ".libs/"
 
 /* Name of package */

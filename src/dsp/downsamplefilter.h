@@ -25,7 +25,7 @@
 
 #define DSAMPLEFILTERLEN 180
 #define CONVLENGTH 75
-#define CONVDELAY  55
+#define CONVDELAY 55
 
 extern const FILTERPARAMTYPE downSampleFilterParam[DSAMPLEFILTERLEN];
 
@@ -35,30 +35,35 @@ public:
   downsampleFilter();
   downsampleFilter(unsigned int len, bool scaled);
   ~downsampleFilter();
-	void allocate(unsigned int dataLength);
+  void allocate(unsigned int dataLength);
   void setFilterParams(bool scaled);
-  void downSample4(short int *data);
-  FILTERPARAMTYPE *filteredDataPtr() {return filteredDataBuffer;}
+  void downSample4(short int* data);
+  FILTERPARAMTYPE* filteredDataPtr()
+  {
+    return filteredDataBuffer;
+  }
   void init();
   DSPFLOAT avgVolumeDb;
-  FILTERPARAMTYPE *getVolumePtr() {return volumeBuffer;}
+  FILTERPARAMTYPE* getVolumePtr()
+  {
+    return volumeBuffer;
+  }
 
 private:
-	void normalizeGain();
-  FILTERPARAMTYPE *filteredDataBuffer;
-//  FILTERPARAMTYPE *volumeDataBuffer;
-  FILTERPARAMTYPE *volumeBuffer;
-  FILTERPARAMTYPE *filterParams;
-	unsigned int filterLength;
-  FILTERPARAMTYPE *samplesI;
-  FILTERPARAMTYPE *samplesQ;
-  DSPFLOAT *volSamples;
-	unsigned int length;
+  void normalizeGain();
+  FILTERPARAMTYPE* filteredDataBuffer;
+  //  FILTERPARAMTYPE *volumeDataBuffer;
+  FILTERPARAMTYPE* volumeBuffer;
+  FILTERPARAMTYPE* filterParams;
+  unsigned int filterLength;
+  FILTERPARAMTYPE* samplesI;
+  FILTERPARAMTYPE* samplesQ;
+  DSPFLOAT* volSamples;
+  unsigned int length;
   int zeroes;
   int ssize;
-//  unsigned int rxBytes;
+  //  unsigned int rxBytes;
   bool first;
-
 };
 
 #endif

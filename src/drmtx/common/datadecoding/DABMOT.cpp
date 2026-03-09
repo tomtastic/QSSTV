@@ -42,49 +42,49 @@
 #include "drmtransmitter.h"
 #include <QDebug>
 
-//#if HAVE_LIBZ
-//#include <zlib.h>
-//#else
-//#ifdef HAVE_LIBFREEIMAGE
-//# include <FreeImage.h>
-//#endif
-//#endif
+// #if HAVE_LIBZ
+// #include <zlib.h>
+// #else
+// #ifdef HAVE_LIBFREEIMAGE
+// # include <FreeImage.h>
+// #endif
+// #endif
 
 #define RUNINLEN 24
 #define RUNOUTLEN 10
 
-static int bsrTransportId=2;
+static int bsrTransportId = 2;
 
-using namespace std; 
+using namespace std;
 /* Implementation *************************************************************/
-//ostream & operator<<(ostream & out, CDateAndTime & d)
+// ostream & operator<<(ostream & out, CDateAndTime & d)
 //{
 //	d.dump(out);
 //	return out;
-//}
+// }
 
-//ostream & operator<<(ostream & out, CMOTObject & o)
+// ostream & operator<<(ostream & out, CMOTObject & o)
 //{
 //	o.dump(out);
 //	return out;
-//}
+// }
 
-//ostream & operator<<(ostream & out, CMOTDirectory & o)
+// ostream & operator<<(ostream & out, CMOTDirectory & o)
 //{
 //	o.dump(out);
 //	return out;
-//}
+// }
 
 /******************************************************************************\
 * Encoder                                                                      *
 \******************************************************************************/
 
-void CMOTDABEnc::SetMOTObject(CMOTObject & NewMOTObject,int bytesAvailable)
+void CMOTDABEnc::SetMOTObject(CMOTObject& NewMOTObject, int bytesAvailable)
 {
   size_t i;
   size_t k;
   CMOTObjectRaw MOTObjectRaw;
-  unsigned char xorfname , addfname ;
+  unsigned char xorfname, addfname;
 
   /* Get some necessary parameters of object */
   const int iPicSizeBits = NewMOTObject.vecbRawData.Size();
@@ -95,33 +95,30 @@ void CMOTDABEnc::SetMOTObject(CMOTObject & NewMOTObject,int bytesAvailable)
      If file name is longer, cut it. TODO: better solution: set Ext flag in
      "ContentName" header extension to allow larger file names */
   size_t iFileNameSize = strFileName.size();
-  if (strFileName=="bsr.bin")
-    {
-      bsrTransportId++;
-      bsrTransportId=bsrTransportId%3;
-      txTransportID=bsrTransportId;
-    }
-  else
-    {
-      if (iFileNameSize > 80)    // was 128
-        iFileNameSize = 80;   //was 128
+  if (strFileName == "bsr.bin") {
+    bsrTransportId++;
+    bsrTransportId = bsrTransportId % 3;
+    txTransportID = bsrTransportId;
+  } else {
+    if (iFileNameSize > 80) // was 128
+      iFileNameSize = 80;   // was 128
 
-      // printf("Binnenkomst SetMOTObject file %s \n", strFileName.c_str());
-      if (iFileNameSize ==0 )
-        return;
+    // printf("Binnenkomst SetMOTObject file %s \n", strFileName.c_str());
+    if (iFileNameSize == 0)
+      return;
 
-      /* special hamcode */
-      xorfname = 0;
-      addfname = 0;
-      for (k=0; k < iFileNameSize ; k++)
-        {
-          xorfname ^= strFileName[k];
-          addfname += strFileName[k];
-          addfname ^= static_cast<unsigned char>(k) ;
-        }
-      txTransportID = 256 * static_cast<int>(addfname) + static_cast<int>(xorfname) ;
-      if (txTransportID <= 2) txTransportID += iFileNameSize;
+    /* special hamcode */
+    xorfname = 0;
+    addfname = 0;
+    for (k = 0; k < iFileNameSize; k++) {
+      xorfname ^= strFileName[k];
+      addfname += strFileName[k];
+      addfname ^= static_cast<unsigned char>(k);
     }
+    txTransportID = 256 * static_cast<int>(addfname) + static_cast<int>(xorfname);
+    if (txTransportID <= 2)
+      txTransportID += iFileNameSize;
+  }
 
   /* end special hamcode */
 
@@ -131,8 +128,8 @@ void CMOTDABEnc::SetMOTObject(CMOTObject & NewMOTObject,int bytesAvailable)
 
   /* Get content type and content sub type of object. We use the format string
      to get these informations about the object */
-  int iContentType = 2;		/* Set default value (general data)  was 0 */
-  int iContentSubType = 1;	/* Set default value (jpg)  was 0 */
+  int iContentType = 2;    /* Set default value (general data)  was 0 */
+  int iContentSubType = 1; /* Set default value (jpg)  was 0 */
 
   /* Get ending string which declares the type of the file. Make lowercase */
 
@@ -140,51 +137,41 @@ void CMOTDABEnc::SetMOTObject(CMOTObject & NewMOTObject,int bytesAvailable)
 #if defined(_MSC_VER) && (_MSC_VER < 1400)
   strFormat = _strlwr(_strdup(NewMOTObject.strFormat.c_str()));
 #else
-  transform(NewMOTObject.strFormat.begin(), NewMOTObject.strFormat.end(),
-            strFormat.begin(), static_cast<int (*)(int)>(tolower));
+  transform(NewMOTObject.strFormat.begin(), NewMOTObject.strFormat.end(), strFormat.begin(),
+            static_cast<int (*)(int)>(tolower));
 #endif
   // printf("DABMOT strFormat is %s \n", strFormat.c_str());
   /* gif: 0, image: 2 */
-  if (strcmp(strFormat.c_str(), "gif") == 0)
-    {
-      iContentType = 2;
-      iContentSubType = 0;
-    }
+  if (strcmp(strFormat.c_str(), "gif") == 0) {
+    iContentType = 2;
+    iContentSubType = 0;
+  }
 
   /* jfif: 1, image: 2. Possible endings: jpg, jpeg, jfif  jp2 added sep 14 2012 */
-  if (( strcmp(strFormat.c_str(), "jpg")==0 ) ||
-      (strcmp(strFormat.c_str(), "jpeg") == 0) ||
-      (strcmp(strFormat.c_str(), "rs1") == 0) ||
-      (strcmp(strFormat.c_str(), "rs2") == 0) ||
-      (strcmp(strFormat.c_str(), "rs3") == 0) ||
-      (strcmp(strFormat.c_str(), "rs4") == 0) ||
-      (strcmp(strFormat.c_str(), "jp2") == 0) ||
-      (strcmp(strFormat.c_str(), "jfif") == 0))
-    {
-      iContentType = 2;
-      iContentSubType = 1;
-    }
+  if ((strcmp(strFormat.c_str(), "jpg") == 0) || (strcmp(strFormat.c_str(), "jpeg") == 0) ||
+      (strcmp(strFormat.c_str(), "rs1") == 0) || (strcmp(strFormat.c_str(), "rs2") == 0) ||
+      (strcmp(strFormat.c_str(), "rs3") == 0) || (strcmp(strFormat.c_str(), "rs4") == 0) ||
+      (strcmp(strFormat.c_str(), "jp2") == 0) || (strcmp(strFormat.c_str(), "jfif") == 0)) {
+    iContentType = 2;
+    iContentSubType = 1;
+  }
 
   /* bmp: 2, image: 2 */
-  if (strcmp(strFormat.c_str(),"bmp") == 0)
-    {
-      iContentType = 2;
-      iContentSubType = 2;
-    }
+  if (strcmp(strFormat.c_str(), "bmp") == 0) {
+    iContentType = 2;
+    iContentSubType = 2;
+  }
 
   /* png: 3, image: 2 */
-  if (strcmp(strFormat.c_str(),"png") == 0)
-    {
-      iContentType = 2;
-      iContentSubType = 3;
-    }
+  if (strcmp(strFormat.c_str(), "png") == 0) {
+    iContentType = 2;
+    iContentSubType = 3;
+  }
   // printf("na de ifs iContentType is %d iContentSubType is %d \n", iContentType, iContentSubType);
   /* Header --------------------------------------------------------------- */
   /* Header size (including header extension) */
-  const int iHeaderSize = 7 /* Header core  */  +
-      5 /* TriggerTime */  +
-      3 + iFileNameSize /* ContentName (header + actual name) */  +
-      2 /* VersionNumber */ ;
+  const int iHeaderSize = 7 /* Header core  */ + 5 /* TriggerTime */ + 3 +
+                          iFileNameSize /* ContentName (header + actual name) */ + 2 /* VersionNumber */;
 
   /* Allocate memory and reset bit access */
   MOTObjectRaw.Header.Init(iHeaderSize * SIZEOF__BYTE);
@@ -270,8 +257,7 @@ void CMOTDABEnc::SetMOTObject(CMOTObject & NewMOTObject,int bytesAvailable)
      number the length of the parameter's DataField in bytes. The length of
      this field is either 7 or 15 bits, depending on the setting of the
      ExtensionFlag */
-  MOTObjectRaw.Header.Enqueue(static_cast<uint32_t>(1 /* header */  +
-                                          iFileNameSize	/* actual data */), 7);
+  MOTObjectRaw.Header.Enqueue(static_cast<uint32_t>(1 /* header */ + iFileNameSize /* actual data */), 7);
   // printf("iFileNameSize is %d\n", iFileNameSize);
   // if (iFileNameSize ==0) return ;
   /* Character set indicator (0 0 0 0 complete EBU Latin based repertoire) */
@@ -286,26 +272,27 @@ void CMOTDABEnc::SetMOTObject(CMOTObject & NewMOTObject,int bytesAvailable)
 
   /* Generate segments ---------------------------------------------------- */
   /* Header (header should not be partitioned! TODO) */
-  const int iPartiSizeHeader = 98;	/* Bytes */// TEST was 100 pa0mbo
+  const int iPartiSizeHeader = 98; /* Bytes */ // TEST was 100 pa0mbo
   // printf("Voor partitioning header \n");
-  PartitionUnits(MOTObjectRaw.Header, MOTObjSegments.vvbiHeader,iPartiSizeHeader);
+  PartitionUnits(MOTObjectRaw.Header, MOTObjSegments.vvbiHeader, iPartiSizeHeader);
   /* Body */
-  //ON4QZ change to better fit in NumDecodeBits
-  PartitionUnits(MOTObjectRaw.Body, MOTObjSegments.vvbiBody, bytesAvailable-14);
+  // ON4QZ change to better fit in NumDecodeBits
+  PartitionUnits(MOTObjectRaw.Body, MOTObjSegments.vvbiBody, bytesAvailable - 14);
 }
 
 
-void CMOTDABEnc::PartitionUnits(CVector < _BINARY > &vecbiSource, CVector < CVector < _BINARY > >&vecbiDest, const int iPartiSize)
+void CMOTDABEnc::PartitionUnits(CVector<_BINARY>& vecbiSource, CVector<CVector<_BINARY>>& vecbiDest,
+                                const int iPartiSize)
 {
   int i, j;
   int iActSegSize;
 
   /* Divide the generated units in partitions */
   const int iSourceSize = vecbiSource.Size() / SIZEOF__BYTE;
-  const int iNumSeg = static_cast<int>(ceil(static_cast<_REAL>(iSourceSize) / iPartiSize));	/* Bytes */
+  const int iNumSeg = static_cast<int>(ceil(static_cast<_REAL>(iSourceSize) / iPartiSize)); /* Bytes */
   iNumSegStore = iNumSeg;
-  const int iSizeLastSeg = iSourceSize -
-                           static_cast<int>(floor(static_cast<_REAL>(iSourceSize) / iPartiSize)) * iPartiSize;
+  const int iSizeLastSeg =
+      iSourceSize - static_cast<int>(floor(static_cast<_REAL>(iSourceSize) / iPartiSize)) * iPartiSize;
 
   /*      printf("In PartitionUnits  iParti %d  iSource %d iNumSeg %d iSizlast %d\n",
                   iPartiSize, iSourceSize, iNumSeg, iSizeLastSeg); */
@@ -314,353 +301,329 @@ void CMOTDABEnc::PartitionUnits(CVector < _BINARY > &vecbiSource, CVector < CVec
   vecbiDest.Init(iNumSeg);
   vecbiSource.ResetBitAccess();
 
-  for (i = 0; i < iNumSeg; i++)
-    {
-      /* All segments except the last one must have the size
-       "iPartSizeHeader". If "iSizeLastSeg" is =, the source data size is
-       a multiple of the partitions size. In this case, all units have
-       the same size (-> "|| (iSizeLastSeg == 0)") */
-      if ((i < iNumSeg - 1) || (iSizeLastSeg == 0))
-        iActSegSize = iPartiSize;
-      else
-        iActSegSize = iSizeLastSeg;
+  for (i = 0; i < iNumSeg; i++) {
+    /* All segments except the last one must have the size
+     "iPartSizeHeader". If "iSizeLastSeg" is =, the source data size is
+     a multiple of the partitions size. In this case, all units have
+     the same size (-> "|| (iSizeLastSeg == 0)") */
+    if ((i < iNumSeg - 1) || (iSizeLastSeg == 0))
+      iActSegSize = iPartiSize;
+    else
+      iActSegSize = iSizeLastSeg;
 
-      /* Add segment data ------------------------------------------------- */
-      /* Header */
-      /* Allocate memory for body data and segment header bits (16) */
-      vecbiDest[i].Init(iActSegSize * SIZEOF__BYTE + 16);
-      vecbiDest[i].ResetBitAccess();
+    /* Add segment data ------------------------------------------------- */
+    /* Header */
+    /* Allocate memory for body data and segment header bits (16) */
+    vecbiDest[i].Init(iActSegSize * SIZEOF__BYTE + 16);
+    vecbiDest[i].ResetBitAccess();
 
-      /* Segment header */
-      /* RepetitionCount: This 3-bit field indicates, as an unsigned
-       binary number, the remaining transmission repetitions for the
-       current object.
-       In our current implementation, no repetitions used. TODO */
-      vecbiDest[i].Enqueue(static_cast<uint32_t>(0), 3);
+    /* Segment header */
+    /* RepetitionCount: This 3-bit field indicates, as an unsigned
+     binary number, the remaining transmission repetitions for the
+     current object.
+     In our current implementation, no repetitions used. TODO */
+    vecbiDest[i].Enqueue(static_cast<uint32_t>(0), 3);
 
-      /* SegmentSize: This 13-bit field, coded as an unsigned binary
-       number, indicates the size of the segment data field in bytes */
-      vecbiDest[i].Enqueue(static_cast<uint32_t>(iActSegSize), 13);
+    /* SegmentSize: This 13-bit field, coded as an unsigned binary
+     number, indicates the size of the segment data field in bytes */
+    vecbiDest[i].Enqueue(static_cast<uint32_t>(iActSegSize), 13);
 
-      /* Body */
-      for (j = 0; j < iActSegSize * SIZEOF__BYTE; j++)
-        vecbiDest[i].Enqueue(vecbiSource.Separate(1), 1);
-    }
+    /* Body */
+    for (j = 0; j < iActSegSize * SIZEOF__BYTE; j++)
+      vecbiDest[i].Enqueue(vecbiSource.Separate(1), 1);
+  }
 }
 
 
-
-void CMOTDABEnc::GenMOTObj(CVector < _BINARY > &vecbiData, CVector < _BINARY > &vecbiSeg, const _BOOLEAN bHeader,  const int iSegNum, const int iTranspID, const _BOOLEAN bLastSeg)
+void CMOTDABEnc::GenMOTObj(CVector<_BINARY>& vecbiData, CVector<_BINARY>& vecbiSeg, const _BOOLEAN bHeader,
+                           const int iSegNum, const int iTranspID, const _BOOLEAN bLastSeg)
 {
-	int i;
-	CCRC CRCObject;
-        // printf("GenMOTObj iTranspID %d SIZEOF__BYTE %d\n", iTranspID, SIZEOF__BYTE);
-	/* Standard settings for this implementation */
-	const _BOOLEAN bCRCUsed = true;	/* CRC */
-	const _BOOLEAN bSegFieldUsed = true;	/* segment field */
-	const _BOOLEAN bUsAccFieldUsed = true;	/* user access field */
-	const _BOOLEAN bTransIDFieldUsed = true;	/* transport ID field */
-        unsigned char testdata[10000];
-        double ownchecksum;
+  int i;
+  CCRC CRCObject;
+  // printf("GenMOTObj iTranspID %d SIZEOF__BYTE %d\n", iTranspID, SIZEOF__BYTE);
+  /* Standard settings for this implementation */
+  const _BOOLEAN bCRCUsed = true;          /* CRC */
+  const _BOOLEAN bSegFieldUsed = true;     /* segment field */
+  const _BOOLEAN bUsAccFieldUsed = true;   /* user access field */
+  const _BOOLEAN bTransIDFieldUsed = true; /* transport ID field */
+  unsigned char testdata[10000];
+  double ownchecksum;
 
-/* Total length of object in bits */
-	int iTotLenMOTObj = 16 /* group header */ ;
-	if (bSegFieldUsed == true)
-		iTotLenMOTObj += 16;
-	if (bUsAccFieldUsed == true)
-	{
-		iTotLenMOTObj += 8;
-		if (bTransIDFieldUsed == true)
-			iTotLenMOTObj += 16;
-	}
-        // printf("DABMOT vecbiSrg.size %d\n", vecbiSeg.Size());
-	iTotLenMOTObj += vecbiSeg.Size();
-	if (bCRCUsed == true)
-		iTotLenMOTObj += 16;
+  /* Total length of object in bits */
+  int iTotLenMOTObj = 16 /* group header */;
+  if (bSegFieldUsed == true)
+    iTotLenMOTObj += 16;
+  if (bUsAccFieldUsed == true) {
+    iTotLenMOTObj += 8;
+    if (bTransIDFieldUsed == true)
+      iTotLenMOTObj += 16;
+  }
+  // printf("DABMOT vecbiSrg.size %d\n", vecbiSeg.Size());
+  iTotLenMOTObj += vecbiSeg.Size();
+  if (bCRCUsed == true)
+    iTotLenMOTObj += 16;
 
-	/* Init data vector */
-	vecbiData.Init(iTotLenMOTObj);
-	vecbiData.ResetBitAccess();
+  /* Init data vector */
+  vecbiData.Init(iTotLenMOTObj);
+  vecbiData.ResetBitAccess();
 
-	/* MSC data group header ------------------------------------------------ */
-	/* Extension flag: this 1-bit flag shall indicate whether the extension
-	   field is present, or not. Not used right now -> 0 */
-	vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
+  /* MSC data group header ------------------------------------------------ */
+  /* Extension flag: this 1-bit flag shall indicate whether the extension
+     field is present, or not. Not used right now -> 0 */
+  vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
 
-	/* CRC flag: this 1-bit flag shall indicate whether there is a CRC at the
-	   end of the MSC data group */
-	if (bCRCUsed == true)
-		vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
-	else
-		vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
+  /* CRC flag: this 1-bit flag shall indicate whether there is a CRC at the
+     end of the MSC data group */
+  if (bCRCUsed == true)
+    vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
+  else
+    vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
 
-	/* Segment flag: this 1-bit flag shall indicate whether the segment field is
-	   present, or not */
-	if (bSegFieldUsed == true)
-		vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
-	else
-		vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
+  /* Segment flag: this 1-bit flag shall indicate whether the segment field is
+     present, or not */
+  if (bSegFieldUsed == true)
+    vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
+  else
+    vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
 
-	/* User access flag: this 1-bit flag shall indicate whether the user access
-	   field is present, or not. We always use this field -> 1 */
-	if (bUsAccFieldUsed == true)
-		vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
-	else
-		vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
+  /* User access flag: this 1-bit flag shall indicate whether the user access
+     field is present, or not. We always use this field -> 1 */
+  if (bUsAccFieldUsed == true)
+    vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
+  else
+    vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
 
-	/* Data group type: this 4-bit field shall define the type of data carried
-	   in the data group data field. Data group types:
-	   3: MOT header information
-	   4: MOT data */
-	if (bHeader == true)
-		vecbiData.Enqueue(static_cast<uint32_t>(3), 4);
-	else
-		vecbiData.Enqueue(static_cast<uint32_t>(4), 4);
+  /* Data group type: this 4-bit field shall define the type of data carried
+     in the data group data field. Data group types:
+     3: MOT header information
+     4: MOT data */
+  if (bHeader == true)
+    vecbiData.Enqueue(static_cast<uint32_t>(3), 4);
+  else
+    vecbiData.Enqueue(static_cast<uint32_t>(4), 4);
 
-	/* Continuity index: the binary value of this 4-bit field shall be
-	   incremented each time a MSC data group of a particular type, with a
-	   content different from that of the immediately preceding data group of
-	   the same type, is transmitted */
-	if (bHeader == true)
-	{
-		vecbiData.Enqueue(static_cast<uint32_t>(iContIndexHeader), 4);
+  /* Continuity index: the binary value of this 4-bit field shall be
+     incremented each time a MSC data group of a particular type, with a
+     content different from that of the immediately preceding data group of
+     the same type, is transmitted */
+  if (bHeader == true) {
+    vecbiData.Enqueue(static_cast<uint32_t>(iContIndexHeader), 4);
 
-		/* Increment modulo 16 */
-		iContIndexHeader++;
-		if (iContIndexHeader == 16)
-			iContIndexHeader = 0;
-	}
-	else
-	{
-		vecbiData.Enqueue(static_cast<uint32_t>(iContIndexBody), 4);
+    /* Increment modulo 16 */
+    iContIndexHeader++;
+    if (iContIndexHeader == 16)
+      iContIndexHeader = 0;
+  } else {
+    vecbiData.Enqueue(static_cast<uint32_t>(iContIndexBody), 4);
 
-		/* Increment modulo 16 */
-		iContIndexBody++;
-		if (iContIndexBody == 16)
-			iContIndexBody = 0;
-	}
+    /* Increment modulo 16 */
+    iContIndexBody++;
+    if (iContIndexBody == 16)
+      iContIndexBody = 0;
+  }
 
-	/* Repetition index: the binary value of this 4-bit field shall signal the
-	   remaining number of repetitions of a MSC data group with the same data
-	   content, occurring in successive MSC data groups of the same type.
-	   No repetition used in this implementation right now -> 0, TODO */
-	vecbiData.Enqueue(static_cast<uint32_t>(0), 4);
+  /* Repetition index: the binary value of this 4-bit field shall signal the
+     remaining number of repetitions of a MSC data group with the same data
+     content, occurring in successive MSC data groups of the same type.
+     No repetition used in this implementation right now -> 0, TODO */
+  vecbiData.Enqueue(static_cast<uint32_t>(0), 4);
 
-	/* Extension field: this 16-bit field shall be used to carry the Data Group
-	   Conditional Access (DGCA) when general data or MOT data uses conditional
-	   access (Data group types 0010 and 0101, respectively). The DGCA contains
-	   the Initialization Modifier (IM) and additional Conditional Access (CA)
-	   information. For other Data group types, the Extension field is reserved
-	   for future additions to the Data group header.
-	   Extension field is not used in this implementation! */
+  /* Extension field: this 16-bit field shall be used to carry the Data Group
+     Conditional Access (DGCA) when general data or MOT data uses conditional
+     access (Data group types 0010 and 0101, respectively). The DGCA contains
+     the Initialization Modifier (IM) and additional Conditional Access (CA)
+     information. For other Data group types, the Extension field is reserved
+     for future additions to the Data group header.
+     Extension field is not used in this implementation! */
 
-	/* Session header ------------------------------------------------------- */
-	/* Segment field */
-	if (bSegFieldUsed == true)
-	{
-		/* Last: this 1-bit flag shall indicate whether the segment number field
-		   is the last or whether there are more to be transmitted */
-		if (bLastSeg == true)
-			vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
-		else
-			vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
+  /* Session header ------------------------------------------------------- */
+  /* Segment field */
+  if (bSegFieldUsed == true) {
+    /* Last: this 1-bit flag shall indicate whether the segment number field
+       is the last or whether there are more to be transmitted */
+    if (bLastSeg == true)
+      vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
+    else
+      vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
 
-		/* Segment number: this 15-bit field, coded as an unsigned binary number
-		   (in the range 0 to 32767), shall indicate the segment number.
-		   NOTE: The first segment is numbered 0 and the segment number is
-		   incremented by one at each new segment */
-                // printf("GenMOTObj blastSeg %d, iSegNum %d \n", bLastSeg, iSegNum);
-		vecbiData.Enqueue(static_cast<uint32_t>(iSegNum), 15);
-	}
+    /* Segment number: this 15-bit field, coded as an unsigned binary number
+       (in the range 0 to 32767), shall indicate the segment number.
+       NOTE: The first segment is numbered 0 and the segment number is
+       incremented by one at each new segment */
+    // printf("GenMOTObj blastSeg %d, iSegNum %d \n", bLastSeg, iSegNum);
+    vecbiData.Enqueue(static_cast<uint32_t>(iSegNum), 15);
+  }
 
-	/* User access field */
-	if (bUsAccFieldUsed == true)
-	{
-		/* Rfa (Reserved for future addition): this 3-bit field shall be
-		   reserved for future additions */
-		vecbiData.Enqueue(static_cast<uint32_t>(0), 3);
+  /* User access field */
+  if (bUsAccFieldUsed == true) {
+    /* Rfa (Reserved for future addition): this 3-bit field shall be
+       reserved for future additions */
+    vecbiData.Enqueue(static_cast<uint32_t>(0), 3);
 
-		/* Transport Id flag: this 1-bit flag shall indicate whether the
-		   Transport Id field is present, or not */
-		if (bTransIDFieldUsed == true)
-			vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
-		else
-			vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
+    /* Transport Id flag: this 1-bit flag shall indicate whether the
+       Transport Id field is present, or not */
+    if (bTransIDFieldUsed == true)
+      vecbiData.Enqueue(static_cast<uint32_t>(1), 1);
+    else
+      vecbiData.Enqueue(static_cast<uint32_t>(0), 1);
 
-		/* Length indicator: this 4-bit field, coded as an unsigned binary
-		   number (in the range 0 to 15), shall indicate the length n in bytes
-		   of the Transport Id and End user address fields.
-		   We do not use end user address field, only transport ID -> 2 */
-		if (bTransIDFieldUsed == true)
-			vecbiData.Enqueue(static_cast<uint32_t>(2), 4);
-		else
-			vecbiData.Enqueue(static_cast<uint32_t>(0), 4);
+    /* Length indicator: this 4-bit field, coded as an unsigned binary
+       number (in the range 0 to 15), shall indicate the length n in bytes
+       of the Transport Id and End user address fields.
+       We do not use end user address field, only transport ID -> 2 */
+    if (bTransIDFieldUsed == true)
+      vecbiData.Enqueue(static_cast<uint32_t>(2), 4);
+    else
+      vecbiData.Enqueue(static_cast<uint32_t>(0), 4);
 
-		/* Transport Id (Identifier): this 16-bit field shall uniquely identify
-		   one data object (file and header information) from a stream of such
-		   objects, It may be used to indicate the object to which the
-		   information carried in the data group belongs or relates */
-		if (bTransIDFieldUsed == true)
-			vecbiData.Enqueue(static_cast<uint32_t>(iTranspID), 16);
-	}
+    /* Transport Id (Identifier): this 16-bit field shall uniquely identify
+       one data object (file and header information) from a stream of such
+       objects, It may be used to indicate the object to which the
+       information carried in the data group belongs or relates */
+    if (bTransIDFieldUsed == true)
+      vecbiData.Enqueue(static_cast<uint32_t>(iTranspID), 16);
+  }
 
-	/* MSC data group data field -------------------------------------------- */
-	vecbiSeg.ResetBitAccess();
+  /* MSC data group data field -------------------------------------------- */
+  vecbiSeg.ResetBitAccess();
 
-	for (i = 0; i < vecbiSeg.Size(); i++)
-		vecbiData.Enqueue(vecbiSeg.Separate(1), 1);
+  for (i = 0; i < vecbiSeg.Size(); i++)
+    vecbiData.Enqueue(vecbiSeg.Separate(1), 1);
 
-	/* MSC data group CRC --------------------------------------------------- */
-	/* The data group CRC shall be a 16-bit CRC word calculated on the data
-	   group header, the session header and the data group data field. The
-	   generation shall be based on the ITU-T Recommendation X.25.
-	   At the beginning of each CRC word calculation, all shift register stage
-	   contents shall be initialized to "1". The CRC word shall be complemented
-	   (1's complement) prior to transmission */
-	if (bCRCUsed == true)
-	{
-		/* Reset bit access */
+  /* MSC data group CRC --------------------------------------------------- */
+  /* The data group CRC shall be a 16-bit CRC word calculated on the data
+     group header, the session header and the data group data field. The
+     generation shall be based on the ITU-T Recommendation X.25.
+     At the beginning of each CRC word calculation, all shift register stage
+     contents shall be initialized to "1". The CRC word shall be complemented
+     (1's complement) prior to transmission */
+  if (bCRCUsed == true) {
+    /* Reset bit access */
 
-		vecbiData.ResetBitAccess();
+    vecbiData.ResetBitAccess();
 
-		/* Calculate the CRC and put it at the end of the segment */
-		CRCObject.Reset(16);
-                 // printf("iTotLenMOTObj = %d \n", iTotLenMOTObj);
-		/* "byLengthBody" was defined in the header */
-		for (i = 0; i < ((iTotLenMOTObj / SIZEOF__BYTE) - 2) /* CRC */ ; i++)  
-			CRCObject.AddByte(static_cast<_BYTE>(vecbiData.Separate(SIZEOF__BYTE)));
+    /* Calculate the CRC and put it at the end of the segment */
+    CRCObject.Reset(16);
+    // printf("iTotLenMOTObj = %d \n", iTotLenMOTObj);
+    /* "byLengthBody" was defined in the header */
+    for (i = 0; i < ((iTotLenMOTObj / SIZEOF__BYTE) - 2) /* CRC */; i++)
+      CRCObject.AddByte(static_cast<_BYTE>(vecbiData.Separate(SIZEOF__BYTE)));
 
-		/* Now, pointer in "enqueue"-function is back at the same place,
-		   add CRC */
-		vecbiData.Enqueue(CRCObject.GetCRC(), 16);
-                // printf("sending crc16 from DABMOT %x  iSegNum %d \n", CRCObject.GetCRC(), iSegNum);
+    /* Now, pointer in "enqueue"-function is back at the same place,
+       add CRC */
+    vecbiData.Enqueue(CRCObject.GetCRC(), 16);
+    // printf("sending crc16 from DABMOT %x  iSegNum %d \n", CRCObject.GetCRC(), iSegNum);
 
-		vecbiData.ResetBitAccess();
+    vecbiData.ResetBitAccess();
 
-                /* extra debugging code pa0mbo */
-		vecbiData.ResetBitAccess();
-		CRCObject.Reset(16);
-		for (i = 0; i < ((iTotLenMOTObj / SIZEOF__BYTE))   ; i++)  
-                {
-		  testdata[i]  = (static_cast<_BYTE>(vecbiData.Separate(SIZEOF__BYTE)));
-                  CRCObject.AddByte(testdata[i]) ;
-                //  printf(" %d  %x\n", i, testdata[i]);
-                }
-                CRCObject.crc16_bytewise( &ownchecksum, testdata, iTotLenMOTObj/SIZEOF__BYTE); // ON4QZ divided by SIZEOF__BYTE
-               //  printf("Own CRC is %x \n", (int)ownchecksum);
-               //  printf("crc16 from DABMOT %x  iSegNum %d \n", CRCObject.GetCRC(), iSegNum);
-                /*    */
-                vecbiData.ResetBitAccess();
-                
-
-	}
+    /* extra debugging code pa0mbo */
+    vecbiData.ResetBitAccess();
+    CRCObject.Reset(16);
+    for (i = 0; i < ((iTotLenMOTObj / SIZEOF__BYTE)); i++) {
+      testdata[i] = (static_cast<_BYTE>(vecbiData.Separate(SIZEOF__BYTE)));
+      CRCObject.AddByte(testdata[i]);
+      //  printf(" %d  %x\n", i, testdata[i]);
+    }
+    CRCObject.crc16_bytewise(&ownchecksum, testdata, iTotLenMOTObj / SIZEOF__BYTE); // ON4QZ divided by SIZEOF__BYTE
+    //  printf("Own CRC is %x \n", (int)ownchecksum);
+    //  printf("crc16 from DABMOT %x  iSegNum %d \n", CRCObject.GetCRC(), iSegNum);
+    /*    */
+    vecbiData.ResetBitAccess();
+  }
 }
 
 
 void CMOTDABEnc::prepareSegmentList(unsigned int repetition) // ON4QZ
 {
-  int i,k,m,counter;
+  int i, k, m, counter;
   unsigned int j;
-  int numHeaderSegments=MOTObjSegments.vvbiHeader.Size();
-  int numBodySegments=MOTObjSegments.vvbiBody.Size();
+  int numHeaderSegments = MOTObjSegments.vvbiHeader.Size();
+  int numBodySegments = MOTObjSegments.vvbiBody.Size();
   segmentList.clear();
-  for(j=0;j<repetition;j++)
-    {
-      // Fill in segmentHeader for RUNIN
-      for(counter=0;counter<RUNINLEN;)
-        {
-          for(k=0;k<numHeaderSegments;k++)
-            {
-              segmentList.append(-1-k);  // negative numbers indicate header
-            }
-          segmentList.append(numBodySegments-1); counter++;// add lastSegment
-          for(i=0;((i<numBodySegments) && (counter<RUNINLEN));i++)
-            {
-              segmentList.append(i); counter++;
-            }
-        }
-      //setup body
-      // fixBlocklist contains the segments to be send
-      // if count==0 then send all segments
-      if(fixBlockList.count()==0)
-        {
-          for(counter=0;counter<numBodySegments;counter++)
-            {
-
-              if(counter%50==0)
-                {
-                  for(k=0;k<numHeaderSegments;k++)
-                    {
-                      segmentList.append(-1-k);
-                    }
-                  segmentList.append(numBodySegments-1); // add lastSegment
-                }
-              segmentList.append(counter);
-            }
-        }
-      else
-        {
-          for(m=0;m<fixBlockList.count();m++)
-            {
-              if(counter%30==0)
-                {
-                  for(k=0;k<numHeaderSegments;k++)
-                    {
-                      segmentList.append(-1-k);
-                    }
-                  segmentList.append(numBodySegments-1); // add lastSegment
-                }
-              segmentList.append(fixBlockList.at(m));
-            }
-        }
-
-      for(counter=0;counter<RUNOUTLEN;)
-        {
-          for(k=0;k<numHeaderSegments;k++)
-            {
-              segmentList.append(-1-k);
-            }
-          segmentList.append(numBodySegments-1); counter++;// add lastSegment
-          for(i=0;((i<numBodySegments) && (counter<RUNOUTLEN));i++)
-            {
-              segmentList.append(i); counter++;
-            }
-        }
+  for (j = 0; j < repetition; j++) {
+    // Fill in segmentHeader for RUNIN
+    for (counter = 0; counter < RUNINLEN;) {
+      for (k = 0; k < numHeaderSegments; k++) {
+        segmentList.append(-1 - k); // negative numbers indicate header
+      }
+      segmentList.append(numBodySegments - 1);
+      counter++; // add lastSegment
+      for (i = 0; ((i < numBodySegments) && (counter < RUNINLEN)); i++) {
+        segmentList.append(i);
+        counter++;
+      }
     }
-  segmentListIdx=0;
-  numTxFrames=segmentList.size();
+    // setup body
+    //  fixBlocklist contains the segments to be send
+    //  if count==0 then send all segments
+    if (fixBlockList.count() == 0) {
+      for (counter = 0; counter < numBodySegments; counter++) {
+        if (counter % 50 == 0) {
+          for (k = 0; k < numHeaderSegments; k++) {
+            segmentList.append(-1 - k);
+          }
+          segmentList.append(numBodySegments - 1); // add lastSegment
+        }
+        segmentList.append(counter);
+      }
+    } else {
+      for (m = 0; m < fixBlockList.count(); m++) {
+        if (counter % 30 == 0) {
+          for (k = 0; k < numHeaderSegments; k++) {
+            segmentList.append(-1 - k);
+          }
+          segmentList.append(numBodySegments - 1); // add lastSegment
+        }
+        segmentList.append(fixBlockList.at(m));
+      }
+    }
+
+    for (counter = 0; counter < RUNOUTLEN;) {
+      for (k = 0; k < numHeaderSegments; k++) {
+        segmentList.append(-1 - k);
+      }
+      segmentList.append(numBodySegments - 1);
+      counter++; // add lastSegment
+      for (i = 0; ((i < numBodySegments) && (counter < RUNOUTLEN)); i++) {
+        segmentList.append(i);
+        counter++;
+      }
+    }
+  }
+  segmentListIdx = 0;
+  numTxFrames = segmentList.size();
 }
 
 
-_BOOLEAN CMOTDABEnc::GetDataGroup(CVector < _BINARY > &vecbiNewData)
+_BOOLEAN CMOTDABEnc::GetDataGroup(CVector<_BINARY>& vecbiNewData)
 {
   bool bLastSegment;
   int segmentNumber;
   int headerNumber;
 
-  segmentNumber=segmentList.at(segmentListIdx);
-  if(segmentNumber<0)
-    {
-      //its a header
-      headerNumber=-1-segmentNumber;
-      if((headerNumber+1)==MOTObjSegments.vvbiHeader.Size()) bLastSegment=true;
-      else bLastSegment=false;
-      GenMOTObj(vecbiNewData, MOTObjSegments.vvbiHeader[headerNumber],true, headerNumber, txTransportID, bLastSegment);
-    }
-  else
-    {
-      //its a body segment
-      if ((segmentNumber+1) == MOTObjSegments.vvbiBody.Size()) bLastSegment = true;
-      else  bLastSegment = false;
-      GenMOTObj(vecbiNewData,MOTObjSegments.vvbiBody[segmentNumber], false,segmentNumber, txTransportID, bLastSegment);
-    }
+  segmentNumber = segmentList.at(segmentListIdx);
+  if (segmentNumber < 0) {
+    // its a header
+    headerNumber = -1 - segmentNumber;
+    if ((headerNumber + 1) == MOTObjSegments.vvbiHeader.Size())
+      bLastSegment = true;
+    else
+      bLastSegment = false;
+    GenMOTObj(vecbiNewData, MOTObjSegments.vvbiHeader[headerNumber], true, headerNumber, txTransportID, bLastSegment);
+  } else {
+    // its a body segment
+    if ((segmentNumber + 1) == MOTObjSegments.vvbiBody.Size())
+      bLastSegment = true;
+    else
+      bLastSegment = false;
+    GenMOTObj(vecbiNewData, MOTObjSegments.vvbiBody[segmentNumber], false, segmentNumber, txTransportID, bLastSegment);
+  }
   segmentListIdx++;
-  if(segmentListIdx==segmentList.count())
-    {
-      segmentListIdx=0;
-      return true;
-    }
- return false;
+  if (segmentListIdx == segmentList.count()) {
+    segmentListIdx = 0;
+    return true;
+  }
+  return false;
 }
 
 //_BOOLEAN CMOTDABEnc::GetDataGroup(CVector < _BINARY > &vecbiNewData)
@@ -679,10 +642,10 @@ _BOOLEAN CMOTDABEnc::GetDataGroup(CVector < _BINARY > &vecbiNewData)
 //          else  bLastSegment = false;
 
 //          /* Generate MOT object for header */
-//          GenMOTObj(vecbiNewData, MOTObjSegments.vvbiHeader[iSegmCntHeader],true, iSegmCntHeader, txTransportID, bLastSegment);
-//          addToLog(QString("FirstRound iSegmCntheader %1 blastseg %2 transportID %3").arg(iSegmCntHeader).arg(bLastSegment).arg(txTransportID),LOGDRMTXMOT);
-//          iSegmCntHeader++;
-//          if (iSegmCntHeader == MOTObjSegments.vvbiHeader.Size())
+//          GenMOTObj(vecbiNewData, MOTObjSegments.vvbiHeader[iSegmCntHeader],true, iSegmCntHeader, txTransportID,
+//          bLastSegment); addToLog(QString("FirstRound iSegmCntheader %1 blastseg %2 transportID
+//          %3").arg(iSegmCntHeader).arg(bLastSegment).arg(txTransportID),LOGDRMTXMOT); iSegmCntHeader++; if
+//          (iSegmCntHeader == MOTObjSegments.vvbiHeader.Size())
 //            {
 //              iSegmCntBody = 0; // Reset counter for body
 //              bCurSegHeader = false; // Header is ready, transmit body now
@@ -702,18 +665,17 @@ _BOOLEAN CMOTDABEnc::GetDataGroup(CVector < _BINARY > &vecbiNewData)
 //              if (bLastSegment)
 //                {
 //                  /* Generate MOT object for Body */
-//                  GenMOTObj(vecbiNewData,MOTObjSegments.vvbiBody[iNumSegStore-1], false,iNumSegStore-1, txTransportID, bLastSegment);
-//                  addToLog(QString("FirstRound Generated MOTObj for seg %1 pseudolast").arg(iNumSegStore-1),LOGDRMTXMOT);
-//                  iSegmCntBody= 0;
-//                  iSegmCntHeader =0;
-//                  bCurSegHeader = true;
-//                  bFirstRound = false ;
+//                  GenMOTObj(vecbiNewData,MOTObjSegments.vvbiBody[iNumSegStore-1], false,iNumSegStore-1, txTransportID,
+//                  bLastSegment); addToLog(QString("FirstRound Generated MOTObj for seg %1
+//                  pseudolast").arg(iNumSegStore-1),LOGDRMTXMOT); iSegmCntBody= 0; iSegmCntHeader =0; bCurSegHeader =
+//                  true; bFirstRound = false ;
 //                }
 //              else
 //                {
 //                  /* Generate MOT object for Body */
-//                  GenMOTObj(vecbiNewData,MOTObjSegments.vvbiBody[iSegmCntBody], false,iSegmCntBody, txTransportID, bLastSegment);
-//                  addToLog(QString("FirstRound Generated MOTObj for seg %1 ").arg(iSegmCntBody),LOGDRMTXMOT);
+//                  GenMOTObj(vecbiNewData,MOTObjSegments.vvbiBody[iSegmCntBody], false,iSegmCntBody, txTransportID,
+//                  bLastSegment); addToLog(QString("FirstRound Generated MOTObj for seg %1
+//                  ").arg(iSegmCntBody),LOGDRMTXMOT);
 //                }
 //              iSegmCntBody++;
 //            }
@@ -738,10 +700,10 @@ _BOOLEAN CMOTDABEnc::GetDataGroup(CVector < _BINARY > &vecbiNewData)
 //            }
 //          else  bLastSegment = false;
 //           /* Generate MOT object for header */
-//          GenMOTObj(vecbiNewData, MOTObjSegments.vvbiHeader[iSegmCntHeader], true, iSegmCntHeader, txTransportID, bLastSegment);
-//          addToLog(QString("iSegmCntheader %1 blastseg %2").arg(iSegmCntHeader).arg(bLastSegment),LOGDRMTXMOT);
-//          iSegmCntHeader++;
-//          if (iSegmCntHeader == MOTObjSegments.vvbiHeader.Size())
+//          GenMOTObj(vecbiNewData, MOTObjSegments.vvbiHeader[iSegmCntHeader], true, iSegmCntHeader, txTransportID,
+//          bLastSegment); addToLog(QString("iSegmCntheader %1 blastseg
+//          %2").arg(iSegmCntHeader).arg(bLastSegment),LOGDRMTXMOT); iSegmCntHeader++; if (iSegmCntHeader ==
+//          MOTObjSegments.vvbiHeader.Size())
 //            {
 //              iSegmCntBody = 0; // Reset counter for body
 //              bCurSegHeader = false;  // Header is ready, transmit body now
@@ -762,16 +724,19 @@ _BOOLEAN CMOTDABEnc::GetDataGroup(CVector < _BINARY > &vecbiNewData)
 //              if (bLastSegment)
 //                {
 //                  /* Generate MOT object for Body */
-//                  GenMOTObj(vecbiNewData, MOTObjSegments.vvbiBody[iSegmCntBody], false, iNumSegStore-1, txTransportID, bLastSegment);
-//                  addToLog(QString("Generated MOTObj for seg %1 last").arg(iNumSegStore-1),LOGDRMTXMOT);
+//                  GenMOTObj(vecbiNewData, MOTObjSegments.vvbiBody[iSegmCntBody], false, iNumSegStore-1, txTransportID,
+//                  bLastSegment); addToLog(QString("Generated MOTObj for seg %1
+//                  last").arg(iNumSegStore-1),LOGDRMTXMOT);
 //                }
 //              else
 //                {
 //                  /* Generate MOT object for Body */
-//                  GenMOTObj(vecbiNewData, MOTObjSegments.vvbiBody[iSegmCntBody], false, iSegmCntBody, txTransportID, bLastSegment);
-//                  addToLog(QString("Generated MOTObj for seg %1 of %2").arg(iSegmCntBody).arg( iNumSegStore),LOGDRMTXMOT);
+//                  GenMOTObj(vecbiNewData, MOTObjSegments.vvbiBody[iSegmCntBody], false, iSegmCntBody, txTransportID,
+//                  bLastSegment); addToLog(QString("Generated MOTObj for seg %1 of %2").arg(iSegmCntBody).arg(
+//                  iNumSegStore),LOGDRMTXMOT);
 //                }
-////              printf("GetDataGroup body situation 2nd iSegmCntBody %d iSegNumStore %d blastseg %d\n", iSegmCntBody, iNumSegStore,  bLastSegment);
+////              printf("GetDataGroup body situation 2nd iSegmCntBody %d iSegNumStore %d blastseg %d\n", iSegmCntBody,
+///iNumSegStore,  bLastSegment);
 
 //              iSegmCntBody++;
 //            }
@@ -792,51 +757,48 @@ _BOOLEAN CMOTDABEnc::GetDataGroup(CVector < _BINARY > &vecbiNewData)
 //}
 
 
-
 _REAL CMOTDABEnc::GetProgPerc() const
 {
-// Get percentage of processed data of current object.
-        _REAL tussenresult;
-	const int
-    iTotNumSeg =	MOTObjSegments.vvbiHeader.Size() + MOTObjSegments.vvbiBody.Size();
-    tussenresult = (static_cast<_REAL>(iSegmCntBody) + static_cast<_REAL>(iSegmCntHeader)) / iTotNumSeg;
-    return tussenresult;
+  // Get percentage of processed data of current object.
+  _REAL tussenresult;
+  const int iTotNumSeg = MOTObjSegments.vvbiHeader.Size() + MOTObjSegments.vvbiBody.Size();
+  tussenresult = (static_cast<_REAL>(iSegmCntBody) + static_cast<_REAL>(iSegmCntHeader)) / iTotNumSeg;
+  return tussenresult;
 }
 
-void
-CMOTDABEnc::Reset()
+void CMOTDABEnc::Reset()
 {
-  bFirstRound = true ;
-  runInCnt=0;
-	/* Reset continuity indices */
-	iContIndexHeader = 0;
-	iContIndexBody = 0;
+  bFirstRound = true;
+  runInCnt = 0;
+  /* Reset continuity indices */
+  iContIndexHeader = 0;
+  iContIndexBody = 0;
   txTransportID = 0;
 
-	/* Init counter for segments */
-	iSegmCntHeader = 0;
-	iSegmCntBody = 0;
+  /* Init counter for segments */
+  iSegmCntHeader = 0;
+  iSegmCntBody = 0;
 
-	/* Init flag which shows what is currently generated, header or body */
-	bCurSegHeader = true;		/* Start with header */
+  /* Init flag which shows what is currently generated, header or body */
+  bCurSegHeader = true; /* Start with header */
 
-	/* Add a "null object" so that at least one valid object can be processed */
-	CMOTObject NullObject;
-  SetMOTObject(NullObject,154);
+  /* Add a "null object" so that at least one valid object can be processed */
+  CMOTObject NullObject;
+  SetMOTObject(NullObject, 154);
 }
 
 /******************************************************************************\
 * Decoder                                                                      *
 \******************************************************************************/
 //_BOOLEAN
-//CMOTDABDec::NewObjectAvailable()
+// CMOTDABDec::NewObjectAvailable()
 //{
 //	return qiNewObjects.empty() == false;
 //}
 
 
-//void
-//CMOTDABDec::GetNextObject(CMOTObject & NewMOTObject)
+// void
+// CMOTDABDec::GetNextObject(CMOTObject & NewMOTObject)
 //{
 //	if (!qiNewObjects.empty())
 //	{
@@ -849,10 +811,10 @@ CMOTDABEnc::Reset()
 //		fprintf(stderr, "GetObject called when queue empty\n");
 //		fflush(stderr);
 //	}
-//}
+// }
 
-//void
-//CMOTDABDec::DeliverIfReady(TTransportID TransportID)
+// void
+// CMOTDABDec::DeliverIfReady(TTransportID TransportID)
 //{
 //	CMOTObject & o = MOTCarousel[TransportID];
 //	if ((!o.bComplete) && o.bHasHeader && o.Body.Ready())
@@ -867,17 +829,17 @@ CMOTDABEnc::Reset()
 //		//cerr << o << endl;;
 //		qiNewObjects.push(TransportID);
 //	}
-//}
+// }
 
-//void
-//CMOTDABDec::AddDataUnit(CVector < _BINARY > &vecbiNewData)
+// void
+// CMOTDABDec::AddDataUnit(CVector < _BINARY > &vecbiNewData)
 //{
 //	int iLenGroupDataField;
 //	CCRC CRCObject;
 //	_BOOLEAN bCRCOk;
 //	int iSegmentNum;
 //	_BINARY biLastFlag;
-//  _BINARY btxTransportIDFlag = 0;
+//   _BINARY btxTransportIDFlag = 0;
 //	int iLenIndicat;
 //	int iSegmentSize;
 //	TTransportID TransportID = -1;
@@ -1076,10 +1038,8 @@ CMOTDABEnc::Reset()
 //				if (MOTDirectory.TransportID != TransportID)
 //				{
 //					/* we never got all the previous directory */
-//					cout << " we never got all the previous directory " << TransportID << ", " << MOTDirectory.  TransportID << endl;
-//					MOTDirectory.Reset();
-//					MOTDirectory.TransportID = TransportID;
-//					MOTDirectoryEntity.Reset();
+//					cout << " we never got all the previous directory " << TransportID << ", " << MOTDirectory.  TransportID <<
+//endl; 					MOTDirectory.Reset(); 					MOTDirectory.TransportID = TransportID; 					MOTDirectoryEntity.Reset();
 //					MOTDirComprEntity.Reset();
 //				}
 
@@ -1107,7 +1067,7 @@ CMOTDABEnc::Reset()
 //					vecbiNewData.Separate(iSegmentSize * SIZEOF__BYTE);
 //				}
 //			}					/* of DG type 6 */
-//#if 0							//Commented until we can test it with a real compressed directory
+// #if 0							//Commented until we can test it with a real compressed directory
 //			else if (iDataGroupType == 7)	/* MOT directory compressed */
 //			{
 //				if (MOTmode != directoryMode)
@@ -1192,7 +1152,7 @@ CMOTDABEnc::Reset()
 //					vecbiNewData.Separate(iSegmentSize * SIZEOF__BYTE);
 //				}
 //			}					/* of DG type 7 */
-//#endif
+// #endif
 //			else
 //			{
 //				vecbiNewData.Separate(iSegmentSize * SIZEOF__BYTE);
@@ -1201,8 +1161,8 @@ CMOTDABEnc::Reset()
 //	}
 //}
 
-//void
-//CMOTDABDec::ProcessDirectory(CBitReassembler & MOTDir)
+// void
+// CMOTDABDec::ProcessDirectory(CBitReassembler & MOTDir)
 //{
 //	MOTDirectory.AddHeader(MOTDir.vecData);
 
@@ -1224,7 +1184,8 @@ CMOTDABEnc::Reset()
 //	}
 //	MOTCarousel.erase(MOTCarousel.begin(), MOTCarousel.end());
 
-//	//cout << "decode directory " << MOTDirectory.  iNumberOfObjects << " === " << MOTDirectory.vecObjects.size() << " {";
+//	//cout << "decode directory " << MOTDirectory.  iNumberOfObjects << " === " << MOTDirectory.vecObjects.size() << "
+//{";
 
 //	MOTDirectory.vecObjects.clear();
 
@@ -1246,281 +1207,241 @@ CMOTDABEnc::Reset()
 
 //}
 
-void
-CDateAndTime::extract_absolute(CVector < _BINARY > &vecbiData)
+void CDateAndTime::extract_absolute(CVector<_BINARY>& vecbiData)
 {
-	vecbiData.Separate(1);		/* rfa */
-	CModJulDate ModJulDate(vecbiData.Separate(17));
-	day = ModJulDate.GetDay();
-	month = ModJulDate.GetMonth();
-	year = ModJulDate.GetYear();
-	vecbiData.Separate(1);		/* rfa */
-	lto_flag = static_cast<int>(vecbiData.Separate(1));
-	utc_flag = static_cast<int>(vecbiData.Separate(1));
-	hours = static_cast<int>(vecbiData.Separate(5));
-	minutes = static_cast<int>(vecbiData.Separate(6));
-	if (utc_flag != 0)
-	{
-		seconds = static_cast<int>(vecbiData.Separate(6));
-		vecbiData.Separate(10);	/* rfa */
-	}
-	else
-	{
-		seconds = 0;
-	}
-	if (lto_flag != 0)
-	{
-		vecbiData.Separate(2);	/* rfa */
-		int sign = static_cast<int>(vecbiData.Separate(1));
-		half_hours = static_cast<int>(vecbiData.Separate(5));
-		if (sign == 1)
-			half_hours = 0 - half_hours;
-	}
-	else
-	{
-		half_hours = 0;
-	}
+  vecbiData.Separate(1); /* rfa */
+  CModJulDate ModJulDate(vecbiData.Separate(17));
+  day = ModJulDate.GetDay();
+  month = ModJulDate.GetMonth();
+  year = ModJulDate.GetYear();
+  vecbiData.Separate(1); /* rfa */
+  lto_flag = static_cast<int>(vecbiData.Separate(1));
+  utc_flag = static_cast<int>(vecbiData.Separate(1));
+  hours = static_cast<int>(vecbiData.Separate(5));
+  minutes = static_cast<int>(vecbiData.Separate(6));
+  if (utc_flag != 0) {
+    seconds = static_cast<int>(vecbiData.Separate(6));
+    vecbiData.Separate(10); /* rfa */
+  } else {
+    seconds = 0;
+  }
+  if (lto_flag != 0) {
+    vecbiData.Separate(2); /* rfa */
+    int sign = static_cast<int>(vecbiData.Separate(1));
+    half_hours = static_cast<int>(vecbiData.Separate(5));
+    if (sign == 1)
+      half_hours = 0 - half_hours;
+  } else {
+    half_hours = 0;
+  }
 }
 
-void
-CDateAndTime::extract_relative(CVector < _BINARY > &vecbiData)
+void CDateAndTime::extract_relative(CVector<_BINARY>& vecbiData)
 {
-	int granularity = static_cast<int>(vecbiData.Separate(2));
-	int interval = static_cast<int>(vecbiData.Separate(6));
-	time_t t = time(nullptr);
-	switch (granularity)
-	{
-	case 0:
-		t += 2 * 60 * interval;
-		break;
-	case 1:
-		t += 30 * 60 * interval;
-		break;
-	case 2:
-		t += 2 * 60 * 60 * interval;
-		break;
-	case 3:
-		t += 24 * 60 * 60 * interval;
-		break;
-	}
-	struct tm *tmp = gmtime(&t);
-	year = tmp->tm_year;
-	month = tmp->tm_mon;
-	day = tmp->tm_mday;
-	hours = tmp->tm_hour;
-	minutes = tmp->tm_min;
-	seconds = tmp->tm_sec;
+  int granularity = static_cast<int>(vecbiData.Separate(2));
+  int interval = static_cast<int>(vecbiData.Separate(6));
+  time_t t = time(nullptr);
+  switch (granularity) {
+  case 0:
+    t += 2 * 60 * interval;
+    break;
+  case 1:
+    t += 30 * 60 * interval;
+    break;
+  case 2:
+    t += 2 * 60 * 60 * interval;
+    break;
+  case 3:
+    t += 24 * 60 * 60 * interval;
+    break;
+  }
+  struct tm* tmp = gmtime(&t);
+  year = tmp->tm_year;
+  month = tmp->tm_mon;
+  day = tmp->tm_mday;
+  hours = tmp->tm_hour;
+  minutes = tmp->tm_min;
+  seconds = tmp->tm_sec;
 }
 
-void
-CDateAndTime::dump(ostream & out)
+void CDateAndTime::dump(ostream& out)
 {
-	out << year << '/' << static_cast<uint16_t>(month) << '/' << static_cast<uint16_t>(day);
-	out << " " << hours << ':' << minutes << ':' << seconds;
-	out << " flags: " << utc_flag << ':' << lto_flag << ':' << half_hours;
+  out << year << '/' << static_cast<uint16_t>(month) << '/' << static_cast<uint16_t>(day);
+  out << " " << hours << ':' << minutes << ':' << seconds;
+  out << " flags: " << utc_flag << ':' << lto_flag << ':' << half_hours;
 }
 
-void
-CMOTObjectBase::decodeExtHeader(_BYTE & bParamId, int &iHeaderFieldLen,
-								int &iDataFieldLen,
-								CVector < _BINARY > &vecbiHeader) const
+void CMOTObjectBase::decodeExtHeader(_BYTE& bParamId, int& iHeaderFieldLen, int& iDataFieldLen,
+                                     CVector<_BINARY>& vecbiHeader) const
 {
-	int iPLI = static_cast<int>(vecbiHeader.Separate(2));
-	bParamId = static_cast<unsigned char>(vecbiHeader.Separate(6));
+  int iPLI = static_cast<int>(vecbiHeader.Separate(2));
+  bParamId = static_cast<unsigned char>(vecbiHeader.Separate(6));
 
-	iHeaderFieldLen = 1;
+  iHeaderFieldLen = 1;
 
-	switch (iPLI)
-	{
-	case 0:
-		/* Total parameter length = 1 byte; no DataField
-		   available */
-		iDataFieldLen = 0;
-		break;
+  switch (iPLI) {
+  case 0:
+    /* Total parameter length = 1 byte; no DataField
+       available */
+    iDataFieldLen = 0;
+    break;
 
-	case 1:
-		/* Total parameter length = 2 bytes, length of DataField
-		   is 1 byte */
-		iDataFieldLen = 1;
-		break;
+  case 1:
+    /* Total parameter length = 2 bytes, length of DataField
+       is 1 byte */
+    iDataFieldLen = 1;
+    break;
 
-	case 2:
-		/* Total parameter length = 5 bytes; length of DataField
-		   is 4 bytes */
-		iDataFieldLen = 4;
-		break;
+  case 2:
+    /* Total parameter length = 5 bytes; length of DataField
+       is 4 bytes */
+    iDataFieldLen = 4;
+    break;
 
-	case 3:
-		/* Total parameter length depends on the DataFieldLength
-		   indicator (the maximum parameter length is
-		   32770 bytes) */
+  case 3:
+    /* Total parameter length depends on the DataFieldLength
+       indicator (the maximum parameter length is
+       32770 bytes) */
 
-		/* Ext (ExtensionFlag): This 1-bit field specifies the
-		   length of the DataFieldLength Indicator and is coded
-		   as follows:
-		   - 0: the total parameter length is derived from the
-		   next 7 bits;
-		   - 1: the total parameter length is derived from the
-		   next 15 bits */
-		_BINARY biExt = static_cast<_BINARY>(vecbiHeader.Separate(1));
+    /* Ext (ExtensionFlag): This 1-bit field specifies the
+       length of the DataFieldLength Indicator and is coded
+       as follows:
+       - 0: the total parameter length is derived from the
+       next 7 bits;
+       - 1: the total parameter length is derived from the
+       next 15 bits */
+    _BINARY biExt = static_cast<_BINARY>(vecbiHeader.Separate(1));
 
-		/* Get data field length */
-		if (biExt == 0)
-		{
-			iDataFieldLen = static_cast<int>(vecbiHeader.Separate(7));
-			iHeaderFieldLen++;
-		}
-		else
-		{
-			iDataFieldLen = static_cast<int>(vecbiHeader.Separate(15));
-			iHeaderFieldLen += 2;
-		}
-	}
+    /* Get data field length */
+    if (biExt == 0) {
+      iDataFieldLen = static_cast<int>(vecbiHeader.Separate(7));
+      iHeaderFieldLen++;
+    } else {
+      iDataFieldLen = static_cast<int>(vecbiHeader.Separate(15));
+      iHeaderFieldLen += 2;
+    }
+  }
 }
 
-void
-CReassembler::cachelast(CVector < _BYTE > &vecDataIn, size_t iSegSize)
+void CReassembler::cachelast(CVector<_BYTE>& vecDataIn, size_t iSegSize)
 {
-	vecLastSegment.Init(iSegSize);
-	for (size_t i = 0; i < iSegSize; i++)
-		vecLastSegment[i] = vecDataIn.Separate(8);
+  vecLastSegment.Init(iSegSize);
+  for (size_t i = 0; i < iSegSize; i++)
+    vecLastSegment[i] = vecDataIn.Separate(8);
 }
 
-void
-CReassembler::copyin(CVector < _BYTE > &vecDataIn, size_t iSegNum,
-					 size_t bytes)
+void CReassembler::copyin(CVector<_BYTE>& vecDataIn, size_t iSegNum, size_t bytes)
 {
-	size_t offset = iSegNum * iSegmentSize;
-	size_t iNewSize = offset + bytes;
-	if (static_cast<size_t>(vecData.Size()) < iNewSize)
-		vecData.Enlarge(iNewSize - vecData.Size());
-	for (size_t i = 0; i < bytes; i++)
-		vecData[offset + i] = vecDataIn.Separate(8);
+  size_t offset = iSegNum * iSegmentSize;
+  size_t iNewSize = offset + bytes;
+  if (static_cast<size_t>(vecData.Size()) < iNewSize)
+    vecData.Enlarge(iNewSize - vecData.Size());
+  for (size_t i = 0; i < bytes; i++)
+    vecData[offset + i] = vecDataIn.Separate(8);
 }
 
-void
-CReassembler::AddSegment(CVector < _BYTE > &vecDataIn,
-						 int iSegSize, int iSegNum, _BOOLEAN bLast)
+void CReassembler::AddSegment(CVector<_BYTE>& vecDataIn, int iSegSize, int iSegNum, _BOOLEAN bLast)
 {
-	if (bLast)
-	{
-		if (iLastSegmentNum == -1)
-		{
-			iLastSegmentNum = iSegNum;
-			iLastSegmentSize = iSegSize;
-			/* three cases:
-			   1: single segment - easy! (actually degenerate with case 3)
-			   2: multi-segment and the last segment came first.
-			   3: normal - some segment, not the last, came first,
-			   we know the segment size
-			 */
-			if (iSegNum == 0)
-			{					/* case 1 */
-				copyin(vecDataIn, 0, iSegSize);
-			}
-			else if (iSegmentSize == 0)
-			{					/* case 2 */
-				cachelast(vecDataIn, iSegSize);
-			}
-			else
-			{					/* case 3 */
-				copyin(vecDataIn, iSegNum, iSegSize);
-			}
-		}						/* otherwise do nothing as we already have the last segment */
-	}
-	else
-	{
-		iSegmentSize = iSegSize;
-		if (Tracker.HaveSegment(iSegNum) == false)
-		{
-			copyin(vecDataIn, iSegNum, iSegSize);
-		}
-	}
-	Tracker.AddSegment(iSegNum);	/* tracking the last segment makes the Ready work! */
+  if (bLast) {
+    if (iLastSegmentNum == -1) {
+      iLastSegmentNum = iSegNum;
+      iLastSegmentSize = iSegSize;
+      /* three cases:
+         1: single segment - easy! (actually degenerate with case 3)
+         2: multi-segment and the last segment came first.
+         3: normal - some segment, not the last, came first,
+         we know the segment size
+       */
+      if (iSegNum == 0) { /* case 1 */
+        copyin(vecDataIn, 0, iSegSize);
+      } else if (iSegmentSize == 0) { /* case 2 */
+        cachelast(vecDataIn, iSegSize);
+      } else { /* case 3 */
+        copyin(vecDataIn, iSegNum, iSegSize);
+      }
+    } /* otherwise do nothing as we already have the last segment */
+  } else {
+    iSegmentSize = iSegSize;
+    if (Tracker.HaveSegment(iSegNum) == false) {
+      copyin(vecDataIn, iSegNum, iSegSize);
+    }
+  }
+  Tracker.AddSegment(iSegNum); /* tracking the last segment makes the Ready work! */
 
-	if ((iLastSegmentSize != -1)	/* we have the last segment */
-		&& (bReady == false)	/* we haven't already completed reassembly */
-		&& Tracker.Ready()		/* there are no gaps */
-		)
-	{
-		if (vecLastSegment.Size() > 0)
-		{
-			/* we have everything, but the last segment came first */
-			copylast();
-		}
-		bReady = true;
-	}
+  if ((iLastSegmentSize != -1) /* we have the last segment */
+      && (bReady == false)     /* we haven't already completed reassembly */
+      && Tracker.Ready()       /* there are no gaps */
+  ) {
+    if (vecLastSegment.Size() > 0) {
+      /* we have everything, but the last segment came first */
+      copylast();
+    }
+    bReady = true;
+  }
 }
 
-void
-CReassembler::copylast()
+void CReassembler::copylast()
 {
-	size_t offset = iLastSegmentNum * iSegmentSize;
-	vecData.Enlarge(vecLastSegment.Size());
-	for (size_t i = 0; i < static_cast<size_t>(vecLastSegment.Size()); i++)
-		vecData[offset + i] = vecLastSegment[i];
-	vecLastSegment.Init(0);
+  size_t offset = iLastSegmentNum * iSegmentSize;
+  vecData.Enlarge(vecLastSegment.Size());
+  for (size_t i = 0; i < static_cast<size_t>(vecLastSegment.Size()); i++)
+    vecData[offset + i] = vecLastSegment[i];
+  vecLastSegment.Init(0);
 }
 
-void
-CBitReassembler::cachelast(CVector < _BYTE > &vecDataIn, size_t iSegSize)
+void CBitReassembler::cachelast(CVector<_BYTE>& vecDataIn, size_t iSegSize)
 {
-	vecLastSegment.Init(8 * iSegSize);
-	vecLastSegment.ResetBitAccess();
-	for (size_t i = 0; i < 8 * iSegSize; i++)
-		vecLastSegment[i] = vecDataIn.Separate(1);
+  vecLastSegment.Init(8 * iSegSize);
+  vecLastSegment.ResetBitAccess();
+  for (size_t i = 0; i < 8 * iSegSize; i++)
+    vecLastSegment[i] = vecDataIn.Separate(1);
 }
 
-void
-CBitReassembler::copyin(CVector < _BYTE > &vecDataIn, size_t iSegNum,
-						size_t bytes)
+void CBitReassembler::copyin(CVector<_BYTE>& vecDataIn, size_t iSegNum, size_t bytes)
 {
-	size_t offset = iSegNum * 8 * iSegmentSize;
-	size_t bits = 8 * bytes;
-	size_t iNewSize = offset + bits;
-	if (static_cast<size_t>(vecData.Size()) < iNewSize)
-		vecData.Enlarge(iNewSize - vecData.Size());
-	for (size_t i = 0; i < bits; i++)
-		vecData[offset + i] = vecDataIn.Separate(1);
+  size_t offset = iSegNum * 8 * iSegmentSize;
+  size_t bits = 8 * bytes;
+  size_t iNewSize = offset + bits;
+  if (static_cast<size_t>(vecData.Size()) < iNewSize)
+    vecData.Enlarge(iNewSize - vecData.Size());
+  for (size_t i = 0; i < bits; i++)
+    vecData[offset + i] = vecDataIn.Separate(1);
 }
 
-void
-CBitReassembler::copylast()
+void CBitReassembler::copylast()
 {
-	size_t offset = iLastSegmentNum * 8 * iSegmentSize;
-	vecData.Enlarge(vecLastSegment.Size());
-	for (size_t i = 0; i < static_cast<size_t>(vecLastSegment.Size()); i++)
-		vecData[offset + i] = vecLastSegment[i];
-	vecLastSegment.Init(0);
-	vecLastSegment.ResetBitAccess();
+  size_t offset = iLastSegmentNum * 8 * iSegmentSize;
+  vecData.Enlarge(vecLastSegment.Size());
+  for (size_t i = 0; i < static_cast<size_t>(vecLastSegment.Size()); i++)
+    vecData[offset + i] = vecLastSegment[i];
+  vecLastSegment.Init(0);
+  vecLastSegment.ResetBitAccess();
 }
 
-string
-CMOTObjectBase::extractString(CVector < _BINARY > &vecbiData, int iLen) const
+string CMOTObjectBase::extractString(CVector<_BINARY>& vecbiData, int iLen) const
 {
-	string strVar;
-	for (size_t i = 0; i < static_cast<size_t>(iLen); i++)
-	{
-		strVar += static_cast<char>(vecbiData.Separate(SIZEOF__BYTE));
-	}
-	return strVar;
+  string strVar;
+  for (size_t i = 0; i < static_cast<size_t>(iLen); i++) {
+    strVar += static_cast<char>(vecbiData.Separate(SIZEOF__BYTE));
+  }
+  return strVar;
 }
 
-//void
-//CMOTDirectory::Reset ()
+// void
+// CMOTDirectory::Reset ()
 //{
-//    CMOTObjectBase::Reset ();
-//    bSortedHeaderInformation = false;
-//    DirectoryIndex.clear ();
-//    bCompressionFlag = false;
-//    iCarouselPeriod = -1;
-//    iNumberOfObjects = 0;
-//    iSegmentSize = 0;
-//}
+//     CMOTObjectBase::Reset ();
+//     bSortedHeaderInformation = false;
+//     DirectoryIndex.clear ();
+//     bCompressionFlag = false;
+//     iCarouselPeriod = -1;
+//     iNumberOfObjects = 0;
+//     iSegmentSize = 0;
+// }
 
 
-//void
-//CMOTDirectory::AddHeader(CVector < _BINARY > &vecbiHeader)
+// void
+// CMOTDirectory::AddHeader(CVector < _BINARY > &vecbiHeader)
 //{
 ////	int iDirectorySize;
 
@@ -1603,7 +1524,7 @@ CMOTObjectBase::extractString(CVector < _BINARY > &vecbiData, int iLen) const
 //}
 
 //_BOOLEAN
-//CReassembler::IsZipped() const
+// CReassembler::IsZipped() const
 //{
 ///*
 //	Check if the header file is a gzip header
@@ -1620,8 +1541,8 @@ CMOTObjectBase::extractString(CVector < _BINARY > &vecbiData, int iLen) const
 //		return false;
 //}
 
-//unsigned int
-//CReassembler::gzGetOriginalSize() const
+// unsigned int
+// CReassembler::gzGetOriginalSize() const
 //{
 ///*
 //	Get the original size from a gzip file
@@ -1644,9 +1565,9 @@ CMOTObjectBase::extractString(CVector < _BINARY > &vecbiData, int iLen) const
 //}
 
 //_BOOLEAN
-//CReassembler::uncompress()
+// CReassembler::uncompress()
 //{
-//#if HAVE_LIBZ
+// #if HAVE_LIBZ
 //	CVector < _BYTE > vecbRawDataOut;
 //	/* Extract the original file size */
 //	unsigned long dest_len = gzGetOriginalSize();
@@ -1688,8 +1609,8 @@ CMOTObjectBase::extractString(CVector < _BINARY > &vecbiData, int iLen) const
 //		vecData.Init(0);
 //		return false;
 //	}
-//#else
-//#	ifdef HAVE_LIBFREEIMAGE
+// #else
+// #	ifdef HAVE_LIBFREEIMAGE
 //	CVector < _BYTE > vecbRawDataOut;
 //	CVector < _BYTE > &vecbRawDataIn = vecData;
 //	/* Extract the original file size */
@@ -1722,21 +1643,21 @@ CMOTObjectBase::extractString(CVector < _BINARY > &vecbiData, int iLen) const
 //		vecData.Init(0);
 //		return false;
 //	}
-//#	else
+// #	else
 //	return false;
-//#	endif
-//#endif
+// #	endif
+// #endif
 //}
 
-//static const char *txt[] = { "txt", "txt", "html", 0 };
-//static const char *img[] = { "gif", "jpeg", "bmp", "png", 0 };
-//static const char *audio[] = { "mpg", "mp2", "mp3", "mpg", "mp2", "mp3",
+// static const char *txt[] = { "txt", "txt", "html", 0 };
+// static const char *img[] = { "gif", "jpeg", "bmp", "png", 0 };
+// static const char *audio[] = { "mpg", "mp2", "mp3", "mpg", "mp2", "mp3",
 //	"pcm", "aiff", "atrac", "atrac2", "mp4", 0
-//};
-//static const char *video[] = { "mpg", "mp2", "mp4", "h263", 0 };
+// };
+// static const char *video[] = { "mpg", "mp2", "mp4", "h263", 0 };
 
-//void
-//CMOTObject::AddHeader(CVector < _BINARY > &vecbiHeader)
+// void
+// CMOTObject::AddHeader(CVector < _BINARY > &vecbiHeader)
 //{
 
 //	/* HeaderSize and BodySize */
@@ -1876,8 +1797,8 @@ CMOTObjectBase::extractString(CVector < _BINARY > &vecbiData, int iLen) const
 //	bHasHeader = true;
 //}
 
-//void
-//CMOTObject::dump(ostream & out)
+// void
+// CMOTObject::dump(ostream & out)
 //{
 //	out << "MOT(" << TransportID << "):";
 //	out << " Name: " << strName;
@@ -1897,10 +1818,10 @@ CMOTObjectBase::extractString(CVector < _BINARY > &vecbiData, int iLen) const
 //	out << " RetransmissionDistance: " << iRetransmissionDistance;
 //	out << " format: " << strFormat;
 //	out << " length: " << iBodySize;
-//}
+// }
 
-//void
-//CMOTDirectory::dump(ostream & out)
+// void
+// CMOTDirectory::dump(ostream & out)
 //{
 //	out << "MOTDIR(" << TransportID << "):";
 //	out << " Expires: " << ExpireTime;
@@ -1912,13 +1833,13 @@ CMOTObjectBase::extractString(CVector < _BINARY > &vecbiData, int iLen) const
 //	out << " indices { ";
 //	for (map < _BYTE, string >::iterator di = DirectoryIndex.begin();
 //		 di != DirectoryIndex.end(); di++)
-//    {
+//     {
 //		out << hex << di->first << dec << " => " << di->second;
 //		out.flush();
-//    }
+//     }
 //	out << " }";
 //	out << " there are " << iNumberOfObjects << " objects {";
 //	for (size_t i = 0; i < vecObjects.size(); i++)
 //		out << " " << vecObjects[i];
 //	out << " }";
-//}
+// }

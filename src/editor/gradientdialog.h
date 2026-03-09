@@ -24,25 +24,24 @@
 #include <QtGui>
 #include "ui_gradientform.h"
 
-struct sgradientParam
-{
-	enum gType {NONE,LINEAR,RADIAL,CONICAL};
-	sgradientParam()
-		{
-			type=NONE;
-		}
-	QColor color1;
-	QColor color2;
-	QColor color3;
-	QColor color4;
-	int pos1;
-	int pos2;
-	int pos3;
-	int pos4;
-	gType type;
-	int direction;
-	void load(QDataStream &str);
-	void save(QDataStream &str);
+struct sgradientParam {
+  enum gType { NONE, LINEAR, RADIAL, CONICAL };
+  sgradientParam()
+  {
+    type = NONE;
+  }
+  QColor color1;
+  QColor color2;
+  QColor color3;
+  QColor color4;
+  int pos1;
+  int pos2;
+  int pos3;
+  int pos4;
+  gType type;
+  int direction;
+  void load(QDataStream& str);
+  void save(QDataStream& str);
 };
 
 /**
@@ -51,28 +50,30 @@ struct sgradientParam
 class gradientForm;
 
 /** Widget to display the various canvasItems */
-class gradientDialog : public QDialog,private Ui::gradientForm
+class gradientDialog : public QDialog, private Ui::gradientForm
 {
-Q_OBJECT
+  Q_OBJECT
 public:
-	gradientDialog(QWidget *parent = 0);
-	~gradientDialog();
-	void readSettings();
-	void writeSettings();
-	void selectGradient();
-	sgradientParam param() {return gParam;}
+  gradientDialog(QWidget* parent = 0);
+  ~gradientDialog();
+  void readSettings();
+  void writeSettings();
+  void selectGradient();
+  sgradientParam param()
+  {
+    return gParam;
+  }
 
-//	QGradient *constructGradient( QRectF f);
+  //	QGradient *constructGradient( QRectF f);
 public slots:
-	void slotColorDialog();
-	void slotUpdate();
-private:
-	sgradientParam gParam;
-	void update();
-	QGradient *g;
+  void slotColorDialog();
+  void slotUpdate();
 
+private:
+  sgradientParam gParam;
+  void update();
+  QGradient* g;
 };
 
 QGradient buildGradient(sgradientParam prm, QRectF f);
 #endif
-

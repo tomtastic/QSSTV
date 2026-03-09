@@ -28,82 +28,84 @@
 #include "maiaXmlRpcClient.h"
 #include "maiaFault.h"
 
-MaiaXmlRpcClient::MaiaXmlRpcClient(QObject* parent) : QObject(parent),
-	manager(this), request() 
+MaiaXmlRpcClient::MaiaXmlRpcClient(QObject* parent) : QObject(parent), manager(this), request()
 {
-	init();
+  init();
 }
 
-MaiaXmlRpcClient::MaiaXmlRpcClient(QUrl url, QObject* parent) : QObject(parent),
-	manager(this), request(url)
+MaiaXmlRpcClient::MaiaXmlRpcClient(QUrl url, QObject* parent) : QObject(parent), manager(this), request(url)
 {
-	init();
-	setUrl(url);
+  init();
+  setUrl(url);
 }
 
-MaiaXmlRpcClient::MaiaXmlRpcClient(QUrl url, QString userAgent, QObject *parent) : QObject(parent) {
-	// userAgent should adhere to RFC 1945 http://tools.ietf.org/html/rfc1945
-	init();
-	request.setRawHeader("User-Agent", userAgent.toLatin1());
-	setUrl(url);
+MaiaXmlRpcClient::MaiaXmlRpcClient(QUrl url, QString userAgent, QObject* parent) : QObject(parent)
+{
+  // userAgent should adhere to RFC 1945 http://tools.ietf.org/html/rfc1945
+  init();
+  request.setRawHeader("User-Agent", userAgent.toLatin1());
+  setUrl(url);
 }
 
 void MaiaXmlRpcClient::init()
 {
-	request.setRawHeader("User-Agent", "libmaia/0.2");
-	request.setHeader(QNetworkRequest::ContentTypeHeader, "text/xml");
-	
-	connect(&manager, &QNetworkAccessManager::finished, this, &MaiaXmlRpcClient::replyFinished);
-	connect(&manager, &QNetworkAccessManager::sslErrors, this, &MaiaXmlRpcClient::sslErrors);
+  request.setRawHeader("User-Agent", "libmaia/0.2");
+  request.setHeader(QNetworkRequest::ContentTypeHeader, "text/xml");
+
+  connect(&manager, &QNetworkAccessManager::finished, this, &MaiaXmlRpcClient::replyFinished);
+  connect(&manager, &QNetworkAccessManager::sslErrors, this, &MaiaXmlRpcClient::sslErrors);
 }
 
 void MaiaXmlRpcClient::setUrl(QUrl url)
 {
-	if(!url.isValid())
-		return;
-	
-	request.setUrl(url);
+  if (!url.isValid())
+    return;
+
+  request.setUrl(url);
 }
 
-void MaiaXmlRpcClient::setUserAgent(QString userAgent) {
-	request.setRawHeader("User-Agent", userAgent.toLatin1());
+void MaiaXmlRpcClient::setUserAgent(QString userAgent)
+{
+  request.setRawHeader("User-Agent", userAgent.toLatin1());
 }
 
-QNetworkReply* MaiaXmlRpcClient::call(QString method, QList<QVariant> args,
-							QObject* responseObject, const char* responseSlot,
-							QObject* faultObject, const char* faultSlot) {
-	MaiaObject* call = new MaiaObject(this);
-	connect(call, SIGNAL(aresponse(QVariant &, QNetworkReply *)), responseObject, responseSlot);
-	connect(call, SIGNAL(fault(int, const QString &, QNetworkReply *)), faultObject, faultSlot);
+QNetworkReply* MaiaXmlRpcClient::call(QString method, QList<QVariant> args, QObject* responseObject,
+                                      const char* responseSlot, QObject* faultObject, const char* faultSlot)
+{
+  MaiaObject* call = new MaiaObject(this);
+  connect(call, SIGNAL(aresponse(QVariant&, QNetworkReply*)), responseObject, responseSlot);
+  connect(call, SIGNAL(fault(int, const QString&, QNetworkReply*)), faultObject, faultSlot);
 
-	QNetworkReply* reply = manager.post( request,
-		call->prepareCall(method, args).toUtf8() );
+  QNetworkReply* reply = manager.post(request, call->prepareCall(method, args).toUtf8());
 
-	callmap[reply] = call;
-	return reply;
+  callmap[reply] = call;
+  return reply;
 }
 
-void MaiaXmlRpcClient::setSslConfiguration(const QSslConfiguration &config) {
-	request.setSslConfiguration(config);
+void MaiaXmlRpcClient::setSslConfiguration(const QSslConfiguration& config)
+{
+  request.setSslConfiguration(config);
 }
 
-QSslConfiguration MaiaXmlRpcClient::sslConfiguration () const {
-	return request.sslConfiguration();
+QSslConfiguration MaiaXmlRpcClient::sslConfiguration() const
+{
+  return request.sslConfiguration();
 }
 
-void MaiaXmlRpcClient::replyFinished(QNetworkReply* reply) {
-	QString response;
-	if(!callmap.contains(reply))
-		return;
-	if(reply->error() != QNetworkReply::NoError) {
-		MaiaFault fault(-32300, reply->errorString());
-		response = fault.toString();
-	} else {
-		response = QString::fromUtf8(reply->readAll());
-	}
-	
-	// parseResponse deletes the MaiaObject
-	callmap[reply]->parseResponse(response, reply);
-	reply->deleteLater();
-	callmap.remove(reply);
+void MaiaXmlRpcClient::replyFinished(QNetworkReply* reply)
+{
+  QString response;
+  if (!callmap.contains(reply))
+    return;
+  if (reply->error() != QNetworkReply::NoError) {
+    MaiaFault fault(-32300, reply->errorString());
+    response = fault.toString();
+  } else {
+    response = QString::fromUtf8(reply->readAll());
+  }
+
+  // parseResponse deletes the MaiaObject
+  callmap[reply]->parseResponse(response, reply);
+  reply->deleteLater();
+  callmap.remove(reply);
 }

@@ -35,22 +35,22 @@
 
 
 /**
-	@author Johan Maes <on4qz@telenet.be>
+  @author Johan Maes <on4qz@telenet.be>
 */
 class modeBW : public modeBase
 {
 public:
-    modeBW(esstvMode m, unsigned int len, bool tx, bool narrowMode);
+  modeBW(esstvMode m, unsigned int len, bool tx, bool narrowMode);
 
-    ~modeBW();
+  ~modeBW();
+
 protected:
   embState rxSetupLine();
-	void calcPixelPositionTable(unsigned int colorLine,bool tx);
-	void setupParams(double clock);
-	void showLine();
+  void calcPixelPositionTable(unsigned int colorLine, bool tx);
+  void setupParams(double clock);
+  void showLine();
   embState txSetupLine();
-	void getLine();
-
+  void getLine();
 };
 
 #endif

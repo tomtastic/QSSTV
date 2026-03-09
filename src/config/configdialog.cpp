@@ -1,23 +1,23 @@
 /**************************************************************************
-*   Copyright (C) 2000-2019 by Johan Maes                                 *
-*   on4qz@telenet.be                                                      *
-*   https://www.qsl.net/o/on4qz                                           *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
-***************************************************************************/
+ *   Copyright (C) 2000-2019 by Johan Maes                                 *
+ *   on4qz@telenet.be                                                      *
+ *   https://www.qsl.net/o/on4qz                                           *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #include "configdialog.h"
 #include "ui_configdialog.h"
 #include "gallerywidget.h"
@@ -26,9 +26,7 @@
 #include "filewatcher.h"
 
 
-configDialog::configDialog(QWidget *parent) :
-  QDialog(parent),
-  ui(new Ui::configDialog)
+configDialog::configDialog(QWidget* parent) : QDialog(parent), ui(new Ui::configDialog)
 {
   ui->setupUi(this);
   ui->catWidget->attachRigController(rigControllerPtr);
@@ -69,15 +67,13 @@ void configDialog::writeSettings()
   ui->drmProfilesWidget->writeSettings();
   ui->cwWidget->writeSettings();
   ui->waterfallWidget->writeSettings();
-  soundNeedsRestart=ui->soundWidget->hasChanged();
-  guiNeedsRestart=ui->guiWidget->hasChanged();
+  soundNeedsRestart = ui->soundWidget->hasChanged();
+  guiNeedsRestart = ui->guiWidget->hasChanged();
   ui->freqSelectWidget->writeSettings();
-  if(ui->guiWidget->backGroundColorChanged)
-    {
-      emit bgColorChanged();
-      ui->guiWidget->backGroundColorChanged=false;
-    }
-
+  if (ui->guiWidget->backGroundColorChanged) {
+    emit bgColorChanged();
+    ui->guiWidget->backGroundColorChanged = false;
+  }
 }
 
 /**
@@ -86,29 +82,21 @@ void configDialog::writeSettings()
 
 int configDialog::exec()
 {
-  if(QDialog::exec())
-  {
+  if (QDialog::exec()) {
     writeSettings();
-    if(ui->directoryWidget->hasChanged() || ui->guiWidget->hasChanged())
-      {
-        galleryWidgetPtr->changedMatrix();
-      }
-    if(ui->drmProfilesWidget->hasChanged())
-      {
-        txWidgetPtr->reloadProfiles();
-      }
-    if(ui->directoryWidget->hasChanged())
-      {
-        fileWatcherPtr->init();
-      }
-    mainWindowPtr->setSSTVDRMPushButton(transmissionModeIndex==TRXDRM);
+    if (ui->directoryWidget->hasChanged() || ui->guiWidget->hasChanged()) {
+      galleryWidgetPtr->changedMatrix();
+    }
+    if (ui->drmProfilesWidget->hasChanged()) {
+      txWidgetPtr->reloadProfiles();
+    }
+    if (ui->directoryWidget->hasChanged()) {
+      fileWatcherPtr->init();
+    }
+    mainWindowPtr->setSSTVDRMPushButton(transmissionModeIndex == TRXDRM);
 
     return QDialog::Accepted;
-  }
-  else
-  {
+  } else {
     return QDialog::Rejected;
   }
 }
-
-

@@ -6,15 +6,19 @@
 #include <QSettings>
 #include "supportfunctions.h"
 
-class baseConfig: public QWidget
+class baseConfig : public QWidget
 {
 public:
-  baseConfig(QWidget *parent = 0);
-  virtual void readSettings()=0;
-  virtual void writeSettings()=0;
-  virtual void getParams()=0;
-  virtual void setParams()=0;
-  bool hasChanged() {return changed;}
+  baseConfig(QWidget* parent = 0);
+  virtual void readSettings() = 0;
+  virtual void writeSettings() = 0;
+  virtual void getParams() = 0;
+  virtual void setParams() = 0;
+  bool hasChanged()
+  {
+    return changed;
+  }
+
 protected:
   bool changed;
 };

@@ -2,9 +2,7 @@
 #include "ui_scopeoffset.h"
 
 
-scopeOffset::scopeOffset(QWidget *parent) :
-  QDialog(parent),
-  ui(new Ui::scopeOffset)
+scopeOffset::scopeOffset(QWidget* parent) : QDialog(parent), ui(new Ui::scopeOffset)
 {
   ui->setupUi(this);
 }
@@ -31,7 +29,5 @@ void scopeOffset::setOffset(unsigned int offset)
 
 unsigned int scopeOffset::getOffset()
 {
-  return ui->offsetSpinbox ->value();
+  return ui->offsetSpinbox->value();
 }
-
-

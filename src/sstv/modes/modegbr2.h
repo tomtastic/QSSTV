@@ -34,22 +34,22 @@
 #include "modebase.h"
 
 /**
-	@author Johan Maes <on4qz@telenet.be>
+  @author Johan Maes <on4qz@telenet.be>
 */
 class modeGBR2 : public modeBase
 {
 public:
   modeGBR2(esstvMode m, unsigned int len, bool tx, bool narrowMode);
-	~modeGBR2();
+  ~modeGBR2();
 
 protected:
   embState rxSetupLine();
-	void calcPixelPositionTable(unsigned int colorLine,bool tx);
-	void setupParams(double clock);
+  void calcPixelPositionTable(unsigned int colorLine, bool tx);
+  void setupParams(double clock);
   unsigned long adjustSyncPosition(unsigned long syncPos0, bool isRetrace);
-//  unsigned long retraceAdjust(unsigned long syncPos);
+  //  unsigned long retraceAdjust(unsigned long syncPos);
 
-//	int adaptStartPosition(bool vertRetrace);
+  //	int adaptStartPosition(bool vertRetrace);
   embState txSetupLine();
 };
 

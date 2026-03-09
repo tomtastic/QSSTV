@@ -27,55 +27,48 @@
 
 
 #define SINTABLEN 2048
-#define TONEBUFLEN (BASESAMPLERATE/1200)
+#define TONEBUFLEN (BASESAMPLERATE / 1200)
 
 class synthesizer
 {
 public:
-	synthesizer(double txSmpClock);
-	~synthesizer();
-	double nextSample(double freq)
-		{
-  		double temp;
-  		int t;
-  		temp=(freq/txSamplingClock)*static_cast<double>(SINTABLEN)+oldAngle;
-  		oldAngle=fmod(temp,SINTABLEN);
-  		t=static_cast<int>(oldAngle+0.5);
-      return sineTable[t%SINTABLEN];
-		}
-	void sendTone(double duration,double lowerFrequency,double upperFrequency, bool concat);
-	void sendSamples(unsigned int numSamples,double frequency);
-	void sendSweep(unsigned int duration,double lowerFrequency, double upperFrequency);
-	void sendSilence(double duration);
-	void sendSample(double freq);
-	void setFilter(efilterType txFilterType);
+  synthesizer(double txSmpClock);
+  ~synthesizer();
+  double nextSample(double freq)
+  {
+    double temp;
+    int t;
+    temp = (freq / txSamplingClock) * static_cast<double>(SINTABLEN) + oldAngle;
+    oldAngle = fmod(temp, SINTABLEN);
+    t = static_cast<int>(oldAngle + 0.5);
+    return sineTable[t % SINTABLEN];
+  }
+  void sendTone(double duration, double lowerFrequency, double upperFrequency, bool concat);
+  void sendSamples(unsigned int numSamples, double frequency);
+  void sendSweep(unsigned int duration, double lowerFrequency, double upperFrequency);
+  void sendSilence(double duration);
+  void sendSample(double freq);
+  void setFilter(efilterType txFilterType);
   void sendWFText();
-  void writeBuffer(quint32 *buffer,int len);
+  void writeBuffer(quint32* buffer, int len);
+
 private:
-	double txSamplingClock;
-	double oldAngle;
-	double sineTable[SINTABLEN];
-//	const float *filterI;
-//	unsigned int filterLength;
+  double txSamplingClock;
+  double oldAngle;
+  double sineTable[SINTABLEN];
+  //	const float *filterI;
+  //	unsigned int filterLength;
   SOUNDFRAME filter(double sample);
   void write(double sample);
-	double sample;
-	double adjust;
-//  waterfallText *waterfallPtr;
+  double sample;
+  double adjust;
+  //  waterfallText *waterfallPtr;
   double toneBuffer[TONEBUFLEN];
   uint pttToneCounter;
-//  void fillBuffer();  //only for test
+  //  void fillBuffer();  //only for test
 };
 
-extern synthesizer *synthesPtr;
-
+extern synthesizer* synthesPtr;
 
 
 #endif
-
-
-
-
-
-
-

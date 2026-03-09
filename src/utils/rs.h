@@ -32,13 +32,13 @@
  * @**PRIM*B0, @**PRIM*(B0+1), @**PRIM*(B0+2)...@**PRIM*(B0+NN-KK)
  * where "@" represents a lower case alpha.
  */
-#define B0 1 /* First root of generator polynomial, alpha form */
+#define B0 1   /* First root of generator polynomial, alpha form */
 #define PRIM 1 /* power of alpha used to generate roots of generator poly */
 
 /* If you want to select your own field generator polynomial, you'll have
  * to edit that in rs.c.
  */
-#define	NN ((1 << MM) - 1)
+#define NN ((1 << MM) - 1)
 typedef unsigned char dtype;
 
 /* Reed-Solomon encoding

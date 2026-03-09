@@ -8,17 +8,15 @@
 #include <QComboBox>
 #include <QTcpSocket>
 
-extern "C" int write_block(hamlib_port_t *p, const char *txbuffer, size_t count);
-extern "C" int read_block(hamlib_port_t *p, char *rxbuffer, size_t count);
+extern "C" int write_block(hamlib_port_t* p, const char* txbuffer, size_t count);
+extern "C" int read_block(hamlib_port_t* p, char* rxbuffer, size_t count);
 
 #define RIGCMDTRIES 4
 
 
+bool model_Sort(const rig_caps* caps1, const rig_caps* caps2);
 
-bool model_Sort(const rig_caps *caps1,const rig_caps *caps2);
-
-struct scatParams
-{
+struct scatParams {
   QString configLabel;
   QString serialPort; /**<  serial port device*/
   QString radioModel;
@@ -45,43 +43,50 @@ struct scatParams
   bool enableHamlibNetworkControl;
   QString hamlibHost;
   int hamlibPort;
-
 };
 
-class rigControl: public QObject
+class rigControl : public QObject
 {
   Q_OBJECT
 public:
   rigControl(int radioIndex);
   ~rigControl();
   bool init();
-  bool enabled() {return rigControlEnabled;}
-  bool getFrequency(double &frequency);
+  bool enabled()
+  {
+    return rigControlEnabled;
+  }
+  bool getFrequency(double& frequency);
   bool setFrequency(double frequency);
-  bool getMode(QString &mode);
+  bool getMode(QString& mode);
   bool setMode(QString mode, QString passBand);
   int getModelNumber(int idx);
   int getRadioModelIndex();
-  bool getRadioList(QComboBox *cb);
+  bool getRadioList(QComboBox* cb);
   void disable();
-  scatParams* params() {return &catParams;}
+  scatParams* params()
+  {
+    return &catParams;
+  }
   void activatePTT(bool b);
-  double getTxDelay() {return catParams.txOnDelay;}
+  double getTxDelay()
+  {
+    return catParams.txOnDelay;
+  }
   int rawCommand(QByteArray ba);
   QString initError;
 
 private:
-
-  RIG *my_rig;            // handle to rig (nstance)
-  freq_t freq;            // frequency
-  rmode_t rmode;          // radio mode of operation
+  RIG* my_rig;   // handle to rig (nstance)
+  freq_t freq;   // frequency
+  rmode_t rmode; // radio mode of operation
   pbwidth_t width;
-  vfo_t vfo;              // vfo selection
-  int strength;           // S-Meter level
-  int retcode;            // generic return code from functions
+  vfo_t vfo;    // vfo selection
+  int strength; // S-Meter level
+  int retcode;  // generic return code from functions
   rig_model_t myrig_model;
   bool rigControlEnabled;
-  void errorMessage(int errorCode,QString command);
+  void errorMessage(int errorCode, QString command);
   void getRadioList();
   scatParams catParams;
   int serialP;
@@ -96,10 +101,10 @@ private:
   bool canGetPTT;
 
   // Hamlib network control members
-  QTcpSocket *hamlibSocket;
-  
+  QTcpSocket* hamlibSocket;
+
   bool initHamlibNetwork();
-  bool sendHamlibCommand(const QString &command);
+  bool sendHamlibCommand(const QString& command);
   QString readHamlibResponse();
 };
 

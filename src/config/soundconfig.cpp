@@ -1,33 +1,33 @@
 /**************************************************************************
-*   Copyright (C) 2000-2019 by Johan Maes                                 *
-*   on4qz@telenet.be                                                      *
-*   https://www.qsl.net/o/on4qz                                           *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
-***************************************************************************/
+ *   Copyright (C) 2000-2019 by Johan Maes                                 *
+ *   on4qz@telenet.be                                                      *
+ *   https://www.qsl.net/o/on4qz                                           *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 
 #include "soundconfig.h"
 #include "ui_soundconfig.h"
 #include "configparams.h"
 #include "supportfunctions.h"
 #ifdef __APPLE__
-#  include "macos/soundmacos.h"
+#include "macos/soundmacos.h"
 #else
-#  include "soundpulse.h"
-#  include "soundalsa.h"
+#include "soundpulse.h"
+#include "soundalsa.h"
 #endif
 
 #include <QSettings>
@@ -49,23 +49,19 @@ soundBase::edataDst soundRoutingOutput;
 quint32 recordingSize;
 
 
-
-soundConfig::soundConfig(QWidget *parent) :  baseConfig(parent), ui(new Ui::soundConfig)
+soundConfig::soundConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::soundConfig)
 {
   QStringList inputPCMList, outputPCMList;
   ui->setupUi(this);
 #ifdef __APPLE__
   ui->alsaRadioButton->setVisible(false);
   ui->pulseRadioButton->setVisible(false);
-  for (const auto &device:soundMacos::getCardList())
-  {
+  for (const auto& device : soundMacos::getCardList()) {
     if (device.SupportsInput)
-      ui->inputPCMNameComboBox->insertItem(INT_MAX,
-                                           QString::fromStdString(device.Label),
+      ui->inputPCMNameComboBox->insertItem(INT_MAX, QString::fromStdString(device.Label),
                                            QString::fromStdString(device.UID));
     if (device.SupportsOutput)
-      ui->outputPCMNameComboBox->insertItem(INT_MAX,
-                                            QString::fromStdString(device.Label),
+      ui->outputPCMNameComboBox->insertItem(INT_MAX, QString::fromStdString(device.Label),
                                             QString::fromStdString(device.UID));
   }
 #else
@@ -85,20 +81,22 @@ void soundConfig::readSettings()
 {
   QSettings qSettings;
   qSettings.beginGroup("SOUND");
-  rxClock=qSettings.value("rxclock",BASESAMPLERATE).toDouble();
-  txClock=qSettings.value("txclock",BASESAMPLERATE).toDouble();
-  if(fabs(1-rxClock/BASESAMPLERATE)>0.002) rxClock=BASESAMPLERATE;
-  if(fabs(1-txClock/BASESAMPLERATE)>0.002) txClock=BASESAMPLERATE;
-  samplingrate=BASESAMPLERATE;
-  inputAudioDevice=qSettings.value("inputAudioDevice","default").toString();
-  outputAudioDevice=qSettings.value("outputAudioDevice","default").toString();
-  alsaSelected=qSettings.value("alsaSelected",false).toBool();
-  pulseSelected=qSettings.value("pulseSelected",false).toBool();
-  swapChannel=qSettings.value("swapChannel",false).toBool();
-  pttToneOtherChannel=qSettings.value("pttToneOtherChannel",false).toBool();
-  soundRoutingInput=  static_cast<soundBase::edataSrc>(qSettings.value("soundRoutingInput",  0 ).toInt());
-  soundRoutingOutput= static_cast<soundBase::edataDst>(qSettings.value("soundRoutingOutput", 0 ).toInt());
-  recordingSize= qSettings.value("recordingSize", 100 ).toInt();
+  rxClock = qSettings.value("rxclock", BASESAMPLERATE).toDouble();
+  txClock = qSettings.value("txclock", BASESAMPLERATE).toDouble();
+  if (fabs(1 - rxClock / BASESAMPLERATE) > 0.002)
+    rxClock = BASESAMPLERATE;
+  if (fabs(1 - txClock / BASESAMPLERATE) > 0.002)
+    txClock = BASESAMPLERATE;
+  samplingrate = BASESAMPLERATE;
+  inputAudioDevice = qSettings.value("inputAudioDevice", "default").toString();
+  outputAudioDevice = qSettings.value("outputAudioDevice", "default").toString();
+  alsaSelected = qSettings.value("alsaSelected", false).toBool();
+  pulseSelected = qSettings.value("pulseSelected", false).toBool();
+  swapChannel = qSettings.value("swapChannel", false).toBool();
+  pttToneOtherChannel = qSettings.value("pttToneOtherChannel", false).toBool();
+  soundRoutingInput = static_cast<soundBase::edataSrc>(qSettings.value("soundRoutingInput", 0).toInt());
+  soundRoutingOutput = static_cast<soundBase::edataDst>(qSettings.value("soundRoutingOutput", 0).toInt());
+  recordingSize = qSettings.value("recordingSize", 100).toInt();
   qSettings.endGroup();
   setParams();
 }
@@ -108,86 +106,95 @@ void soundConfig::writeSettings()
   QSettings qSettings;
   getParams();
   qSettings.beginGroup("SOUND");
-  qSettings.setValue("rxclock",rxClock);
-  qSettings.setValue("txclock",txClock);
-  qSettings.setValue("inputAudioDevice",inputAudioDevice);
-  qSettings.setValue("outputAudioDevice",outputAudioDevice);
-  qSettings.setValue("alsaSelected",alsaSelected);
-  qSettings.setValue("pulseSelected",pulseSelected);
-  qSettings.setValue("swapChannel",swapChannel);
-  qSettings.setValue("pttToneOtherChannel",pttToneOtherChannel);
-  qSettings.setValue ("soundRoutingInput", soundRoutingInput );
-  qSettings.setValue ("soundRoutingOutput",soundRoutingOutput );
-  qSettings.setValue ("recordingSize",recordingSize );
+  qSettings.setValue("rxclock", rxClock);
+  qSettings.setValue("txclock", txClock);
+  qSettings.setValue("inputAudioDevice", inputAudioDevice);
+  qSettings.setValue("outputAudioDevice", outputAudioDevice);
+  qSettings.setValue("alsaSelected", alsaSelected);
+  qSettings.setValue("pulseSelected", pulseSelected);
+  qSettings.setValue("swapChannel", swapChannel);
+  qSettings.setValue("pttToneOtherChannel", pttToneOtherChannel);
+  qSettings.setValue("soundRoutingInput", soundRoutingInput);
+  qSettings.setValue("soundRoutingOutput", soundRoutingOutput);
+  qSettings.setValue("recordingSize", recordingSize);
   qSettings.endGroup();
 }
 
 
 void soundConfig::setParams()
 {
-  setValue(rxClock,ui->inputClockLineEdit,9);
-  setValue(txClock,ui->outputClockLineEdit,9);
+  setValue(rxClock, ui->inputClockLineEdit, 9);
+  setValue(txClock, ui->outputClockLineEdit, 9);
 #ifdef __APPLE__
   int i;
   i = ui->inputPCMNameComboBox->findData(inputAudioDevice);
-    if ( i >= 0 ) ui->inputPCMNameComboBox->setCurrentIndex(i);
+  if (i >= 0)
+    ui->inputPCMNameComboBox->setCurrentIndex(i);
   i = ui->outputPCMNameComboBox->findData(outputAudioDevice);
-    if ( i >= 0 ) ui->outputPCMNameComboBox->setCurrentIndex(i);
+  if (i >= 0)
+    ui->outputPCMNameComboBox->setCurrentIndex(i);
 #else
-  setValue(inputAudioDevice,ui->inputPCMNameComboBox);
-  setValue(outputAudioDevice,ui->outputPCMNameComboBox);
+  setValue(inputAudioDevice, ui->inputPCMNameComboBox);
+  setValue(outputAudioDevice, ui->outputPCMNameComboBox);
 #endif
-  setValue(alsaSelected,ui->alsaRadioButton);
-  setValue(pulseSelected,ui->pulseRadioButton);
-  setValue(swapChannel,ui->swapChannelCheckBox);
-  setValue(pttToneOtherChannel,ui->pttToneCheckBox);
-  if(soundRoutingInput==soundBase::SNDINCARD) ui->inFromCard->setChecked(true);
-  else if (soundRoutingInput==soundBase::SNDINFROMFILE) ui->inFromFile->setChecked(true);
-  else ui->inRecordFromCard->setChecked(true);
+  setValue(alsaSelected, ui->alsaRadioButton);
+  setValue(pulseSelected, ui->pulseRadioButton);
+  setValue(swapChannel, ui->swapChannelCheckBox);
+  setValue(pttToneOtherChannel, ui->pttToneCheckBox);
+  if (soundRoutingInput == soundBase::SNDINCARD)
+    ui->inFromCard->setChecked(true);
+  else if (soundRoutingInput == soundBase::SNDINFROMFILE)
+    ui->inFromFile->setChecked(true);
+  else
+    ui->inRecordFromCard->setChecked(true);
 
-  if(soundRoutingOutput==soundBase::SNDOUTCARD) ui->outToCard->setChecked(true);
-  else ui->outRecord->setChecked(true);
-  setValue(recordingSize,ui->mbSpinBox);
+  if (soundRoutingOutput == soundBase::SNDOUTCARD)
+    ui->outToCard->setChecked(true);
+  else
+    ui->outRecord->setChecked(true);
+  setValue(recordingSize, ui->mbSpinBox);
 }
 
 void soundConfig::getParams()
 {
-  QString inputAudioDeviceCopy=inputAudioDevice;
-  QString  outputAudioDeviceCopy=outputAudioDevice;
-  bool alsaSelectedCopy=alsaSelected;
+  QString inputAudioDeviceCopy = inputAudioDevice;
+  QString outputAudioDeviceCopy = outputAudioDevice;
+  bool alsaSelectedCopy = alsaSelected;
 
 
-  soundBase::edataSrc soundRoutingInputCopy=soundRoutingInput;
-  soundBase::edataDst soundRoutingOutputCopy=soundRoutingOutput;
+  soundBase::edataSrc soundRoutingInputCopy = soundRoutingInput;
+  soundBase::edataDst soundRoutingOutputCopy = soundRoutingOutput;
 
-  getValue(rxClock,ui->inputClockLineEdit);
-  getValue(txClock,ui->outputClockLineEdit);
+  getValue(rxClock, ui->inputClockLineEdit);
+  getValue(txClock, ui->outputClockLineEdit);
 #ifdef __APPLE__
-  inputAudioDevice  = ui->inputPCMNameComboBox->currentData().toString();
+  inputAudioDevice = ui->inputPCMNameComboBox->currentData().toString();
   outputAudioDevice = ui->outputPCMNameComboBox->currentData().toString();
 #else
-  getValue(inputAudioDevice,ui->inputPCMNameComboBox);
-  getValue(outputAudioDevice,ui->outputPCMNameComboBox);
+  getValue(inputAudioDevice, ui->inputPCMNameComboBox);
+  getValue(outputAudioDevice, ui->outputPCMNameComboBox);
 #endif
-  getValue(alsaSelected,ui->alsaRadioButton);
-  getValue(pulseSelected,ui->pulseRadioButton);
-  getValue(swapChannel,ui->swapChannelCheckBox);
-  getValue(pttToneOtherChannel,ui->pttToneCheckBox);
+  getValue(alsaSelected, ui->alsaRadioButton);
+  getValue(pulseSelected, ui->pulseRadioButton);
+  getValue(swapChannel, ui->swapChannelCheckBox);
+  getValue(pttToneOtherChannel, ui->pttToneCheckBox);
 
-  if (ui->inFromCard->isChecked()) soundRoutingInput=soundBase::SNDINCARD;
-  else if(ui->inFromFile->isChecked()) soundRoutingInput=soundBase::SNDINFROMFILE;
-  else soundRoutingInput=soundBase::SNDINCARDTOFILE;
+  if (ui->inFromCard->isChecked())
+    soundRoutingInput = soundBase::SNDINCARD;
+  else if (ui->inFromFile->isChecked())
+    soundRoutingInput = soundBase::SNDINFROMFILE;
+  else
+    soundRoutingInput = soundBase::SNDINCARDTOFILE;
 
-  if (ui->outToCard->isChecked()) soundRoutingOutput=soundBase::SNDOUTCARD;
-  else soundRoutingOutput=soundBase::SNDOUTTOFILE;
-  getValue(recordingSize,ui->mbSpinBox);
-  changed=false;
-  if(inputAudioDeviceCopy!=inputAudioDevice
-     || outputAudioDeviceCopy!=outputAudioDevice
-     || soundRoutingInputCopy!=soundRoutingInput
-     || soundRoutingOutputCopy!=soundRoutingOutput
-     || alsaSelectedCopy!=alsaSelected)
-  {
-    changed=true;
+  if (ui->outToCard->isChecked())
+    soundRoutingOutput = soundBase::SNDOUTCARD;
+  else
+    soundRoutingOutput = soundBase::SNDOUTTOFILE;
+  getValue(recordingSize, ui->mbSpinBox);
+  changed = false;
+  if (inputAudioDeviceCopy != inputAudioDevice || outputAudioDeviceCopy != outputAudioDevice ||
+      soundRoutingInputCopy != soundRoutingInput || soundRoutingOutputCopy != soundRoutingOutput ||
+      alsaSelectedCopy != alsaSelected) {
+    changed = true;
   }
 }

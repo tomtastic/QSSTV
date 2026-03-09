@@ -37,89 +37,87 @@
 /* Implementation *************************************************************/
 void CCRC::Reset(const int iNewDegree)
 {
-	/* Build mask of bit, which was shifted out of the shift register */
-	iBitOutPosMask = 1 << iNewDegree;
+  /* Build mask of bit, which was shifted out of the shift register */
+  iBitOutPosMask = 1 << iNewDegree;
 
-	/* Index of vector storing the polynominals for CRC calculation */
-	iDegIndex = iNewDegree - 1;
+  /* Index of vector storing the polynominals for CRC calculation */
+  iDegIndex = iNewDegree - 1;
 
-	/* Init state shift-register with ones. Set all registers to "1" with
-	   bit-wise not operation */
-	iStateShiftReg = ~static_cast<uint32_t>(0);
+  /* Init state shift-register with ones. Set all registers to "1" with
+     bit-wise not operation */
+  iStateShiftReg = ~static_cast<uint32_t>(0);
 }
 
 void CCRC::AddByte(const _BYTE byNewInput)
 {
-	for (int i = 0; i < SIZEOF__BYTE; i++)
-	{
-		/* Shift bits in shift-register for transistion */
-		iStateShiftReg <<= 1;
+  for (int i = 0; i < SIZEOF__BYTE; i++) {
+    /* Shift bits in shift-register for transistion */
+    iStateShiftReg <<= 1;
 
-		/* Take bit, which was shifted out of the register-size and place it
-		   at the beginning (LSB)
-		   (If condition is not satisfied, implicitely a "0" is added) */
-		if ((iStateShiftReg & iBitOutPosMask) > 0)
-			iStateShiftReg |= 1;
+    /* Take bit, which was shifted out of the register-size and place it
+       at the beginning (LSB)
+       (If condition is not satisfied, implicitely a "0" is added) */
+    if ((iStateShiftReg & iBitOutPosMask) > 0)
+      iStateShiftReg |= 1;
 
-		/* Add new data bit to the LSB */
-		if ((byNewInput & (1 << (SIZEOF__BYTE - i - 1))) > 0)
-			iStateShiftReg ^= 1;
+    /* Add new data bit to the LSB */
+    if ((byNewInput & (1 << (SIZEOF__BYTE - i - 1))) > 0)
+      iStateShiftReg ^= 1;
 
-		/* Add mask to shift-register if first bit is true */
-		if (iStateShiftReg & 1)
-			iStateShiftReg ^= iPolynMask[iDegIndex];
-	}
+    /* Add mask to shift-register if first bit is true */
+    if (iStateShiftReg & 1)
+      iStateShiftReg ^= iPolynMask[iDegIndex];
+  }
 }
 
 void CCRC::AddBit(const _BINARY biNewInput)
 {
-	/* Shift bits in shift-register for transistion */
-	iStateShiftReg <<= 1;
+  /* Shift bits in shift-register for transistion */
+  iStateShiftReg <<= 1;
 
-	/* Take bit, which was shifted out of the register-size and place it
-	   at the beginning (LSB)
-	   (If condition is not satisfied, implicitely a "0" is added) */
-	if ((iStateShiftReg & iBitOutPosMask) > 0)
-		iStateShiftReg |= 1;
+  /* Take bit, which was shifted out of the register-size and place it
+     at the beginning (LSB)
+     (If condition is not satisfied, implicitely a "0" is added) */
+  if ((iStateShiftReg & iBitOutPosMask) > 0)
+    iStateShiftReg |= 1;
 
-	/* Add new data bit to the LSB */
-	if (biNewInput > 0)
-		iStateShiftReg ^= 1;
+  /* Add new data bit to the LSB */
+  if (biNewInput > 0)
+    iStateShiftReg ^= 1;
 
-	/* Add mask to shift-register if first bit is true */
-	if (iStateShiftReg & 1)
-		iStateShiftReg ^= iPolynMask[iDegIndex];
+  /* Add mask to shift-register if first bit is true */
+  if (iStateShiftReg & 1)
+    iStateShiftReg ^= iPolynMask[iDegIndex];
 }
 
 uint32_t CCRC::GetCRC()
 {
-	/* Return inverted shift-register (1's complement) */
-	iStateShiftReg = ~iStateShiftReg;
+  /* Return inverted shift-register (1's complement) */
+  iStateShiftReg = ~iStateShiftReg;
 
-	/* Remove bit which where shifted out of the shift-register frame */
-	return iStateShiftReg & (iBitOutPosMask - 1);
+  /* Remove bit which where shifted out of the shift-register frame */
+  return iStateShiftReg & (iBitOutPosMask - 1);
 }
 
 _BOOLEAN CCRC::CheckCRC(const uint32_t iCRC)
 {
-	if (iCRC == GetCRC())
-		return true;
-	else
-		return false;
+  if (iCRC == GetCRC())
+    return true;
+  else
+    return false;
 }
 
 CCRC::CCRC()
 {
-	/* These polynominals are used in the DRM-standard */
-	iPolynMask[0] = 0;
-	iPolynMask[1] = 1 << 1;
-	iPolynMask[2] = 1 << 1;
-	iPolynMask[4] = (1 << 1) | (1 << 2) | (1 << 4);
-	iPolynMask[5] = (1 << 1) | (1 << 2) | (1 << 3) | (1 << 5);
-	iPolynMask[7] = (1 << 2) | (1 << 3) | (1 << 4);
-	iPolynMask[15] = (1 << 5) | (1 << 12);
+  /* These polynominals are used in the DRM-standard */
+  iPolynMask[0] = 0;
+  iPolynMask[1] = 1 << 1;
+  iPolynMask[2] = 1 << 1;
+  iPolynMask[4] = (1 << 1) | (1 << 2) | (1 << 4);
+  iPolynMask[5] = (1 << 1) | (1 << 2) | (1 << 3) | (1 << 5);
+  iPolynMask[7] = (1 << 2) | (1 << 3) | (1 << 4);
+  iPolynMask[15] = (1 << 5) | (1 << 12);
 }
-
 
 
 /******************************************************************************/
@@ -168,52 +166,48 @@ CCRC::CCRC()
 
 
 /*************
-*
-*   adjusted for use in own plain C programa
-*   by M.Bos - PA0MBO
-*
-*   Date Dec 9th 2007
-*/
+ *
+ *   adjusted for use in own plain C programa
+ *   by M.Bos - PA0MBO
+ *
+ *   Date Dec 9th 2007
+ */
 
 
 /******************************************************************************/
 /* function                                                                   */
 /******************************************************************************/
-void CCRC::crc16_bytewise(double  checksum[],
-                          unsigned char in[], long N)
+void CCRC::crc16_bytewise(double checksum[], unsigned char in[], long N)
 {
   long int i;
   int j;
   unsigned int b = 0xFFFF;
-  unsigned int x = 0x1021;	/* (1) 0001000000100001 */
-  unsigned int y=0;
+  unsigned int x = 0x1021; /* (1) 0001000000100001 */
+  unsigned int y = 0;
 
   for (i = 0; i < N - 2; i++)
 
-    {
-      for (j = 7; j >= 0; j--)
-        {
-          y = (((b >> 15) + static_cast<unsigned int>(in[i] >> j)) & 0x01) & 0x01;	/* extra parenth pa0mbo */
-          if (y == 1)
-            b = ((b << 1) ^ x);
+  {
+    for (j = 7; j >= 0; j--) {
+      y = (((b >> 15) + static_cast<unsigned int>(in[i] >> j)) & 0x01) & 0x01; /* extra parenth pa0mbo */
+      if (y == 1)
+        b = ((b << 1) ^ x);
 
-          else
-            b = (b << 1);
-        }
+      else
+        b = (b << 1);
     }
+  }
   for (i = N - 2; i < N; i++)
 
-    {
-      for (j = 7; j >= 0; j--)
-        {
-          y = (((b >> 15) + static_cast<unsigned int>((in[i] >> j) & 0x01)) ^ 0x01) & 0x01;	/* extra parent pa0mbo */
-          if (y == 1)
-            b = ((b << 1) ^ x);
+  {
+    for (j = 7; j >= 0; j--) {
+      y = (((b >> 15) + static_cast<unsigned int>((in[i] >> j) & 0x01)) ^ 0x01) & 0x01; /* extra parent pa0mbo */
+      if (y == 1)
+        b = ((b << 1) ^ x);
 
-          else
-            b = (b << 1);
-        }
+      else
+        b = (b << 1);
     }
+  }
   *checksum = static_cast<double>(b & 0xFFFF);
 }
-

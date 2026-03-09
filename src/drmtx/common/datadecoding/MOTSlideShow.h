@@ -39,24 +39,29 @@
 class CMOTSlideShowEncoder
 {
 public:
-  CMOTSlideShowEncoder ():vecPicFileNames (0) {strCurObjName="";}
-  virtual ~ CMOTSlideShowEncoder () {}
-  void Init (CParameter &TParam);
-  void GetDataUnit(CVector < _BINARY > &vecbiNewData);
-  void AddArray (QByteArray *ba, const QString name, const QString format);
-  void ClearAllFileNames () {vecPicFileNames.Init (0);}
-  _BOOLEAN GetTransStat (string & strCurPict, _REAL & rCurPerc) const;
+  CMOTSlideShowEncoder() : vecPicFileNames(0)
+  {
+    strCurObjName = "";
+  }
+  virtual ~CMOTSlideShowEncoder() {}
+  void Init(CParameter& TParam);
+  void GetDataUnit(CVector<_BINARY>& vecbiNewData);
+  void AddArray(QByteArray* ba, const QString name, const QString format);
+  void ClearAllFileNames()
+  {
+    vecPicFileNames.Init(0);
+  }
+  _BOOLEAN GetTransStat(string& strCurPict, _REAL& rCurPerc) const;
 
 protected:
-  struct SPicDescr
-  {
-    QByteArray *arrayPtr;
+  struct SPicDescr {
+    QByteArray* arrayPtr;
     QString name;
     QString format;
   };
-  void AddNextPicture ();
+  void AddNextPicture();
   CMOTDABEnc MOTDAB;
-  CVector < SPicDescr > vecPicFileNames;
+  CVector<SPicDescr> vecPicFileNames;
   int iPictureCnt;
   string strCurObjName;
   bool allDataSend;

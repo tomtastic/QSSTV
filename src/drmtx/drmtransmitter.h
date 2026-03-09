@@ -11,13 +11,17 @@ class drmTransmitter
 public:
   drmTransmitter();
   ~drmTransmitter();
-  void init(QByteArray *ba, QString name, QString format, drmTxParams params);
+  void init(QByteArray* ba, QString name, QString format, drmTxParams params);
   void start(bool startTx);
-  double getDuration() {return duration;} // expressed in seconds
+  double getDuration()
+  {
+    return duration;
+  } // expressed in seconds
   double transmissionTime;
+
 private:
-  CDRMTransmitter *DRMTransmitter;
-  CParameter* TransmParam ;
+  CDRMTransmitter* DRMTransmitter;
+  CParameter* TransmParam;
   int dataLength;
   double duration;
 };

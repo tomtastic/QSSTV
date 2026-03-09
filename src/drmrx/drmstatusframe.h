@@ -7,33 +7,34 @@
 
 class demodulator;
 
-namespace Ui {
+namespace Ui
+{
 class drmStatusFrame;
 }
 
 class drmStatusFrame : public QFrame
 {
   Q_OBJECT
-  
+
 public:
-  explicit drmStatusFrame(QWidget *parent = 0);
+  explicit drmStatusFrame(QWidget* parent = 0);
   ~drmStatusFrame();
   void init();
   void setStatus();
 
 private:
-  Ui::drmStatusFrame *ui;
+  Ui::drmStatusFrame* ui;
   QString call;
-//  void paintEvent (QPaintEvent *e);
+  //  void paintEvent (QPaintEvent *e);
   QString mode;
   float bandwidth;
   QString interleave;
   QString protection;
   int qam;
 
-  QPixmap *greenPXM;
-  QPixmap *redPXM;
-  QPixmap *yellowPXM;
+  QPixmap* greenPXM;
+  QPixmap* redPXM;
+  QPixmap* yellowPXM;
 
   bool prevTimeSync;
   int prevFacValid;

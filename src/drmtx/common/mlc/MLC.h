@@ -12,16 +12,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
@@ -35,8 +35,8 @@
 #include "../tables/TableMLC.h"
 #include "../tables/TableCarMap.h"
 #include "ConvEncoder.h"
-//#include "ViterbiDecoder.h"
-//#include "Metric.h"
+// #include "ViterbiDecoder.h"
+// #include "Metric.h"
 #include "BitInterleaver.h"
 #include "QAMMapping.h"
 #include "EnergyDispersal.h"
@@ -46,51 +46,50 @@
 class CMLC
 {
 public:
-	CMLC() : iN_mux(0), eChannelType(CT_MSC) {}
-	virtual ~CMLC() {}
+  CMLC() : iN_mux(0), eChannelType(CT_MSC) {}
+  virtual ~CMLC() {}
 
-	void CalculateParam(CParameter& Parameter, int iNewChannelType);
+  void CalculateParam(CParameter& Parameter, int iNewChannelType);
 
 protected:
-	int	iLevels;
-	/* No input bits for each level. First index: Level, second index:
-	   Protection level.
-	   For three levels: [M_0,l  M_1,l  M2,l]
-	   For six levels: [M_0,lRe  M_0,lIm  M_1,lRe  M_1,lIm  M_2,lRe  ...  ] */
-	int	iM[MC_MAX_NUM_LEVELS][2];
-	int iN[2];
-	int iL[3];
-	int iN_mux;
-	int iCodeRate[MC_MAX_NUM_LEVELS][2];
+  int iLevels;
+  /* No input bits for each level. First index: Level, second index:
+     Protection level.
+     For three levels: [M_0,l  M_1,l  M2,l]
+     For six levels: [M_0,lRe  M_0,lIm  M_1,lRe  M_1,lIm  M_2,lRe  ...  ] */
+  int iM[MC_MAX_NUM_LEVELS][2];
+  int iN[2];
+  int iL[3];
+  int iN_mux;
+  int iCodeRate[MC_MAX_NUM_LEVELS][2];
 
-	const int* piInterlSequ;
+  const int* piInterlSequ;
 
-	int	iNumEncBits;
+  int iNumEncBits;
 
-	EChanType	eChannelType;
-	ECodScheme	eCodingScheme;
+  EChanType eChannelType;
+  ECodScheme eCodingScheme;
 };
 
-class CMLCEncoder : public CTransmitterModul<_BINARY, _COMPLEX>, 
-					public CMLC
+class CMLCEncoder : public CTransmitterModul<_BINARY, _COMPLEX>, public CMLC
 {
 public:
-	CMLCEncoder() {}
-	virtual ~CMLCEncoder() {}
+  CMLCEncoder() {}
+  virtual ~CMLCEncoder() {}
 
 protected:
-	CConvEncoder		ConvEncoder[MC_MAX_NUM_LEVELS];
-	/* Two different types of interleaver table */
-	CBitInterleaver		BitInterleaver[2];
-	CQAMMapping			QAMMapping;
-	CEngergyDispersal	EnergyDisp;
+  CConvEncoder ConvEncoder[MC_MAX_NUM_LEVELS];
+  /* Two different types of interleaver table */
+  CBitInterleaver BitInterleaver[2];
+  CQAMMapping QAMMapping;
+  CEngergyDispersal EnergyDisp;
 
-	/* Internal buffers */
-	CVector<_DECISION>	vecEncInBuffer[MC_MAX_NUM_LEVELS];
-	CVector<_DECISION>	vecEncOutBuffer[MC_MAX_NUM_LEVELS];
+  /* Internal buffers */
+  CVector<_DECISION> vecEncInBuffer[MC_MAX_NUM_LEVELS];
+  CVector<_DECISION> vecEncOutBuffer[MC_MAX_NUM_LEVELS];
 
-	virtual void InitInternal(CParameter& TransmParam);
-	virtual void ProcessDataInternal(CParameter& Parameter);
+  virtual void InitInternal(CParameter& TransmParam);
+  virtual void ProcessDataInternal(CParameter& Parameter);
 };
 
 
@@ -100,43 +99,41 @@ protected:
 class CMSCMLCEncoder : public CMLCEncoder
 {
 protected:
-	virtual void InitInternal(CParameter& TransmParam)
-	{
-		/* Set corresponding type */
-		eChannelType = CT_MSC;
+  virtual void InitInternal(CParameter& TransmParam)
+  {
+    /* Set corresponding type */
+    eChannelType = CT_MSC;
 
-		/* Call init in encoder */
-		CMLCEncoder::InitInternal(TransmParam);
-	};
+    /* Call init in encoder */
+    CMLCEncoder::InitInternal(TransmParam);
+  };
 };
 
 class CSDCMLCEncoder : public CMLCEncoder
 {
 protected:
-	virtual void InitInternal(CParameter& TransmParam)
-	{
-		/* Set corresponding type */
-		eChannelType = CT_SDC;
+  virtual void InitInternal(CParameter& TransmParam)
+  {
+    /* Set corresponding type */
+    eChannelType = CT_SDC;
 
-		/* Call init in encoder */
-		CMLCEncoder::InitInternal(TransmParam);
-	};
+    /* Call init in encoder */
+    CMLCEncoder::InitInternal(TransmParam);
+  };
 };
 
 class CFACMLCEncoder : public CMLCEncoder
 {
 protected:
-	virtual void InitInternal(CParameter& TransmParam)
-	{
-		/* Set corresponding type */
-		eChannelType = CT_FAC;
+  virtual void InitInternal(CParameter& TransmParam)
+  {
+    /* Set corresponding type */
+    eChannelType = CT_FAC;
 
-		/* Call init in encoder */
-		CMLCEncoder::InitInternal(TransmParam);
-	};
+    /* Call init in encoder */
+    CMLCEncoder::InitInternal(TransmParam);
+  };
 };
-
-
 
 
 #endif // !defined(MLC_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)

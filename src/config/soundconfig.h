@@ -18,16 +18,17 @@ extern soundBase::edataDst soundRoutingOutput;
 extern quint32 recordingSize;
 
 
-namespace Ui {
-  class soundConfig;
-  }
+namespace Ui
+{
+class soundConfig;
+}
 
 class soundConfig : public baseConfig
 {
   Q_OBJECT
-  
+
 public:
-  explicit soundConfig(QWidget *parent = 0);
+  explicit soundConfig(QWidget* parent = 0);
   ~soundConfig();
   void readSettings();
   void writeSettings();
@@ -35,10 +36,8 @@ public:
   void setParams();
 
 
-
 private:
-  Ui::soundConfig *ui;
-
+  Ui::soundConfig* ui;
 };
 
 #endif // soundConfig_H

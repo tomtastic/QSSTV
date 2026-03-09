@@ -9,11 +9,12 @@ extern QString myLastname;
 extern QString myFirstname;
 extern QString lastReceivedCall;
 
-extern bool    onlineStatusEnabled;
+extern bool onlineStatusEnabled;
 extern QString onlineStatusText;
 
 
-namespace Ui {
+namespace Ui
+{
 class operatorConfig;
 }
 
@@ -22,7 +23,7 @@ class operatorConfig : public baseConfig
   Q_OBJECT
 
 public:
-  explicit operatorConfig(QWidget *parent = 0);
+  explicit operatorConfig(QWidget* parent = 0);
   ~operatorConfig();
   void readSettings();
   void writeSettings();
@@ -30,7 +31,7 @@ public:
   void setParams();
 
 private:
-  Ui::operatorConfig *ui;
+  Ui::operatorConfig* ui;
 };
 
 #endif // OPERATORCONFIG_H

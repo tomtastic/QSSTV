@@ -5,80 +5,73 @@
 #include <QCursor>
 
 
-const QString MAJORVERSION  = "10.0";
+const QString MAJORVERSION = "10.0";
 const QString CONFIGVERSION = "9.0";
-const QString MINORVERSION  = ".0";
-const QString LOGVERSION = ("qsstv."+MAJORVERSION+MINORVERSION+".log");
+const QString MINORVERSION = ".0";
+const QString LOGVERSION = ("qsstv." + MAJORVERSION + MINORVERSION + ".log");
 const QString ORGANIZATION = "ON4QZ";
-const QString APPLICATION  = ("qsstv_" +CONFIGVERSION);
-const QString qsstvVersion=QString("QSSTV " + MAJORVERSION+MINORVERSION);
-const QString APPNAME=QString("QSSTV");
+const QString APPLICATION = ("qsstv_" + CONFIGVERSION);
+const QString qsstvVersion = QString("QSSTV " + MAJORVERSION + MINORVERSION);
+const QString APPNAME = QString("QSSTV");
 
 
-QSplashScreen *splashPtr;
+QSplashScreen* splashPtr;
 QString splashStr;
 
-mainWindow *mainWindowPtr;
-soundBase *soundIOPtr;
-logFile *logFilePtr;
-configDialog *configDialogPtr;
+mainWindow* mainWindowPtr;
+soundBase* soundIOPtr;
+logFile* logFilePtr;
+configDialog* configDialogPtr;
 
 
-ftpThread *notifyRXIntfPtr;
-ftpThread *hybridTxIntfPtr;
-ftpThread *notifyTXIntfPtr;
-ftpThread *onlineStatusIntfPtr;
-ftpThread *hybridRxIntfPtr;
-ftpThread *saveImageIntfPtr;
+ftpThread* notifyRXIntfPtr;
+ftpThread* hybridTxIntfPtr;
+ftpThread* notifyTXIntfPtr;
+ftpThread* onlineStatusIntfPtr;
+ftpThread* hybridRxIntfPtr;
+ftpThread* saveImageIntfPtr;
 
 
+dispatcher* dispatcherPtr;
+QStatusBar* statusBarPtr;
+rxWidget* rxWidgetPtr;
+txWidget* txWidgetPtr;
+galleryWidget* galleryWidgetPtr;
+waterfallText* waterfallPtr;
+rigControl* rigControllerPtr;
+xmlInterface* xmlIntfPtr;
+logBook* logBookPtr;
+fileWatcher* fileWatcherPtr;
 
 
-dispatcher *dispatcherPtr;
-QStatusBar *statusBarPtr;
-rxWidget *rxWidgetPtr;
-txWidget *txWidgetPtr;
-galleryWidget *galleryWidgetPtr;
-waterfallText *waterfallPtr;
-rigControl *rigControllerPtr;
-xmlInterface *xmlIntfPtr;
-logBook *logBookPtr;
-fileWatcher *fileWatcherPtr;
-
-
-int fftNumBlocks=2;
+int fftNumBlocks = 2;
 bool useHybrid;
 bool inStartup;
 
 
+etransmissionMode transmissionModeIndex; // SSTV , DRM
 
 
-
-
-etransmissionMode transmissionModeIndex;  // SSTV , DRM
-
-
-
-QPixmap *greenPXMPtr;
-QPixmap *redPXMPtr;
+QPixmap* greenPXMPtr;
+QPixmap* redPXMPtr;
 
 #ifdef ENABLESCOPE
-scopeView *scopeViewerData;
-scopeView *scopeViewerSyncNarrow;
-scopeView *scopeViewerSyncWide;
+scopeView* scopeViewerData;
+scopeView* scopeViewerSyncNarrow;
+scopeView* scopeViewerSyncWide;
 #endif
 
 
 void globalInit()
 {
-  logFilePtr=new logFile();
+  logFilePtr = new logFile();
   logFilePtr->open(LOGVERSION);
   QSettings qSettings;
   qSettings.beginGroup("MAIN");
   logFilePtr->readSettings();
-  greenPXMPtr=new QPixmap(16,16);
+  greenPXMPtr = new QPixmap(16, 16);
   greenPXMPtr->fill(Qt::green);
-  redPXMPtr=new QPixmap(16,16);
+  redPXMPtr = new QPixmap(16, 16);
   redPXMPtr->fill(Qt::red);
   qSettings.endGroup();
 }
@@ -88,4 +81,3 @@ void globalEnd(void)
   logFilePtr->writeSettings();
   logFilePtr->close();
 }
-

@@ -38,96 +38,92 @@
 \******************************************************************************/
 void COFDMModulation::ProcessDataInternal(CParameter&)
 {
-	int	i;
-         // printf("In COFDMModul iShiftKmin %d iEndIndex %d , iDFTSize %d iGuardSize %d\n",
-//			iShiftedKmin, iEndIndex, iDFTSize, iGuardSize); 
-	/* Copy input vector in matlib vector and place bins at the correct
-	   position */
-	for (i = iShiftedKmin; i < iEndIndex; i++) 
-	{
-//		veccFFTInput[150] = _COMPLEX((_REAL) 1.0, (_REAL) -1.0);   // test pa0mbo
-		veccFFTInput[i] = (*pvecInputData)[i - iShiftedKmin]; 
-//		veccFFTInput[iDFTSize -1  - i] = Conj((*pvecInputData)[i - iShiftedKmin]); 
-		// printf(" veccFFTInput %d  %g  %g\n", i,(veccFFTInput[i]).real(), (veccFFTInput[i]).imag());
-	}
+  int i;
+  // printf("In COFDMModul iShiftKmin %d iEndIndex %d , iDFTSize %d iGuardSize %d\n",
+  //			iShiftedKmin, iEndIndex, iDFTSize, iGuardSize);
+  /* Copy input vector in matlib vector and place bins at the correct
+     position */
+  for (i = iShiftedKmin; i < iEndIndex; i++) {
+    //		veccFFTInput[150] = _COMPLEX((_REAL) 1.0, (_REAL) -1.0);   // test pa0mbo
+    veccFFTInput[i] = (*pvecInputData)[i - iShiftedKmin];
+    //		veccFFTInput[iDFTSize -1  - i] = Conj((*pvecInputData)[i - iShiftedKmin]);
+    // printf(" veccFFTInput %d  %g  %g\n", i,(veccFFTInput[i]).real(), (veccFFTInput[i]).imag());
+  }
 
-	/* Calculate inverse fast Fourier transformation */
-	veccFFTOutput = Ifft(veccFFTInput, FftPlan);
+  /* Calculate inverse fast Fourier transformation */
+  veccFFTOutput = Ifft(veccFFTInput, FftPlan);
 
-	/* Copy complex FFT output in output buffer and scale */
-	for (i = 0; i < iDFTSize; i++)
-		(*pvecOutputData)[i + iGuardSize] = veccFFTOutput[i] * static_cast<CReal>(iDFTSize);
+  /* Copy complex FFT output in output buffer and scale */
+  for (i = 0; i < iDFTSize; i++)
+    (*pvecOutputData)[i + iGuardSize] = veccFFTOutput[i] * static_cast<CReal>(iDFTSize);
 
-	/* Copy data from the end to the guard-interval (Add guard-interval) */
-	for (i = 0; i < iGuardSize; i++)
-		(*pvecOutputData)[i] = (*pvecOutputData)[iDFTSize + i];
+  /* Copy data from the end to the guard-interval (Add guard-interval) */
+  for (i = 0; i < iGuardSize; i++)
+    (*pvecOutputData)[i] = (*pvecOutputData)[iDFTSize + i];
 
-	/* tbv test printout pa0mbo  
+  /* tbv test printout pa0mbo
         printf("===========\n");
-	 for (i=0; i < iDFTSize + iGuardSize ; i++)
-		 printf("%d  %g \n",i,  ((*pvecOutputData)[i]).real()); 
-	 printf("=============\n");  */ 
+   for (i=0; i < iDFTSize + iGuardSize ; i++)
+     printf("%d  %g \n",i,  ((*pvecOutputData)[i]).real());
+   printf("=============\n");  */
 
-	/* Shift spectrum to desired IF ----------------------------------------- */
-	/* Only apply shifting if phase is not zero */
-	if (cExpStep != _COMPLEX(static_cast<_REAL>(1.0), static_cast<_REAL>(0.0)))
-	{
-		for (i = 0; i < iOutputBlockSize; i++)
-		{
-			(*pvecOutputData)[i] = (*pvecOutputData)[i] * Conj(cCurExp);   // pa0mbo shift off
-			
-			/* Rotate exp-pointer on step further by complex multiplication
-			   with precalculated rotation vector cExpStep. This saves us from
-			   calling sin() and cos() functions all the time (iterative
-			   calculation of these functions) */
-			cCurExp *= cExpStep;
-		}
-	}
+  /* Shift spectrum to desired IF ----------------------------------------- */
+  /* Only apply shifting if phase is not zero */
+  if (cExpStep != _COMPLEX(static_cast<_REAL>(1.0), static_cast<_REAL>(0.0))) {
+    for (i = 0; i < iOutputBlockSize; i++) {
+      (*pvecOutputData)[i] = (*pvecOutputData)[i] * Conj(cCurExp); // pa0mbo shift off
+
+      /* Rotate exp-pointer on step further by complex multiplication
+         with precalculated rotation vector cExpStep. This saves us from
+         calling sin() and cos() functions all the time (iterative
+         calculation of these functions) */
+      cCurExp *= cExpStep;
+    }
+  }
 }
 
 void COFDMModulation::InitInternal(CParameter& TransmParam)
 {
-	TransmParam.Lock(); 
-	/* Get global parameters */
-	iDFTSize = TransmParam.CellMappingTable.iFFTSizeN;
-	iGuardSize = TransmParam.CellMappingTable.iGuardSize;
-	iShiftedKmin = TransmParam.CellMappingTable.iShiftedKmin;
+  TransmParam.Lock();
+  /* Get global parameters */
+  iDFTSize = TransmParam.CellMappingTable.iFFTSizeN;
+  iGuardSize = TransmParam.CellMappingTable.iGuardSize;
+  iShiftedKmin = TransmParam.CellMappingTable.iShiftedKmin;
 
-	/* Last index */
-	iEndIndex = TransmParam.CellMappingTable.iShiftedKmax + 1;
+  /* Last index */
+  iEndIndex = TransmParam.CellMappingTable.iShiftedKmax + 1;
 
-	/* Normalized offset correction factor for IF shift. Subtract the
-	   default IF frequency ("VIRTUAL_INTERMED_FREQ") */
-	const _REAL rNormCurFreqOffset = static_cast<_REAL>(-2.0) * crPi *
-//		((_REAL ) -6751.0)/ SOUNDCRD_SAMPLE_RATE;  
-		(rDefCarOffset - VIRTUAL_INTERMED_FREQ) / SOUNDCRD_SAMPLE_RATE;  
-         // printf("COFDMMod rDefCarOffset %g Virt IF %g rNormCurFreqoffset %g \n", rDefCarOffset, (_REAL) VIRTUAL_INTERMED_FREQ,  rNormCurFreqOffset);
+  /* Normalized offset correction factor for IF shift. Subtract the
+     default IF frequency ("VIRTUAL_INTERMED_FREQ") */
+  const _REAL rNormCurFreqOffset = static_cast<_REAL>(-2.0) * crPi *
+                                   //		((_REAL ) -6751.0)/ SOUNDCRD_SAMPLE_RATE;
+                                   (rDefCarOffset - VIRTUAL_INTERMED_FREQ) / SOUNDCRD_SAMPLE_RATE;
+  // printf("COFDMMod rDefCarOffset %g Virt IF %g rNormCurFreqoffset %g \n", rDefCarOffset, (_REAL)
+  // VIRTUAL_INTERMED_FREQ,  rNormCurFreqOffset);
 
-	/* Rotation vector for exp() calculation */
-	cExpStep = _COMPLEX(cos(rNormCurFreqOffset), sin(rNormCurFreqOffset));
+  /* Rotation vector for exp() calculation */
+  cExpStep = _COMPLEX(cos(rNormCurFreqOffset), sin(rNormCurFreqOffset));
 
-         //  printf("COFDMMod cExpStep real %g imag  %g \n", cos(rNormCurFreqOffset), sin(rNormCurFreqOffset));
-	/* Start with phase null (can be arbitrarily chosen) */
-	cCurExp = static_cast<_REAL>(1.0);
+  //  printf("COFDMMod cExpStep real %g imag  %g \n", cos(rNormCurFreqOffset), sin(rNormCurFreqOffset));
+  /* Start with phase null (can be arbitrarily chosen) */
+  cCurExp = static_cast<_REAL>(1.0);
 
-	/* Init plans for FFT (faster processing of Fft and Ifft commands) */
-	FftPlan.Init(iDFTSize);
-   //     printf("In FftPlan.Init  iDFTSize is %d \n", iDFTSize);
+  /* Init plans for FFT (faster processing of Fft and Ifft commands) */
+  FftPlan.Init(iDFTSize);
+  //     printf("In FftPlan.Init  iDFTSize is %d \n", iDFTSize);
 
-	/* Allocate memory for intermediate result of fft. Zero out input vector
-	   (because only a few bins are used, the rest has to be zero) */
-	veccFFTInput.Init(iDFTSize, static_cast<CReal>(0.0));
-	veccFFTOutput.Init(iDFTSize);
+  /* Allocate memory for intermediate result of fft. Zero out input vector
+     (because only a few bins are used, the rest has to be zero) */
+  veccFFTInput.Init(iDFTSize, static_cast<CReal>(0.0));
+  veccFFTOutput.Init(iDFTSize);
 
-	/* Define block-sizes for input and output */
-	iInputBlockSize = TransmParam.CellMappingTable.iNumCarrier;
-	iOutputBlockSize = TransmParam.CellMappingTable.iSymbolBlockSize;
+  /* Define block-sizes for input and output */
+  iInputBlockSize = TransmParam.CellMappingTable.iNumCarrier;
+  iOutputBlockSize = TransmParam.CellMappingTable.iSymbolBlockSize;
 
-	// printf("In COFDMMOd init DFTsize %d Guardsize %d ShiftedKmin %d \n", iDFTSize, iGuardSize, iShiftedKmin);
-	 // printf("In COFDMMOd init Inputblcksize %d Outputblocksize %d \n", iInputBlockSize, iOutputBlockSize);
+  // printf("In COFDMMOd init DFTsize %d Guardsize %d ShiftedKmin %d \n", iDFTSize, iGuardSize, iShiftedKmin);
+  // printf("In COFDMMOd init Inputblcksize %d Outputblocksize %d \n", iInputBlockSize, iOutputBlockSize);
 
 
-	TransmParam.Unlock(); 
+  TransmParam.Unlock();
 }
-
-

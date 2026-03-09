@@ -5,124 +5,125 @@
 #include <QEvent>
 
 
-enum ftpEventType
-{
-  ftp_list=QEvent::User,
-  ftp_remove,
-  ftp_rename,
-  ftp_upload,
-  ftp_download,
-  ftp_disconnect,
-  ftp_cd
-};
+enum ftpEventType { ftp_list = QEvent::User, ftp_remove, ftp_rename, ftp_upload, ftp_download, ftp_disconnect, ftp_cd };
 
 
-class ftpBaseEvent: public QEvent
+class ftpBaseEvent : public QEvent
 {
 public:
-  ftpBaseEvent(QEvent::Type t):QEvent(t) {doneIt=nullptr;}
-  void waitFor(bool *d) {doneIt=d;}
+  ftpBaseEvent(QEvent::Type t) : QEvent(t)
+  {
+    doneIt = nullptr;
+  }
+  void waitFor(bool* d)
+  {
+    doneIt = d;
+  }
   void setDone()
   {
-    if(doneIt!=nullptr) *doneIt=true;
+    if (doneIt != nullptr)
+      *doneIt = true;
   }
   QString description;
   bool closeWhenDone;
   QString source;
   QString destination;
+
 private:
-  bool *doneIt;
+  bool* doneIt;
 };
 
-class ftp_downloadEvent : public  ftpBaseEvent
+class ftp_downloadEvent : public ftpBaseEvent
 {
 public:
   /** create event */
-  ftp_downloadEvent(QString tSource,QString tDestination,bool closeDone):ftpBaseEvent( static_cast<QEvent::Type>(ftp_download))
+  ftp_downloadEvent(QString tSource, QString tDestination, bool closeDone)
+      : ftpBaseEvent(static_cast<QEvent::Type>(ftp_download))
   {
-    description="ftp download";
-    closeWhenDone=closeDone;
-    source=tSource;
-    destination=tDestination;
+    description = "ftp download";
+    closeWhenDone = closeDone;
+    source = tSource;
+    destination = tDestination;
   }
 };
 
-class ftp_uploadEvent : public  ftpBaseEvent
+class ftp_uploadEvent : public ftpBaseEvent
 {
 public:
   /** create event */
-  ftp_uploadEvent(QString tSource,QString tDestination,bool closeDone):ftpBaseEvent( static_cast<QEvent::Type>(ftp_upload))
+  ftp_uploadEvent(QString tSource, QString tDestination, bool closeDone)
+      : ftpBaseEvent(static_cast<QEvent::Type>(ftp_upload))
   {
-    description="ftp upload";
-    closeWhenDone=closeDone;
-    source=tSource;
-    destination=tDestination;
+    description = "ftp upload";
+    closeWhenDone = closeDone;
+    source = tSource;
+    destination = tDestination;
   }
 };
 
-class ftp_renameEvent : public  ftpBaseEvent
+class ftp_renameEvent : public ftpBaseEvent
 {
 public:
   /** create event */
-  ftp_renameEvent(QString tSource,QString tDestination,bool closeDone):ftpBaseEvent( static_cast<QEvent::Type>(ftp_rename))
+  ftp_renameEvent(QString tSource, QString tDestination, bool closeDone)
+      : ftpBaseEvent(static_cast<QEvent::Type>(ftp_rename))
   {
-    description="ftp rename";
-    closeWhenDone=closeDone;
-    source=tSource;
-    destination=tDestination;
-  }
-};
-
-
-
-class ftp_removeEvent : public  ftpBaseEvent
-{
-public:
-  /** create event */
-  ftp_removeEvent(QString tSource,bool closeDone):ftpBaseEvent( static_cast<QEvent::Type>(ftp_remove) )
-  {
-    description="ftp remove";
-    closeWhenDone=closeDone;
-    source=tSource;
-    destination="";
-  }
-};
-
-class ftp_listEvent : public  ftpBaseEvent
-{
-public:
-  /** create event */
-  ftp_listEvent(QString tMask,bool closeDone):ftpBaseEvent( static_cast<QEvent::Type>(ftp_list) )
-  {
-    description="ftp list";
-    closeWhenDone=closeDone;
-    source=tMask;
-    destination="";
+    description = "ftp rename";
+    closeWhenDone = closeDone;
+    source = tSource;
+    destination = tDestination;
   }
 };
 
 
-class ftp_cdEvent : public  ftpBaseEvent
+class ftp_removeEvent : public ftpBaseEvent
 {
 public:
   /** create event */
-  ftp_cdEvent(QString dir):ftpBaseEvent( static_cast<QEvent::Type>(ftp_cd) )
+  ftp_removeEvent(QString tSource, bool closeDone) : ftpBaseEvent(static_cast<QEvent::Type>(ftp_remove))
   {
-    description="ftp cd";
-    closeWhenDone=false;
-    source=dir;
-    destination="";
+    description = "ftp remove";
+    closeWhenDone = closeDone;
+    source = tSource;
+    destination = "";
+  }
+};
+
+class ftp_listEvent : public ftpBaseEvent
+{
+public:
+  /** create event */
+  ftp_listEvent(QString tMask, bool closeDone) : ftpBaseEvent(static_cast<QEvent::Type>(ftp_list))
+  {
+    description = "ftp list";
+    closeWhenDone = closeDone;
+    source = tMask;
+    destination = "";
   }
 };
 
 
-class ftp_disconnectEvent : public  ftpBaseEvent
+class ftp_cdEvent : public ftpBaseEvent
 {
 public:
   /** create event */
-  ftp_disconnectEvent():ftpBaseEvent( static_cast<QEvent::Type>(ftp_disconnect))
+  ftp_cdEvent(QString dir) : ftpBaseEvent(static_cast<QEvent::Type>(ftp_cd))
   {
-    description="ftp disconnect";
+    description = "ftp cd";
+    closeWhenDone = false;
+    source = dir;
+    destination = "";
+  }
+};
+
+
+class ftp_disconnectEvent : public ftpBaseEvent
+{
+public:
+  /** create event */
+  ftp_disconnectEvent() : ftpBaseEvent(static_cast<QEvent::Type>(ftp_disconnect))
+  {
+    description = "ftp disconnect";
   }
 };
 

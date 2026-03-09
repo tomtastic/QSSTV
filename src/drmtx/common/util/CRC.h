@@ -38,22 +38,22 @@
 class CCRC
 {
 public:
-	CCRC();
-	virtual ~CCRC() {}
+  CCRC();
+  virtual ~CCRC() {}
 
-	void Reset(const int iNewDegree);
-	void AddByte(const _BYTE byNewInput);
-	void AddBit(const _BINARY biNewInput);
-	_BOOLEAN CheckCRC(const uint32_t iCRC);
-	uint32_t GetCRC();
-        void crc16_bytewise(double checksum[], unsigned char in[], long N);
+  void Reset(const int iNewDegree);
+  void AddByte(const _BYTE byNewInput);
+  void AddBit(const _BINARY biNewInput);
+  _BOOLEAN CheckCRC(const uint32_t iCRC);
+  uint32_t GetCRC();
+  void crc16_bytewise(double checksum[], unsigned char in[], long N);
 
 protected:
-	int			iDegIndex;
-	uint32_t	iBitOutPosMask;
+  int iDegIndex;
+  uint32_t iBitOutPosMask;
 
-	uint32_t	iPolynMask[16];
-	uint32_t	iStateShiftReg;
+  uint32_t iPolynMask[16];
+  uint32_t iStateShiftReg;
 };
 
 

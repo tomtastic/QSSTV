@@ -13,18 +13,18 @@
 
 #include <QWidget>
 
-enum etxMode {TXUPLOAD,TXBINARY,TXNORMAL};
+enum etxMode { TXUPLOAD, TXBINARY, TXNORMAL };
 
-#define NOTIFYCHECKINTERVAL 15*1000
+#define NOTIFYCHECKINTERVAL 15 * 1000
 #define NUMBEROFNOTIFYCHECKS 4
 
-//#define DRMMAXSIZE 100000
-//#define DRMMINSIZE 3000
-
+// #define DRMMAXSIZE 100000
+// #define DRMMINSIZE 3000
 
 
 class drmTransmitter;
-namespace Ui {
+namespace Ui
+{
 class txWidget;
 }
 
@@ -33,33 +33,39 @@ class txWidget : public QWidget
   Q_OBJECT
 
 public:
-  explicit txWidget(QWidget *parent = 0);
+  explicit txWidget(QWidget* parent = 0);
   ~txWidget();
   void init();
-//  void startTX(bool st, bool check=true);
+  //  void startTX(bool st, bool check=true);
   void prepareTx();
   void prepareTxComplete(bool ok);
   void writeSettings();
   void readSettings();
   //  void repeat(QImage *im,esstvMode sm);
-  void sendRepeaterImage(esstvMode rxMode=NOTVALID);
-  void setImage(QImage *ima);
-  void setImage(const QString &fn);
+  void sendRepeaterImage(esstvMode rxMode = NOTVALID);
+  void setImage(QImage* ima);
+  void setImage(const QString& fn);
   void setProgress(uint prg);
   void setupTemplatesComboBox();
-  void setPreviewWidget(const QString &fn);
+  void setPreviewWidget(const QString& fn);
   void setSettingsTab();
-  txFunctions *functionsPtr() {return txFunctionsPtr;}
-  imageViewer *getImageViewerPtr(){ return imageViewerPtr;}
+  txFunctions* functionsPtr()
+  {
+    return txFunctionsPtr;
+  }
+  imageViewer* getImageViewerPtr()
+  {
+    return imageViewerPtr;
+  }
   QString getPreviewFilename();
   void txTestPattern(etpSelect sel);
-  void startNotifyCheck(const QString &tmask);
+  void startNotifyCheck(const QString& tmask);
 
-  void setDRMNotifyText(const QString &txt)
+  void setDRMNotifyText(const QString& txt)
   {
     ui->txNotificationList->setPlainText(txt);
   }
-  void appendDRMNotifyText(const QString &txt)
+  void appendDRMNotifyText(const QString& txt)
   {
     ui->txNotificationList->appendPlainText(txt);
   }
@@ -97,7 +103,7 @@ public slots:
   void slotSize(int fsize);
   void slotSizeApply();
   void slotTransmissionMode(int rxtxMode);
-  void slotProfileChanged(int );
+  void slotProfileChanged(int);
 
   void slotModeChanged(int);
   void slotResizeChanged(int);
@@ -109,35 +115,35 @@ public slots:
 
 private slots:
   void slotRepaterDelay();
-    void slotImageChanged();
+  void slotImageChanged();
 
 signals:
   void modeSwitch(int);
 
 protected:
-  void showEvent(QShowEvent *event) override;
-  void paintEvent(QPaintEvent *event) override;
+  void showEvent(QShowEvent* event) override;
+  void paintEvent(QPaintEvent* event) override;
 
 private:
   void initView();
   void setParams();
-  void sendHybrid(const QString &fn);
+  void sendHybrid(const QString& fn);
   void applyTemplate();
   void updateTxTime();
   void startTxImage();
   void enableButtons(bool enable);
 
-  Ui::txWidget *ui;
-  txFunctions *txFunctionsPtr;
+  Ui::txWidget* ui;
+  txFunctions* txFunctionsPtr;
 
-  editor *ed;
-  QTimer *repeaterTimer;
+  editor* ed;
+  QTimer* repeaterTimer;
   QTimer repeaterTxDelayTimer;
   int repeaterIndex;
   QImage origImage;
   QImage resultImage;
 
-  imageViewer *imageViewerPtr;
+  imageViewer* imageViewerPtr;
   etransmissionMode currentTXMode;
   uint maxSize;
   uint compressedSize;
@@ -153,22 +159,6 @@ private:
   bool notifyBusy;
   bool repeaterIdleImage;
   float fileSize;
-
 };
 
 #endif // TXWIDGET_H
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

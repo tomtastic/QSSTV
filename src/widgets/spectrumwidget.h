@@ -4,26 +4,27 @@
 #include <QFrame>
 #include "fftcalc.h"
 
-namespace Ui {
-  class spectrumWidget;
-  }
+namespace Ui
+{
+class spectrumWidget;
+}
 
 class spectrumWidget : public QFrame
 {
   Q_OBJECT
-  
+
 public:
-  spectrumWidget(QWidget *parent = 0);
+  spectrumWidget(QWidget* parent = 0);
   ~spectrumWidget();
   void init(int length, int numBlocks, int isamplingrate);
-//  void realFFT(short int *iBuffer);
-//  void realFFT(float *iBuffer);
-  void realFFT(double *iBuffer);
+  //  void realFFT(short int *iBuffer);
+  //  void realFFT(float *iBuffer);
+  void realFFT(double* iBuffer);
   void readSettings();
   void writeSettings();
   void displaySettings(bool drm);
   double getVolumeDb();
-  QImage *getImage();
+  QImage* getImage();
 
 private slots:
   void slotMaxDbChanged(int mb);
@@ -31,9 +32,9 @@ private slots:
   void getParams();
   void setParams();
   void slotAvgChanged(double);
-  
+
 private:
-  Ui::spectrumWidget *ui;
+  Ui::spectrumWidget* ui;
   int maxdb;
   int range;
   double avg;

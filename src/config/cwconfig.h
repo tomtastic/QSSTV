@@ -6,27 +6,28 @@
 extern QString cwText;
 extern int cwTone;
 extern int cwWPM;
-//extern bool enableCW;
+// extern bool enableCW;
 
 
-namespace Ui {
+namespace Ui
+{
 class cwConfig;
 }
 
 class cwConfig : public baseConfig
 {
   Q_OBJECT
-  
+
 public:
-  explicit cwConfig(QWidget *parent = 0);
+  explicit cwConfig(QWidget* parent = 0);
   ~cwConfig();
   void readSettings();
   void writeSettings();
   void getParams();
   void setParams();
-  
+
 private:
-  Ui::cwConfig *ui;
+  Ui::cwConfig* ui;
 };
 
 #endif // CWCONFIG_H

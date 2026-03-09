@@ -11,22 +11,17 @@
 #include "txwidget.h"
 
 
-
-galleryWidget::galleryWidget(QWidget *parent) :
-  QWidget(parent),
-  ui(new Ui::galleryWidget)
+galleryWidget::galleryWidget(QWidget* parent) : QWidget(parent), ui(new Ui::galleryWidget)
 {
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0);
   ui->templateMatrix->setSortFlag(QDir::Name);
-
 }
 
 galleryWidget::~galleryWidget()
 {
   writeSettings();
   delete ui;
-
 }
 
 
@@ -48,48 +43,44 @@ void galleryWidget::changedMatrix()
 
 void galleryWidget::slotDirChanged(QString dn)
 {
-  if(recursiveScanDirs) {
+  if (recursiveScanDirs) {
     fileWatcherPtr->addPathRecursive(dn);
   }
-  if(dn.startsWith(txStockImagesPath))
-    {
-      ui->txStockMatrix->changed();
-    }
-  if(dn.startsWith(templatesPath))
-    {
-      ui->templateMatrix->changed();
-      txWidgetPtr->setupTemplatesComboBox();
-    }
+  if (dn.startsWith(txStockImagesPath)) {
+    ui->txStockMatrix->changed();
+  }
+  if (dn.startsWith(templatesPath)) {
+    ui->templateMatrix->changed();
+    txWidgetPtr->setupTemplatesComboBox();
+  }
 }
 
 
 void galleryWidget::changedMatrix(imageViewer::thumbType itype)
 {
-  switch(itype)
-    {
-    case imageViewer::RXSSTVTHUMB:
-      ui->rxSSTVMatrix->init(galleryRows,galleryColumns,rxSSTVImagesPath,imageViewer::RXSSTVTHUMB);
-      break;
-    case imageViewer::RXDRMTHUMB:
-      ui->rxDRMMatrix->init(galleryRows,galleryColumns,rxDRMImagesPath,imageViewer::RXDRMTHUMB);
-      break;
-    case imageViewer::TXSSTVTHUMB:
-      ui->txSSTVMatrix->init(galleryRows,galleryColumns,txSSTVImagesPath,imageViewer::TXSSTVTHUMB);
-      break;
-    case imageViewer::TXDRMTHUMB:
-      ui->txDRMMatrix->init(galleryRows,galleryColumns,txDRMImagesPath,imageViewer::TXDRMTHUMB);
-      break;
-    case imageViewer::TXSTOCKTHUMB:
-      ui->txStockMatrix->init(galleryRows,galleryColumns,txStockImagesPath,imageViewer::TXSTOCKTHUMB);
-      break;
-    case imageViewer::TEMPLATETHUMB:
-      ui->templateMatrix->init(galleryRows,galleryColumns,templatesPath,imageViewer::TEMPLATETHUMB);
-      break;
-    default:
-      break;
-    }
+  switch (itype) {
+  case imageViewer::RXSSTVTHUMB:
+    ui->rxSSTVMatrix->init(galleryRows, galleryColumns, rxSSTVImagesPath, imageViewer::RXSSTVTHUMB);
+    break;
+  case imageViewer::RXDRMTHUMB:
+    ui->rxDRMMatrix->init(galleryRows, galleryColumns, rxDRMImagesPath, imageViewer::RXDRMTHUMB);
+    break;
+  case imageViewer::TXSSTVTHUMB:
+    ui->txSSTVMatrix->init(galleryRows, galleryColumns, txSSTVImagesPath, imageViewer::TXSSTVTHUMB);
+    break;
+  case imageViewer::TXDRMTHUMB:
+    ui->txDRMMatrix->init(galleryRows, galleryColumns, txDRMImagesPath, imageViewer::TXDRMTHUMB);
+    break;
+  case imageViewer::TXSTOCKTHUMB:
+    ui->txStockMatrix->init(galleryRows, galleryColumns, txStockImagesPath, imageViewer::TXSTOCKTHUMB);
+    break;
+  case imageViewer::TEMPLATETHUMB:
+    ui->templateMatrix->init(galleryRows, galleryColumns, templatesPath, imageViewer::TEMPLATETHUMB);
+    break;
+  default:
+    break;
+  }
 }
-
 
 
 /*!
@@ -99,24 +90,24 @@ void galleryWidget::changedMatrix(imageViewer::thumbType itype)
 void galleryWidget::readSettings()
 {
   QSettings qSettings;
-  qSettings.beginGroup ("Gallery");
+  qSettings.beginGroup("Gallery");
 
-  splashStr+=QString( "Loading RX images" ).rightJustified(25,' ')+"\n";
-  splashPtr->showMessage ( splashStr ,Qt::AlignLeft,Qt::white);
+  splashStr += QString("Loading RX images").rightJustified(25, ' ') + "\n";
+  splashPtr->showMessage(splashStr, Qt::AlignLeft, Qt::white);
   qApp->processEvents();
-  ui->rxSSTVMatrix->init(galleryRows,galleryColumns,rxSSTVImagesPath,imageViewer::RXSSTVTHUMB);
-  ui->rxDRMMatrix->init(galleryRows,galleryColumns,rxDRMImagesPath,imageViewer::RXDRMTHUMB);
+  ui->rxSSTVMatrix->init(galleryRows, galleryColumns, rxSSTVImagesPath, imageViewer::RXSSTVTHUMB);
+  ui->rxDRMMatrix->init(galleryRows, galleryColumns, rxDRMImagesPath, imageViewer::RXDRMTHUMB);
 
-  splashStr+=QString( "Loading TX images" ).rightJustified(25,' ')+"\n";
-  splashPtr->showMessage ( splashStr ,Qt::AlignLeft,Qt::white);
+  splashStr += QString("Loading TX images").rightJustified(25, ' ') + "\n";
+  splashPtr->showMessage(splashStr, Qt::AlignLeft, Qt::white);
   qApp->processEvents();
-  ui->txSSTVMatrix->init(galleryRows,galleryColumns,txSSTVImagesPath,imageViewer::TXSSTVTHUMB);
-  ui->txDRMMatrix->init(galleryRows,galleryColumns,txDRMImagesPath,imageViewer::TXDRMTHUMB);
-  ui->txStockMatrix->init(galleryRows,galleryColumns,txStockImagesPath,imageViewer::TXSTOCKTHUMB);
+  ui->txSSTVMatrix->init(galleryRows, galleryColumns, txSSTVImagesPath, imageViewer::TXSSTVTHUMB);
+  ui->txDRMMatrix->init(galleryRows, galleryColumns, txDRMImagesPath, imageViewer::TXDRMTHUMB);
+  ui->txStockMatrix->init(galleryRows, galleryColumns, txStockImagesPath, imageViewer::TXSTOCKTHUMB);
 
-  splashStr+=QString( "Loading Templates" ).rightJustified(25,' ')+"\n";
-  splashPtr->showMessage ( splashStr ,Qt::AlignLeft,Qt::white);
-  ui->templateMatrix->init(galleryRows,galleryColumns,templatesPath,imageViewer::TEMPLATETHUMB);
+  splashStr += QString("Loading Templates").rightJustified(25, ' ') + "\n";
+  splashPtr->showMessage(splashStr, Qt::AlignLeft, Qt::white);
+  ui->templateMatrix->init(galleryRows, galleryColumns, templatesPath, imageViewer::TEMPLATETHUMB);
 }
 
 /*!
@@ -125,14 +116,13 @@ void galleryWidget::readSettings()
 void galleryWidget::writeSettings()
 {
   QSettings qSettings;
-  qSettings.beginGroup ( "Gallery" );
+  qSettings.beginGroup("Gallery");
   qSettings.endGroup();
 }
 
 /*!
   setup of the user interface
 */
-
 
 
 /*!
@@ -147,35 +137,32 @@ void galleryWidget::writeSettings()
   \return QString containing filename, check with QString.isNull for validity
 */
 
-QString galleryWidget::getTemplateFileName ( int tm )
+QString galleryWidget::getTemplateFileName(int tm)
 {
   int i;
   QString str;
   QStringList slTemp;
-  if(tm>=0)
-    {
-      for(i=0;i<ui->templateMatrix->getFileList().count();i++)
-        {
-          str=ui->templateMatrix->getFileList().at(i).absoluteFilePath();
-          slTemp.append(str);
-        }
-      slTemp.sort();
-      return slTemp.at(tm);
+  if (tm >= 0) {
+    for (i = 0; i < ui->templateMatrix->getFileList().count(); i++) {
+      str = ui->templateMatrix->getFileList().at(i).absoluteFilePath();
+      slTemp.append(str);
     }
-  else return QString();
+    slTemp.sort();
+    return slTemp.at(tm);
+  } else
+    return QString();
 }
 
-const QStringList &galleryWidget::getFilenames()
+const QStringList& galleryWidget::getFilenames()
 {
   QString str;
   sl.clear();
   int i;
-  for(i=0;i<ui->templateMatrix->getFileList().count();i++)
-    {
-      str=getTemplateFileName (i);
-      QFileInfo fi(str);
-      sl.append(fi.baseName());
-    }
+  for (i = 0; i < ui->templateMatrix->getFileList().count(); i++) {
+    str = getTemplateFileName(i);
+    QFileInfo fi(str);
+    sl.append(fi.baseName());
+  }
   return sl;
 }
 
@@ -186,30 +173,24 @@ const QStringList &galleryWidget::getFilenames()
 
 */
 
-void galleryWidget::putRxImage(const QString &fn)
+void galleryWidget::putRxImage(const QString& fn)
 {
-  if(transmissionModeIndex==TRXSSTV)
-    {
-      statusBarPtr->showMessage ( "Saved: "+fn );
-      ui->rxSSTVMatrix->changed();
-    }
-  else
-    {
-      statusBarPtr->showMessage ( "Saved: "+fn+QString("  (%1dB)").arg(lastAvgSNR,0,'f',0) );
-      ui->rxDRMMatrix->changed();
-    }
+  if (transmissionModeIndex == TRXSSTV) {
+    statusBarPtr->showMessage("Saved: " + fn);
+    ui->rxSSTVMatrix->changed();
+  } else {
+    statusBarPtr->showMessage("Saved: " + fn + QString("  (%1dB)").arg(lastAvgSNR, 0, 'f', 0));
+    ui->rxDRMMatrix->changed();
+  }
 }
 
 void galleryWidget::txImageChanged()
 {
-  if(transmissionModeIndex==TRXSSTV)
-    {
-      ui->txSSTVMatrix->changed();
-    }
-  else
-    {
-      ui->txDRMMatrix->changed();
-    }
+  if (transmissionModeIndex == TRXSSTV) {
+    ui->txSSTVMatrix->changed();
+  } else {
+    ui->txDRMMatrix->changed();
+  }
 }
 
 void galleryWidget::txStockImageChanged()
@@ -228,9 +209,3 @@ QString galleryWidget::getLastRxImage()
 {
   return ui->rxDRMMatrix->getLastFile();
 }
-
-
-
-
-
-

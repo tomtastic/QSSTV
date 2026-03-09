@@ -32,13 +32,13 @@
 
 
 #define SYNCBPNUMZEROES 10
-#define SYNCBPNUMPOLES  10
-#define SYNCBP1200GAIN (2036425.679557*7.7)
-extern const double z_sync_bp1200[SYNCBPNUMZEROES+1];
+#define SYNCBPNUMPOLES 10
+#define SYNCBP1200GAIN (2036425.679557 * 7.7)
+extern const double z_sync_bp1200[SYNCBPNUMZEROES + 1];
 extern const double p_sync_bp1200[SYNCBPNUMPOLES];
 
 #define SYNCBP1900GAIN 15076908.367168
-extern const double z_sync_bp1900[SYNCBPNUMZEROES+1];
+extern const double z_sync_bp1900[SYNCBPNUMZEROES + 1];
 extern const double p_sync_bp1900[SYNCBPNUMPOLES];
 
 
@@ -47,14 +47,10 @@ extern const double p_sync_bp1900[SYNCBPNUMPOLES];
 extern const double z_sync_lp[SYNCLPTAPS];
 
 
-
-
-
-
 #define VIDEOBPNUMZEROES 8
 #define VIDEOBPNUMPOLES 8
 #define VIDEOBPGAIN 2284.945151
-extern const double z_video_bp[VIDEOBPNUMZEROES+1];
+extern const double z_video_bp[VIDEOBPNUMZEROES + 1];
 extern const double p_video_bp[VIDEOBPNUMPOLES];
 
 
@@ -64,26 +60,23 @@ extern const double p_video_bp[VIDEOBPNUMPOLES];
 extern const double videoFilterCoefFIR[VIDEOFIRNUMTAPS];
 
 
-
 #define DRMHILBERTTAPS 153
 #define DRMHILBERTGAIN 1.569749
 extern const FILTERPARAMTYPE drmHilbertCoef[DRMHILBERTTAPS];
 
-enum efilterType {FNARROW,FWIDE};
-enum epostFilterType {NONE};
-extern const  FILTERPARAMTYPE wfFilterCoef[TXWFNUMTAPS];
+enum efilterType { FNARROW, FWIDE };
+enum epostFilterType { NONE };
+extern const FILTERPARAMTYPE wfFilterCoef[TXWFNUMTAPS];
 
-DSPFLOAT calculateGain(const DSPFLOAT *fp,unsigned int len);
+DSPFLOAT calculateGain(const DSPFLOAT* fp, unsigned int len);
 
-struct sfilters
-{
+struct sfilters {
   const QString filterName;
-  const FILTERPARAMTYPE *filterPtr;
+  const FILTERPARAMTYPE* filterPtr;
   DSPFLOAT centerFrequency;
 };
 
-//extern sfilters filterStruct[NUMRXFILTERS];
+// extern sfilters filterStruct[NUMRXFILTERS];
 
 
- 
- #endif
+#endif

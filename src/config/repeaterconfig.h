@@ -19,16 +19,17 @@ extern QString repeaterIdleTemplate;
 extern int repeaterTxDelay;
 extern int repeaterImageSize; // in kB
 
-namespace Ui {
+namespace Ui
+{
 class repeaterConfig;
 }
 
 class repeaterConfig : public baseConfig
 {
   Q_OBJECT
-  
+
 public:
-  explicit repeaterConfig(QWidget *parent = 0);
+  explicit repeaterConfig(QWidget* parent = 0);
   ~repeaterConfig();
   void readSettings();
   void writeSettings();
@@ -42,9 +43,9 @@ private slots:
   void slotRp4Browse();
   void slotRepeaterIdleTemplateBrowse();
   void slotRepeaterTemplateBrowse();
-  
+
 private:
-  Ui::repeaterConfig *ui;
+  Ui::repeaterConfig* ui;
 };
 
 #endif // REPEATERCONFIG_H

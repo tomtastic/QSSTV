@@ -30,25 +30,24 @@
 #include "dispatcher.h"
 #endif
 
-/*! 
+/*!
   constructor
 */
-editor::editor(QWidget *parent): QMainWindow(parent)
+editor::editor(QWidget* parent) : QMainWindow(parent)
 {
-  ev=new editorView(this);
-  setCentralWidget (ev);
+  ev = new editorView(this);
+  setCentralWidget(ev);
   initActions();
   initMenubar();
   statusBar()->showMessage("Select a tool");
-  setMinimumSize(640,480);
-  resize(640,480);
-  addToLog (QString(" editor create: %1")
-            .arg(QString::number((ulong)this,16)),LOGEDIT);
+  setMinimumSize(640, 480);
+  resize(640, 480);
+  addToLog(QString(" editor create: %1").arg(QString::number((ulong) this, 16)), LOGEDIT);
   setWindowTitle("Template Editor");
   readSettings();
 }
 
-/*! 
+/*!
   destructor (saves settings on deletion)
 */
 
@@ -57,91 +56,91 @@ editor::~editor()
   writeSettings();
 }
 
-/*! 
+/*!
   reads the settings (saved images for tx,rx,templates)
 */
 
 void editor::readSettings()
 {
   QSettings qSettings;
-  qSettings.beginGroup ("Editor" );
-  int windowWidth = qSettings.value( "windowWidth", 640 ).toInt();
-  int windowHeight = qSettings.value( "windowHeight", 480 ).toInt();
-  int windowX = qSettings.value( "windowX", -1 ).toInt();
-  int windowY = qSettings.value( "windowY", -1 ).toInt();
-  if ( windowX != -1 || windowY != -1 ) 	move ( windowX, windowY );
-  resize ( windowWidth, windowHeight );
+  qSettings.beginGroup("Editor");
+  int windowWidth = qSettings.value("windowWidth", 640).toInt();
+  int windowHeight = qSettings.value("windowHeight", 480).toInt();
+  int windowX = qSettings.value("windowX", -1).toInt();
+  int windowY = qSettings.value("windowY", -1).toInt();
+  if (windowX != -1 || windowY != -1)
+    move(windowX, windowY);
+  resize(windowWidth, windowHeight);
   qSettings.endGroup();
 }
 
-/*! 
+/*!
   writes the settings (saved images for tx,rx,templates)
 */
 void editor::writeSettings()
 {
   QSettings qSettings;
-  qSettings.beginGroup ("Editor" );
-  qSettings.setValue ( "windowWidth", width() );
-  qSettings.setValue ( "windowHeight", height() );
-  qSettings.setValue ( "windowX", x() );
-  qSettings.setValue ( "windowY", y() );
+  qSettings.beginGroup("Editor");
+  qSettings.setValue("windowWidth", width());
+  qSettings.setValue("windowHeight", height());
+  qSettings.setValue("windowX", x());
+  qSettings.setValue("windowY", y());
   qSettings.endGroup();
 }
 
 
 void editor::initActions()
 {
-  fileNew = new QAction(QIcon(":/icons/filenew.png"),tr("&New"),this);
+  fileNew = new QAction(QIcon(":/icons/filenew.png"), tr("&New"), this);
   fileNew->setShortcut(tr("Ctrl+N"));
   fileNew->setStatusTip(tr("Create a new image"));
   connect(fileNew, &QAction::triggered, this, &editor::slotFileNew);
 
-  fileOpen = new QAction(QIcon(":/icons/fileopen.png"),tr("&Open"),this);
+  fileOpen = new QAction(QIcon(":/icons/fileopen.png"), tr("&Open"), this);
   fileOpen->setShortcut(tr("Ctrl+O"));
   fileOpen->setStatusTip(tr("Open an image file"));
   connect(fileOpen, &QAction::triggered, this, &editor::slotFileOpen);
 
-  fileSave = new QAction(QIcon(":/icons/filesave.png"),tr("&Save file"),this);
+  fileSave = new QAction(QIcon(":/icons/filesave.png"), tr("&Save file"), this);
   fileSave->setStatusTip(tr("Save the file under the same name and format"));
   connect(fileSave, &QAction::triggered, this, &editor::slotFileSave);
 
-  fileSaveImage = new QAction(tr("Save as &Image"),this);
+  fileSaveImage = new QAction(tr("Save as &Image"), this);
   fileSaveImage->setStatusTip(tr("Save the file in PNG format"));
   connect(fileSaveImage, &QAction::triggered, this, &editor::slotFileSaveImage);
 
-  fileSaveTemplate = new QAction(("Save as &Template"),this);
+  fileSaveTemplate = new QAction(("Save as &Template"), this);
   fileSaveTemplate->setStatusTip(tr("Save template file "));
   connect(fileSaveTemplate, &QAction::triggered, this, &editor::slotFileSaveTemplate);
 
-  fileQuit = new QAction(tr("Quit"),this);
+  fileQuit = new QAction(tr("Quit"), this);
   fileQuit->setShortcut(tr("Ctrl+Q"));
   fileQuit->setStatusTip(tr("Quits the editor"));
   connect(fileQuit, &QAction::triggered, this, &editor::slotFileQuit);
 
-  clearAll= new QAction(QIcon(":/icons/eraser.png"),tr("Clear &All"),this);
+  clearAll = new QAction(QIcon(":/icons/eraser.png"), tr("Clear &All"), this);
   clearAll->setShortcut(tr("Ctrl+A"));
   clearAll->setStatusTip(tr("Delete all objects and fill the background with the background color"));
   connect(clearAll, &QAction::triggered, ev, &editorView::slotClearAll);
 
-  copy= new QAction(tr("Copy"),this);
+  copy = new QAction(tr("Copy"), this);
   copy->setShortcut(tr("Ctrl+C"));
   connect(copy, &QAction::triggered, ev->getScene(), &editorScene::slotCopy);
 
-  paste= new QAction(tr("Paste"),this);
+  paste = new QAction(tr("Paste"), this);
   paste->setShortcut(tr("Ctrl+V"));
   connect(paste, &QAction::triggered, ev->getScene(), &editorScene::slotPaste);
 
-  deleteAction=new QAction(tr("&Delete"),this);
+  deleteAction = new QAction(tr("&Delete"), this);
   deleteAction->setShortcut(tr("Del"));
   connect(deleteAction, &QAction::triggered, ev->getScene(), &editorScene::slotDeleteItem);
 }
 
 
-
 void editor::initMenubar()
 {
-  fileMenu=menuBar()->addMenu(tr("&File"));
-  editMenu=menuBar()->addMenu(tr("&Edit"));
+  fileMenu = menuBar()->addMenu(tr("&File"));
+  editMenu = menuBar()->addMenu(tr("&Edit"));
   fileMenu->addAction(fileNew);
   fileMenu->addAction(fileOpen);
   fileMenu->addAction(fileSave);
@@ -157,21 +156,19 @@ void editor::initMenubar()
 
 void editor::slotFileNew()
 {
-  if(ev->isModified())
-    {
-      int ret=QMessageBox::question( this, "Editor",
-                                        "The document has not been saved as a template\n"
-                                        "&Continue Anyway",
-                                        QMessageBox::Yes |  QMessageBox::No,QMessageBox::No );
-      switch (ret)
-        { // Escape == button 2
-        case QMessageBox::Yes: // Continu clicked
-          break;
-        case QMessageBox::No: // Cancel clicked
-          return;
-          break;
-        }
+  if (ev->isModified()) {
+    int ret = QMessageBox::question(this, "Editor",
+                                    "The document has not been saved as a template\n"
+                                    "&Continue Anyway",
+                                    QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+    switch (ret) {         // Escape == button 2
+    case QMessageBox::Yes: // Continu clicked
+      break;
+    case QMessageBox::No: // Cancel clicked
+      return;
+      break;
     }
+  }
   ev->slotClearAll();
   localFile.close();
   localFile.setFileName("Untitled.templ");
@@ -182,16 +179,17 @@ void editor::slotFileOpen()
 {
   /*	QFileDialog *fd = new QFileDialog(this,0,true);
   fd->show();*/
-  dirDialog d(this,0);
-  QString s=d.openFileName(templatesPath,"*.png *.gif *.jpg *.templ");
-  if (s.isNull()) return ;
-  if (s.isEmpty()) return ;
+  dirDialog d(this, 0);
+  QString s = d.openFileName(templatesPath, "*.png *.gif *.jpg *.templ");
+  if (s.isNull())
+    return;
+  if (s.isEmpty())
+    return;
   localFile.setFileName(s);
-  if(ev->open(localFile))
-    {
-      setWindowTitle(QString("Template Editor: %1").arg(s));
-      addToLog("localfile after open = " + localFile.fileName(),LOGEDIT);
-    }
+  if (ev->open(localFile)) {
+    setWindowTitle(QString("Template Editor: %1").arg(s));
+    addToLog("localfile after open = " + localFile.fileName(), LOGEDIT);
+  }
 }
 
 /*!
@@ -201,52 +199,50 @@ void editor::slotFileOpen()
 
 void editor::slotFileSave()
 {
-  if(localFile.fileName().isEmpty())
-    {
-      slotFileSaveTemplate();
-      return;
-    }
-  if(ev->getScene()->getImageType()==editorScene::FLATIMAGE)
-    {
-      addToLog("localfile to save = " + localFile.fileName(),LOGEDIT);
-      ev->save(localFile,false);
-    }
-  else
-    {
-      ev->save(localFile,true);
-    }
+  if (localFile.fileName().isEmpty()) {
+    slotFileSaveTemplate();
+    return;
+  }
+  if (ev->getScene()->getImageType() == editorScene::FLATIMAGE) {
+    addToLog("localfile to save = " + localFile.fileName(), LOGEDIT);
+    ev->save(localFile, false);
+  } else {
+    ev->save(localFile, true);
+  }
 }
 
 void editor::slotFileSaveImage()
 {
-  dirDialog d(this,"Editor");
+  dirDialog d(this, "Editor");
   QString s(localFile.fileName());
-  if(s.isEmpty())
-    {
-      s=txStockImagesPath;
-    }
-  s=d.saveFileName(s,"*.png","png");
-  if (s.isNull()) return ;
-  if (s.isEmpty()) return ;
+  if (s.isEmpty()) {
+    s = txStockImagesPath;
+  }
+  s = d.saveFileName(s, "*.png", "png");
+  if (s.isNull())
+    return;
+  if (s.isEmpty())
+    return;
   localFile.setFileName(s);
   setWindowTitle(QString("Template Editor: %1").arg(s));
-  ev->save(localFile,false);
+  ev->save(localFile, false);
 }
 
 void editor::slotFileSaveTemplate()
 {
-  dirDialog d(this,"Browse");
+  dirDialog d(this, "Browse");
   QString s(localFile.fileName());
-  if(s.isEmpty())
-    {
-      s=templatesPath;
-    }
-  s=d.saveFileName(s,"*.templ","templ");
-  if (s.isNull()) return ;
-  if (s.isEmpty()) return ;
+  if (s.isEmpty()) {
+    s = templatesPath;
+  }
+  s = d.saveFileName(s, "*.templ", "templ");
+  if (s.isNull())
+    return;
+  if (s.isEmpty())
+    return;
   localFile.setFileName(s);
   setWindowTitle(QString("Template Editor: %1").arg(s));
-  ev->save(localFile,true);
+  ev->save(localFile, true);
 }
 
 
@@ -257,45 +253,40 @@ void editor::slotFileQuit()
 }
 
 
-
-void editor::closeEvent(QCloseEvent *e)
+void editor::closeEvent(QCloseEvent* e)
 {
-
-  if(ev->isModified())
-    {
-      QMessageBox msgBox;
-      msgBox.setText("The document has been modified.");
-      msgBox.setInformativeText("Do you want to save your changes?");
-      msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-      msgBox.setDefaultButton(QMessageBox::Save);
-      int ret = msgBox.exec();
-      switch (ret)
-        {
-        case QMessageBox::Save:
-          slotFileSave();
-          break;
-        case QMessageBox::Discard:
-          // Don't Save was clicked
-          break;
-        case QMessageBox::Cancel:
-          return;
-          break;
-        default:
-          // should never be reached
-          break;
-        }
+  if (ev->isModified()) {
+    QMessageBox msgBox;
+    msgBox.setText("The document has been modified.");
+    msgBox.setInformativeText("Do you want to save your changes?");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();
+    switch (ret) {
+    case QMessageBox::Save:
+      slotFileSave();
+      break;
+    case QMessageBox::Discard:
+      // Don't Save was clicked
+      break;
+    case QMessageBox::Cancel:
+      return;
+      break;
+    default:
+      // should never be reached
+      break;
     }
+  }
 #ifndef STANDALONE
-  editorFinishedEvent *ce = new editorFinishedEvent(true,localFile.fileName());
-  QApplication::postEvent(dispatcherPtr, ce );  // Qt will delete it when done	emit imageAvailable(ev->getImage());
+  editorFinishedEvent* ce = new editorFinishedEvent(true, localFile.fileName());
+  QApplication::postEvent(dispatcherPtr, ce); // Qt will delete it when done	emit imageAvailable(ev->getImage());
 #endif
   writeSettings();
   e->accept();
 }
 
 
-
-bool editor::setImage(QImage *im)
+bool editor::setImage(QImage* im)
 {
   ev->setImage(im);
   return true;
@@ -307,4 +298,3 @@ bool editor::openFile(QString fn)
   localFile.setFileName(fn);
   return ev->open(f);
 }
-

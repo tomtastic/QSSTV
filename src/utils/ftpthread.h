@@ -15,7 +15,7 @@
 class QFtp;
 class QFile;
 
-enum eftpError {FTPOK,FTPERROR,FTPTIMEOUT};
+enum eftpError { FTPOK, FTPERROR, FTPTIMEOUT };
 
 class ftpThread : public QObject
 {
@@ -26,9 +26,9 @@ public:
 
   void setHostParams(QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory);
 public slots:
-//  void slotStart();
-  void customEvent( QEvent * ev );
-  QList <QUrlInfo> getList()
+  //  void slotStart();
+  void customEvent(QEvent* ev);
+  QList<QUrlInfo> getList()
   {
     return listingResults;
   }
@@ -39,31 +39,31 @@ private slots:
   void slotTimeout();
   void slotDisconnect();
   void slotCommandStarted(int);
-  void slotCommandFinished(int,bool);
+  void slotCommandFinished(int, bool);
   void slotDone(bool);
   void slotStateChanged(int state);
-  void slotListInfo(const QUrlInfo &);
-  void slotRawCommandReply(int, const QString &);
-  void slotProgress(qint64,qint64);
+  void slotListInfo(const QUrlInfo&);
+  void slotRawCommandReply(int, const QString&);
+  void slotProgress(qint64, qint64);
 
 signals:
   void finished();
-  void commandsDone(int error,QString errorStr);
+  void commandsDone(int error, QString errorStr);
   void listingComplete(bool err);
-  void downloadFinished(bool err,QString fn);
+  void downloadFinished(bool err, QString fn);
   void ftpQuit();
 
 private:
   QString idName;
   bool canCloseWhenDone;
   bool displayProgress;
-  QFtp *qftpPtr;
+  QFtp* qftpPtr;
 
-  void setupConnection(QString tHost,int tPort,QString tUser,QString tPasswd,QString tDirectory);
+  void setupConnection(QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory);
   void destroy();
   void doConnect();
   void connectToHost();
-  void changePath( const QString &newPath );
+  void changePath(const QString& newPath);
   int listFiles(QString mask);
   void uploadFile(QString source, QString destination);
   void downloadFile(QString source, QString destination);
@@ -85,15 +85,15 @@ private:
   bool aborting;
   bool stopThread;
 
-  QTimer *timeoutTimerPtr;
-  QTimer *disconnectTimerPtr;
-  QTimer *notifyTimerPtr;
+  QTimer* timeoutTimerPtr;
+  QTimer* disconnectTimerPtr;
+  QTimer* notifyTimerPtr;
 
-  bool   timeoutExpired;
+  bool timeoutExpired;
   int timeoutValue;
 
-//  void slotStateChanged( int );
-  void dumpState( int state );
+  //  void slotStateChanged( int );
+  void dumpState(int state);
 
 
   bool isLoggedIn();
@@ -101,13 +101,13 @@ private:
   bool isBusy();
 
 
-//  void execFTPTest();
+  //  void execFTPTest();
 
   eftpError lastError;
   QString lastErrorStr;
-  QFile *sourceFn;
-  QFile *destFn;
-  QList <QUrlInfo> listingResults;
+  QFile* sourceFn;
+  QFile* destFn;
+  QList<QUrlInfo> listingResults;
   bool removeFiles;
 };
 

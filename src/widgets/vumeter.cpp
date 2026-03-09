@@ -28,58 +28,53 @@
 #define OFFSET 50
 
 
-
-vuMeter::vuMeter(QWidget *parent) : QWidget(parent)
+vuMeter::vuMeter(QWidget* parent) : QWidget(parent)
 {
   colBack = QColor(50, 50, 255);
   colValue = Qt::white;
   colHigh = Qt::red;
-  colMid =  Qt::green;
-  colLow =  Qt::blue;
+  colMid = Qt::green;
+  colLow = Qt::blue;
   min = 0;
   max = 100;
-  val =9;
+  val = 9;
   prevValue = 0;
-  horizontal=false;
-  divisions=20;
-  labelText="V";
+  horizontal = false;
+  divisions = 20;
+  labelText = "V";
 }
 
-void vuMeter::setLabelText(const QString &t)
+void vuMeter::setLabelText(const QString& t)
 {
-  labelText=t;
+  labelText = t;
 }
 
 
-void vuMeter::paintEvent(QPaintEvent *)
+void vuMeter::paintEvent(QPaintEvent*)
 {
-  if(width()>height()) horizontal=true;
-  else horizontal=false;
-  if (horizontal)
-    {
-      w=LG;
-      h=SG;
-      rw=5;
-      rh=30; // rect rounding
-    }
+  if (width() > height())
+    horizontal = true;
   else
-    {
-      w=SG;
-      h=LG;
-      rw=30;
-      rh=5; // rect rounding
-    }
-  if(!slowCPU)
-    {
-      paintBorder();
-    }
+    horizontal = false;
+  if (horizontal) {
+    w = LG;
+    h = SG;
+    rw = 5;
+    rh = 30; // rect rounding
+  } else {
+    w = SG;
+    h = LG;
+    rw = 30;
+    rh = 5; // rect rounding
+  }
+  if (!slowCPU) {
+    paintBorder();
+  }
   paintBar();
 }
 
 void vuMeter::paintBorder()
 {
-
-
   QLinearGradient linGrad;
   QLinearGradient linGrad1;
   QRectF border1;
@@ -92,35 +87,36 @@ void vuMeter::paintBorder()
 
   painter.setRenderHint(QPainter::Antialiasing);
 
-  if (horizontal)
-    {
-      linGrad.setStart(250,BW); linGrad.setFinalStop(250, 2*BW);
-      linGrad1.setStart(1,SG-3*BW); linGrad1.setFinalStop(1, SG-BW);
-      border1=QRectF(5, 20, w-2*BW, h-5*BW);
-      rct=QRectF(2*BW,h/2-10, 20, 25);
-    }
-  else
-    {
-      linGrad.setStart(BW,1); linGrad.setFinalStop(2*BW, 1);
-      linGrad1.setStart(SG-3*BW,1); linGrad1.setFinalStop(SG-BW, 1);
-      border1=QRectF(20, 5, w-5*BW, h-2*BW);
-      rct=QRectF(w/2-10, h-4*BW-10, 20, 25);
-    }
+  if (horizontal) {
+    linGrad.setStart(250, BW);
+    linGrad.setFinalStop(250, 2 * BW);
+    linGrad1.setStart(1, SG - 3 * BW);
+    linGrad1.setFinalStop(1, SG - BW);
+    border1 = QRectF(5, 20, w - 2 * BW, h - 5 * BW);
+    rct = QRectF(2 * BW, h / 2 - 10, 20, 25);
+  } else {
+    linGrad.setStart(BW, 1);
+    linGrad.setFinalStop(2 * BW, 1);
+    linGrad1.setStart(SG - 3 * BW, 1);
+    linGrad1.setFinalStop(SG - BW, 1);
+    border1 = QRectF(20, 5, w - 5 * BW, h - 2 * BW);
+    rct = QRectF(w / 2 - 10, h - 4 * BW - 10, 20, 25);
+  }
   painter.setWindow(0, 0, w, h);
   linGrad.setColorAt(0, light);
   linGrad.setColorAt(1, colBack);
   linGrad.setSpread(QGradient::PadSpread);
   painter.setBrush(linGrad);
-  QRectF border(5, 5, w-2*BW, h-2*BW);
-  painter.drawRoundedRect(border, rw,rh);
+  QRectF border(5, 5, w - 2 * BW, h - 2 * BW);
+  painter.drawRoundedRect(border, rw, rh);
   linGrad1.setColorAt(0, colBack);
   linGrad1.setColorAt(1, dark);
   linGrad1.setSpread(QGradient::PadSpread);
   painter.setBrush(linGrad1);
-  painter.drawRoundedRect(border1, rw,rh);
+  painter.drawRoundedRect(border1, rw, rh);
 
 
-  //paint label
+  // paint label
 
   painter.setPen(QPen(colValue, 2));
   QFont valFont("Arial", 24, QFont::Bold);
@@ -139,23 +135,21 @@ void vuMeter::paintBar()
   QPainter painter(this);
   painter.setWindow(0, 0, w, h);
   painter.setRenderHint(QPainter::Antialiasing);
-  if (horizontal)
-    {
-      linGrad.setStart(w,h); linGrad.setFinalStop(0,h);
-      bar2=QRectF(OFFSET,3*BW,w-OFFSET-3*BW,h-6*BW);
-      length = bar2.width();
-      bar = abs(length * (1-(val-min)/(max-min)));
-      bar1=QRectF(bar2.x()+bar2.width()-bar,bar2.y(),bar, bar2.height());
-    }
-  else
-    {
-      linGrad.setStart(w,0); linGrad.setFinalStop(w,h);
-      bar2=QRectF(3*BW,4*BW,w-6*BW,h-1*OFFSET);
-      length = bar2.height();
-      bar = abs(length * (val-min)/(max-min));
-      bar1=QRectF(bar2.x(),bar2.y(),bar2.width(), bar2.height()-bar);
-
-    }
+  if (horizontal) {
+    linGrad.setStart(w, h);
+    linGrad.setFinalStop(0, h);
+    bar2 = QRectF(OFFSET, 3 * BW, w - OFFSET - 3 * BW, h - 6 * BW);
+    length = bar2.width();
+    bar = abs(length * (1 - (val - min) / (max - min)));
+    bar1 = QRectF(bar2.x() + bar2.width() - bar, bar2.y(), bar, bar2.height());
+  } else {
+    linGrad.setStart(w, 0);
+    linGrad.setFinalStop(w, h);
+    bar2 = QRectF(3 * BW, 4 * BW, w - 6 * BW, h - 1 * OFFSET);
+    length = bar2.height();
+    bar = abs(length * (val - min) / (max - min));
+    bar1 = QRectF(bar2.x(), bar2.y(), bar2.width(), bar2.height() - bar);
+  }
 
   linGrad.setColorAt(0, colHigh);
   linGrad.setColorAt(0.5, colMid);
@@ -170,19 +164,15 @@ void vuMeter::paintBar()
 
   painter.drawRect(bar1);
   painter.setPen(QPen(Qt::black, 2));
-  for (i = 0; i <=divisions; i++)
-    {
-      if(horizontal)
-        {
-          painter.drawLine(bar2.left()+bar2.width()*i/divisions, bar2.top(), bar2.left()+bar2.width()*i/divisions, bar2.bottom());
-        }
-      else
-        {
-          painter.drawLine(bar2.left(), bar2.top()+bar2.height()*i/divisions, bar2.right(), bar2.top()+bar2.height()*i/divisions);
-        }
+  for (i = 0; i <= divisions; i++) {
+    if (horizontal) {
+      painter.drawLine(bar2.left() + bar2.width() * i / divisions, bar2.top(),
+                       bar2.left() + bar2.width() * i / divisions, bar2.bottom());
+    } else {
+      painter.drawLine(bar2.left(), bar2.top() + bar2.height() * i / divisions, bar2.right(),
+                       bar2.top() + bar2.height() * i / divisions);
     }
-
-
+  }
 }
 
 
@@ -210,7 +200,7 @@ void vuMeter::setColorMid(QColor color)
   update();
 }
 
-void vuMeter::setColors(QColor cL,QColor cM,QColor cH)
+void vuMeter::setColors(QColor cL, QColor cM, QColor cH)
 {
   colLow = cL;
   colMid = cM;
@@ -225,58 +215,45 @@ void vuMeter::setColorLow(QColor color)
 }
 
 
-
 void vuMeter::setValue(double value)
 {
-  if((fabs(1-(value/prevValue))<0.05)  && (slowCPU))
-    {
-      return;
-    }
-  if (value > max)
-    {
-      val = max;
-    }
-  else if (value < min)
-    {
-      val = min;
-    }
-  else
-    {
-      val = value;
-    }
-  prevValue=value;
+  if ((fabs(1 - (value / prevValue)) < 0.05) && (slowCPU)) {
+    return;
+  }
+  if (value > max) {
+    val = max;
+  } else if (value < min) {
+    val = min;
+  } else {
+    val = value;
+  }
+  prevValue = value;
   update();
 }
 
 
 void vuMeter::setMinimum(double minValue)
 {
-  if (minValue > max)
-    {
-      min = max;
-      max = minValue;
-      update();
-    }
-  else
-    {
-      min = minValue;
-      update();
-    }
+  if (minValue > max) {
+    min = max;
+    max = minValue;
+    update();
+  } else {
+    min = minValue;
+    update();
+  }
 }
 
 void vuMeter::setMaximum(double maxValue)
 {
-  if (maxValue < min)
-    {
-      max = min;
-      min = maxValue;
-      update();
-    }
-  else
-    {
-      max = maxValue;
-      update();
-    }
+  if (maxValue < min) {
+    max = min;
+    min = maxValue;
+    update();
+  } else {
+    max = maxValue;
+    update();
+  }
 }
 
 QSize vuMeter::minimumSizeHint() const
@@ -288,5 +265,3 @@ QSize vuMeter::sizeHint() const
 {
   return QSize(100, 540);
 }
-
-

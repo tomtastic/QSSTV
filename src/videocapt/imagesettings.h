@@ -42,8 +42,8 @@
 #define IMAGESETTINGS_H
 
 #ifdef __Linux__
-#include <linux/types.h>          /* for videodev2.h */
-#endif /* __Linux__ */
+#include <linux/types.h> /* for videodev2.h */
+#endif                   /* __Linux__ */
 #include <linux/videodev2.h>
 
 #include <QDialog>
@@ -60,25 +60,24 @@ class imageSettingsUi;
 
 class imageSettings : public QDialog
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    imageSettings(QString cameraDevice, QWidget *parent = 0);
-    ~imageSettings();
+  imageSettings(QString cameraDevice, QWidget* parent = 0);
+  ~imageSettings();
 
 
 private:
-    QByteArray camDev;
-    Ui::imageSettingsUi *ui;
-    QCameraImageCapture *imagecapture;
-    bool loadCapabilities();
-    void addControl(struct v4l2_queryctrl &ctrl, int fd);
-    void addNewTab(QString tabName);
-    QWidget *grid;
-    QGridLayout *gridLayout;
-    int row;
-    void showEvent(QShowEvent * event);
-
+  QByteArray camDev;
+  Ui::imageSettingsUi* ui;
+  QCameraImageCapture* imagecapture;
+  bool loadCapabilities();
+  void addControl(struct v4l2_queryctrl& ctrl, int fd);
+  void addNewTab(QString tabName);
+  QWidget* grid;
+  QGridLayout* gridLayout;
+  int row;
+  void showEvent(QShowEvent* event);
 };
 
 #endif // IMAGESETTINGS_H

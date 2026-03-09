@@ -6,7 +6,7 @@
  *	Volker Fischer
  *
  * Description:
- *	
+ *
  *
  ******************************************************************************
  *
@@ -31,26 +31,22 @@
 #include <time.h>
 
 
-
-
 /******************************************************************************\
 * FAC data																	   *
 \******************************************************************************/
 /* Transmitter */
 void CGenerateFACData::ProcessDataInternal(CParameter& TransmParam)
 {
-	FACTransmit.FACParam(pvecOutputData, TransmParam);
+  FACTransmit.FACParam(pvecOutputData, TransmParam);
 }
 
 void CGenerateFACData::InitInternal(CParameter& TransmParam)
 {
-	FACTransmit.Init(TransmParam);
+  FACTransmit.Init(TransmParam);
 
-	/* Define block-size for output */
-	iOutputBlockSize = NUM_FAC_BITS_PER_BLOCK;
+  /* Define block-size for output */
+  iOutputBlockSize = NUM_FAC_BITS_PER_BLOCK;
 }
-
-
 
 
 /******************************************************************************\
@@ -59,14 +55,11 @@ void CGenerateFACData::InitInternal(CParameter& TransmParam)
 /* Transmitter */
 void CGenerateSDCData::ProcessDataInternal(CParameter& TransmParam)
 {
-	SDCTransmit.SDCParam(pvecOutputData, TransmParam);
+  SDCTransmit.SDCParam(pvecOutputData, TransmParam);
 }
 
 void CGenerateSDCData::InitInternal(CParameter& TransmParam)
 {
-	/* Define block-size for output */
-	iOutputBlockSize = TransmParam.iNumSDCBitsPerSFrame;
+  /* Define block-size for output */
+  iOutputBlockSize = TransmParam.iNumSDCBitsPerSFrame;
 }
-
-
-

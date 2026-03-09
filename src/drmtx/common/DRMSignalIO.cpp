@@ -32,7 +32,7 @@
 #include <iostream>
 #include "appglobal.h"
 
-#define pi  4.0*atan(1.0) 
+#define pi 4.0 * atan(1.0)
 
 /******************************************************************************\
 * Transmitter                                                                  *
@@ -41,106 +41,103 @@ void CTransmitData::ProcessDataInternal(CParameter&)
 {
   int i;
   const int iNs2 = iInputBlockSize * 2;
-  rNormFactor =1000.0 ; // pa0mbo (was 16000)
-  for (i = 0; i < iNs2; i += 2)
-    {
-      const int iCurIndex = iBlockCnt * iNs2 + i;
+  rNormFactor = 1000.0; // pa0mbo (was 16000)
+  for (i = 0; i < iNs2; i += 2) {
+    const int iCurIndex = iBlockCnt * iNs2 + i;
 
-      /* Imaginary, real */
-      const short sCurOutReal = static_cast<short>((*pvecInputData)[i / 2].real() * rNormFactor);
-      const short  sCurOutImag = static_cast<short>((*pvecInputData)[i / 2].imag() * rNormFactor);
+    /* Imaginary, real */
+    const short sCurOutReal = static_cast<short>((*pvecInputData)[i / 2].real() * rNormFactor);
+    const short sCurOutImag = static_cast<short>((*pvecInputData)[i / 2].imag() * rNormFactor);
 
-      /* Envelope, phase */
-      const short sCurOutEnv = static_cast<short>(Abs((*pvecInputData)[i / 2]) * static_cast<_REAL>(256.0));
-      const short sCurOutPhase = 	static_cast<short>(Angle((*pvecInputData)[i / 2]) * static_cast<_REAL>(5000.0));  /* 2^15 / pi / 2 -> approx. 5000 */
+    /* Envelope, phase */
+    const short sCurOutEnv = static_cast<short>(Abs((*pvecInputData)[i / 2]) * static_cast<_REAL>(256.0));
+    const short sCurOutPhase = static_cast<short>(Angle((*pvecInputData)[i / 2]) *
+                                                  static_cast<_REAL>(5000.0)); /* 2^15 / pi / 2 -> approx. 5000 */
 
-      switch (eOutputFormat)
-        {
-        case OF_REAL_VAL:
-//          vecsDataOut[iCurIndex]  = sCurOutReal;
-          vecsDataOut[iCurIndex]  = sCurOutReal;
-          vecsDataOut[iCurIndex + 1] = 0;
+    switch (eOutputFormat) {
+    case OF_REAL_VAL:
+      //          vecsDataOut[iCurIndex]  = sCurOutReal;
+      vecsDataOut[iCurIndex] = sCurOutReal;
+      vecsDataOut[iCurIndex + 1] = 0;
 
 
-          //                  (short) 15000.0*sin(pi*1500.0*i/48000.0) ; //  pa0mbo 1500 Hz test signaal
-          //                printf("%d %d \n", i/2 , vecsDataOut[iCurIndex]);
-        break;
+      //                  (short) 15000.0*sin(pi*1500.0*i/48000.0) ; //  pa0mbo 1500 Hz test signaal
+      //                printf("%d %d \n", i/2 , vecsDataOut[iCurIndex]);
+      break;
 
-        case OF_IQ_POS:
-          /* Send inphase and quadrature (I / Q) signal to stereo sound card
-         output. I: left channel, Q: right channel */
-          vecsDataOut[iCurIndex] = sCurOutReal;
-          vecsDataOut[iCurIndex + 1] = sCurOutImag;
-        break;
+    case OF_IQ_POS:
+      /* Send inphase and quadrature (I / Q) signal to stereo sound card
+     output. I: left channel, Q: right channel */
+      vecsDataOut[iCurIndex] = sCurOutReal;
+      vecsDataOut[iCurIndex + 1] = sCurOutImag;
+      break;
 
-        case OF_IQ_NEG:
-          /* Send inphase and quadrature (I / Q) signal to stereo sound card output. I: right channel, Q: left channel */
-          vecsDataOut[iCurIndex] = sCurOutImag;
-          vecsDataOut[iCurIndex + 1] = sCurOutReal;
-        break;
+    case OF_IQ_NEG:
+      /* Send inphase and quadrature (I / Q) signal to stereo sound card output. I: right channel, Q: left channel */
+      vecsDataOut[iCurIndex] = sCurOutImag;
+      vecsDataOut[iCurIndex + 1] = sCurOutReal;
+      break;
 
-        case OF_EP:
-          /* Send envelope and phase signal to stereo sound card output. Envelope: left channel, Phase: right channel */
-          vecsDataOut[iCurIndex] = sCurOutEnv;
-          vecsDataOut[iCurIndex + 1] = sCurOutPhase;
-        break;
-        }
+    case OF_EP:
+      /* Send envelope and phase signal to stereo sound card output. Envelope: left channel, Phase: right channel */
+      vecsDataOut[iCurIndex] = sCurOutEnv;
+      vecsDataOut[iCurIndex + 1] = sCurOutPhase;
+      break;
     }
+  }
   iBlockCnt++;
-  if (iBlockCnt == iNumBlocks)
-    {
-      iBlockCnt = 0;
-      pSound->Write(vecsDataOut); //  printf("DRMSignalIO na pSound-> write\n");
-      addToLog(QString("writing vecsDataOut:%1").arg(vecsDataOut.size()),LOGDRMTX);
-     }
+  if (iBlockCnt == iNumBlocks) {
+    iBlockCnt = 0;
+    pSound->Write(vecsDataOut); //  printf("DRMSignalIO na pSound-> write\n");
+    addToLog(QString("writing vecsDataOut:%1").arg(vecsDataOut.size()), LOGDRMTX);
+  }
 }
 
 void CTransmitData::InitInternal(CParameter& TransmParam)
 {
-/*
-	float*	pCurFilt;
-	int		iNumTapsTransmFilt;
-	CReal	rNormCurFreqOffset;
-*/
-	const int iSymbolBlockSize = TransmParam.CellMappingTable.iSymbolBlockSize;
+  /*
+    float*	pCurFilt;
+    int		iNumTapsTransmFilt;
+    CReal	rNormCurFreqOffset;
+  */
+  const int iSymbolBlockSize = TransmParam.CellMappingTable.iSymbolBlockSize;
 
-	/* Init vector for storing a complete DRM frame number of OFDM symbols */
-	iBlockCnt = 0;
-	TransmParam.Lock(); 
-	iNumBlocks = TransmParam.CellMappingTable.iNumSymPerFrame;
-	ESpecOcc eSpecOcc = TransmParam.GetSpectrumOccup();
-	TransmParam.Unlock(); 
-	iBigBlockSize = iSymbolBlockSize * 2 * iNumBlocks;  /* stereo */
-        // printf("iBigBlockSize in init Ctransmitdata = %d\n", iBigBlockSize);
+  /* Init vector for storing a complete DRM frame number of OFDM symbols */
+  iBlockCnt = 0;
+  TransmParam.Lock();
+  iNumBlocks = TransmParam.CellMappingTable.iNumSymPerFrame;
+  ESpecOcc eSpecOcc = TransmParam.GetSpectrumOccup();
+  TransmParam.Unlock();
+  iBigBlockSize = iSymbolBlockSize * 2 * iNumBlocks; /* stereo */
+  // printf("iBigBlockSize in init Ctransmitdata = %d\n", iBigBlockSize);
 
-	vecsDataOut.Init(iBigBlockSize);
+  vecsDataOut.Init(iBigBlockSize);
 
-	if (pFileTransmitter != nullptr)
-	{
-		fclose(pFileTransmitter);
-	}
+  if (pFileTransmitter != nullptr) {
+    fclose(pFileTransmitter);
+  }
 
   /* Init sound interface */
-//		pSound->Init(iBigBlockSize, true);
+  //		pSound->Init(iBigBlockSize, true);
 
-	/* Init bandpass filter object */
-  BPFilter.Init(iSymbolBlockSize, rDefCarOffset, eSpecOcc,CDRMBandpassFilt::FT_TRANSMITTER);
-     /*   printf("DRMSignalIO BPFilter init Symbolsize %d rDefCaroffset %g  eSpecooc %d \n",
-			iSymbolBlockSize, rDefCarOffset, eSpecOcc); */
+  /* Init bandpass filter object */
+  BPFilter.Init(iSymbolBlockSize, rDefCarOffset, eSpecOcc, CDRMBandpassFilt::FT_TRANSMITTER);
+  /*   printf("DRMSignalIO BPFilter init Symbolsize %d rDefCaroffset %g  eSpecooc %d \n",
+   iSymbolBlockSize, rDefCarOffset, eSpecOcc); */
 
 
-	/* All robustness modes and spectrum occupancies should have the same output
-	   power. Calculate the normaization factor based on the average power of
-	   symbol (the number 3000 was obtained through output tests) */
-	rNormFactor = static_cast<CReal>(6000.0) / Sqrt(TransmParam.CellMappingTable.rAvPowPerSymbol);  // pa0mbo was 3000.0 nu as in ham
-	/* Define block-size for input */
-	iInputBlockSize = iSymbolBlockSize;
+  /* All robustness modes and spectrum occupancies should have the same output
+     power. Calculate the normaization factor based on the average power of
+     symbol (the number 3000 was obtained through output tests) */
+  rNormFactor =
+      static_cast<CReal>(6000.0) / Sqrt(TransmParam.CellMappingTable.rAvPowPerSymbol); // pa0mbo was 3000.0 nu as in ham
+  /* Define block-size for input */
+  iInputBlockSize = iSymbolBlockSize;
 }
 
 CTransmitData::~CTransmitData()
 {
-	/* Close file */
-	if (pFileTransmitter != nullptr)
-		fclose(pFileTransmitter);
+  /* Close file */
+  if (pFileTransmitter != nullptr)
+    fclose(pFileTransmitter);
 }
-

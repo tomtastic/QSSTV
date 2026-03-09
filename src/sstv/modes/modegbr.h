@@ -24,17 +24,18 @@
 #include "modebase.h"
 
 /**
-	@author Johan Maes <on4qz@telenet.be>
+  @author Johan Maes <on4qz@telenet.be>
 */
 class modeGBR : public modeBase
 {
 public:
   modeGBR(esstvMode m, unsigned int len, bool tx, bool narrowMode);
-	~modeGBR();
+  ~modeGBR();
+
 protected:
   embState rxSetupLine();
-	void calcPixelPositionTable(unsigned int colorLine,bool tx);
-	void setupParams(double clock);
+  void calcPixelPositionTable(unsigned int colorLine, bool tx);
+  void setupParams(double clock);
   embState txSetupLine();
 };
 

@@ -11,12 +11,10 @@
 #define STATESCALER 100
 
 
-
 class modeBase;
 
 
-struct ssenitivity
-{
+struct ssenitivity {
   unsigned int minMatchedLines;
   unsigned int maxLineDistanceModeDetect;
   unsigned int maxLineDistanceInSync;
@@ -27,8 +25,7 @@ struct ssenitivity
   int maxOutOfSyncLines;
 };
 
-struct ssyncEntry
-{
+struct ssyncEntry {
   ssyncEntry()
   {
     init();
@@ -36,19 +33,19 @@ struct ssyncEntry
 
   void init()
   {
-    start=0;
-    end=0;
-    startVolume=0;
-    maxVolume=0;
-    width=0;
-    inUse=false;
-    retrace=false;
-    lineNumber=0;
-    length=0;
+    start = 0;
+    end = 0;
+    startVolume = 0;
+    maxVolume = 0;
+    width = 0;
+    inUse = false;
+    retrace = false;
+    lineNumber = 0;
+    length = 0;
   }
   int diffStartEnd()
   {
-    width=end-start;
+    width = end - start;
     return width;
   }
   uint start;
@@ -62,87 +59,106 @@ struct ssyncEntry
   uint length;
 };
 
-struct smatchEntry
-{
+struct smatchEntry {
   smatchEntry()
   {
     init();
   }
 
-  smatchEntry(uint fromIdx,uint toIdx,uint lineSpace,double fract,uint endFromSample,uint endToSample)
+  smatchEntry(uint fromIdx, uint toIdx, uint lineSpace, double fract, uint endFromSample, uint endToSample)
   {
-    from=fromIdx;
-    to=toIdx;
-    lineSpacing=lineSpace;
-    fraction=fract;
-    endFrom=endFromSample;
-    endTo=endToSample;
+    from = fromIdx;
+    to = toIdx;
+    lineSpacing = lineSpace;
+    fraction = fract;
+    endFrom = endFromSample;
+    endTo = endToSample;
   }
   void init()
   {
-    from=0;
-    to=0;
-    lineSpacing=0;
-    fraction=0;
-    endFrom=0;
-    endTo=0;
+    from = 0;
+    to = 0;
+    lineSpacing = 0;
+    fraction = 0;
+    endFrom = 0;
+    endTo = 0;
   }
   uint from; /**< the from index pointing to the syncArray */
   uint to;   /**< the to index pointing to  the syncArray */
   uint lineSpacing;
   double fraction;
   uint endFrom; /**< sampleCounter From */
-  uint endTo; /**< sampleCounter To */
+  uint endTo;   /**< sampleCounter To */
 };
 
-struct sslantXY
-{
+struct sslantXY {
   DSPFLOAT x;
   DSPFLOAT y;
 };
 
-typedef QList<smatchEntry *> modeMatchList;
-typedef QList<modeMatchList *>  modeMatchChain;
+typedef QList<smatchEntry*> modeMatchList;
+typedef QList<modeMatchList*> modeMatchChain;
 
 class syncProcessor : public QObject
 {
   Q_OBJECT
 public:
   //  enum esyncState {SYNCOFF,SYNCUP,SYNCSTART,SYNCON,SYNCDOWN,SYNCEND,SYNCVALID};
-  enum esyncState {SYNCOFF,SYNCACTIVE,SYNCVALID};
-  enum esyncProcessState {MODEDETECT,INSYNC,SYNCLOSTNEWMODE,SYNCLOSTFALSESYNC,SYNCLOSTMISSINGLINES,SYNCLOST,RETRACEWAIT};
-  explicit syncProcessor(bool narrow,QObject *parent = 0);
+  enum esyncState { SYNCOFF, SYNCACTIVE, SYNCVALID };
+  enum esyncProcessState {
+    MODEDETECT,
+    INSYNC,
+    SYNCLOSTNEWMODE,
+    SYNCLOSTFALSESYNC,
+    SYNCLOSTMISSINGLINES,
+    SYNCLOST,
+    RETRACEWAIT
+  };
+  explicit syncProcessor(bool narrow, QObject* parent = 0);
   ~syncProcessor();
   void init();
   void reset();
   void process();
-  esyncProcessState getSyncState(quint32  &syncPos) {syncPos=syncPosition; return syncProcesState; }
-  esstvMode getMode() {return currentMode;}
+  esyncProcessState getSyncState(quint32& syncPos)
+  {
+    syncPos = syncPosition;
+    return syncProcesState;
+  }
+  esstvMode getMode()
+  {
+    return currentMode;
+  }
   void resetRetraceFlag();
   bool hasNewClock()
   {
-    bool nc=newClock;
-    newClock=false;
+    bool nc = newClock;
+    newClock = false;
     return nc;
   }
   void clear();
   void recalculateMatchArray();
-  DSPFLOAT getNewClock() {return modifiedClock;}
-  void setSyncDetectionEnabled(bool enable) {enableSyncDetection=enable;}
+  DSPFLOAT getNewClock()
+  {
+    return modifiedClock;
+  }
+  void setSyncDetectionEnabled(bool enable)
+  {
+    enableSyncDetection = enable;
+  }
 
 
   quint32 sampleCounter;
   quint32 syncPosition;
   quint32 lastValidSyncCounter;
   //  DSPFLOAT trackMax;
-  int      syncQuality;
-  modeBase *currentModePtr;
+  int syncQuality;
+  modeBase* currentModePtr;
 
-  quint16      *freqPtr;
-  DSPFLOAT     *syncVolumePtr;
-  DSPFLOAT     *inputVolumePtr;
-  videoFilter  *videoFilterPtr;
-  bool         retraceFlag;
+  quint16* freqPtr;
+  DSPFLOAT* syncVolumePtr;
+  DSPFLOAT* inputVolumePtr;
+  videoFilter* videoFilterPtr;
+  bool retraceFlag;
   bool tempOutOfSync;
 
 #ifdef ENABLESCOPE
@@ -176,7 +192,7 @@ private:
   DSPFLOAT samplesPerLine;
   streamDecoder streamDecode;
   DSPFLOAT lineTolerance;
-  modeMatchList *activeChainPtr;
+  modeMatchList* activeChainPtr;
 
   bool currentModeMatchChanged;
   uint lastSyncTest;
@@ -189,13 +205,13 @@ private:
   bool findMatch();
   bool addToMatch(esstvMode mode);
   bool addToChain(esstvMode mode, uint fromIdx);
-  bool lineCompare(DSPFLOAT samPerLine, int srcIdx, int dstIdx, quint16 &lineNumber, double &fraction);
+  bool lineCompare(DSPFLOAT samPerLine, int srcIdx, int dstIdx, quint16& lineNumber, double& fraction);
   void switchSyncState(esyncState newState, quint32 sampleCntr);
-  void switchProcessState(esyncProcessState  newState);
-  uint calcTotalLines(modeMatchList *mlPtr);
-  double calcTotalFract(modeMatchList *mlPtr);
+  void switchProcessState(esyncProcessState newState);
+  uint calcTotalLines(modeMatchList* mlPtr);
+  double calcTotalFract(modeMatchList* mlPtr);
   void clearMatchArray();
-  void removeMatchArrayChain(esstvMode mode,int chainIdx);
+  void removeMatchArrayChain(esstvMode mode, int chainIdx);
   void cleanupMatchArray();
   void dropTop();
   void deleteSyncArrayEntry(uint entry);
@@ -204,7 +220,7 @@ private:
   void trackSyncs();
   void calcSyncQuality();
   void calculateLineNumber(uint fromIdx, uint toIdx);
-  void regression(DSPFLOAT &a, DSPFLOAT &b, bool initial);
+  void regression(DSPFLOAT& a, DSPFLOAT& b, bool initial);
   bool slantAdjust(bool initial);
   DSPFLOAT syncWidth;
 
@@ -218,15 +234,10 @@ private:
 
   bool detectNarrow;
   bool enableSyncDetection;
-  uint  minMatchedLines;
-  uint  visEndCounter;
-//  DSPFLOAT syncAvgPtr[RXSTRIPE];
-//  DSPFLOAT syncAvg;
-
+  uint minMatchedLines;
+  uint visEndCounter;
+  //  DSPFLOAT syncAvgPtr[RXSTRIPE];
+  //  DSPFLOAT syncAvg;
 };
 
 #endif // SYNCPROCESSOR_H
-
-
-
-

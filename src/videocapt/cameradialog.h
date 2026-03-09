@@ -4,35 +4,33 @@
 #include <QDialog>
 #include <QTimer>
 
-namespace Ui {
+namespace Ui
+{
 class cameraDialog;
 }
 
 class videoCapture;
 
 
-
-struct scameraSizes
-{
-  scameraSizes(int w,int h,QString desc)
+struct scameraSizes {
+  scameraSizes(int w, int h, QString desc)
   {
-    description=desc;
-    width=w;
-    height=h;
+    description = desc;
+    width = w;
+    height = h;
   }
   QString description;
   int width;
   int height;
 };
 
-struct sformats
-{
-  sformats(int frmt,QString desc,QList<scameraSizes> cs)
+struct sformats {
+  sformats(int frmt, QString desc, QList<scameraSizes> cs)
   {
-    format=frmt;
-    description=desc;
-    cameraSizes=cs;
-    sizeIdx=0;
+    format = frmt;
+    description = desc;
+    cameraSizes = cs;
+    sizeIdx = 0;
   }
   int format;
   QString description;
@@ -41,16 +39,15 @@ struct sformats
   QList<scameraSizes> cameraSizes;
 };
 
-struct scameraDevice
-{
-  scameraDevice(QString devName,QString devDescription,QString driv,QString bus,QList<sformats> frmts)
+struct scameraDevice {
+  scameraDevice(QString devName, QString devDescription, QString driv, QString bus, QList<sformats> frmts)
   {
-    deviceName=devName;
-    deviceDescription=devDescription;
-    driver=driv;
-    busInfo=bus;
-    formats=frmts;
-    formatIdx=0;
+    deviceName = devName;
+    deviceDescription = devDescription;
+    driver = driv;
+    busInfo = bus;
+    formats = frmts;
+    formatIdx = 0;
   }
   QString deviceName;
   QString deviceDescription;
@@ -61,17 +58,15 @@ struct scameraDevice
 };
 
 
-
-
 class cameraDialog : public QDialog
 {
   Q_OBJECT
 
 public:
-  explicit cameraDialog(QWidget *parent = 0);
+  explicit cameraDialog(QWidget* parent = 0);
   ~cameraDialog();
   int exec();
-  QImage *getImage();
+  QImage* getImage();
 private slots:
   void slotSettings();
   void slotDeviceChanged(int idx);
@@ -80,25 +75,21 @@ private slots:
 
 
 private:
-
-  Ui::cameraDialog *ui;
+  Ui::cameraDialog* ui;
   void listCameraDevices();
   QList<scameraDevice> cameraList;
 
   void getCameraInfo(QStringList devList);
-  videoCapture *videoCapturePtr;
+  videoCapture* videoCapturePtr;
   bool cameraActive;
-  void timerEvent(QTimerEvent *event);
+  void timerEvent(QTimerEvent* event);
   QString pixelFormatStr(int pixelFormat);
   QList<sformats> getFormatList(int fd);
   void setupFormatComboBox(scameraDevice cd);
   void setupSizeComboBox(sformats frmat);
   int timerID;
-  bool restartCapturing(bool first=false);
+  bool restartCapturing(bool first = false);
   void deactivateTimer();
-
-
 };
 
 #endif // CAMERADIALOG_H
-

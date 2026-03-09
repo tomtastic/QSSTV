@@ -33,23 +33,31 @@
 class editorForm;
 
 /** Widget to display the various canvasItems */
-class editorView : public QWidget,private Ui::editorForm
+class editorView : public QWidget, private Ui::editorForm
 {
   Q_OBJECT
 public:
-
-  editorView(QWidget *parent = 0);
+  editorView(QWidget* parent = 0);
   ~editorView();
   void readSettings();
   void writeSettings();
 
-  bool isModified() {return modified;}
-  bool open(QFile &f);
-  void save(QFile &f,bool templ);
+  bool isModified()
+  {
+    return modified;
+  }
+  bool open(QFile& f);
+  void save(QFile& f, bool templ);
 
-  QImage *getImage() { return image;}
-  void setImage(QImage *ima);
-  editorScene *getScene() {return scene;}
+  QImage* getImage()
+  {
+    return image;
+  }
+  void setImage(QImage* ima);
+  editorScene* getScene()
+  {
+    return scene;
+  }
 
 public slots:
   void slotChangeCanvasSize();
@@ -65,33 +73,34 @@ public slots:
   void slotDump();
 #endif
 
-  //Font
-  void slotFontChanged(const QFont &);
+  // Font
+  void slotFontChanged(const QFont&);
   void slotFontSizeChanged(int);
   void slotPenWidthChanged(double);
   void slotBold(bool);
   void slotItalic(bool);
   void slotUnderline(bool);
 
-  //Color
+  // Color
   void slotColorDialog();
   void slotGradientDialog();
   void slotButtonTriggered();
 
-  //Transform
+  // Transform
   void slotShearChanged(int);
   void slotItemSelected(graphItemBase*);
-  //Debug
+  // Debug
 
-  void slotTextReturnPressed(const QString &);
+  void slotTextReturnPressed(const QString&);
+
 private:
-  editorScene *scene;
+  editorScene* scene;
   bool modified;
-  QImage *image;
-  QPlainTextEdit *textEdit;
+  QImage* image;
+  QPlainTextEdit* textEdit;
   void setTransform();
-  QIcon createColorToolButtonIcon(const QString &imageFile, QColor color);
-  QMenu *createColorMenu(void (editorView::*)(), int, QString text);
+  QIcon createColorToolButtonIcon(const QString& imageFile, QColor color);
+  QMenu* createColorMenu(void (editorView::*)(), int, QString text);
   int canvasSizeIndex;
   int pointSize;
   QString fontFamily;
@@ -102,8 +111,6 @@ private:
   QColor fillColor;
   QColor lineColor;
   QColor gradientColor;
-
-
 
 
   QString txt;

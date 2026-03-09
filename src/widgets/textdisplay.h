@@ -3,22 +3,23 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class textDisplay;
 }
 
 class textDisplay : public QDialog
 {
   Q_OBJECT
-  
+
 public:
-  explicit textDisplay(QWidget *parent = 0);
+  explicit textDisplay(QWidget* parent = 0);
   ~textDisplay();
   void clear();
-  void append(const QString &t);
-  
+  void append(const QString& t);
+
 private:
-  Ui::textDisplay *ui;
+  Ui::textDisplay* ui;
 };
 
 #endif // TEXTDISPLAY_H

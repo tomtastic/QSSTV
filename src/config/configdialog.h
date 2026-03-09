@@ -3,7 +3,8 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class configDialog;
 }
 
@@ -12,7 +13,7 @@ class configDialog : public QDialog
   Q_OBJECT
 
 public:
-  explicit configDialog(QWidget *parent = 0);
+  explicit configDialog(QWidget* parent = 0);
   ~configDialog();
   void readSettings();
   void writeSettings();
@@ -26,8 +27,7 @@ signals:
 
 
 private:
-  Ui::configDialog *ui;
-
+  Ui::configDialog* ui;
 };
 
 #endif // CONFIGDIALOG_H

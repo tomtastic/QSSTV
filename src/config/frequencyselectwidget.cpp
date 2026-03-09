@@ -1,23 +1,23 @@
 /**************************************************************************
-*   Copyright (C) 2000-2019 by Johan Maes                                 *
-*   on4qz@telenet.be                                                      *
-*   https://www.qsl.net/o/on4qz                                           *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
-***************************************************************************/
+ *   Copyright (C) 2000-2019 by Johan Maes                                 *
+ *   on4qz@telenet.be                                                      *
+ *   https://www.qsl.net/o/on4qz                                           *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 
 #include "frequencyselectwidget.h"
 #include "ui_frequencyselectwidget.h"
@@ -29,13 +29,12 @@ QStringList passBandList;
 QString additionalCommand;
 bool additionalCommandHex;
 
-frequencySelectWidget::frequencySelectWidget(QWidget *parent) :baseConfig(parent),
-  ui(new Ui::frequencySelectWidget)
+frequencySelectWidget::frequencySelectWidget(QWidget* parent) : baseConfig(parent), ui(new Ui::frequencySelectWidget)
 {
   ui->setupUi(this);
   QStringList sl;
-  sl<<"Frequencyy"<<"Mode"<<"Modulation"<<"Passband";
-  ui->tableWidget->setAlternatingRowColors (false);
+  sl << "Frequencyy" << "Mode" << "Modulation" << "Passband";
+  ui->tableWidget->setAlternatingRowColors(false);
   ui->tableWidget->setColumnCount(4);
   ui->tableWidget->setHorizontalHeaderLabels(sl);
   connect(ui->tableWidget, &QTableWidget::itemChanged, this, &frequencySelectWidget::slotItemChanged);
@@ -44,14 +43,13 @@ frequencySelectWidget::frequencySelectWidget(QWidget *parent) :baseConfig(parent
   connect(ui->deleteFreqPushButton, &QPushButton::clicked, this, &frequencySelectWidget::slotFreqDelete);
   connect(ui->moveUpFreqPushButton, &QPushButton::clicked, this, &frequencySelectWidget::slotFreqUp);
   connect(ui->moveDownFreqPushButton, &QPushButton::clicked, this, &frequencySelectWidget::slotFreqDown);
-  lastRowSelected=-1;
+  lastRowSelected = -1;
 }
 
 frequencySelectWidget::~frequencySelectWidget()
 {
   writeSettings();
   delete ui;
-
 }
 
 void frequencySelectWidget::readSettings()
@@ -59,29 +57,26 @@ void frequencySelectWidget::readSettings()
   int i;
   QSettings qSettings;
   qSettings.beginGroup("FREQSELECT");
-  freqList=qSettings.value("frequencyList",QStringList()).toStringList();
-  modeList=qSettings.value("modeList",QStringList()).toStringList();
-  sbModeList=qSettings.value("sbModeList",QStringList()).toStringList();
-  passBandList=qSettings.value("passBandList",QStringList()).toStringList();
-  additionalCommand=qSettings.value("additionalCommand",QString()).toString();
-  additionalCommandHex=qSettings.value("additionalCommandHex",false).toBool();
-  if(passBandList.count()!=freqList.count())
-    {
-      passBandList.clear();
-      for(i=0;i<freqList.count();i++)
-        {
-          passBandList<<"Normal";
-        }
+  freqList = qSettings.value("frequencyList", QStringList()).toStringList();
+  modeList = qSettings.value("modeList", QStringList()).toStringList();
+  sbModeList = qSettings.value("sbModeList", QStringList()).toStringList();
+  passBandList = qSettings.value("passBandList", QStringList()).toStringList();
+  additionalCommand = qSettings.value("additionalCommand", QString()).toString();
+  additionalCommandHex = qSettings.value("additionalCommandHex", false).toBool();
+  if (passBandList.count() != freqList.count()) {
+    passBandList.clear();
+    for (i = 0; i < freqList.count(); i++) {
+      passBandList << "Normal";
     }
+  }
 
-  if(modeList.count()!=freqList.count()  || sbModeList.count()!=freqList.count())
-    {
-      // invalid config
-      freqList.clear();
-      modeList.clear();
-      sbModeList.clear();
-      passBandList.clear();
-    }
+  if (modeList.count() != freqList.count() || sbModeList.count() != freqList.count()) {
+    // invalid config
+    freqList.clear();
+    modeList.clear();
+    sbModeList.clear();
+    passBandList.clear();
+  }
   setParams();
   qSettings.endGroup();
 }
@@ -91,42 +86,37 @@ void frequencySelectWidget::writeSettings()
   QSettings qSettings;
   getParams();
   qSettings.beginGroup("FREQSELECT");
-  qSettings.setValue("frequencyList",freqList);
-  qSettings.setValue("modeList",modeList);
-  qSettings.setValue("sbModeList",sbModeList);
-  qSettings.setValue("passBandList",passBandList);
-  qSettings.setValue("additionalCommand",additionalCommand);
-  qSettings.setValue("additionalCommandHex",additionalCommandHex);
+  qSettings.setValue("frequencyList", freqList);
+  qSettings.setValue("modeList", modeList);
+  qSettings.setValue("sbModeList", sbModeList);
+  qSettings.setValue("passBandList", passBandList);
+  qSettings.setValue("additionalCommand", additionalCommand);
+  qSettings.setValue("additionalCommandHex", additionalCommandHex);
   qSettings.endGroup();
 }
 
 void frequencySelectWidget::constructTable()
 {
   int i;
-  while(ui->tableWidget->rowCount()>0)
-    {
-      ui->tableWidget->removeRow(0);
-    }
+  while (ui->tableWidget->rowCount() > 0) {
+    ui->tableWidget->removeRow(0);
+  }
   ui->tableWidget->setRowCount(freqList.count());
 
-  for(i=0;i<freqList.count();)
-    {
-      if(!freqList.at(i).isEmpty())
-        {
-          createEntry(i++);
-        }
-      else
-        {
-          freqList.takeAt(i);
-          modeList.takeAt(i);
-          sbModeList.takeAt(i);
-          passBandList.takeAt(i);
-          ui->tableWidget->setRowCount(freqList.count());
-        }
+  for (i = 0; i < freqList.count();) {
+    if (!freqList.at(i).isEmpty()) {
+      createEntry(i++);
+    } else {
+      freqList.takeAt(i);
+      modeList.takeAt(i);
+      sbModeList.takeAt(i);
+      passBandList.takeAt(i);
+      ui->tableWidget->setRowCount(freqList.count());
     }
+  }
 }
 
-void frequencySelectWidget:: getParams()
+void frequencySelectWidget::getParams()
 {
   int i;
   bool ok;
@@ -135,37 +125,30 @@ void frequencySelectWidget:: getParams()
   sbModeList.clear();
   passBandList.clear();
 
-  for(i=0;i<ui->tableWidget->rowCount();i++)
+  for (i = 0; i < ui->tableWidget->rowCount(); i++) {
+    ui->tableWidget->item(i, 0)->text().toDouble(&ok);
     {
-      ui->tableWidget->item(i,0)->text().toDouble(&ok);
-      {
-        if (!ok)
-          {
-            blockSignals(true);
-            ui->tableWidget->item(i,0)->setText("");
-            blockSignals(false);
-          }
+      if (!ok) {
+        blockSignals(true);
+        ui->tableWidget->item(i, 0)->setText("");
+        blockSignals(false);
       }
-      freqList.append(ui->tableWidget->item(i,0)->text());
-      modeList.append((static_cast<QComboBox *>(ui->tableWidget->cellWidget(i,1)))->currentText());
-      sbModeList.append((static_cast<QComboBox *>(ui->tableWidget->cellWidget(i,2)))->currentText());
-      passBandList.append((static_cast<QComboBox *>(ui->tableWidget->cellWidget(i,3)))->currentText());
     }
-  getValue(additionalCommand,ui->additionalCommandLineEdit);
-  getValue(additionalCommandHex,ui->additionalCommandHexCheckBox);
+    freqList.append(ui->tableWidget->item(i, 0)->text());
+    modeList.append((static_cast<QComboBox*>(ui->tableWidget->cellWidget(i, 1)))->currentText());
+    sbModeList.append((static_cast<QComboBox*>(ui->tableWidget->cellWidget(i, 2)))->currentText());
+    passBandList.append((static_cast<QComboBox*>(ui->tableWidget->cellWidget(i, 3)))->currentText());
+  }
+  getValue(additionalCommand, ui->additionalCommandLineEdit);
+  getValue(additionalCommandHex, ui->additionalCommandHexCheckBox);
 }
 
 void frequencySelectWidget::setParams()
 {
   constructTable();
-  setValue(additionalCommand,ui->additionalCommandLineEdit);
-  setValue(additionalCommandHex,ui->additionalCommandHexCheckBox);
+  setValue(additionalCommand, ui->additionalCommandLineEdit);
+  setValue(additionalCommandHex, ui->additionalCommandHexCheckBox);
 }
-
-
-
-
-
 
 
 void frequencySelectWidget::slotFreqAdd()
@@ -174,91 +157,85 @@ void frequencySelectWidget::slotFreqAdd()
   modeList.append("SSTV");
   sbModeList.append("LSB");
   passBandList.append("Normal");
-  createEntry(freqList.count()-1);
+  createEntry(freqList.count() - 1);
 }
 
 void frequencySelectWidget::slotFreqDelete()
 {
-  int curRow=lastRowSelected;
+  int curRow = lastRowSelected;
   freqList.takeAt(curRow);
   modeList.takeAt(curRow);
   sbModeList.takeAt(curRow);
   constructTable();
-  if((curRow<freqList.count()) && (curRow!=0))
-    {
-      ui->tableWidget->setCurrentCell(curRow-1,0);
-      ui->tableWidget->item(curRow-1, 0)->setSelected(true);
-      setLastRowSelected();
-    }
+  if ((curRow < freqList.count()) && (curRow != 0)) {
+    ui->tableWidget->setCurrentCell(curRow - 1, 0);
+    ui->tableWidget->item(curRow - 1, 0)->setSelected(true);
+    setLastRowSelected();
+  }
 }
 void frequencySelectWidget::slotFreqUp()
 {
-  int curRow=lastRowSelected;
-  QString  f,m,sb;
-  if(curRow>0)
-    {
-      f=freqList.at(curRow-1);
-      m=modeList.at(curRow-1);
-      sb=sbModeList.at(curRow-1);
-      freqList[curRow-1]=freqList.at(curRow);
-      modeList[curRow-1]=modeList.at(curRow);
-      sbModeList[curRow-1]=sbModeList.at(curRow);
-      freqList[curRow]=f;
-      modeList[curRow]=m;
-      sbModeList[curRow]=sb;
-      constructTable();
-      ui->tableWidget->setCurrentCell(curRow-1,0);
-      ui->tableWidget->item(curRow-1, 0)->setSelected(true);
-      setLastRowSelected();
-
-    }
+  int curRow = lastRowSelected;
+  QString f, m, sb;
+  if (curRow > 0) {
+    f = freqList.at(curRow - 1);
+    m = modeList.at(curRow - 1);
+    sb = sbModeList.at(curRow - 1);
+    freqList[curRow - 1] = freqList.at(curRow);
+    modeList[curRow - 1] = modeList.at(curRow);
+    sbModeList[curRow - 1] = sbModeList.at(curRow);
+    freqList[curRow] = f;
+    modeList[curRow] = m;
+    sbModeList[curRow] = sb;
+    constructTable();
+    ui->tableWidget->setCurrentCell(curRow - 1, 0);
+    ui->tableWidget->item(curRow - 1, 0)->setSelected(true);
+    setLastRowSelected();
+  }
 }
 
 void frequencySelectWidget::slotFreqDown()
 {
-  int curRow=lastRowSelected;
-  QString  f,m,sb;
-  if(curRow<(ui->tableWidget->rowCount()-1) && curRow>=0)
-    {
-      f=freqList.at(curRow+1);
-      m=modeList.at(curRow+1);
-      sb=sbModeList.at(curRow+1);
-      freqList[curRow+1]=freqList.at(curRow);
-      modeList[curRow+1]=modeList.at(curRow);
-      sbModeList[curRow+1]=sbModeList.at(curRow);
-      freqList[curRow]=f;
-      modeList[curRow]=m;
-      sbModeList[curRow]=sb;
-      constructTable();
-      ui->tableWidget->setCurrentCell(curRow+1,0);
-      ui->tableWidget->item(curRow+1, 0)->setSelected(true);
-      setLastRowSelected();
-
-    }
+  int curRow = lastRowSelected;
+  QString f, m, sb;
+  if (curRow < (ui->tableWidget->rowCount() - 1) && curRow >= 0) {
+    f = freqList.at(curRow + 1);
+    m = modeList.at(curRow + 1);
+    sb = sbModeList.at(curRow + 1);
+    freqList[curRow + 1] = freqList.at(curRow);
+    modeList[curRow + 1] = modeList.at(curRow);
+    sbModeList[curRow + 1] = sbModeList.at(curRow);
+    freqList[curRow] = f;
+    modeList[curRow] = m;
+    sbModeList[curRow] = sb;
+    constructTable();
+    ui->tableWidget->setCurrentCell(curRow + 1, 0);
+    ui->tableWidget->item(curRow + 1, 0)->setSelected(true);
+    setLastRowSelected();
+  }
 }
 
 void frequencySelectWidget::createEntry(int row)
 {
   QComboBox *cb, *sb, *pb;
-  QTableWidgetItem *ct;
-  if(row>(ui->tableWidget->rowCount()-1))
-    {
-      ui->tableWidget->setRowCount(row+1);
-    }
-  ui->tableWidget-> blockSignals(true);
-  ct=new QTableWidgetItem();
+  QTableWidgetItem* ct;
+  if (row > (ui->tableWidget->rowCount() - 1)) {
+    ui->tableWidget->setRowCount(row + 1);
+  }
+  ui->tableWidget->blockSignals(true);
+  ct = new QTableWidgetItem();
   ct->setText(freqList.at(row));
-  ui->tableWidget->setItem(row,0,ct);
+  ui->tableWidget->setItem(row, 0, ct);
 
-  cb=new QComboBox(this);
+  cb = new QComboBox(this);
   cb->addItem("SSTV");
   cb->addItem("DRM");
-//  cb->setCurrentText(modeList.at(row));
-  setValue(modeList.at(row),cb);
+  //  cb->setCurrentText(modeList.at(row));
+  setValue(modeList.at(row), cb);
 
-  ui->tableWidget->setCellWidget(row,1,cb);
+  ui->tableWidget->setCellWidget(row, 1, cb);
 
-  sb=new QComboBox(this);
+  sb = new QComboBox(this);
   sb->addItem("LSB");
   sb->addItem("USB");
   sb->addItem("FM");
@@ -268,21 +245,20 @@ void frequencySelectWidget::createEntry(int row)
   sb->addItem("PKTFM");
 
 
+  //  sb->setCurrentText(sbModeList.at(row));
+  setValue(sbModeList.at(row), sb);
+  ui->tableWidget->setCellWidget(row, 2, sb);
 
-//  sb->setCurrentText(sbModeList.at(row));
-  setValue(sbModeList.at(row),sb);
-  ui->tableWidget->setCellWidget(row,2,sb);
-
-  pb=new QComboBox(this);
+  pb = new QComboBox(this);
   pb->addItem("Normal");
   pb->addItem("Wide");
   pb->addItem("Narrow");
-//  sb->setCurrentText(sbModeList.at(row));
-  setValue(passBandList.at(row),pb);
-  ui->tableWidget->setCellWidget(row,3,pb);
+  //  sb->setCurrentText(sbModeList.at(row));
+  setValue(passBandList.at(row), pb);
+  ui->tableWidget->setCellWidget(row, 3, pb);
   connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &frequencySelectWidget::slotItemChanged);
   connect(sb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &frequencySelectWidget::slotItemChanged);
-   ui->tableWidget->blockSignals(false);
+  ui->tableWidget->blockSignals(false);
 }
 
 void frequencySelectWidget::slotItemChanged()
@@ -292,13 +268,12 @@ void frequencySelectWidget::slotItemChanged()
 
 void frequencySelectWidget::setLastRowSelected()
 {
-  lastRowSelected=ui->tableWidget->currentRow();
-  if(lastRowSelected>=ui->tableWidget->rowCount())
-    {
-      lastRowSelected=-1;
-    }
+  lastRowSelected = ui->tableWidget->currentRow();
+  if (lastRowSelected >= ui->tableWidget->rowCount()) {
+    lastRowSelected = -1;
+  }
 }
-void frequencySelectWidget::slotCellClicked(int r,int)
+void frequencySelectWidget::slotCellClicked(int r, int)
 {
-  lastRowSelected=r;
+  lastRowSelected = r;
 }

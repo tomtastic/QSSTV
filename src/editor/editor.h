@@ -26,7 +26,6 @@
 #include <QComboBox>
 
 
-
 class editorView;
 
 /*!
@@ -40,45 +39,45 @@ This editor allows the creation of images and templates.
 */
 class editor : public QMainWindow
 {
-	Q_OBJECT
+  Q_OBJECT
 
 public:
-    editor(QWidget *parent=0);
-	~editor();
-	bool openFile(QString fn);
-	void readSettings();
-  bool setImage(QImage *im);
+  editor(QWidget* parent = 0);
+  ~editor();
+  bool openFile(QString fn);
+  void readSettings();
+  bool setImage(QImage* im);
 
 public slots:
-	void slotFileNew();
-	void slotFileOpen();
-	void slotFileSave();
-	void slotFileSaveImage();
-	void slotFileSaveTemplate();
-	void slotFileQuit();
+  void slotFileNew();
+  void slotFileOpen();
+  void slotFileSave();
+  void slotFileSaveImage();
+  void slotFileSaveTemplate();
+  void slotFileQuit();
 
 
 private:
-	editorView *ev;
-	void closeEvent(QCloseEvent *);
-	void initActions();
-	void initMenubar();
+  editorView* ev;
+  void closeEvent(QCloseEvent*);
+  void initActions();
+  void initMenubar();
 
-	void writeSettings();
-	QAction *fileNew;
-	QAction *fileOpen;
-	QAction *fileSave;
-	QAction *fileSaveImage;
-	QAction *fileSaveTemplate;
-	QAction *fileQuit;
-	QAction *clearAll;
-	QAction *copy;
-	QAction *paste;
-	QAction *deleteAction;
-	QMenu *fileMenu;
-	QMenu *editMenu;
-	QFile localFile;
-	QFile externalFile;
+  void writeSettings();
+  QAction* fileNew;
+  QAction* fileOpen;
+  QAction* fileSave;
+  QAction* fileSaveImage;
+  QAction* fileSaveTemplate;
+  QAction* fileQuit;
+  QAction* clearAll;
+  QAction* copy;
+  QAction* paste;
+  QAction* deleteAction;
+  QMenu* fileMenu;
+  QMenu* editMenu;
+  QFile localFile;
+  QFile externalFile;
 };
 
 #endif

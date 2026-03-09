@@ -13,18 +13,17 @@
 #define BYTESPOWER 18
 
 
-//WWV WWVH             2500.0, 5000.0, 10000.0
+// WWV WWVH             2500.0, 5000.0, 10000.0
 
-//·      GBR                           60.0 kHz
+// ·      GBR                           60.0 kHz
 
-//·      RWM                          4996.0, 9996.0, 14996.0
+// ·      RWM                          4996.0, 9996.0, 14996.0
 
-//·      CHU                            7335.0
-
+// ·      CHU                            7335.0
 
 
 #define PERIODSIZE (DOWNSAMPLESIZE)
-#define BUFFERSIZE (8*DOWNSAMPLESIZE)
+#define BUFFERSIZE (8 * DOWNSAMPLESIZE)
 #define CALIBRATIONSIZE (PERIODSIZE)
 #define CALIBRATIONLEADIN 80
 
@@ -34,33 +33,51 @@ class soundBase : public QThread
   Q_OBJECT
 
 public:
-  enum edataSrc{SNDINCARD,SNDINFROMFILE,SNDINCARDTOFILE};
-  enum edataDst{SNDOUTCARD,SNDOUTTOFILE};
-  enum eplaybackState{PBINIT,PBSTARTING,PBRUNNING,PBCALIBRATESTART,PBCALIBRATEWAIT,PBCALIBRATE,PBEND};
-  enum ecaptureState{CPINIT,CPSTARTING,CPRUNNING,CPCALIBRATESTART,CPCALIBRATEWAIT,CPCALIBRATE,CPEND};
+  enum edataSrc { SNDINCARD, SNDINFROMFILE, SNDINCARDTOFILE };
+  enum edataDst { SNDOUTCARD, SNDOUTTOFILE };
+  enum eplaybackState { PBINIT, PBSTARTING, PBRUNNING, PBCALIBRATESTART, PBCALIBRATEWAIT, PBCALIBRATE, PBEND };
+  enum ecaptureState { CPINIT, CPSTARTING, CPRUNNING, CPCALIBRATESTART, CPCALIBRATEWAIT, CPCALIBRATE, CPEND };
 
-  explicit soundBase(QObject *parent = 0);
+  explicit soundBase(QObject* parent = 0);
   ~soundBase();
-  virtual bool init(int samplerate)=0;
+  virtual bool init(int samplerate) = 0;
   void run();
   void idleRX();
   void idleTX();
   void stopSoundThread();
-  virtual void getCardList() {;}
+  virtual void getCardList()
+  {
+    ;
+  }
 
   bool startCapture();
   bool startPlayback();
-  buffer<FILTERPARAMTYPE,BYTESPOWER> rxBuffer;
-  buffer<FILTERPARAMTYPE,BYTESPOWER> rxVolumeBuffer;
-  buffer<SOUNDFRAME,16> txBuffer;
-  double getVolumeDb(){return volume;}
-  FILTERPARAMTYPE *getVolumePtr() {return downsampleFilterPtr->getVolumePtr();}
-  const QString getLastError() { return lastErrorStr;}
-  bool isPlaying() {return playbackState!=PBINIT;}
-  bool isCapturing() {return captureState!=CPINIT;}
+  buffer<FILTERPARAMTYPE, BYTESPOWER> rxBuffer;
+  buffer<FILTERPARAMTYPE, BYTESPOWER> rxVolumeBuffer;
+  buffer<SOUNDFRAME, 16> txBuffer;
+  double getVolumeDb()
+  {
+    return volume;
+  }
+  FILTERPARAMTYPE* getVolumePtr()
+  {
+    return downsampleFilterPtr->getVolumePtr();
+  }
+  const QString getLastError()
+  {
+    return lastErrorStr;
+  }
+  bool isPlaying()
+  {
+    return playbackState != PBINIT;
+  }
+  bool isCapturing()
+  {
+    return captureState != CPINIT;
+  }
 
   bool calibrate(bool isCapture);
-  bool calibrationCount(unsigned int &frames, double &elapsedTime);
+  bool calibrationCount(unsigned int& frames, double& elapsedTime);
   int countAvailable;
 signals:
 
@@ -72,36 +89,42 @@ protected:
   int capture();
   int play();
 
-  virtual int read(int &countAvailable)=0;
-  virtual int write(uint numFrames)=0;
-  virtual void flushCapture()=0;
-  virtual void flushPlayback()=0;
-  virtual void prepareCapture() {;}
-  virtual void preparePlayback() {;}
-  virtual void closeDevices()=0;
-  virtual void waitPlaybackEnd()=0;
+  virtual int read(int& countAvailable) = 0;
+  virtual int write(uint numFrames) = 0;
+  virtual void flushCapture() = 0;
+  virtual void flushPlayback() = 0;
+  virtual void prepareCapture()
+  {
+    ;
+  }
+  virtual void preparePlayback()
+  {
+    ;
+  }
+  virtual void closeDevices() = 0;
+  virtual void waitPlaybackEnd() = 0;
 
 
   int sampleRate;
-  qint16 tempRXBuffer[DOWNSAMPLESIZE*2*2]; // in some cases the hardware interface is stereo (can be S16_LE or S32_LE)
-  quint32 tempTXBuffer[DOWNSAMPLESIZE*2];
+  qint16
+      tempRXBuffer[DOWNSAMPLESIZE * 2 * 2]; // in some cases the hardware interface is stereo (can be S16_LE or S32_LE)
+  quint32 tempTXBuffer[DOWNSAMPLESIZE * 2];
   bool stopThread;
   eplaybackState playbackState;
-  ecaptureState  captureState;
+  ecaptureState captureState;
 
 
   wavIO waveIn;
   wavIO waveOut;
-  void errorHandler(const QString &title, const QString &info);
+  void errorHandler(const QString& title, const QString& info);
   void switchCaptureState(ecaptureState cs);
   void switchPlaybackState(eplaybackState ps);
 
 
-
 private:
-  downsampleFilter *downsampleFilterPtr;
+  downsampleFilter* downsampleFilterPtr;
   double volume;
-//  uint intVolume;
+  //  uint intVolume;
   int captureCalibration(bool leadIn);
   int playbackCalibration(bool leadIn);
   QMutex mutex;
@@ -116,15 +139,13 @@ private:
   quint64 storedFrames;
   bool prebuf;
   unsigned int prevFrames;
-  float agcCurrentGain = 1.0f;        // Current AGC gain factor
-  float agcTargetAmplitude = 22937.6f;   // Target normalized amplitude (70% of full scale)
-  float agcAttackTime = 0.01f;       // Attack time in seconds
-  float agcReleaseTime = 0.1f;       // Release time in seconds
-  float agcMaxGain = 15.0f;          // Maximum allowed gain
+  float agcCurrentGain = 1.0f;         // Current AGC gain factor
+  float agcTargetAmplitude = 22937.6f; // Target normalized amplitude (70% of full scale)
+  float agcAttackTime = 0.01f;         // Attack time in seconds
+  float agcReleaseTime = 0.1f;         // Release time in seconds
+  float agcMaxGain = 15.0f;            // Maximum allowed gain
 
-  void applyAGC(qint16 *buffer, int count);
-
-
+  void applyAGC(qint16* buffer, int count);
 };
 
 #endif // SOUNDBASE_H

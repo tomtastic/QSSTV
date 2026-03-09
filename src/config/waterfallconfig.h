@@ -16,17 +16,17 @@ extern int wfFontSize;
 extern bool wfBold;
 
 
-
-namespace Ui {
+namespace Ui
+{
 class waterfallConfig;
 }
 
 class waterfallConfig : public baseConfig
 {
   Q_OBJECT
-  
+
 public:
-  explicit waterfallConfig(QWidget *parent = 0);
+  explicit waterfallConfig(QWidget* parent = 0);
   ~waterfallConfig();
   void readSettings();
   void writeSettings();
@@ -35,9 +35,9 @@ public:
 
 public slots:
   void slotFontChanged();
-  
+
 private:
-  Ui::waterfallConfig *ui;
+  Ui::waterfallConfig* ui;
 };
 
 #endif // WATERFALLCONFIG_H

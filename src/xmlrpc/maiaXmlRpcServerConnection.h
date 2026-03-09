@@ -37,71 +37,68 @@
 class QHttpRequestHeader
 {
 public:
-    explicit QHttpRequestHeader(QString headerString);
-    virtual ~QHttpRequestHeader() {}
+  explicit QHttpRequestHeader(QString headerString);
+  virtual ~QHttpRequestHeader() {}
 
-    bool isValid();
-    QString method();
-    uint contentLength() const;
+  bool isValid();
+  QString method();
+  uint contentLength() const;
 
 private:
-    QString mHeaderString;
-    QString mMethod;
-    QMap<QString, QString> mHeaders;
+  QString mHeaderString;
+  QString mMethod;
+  QMap<QString, QString> mHeaders;
 };
 
 class QHttpResponseHeader
 {
 public:
-    explicit QHttpResponseHeader(int code, QString text);
-    virtual ~QHttpResponseHeader() {}
-    void setValue(const QString &key, const QString &value);
-    virtual QString toString() const;
-    void setContentLength(int len)
-    {
-       setValue("Content-length", QString::number(len));
-    }
+  explicit QHttpResponseHeader(int code, QString text);
+  virtual ~QHttpResponseHeader() {}
+  void setValue(const QString& key, const QString& value);
+  virtual QString toString() const;
+  void setContentLength(int len)
+  {
+    setValue("Content-length", QString::number(len));
+  }
 
 private:
-    int mCode;
-    QString mText;
-    QMap<QString, QString> mHeaders;
+  int mCode;
+  QString mText;
+  QMap<QString, QString> mHeaders;
 };
 #endif
 
 
-class MaiaXmlRpcServerConnection : public QObject {
-	Q_OBJECT
-	
-	public:
-		MaiaXmlRpcServerConnection(QTcpSocket *connection, QObject *parent = 0);
-		~MaiaXmlRpcServerConnection();
-		
-	signals:
-		void getMethod(QString method, QObject **responseObject, const char **responseSlot);
+class MaiaXmlRpcServerConnection : public QObject
+{
+  Q_OBJECT
 
-	private slots:
-		void readFromSocket();
-    void slotDisconnect();
-	
-	private:
-		void sendResponse(QString content);
-		void parseCall(QString call);
+public:
+  MaiaXmlRpcServerConnection(QTcpSocket* connection, QObject* parent = 0);
+  ~MaiaXmlRpcServerConnection();
 
-		
+signals:
+  void getMethod(QString method, QObject** responseObject, const char** responseSlot);
 
-		QTcpSocket *clientConnection;
-		QString headerString;
-		QHttpRequestHeader *header;
-		
+private slots:
+  void readFromSocket();
+  void slotDisconnect();
+
+private:
+  void sendResponse(QString content);
+  void parseCall(QString call);
+
+
+  QTcpSocket* clientConnection;
+  QString headerString;
+  QHttpRequestHeader* header;
 };
 
 
-QByteArray getReturnType(const QMetaObject *obj,
-            const QByteArray &method, const QList<QByteArray> argTypes);
+QByteArray getReturnType(const QMetaObject* obj, const QByteArray& method, const QList<QByteArray> argTypes);
 
-bool invokeMethodWithVariants(QObject *obj,
-        const QByteArray &method, const QVariantList &args,
-        QVariant *ret, Qt::ConnectionType type = Qt::AutoConnection);
+bool invokeMethodWithVariants(QObject* obj, const QByteArray& method, const QVariantList& args, QVariant* ret,
+                              Qt::ConnectionType type = Qt::AutoConnection);
 
 #endif

@@ -2,12 +2,12 @@
  * Reed-Solomon coding and decoding
  * Phil Karn (karn@ka9q.ampr.org) September 1996
  * Separate CCSDS version create Dec 1998, merged into this version May 1999
- * 
+ *
  * This file is derived from my generic RS encoder/decoder, which is
  * in turn based on the program "new_rs_erasures.c" by Robert
  * Morelos-Zaragoza (robert@spectra.eng.hawaii.edu) and Hari Thirumoorthy
  * (harit@spectra.eng.hawaii.edu), Aug 1995
- 
+
  * Copyright 1999 Phil Karn, KA9Q
  * May be used under the terms of the GNU public license
  */
@@ -23,8 +23,7 @@ static int KK;
  */
 
 /* 1+x^2+x^3+x^4+x^8 */
-int Pp[MM+1] = { 1, 0, 1, 1, 1, 0, 0, 0, 1 };
-
+int Pp[MM + 1] = {1, 0, 1, 1, 1, 0, 0, 0, 1};
 
 
 /* This defines the type used to store an element of the Galois Field
@@ -45,18 +44,17 @@ static gf Index_of[NN + 1];
 /* No legal value in index form represents zero, so
  * we need a special value for this purpose
  */
-#define A0	(NN)
+#define A0 (NN)
 
 /* Generator polynomial g(x) in index form */
-//static gf Gg[NN - KK + 1];
-static gf Gg[NN-RSDSIZERS4+1]; //worst case
-static int RS_init=0; /* Initialization flag */
+// static gf Gg[NN - KK + 1];
+static gf Gg[NN - RSDSIZERS4 + 1]; // worst case
+static int RS_init = 0;            /* Initialization flag */
 
 /* Compute x % NN, where NN is 2**MM - 1,
  * without a slow divide
  */
-static  gf
-modnn(int x)
+static gf modnn(int x)
 {
   while (x >= NN) {
     x -= NN;
@@ -65,25 +63,28 @@ modnn(int x)
   return x;
 }
 
-#define	min(a,b)	((a) < (b) ? (a) : (b))
+#define min(a, b) ((a) < (b) ? (a) : (b))
 
-#define	CLEAR(a,n) {\
-int ci;\
-for(ci=(n)-1;ci >=0;ci--)\
-(a)[ci] = 0;\
-}
+#define CLEAR(a, n)                                                                                                    \
+  {                                                                                                                    \
+    int ci;                                                                                                            \
+    for (ci = (n) - 1; ci >= 0; ci--)                                                                                  \
+      (a)[ci] = 0;                                                                                                     \
+  }
 
-#define	COPY(a,b,n) {\
-int ci;\
-for(ci=(n)-1;ci >=0;ci--)\
-(a)[ci] = (b)[ci];\
-}
+#define COPY(a, b, n)                                                                                                  \
+  {                                                                                                                    \
+    int ci;                                                                                                            \
+    for (ci = (n) - 1; ci >= 0; ci--)                                                                                  \
+      (a)[ci] = (b)[ci];                                                                                               \
+  }
 
-#define	COPYDOWN(a,b,n) {\
-int ci;\
-for(ci=(n)-1;ci >=0;ci--)\
-(a)[ci] = (b)[ci];\
-}
+#define COPYDOWN(a, b, n)                                                                                              \
+  {                                                                                                                    \
+    int ci;                                                                                                            \
+    for (ci = (n) - 1; ci >= 0; ci--)                                                                                  \
+      (a)[ci] = (b)[ci];                                                                                               \
+  }
 
 #define Ldec 1
 
@@ -108,7 +109,7 @@ for(ci=(n)-1;ci >=0;ci--)\
         a(0) + a(1) @ + a(2) @^2 + ... + a(m-1) @^(m-1)
    we consider the integer "i" whose binary representation with a(0) being LSB
    and a(m-1) MSB is (a(0),a(1),...,a(m-1)) and locate the entry
-   "index_of[i]". Now, @^index_of[i] is that element whose polynomial 
+   "index_of[i]". Now, @^index_of[i] is that element whose polynomial
     representation is (a(0),a(1),a(2),...,a(m-1)).
    NOTE:
         The element alpha_to[2^m-1] = 0 always signifying that the
@@ -116,11 +117,10 @@ for(ci=(n)-1;ci >=0;ci--)\
         Similarly, the element index_of[0] = A0 always signifying
    that the power of alpha which has the polynomial representation
    (0,0,...,0) is "infinity".
- 
+
 */
 
-static void
-generate_gf(void)
+static void generate_gf(void)
 {
   int i, mask;
 
@@ -131,8 +131,8 @@ generate_gf(void)
     Index_of[Alpha_to[i]] = i;
     /* If Pp[i] == 1 then, term @^i occurs in poly-repr of @^MM */
     if (Pp[i] != 0)
-      Alpha_to[MM] ^= mask;	/* Bit-wise EXOR operation */
-    mask <<= 1;	/* single left-shift */
+      Alpha_to[MM] ^= mask; /* Bit-wise EXOR operation */
+    mask <<= 1;             /* single left-shift */
   }
   Index_of[Alpha_to[MM]] = MM;
   /*
@@ -165,23 +165,22 @@ generate_gf(void)
  * If B0 = 0, TT = 2. deg(g(x)) = 2*TT = 4.
  * g(x) = (x+1) (x+@) (x+@**2) (x+@**3)
  */
-static void
-gen_poly(void)
+static void gen_poly(void)
 {
   int i, j;
 
   Gg[0] = 1;
   for (i = 0; i < NN - KK; i++) {
-    Gg[i+1] = 1;
+    Gg[i + 1] = 1;
     /*
      * Below multiply (Gg[0]+Gg[1]*x + ... +Gg[i]x^i) by
      * (@**(B0+i)*PRIM + x)
      */
     for (j = i; j > 0; j--)
       if (Gg[j] != 0)
-	Gg[j] = Gg[j - 1] ^ Alpha_to[modnn((Index_of[Gg[j]]) + (B0 + i) *PRIM)];
+        Gg[j] = Gg[j - 1] ^ Alpha_to[modnn((Index_of[Gg[j]]) + (B0 + i) * PRIM)];
       else
-	Gg[j] = Gg[j - 1];
+        Gg[j] = Gg[j - 1];
     /* Gg[0] can never be zero */
     Gg[0] = Alpha_to[modnn(Index_of[Gg[0]] + (B0 + i) * PRIM)];
   }
@@ -199,27 +198,26 @@ gen_poly(void)
  * elements of Gg[], which was generated above. Codeword is   c(X) =
  * data(X)*X**(NN-KK)+ b(X)
  */
-int
-encode_rs(dtype data[], dtype bb[])
+int encode_rs(dtype data[], dtype bb[])
 {
   int i, j;
   gf feedback;
-  CLEAR(bb,NN-KK);
+  CLEAR(bb, NN - KK);
 
 
-  for(i = KK - 1; i >= 0; i--) {
+  for (i = KK - 1; i >= 0; i--) {
     feedback = Index_of[data[i] ^ bb[NN - KK - 1]];
-    if (feedback != A0) {	/* feedback term is non-zero */
+    if (feedback != A0) { /* feedback term is non-zero */
       for (j = NN - KK - 1; j > 0; j--)
-	if (Gg[j] != A0)
-	  bb[j] = bb[j - 1] ^ Alpha_to[modnn(Gg[j] + feedback)];
-	else
-	  bb[j] = bb[j - 1];
+        if (Gg[j] != A0)
+          bb[j] = bb[j - 1] ^ Alpha_to[modnn(Gg[j] + feedback)];
+        else
+          bb[j] = bb[j - 1];
       bb[0] = Alpha_to[modnn(Gg[0] + feedback)];
-    } else {	/* feedback term is zero. encoder becomes a
-		 * single-byte shifter */
+    } else { /* feedback term is zero. encoder becomes a
+              * single-byte shifter */
       for (j = NN - KK - 1; j > 0; j--)
-	bb[j] = bb[j - 1];
+        bb[j] = bb[j - 1];
       bb[0] = 0;
     }
   }
@@ -233,7 +231,7 @@ encode_rs(dtype data[], dtype bb[])
  * Return number of symbols corrected, or -1 if codeword is illegal
  * or uncorrectable. If eras_pos is non-null, the detected error locations
  * are written back. NOTE! This array must be at least NN-KK elements long.
- * 
+ *
  * First "no_eras" erasures are declared by the calling program. Then, the
  * maximum # of errors correctable is t_after_eras = floor((NN-KK-no_eras)/2).
  * If the number of channel errors is not greater than "t_after_eras" the
@@ -244,218 +242,211 @@ encode_rs(dtype data[], dtype bb[])
  * will result. The decoder *could* check for this condition, but it would involve
  * extra time on every decoding operation.
  */
-int
-eras_dec_rs(dtype data[], int eras_pos[], int no_eras)
+int eras_dec_rs(dtype data[], int eras_pos[], int no_eras)
 {
   int deg_lambda, el, deg_omega;
-  int i, j, r,k;
+  int i, j, r, k;
 
-  gf u,q,tmp,num1,num2,den,discr_r;
-  gf lambda[NN-KK + 1], s[NN-KK + 1];	/* Err+Eras Locator poly
-           * and syndrome poly */
-  gf b[NN-KK + 1], t[NN-KK + 1], omega[NN-KK + 1];
-  gf root[NN-KK], reg[NN-KK + 1], loc[NN-KK];
+  gf u, q, tmp, num1, num2, den, discr_r;
+  gf lambda[NN - KK + 1], s[NN - KK + 1]; /* Err+Eras Locator poly
+                                           * and syndrome poly */
+  gf b[NN - KK + 1], t[NN - KK + 1], omega[NN - KK + 1];
+  gf root[NN - KK], reg[NN - KK + 1], loc[NN - KK];
   int syn_error, count;
 
 
   /* form the syndromes; i.e., evaluate data(x) at roots of g(x)
    * namely @**(B0+i)*PRIM, i = 0, ... ,(NN-KK-1)
    */
-  for(i=1;i<=NN-KK;i++)
-    {
-      s[i] = data[0];
-    }
-  for(j=1;j<NN;j++)
-    {
-      if(data[j] == 0) continue;
-      tmp = Index_of[data[j]];
+  for (i = 1; i <= NN - KK; i++) {
+    s[i] = data[0];
+  }
+  for (j = 1; j < NN; j++) {
+    if (data[j] == 0)
+      continue;
+    tmp = Index_of[data[j]];
 
-      /*	s[i] ^= Alpha_to[modnn(tmp + (B0+i-1)*j)]; */
-      for(i=1;i<=NN-KK;i++)
-        s[i] ^= Alpha_to[modnn(tmp + (B0+i-1)*PRIM*j)];
-    }
+    /*	s[i] ^= Alpha_to[modnn(tmp + (B0+i-1)*j)]; */
+    for (i = 1; i <= NN - KK; i++)
+      s[i] ^= Alpha_to[modnn(tmp + (B0 + i - 1) * PRIM * j)];
+  }
   /* Convert syndromes to index form, checking for nonzero condition */
   syn_error = 0;
-  for(i=1;i<=NN-KK;i++)
-    {
-      syn_error |= s[i];
-      s[i] = Index_of[s[i]];
-    }
-  
+  for (i = 1; i <= NN - KK; i++) {
+    syn_error |= s[i];
+    s[i] = Index_of[s[i]];
+  }
+
   if (!syn_error) {
-      /* if syndrome is zero, data[] is a codeword and there are no
+    /* if syndrome is zero, data[] is a codeword and there are no
      * errors to correct. So return data[] unmodified
      */
-      count = 0;
-      goto finish;
-    }
-  CLEAR(&lambda[1],NN-KK);
+    count = 0;
+    goto finish;
+  }
+  CLEAR(&lambda[1], NN - KK);
   lambda[0] = 1;
 
   if (no_eras > 0) {
-      /* Init lambda to be the erasure locator polynomial */
-      lambda[1] = Alpha_to[modnn(PRIM * eras_pos[0])];
-      for (i = 1; i < no_eras; i++)
-        {
-          u = modnn(PRIM*eras_pos[i]);
-          for (j = i+1; j > 0; j--)
-            {
-              tmp = Index_of[lambda[j - 1]];
-              if(tmp != A0)
-                {
-                  lambda[j] ^= Alpha_to[modnn(u + tmp)];
-                }
-            }
+    /* Init lambda to be the erasure locator polynomial */
+    lambda[1] = Alpha_to[modnn(PRIM * eras_pos[0])];
+    for (i = 1; i < no_eras; i++) {
+      u = modnn(PRIM * eras_pos[i]);
+      for (j = i + 1; j > 0; j--) {
+        tmp = Index_of[lambda[j - 1]];
+        if (tmp != A0) {
+          lambda[j] ^= Alpha_to[modnn(u + tmp)];
         }
-     }
-  for(i=0;i<NN-KK+1;i++)
+      }
+    }
+  }
+  for (i = 0; i < NN - KK + 1; i++)
     b[i] = Index_of[lambda[i]];
-  
+
   /*
    * Begin Berlekamp-Massey algorithm to determine error+erasure
    * locator polynomial
    */
   r = no_eras;
   el = no_eras;
-  while (++r <= NN-KK) {	/* r is the step number */
-      /* Compute discrepancy at the r-th step in poly-form */
-      discr_r = 0;
-      for (i = 0; i < r; i++){
-          if ((lambda[i] != 0) && (s[r - i] != A0)) {
-              discr_r ^= Alpha_to[modnn(Index_of[lambda[i]] + s[r - i])];
-            }
-        }
-      discr_r = Index_of[discr_r];	/* Index form */
-      if (discr_r == A0) {
-          /* 2 lines below: B(x) <-- x*B(x) */
-          COPYDOWN(&b[1],b,NN-KK);
-          b[0] = A0;
-        } else {
-          /* 7 lines below: T(x) <-- lambda(x) - discr_r*x*b(x) */
-          t[0] = lambda[0];
-          for (i = 0 ; i < NN-KK; i++) {
-              if(b[i] != A0)
-                t[i+1] = lambda[i+1] ^ Alpha_to[modnn(discr_r + b[i])];
-              else
-                t[i+1] = lambda[i+1];
-            }
-          if (2 * el <= r + no_eras - 1) {
-              el = r + no_eras - el;
-              /*
-   * 2 lines below: B(x) <-- inv(discr_r) *
-   * lambda(x)
-   */
-              for (i = 0; i <= NN-KK; i++)
-                b[i] = (lambda[i] == 0) ? A0 : modnn(Index_of[lambda[i]] - discr_r + NN);
-            } else {
-              /* 2 lines below: B(x) <-- x*B(x) */
-              COPYDOWN(&b[1],b,NN-KK);
-              b[0] = A0;
-            }
-          COPY(lambda,t,NN-KK+1);
-        }
+  while (++r <= NN - KK) { /* r is the step number */
+    /* Compute discrepancy at the r-th step in poly-form */
+    discr_r = 0;
+    for (i = 0; i < r; i++) {
+      if ((lambda[i] != 0) && (s[r - i] != A0)) {
+        discr_r ^= Alpha_to[modnn(Index_of[lambda[i]] + s[r - i])];
+      }
     }
+    discr_r = Index_of[discr_r]; /* Index form */
+    if (discr_r == A0) {
+      /* 2 lines below: B(x) <-- x*B(x) */
+      COPYDOWN(&b[1], b, NN - KK);
+      b[0] = A0;
+    } else {
+      /* 7 lines below: T(x) <-- lambda(x) - discr_r*x*b(x) */
+      t[0] = lambda[0];
+      for (i = 0; i < NN - KK; i++) {
+        if (b[i] != A0)
+          t[i + 1] = lambda[i + 1] ^ Alpha_to[modnn(discr_r + b[i])];
+        else
+          t[i + 1] = lambda[i + 1];
+      }
+      if (2 * el <= r + no_eras - 1) {
+        el = r + no_eras - el;
+        /*
+         * 2 lines below: B(x) <-- inv(discr_r) *
+         * lambda(x)
+         */
+        for (i = 0; i <= NN - KK; i++)
+          b[i] = (lambda[i] == 0) ? A0 : modnn(Index_of[lambda[i]] - discr_r + NN);
+      } else {
+        /* 2 lines below: B(x) <-- x*B(x) */
+        COPYDOWN(&b[1], b, NN - KK);
+        b[0] = A0;
+      }
+      COPY(lambda, t, NN - KK + 1);
+    }
+  }
 
   /* Convert lambda to index form and compute deg(lambda(x)) */
   deg_lambda = 0;
-  for(i=0;i<NN-KK+1;i++){
-      lambda[i] = Index_of[lambda[i]];
-      if(lambda[i] != A0)
-        deg_lambda = i;
-    }
+  for (i = 0; i < NN - KK + 1; i++) {
+    lambda[i] = Index_of[lambda[i]];
+    if (lambda[i] != A0)
+      deg_lambda = i;
+  }
   /*
    * Find roots of the error+erasure locator polynomial by Chien
    * Search
    */
-  COPY(&reg[1],&lambda[1],NN-KK);
-  count = 0;		/* Number of roots of lambda(x) */
-  for (i = 1,k=NN-Ldec; i <= NN; i++,k = modnn(NN+k-Ldec)) {
-      q = 1;
-      for (j = deg_lambda; j > 0; j--){
-          if (reg[j] != A0) {
-              reg[j] = modnn(reg[j] + j);
-              q ^= Alpha_to[reg[j]];
-            }
-        }
-      if (q != 0)
-        continue;
-      /* store root (index-form) and error location number */
-      root[count] = i;
-      loc[count] = k;
-      /* If we've already found max possible roots,
+  COPY(&reg[1], &lambda[1], NN - KK);
+  count = 0; /* Number of roots of lambda(x) */
+  for (i = 1, k = NN - Ldec; i <= NN; i++, k = modnn(NN + k - Ldec)) {
+    q = 1;
+    for (j = deg_lambda; j > 0; j--) {
+      if (reg[j] != A0) {
+        reg[j] = modnn(reg[j] + j);
+        q ^= Alpha_to[reg[j]];
+      }
+    }
+    if (q != 0)
+      continue;
+    /* store root (index-form) and error location number */
+    root[count] = i;
+    loc[count] = k;
+    /* If we've already found max possible roots,
      * abort the search to save time
      */
-      if(++count == deg_lambda)
-        break;
-    }
+    if (++count == deg_lambda)
+      break;
+  }
   if (deg_lambda != count) {
-      /*
+    /*
      * deg(lambda) unequal to number of roots => uncorrectable
      * error detected
      */
-      count = -1;
-      goto finish;
-    }
+    count = -1;
+    goto finish;
+  }
   /*
    * Compute err+eras evaluator poly omega(x) = s(x)*lambda(x) (modulo
    * x**(NN-KK)). in index form. Also find deg(omega).
    */
   deg_omega = 0;
-  for (i = 0; i < NN-KK;i++){
-      tmp = 0;
-      j = (deg_lambda < i) ? deg_lambda : i;
-      for(;j >= 0; j--){
-          if ((s[i + 1 - j] != A0) && (lambda[j] != A0))
-            tmp ^= Alpha_to[modnn(s[i + 1 - j] + lambda[j])];
-        }
-      if(tmp != 0)
-        deg_omega = i;
-      omega[i] = Index_of[tmp];
+  for (i = 0; i < NN - KK; i++) {
+    tmp = 0;
+    j = (deg_lambda < i) ? deg_lambda : i;
+    for (; j >= 0; j--) {
+      if ((s[i + 1 - j] != A0) && (lambda[j] != A0))
+        tmp ^= Alpha_to[modnn(s[i + 1 - j] + lambda[j])];
     }
-  omega[NN-KK] = A0;
-  
+    if (tmp != 0)
+      deg_omega = i;
+    omega[i] = Index_of[tmp];
+  }
+  omega[NN - KK] = A0;
+
   /*
    * Compute error values in poly-form. num1 = omega(inv(X(l))), num2 =
    * inv(X(l))**(B0-1) and den = lambda_pr(inv(X(l))) all in poly-form
    */
-  for (j = count-1; j >=0; j--) {
-      num1 = 0;
-      for (i = deg_omega; i >= 0; i--) {
-          if (omega[i] != A0)
-            num1  ^= Alpha_to[modnn(omega[i] + i * root[j])];
-        }
-      num2 = Alpha_to[modnn(root[j] * (B0 - 1) + NN)];
-      den = 0;
-
-      /* lambda[i+1] for i even is the formal derivative lambda_pr of lambda[i] */
-      for (i = min(deg_lambda,NN-KK-1) & ~1; i >= 0; i -=2) {
-          if(lambda[i+1] != A0)
-            den ^= Alpha_to[modnn(lambda[i+1] + i * root[j])];
-        }
-      if (den == 0) {
-
-          /* Convert to dual- basis */
-          count = -1;
-          goto finish;
-        }
-      /* Apply error to data */
-      if (num1 != 0) {
-          data[loc[j]] ^= Alpha_to[modnn(Index_of[num1] + Index_of[num2] + NN - Index_of[den])];
-        }
+  for (j = count - 1; j >= 0; j--) {
+    num1 = 0;
+    for (i = deg_omega; i >= 0; i--) {
+      if (omega[i] != A0)
+        num1 ^= Alpha_to[modnn(omega[i] + i * root[j])];
     }
+    num2 = Alpha_to[modnn(root[j] * (B0 - 1) + NN)];
+    den = 0;
+
+    /* lambda[i+1] for i even is the formal derivative lambda_pr of lambda[i] */
+    for (i = min(deg_lambda, NN - KK - 1) & ~1; i >= 0; i -= 2) {
+      if (lambda[i + 1] != A0)
+        den ^= Alpha_to[modnn(lambda[i + 1] + i * root[j])];
+    }
+    if (den == 0) {
+      /* Convert to dual- basis */
+      count = -1;
+      goto finish;
+    }
+    /* Apply error to data */
+    if (num1 != 0) {
+      data[loc[j]] ^= Alpha_to[modnn(Index_of[num1] + Index_of[num2] + NN - Index_of[den])];
+    }
+  }
 finish:
-  if(eras_pos != nullptr){
-      for(i=0;i<count;i++){
-          if(eras_pos!= nullptr)
-            eras_pos[i] = loc[i];
-        }
+  if (eras_pos != nullptr) {
+    for (i = 0; i < count; i++) {
+      if (eras_pos != nullptr)
+        eras_pos[i] = loc[i];
     }
+  }
   return count;
 }
 /* Encoder/decoder initialization - call this first! */
 void init_rs(int kk)
 {
-  KK=kk;
+  KK = kk;
   generate_gf();
   gen_poly();
   RS_init = 1;

@@ -6,16 +6,17 @@
 
 class QLCDNumber;
 
-namespace Ui {
-  class calibration;
-  }
+namespace Ui
+{
+class calibration;
+}
 
 class calibration : public QDialog
 {
   Q_OBJECT
-  
+
 public:
-  explicit calibration(QWidget *parent = 0);
+  explicit calibration(QWidget* parent = 0);
   ~calibration();
   int exec();
   /**
@@ -23,26 +24,32 @@ public:
    *
    * @return double calibrated value of the rxclock
    */
-  double getRXClock() {return rxCardClock;}
+  double getRXClock()
+  {
+    return rxCardClock;
+  }
 
   /**
    * @brief get calibrated transmit clock
    *
    * @return double calibrated value of the txclock
    */
-  double getTXClock(){return txCardClock;}
+  double getTXClock()
+  {
+    return txCardClock;
+  }
 
 public slots:
   void hasFinished(int result);
-  
+
 private:
-  Ui::calibration *ui;
+  Ui::calibration* ui;
   double rxCardClock;
   double txCardClock;
   bool stopped;
   void init();
   bool start(bool isRX);
-  void display(int value,QLCDNumber *dspl);
+  void display(int value, QLCDNumber* dspl);
   bool canceled;
 };
 

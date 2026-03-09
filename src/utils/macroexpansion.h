@@ -4,8 +4,7 @@
 #include <QList>
 
 
-struct sconvert
-{
+struct sconvert {
   QChar tag;
   QString replacement;
 };
@@ -15,8 +14,12 @@ class macroExpansion
 public:
   macroExpansion();
   QString convert(QString txt);
-  void addConversion(QChar tag,QString value);
-  void clear() {convertList.clear();}
+  void addConversion(QChar tag, QString value);
+  void clear()
+  {
+    convertList.clear();
+  }
+
 private:
   QList<sconvert> convertList;
 };

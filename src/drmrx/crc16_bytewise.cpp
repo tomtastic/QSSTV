@@ -41,12 +41,12 @@
 
 
 /*************
-*
-*   adjusted for use in own plain C programa
-*   by M.Bos - PA0MBO
-*
-*   Date Dec 9th 2007
-*/
+ *
+ *   adjusted for use in own plain C programa
+ *   by M.Bos - PA0MBO
+ *
+ *   Date Dec 9th 2007
+ */
 
 #include <math.h>
 #include <stdlib.h>
@@ -57,39 +57,37 @@
 /* function                                                                   */
 
 /******************************************************************************/
-void crc16_bytewise(double /*@out@ */ checksum[],unsigned char in[], long N)
+void crc16_bytewise(double /*@out@ */ checksum[], unsigned char in[], long N)
 {
   long int i;
   int j;
   unsigned int b = 0xFFFF;
-  unsigned int x = 0x1021;	/* (1) 0001000000100001 */
+  unsigned int x = 0x1021; /* (1) 0001000000100001 */
   unsigned int y;
 
   for (i = 0; i < N - 2; i++)
 
-    {
-      for (j = 7; j >= 0; j--)
-	{
-	  y = (((b >> 15) + static_cast<unsigned int>(in[i] >> j)) & 0x01) & 0x01;	/* extra parenth pa0mbo */
-	  if (y == 1)
-	    b = ((b << 1) ^ x);
+  {
+    for (j = 7; j >= 0; j--) {
+      y = (((b >> 15) + static_cast<unsigned int>(in[i] >> j)) & 0x01) & 0x01; /* extra parenth pa0mbo */
+      if (y == 1)
+        b = ((b << 1) ^ x);
 
-	  else
-	    b = (b << 1);
-	}
+      else
+        b = (b << 1);
     }
+  }
   for (i = N - 2; i < N; i++)
 
-    {
-      for (j = 7; j >= 0; j--)
-	{
-	  y = (((b >> 15) + static_cast<unsigned int>((in[i] >> j) & 0x01)) ^ 0x01) & 0x01;	/* extra parent pa0mbo */
-	  if (y == 1)
-	    b = ((b << 1) ^ x);
+  {
+    for (j = 7; j >= 0; j--) {
+      y = (((b >> 15) + static_cast<unsigned int>((in[i] >> j) & 0x01)) ^ 0x01) & 0x01; /* extra parent pa0mbo */
+      if (y == 1)
+        b = ((b << 1) ^ x);
 
-	  else
-	    b = (b << 1);
-	}
+      else
+        b = (b << 1);
     }
+  }
   *checksum = static_cast<double>(b & 0xFFFF);
 }

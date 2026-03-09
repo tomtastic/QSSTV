@@ -6,14 +6,14 @@
 
 /*! a WAVE format structure
 
-		The canonical WAVE format starts with the RIFF header:
+    The canonical WAVE format starts with the RIFF header:
     \verbatim
 0         4   ChunkID          Contains the letters "RIFF" in ASCII form
                                (0x52494646 big-endian form).
 4         4   ChunkSize        36 + SubChunk2Size, or more precisely:
                                4 + (8 + SubChunk1Size) + (8 + SubChunk2Size)
-                               This is the size of the rest of the chunk 
-                               following this number.  This is the size of the 
+                               This is the size of the rest of the chunk
+                               following this number.  This is the size of the
                                entire file in bytes minus 8 bytes for the
                                two fields not included in this count:
                                ChunkID and ChunkSize.
@@ -28,7 +28,7 @@ The "fmt " subchunk describes the sound data's format:
 16        4   Subchunk1Size    16 for PCM.  This is the size of the
                                rest of the Subchunk which follows this number.
 20        2   AudioFormat      PCM = 1 (i.e. Linear quantization)
-                               Values other than 1 indicate some 
+                               Values other than 1 indicate some
                                form of compression.
 22        2   NumChannels      Mono = 1, Stereo = 2, etc.
 24        4   SampleRate       8000, 44100, etc.
@@ -48,72 +48,75 @@ The "data" subchunk contains the size of the data and the actual sound:
 40        4   Subchunk2Size    == NumSamples * NumChannels * BitsPerSample/8
                                This is the number of bytes in the data.
                                You can also think of this as the size
-                               of the read of the subchunk following this 
+                               of the read of the subchunk following this
                                number.
 44        *   Data             The actual sound data.
 
-		\endverbatim 
+    \endverbatim
 */
 
 
-struct sWave
-{
-  char chunkID[4];					//!< Contains the letters "RIFF"
-  int  chunkSize;						//!< 36 + SubChunk2Size
-  char format[4];	 					//!< Contains the letters "WAVE"
-  char subChunk1ID[4]; 			//!< Contains the letters "fmt "
-  int  subChunk1Size;				//!< 16 for PCM
-  short int audioFormat;		//!< PCM = 1 (i.e. Linear quantization)
-  short int numChannels;		//!< Mono = 1, Stereo = 2, etc.
-  unsigned int sampleRate;	//!< 8000, 44100, etc.
-  unsigned int byteRate;		//!< == SampleRate * NumChannels * BitsPerSample/8
-  short int blockAlign;			//!< == NumChannels * BitsPerSample/8
-  short int bitsPerSample;	//!< 8 bits = 8, 16 bits = 16, etc.
-  char subChunk2ID[4];			//!< Contains the letters "data"
-  int  subChunk2Size;				//!< NumSamples * NumChannels * BitsPerSample/8
+struct sWave {
+  char chunkID[4];         //!< Contains the letters "RIFF"
+  int chunkSize;           //!< 36 + SubChunk2Size
+  char format[4];          //!< Contains the letters "WAVE"
+  char subChunk1ID[4];     //!< Contains the letters "fmt "
+  int subChunk1Size;       //!< 16 for PCM
+  short int audioFormat;   //!< PCM = 1 (i.e. Linear quantization)
+  short int numChannels;   //!< Mono = 1, Stereo = 2, etc.
+  unsigned int sampleRate; //!< 8000, 44100, etc.
+  unsigned int byteRate;   //!< == SampleRate * NumChannels * BitsPerSample/8
+  short int blockAlign;    //!< == NumChannels * BitsPerSample/8
+  short int bitsPerSample; //!< 8 bits = 8, 16 bits = 16, etc.
+  char subChunk2ID[4];     //!< Contains the letters "data"
+  int subChunk2Size;       //!< NumSamples * NumChannels * BitsPerSample/8
 };
 
 //! class for accessing .wav files
 class wavIO
 {
 public:
-  wavIO(unsigned int samplingR=BASESAMPLERATE);
-	~wavIO();
-	bool openFileForRead(QString fname,bool ask);
+  wavIO(unsigned int samplingR = BASESAMPLERATE);
+  ~wavIO();
+  bool openFileForRead(QString fname, bool ask);
   bool openFileForWrite(QString fname, bool ask, bool isStereo);
-  int  read (short int *dPtr, uint len);
-  bool write(quint16 *dPtr, uint len, bool isStereo);
-	void setSamplingrate(int sr) {samplingrate=sr;}
-  int getNumberOfChannels(){return numberOfChannels;}
+  int read(short int* dPtr, uint len);
+  bool write(quint16* dPtr, uint len, bool isStereo);
+  void setSamplingrate(int sr)
+  {
+    samplingrate = sr;
+  }
+  int getNumberOfChannels()
+  {
+    return numberOfChannels;
+  }
   void closeFile();
 
-	/** return the number of samples in the opened file */
-	unsigned int getNumberOfSamples()
-		{
-			return numberOfSamples;
-		}
-	/** close all opened files */
-	void close()
-		{
-    if(inopf.isOpen())
-      {
-      write(nullptr,0,true); // flush everything in case we are writing
-			closeFile();
-      }
-		}
-  private:
-    sWave waveHeader;
-    unsigned int numberOfSamples;
-		unsigned int samplesRead;
-		unsigned int samplingrate;
-    int numberOfChannels;
-    QFile inopf;
-    void initHeader();
-		bool writeHeader();
-    bool checkString(char *str,const char *cstr);
-		bool reading;
-		bool writing;
+  /** return the number of samples in the opened file */
+  unsigned int getNumberOfSamples()
+  {
+    return numberOfSamples;
+  }
+  /** close all opened files */
+  void close()
+  {
+    if (inopf.isOpen()) {
+      write(nullptr, 0, true); // flush everything in case we are writing
+      closeFile();
+    }
+  }
 
-
+private:
+  sWave waveHeader;
+  unsigned int numberOfSamples;
+  unsigned int samplesRead;
+  unsigned int samplingrate;
+  int numberOfChannels;
+  QFile inopf;
+  void initHeader();
+  bool writeHeader();
+  bool checkString(char* str, const char* cstr);
+  bool reading;
+  bool writing;
 };
 #endif

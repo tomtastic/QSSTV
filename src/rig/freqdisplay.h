@@ -3,21 +3,22 @@
 
 #include <QWidget>
 
-namespace Ui {
-  class freqDisplay;
-  }
+namespace Ui
+{
+class freqDisplay;
+}
 
 class freqDisplay : public QWidget
 {
   Q_OBJECT
-  
+
 public:
-  explicit freqDisplay(QWidget *parent = 0);
+  explicit freqDisplay(QWidget* parent = 0);
   ~freqDisplay();
   void display(double freq);
-  
+
 private:
-  Ui::freqDisplay *ui;
+  Ui::freqDisplay* ui;
 };
 
 #endif // FREQDISPLAY_H

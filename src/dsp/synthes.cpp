@@ -33,263 +33,169 @@
 //  This value is added to the old index  of the sine table.
 */
 
-synthesizer *synthesPtr;
+synthesizer* synthesPtr;
 
 synthesizer::synthesizer(double txSmpClock)
 {
-	// generate the table
-	int i;
-	txSamplingClock=txSmpClock;
-  addToLog(QString("synthes: tx sampling clock=%1").arg(txSamplingClock),LOGSOUND);
-  for (i=0;i<SINTABLEN;i++)
-    {
-      sineTable[i]=(sin((static_cast<double>(i)*M_PI*2.)/SINTABLEN)*8000.);
-    }
-
-//  waterfallPtr= new waterfallText;
-  for(i=0;i<TONEBUFLEN;i++)
-  {
-    toneBuffer[i]=sin((i*2*M_PI)*1200./BASESAMPLERATE)*8000.;
+  // generate the table
+  int i;
+  txSamplingClock = txSmpClock;
+  addToLog(QString("synthes: tx sampling clock=%1").arg(txSamplingClock), LOGSOUND);
+  for (i = 0; i < SINTABLEN; i++) {
+    sineTable[i] = (sin((static_cast<double>(i) * M_PI * 2.) / SINTABLEN) * 8000.);
   }
-  oldAngle=0.;
-  adjust=0.;
-  pttToneCounter=0;
+
+  //  waterfallPtr= new waterfallText;
+  for (i = 0; i < TONEBUFLEN; i++) {
+    toneBuffer[i] = sin((i * 2 * M_PI) * 1200. / BASESAMPLERATE) * 8000.;
+  }
+  oldAngle = 0.;
+  adjust = 0.;
+  pttToneCounter = 0;
 }
 
-synthesizer::~synthesizer()
-{
-}
+synthesizer::~synthesizer() {}
 
-void synthesizer::sendTone(double duration,double lowerFrequency,double upperFrequency,bool concat)
+void synthesizer::sendTone(double duration, double lowerFrequency, double upperFrequency, bool concat)
 {
-//  fillBuffer();
-  if(upperFrequency!=0)
-  {
-    sendSweep(duration,lowerFrequency,upperFrequency);
+  //  fillBuffer();
+  if (upperFrequency != 0) {
+    sendSweep(duration, lowerFrequency, upperFrequency);
     return;
   }
-  if(!concat) adjust=0.;
-// convert duration to number of samples
-  unsigned int ns=static_cast<unsigned int>((duration+adjust)*txSamplingClock+0.5);
-  adjust+=duration-(static_cast<double>(ns))/txSamplingClock;
-  sendSamples(ns,lowerFrequency);
+  if (!concat)
+    adjust = 0.;
+  // convert duration to number of samples
+  unsigned int ns = static_cast<unsigned int>((duration + adjust) * txSamplingClock + 0.5);
+  adjust += duration - (static_cast<double>(ns)) / txSamplingClock;
+  sendSamples(ns, lowerFrequency);
 }
 
 void synthesizer::sendWFText()
 {
-  DSPFLOAT *dataPtr;
+  DSPFLOAT* dataPtr;
   int len;
   int i;
-  len=waterfallPtr->getLength();
-  while ((dataPtr=waterfallPtr->nextLine())!=nullptr)
-    {
-      addToLog(QString("sending id len=%1").arg(len),LOGSYNTHES);
-      for (i=0;i<len;i++)
-        {
-          write(static_cast<double>(dataPtr[i]));
-        }
-//       arrayDump(QString("wf"),dataPtr,32,true);
+  len = waterfallPtr->getLength();
+  while ((dataPtr = waterfallPtr->nextLine()) != nullptr) {
+    addToLog(QString("sending id len=%1").arg(len), LOGSYNTHES);
+    for (i = 0; i < len; i++) {
+      write(static_cast<double>(dataPtr[i]));
     }
-  addToLog("end of id",LOGSYNTHES);
+    //       arrayDump(QString("wf"),dataPtr,32,true);
+  }
+  addToLog("end of id", LOGSYNTHES);
 }
 
-void synthesizer::sendSamples(unsigned int numSamples,double frequency)
+void synthesizer::sendSamples(unsigned int numSamples, double frequency)
 {
-	unsigned int i;
-	for(i=0;i<numSamples;i++)
-		{
-			sendSample(frequency);
-		}
+  unsigned int i;
+  for (i = 0; i < numSamples; i++) {
+    sendSample(frequency);
+  }
 }
 
-void synthesizer::sendSweep(unsigned int duration,double lowerFrequency, double upperFrequency)
+void synthesizer::sendSweep(unsigned int duration, double lowerFrequency, double upperFrequency)
 {
-	unsigned int i;
-	unsigned int numSamples=duration*txSamplingClock;
-	double deltaFreq=(upperFrequency-lowerFrequency)/numSamples;
-	for(i=0;i<numSamples;i++)
-	{
-		sendSample(lowerFrequency+deltaFreq*i);
-	}
+  unsigned int i;
+  unsigned int numSamples = duration * txSamplingClock;
+  double deltaFreq = (upperFrequency - lowerFrequency) / numSamples;
+  for (i = 0; i < numSamples; i++) {
+    sendSample(lowerFrequency + deltaFreq * i);
+  }
 }
 
 void synthesizer::sendSilence(double duration)
 {
-	unsigned int i;
-	// convert duration to number of samples
-	unsigned int ns=static_cast<uint>(duration*txSamplingClock+0.5);
-	for(i=0;i<ns;i++)
-		{
-      write(0);
-		}
+  unsigned int i;
+  // convert duration to number of samples
+  unsigned int ns = static_cast<uint>(duration * txSamplingClock + 0.5);
+  for (i = 0; i < ns; i++) {
+    write(0);
+  }
 }
 
 void synthesizer::sendSample(double freq)
 {
-	sample=nextSample(freq);
-	write(sample);
+  sample = nextSample(freq);
+  write(sample);
 }
 
 
 SOUNDFRAME synthesizer::filter(double sample)
 {
- quint32 tst;
- quint32 ptt;
- tst=static_cast<quint32>(round(sample));
-// if(outputStereo)
-//   {
-//      tst+=tst<<16;
-//   }
- if(pttToneOtherChannel)
-   {
-     ptt=(static_cast<quint32>(toneBuffer[(pttToneCounter++)%TONEBUFLEN]))<< 16;
-     tst+=ptt;
-   }
- if(swapChannel)
-   {
-     tst=((tst>>16) & 0xFFFF)+(tst<<16);
-   }
- return tst;
+  quint32 tst;
+  quint32 ptt;
+  tst = static_cast<quint32>(round(sample));
+  // if(outputStereo)
+  //   {
+  //      tst+=tst<<16;
+  //   }
+  if (pttToneOtherChannel) {
+    ptt = (static_cast<quint32>(toneBuffer[(pttToneCounter++) % TONEBUFLEN])) << 16;
+    tst += ptt;
+  }
+  if (swapChannel) {
+    tst = ((tst >> 16) & 0xFFFF) + (tst << 16);
+  }
+  return tst;
 }
 
 void synthesizer::write(double sample)
 {
-  quint32 smp=filter(sample);
-//  while((!soundIOPtr->txBuffer.put(smp)) && (soundIOPtr->isPlaying()))
-     while((!soundIOPtr->txBuffer.put(smp)))
-    {
-      usleep(2000);
-    }
+  quint32 smp = filter(sample);
+  //  while((!soundIOPtr->txBuffer.put(smp)) && (soundIOPtr->isPlaying()))
+  while ((!soundIOPtr->txBuffer.put(smp))) {
+    usleep(2000);
+  }
 }
-
 
 
 // buffer must already contain correct stereo information
-void synthesizer::writeBuffer(quint32 *buffer, int len)
+void synthesizer::writeBuffer(quint32* buffer, int len)
 {
   int i;
-   if(swapChannel)
-     {
-       for(i=0;i<len;i++)
-        {
-           buffer[i]=((buffer[i]>>16) & 0xFFFF)+(buffer[i]<<16);
-
-        }
-     }
-  while((!soundIOPtr->txBuffer.put(buffer,len)) && (soundIOPtr->isPlaying()))
-    {
-      usleep(2000);
+  if (swapChannel) {
+    for (i = 0; i < len; i++) {
+      buffer[i] = ((buffer[i] >> 16) & 0xFFFF) + (buffer[i] << 16);
     }
+  }
+  while ((!soundIOPtr->txBuffer.put(buffer, len)) && (soundIOPtr->isPlaying())) {
+    usleep(2000);
+  }
 }
-
-
 
 
 void synthesizer::setFilter(efilterType txFilterType)
 {
-
-//  filterLength=TXNUMTAPS;
-  switch (txFilterType)
-    {
-//      case F400:
-//      case F600:
-//      case F1000:
-//      case F800:
-      //filterI=f800TX;
-      default:
-      break;
-    }
+  //  filterLength=TXNUMTAPS;
+  switch (txFilterType) {
+    //      case F400:
+    //      case F600:
+    //      case F1000:
+    //      case F800:
+    // filterI=f800TX;
+  default:
+    break;
+  }
 }
 
-//void synthesizer::fillBuffer()
+// void synthesizer::fillBuffer()
 //{
-//  unsigned int i;
-//  unsigned int sz;
-//  sz=soundIOPtr->txBuffer.getBufferSize();
-//  for(i=0;i<50000;i++)
-//    {
-//      soundIOPtr->txBuffer.put((SOUNDFRAME)(round(nextSample(2300))));
-//    }
-//  for(;i<(sz);i++)
-//    {
-//      soundIOPtr->txBuffer.put((SOUNDFRAME)(round(nextSample(1500))));
-//    }
-//  for(;i<sz-1;i++)
-//    {
-//      soundIOPtr->txBuffer.put((SOUNDFRAME)(round(0)));
-//    }
-//  addToLog(QString("buffercount %1").arg(soundIOPtr->txBuffer.getWriteIndex()),LOGSYNTHES);
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//   unsigned int i;
+//   unsigned int sz;
+//   sz=soundIOPtr->txBuffer.getBufferSize();
+//   for(i=0;i<50000;i++)
+//     {
+//       soundIOPtr->txBuffer.put((SOUNDFRAME)(round(nextSample(2300))));
+//     }
+//   for(;i<(sz);i++)
+//     {
+//       soundIOPtr->txBuffer.put((SOUNDFRAME)(round(nextSample(1500))));
+//     }
+//   for(;i<sz-1;i++)
+//     {
+//       soundIOPtr->txBuffer.put((SOUNDFRAME)(round(0)));
+//     }
+//   addToLog(QString("buffercount %1").arg(soundIOPtr->txBuffer.getWriteIndex()),LOGSYNTHES);
+// }

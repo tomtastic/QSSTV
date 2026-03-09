@@ -17,19 +17,26 @@ public:
   waterfallText();
   ~waterfallText();
   void init();
-  void setText(const QString &txt);
-  QImage *getImagePtr() {return &image;}
- DSPFLOAT *nextLine();
- int getLength() {return fftLength;}
- double getDuration(const QString &txt=QString());
+  void setText(const QString& txt);
+  QImage* getImagePtr()
+  {
+    return &image;
+  }
+  DSPFLOAT* nextLine();
+  int getLength()
+  {
+    return fftLength;
+  }
+  double getDuration(const QString& txt = QString());
+
 private:
   int fftLength;
   int samplingrate;
-  fftw_complex *out;
-  fftw_complex *dataBuffer;
+  fftw_complex* out;
+  fftw_complex* dataBuffer;
 
-  DSPFLOAT *outFiltered;
-  DSPFLOAT *audioBuf;
+  DSPFLOAT* outFiltered;
+  DSPFLOAT* audioBuf;
   fftw_plan plan;
   void setupImage(QString txt);
   QString convert(QString txt);
@@ -37,12 +44,12 @@ private:
   int width;
   int height;
   int line;
-  wfFilter *txFilter;
+  wfFilter* txFilter;
   QImage image;
   int dLine;
   int startFreqIndex;
-  double *phr;
-  double *phi;
+  double* phr;
+  double* phi;
   double amplitude;
   macroExpansion mexp;
 };

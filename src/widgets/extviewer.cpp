@@ -3,10 +3,10 @@
 #include <QFileInfo>
 #include <QDebug>
 
-extViewer::extViewer(QWidget *parent) :   QDialog(parent),   ui(new Ui::extViewer)
+extViewer::extViewer(QWidget* parent) : QDialog(parent), ui(new Ui::extViewer)
 {
   ui->setupUi(this);
-  activeMovie=false;
+  activeMovie = false;
   setModal(false);
   setWindowState(Qt::WindowMaximized);
 }
@@ -17,18 +17,17 @@ extViewer::~extViewer()
 }
 
 
-void extViewer::setup(const QString &fn)
+void extViewer::setup(const QString& fn)
 {
-  int fw,fh;
+  int fw, fh;
   // we want the original image
-  ui->imViewer->stretch=true;
+  ui->imViewer->stretch = true;
   ui->imViewer->setType(imageViewer::EXTVIEW);
-  QString filename = fn;  // Create non-const copy for openImage
-  ui->imViewer->openImage(filename,false,false,false,true);
-  fileName=fn;
+  QString filename = fn; // Create non-const copy for openImage
+  ui->imViewer->openImage(filename, false, false, false, true);
+  fileName = fn;
   QFileInfo fi(fn);
-  fw=ui->imViewer-> getImagePtr()->width();
-  fh=ui->imViewer->getImagePtr()->height();
+  fw = ui->imViewer->getImagePtr()->width();
+  fh = ui->imViewer->getImagePtr()->height();
   ui->lineEdit->setText(QString("%1 %2x%3").arg(fi.fileName()).arg(fw).arg(fh));
 }
-

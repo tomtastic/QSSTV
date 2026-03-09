@@ -3,7 +3,8 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class canvasSizeForm;
 }
 
@@ -12,13 +13,13 @@ class canvasSizeForm : public QDialog
   Q_OBJECT
 
 public:
-  explicit canvasSizeForm(QWidget *parent = 0);
+  explicit canvasSizeForm(QWidget* parent = 0);
   ~canvasSizeForm();
   QRect getSize();
-  void setSize(int x,int y);
+  void setSize(int x, int y);
 
 private:
-  Ui::canvasSizeForm *ui;
+  Ui::canvasSizeForm* ui;
 };
 
 #endif // CANVASSIZEFORM_H

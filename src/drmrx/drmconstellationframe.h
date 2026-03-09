@@ -3,26 +3,28 @@
 
 #include <QFrame>
 
-enum econstellation {FAC,MSC};
+enum econstellation { FAC, MSC };
 
-namespace Ui {
+namespace Ui
+{
 class drmConstellationFrame;
 }
 
 class drmConstellationFrame : public QFrame
 {
   Q_OBJECT
-  
+
 public:
-  explicit drmConstellationFrame(QWidget *parent = 0);
+  explicit drmConstellationFrame(QWidget* parent = 0);
   ~drmConstellationFrame();
   void setConstellation(econstellation constellation);
   void clearConstellation();
+
 private:
-  Ui::drmConstellationFrame *ui;
- void paintEvent (QPaintEvent *);
- float ConstellationArray[2 * 2959];
- int lmsc;
+  Ui::drmConstellationFrame* ui;
+  void paintEvent(QPaintEvent*);
+  float ConstellationArray[2 * 2959];
+  int lmsc;
 };
 
 #endif // DRMCONSTELLATIONFRAME_H

@@ -11,15 +11,15 @@ SSTV Parameter functions
 */
 
 
-//#define NUMFAXMODES 3 //!< Number of FAX Modes for RX and TX
+// #define NUMFAXMODES 3 //!< Number of FAX Modes for RX and TX
 
 
 #define GREENLINE 0 //!< index for green line buffer
 #define BLUELINE 1  //!< index for blue line buffer
-#define REDLINE 2		//!< index for red line buffer
-#define YLINEODD 3 //!< index for intensity line buffer 0 
+#define REDLINE 2   //!< index for red line buffer
+#define YLINEODD 3  //!< index for intensity line buffer 0
 #define YLINEEVEN 4 //!< index for intensity line buffer 1
-#define VIDEOBW 800 
+#define VIDEOBW 800
 #define MAXLINES 800
 
 #define DEMODAM 0
@@ -29,14 +29,12 @@ SSTV Parameter functions
 #define RETRACEWIDTH 0.29
 
 
-
 /**
   \brief SSTV Modes
 
   M1 to FAX480 are using sync pulses, AVT modes do not use syncs.
 */
-enum esstvMode
-{
+enum esstvMode {
   M1,
   M2,
   S1,
@@ -93,13 +91,13 @@ enum esstvMode
 #define STARTWIDE M1
 #define ENDWIDE FAX480
 
-//enum efaxMode
+// enum efaxMode
 //{
 //	NOAA,
 //	HFFAX,
 //	FAXCUSTOM,
 //	FAXNONE
-//};
+// };
 
 /*
 
@@ -118,21 +116,20 @@ struct sTimeFreq
 
 */
 
-struct sSSTVParam
-{
+struct sSSTVParam {
   QString name;
   QString shortName;
   enum esstvMode mode;
   DSPFLOAT imageTime;
   unsigned int numberOfPixels; // NumberOfPixels per Line
   unsigned int numberOfDisplayLines;
-  unsigned int numberOfDataLines;  // data lines
+  unsigned int numberOfDataLines; // data lines
   quint32 VISCode;
-  float sync;			//used for rx
+  float sync; // used for rx
   float fp;
   float bp;
   float blank;
-  float synct;		// used for tx
+  float synct; // used for tx
   float fpt;
   float bpt;
   float blankt;
@@ -141,11 +138,11 @@ struct sSSTVParam
   int deviation;
 };
 
-//struct sFAXParam
+// struct sFAXParam
 //{
 //	~sFAXParam(){}
-//  QString name;
-//  QString shortName;
+//   QString name;
+//   QString shortName;
 ////	enum efaxMode mode;
 //	uint modulation;
 //	double lpm;
@@ -164,37 +161,37 @@ struct sSSTVParam
 //};
 
 
-extern sSSTVParam SSTVTable[NUMSSTVMODES+1];
-//extern sFAXParam FAXTable[NUMFAXMODES+1];
+extern sSSTVParam SSTVTable[NUMSSTVMODES + 1];
+// extern sFAXParam FAXTable[NUMFAXMODES+1];
 
 extern sSSTVParam rxSSTVParam;
-//extern sFAXParam  rxFAXParam;
+// extern sFAXParam  rxFAXParam;
 extern sSSTVParam txSSTVParam;
-//extern sFAXParam txFAXParam;
-extern DSPFLOAT *lineTimeTableRX;
-extern DSPFLOAT *lineTimeTableTX;
+// extern sFAXParam txFAXParam;
+extern DSPFLOAT* lineTimeTableRX;
+extern DSPFLOAT* lineTimeTableTX;
 
 
-void setupSSTVLineTimeTable(esstvMode modeIndex,DSPFLOAT clock,bool transmit);
-DSPFLOAT getLineLength(esstvMode modeIndex,DSPFLOAT clock);
-DSPFLOAT getSyncWidth(esstvMode modeIndex,DSPFLOAT clock);
-//void setupFAXLineTimeTable(DSPFLOAT clock);
-esstvMode initializeParametersVIS(unsigned int viscode,bool tx);
-bool  initializeSSTVParametersIndex(esstvMode modeIndex,bool tx);
-//bool  initializeFAXParametersIndex(efaxMode modeIndex,bool tx);
+void setupSSTVLineTimeTable(esstvMode modeIndex, DSPFLOAT clock, bool transmit);
+DSPFLOAT getLineLength(esstvMode modeIndex, DSPFLOAT clock);
+DSPFLOAT getSyncWidth(esstvMode modeIndex, DSPFLOAT clock);
+// void setupFAXLineTimeTable(DSPFLOAT clock);
+esstvMode initializeParametersVIS(unsigned int viscode, bool tx);
+bool initializeSSTVParametersIndex(esstvMode modeIndex, bool tx);
+// bool  initializeFAXParametersIndex(efaxMode modeIndex,bool tx);
 esstvMode lookupVIS(unsigned int vc);
 QString getSSTVModeNameLong(esstvMode m);
 QString getSSTVModeNameShort(esstvMode m);
 
 void dumpSamplesPerLine();
-//QString getFAXModeNameLong(efaxMode m);
-//QString getFAXModeShort(efaxMode m);
+// QString getFAXModeNameLong(efaxMode m);
+// QString getFAXModeShort(efaxMode m);
 
-esstvMode modeLookup(unsigned int lineLength,DSPFLOAT clock);
+esstvMode modeLookup(unsigned int lineLength, DSPFLOAT clock);
 DSPFLOAT longestLine(DSPFLOAT clock);
-bool lineIsValid(esstvMode mode,unsigned int lineLength,DSPFLOAT clock);
+bool lineIsValid(esstvMode mode, unsigned int lineLength, DSPFLOAT clock);
 void printActiveSSTVParam(bool tx);
-//void copyCustomParam(bool tx);
+// void copyCustomParam(bool tx);
 quint32 getMaxLineSamples();
 
 extern bool autoSlantAdjust;
@@ -203,8 +200,3 @@ extern int sensitivity;
 extern esstvMode sstvModeIndexRx;
 extern esstvMode sstvModeIndexTx;
 #endif
-
-
-
-
-

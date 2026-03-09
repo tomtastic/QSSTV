@@ -5,27 +5,26 @@
 
 class filter
 {
-
 public:
-  enum efilterType {FTNONE,FTFIR,FTIIR,FTHILB};
-  filter(efilterType fType,uint dataLenght);
+  enum efilterType { FTNONE, FTFIR, FTIIR, FTHILB };
+  filter(efilterType fType, uint dataLenght);
   ~filter();
   void process();
   void init();
-  void processFIR(FILTERPARAMTYPE *dataPtr,FILTERPARAMTYPE *dataOutputPtr);
-  void processFIRInt(FILTERPARAMTYPE *dataPtr, quint16 *dataOutputPtr);
-  void processFIRDemod(FILTERPARAMTYPE *dataPtr, FILTERPARAMTYPE *dataOutputPtr);
-  void processIIRRectified(FILTERPARAMTYPE *dataPtr);
-  void processHILBVolume(FILTERPARAMTYPE *dataPtr);
-  void processIQ(FILTERPARAMTYPE *dataPtr,float *dataOutputPtr);
+  void processFIR(FILTERPARAMTYPE* dataPtr, FILTERPARAMTYPE* dataOutputPtr);
+  void processFIRInt(FILTERPARAMTYPE* dataPtr, quint16* dataOutputPtr);
+  void processFIRDemod(FILTERPARAMTYPE* dataPtr, FILTERPARAMTYPE* dataOutputPtr);
+  void processIIRRectified(FILTERPARAMTYPE* dataPtr);
+  void processHILBVolume(FILTERPARAMTYPE* dataPtr);
+  void processIQ(FILTERPARAMTYPE* dataPtr, float* dataOutputPtr);
   void setupMatchedFilter(FILTERPARAMTYPE freq, uint numTaps);
   void allocate();
-  FILTERPARAMTYPE *coefZPtr;
-  FILTERPARAMTYPE *coefPPtr;
-  FILTERPARAMTYPE *filteredPtr;
-  FILTERPARAMTYPE *volumePtr;
+  FILTERPARAMTYPE* coefZPtr;
+  FILTERPARAMTYPE* coefPPtr;
+  FILTERPARAMTYPE* filteredPtr;
+  FILTERPARAMTYPE* volumePtr;
   FILTERPARAMTYPE gain;
-  quint16 *demodPtr;
+  quint16* demodPtr;
   FILTERPARAMTYPE frCenter;
   FILTERPARAMTYPE volumeAttackIntegrator;
   FILTERPARAMTYPE volumeDecayIntegrator;
@@ -37,21 +36,19 @@ public:
   bool coefZPtrNewed;
 
 private:
-
   void resetPointers();
   void deleteBuffers();
 
-  FILTERPARAMTYPE *sampleBufferIPtr;
-  FILTERPARAMTYPE *sampleBufferQPtr;
-  FILTERPARAMTYPE *sampleBufferYIPtr;
-
+  FILTERPARAMTYPE* sampleBufferIPtr;
+  FILTERPARAMTYPE* sampleBufferQPtr;
+  FILTERPARAMTYPE* sampleBufferYIPtr;
 
 
   FILTERPARAMTYPE resIprev;
   FILTERPARAMTYPE resQprev;
 
   FILTERPARAMTYPE angleToFc;
-//  FILTERPARAMTYPE avgVolume;
+  //  FILTERPARAMTYPE avgVolume;
   FILTERPARAMTYPE prevTemp;
 
   NCO nco;
@@ -60,8 +57,6 @@ private:
   uint bufSize;
   efilterType filterType;
 };
-
-
 
 
 #endif // FILTER_H

@@ -5,11 +5,10 @@
 #include "maiaXmlRpcServer.h"
 #include "maiaXmlRpcServerConnection.h"
 
-struct sxmlInfo
-{
+struct sxmlInfo {
   sxmlInfo()
   {
-    frequency=-1.;
+    frequency = -1.;
   }
   QString rigName;
   QString bandWidth;
@@ -23,10 +22,10 @@ class xmlInterface : public QObject
 {
   Q_OBJECT
 public:
-  explicit xmlInterface(QObject *parent = 0);
+  explicit xmlInterface(QObject* parent = 0);
   void activatePTT(bool b);
 
-  
+
 public slots:
   void takeControl();
   void setName(QString t);
@@ -45,8 +44,8 @@ public slots:
 
 
 private:
-  MaiaXmlRpcServer *rpcServer;
-  void log(QString cmd,QString t);
+  MaiaXmlRpcServer* rpcServer;
+  void log(QString cmd, QString t);
   void log(QString cmd, QVariantList t);
   sxmlInfo rigInfo;
 };
