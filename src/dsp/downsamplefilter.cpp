@@ -19,8 +19,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "downsamplefilter.h"
-#include "appglobal.h"
-#include "arraydumper.h"
 #include "logging.h"
 
 #include <QDebug>
