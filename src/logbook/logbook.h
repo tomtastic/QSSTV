@@ -13,9 +13,8 @@ struct slogParam {
 };
 
 
-class logBook
-{
-public:
+class logBook {
+ public:
   enum eIndex {
     LPROG,
     LVER,
@@ -42,11 +41,11 @@ public:
   logBook();
   void logQSO(QString call, QString mode, QString comment);
 
-private:
+ private:
   void getFrequency();
   double frequency;
   void setParam(eIndex tag, QString value);
   ipcMessage* ipcQueue;
 };
 
-#endif // LOGBOOK_H
+#endif  // LOGBOOK_H

@@ -44,8 +44,7 @@ It also starts, stops and synchronizes the threads.
 
 /*! creates dispatcher instance  */
 
-dispatcher::dispatcher()
-{
+dispatcher::dispatcher() {
   mbox = nullptr;
   progressFTP = nullptr;
   lastFileName.clear();
@@ -56,8 +55,7 @@ dispatcher::dispatcher()
 
 dispatcher::~dispatcher() {}
 
-void dispatcher::init()
-{
+void dispatcher::init() {
   editorActive = false;
   infoTextPtr = new textDisplay(mainWindowPtr);
   mainWindowPtr->spectrumFramePtr->init(RXSTRIPE, fftNumBlocks, BASESAMPLERATE / SUBSAMPLINGFACTOR);
@@ -70,210 +68,204 @@ void dispatcher::init()
   All communication between the threads are passed via this eventhandler.
 */
 
-void dispatcher::customEvent(QEvent* e)
-{
+void dispatcher::customEvent(QEvent* e) {
   dispatchEventType type;
   QString fn;
   type = static_cast<dispatchEventType>(e->type());
   if ((type != displayFFT) && (type != displaySync) && (type != rxSSTVStatus) && (type != lineDisplay) &&
       (type != displayDRMInfo) && (type != displayDRMStat)) {
-    addToLog(((baseEvent*) e)->description, LOGDISPATCH);
+    addToLog(((baseEvent*)e)->description, LOGDISPATCH);
   }
   switch (type) {
-  case displayFFT:
-    mainWindowPtr->spectrumFramePtr->realFFT((static_cast<displayFFTEvent*>(e))->data());
-    rxWidgetPtr->vMeterPtr()->setValue(soundIOPtr->getVolumeDb());
-    break;
-  case displaySync:
-    uint s;
-    (static_cast<displaySyncEvent*>(e))->getInfo(s);
-    rxWidgetPtr->sMeterPtr()->setValue(static_cast<double>(s));
-    break;
-  case rxSSTVStatus:
-    rxWidgetPtr->setSSTVStatusText((static_cast<rxSSTVStatusEvent*>(e))->getStr());
-    break;
-
-  case startImageRX:
-    addToLog("dispatcher: clearing RxImage", LOGDISPATCH);
-    //      rxWidgetPtr->getImageViewerPtr()->createImage(
-    //      ((startImageRXEvent*)e)->getSize(),QColor(0,0,128),imageStretch);
-    rxWidgetPtr->getImageViewerPtr()->createImage((static_cast<startImageRXEvent*>(e))->getSize(), imageBackGroundColor,
-                                                  imageStretch);
-    lastCallsign = "";
-    break;
-  case lineDisplay: {
-    rxWidgetPtr->getImageViewerPtr()->displayImage();
-  } break;
-  case endSSTVImageRX:
-    if (autoSave) {
-      addToLog("dispatcher:endImage savingRxImage", LOGDISPATCH);
-      saveRxSSTVImage((static_cast<endImageSSTVRXEvent*>(e))->getMode());
-    }
-    break;
-
-
-  case rxDRMStatus:
-    rxWidgetPtr->setDRMStatusText((static_cast<rxDRMStatusEvent*>(e))->getStr());
-
-    break;
-
-  case statusBarMsg:
-    statusBarPtr->showMessage((static_cast<statusBarMsgEvent*>(e))->getStr());
-    break;
-  case callEditor:
-    if (editorActive)
+    case displayFFT:
+      mainWindowPtr->spectrumFramePtr->realFFT((static_cast<displayFFTEvent*>(e))->data());
+      rxWidgetPtr->vMeterPtr()->setValue(soundIOPtr->getVolumeDb());
       break;
-    editorActive = true;
-    ed = new editor();
-    ed->show();
-    iv = (static_cast<callEditorEvent*>(e))->getImageViewer();
-    addToLog(QString(" callEditorEvent imageViewPtr: %1").arg(QString::number((ulong) iv, 16)), LOGDISPATCH);
-    addToLog(QString("editor: filename %1").arg(((callEditorEvent*) e)->getFilename()), LOGDISPATCH);
-    ed->openFile((static_cast<callEditorEvent*>(e))->getFilename());
-    break;
-
-  case txDRMNotify:
-    txWidgetPtr->setDRMNotifyText((static_cast<txDRMNotifyEvent*>(e))->getStr());
-    break;
-  case txDRMNotifyAppend:
-    txWidgetPtr->appendDRMNotifyText((static_cast<txDRMNotifyAppendEvent*>(e))->getStr());
-    break;
-  case txPrepareComplete:
-    txWidgetPtr->prepareTxComplete((static_cast<txPrepareCompleteEvent*>(e))->ok());
-    break;
-
-  case editorFinished:
-    if (!editorActive)
+    case displaySync:
+      uint s;
+      (static_cast<displaySyncEvent*>(e))->getInfo(s);
+      rxWidgetPtr->sMeterPtr()->setValue(static_cast<double>(s));
       break;
-    if ((static_cast<editorFinishedEvent*>(e))->isOK()) {
-      addToLog(QString(" editorFinishedEvent imageViewPtr: %1").arg(QString::number((ulong) iv, 16)), LOGDISPATCH);
-      iv->reload();
-    }
-    editorActive = false;
-    delete ed;
-    break;
+    case rxSSTVStatus:
+      rxWidgetPtr->setSSTVStatusText((static_cast<rxSSTVStatusEvent*>(e))->getStr());
+      break;
 
-  case templatesChanged:
-    galleryWidgetPtr->changedMatrix(imageViewer::TEMPLATETHUMB);
-    txWidgetPtr->setupTemplatesComboBox();
-    break;
+    case startImageRX:
+      addToLog("dispatcher: clearing RxImage", LOGDISPATCH);
+      //      rxWidgetPtr->getImageViewerPtr()->createImage(
+      //      ((startImageRXEvent*)e)->getSize(),QColor(0,0,128),imageStretch);
+      rxWidgetPtr->getImageViewerPtr()->createImage((static_cast<startImageRXEvent*>(e))->getSize(),
+                                                    imageBackGroundColor, imageStretch);
+      lastCallsign = "";
+      break;
+    case lineDisplay: {
+      rxWidgetPtr->getImageViewerPtr()->displayImage();
+    } break;
+    case endSSTVImageRX:
+      if (autoSave) {
+        addToLog("dispatcher:endImage savingRxImage", LOGDISPATCH);
+        saveRxSSTVImage((static_cast<endImageSSTVRXEvent*>(e))->getMode());
+      }
+      break;
 
-  case progressTX:
-    txTimeCounter = 0;
-    addToLog(QString("dispatcher: progress duration=%1").arg(((progressTXEvent*) e)->getInfo()), LOGDISPATCH);
-    prTimerIndex = startTimer((static_cast<progressTXEvent*>(e))->getInfo() *
-                              10); // time in seconds -> times 1000 for msec,divide by 100 for progress
-    break;
 
-  case stoppingTX:
-    addToLog("dispatcher: endTXImage", LOGDISPATCH);
-    break;
+    case rxDRMStatus:
+      rxWidgetPtr->setDRMStatusText((static_cast<rxDRMStatusEvent*>(e))->getStr());
 
-  case endImageTX:
-    // addToLog("dispatcher: endTXImage",LOGDISPATCH);
-    while (soundIOPtr->isPlaying()) {
-      qApp->processEvents();
-    }
-    addToLog("dispatcher: endTXImage", LOGDISPATCH);
-    txWidgetPtr->slotStop();
-    //      startRX();
-    break;
+      break;
 
-  case displayDRMInfo:
-    if (!slowCPU) {
-      rxWidgetPtr->mscWdg()->setConstellation(MSC);
-      rxWidgetPtr->facWdg()->setConstellation(FAC);
-    }
-    rxWidgetPtr->statusWdg()->setStatus();
-    break;
+    case statusBarMsg:
+      statusBarPtr->showMessage((static_cast<statusBarMsgEvent*>(e))->getStr());
+      break;
+    case callEditor:
+      if (editorActive) break;
+      editorActive = true;
+      ed = new editor();
+      ed->show();
+      iv = (static_cast<callEditorEvent*>(e))->getImageViewer();
+      addToLog(QString(" callEditorEvent imageViewPtr: %1").arg(QString::number((ulong)iv, 16)), LOGDISPATCH);
+      addToLog(QString("editor: filename %1").arg(((callEditorEvent*)e)->getFilename()), LOGDISPATCH);
+      ed->openFile((static_cast<callEditorEvent*>(e))->getFilename());
+      break;
 
-  case displayDRMStat:
-    DSPFLOAT s1;
-    (static_cast<displayDRMStatEvent*>(e))->getInfo(s1);
-    rxWidgetPtr->sMeterPtr()->setValue(s1);
-    break;
+    case txDRMNotify:
+      txWidgetPtr->setDRMNotifyText((static_cast<txDRMNotifyEvent*>(e))->getStr());
+      break;
+    case txDRMNotifyAppend:
+      txWidgetPtr->appendDRMNotifyText((static_cast<txDRMNotifyAppendEvent*>(e))->getStr());
+      break;
+    case txPrepareComplete:
+      txWidgetPtr->prepareTxComplete((static_cast<txPrepareCompleteEvent*>(e))->ok());
+      break;
 
-  case loadRXImage: {
-    QString fn = (static_cast<loadRXImageEvent*>(e))->getFilename();
-    rxWidgetPtr->getImageViewerPtr()->openImage(fn, false, false, false, true);
-  } break;
-  case moveToTx: {
-    addToLog(QString("moveToTx: %1").arg(((moveToTxEvent*) e)->getFilename()), LOGDISPATCH);
-    txWidgetPtr->setImage((static_cast<moveToTxEvent*>(e))->getFilename());
-  } break;
-  case saveDRMImage: {
-    QString info;
-    (static_cast<saveDRMImageEvent*>(e))->getFilename(fn);
-    (static_cast<saveDRMImageEvent*>(e))->getInfo(info);
-    if (!rxWidgetPtr->getImageViewerPtr()->openImage(fn, false, false, false, false)) {
-      // simply save the file if it is not an image file
-      if (mbox == nullptr)
-        delete mbox;
+    case editorFinished:
+      if (!editorActive) break;
+      if ((static_cast<editorFinishedEvent*>(e))->isOK()) {
+        addToLog(QString(" editorFinishedEvent imageViewPtr: %1").arg(QString::number((ulong)iv, 16)), LOGDISPATCH);
+        iv->reload();
+      }
+      editorActive = false;
+      delete ed;
+      break;
+
+    case templatesChanged:
+      galleryWidgetPtr->changedMatrix(imageViewer::TEMPLATETHUMB);
+      txWidgetPtr->setupTemplatesComboBox();
+      break;
+
+    case progressTX:
+      txTimeCounter = 0;
+      addToLog(QString("dispatcher: progress duration=%1").arg(((progressTXEvent*)e)->getInfo()), LOGDISPATCH);
+      prTimerIndex = startTimer((static_cast<progressTXEvent*>(e))->getInfo() *
+                                10);  // time in seconds -> times 1000 for msec,divide by 100 for progress
+      break;
+
+    case stoppingTX:
+      addToLog("dispatcher: endTXImage", LOGDISPATCH);
+      break;
+
+    case endImageTX:
+      // addToLog("dispatcher: endTXImage",LOGDISPATCH);
+      while (soundIOPtr->isPlaying()) {
+        qApp->processEvents();
+      }
+      addToLog("dispatcher: endTXImage", LOGDISPATCH);
+      txWidgetPtr->slotStop();
+      //      startRX();
+      break;
+
+    case displayDRMInfo:
+      if (!slowCPU) {
+        rxWidgetPtr->mscWdg()->setConstellation(MSC);
+        rxWidgetPtr->facWdg()->setConstellation(FAC);
+      }
+      rxWidgetPtr->statusWdg()->setStatus();
+      break;
+
+    case displayDRMStat:
+      DSPFLOAT s1;
+      (static_cast<displayDRMStatEvent*>(e))->getInfo(s1);
+      rxWidgetPtr->sMeterPtr()->setValue(s1);
+      break;
+
+    case loadRXImage: {
+      QString fn = (static_cast<loadRXImageEvent*>(e))->getFilename();
+      rxWidgetPtr->getImageViewerPtr()->openImage(fn, false, false, false, true);
+    } break;
+    case moveToTx: {
+      addToLog(QString("moveToTx: %1").arg(((moveToTxEvent*)e)->getFilename()), LOGDISPATCH);
+      txWidgetPtr->setImage((static_cast<moveToTxEvent*>(e))->getFilename());
+    } break;
+    case saveDRMImage: {
+      QString info;
+      (static_cast<saveDRMImageEvent*>(e))->getFilename(fn);
+      (static_cast<saveDRMImageEvent*>(e))->getInfo(info);
+      if (!rxWidgetPtr->getImageViewerPtr()->openImage(fn, false, false, false, false)) {
+        // simply save the file if it is not an image file
+        if (mbox == nullptr) delete mbox;
+        mbox = new QMessageBox(mainWindowPtr);
+        mbox->setWindowTitle("Received file");
+        mbox->setText(QString("Saved file %1").arg(fn));
+        mbox->show();
+        QTimer::singleShot(4000, mbox, SLOT(hide()));
+        break;
+      }
+      saveImage(fn, info);
+      if (repeaterEnabled) {
+        txWidgetPtr->sendRepeaterImage();
+      }
+    } break;
+
+    case prepareFix:
+      addToLog("prepareFix", LOGDISPATCH);
+      startDRMFIXTx((static_cast<prepareFixEvent*>(e))->getData());
+      break;
+    case displayText:
+      infoTextPtr->clear();
+      infoTextPtr->setWindowTitle(QString("Received from %1").arg(drmCallsign));
+      infoTextPtr->append((static_cast<displayTextEvent*>(e))->getStr());
+      infoTextPtr->show();
+      break;
+
+    case displayMBox:
+      if (mbox == nullptr) delete mbox;
       mbox = new QMessageBox(mainWindowPtr);
-      mbox->setWindowTitle("Received file");
-      mbox->setText(QString("Saved file %1").arg(fn));
+      mbox->setWindowTitle((static_cast<displayMBoxEvent*>(e))->getTitle());
+      mbox->setText((static_cast<displayMBoxEvent*>(e))->getStr());
       mbox->show();
       QTimer::singleShot(4000, mbox, SLOT(hide()));
       break;
-    }
-    saveImage(fn, info);
-    if (repeaterEnabled) {
-      txWidgetPtr->sendRepeaterImage();
-    }
-  } break;
 
-  case prepareFix:
-    addToLog("prepareFix", LOGDISPATCH);
-    startDRMFIXTx((static_cast<prepareFixEvent*>(e))->getData());
-    break;
-  case displayText:
-    infoTextPtr->clear();
-    infoTextPtr->setWindowTitle(QString("Received from %1").arg(drmCallsign));
-    infoTextPtr->append((static_cast<displayTextEvent*>(e))->getStr());
-    infoTextPtr->show();
-    break;
+    case displayProgressFTP: {
+      if ((static_cast<displayProgressFTPEvent*>(e))->getTotal() == 0) {
+        delete progressFTP;
+        progressFTP = nullptr;
+        break;
+      }
+      if (progressFTP == nullptr) {
+        progressFTP = new QProgressDialog("FTP Transfer", "Cancel", 0, 0, mainWindowPtr);
+      }
+      progressFTP->show();
+      progressFTP->setMaximum((static_cast<displayProgressFTPEvent*>(e))->getTotal());
+      progressFTP->setValue((static_cast<displayProgressFTPEvent*>(e))->getBytes());
+    } break;
+      //    case notifyAction: // sends notification after reception of hybrid image
+      //      // todo     notifyRXIntfPtr->mremove(((notifyActionEvent*)e)->getToRemove());
+      //      //      notifyRXIntfPtr->uploadData(((notifyActionEvent*)e)->getMsg().toLatin1(),
+      //      ((notifyActionEvent*)e)->getFilename()); break;
 
-  case displayMBox:
-    if (mbox == nullptr)
-      delete mbox;
-    mbox = new QMessageBox(mainWindowPtr);
-    mbox->setWindowTitle((static_cast<displayMBoxEvent*>(e))->getTitle());
-    mbox->setText((static_cast<displayMBoxEvent*>(e))->getStr());
-    mbox->show();
-    QTimer::singleShot(4000, mbox, SLOT(hide()));
-    break;
-
-  case displayProgressFTP: {
-    if ((static_cast<displayProgressFTPEvent*>(e))->getTotal() == 0) {
-      delete progressFTP;
-      progressFTP = nullptr;
+    case notifyCheck:
+      txWidgetPtr->startNotifyCheck((static_cast<notifyCheckEvent*>(e))->getFilename());
       break;
-    }
-    if (progressFTP == nullptr) {
-      progressFTP = new QProgressDialog("FTP Transfer", "Cancel", 0, 0, mainWindowPtr);
-    }
-    progressFTP->show();
-    progressFTP->setMaximum((static_cast<displayProgressFTPEvent*>(e))->getTotal());
-    progressFTP->setValue((static_cast<displayProgressFTPEvent*>(e))->getBytes());
-  } break;
-    //    case notifyAction: // sends notification after reception of hybrid image
-    //      // todo     notifyRXIntfPtr->mremove(((notifyActionEvent*)e)->getToRemove());
-    //      //      notifyRXIntfPtr->uploadData(((notifyActionEvent*)e)->getMsg().toLatin1(),
-    //      ((notifyActionEvent*)e)->getFilename()); break;
-
-  case notifyCheck:
-    txWidgetPtr->startNotifyCheck((static_cast<notifyCheckEvent*>(e))->getFilename());
-    break;
-  default:
-    addToLog(QString("unsupported event: %1").arg(((baseEvent*) e)->description), LOGALL);
-    break;
+    default:
+      addToLog(QString("unsupported event: %1").arg(((baseEvent*)e)->description), LOGALL);
+      break;
   }
   (static_cast<baseEvent*>(e))->setDone();
 }
 
 
-void dispatcher::idleAll()
-{
+void dispatcher::idleAll() {
   if (prTimerIndex >= 0) {
     killTimer(prTimerIndex);
     prTimerIndex = -1;
@@ -285,15 +277,13 @@ void dispatcher::idleAll()
 }
 
 
-void dispatcher::startRX()
-{
+void dispatcher::startRX() {
   idleAll();
   soundIOPtr->startCapture();
   rxWidgetPtr->functionsPtr()->startRX();
 }
 
-void dispatcher::startTX(txFunctions::etxState state)
-{
+void dispatcher::startTX(txFunctions::etxState state) {
   idleAll();
   rigControllerPtr->activatePTT(true);
   soundIOPtr->startPlayback();
@@ -301,15 +291,12 @@ void dispatcher::startTX(txFunctions::etxState state)
 }
 
 
-void dispatcher::startDRMFIXTx(QByteArray ba)
-{
-  if (!txWidgetPtr->functionsPtr()->prepareFIX(ba))
-    return;
+void dispatcher::startDRMFIXTx(QByteArray ba) {
+  if (!txWidgetPtr->functionsPtr()->prepareFIX(ba)) return;
   startTX(txFunctions::TXSENDDRMFIX);
 }
 
-void dispatcher::startDRMTxBinary()
-{
+void dispatcher::startDRMTxBinary() {
   // TODO: this whole thing should probably live in txWidget::slotBinary
   QFileInfo finfo;
   int sizeOfFile;
@@ -318,18 +305,15 @@ void dispatcher::startDRMTxBinary()
   QMessageBox mbox(mainWindowPtr);
   QPushButton* sendButton;
 
-  dirDialog d((QWidget*) mainWindowPtr, "Binary File");
+  dirDialog d((QWidget*)mainWindowPtr, "Binary File");
   QString filename = d.openFileName("", "*");
-  if (filename.isEmpty())
-    return;
-  if (!txWidgetPtr->functionsPtr()->prepareBinary(filename))
-    return;
+  if (filename.isEmpty()) return;
+  if (!txWidgetPtr->functionsPtr()->prepareBinary(filename)) return;
 
   txtime = txWidgetPtr->functionsPtr()->calcTxTime(true, 0);
   finfo.setFile(filename);
 
-  if (txtime > (3 * 60))
-    mbox.setIcon(QMessageBox::Warning);
+  if (txtime > (3 * 60)) mbox.setIcon(QMessageBox::Warning);
 
   mbox.setWindowTitle("TX Binary File");
   mbox.setText(QString("'%1'").arg(filename));
@@ -357,8 +341,7 @@ void dispatcher::startDRMTxBinary()
 }
 
 
-void dispatcher::logSSTV(QString call, bool fromFSKID)
-{
+void dispatcher::logSSTV(QString call, bool fromFSKID) {
   if (lastFileName.isEmpty()) {
     return;
   }
@@ -375,14 +358,13 @@ void dispatcher::logSSTV(QString call, bool fromFSKID)
 }
 
 
-void dispatcher::saveRxSSTVImage(esstvMode mode)
-{
+void dispatcher::saveRxSSTVImage(esstvMode mode) {
   QString info, s, fileName;
   QString shortModeName = getSSTVModeNameShort(mode);
 
   QTemporaryFile tfn;
   int m;
-  QDateTime dt(QDateTime::currentDateTime().toUTC()); // this is compatible with QT 4.6
+  QDateTime dt(QDateTime::currentDateTime().toUTC());  // this is compatible with QT 4.6
   dt.setTimeZone(QTimeZone::UTC);
   if (mode == NOTVALID) {
     lastFileName.clear();
@@ -404,15 +386,13 @@ void dispatcher::saveRxSSTVImage(esstvMode mode)
 
     info = "";
     m = 0;
-    while (m <= NUMSSTVMODES && shortModeName != SSTVTable[m].shortName)
-      m++;
+    while (m <= NUMSSTVMODES && shortModeName != SSTVTable[m].shortName) m++;
     if (m <= NUMSSTVMODES)
       info += SSTVTable[m].name;
     else
       info += shortModeName;
 
-    if (!lastCallsign.isEmpty())
-      info += " de " + lastCallsign;
+    if (!lastCallsign.isEmpty()) info += " de " + lastCallsign;
 
     saveImage(fileName, info);
     lastFileName = QString("%1_%2.%3").arg(shortModeName).arg(dt.toString("yyyyMMdd_HHmmss")).arg(defaultImageFormat);
@@ -420,8 +400,7 @@ void dispatcher::saveRxSSTVImage(esstvMode mode)
   }
 }
 
-void dispatcher::saveImage(QString fileName, QString infotext)
-{
+void dispatcher::saveImage(QString fileName, QString infotext) {
   // filename is the name of the original file in hybrid mode
   QFileInfo info(fileName);
   QString fn = "/tmp/" + info.baseName() + "." + ftpDefaultImageFormat;
@@ -455,8 +434,7 @@ void dispatcher::saveImage(QString fileName, QString infotext)
     } else {
       remoteDir = ftpRemoteDRMDirectory;
     }
-    if (!infotext.isEmpty())
-      text += " " + infotext;
+    if (!infotext.isEmpty()) text += " " + infotext;
     // Limit uploaded size
     if ((im.width() > 960) || (im.height() > 768)) {
       im = im.scaled(960, 768, Qt::KeepAspectRatio);
@@ -466,8 +444,7 @@ void dispatcher::saveImage(QString fileName, QString infotext)
     // font would be unreadable
     QFont font("Arial");
     pixelSize = 9 * im.width() / 320;
-    if (pixelSize < 8)
-      pixelSize = 8;
+    if (pixelSize < 8) pixelSize = 8;
     font.setPixelSize(pixelSize);
     QFontMetrics fontm(font);
 #if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
@@ -489,13 +466,11 @@ void dispatcher::saveImage(QString fileName, QString infotext)
   }
 }
 
-void dispatcher::uploadToRXServer(QString remoteDir, QString fn)
-{
+void dispatcher::uploadToRXServer(QString remoteDir, QString fn) {
   // todo ftp
   QString uploadDestinationFile = fn;
   uploadSourceFile = fn;
-  if (ff.isBusy())
-    return;
+  if (ff.isBusy()) return;
   ff.setupFtp("FTP Upload to server", ftpRemoteHost, ftpPort, ftpLogin, ftpPassword, remoteDir);
 
   QImage im(1, QDateTime::currentDateTime().time().minute(), QImage::Format_RGB32);
@@ -513,16 +488,13 @@ void dispatcher::uploadToRXServer(QString remoteDir, QString fn)
 }
 
 
-void dispatcher::slotRenameListing(bool err)
-{
+void dispatcher::slotRenameListing(bool err) {
   int i;
-  if (err)
-    return;
+  if (err) return;
   QList<QUrlInfo> images;
   QString extension = "";
 
-  if (addExtension)
-    extension = "." + ftpDefaultImageFormat.toLower();
+  if (addExtension) extension = "." + ftpDefaultImageFormat.toLower();
   images = ff.getListing();
   QString src, dst;
   for (i = ftpNumImages; i > 1; i--) {
@@ -536,21 +508,17 @@ void dispatcher::slotRenameListing(bool err)
 }
 
 
-bool dispatcher::inList(QList<QUrlInfo> lst, QString fn)
-{
+bool dispatcher::inList(QList<QUrlInfo> lst, QString fn) {
   int i;
   for (i = 0; i < lst.count(); i++) {
-    if (lst.at(i).name() == fn)
-      return true;
+    if (lst.at(i).name() == fn) return true;
   }
   return false;
 }
 
 
-void dispatcher::showOffLine()
-{
-  if (!enableFTP)
-    return;
+void dispatcher::showOffLine() {
+  if (!enableFTP) return;
   ff.setupFtp("FTP Show Offline", ftpRemoteHost, ftpPort, ftpLogin, ftpPassword, ftpRemoteSSTVDirectory);
   QImage im(2, QDateTime::currentDateTime().time().minute(), QImage::Format_RGB32);
   im.fill(Qt::black);
@@ -564,8 +532,7 @@ void dispatcher::showOffLine()
 }
 
 
-void dispatcher::timerEvent(QTimerEvent* event)
-{
+void dispatcher::timerEvent(QTimerEvent* event) {
   if (event->timerId() == prTimerIndex) {
     txWidgetPtr->setProgress(++txTimeCounter);
     if (txTimeCounter >= 100) {
@@ -580,8 +547,7 @@ void dispatcher::timerEvent(QTimerEvent* event)
 }
 
 
-void dispatcher::slotTXNotification(QString info)
-{
+void dispatcher::slotTXNotification(QString info) {
   if (info != "") {
     txWidgetPtr->appendDRMNotifyText(info);
   }

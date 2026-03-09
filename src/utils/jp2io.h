@@ -50,48 +50,46 @@ typedef struct raw_cparameters {
 
 
 typedef struct opj_decompress_params {
-  opj_dparameters_t core;           // core library parameters
-  char infile[OPJ_PATH_LEN];        // input file name
-  char outfile[OPJ_PATH_LEN];       // output file name
-  int decod_format;                 // input file format 0: J2K, 1: JP2, 2: JPT
-  int cod_format;                   // output file format 0: PGX, 1: PxM, 2: BMP
-  char indexfilename[OPJ_PATH_LEN]; // index file name
-  OPJ_UINT32 DA_x0;                 // Decoding area left boundary
-  OPJ_UINT32 DA_x1;                 // Decoding area right boundary
-  OPJ_UINT32 DA_y0;                 // Decoding area up boundary
-  OPJ_UINT32 DA_y1;                 // Decoding area bottom boundary
-  OPJ_BOOL m_verbose;               // Verbose mode
-  OPJ_UINT32 tile_index;            // tile number of the decoded tile
-  OPJ_UINT32 nb_tile_to_decode;     // Nb of tile to decode
+  opj_dparameters_t core;            // core library parameters
+  char infile[OPJ_PATH_LEN];         // input file name
+  char outfile[OPJ_PATH_LEN];        // output file name
+  int decod_format;                  // input file format 0: J2K, 1: JP2, 2: JPT
+  int cod_format;                    // output file format 0: PGX, 1: PxM, 2: BMP
+  char indexfilename[OPJ_PATH_LEN];  // index file name
+  OPJ_UINT32 DA_x0;                  // Decoding area left boundary
+  OPJ_UINT32 DA_x1;                  // Decoding area right boundary
+  OPJ_UINT32 DA_y0;                  // Decoding area up boundary
+  OPJ_UINT32 DA_y1;                  // Decoding area bottom boundary
+  OPJ_BOOL m_verbose;                // Verbose mode
+  OPJ_UINT32 tile_index;             // tile number of the decoded tile
+  OPJ_UINT32 nb_tile_to_decode;      // Nb of tile to decode
   opj_precision* precision;
   OPJ_UINT32 nb_precision;
-  int force_rgb; // force output colorspace to RGB
-  int upsample;  // upsample components according to their dx/dy values
-  int split_pnm; // split output components to different files
+  int force_rgb;  // force output colorspace to RGB
+  int upsample;   // upsample components according to their dx/dy values
+  int split_pnm;  // split output components to different files
 } opj_decompress_parameters;
 
 
-class jp2IO : public QObject
-{
+class jp2IO : public QObject {
   Q_OBJECT
-public:
+ public:
   jp2IO();
   bool check(QString fileName);
   QImage decode(QString fileName);
   QByteArray encode(QImage qimage, QImage& newImage, int& fileSize, int compressionRatio = 0);
-  void setParams(QImage* im, QString filename, bool tFromCache)
-  {
+  void setParams(QImage* im, QString filename, bool tFromCache) {
     threadImage = im;
     threadFilename = filename;
     fromCache = tFromCache;
   }
-public slots:
+ public slots:
   void slotStart();
 
-signals:
+ signals:
   void done(bool, bool);
 
-private:
+ private:
   int magicFormat;
   QString magicStr;
   opj_decompress_parameters parameters; /* decompression parameters */
@@ -112,4 +110,4 @@ private:
   bool fromCache;
 };
 
-#endif // JP2READER_H
+#endif  // JP2READER_H

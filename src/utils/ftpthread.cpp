@@ -15,8 +15,7 @@ QString commandStr[15] = {"None", "SetTxMode", "SetProxy", "ConnectToHost", "Log
                           "Get",  "Put",       "Remove",   "Mkdir",         "Rmdir", "Rename", "RawCommand"};
 
 
-ftpThread::ftpThread(QString id) : QObject()
-{
+ftpThread::ftpThread(QString id) : QObject() {
   qftpPtr = nullptr;
   addToLog(QString("FTP Created: %1").arg(id), LOGFTPTHREAD);
   idName = id;
@@ -29,19 +28,16 @@ ftpThread::ftpThread(QString id) : QObject()
   //  qDebug()<< "ftpThread constructor";
 }
 
-ftpThread::~ftpThread()
-{
+ftpThread::~ftpThread() {
   //  qDebug()<< "ftpThread destructor";
 }
 
-void ftpThread::slotInit()
-{
+void ftpThread::slotInit() {
   timeoutTimerPtr = new QTimer(this);
   disconnectTimerPtr = new QTimer(this);
   notifyTimerPtr = new QTimer(this);
   destroy();
-  if (qftpPtr)
-    delete qftpPtr;
+  if (qftpPtr) delete qftpPtr;
   addToLog(QString("FTP init '%1'").arg(idName), LOGFTPTHREAD);
 
   qftpPtr = new QFtp;
@@ -66,8 +62,7 @@ void ftpThread::slotInit()
   disconnectTimerPtr->setInterval(2000);
 }
 
-void ftpThread::setHostParams(QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory)
-{
+void ftpThread::setHostParams(QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory) {
   host = tHost;
   port = tPort;
   user = tUser;
@@ -75,8 +70,7 @@ void ftpThread::setHostParams(QString tHost, int tPort, QString tUser, QString t
   directory = tDirectory;
 }
 
-void ftpThread::disconnectFtp()
-{
+void ftpThread::disconnectFtp() {
   if (!isUnconnected()) {
     addToLog(QString("'%1': schedule disconnect in %2ms").arg(idName).arg(disconnectTimerPtr->interval()),
              LOGFTPTHREAD);
@@ -85,14 +79,13 @@ void ftpThread::disconnectFtp()
 }
 
 
-void ftpThread::customEvent(QEvent* e)
-{
+void ftpThread::customEvent(QEvent* e) {
   QString source;
   QString destination;
   ftpEventType type;
   type = static_cast<ftpEventType>(e->type());
   addToLog(QString("customevent:%1 in thread: %2")
-               .arg(((ftpBaseEvent*) e)->description)
+               .arg(((ftpBaseEvent*)e)->description)
                .arg(QThread::currentThread()->objectName()),
            LOGFTPTHREAD);
   source = (static_cast<ftpBaseEvent*>(e))->source;
@@ -100,49 +93,47 @@ void ftpThread::customEvent(QEvent* e)
   canCloseWhenDone = (static_cast<ftpBaseEvent*>(e))->closeWhenDone;
 
   switch (type) {
-  case ftp_list:
-    addToLog(QString("customevent ftp_list %1").arg(source), LOGFTPTHREAD);
-    listingResults.clear();
-    listFiles(source);
-    break;
-  case ftp_remove:
-    addToLog(QString("customevent ftp_remove %1").arg(source), LOGFTPTHREAD);
-    remove(source);
-    break;
-  case ftp_rename:
-    addToLog(QString("customevent ftp_rename %1 to %2").arg(source).arg(destination), LOGFTPTHREAD);
-    rename(source, destination);
-    break;
-  case ftp_upload:
-    addToLog(QString("customevent ftp_upload %1 to %2").arg(source).arg(destination), LOGFTPTHREAD);
-    uploadFile(source, destination);
-    break;
-  case ftp_download:
-    addToLog(QString("customevent ftp_download %1 to %2").arg(source).arg(destination), LOGFTPTHREAD);
-    downloadFile(source, destination);
-    break;
-  case ftp_disconnect:
-    addToLog(QString("customevent ftp_disconnect"), LOGFTPTHREAD);
-    disconnectFtp();
-    break;
-  case ftp_cd:
-    doConnect();
-    qftpPtr->cd(source);
-    break;
-  default:
-    addToLog(QString("unsupported event: %1").arg(((ftpBaseEvent*) e)->description), LOGALL);
-    break;
+    case ftp_list:
+      addToLog(QString("customevent ftp_list %1").arg(source), LOGFTPTHREAD);
+      listingResults.clear();
+      listFiles(source);
+      break;
+    case ftp_remove:
+      addToLog(QString("customevent ftp_remove %1").arg(source), LOGFTPTHREAD);
+      remove(source);
+      break;
+    case ftp_rename:
+      addToLog(QString("customevent ftp_rename %1 to %2").arg(source).arg(destination), LOGFTPTHREAD);
+      rename(source, destination);
+      break;
+    case ftp_upload:
+      addToLog(QString("customevent ftp_upload %1 to %2").arg(source).arg(destination), LOGFTPTHREAD);
+      uploadFile(source, destination);
+      break;
+    case ftp_download:
+      addToLog(QString("customevent ftp_download %1 to %2").arg(source).arg(destination), LOGFTPTHREAD);
+      downloadFile(source, destination);
+      break;
+    case ftp_disconnect:
+      addToLog(QString("customevent ftp_disconnect"), LOGFTPTHREAD);
+      disconnectFtp();
+      break;
+    case ftp_cd:
+      doConnect();
+      qftpPtr->cd(source);
+      break;
+    default:
+      addToLog(QString("unsupported event: %1").arg(((ftpBaseEvent*)e)->description), LOGALL);
+      break;
   }
 }
 
 
-void ftpThread::setupConnection(QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory)
-{
+void ftpThread::setupConnection(QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory) {
   addToLog(QString("'%1' host: %2, User: %3,directory: %4").arg(idName).arg(tHost).arg(tUser).arg(tDirectory),
            LOGFTPTHREAD);
   if (host != tHost || user != tUser || passwd != tPasswd || port != tPort) {
-    if (qftpPtr)
-      destroy();
+    if (qftpPtr) destroy();
   }
   host = tHost;
   port = tPort;
@@ -153,8 +144,7 @@ void ftpThread::setupConnection(QString tHost, int tPort, QString tUser, QString
 }
 
 
-void ftpThread::destroy()
-{
+void ftpThread::destroy() {
   disconnectTimerPtr->stop();
   //  mremove_listids.clear();
   //  listingResults.clear();
@@ -172,8 +162,7 @@ void ftpThread::destroy()
   }
 }
 
-void ftpThread::doConnect()
-{
+void ftpThread::doConnect() {
   aborting = false;
   if (isUnconnected() && !connectPending) {
     // addToLog(QString("FTP connect to host %1").arg(host),LOGFTPTHREAD);
@@ -186,8 +175,7 @@ void ftpThread::doConnect()
   }
 }
 
-void ftpThread::connectToHost()
-{
+void ftpThread::connectToHost() {
   int id;
   Q_UNUSED(id);
   addToLog(QString("'%1' connectToHost %2").arg(idName).arg(host), LOGFTPTHREAD);
@@ -203,8 +191,7 @@ void ftpThread::connectToHost()
   }
 }
 
-void ftpThread::changePath(const QString& newPath)
-{
+void ftpThread::changePath(const QString& newPath) {
   int id;
   Q_UNUSED(id);
   if ((directory != newPath) || (isUnconnected())) {
@@ -216,16 +203,14 @@ void ftpThread::changePath(const QString& newPath)
   }
 }
 
-int ftpThread::listFiles(QString mask)
-{
+int ftpThread::listFiles(QString mask) {
   int id;
   doConnect();
   id = qftpPtr->list(mask);
   return id;
 }
 
-void ftpThread::uploadFile(QString source, QString destination)
-{
+void ftpThread::uploadFile(QString source, QString destination) {
   int id;
   Q_UNUSED(id);
   addToLog("uploadFile", LOGFTPTHREAD);
@@ -251,7 +236,7 @@ void ftpThread::uploadFile(QString source, QString destination)
   addToLog(QString("'%1' put '%2', %3 bytes").arg(idName).arg(destination).arg(sourceFn->size()), LOGFTPTHREAD);
   ftpDone = false;
   doConnect();
-  if (fin.fileName().isEmpty()) // no target specified, use the same name as the source
+  if (fin.fileName().isEmpty())  // no target specified, use the same name as the source
   {
     id = qftpPtr->put(sourceFn, fi.fileName(), QFtp::Binary);
   } else {
@@ -262,11 +247,9 @@ void ftpThread::uploadFile(QString source, QString destination)
 }
 
 
-void ftpThread::downloadFile(QString source, QString destination)
-{
+void ftpThread::downloadFile(QString source, QString destination) {
   addToLog("FTP downloadFile", LOGFTPTHREAD);
-  if (destFn)
-    delete destFn;
+  if (destFn) delete destFn;
   destFn = new QFile(destination);
   if (!destFn->open(QIODevice::WriteOnly)) {
     addToLog(QString("Can't open %1 for writing").arg(destination), LOGFTPTHREAD);
@@ -292,8 +275,7 @@ void ftpThread::downloadFile(QString source, QString destination)
 }
 
 
-void ftpThread::remove(QString source)
-{
+void ftpThread::remove(QString source) {
   int id;
   Q_UNUSED(id);
   ftpDone = false;
@@ -302,8 +284,7 @@ void ftpThread::remove(QString source)
   addToLog(QString("Name=%1 source=%2  id:%3").arg(idName).arg(source).arg(id), LOGFTPTHREAD);
 }
 
-void ftpThread::rename(QString source, QString destination)
-{
+void ftpThread::rename(QString source, QString destination) {
   int id;
   Q_UNUSED(id);
   ftpDone = false;
@@ -314,47 +295,41 @@ void ftpThread::rename(QString source, QString destination)
 }
 
 
-void ftpThread::slotStateChanged(int state)
-{
-  dumpState(state);
-}
+void ftpThread::slotStateChanged(int state) { dumpState(state); }
 
-void ftpThread::dumpState(int state)
-{
+void ftpThread::dumpState(int state) {
   switch (state) {
-  case QFtp::Unconnected:
-    addToLog(QString("FTPss Unconnected name:=%1 :host=%2").arg(idName).arg(host), LOGFTPTHREAD);
-    break;
-  case QFtp::HostLookup:
-    addToLog(QString("FTPss Host lookup name:=%1 :host=%2").arg(idName).arg(host), LOGFTPTHREAD);
-    break;
-  case QFtp::Connecting:
-    addToLog(QString("FTPss Connecting name:=%1 :host=%2").arg(idName).arg(host), LOGFTPTHREAD);
-    break;
-  case QFtp::Connected:
-    addToLog(QString("FTPss Connected name:=%1 :host=%2").arg(idName).arg(host), LOGFTPTHREAD);
-    break;
-  case QFtp::LoggedIn:
-    addToLog(QString("FTPss Logged In name:=%1 :host=%2").arg(idName).arg(host), LOGFTPTHREAD);
-    break;
-  case QFtp::Closing:
-    addToLog(QString("FTPss Closing name:=%1 :host=%2").arg(idName).arg(host), LOGFTPTHREAD);
-    break;
-  default:
-    addToLog(QString("FTPss unknown %1 name:=%2 host=%3").arg(qftpPtr->state()).arg(idName).arg(host), LOGFTPTHREAD);
-    break;
+    case QFtp::Unconnected:
+      addToLog(QString("FTPss Unconnected name:=%1 :host=%2").arg(idName).arg(host), LOGFTPTHREAD);
+      break;
+    case QFtp::HostLookup:
+      addToLog(QString("FTPss Host lookup name:=%1 :host=%2").arg(idName).arg(host), LOGFTPTHREAD);
+      break;
+    case QFtp::Connecting:
+      addToLog(QString("FTPss Connecting name:=%1 :host=%2").arg(idName).arg(host), LOGFTPTHREAD);
+      break;
+    case QFtp::Connected:
+      addToLog(QString("FTPss Connected name:=%1 :host=%2").arg(idName).arg(host), LOGFTPTHREAD);
+      break;
+    case QFtp::LoggedIn:
+      addToLog(QString("FTPss Logged In name:=%1 :host=%2").arg(idName).arg(host), LOGFTPTHREAD);
+      break;
+    case QFtp::Closing:
+      addToLog(QString("FTPss Closing name:=%1 :host=%2").arg(idName).arg(host), LOGFTPTHREAD);
+      break;
+    default:
+      addToLog(QString("FTPss unknown %1 name:=%2 host=%3").arg(qftpPtr->state()).arg(idName).arg(host), LOGFTPTHREAD);
+      break;
   }
 }
 
-void ftpThread::wait(int timeout)
-{
+void ftpThread::wait(int timeout) {
   timeoutTimerPtr->stop();
   if (timeout < 0)
     timeoutValue = FTPTIMEOUTTIME * (0 - timeout);
   else
     timeoutValue = timeout;
-  if (timeoutValue)
-    timeoutTimerPtr->setInterval(timeoutValue);
+  if (timeoutValue) timeoutTimerPtr->setInterval(timeoutValue);
   addToLog(QString("'%1' tim.start timeout=%2").arg(idName).arg(timeoutValue), LOGFTPTHREAD);
   timeoutTimerPtr->start();
   timeoutExpired = false;
@@ -382,29 +357,16 @@ void ftpThread::wait(int timeout)
 }
 
 
-bool ftpThread::isLoggedIn()
-{
-  return qftpPtr->state() == QFtp::LoggedIn;
-}
+bool ftpThread::isLoggedIn() { return qftpPtr->state() == QFtp::LoggedIn; }
 
-bool ftpThread::isUnconnected()
-{
-  return qftpPtr->state() == QFtp::Unconnected;
-}
+bool ftpThread::isUnconnected() { return qftpPtr->state() == QFtp::Unconnected; }
 
-bool ftpThread::isBusy()
-{
-  return !ftpDone;
-}
+bool ftpThread::isBusy() { return !ftpDone; }
 
 
-void ftpThread::slotTimeout()
-{
-  timeoutExpired = true;
-}
+void ftpThread::slotTimeout() { timeoutExpired = true; }
 
-void ftpThread::slotDisconnect()
-{
+void ftpThread::slotDisconnect() {
   addToLog(QString("'%1'").arg(idName), LOGFTPTHREAD);
   destroy();
   emit ftpQuit();
@@ -417,17 +379,16 @@ void ftpThread::slotDisconnect()
 **
 *****************************************************************************/
 
-void ftpThread::slotCommandStarted(int id)
-{
+void ftpThread::slotCommandStarted(int id) {
   Q_UNUSED(id);
   addToLog(QString("'%1' id:%2, %3").arg(idName).arg(id).arg(commandStr[qftpPtr->currentCommand()]), LOGFTPTHREAD);
-  if (qftpPtr->currentCommand() == QFtp::List) {}
+  if (qftpPtr->currentCommand() == QFtp::List) {
+  }
   //  addToLog(QString("'%1' tim.restart interval=%2").arg(name).arg(timeoutTimer.interval()),LOGFTPTHREAD);
   //  timeoutTimer.start();
 }
 
-void ftpThread::slotCommandFinished(int id, bool err)
-{
+void ftpThread::slotCommandFinished(int id, bool err) {
   Q_UNUSED(id);
   QIODevice* p;
   QFtp::Command cmd;
@@ -442,17 +403,17 @@ void ftpThread::slotCommandFinished(int id, bool err)
                .arg(err),
            LOGFTPTHREAD);
   switch (cmd) {
-  case QFtp::Login:
-    connectPending = false;
-    break;
-  case QFtp::List:
-    emit listingComplete(err);
-    break;
-  case QFtp::Get:
-    emit downloadFinished(err, destFn->fileName());
-    break;
-  default:
-    break;
+    case QFtp::Login:
+      connectPending = false;
+      break;
+    case QFtp::List:
+      emit listingComplete(err);
+      break;
+    case QFtp::Get:
+      emit downloadFinished(err, destFn->fileName());
+      break;
+    default:
+      break;
   }
 
   if (err) {
@@ -473,8 +434,7 @@ void ftpThread::slotCommandFinished(int id, bool err)
 // (it is emitted after the last command's commandFinished() signal).
 // error is true if an error occurred during the processing; otherwise error is false.
 
-void ftpThread::slotDone(bool error)
-{
+void ftpThread::slotDone(bool error) {
   //  timeoutTimer.stop();
   lastError = FTPERROR;
   if (error) {
@@ -483,17 +443,17 @@ void ftpThread::slotDone(bool error)
     // failed).
     if (!isLoggedIn()) {
       switch (qftpPtr->error()) {
-      case QFtp::NoError:
-        lastError = FTPOK;
-        break;
-      case QFtp::UnknownError:
-        break;
-      case QFtp::HostNotFound:
-        break;
-      case QFtp::ConnectionRefused:
-        break;
-      case QFtp::NotConnected:
-        break;
+        case QFtp::NoError:
+          lastError = FTPOK;
+          break;
+        case QFtp::UnknownError:
+          break;
+        case QFtp::HostNotFound:
+          break;
+        case QFtp::ConnectionRefused:
+          break;
+        case QFtp::NotConnected:
+          break;
       }
       if (lastError == FTPOK) {
         emit commandsDone(static_cast<int>(lastError), "Success");
@@ -524,27 +484,24 @@ void ftpThread::slotDone(bool error)
 }
 
 
-void ftpThread::slotListInfo(const QUrlInfo& ent)
-{
+void ftpThread::slotListInfo(const QUrlInfo& ent) {
   if (ent.isFile()) {
     addToLog(QString("currentId=%1, name=%2").arg(qftpPtr->currentId()).arg(ent.name()), LOGFTPTHREAD);
     listingResults.append(ent);
   }
 }
 
-void ftpThread::slotRawCommandReply(int code, const QString& text)
-{
+void ftpThread::slotRawCommandReply(int code, const QString& text) {
   Q_UNUSED(code);
   Q_UNUSED(text);
   addToLog(QString("FTP Raw Command Reply: code=%1 , %2").arg(code).arg(text), LOGFTPTHREAD);
 }
 
-void ftpThread::slotProgress(qint64 bytes, qint64 total)
-{
+void ftpThread::slotProgress(qint64 bytes, qint64 total) {
   if (displayProgress) {
     displayProgressFTPEvent* stmb;
     stmb = new displayProgressFTPEvent(bytes, total);
-    QApplication::postEvent(dispatcherPtr, stmb); // Qt will delete it when done
+    QApplication::postEvent(dispatcherPtr, stmb);  // Qt will delete it when done
   }
   addToLog(QString("'%1' tim.restart interval=%2").arg(idName).arg(timeoutTimerPtr->interval()), LOGFTPTHREAD);
   timeoutTimerPtr->start();

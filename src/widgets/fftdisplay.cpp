@@ -6,8 +6,7 @@
 #include <QPainter>
 
 
-fftDisplay::fftDisplay(QWidget* parent) : QLabel(parent)
-{
+fftDisplay::fftDisplay(QWidget* parent) : QLabel(parent) {
   //  blockIndex=0;
   arMagSAvg = nullptr;
   fftArray = nullptr;
@@ -24,29 +23,22 @@ fftDisplay::fftDisplay(QWidget* parent) : QLabel(parent)
   displayCounter = 0;
 }
 
-fftDisplay::~fftDisplay()
-{
+fftDisplay::~fftDisplay() {
   delete imagePtr;
-  if (fftArray)
-    delete fftArray;
-  if (arMagSAvg)
-    delete[] arMagSAvg;
-  if (arMagWAvg)
-    delete[] arMagWAvg;
+  if (fftArray) delete fftArray;
+  if (arMagSAvg) delete[] arMagSAvg;
+  if (arMagWAvg) delete[] arMagWAvg;
 }
 
 
-void fftDisplay::init(int length, int nblocks, int isamplingrate)
-{
+void fftDisplay::init(int length, int nblocks, int isamplingrate) {
   int i;
   windowSize = length;
   fftLength = windowSize * nblocks;
   samplingrate = isamplingrate;
-  if (fftArray)
-    delete fftArray;
-  if (arMagSAvg)
-    delete[] arMagSAvg;
-  step = static_cast<double>(samplingrate) / static_cast<double>(fftLength); // freq step per bin
+  if (fftArray) delete fftArray;
+  if (arMagSAvg) delete[] arMagSAvg;
+  step = static_cast<double>(samplingrate) / static_cast<double>(fftLength);  // freq step per bin
   binBegin = static_cast<int>(rint(FFTLOW / step));
   binEnd = static_cast<int>(rint(FFTHIGH / step));
   binDiff = binEnd - binBegin;
@@ -62,16 +54,14 @@ void fftDisplay::init(int length, int nblocks, int isamplingrate)
 }
 
 
-void fftDisplay::setMarkers(int mrk1, int mrk2, int mrk3)
-{
+void fftDisplay::setMarkers(int mrk1, int mrk2, int mrk3) {
   marker1 = mrk1;
   marker2 = mrk2;
   marker3 = mrk3;
   update();
 }
 
-void fftDisplay::showFFT(double* fftData)
-{
+void fftDisplay::showFFT(double* fftData) {
   int i, j, repCnt;
   QColor c;
   double re, imag, tmp, tmp1;
@@ -83,8 +73,7 @@ void fftDisplay::showFFT(double* fftData)
   }
   if ((imWidth != width()) || (imHeight != height())) {
     if (imWidth != width()) {
-      if (arMagWAvg != nullptr)
-        delete[] arMagWAvg;
+      if (arMagWAvg != nullptr) delete[] arMagWAvg;
       arMagWAvg = new double[width()];
       for (i = 0; i < width(); i++) {
         arMagWAvg[i] = 0;
@@ -105,7 +94,7 @@ void fftDisplay::showFFT(double* fftData)
     for (i = binBegin, j = 0; i < binEnd; i++, j++) {
       re = fftData[i] / fftLength;
       imag = fftData[fftLength - i] / fftLength;
-      tmp = 10 * log10((re * re + imag * imag)) - 77.27; // 0.5 Vtt is 0db
+      tmp = 10 * log10((re * re + imag * imag)) - 77.27;  // 0.5 Vtt is 0db
       if (arMagSAvg[j] < -100) {
         arMagSAvg[j] = -100;
       }
@@ -114,12 +103,10 @@ void fftDisplay::showFFT(double* fftData)
       else
         arMagSAvg[j] = arMagSAvg[j] * (1 - avgVal) + avgVal * tmp;
       tmp = (fftMax - arMagSAvg[j]) / range;
-      if (tmp < 0)
-        tmp = 0;
-      if (tmp > 1)
-        tmp = 1;
+      if (tmp < 0) tmp = 0;
+      if (tmp > 1) tmp = 1;
       int pos = static_cast<int>(rint(static_cast<double>(j * (imWidth - 1)) / static_cast<double>(binDiff)));
-      fftArray->setPoint(j, pos, (imHeight - 1) * tmp); // range 0 -> -1
+      fftArray->setPoint(j, pos, (imHeight - 1) * tmp);  // range 0 -> -1
     }
   } else {
     memmove(imagePtr->scanLine(1), imagePtr->scanLine(0), (imWidth * (imHeight - 2)) * sizeof(uint));
@@ -134,16 +121,14 @@ void fftDisplay::showFFT(double* fftData)
       if (((i - binBegin) * imWidth) / (binEnd - binBegin) >= j) {
         tmp1 /= repCnt;
         repCnt = 0;
-        tmp = 10 * log10((tmp1)) - 77.27; // 0.5 Vtt is 0db
+        tmp = 10 * log10((tmp1)) - 77.27;  // 0.5 Vtt is 0db
         arMagWAvg[j] = arMagWAvg[j] * (1 - avgVal) + avgVal * tmp;
         if (arMagWAvg[j] < -100) {
           arMagWAvg[j] = -100;
         }
         tmp = 1 - (fftMax - arMagWAvg[j]) / range;
-        if (tmp < 0)
-          tmp = 0;
-        if (tmp > 1)
-          tmp = 1;
+        if (tmp < 0) tmp = 0;
+        if (tmp > 1) tmp = 1;
         c.setHsv(240 - tmp * 60, 255, tmp * 255);
         ptr[j] = c.rgb();
         tmp1 = 0;
@@ -155,15 +140,13 @@ void fftDisplay::showFFT(double* fftData)
 }
 
 
-void fftDisplay::drawMarkers(QPainter* painter, int top, int bot)
-{
+void fftDisplay::drawMarkers(QPainter* painter, int top, int bot) {
   painter->drawLine((((marker1 - FFTLOW) * imWidth) / FFTSPAN), top, (((marker1 - FFTLOW) * imWidth) / FFTSPAN), bot);
   painter->drawLine((((marker2 - FFTLOW) * imWidth) / FFTSPAN), top, (((marker2 - FFTLOW) * imWidth) / FFTSPAN), bot);
   painter->drawLine((((marker3 - FFTLOW) * imWidth) / FFTSPAN), top, (((marker3 - FFTLOW) * imWidth) / FFTSPAN), bot);
 }
 
-QImage* fftDisplay::getImage()
-{
+QImage* fftDisplay::getImage() {
   QImage* im = new QImage(width(), height() + 10, QImage::Format_RGB32);
   QPainter p(im);
   QPen pn;
@@ -182,8 +165,7 @@ QImage* fftDisplay::getImage()
   return im;
 }
 
-void fftDisplay::paintEvent(QPaintEvent* p)
-{
+void fftDisplay::paintEvent(QPaintEvent* p) {
   QPen pn;
   QPainter painter(this);
   painter.setRenderHint(QPainter::Antialiasing);

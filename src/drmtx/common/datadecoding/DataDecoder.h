@@ -47,21 +47,17 @@ class CNews;
 
 /* Classes ********************************************************************/
 /* Encoder ------------------------------------------------------------------ */
-class CDataEncoder
-{
-public:
+class CDataEncoder {
+ public:
   CDataEncoder() {}
   virtual ~CDataEncoder() {}
 
   int Init(CParameter& Param);
   void GeneratePacket(CVector<_BINARY>& vecbiPacket);
 
-  CMOTSlideShowEncoder* GetSliShowEnc()
-  {
-    return &MOTSlideShowEncoder;
-  }
+  CMOTSlideShowEncoder* GetSliShowEnc() { return &MOTSlideShowEncoder; }
 
-protected:
+ protected:
   CMOTSlideShowEncoder MOTSlideShowEncoder;
   CVector<_BINARY> vecbiCurDataUnit;
 
@@ -73,4 +69,4 @@ protected:
 };
 
 
-#endif // !defined(DATADECODER_H__3B0BA660_CA3452363E7A0D31912__INCLUDED_)
+#endif  // !defined(DATADECODER_H__3B0BA660_CA3452363E7A0D31912__INCLUDED_)

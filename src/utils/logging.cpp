@@ -40,8 +40,7 @@
 // logFile logfile;
 
 
-logFile::logFile() : maskBA(NUMDEBUGLEVELS, false)
-{
+logFile::logFile() : maskBA(NUMDEBUGLEVELS, false) {
 #ifdef ENABLELOGGING
   lf = new QFile;
 #ifdef ENABLEAUX
@@ -58,8 +57,7 @@ logFile::logFile() : maskBA(NUMDEBUGLEVELS, false)
 */
 
 #ifdef ENABLELOGGING
-bool logFile::open(QString logname)
-{
+bool logFile::open(QString logname) {
   lf->setFileName(QDir::homePath() + "/" + logname);
 #ifdef ENABLEAUX
   auxFile->setFileName(QDir::homePath() + "/aux_" + logname);
@@ -67,10 +65,7 @@ bool logFile::open(QString logname)
   return reopen();
 }
 #else
-bool logFile::open(QString)
-{
-  return true;
-}
+bool logFile::open(QString) { return true; }
 #endif
 
 
@@ -78,13 +73,9 @@ bool logFile::open(QString)
   closes the logfile
 */
 
-logFile::~logFile()
-{
-  close();
-}
+logFile::~logFile() { close(); }
 
-void logFile::close()
-{
+void logFile::close() {
 #ifdef ENABLELOGGING
   errorOut() << "closing logfile";
   add("End of logfile", LOGALL);
@@ -98,14 +89,12 @@ void logFile::close()
 #endif
 }
 
-void logFile::reset()
-{
+void logFile::reset() {
   close();
   reopen();
 }
 
-bool logFile::reopen()
-{
+bool logFile::reopen() {
 #ifdef ENABLELOGGING
   setEnabled(false);
   QFileInfo finf(*lf);
@@ -147,16 +136,13 @@ bool logFile::reopen()
 */
 
 #ifdef ENABLELOGGING
-void logFile::add(QString message, short unsigned int posMask)
-{
+void logFile::add(QString message, short unsigned int posMask) {
   QString tempStr, tempStr_qd;
-  if (!(posMask == LOGALL)) // always show messages with DBALL
+  if (!(posMask == LOGALL))  // always show messages with DBALL
   {
-    if (!maskBA[posMask])
-      return;
+    if (!maskBA[posMask]) return;
   }
-  if (!enabled)
-    return;
+  if (!enabled) return;
   mutex.lock();
   if (logCount == 0) {
     logCount = 1;
@@ -195,8 +181,7 @@ void logFile::add(QString message, short unsigned int posMask)
         tempStr_qd = QString("%3 %4 %5").arg(levelStr[savedPosMask]).arg(logCount).arg(savedLogEntry);
     }
     *ts << tempStr;
-    if (outputDebug)
-      qDebug() << tempStr_qd;
+    if (outputDebug) qDebug() << tempStr_qd;
 
     //      tmp=QString("%1 ").arg(timer.elapsed(),5);
     //      tmp2 = QTime::currentTime().toString("HH:mm:ss:zzz ");
@@ -214,8 +199,7 @@ void logFile::add(QString message, short unsigned int posMask)
 void logFile::add(QString, short unsigned int) {}
 #endif
 
-void logFile::add(const char* fileName, const char* functionName, int line, QString t, short unsigned int posMask)
-{
+void logFile::add(const char* fileName, const char* functionName, int line, QString t, short unsigned int posMask) {
   QString s;
   QFileInfo finfo(fileName);
 
@@ -231,10 +215,8 @@ void logFile::add(const char* fileName, const char* functionName, int line, QStr
 
 
 #ifdef ENABLEAUX
-void logFile::addToAux(QString t)
-{
-  if (!enabled)
-    return;
+void logFile::addToAux(QString t) {
+  if (!enabled) return;
   mutex.lock();
   *auxTs << t << "\n";
   auxTs->flush();
@@ -249,20 +231,15 @@ void logFile::addToAux(QString) {}
   \return previous logging state (true if logging was enabled)
 */
 
-bool logFile::setEnabled(bool enable)
-{
+bool logFile::setEnabled(bool enable) {
   bool t = enabled;
   enabled = enable;
   return t;
 }
 
-void logFile::setLogMask(QBitArray logMask)
-{
-  maskBA = logMask;
-}
+void logFile::setLogMask(QBitArray logMask) { maskBA = logMask; }
 
-void logFile::maskSelect(QWidget* wPtr)
-{
+void logFile::maskSelect(QWidget* wPtr) {
   int i, j;
   QDialog lf(wPtr);
   QCheckBox* cb;
@@ -298,8 +275,7 @@ void logFile::maskSelect(QWidget* wPtr)
   }
 }
 
-void logFile::readSettings()
-{
+void logFile::readSettings() {
   QBitArray ba;
   QSettings qSettings;
   qSettings.beginGroup("logging");
@@ -314,8 +290,7 @@ void logFile::readSettings()
   qSettings.endGroup();
 }
 
-void logFile::writeSettings()
-{
+void logFile::writeSettings() {
   QSettings qSettings;
   qSettings.beginGroup("logging");
   qSettings.setValue("maskBA", maskBA);

@@ -42,9 +42,8 @@ struct sitemParam {
 enum ResizeCorners { TOP_LEFT, TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, ROTATE };
 
 
-class graphItemBase : public QAbstractGraphicsShapeItem
-{
-public:
+class graphItemBase : public QAbstractGraphicsShapeItem {
+ public:
   enum egraphType { BASE = QGraphicsItem::UserType + 1, RECTANGLE, ELLIPSE, IMAGE, LINE, TEXT, REPLAY, SBORDER };
   graphItemBase(QMenu* cntxtMenu);
   ~graphItemBase();
@@ -66,64 +65,41 @@ public:
   void load(QDataStream& str);
   void save(QDataStream& str);
   void setTransform(int rot, double hs, double vs);
-  QRectF rect()
-  {
-    return param.rct;
-  }
-  void setImage(const QImage& ima)
-  {
-    param.im = ima;
-  }
+  QRectF rect() { return param.rct; }
+  void setImage(const QImage& ima) { param.im = ima; }
   sitemParam getParam();
   void setParam(sitemParam sp);
-  QString text() const
-  {
-    return param.txt;
-  }
+  QString text() const { return param.txt; }
 
   virtual void setText(const QString&) {}
   virtual void setFont(QFont) {}
-  void setBrush(QColor c)
-  {
+  void setBrush(QColor c) {
     param.fillColor = c;
     QAbstractGraphicsShapeItem::setBrush(param.fillColor);
   }
-  void setBrush(sgradientParam p, QRectF rct)
-  {
+  void setBrush(sgradientParam p, QRectF rct) {
     param.gradient = p;
     QAbstractGraphicsShapeItem::setBrush(buildGradient(param.gradient, rct));
   }
-  void setLocked(bool b)
-  {
-    param.locked = b;
-  }
-  void setGradient(sgradientParam pm)
-  {
+  void setLocked(bool b) { param.locked = b; }
+  void setGradient(sgradientParam pm) {
     param.modified = true;
     param.gradient = pm;
   }
-  virtual void setRect(const QRectF& rectangle)
-  {
+  virtual void setRect(const QRectF& rectangle) {
     param.rct = rectangle;
     param.modified = true;
   }
-  virtual void setRect(qreal x, qreal y, qreal width, qreal height)
-  {
+  virtual void setRect(qreal x, qreal y, qreal width, qreal height) {
     param.rct = QRectF(x, y, width, height);
     param.modified = true;
   }
-  int type() const
-  {
-    return param.type;
-  }
-  sitemParam* getParamPtr()
-  {
-    return &param;
-  }
+  int type() const { return param.type; }
+  sitemParam* getParamPtr() { return &param; }
   bool markedForDeletion;
 
 
-protected:
+ protected:
   QRectF m_ActualRect;
   QRectF m_CornerRect;
   bool selected;
@@ -140,11 +116,11 @@ protected:
   sitemParam param;
   void contextMenuEvent(QGraphicsSceneContextMenuEvent* event);
 
-private:
+ private:
   void setTransform();
 };
 
 #define NUMITEMTYPES (graphItemBase::SBORDER - graphItemBase::BASE + 1)
 extern QString itemTypeStr[NUMITEMTYPES];
 
-#endif // BASEGRAPHICITEM_H
+#endif  // BASEGRAPHICITEM_H

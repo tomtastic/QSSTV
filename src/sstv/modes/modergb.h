@@ -37,13 +37,12 @@
 /**
   @author Johan Maes <on4qz@telenet.be>
 */
-class modeRGB : public modeBase
-{
-public:
+class modeRGB : public modeBase {
+ public:
   modeRGB(esstvMode m, unsigned int len, bool tx, bool narrowMode);
   ~modeRGB();
 
-private:
+ private:
   embState rxSetupLine();
   void calcPixelPositionTable(unsigned int colorLine, bool tx);
   void setupParams(double clock);

@@ -10,8 +10,7 @@
 #define MAXROWSIZE 52
 
 
-imageMatrix::imageMatrix(QWidget* parent) : QWidget(parent)
-{
+imageMatrix::imageMatrix(QWidget* parent) : QWidget(parent) {
   parentPtr = parent;
   parentPtr->resize(511, 300);
   verticalLayout = nullptr;
@@ -19,16 +18,13 @@ imageMatrix::imageMatrix(QWidget* parent) : QWidget(parent)
   sortFlags = QDir::Time;
 }
 
-imageMatrix::~imageMatrix()
-{
+imageMatrix::~imageMatrix() {
   // if(verticalLayout!=nullptr) delete verticalLayout;
   // if( horizontalLayout!=nullptr) delete horizontalLayout;
 }
 
-void imageMatrix::setupLayout()
-{
-  if (verticalLayout != nullptr)
-    delete verticalLayout;
+void imageMatrix::setupLayout() {
+  if (verticalLayout != nullptr) delete verticalLayout;
   verticalLayout = new QVBoxLayout(parentPtr);
   verticalLayout->setObjectName(QString::fromUtf8("vt1"));
   verticalLayout->setSpacing(2);
@@ -86,8 +82,7 @@ void imageMatrix::setupLayout()
 }
 
 
-void imageMatrix::init(int numRows, int numColumns, QString dir, imageViewer::thumbType tt)
-{
+void imageMatrix::init(int numRows, int numColumns, QString dir, imageViewer::thumbType tt) {
   int i, j;
   rows = numRows;
   columns = numColumns;
@@ -116,13 +111,9 @@ void imageMatrix::init(int numRows, int numColumns, QString dir, imageViewer::th
   //  displayFiles();
 }
 
-bool compareFile(QFileInfo f1, QFileInfo f2)
-{
-  return f1.lastModified() > f2.lastModified();
-}
+bool compareFile(QFileInfo f1, QFileInfo f2) { return f1.lastModified() > f2.lastModified(); }
 
-void imageMatrix::getList()
-{
+void imageMatrix::getList() {
   QDateTime listFileTime;
   QDirIterator::IteratorFlags flags = QDirIterator::NoIteratorFlags;
 
@@ -146,21 +137,18 @@ void imageMatrix::getList()
   }
   std::sort(fileList.begin(), fileList.end(), compareFile);
   numPages = ceil(static_cast<double>(fileList.count()) / static_cast<double>(rows * columns));
-  if (numPages == 0)
-    numPages = 1;
+  if (numPages == 0) numPages = 1;
   slotBegin();
 }
 
-QString imageMatrix::getLastFile()
-{
+QString imageMatrix::getLastFile() {
   if (fileList.count() > 0) {
     return fileList.last().absoluteFilePath();
   } else
     return QString();
 }
 
-void imageMatrix::displayFiles()
-{
+void imageMatrix::displayFiles() {
   int i, j, k;
 
   QString tempStr;
@@ -185,22 +173,18 @@ void imageMatrix::displayFiles()
   }
 }
 
-void imageMatrix::changed()
-{
+void imageMatrix::changed() {
   getList();
   //    displayFiles();
 }
 
 
-void imageMatrix::slotPrev()
-{
-  if (currentPage != 0)
-    currentPage--;
+void imageMatrix::slotPrev() {
+  if (currentPage != 0) currentPage--;
   displayFiles();
 }
 
-void imageMatrix::slotNext()
-{
+void imageMatrix::slotNext() {
   currentPage++;
   if (currentPage >= numPages) {
     currentPage--;
@@ -208,27 +192,22 @@ void imageMatrix::slotNext()
   displayFiles();
 }
 
-void imageMatrix::slotBegin()
-{
+void imageMatrix::slotBegin() {
   currentPage = 0;
   displayFiles();
 }
 
-void imageMatrix::slotEnd()
-{
+void imageMatrix::slotEnd() {
   currentPage = numPages - 1;
-  if (currentPage < 0)
-    currentPage = 0;
+  if (currentPage < 0) currentPage = 0;
   displayFiles();
 }
 
-void imageMatrix::slotLayoutChanged()
-{
+void imageMatrix::slotLayoutChanged() {
   int curPag = currentPage;
   getList();
   if (curPag >= numPages) {
-    if (curPag > 0)
-      curPag--;
+    if (curPag > 0) curPag--;
   }
   currentPage = curPag;
   displayFiles();

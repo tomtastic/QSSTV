@@ -17,27 +17,25 @@ extern QString hybridNotifyDir;
 extern QString onlineStatusDir;
 
 
-namespace Ui
-{
+namespace Ui {
 class hybridConfig;
 }
 
-class hybridConfig : public baseConfig
-{
+class hybridConfig : public baseConfig {
   Q_OBJECT
 
-public:
+ public:
   explicit hybridConfig(QWidget* parent = 0);
   ~hybridConfig();
   void readSettings();
   void writeSettings();
   void getParams();
   void setParams();
-private slots:
+ private slots:
   void slotTestHybridPushButton();
 
-private:
+ private:
   Ui::hybridConfig* ui;
 };
 
-#endif // HYBRIDCONFIG_H
+#endif  // HYBRIDCONFIG_H

@@ -1,24 +1,14 @@
 #include "textdisplay.h"
 #include "ui_textdisplay.h"
 
-textDisplay::textDisplay(QWidget* parent) : QDialog(parent), ui(new Ui::textDisplay)
-{
-  ui->setupUi(this);
-}
+textDisplay::textDisplay(QWidget* parent) : QDialog(parent), ui(new Ui::textDisplay) { ui->setupUi(this); }
 
-textDisplay::~textDisplay()
-{
-  delete ui;
-}
+textDisplay::~textDisplay() { delete ui; }
 
 
-void textDisplay::clear()
-{
-  ui->plainTextEdit->clear();
-}
+void textDisplay::clear() { ui->plainTextEdit->clear(); }
 
-void textDisplay::append(const QString& t)
-{
+void textDisplay::append(const QString& t) {
   int i;
   QStringList sl;
   sl = t.split("\r\n");

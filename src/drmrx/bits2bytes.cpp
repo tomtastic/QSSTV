@@ -53,8 +53,7 @@
 #include <math.h>
 #include <float.h>
 
-void bits2bytes(double* inbits, int N, unsigned char /*@out@ */* outbytes)
-{
+void bits2bytes(double* inbits, int N, unsigned char /*@out@ */* outbytes) {
   unsigned char single_byte;
   int m, n;
 

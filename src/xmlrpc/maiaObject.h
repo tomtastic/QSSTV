@@ -33,21 +33,20 @@
 #include <QtXml>
 #include <QNetworkReply>
 
-class MaiaObject : public QObject
-{
+class MaiaObject : public QObject {
   Q_OBJECT
 
-public:
+ public:
   MaiaObject(QObject* parent = 0);
   static QDomElement toXml(QVariant arg);
   static QVariant fromXml(const QDomElement& elem);
   QString prepareCall(QString method, QList<QVariant> args);
   static QString prepareResponse(QVariant arg);
 
-public slots:
+ public slots:
   void parseResponse(QString response, QNetworkReply* reply);
 
-signals:
+ signals:
   void aresponse(QVariant&, QNetworkReply* reply);
   void call(const QString, const QList<QVariant>);
   void fault(int, const QString&, QNetworkReply* reply);

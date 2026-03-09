@@ -12,14 +12,14 @@ class ftpThread;
 
 /** dispatch events are used to communicate with the different threads */
 enum dispatchEventType {
-  info = QEvent::User, //!< send when dsp stops running
-  soundcardIdle,       //!< send when soundcard stops running
+  info = QEvent::User,  //!< send when dsp stops running
+  soundcardIdle,        //!< send when soundcard stops running
   displayFFT,
   displaySync,
   displayDRMStat,
   displayDRMInfo,
-  syncDisp,    //!< synchro display event
-  lineDisplay, //!< display 1 line
+  syncDisp,     //!< synchro display event
+  lineDisplay,  //!< display 1 line
   eraseDisp,
   createMode,
   startImageRX,
@@ -28,11 +28,11 @@ enum dispatchEventType {
   stoppingTX,
   progressTX,
   outOfSync,
-  rxSSTVStatus, //! shows message in sstv tab
-  rxDRMStatus,  //! shows message in drm tab
-  txDRMNotify,  //! shows text in tx notifications box
+  rxSSTVStatus,  //! shows message in sstv tab
+  rxDRMStatus,   //! shows message in drm tab
+  txDRMNotify,   //! shows text in tx notifications box
   txDRMNotifyAppend,
-  txPrepareComplete, //!< tx preparations (uploading etc) complete
+  txPrepareComplete,  //!< tx preparations (uploading etc) complete
   closeWindows,
   callEditor,
   templatesChanged,
@@ -55,58 +55,40 @@ enum dispatchEventType {
   statusBarMsg
 };
 
-class baseEvent : public QEvent
-{
-public:
-  baseEvent(QEvent::Type t) : QEvent(t)
-  {
-    doneIt = nullptr;
-  }
-  void waitFor(bool* d)
-  {
-    doneIt = d;
-  }
-  void setDone()
-  {
-    if (doneIt != nullptr)
-      *doneIt = true;
+class baseEvent : public QEvent {
+ public:
+  baseEvent(QEvent::Type t) : QEvent(t) { doneIt = nullptr; }
+  void waitFor(bool* d) { doneIt = d; }
+  void setDone() {
+    if (doneIt != nullptr) *doneIt = true;
   }
   QString description;
 
-private:
+ private:
   bool* doneIt;
 };
 
 /**
   this event is send when the dspfunc thread stops running
 */
-class infoEvent : public baseEvent
-{
-public:
+class infoEvent : public baseEvent {
+ public:
   /** create event */
-  infoEvent(QString t) : baseEvent(static_cast<QEvent::Type>(info)), str(t)
-  {
-    description = "infoEvent";
-  }
+  infoEvent(QString t) : baseEvent(static_cast<QEvent::Type>(info)), str(t) { description = "infoEvent"; }
   /** returns info string from the event */
-  QString getStr() const
-  {
-    return str;
-  }
+  QString getStr() const { return str; }
 
-private:
+ private:
   QString str;
 };
 
 /**
   this event is send when the soundcard thread goes to idle
 */
-class soundcardIdleEvent : public baseEvent
-{
-public:
+class soundcardIdleEvent : public baseEvent {
+ public:
   /** create event */
-  soundcardIdleEvent() : baseEvent(static_cast<QEvent::Type>(soundcardIdle))
-  {
+  soundcardIdleEvent() : baseEvent(static_cast<QEvent::Type>(soundcardIdle)) {
     {
       description = " soudcardIdleEvent";
     }
@@ -117,81 +99,56 @@ public:
 /**
   this event is send with the sync quality info and the signal volume
 */
-class displaySyncEvent : public baseEvent
-{
-public:
+class displaySyncEvent : public baseEvent {
+ public:
   /** create event */
-  displaySyncEvent(uint s) : baseEvent(static_cast<QEvent::Type>(displaySync)), sync(s)
-  {
+  displaySyncEvent(uint s) : baseEvent(static_cast<QEvent::Type>(displaySync)), sync(s) {
     description = " displaySyncEvent";
   }
   /** returns int sync value */
-  void getInfo(uint& s)
-  {
-    s = sync;
-  }
+  void getInfo(uint& s) { s = sync; }
 
-private:
+ private:
   uint sync;
   //  DSPFLOAT vol;
 };
 
-class displayDRMStatEvent : public baseEvent
-{
-public:
+class displayDRMStatEvent : public baseEvent {
+ public:
   /** create event */
-  displayDRMStatEvent(uint s) : baseEvent(static_cast<QEvent::Type>(displayDRMStat)), snr(s)
-  {
+  displayDRMStatEvent(uint s) : baseEvent(static_cast<QEvent::Type>(displayDRMStat)), snr(s) {
     description = " displayDRMStatEvent";
   }
   /** returns length and pointer  from the event */
-  void getInfo(DSPFLOAT& s)
-  {
-    s = snr;
-  }
+  void getInfo(DSPFLOAT& s) { s = snr; }
 
-private:
+ private:
   DSPFLOAT snr;
 };
 
 
-class ftpSetupEvent : public baseEvent
-{
-public:
+class ftpSetupEvent : public baseEvent {
+ public:
   /** create event */
   ftpSetupEvent(ftpThread* ftpIntf, QString h, int p, QString u, QString pwd, QString d)
-      : baseEvent(static_cast<QEvent::Type>(ftpSetup)), ftpIntfPtr(ftpIntf), host(h), port(p), user(u), password(pwd),
-        dir(d)
-  {
+      : baseEvent(static_cast<QEvent::Type>(ftpSetup)),
+        ftpIntfPtr(ftpIntf),
+        host(h),
+        port(p),
+        user(u),
+        password(pwd),
+        dir(d) {
     description = "ftpSetupEvent";
   }
   /** returns settings from the event */
-  ftpThread* getFtpIntfPtr() const
-  {
-    return ftpIntfPtr;
-  }
-  QString getHost() const
-  {
-    return host;
-  }
-  int getPort() const
-  {
-    return port;
-  }
-  QString getUser() const
-  {
-    return user;
-  }
-  QString getPassword() const
-  {
-    return password;
-  }
-  QString getDir() const
-  {
-    return dir;
-  }
+  ftpThread* getFtpIntfPtr() const { return ftpIntfPtr; }
+  QString getHost() const { return host; }
+  int getPort() const { return port; }
+  QString getUser() const { return user; }
+  QString getPassword() const { return password; }
+  QString getDir() const { return dir; }
 
-private:
+ private:
   ftpThread* ftpIntfPtr;
   QString host;
   int port;
@@ -200,35 +157,24 @@ private:
   QString dir;
 };
 
-class ftpUploadFileEvent : public baseEvent
-{
-public:
+class ftpUploadFileEvent : public baseEvent {
+ public:
   /** create event */
   ftpUploadFileEvent(ftpThread* ftpIntf, QString srcFn, QString dstFn, bool recon)
-      : baseEvent(static_cast<QEvent::Type>(ftpUploadFile)), ftpIntfPtr(ftpIntf), sourceFilename(srcFn),
-        destFilename(dstFn), reconnect(recon)
-  {
+      : baseEvent(static_cast<QEvent::Type>(ftpUploadFile)),
+        ftpIntfPtr(ftpIntf),
+        sourceFilename(srcFn),
+        destFilename(dstFn),
+        reconnect(recon) {
     description = "ftpUploadFileEvent";
   }
   /** returns settings from the event */
-  ftpThread* getFtpIntfPtr() const
-  {
-    return ftpIntfPtr;
-  }
-  QString getSrcFn() const
-  {
-    return sourceFilename;
-  }
-  QString getDstFn() const
-  {
-    return destFilename;
-  }
-  bool getReconnect() const
-  {
-    return reconnect;
-  }
+  ftpThread* getFtpIntfPtr() const { return ftpIntfPtr; }
+  QString getSrcFn() const { return sourceFilename; }
+  QString getDstFn() const { return destFilename; }
+  bool getReconnect() const { return reconnect; }
 
-private:
+ private:
   ftpThread* ftpIntfPtr;
   QString sourceFilename;
   QString destFilename;
@@ -258,152 +204,109 @@ private:
 // };
 
 
-class notifyCheckEvent : public baseEvent
-{
-public:
+class notifyCheckEvent : public baseEvent {
+ public:
   /** create event */
-  notifyCheckEvent(QString fn) : baseEvent(static_cast<QEvent::Type>(notifyCheck)), filename(fn)
-  {
+  notifyCheckEvent(QString fn) : baseEvent(static_cast<QEvent::Type>(notifyCheck)), filename(fn) {
     description = "notifyCheckEvent";
   }
-  QString getFilename() const
-  {
-    return filename;
-  }
+  QString getFilename() const { return filename; }
 
-private:
+ private:
   QString filename;
 };
 
 
-class rxSSTVStatusEvent : public baseEvent
-{
-public:
+class rxSSTVStatusEvent : public baseEvent {
+ public:
   /** create event */
-  rxSSTVStatusEvent(QString t) : baseEvent(static_cast<QEvent::Type>(rxSSTVStatus)), str(t)
-  {
+  rxSSTVStatusEvent(QString t) : baseEvent(static_cast<QEvent::Type>(rxSSTVStatus)), str(t) {
     description = "rxSSTVStatusEvent";
   }
   /** returns info string from the event */
-  QString getStr() const
-  {
-    return str;
-  }
+  QString getStr() const { return str; }
 
-private:
+ private:
   QString str;
 };
 
-class rxDRMStatusEvent : public baseEvent
-{
-public:
+class rxDRMStatusEvent : public baseEvent {
+ public:
   /** create event */
-  rxDRMStatusEvent(QString t) : baseEvent(static_cast<QEvent::Type>(rxDRMStatus)), str(t)
-  {
+  rxDRMStatusEvent(QString t) : baseEvent(static_cast<QEvent::Type>(rxDRMStatus)), str(t) {
     description = "rxDRMStatusEvent";
   }
   /** returns info string from the event */
-  QString getStr() const
-  {
-    return str;
-  }
+  QString getStr() const { return str; }
 
-private:
+ private:
   QString str;
 };
 
 
-class txDRMNotifyEvent : public baseEvent
-{
-public:
+class txDRMNotifyEvent : public baseEvent {
+ public:
   /** create event */
-  txDRMNotifyEvent(QString t) : baseEvent(static_cast<QEvent::Type>(txDRMNotify)), str(t)
-  {
+  txDRMNotifyEvent(QString t) : baseEvent(static_cast<QEvent::Type>(txDRMNotify)), str(t) {
     description = "txDRMNotifyEvent";
   }
   /** returns info string from the event */
-  QString getStr() const
-  {
-    return str;
-  }
+  QString getStr() const { return str; }
 
-private:
+ private:
   QString str;
 };
 
-class txDRMNotifyAppendEvent : public baseEvent
-{
-public:
+class txDRMNotifyAppendEvent : public baseEvent {
+ public:
   /** create event */
-  txDRMNotifyAppendEvent(QString t) : baseEvent(static_cast<QEvent::Type>(txDRMNotifyAppend)), str(t)
-  {
+  txDRMNotifyAppendEvent(QString t) : baseEvent(static_cast<QEvent::Type>(txDRMNotifyAppend)), str(t) {
     description = "txDRMNotifyAppendEvent";
   }
   /** returns info string from the event */
-  QString getStr() const
-  {
-    return str;
-  }
+  QString getStr() const { return str; }
 
-private:
+ private:
   QString str;
 };
 
-class txPrepareCompleteEvent : public baseEvent
-{
-public:
+class txPrepareCompleteEvent : public baseEvent {
+ public:
   /** create event */
-  txPrepareCompleteEvent(bool tok) : baseEvent(static_cast<QEvent::Type>(txPrepareComplete)), _ok(tok)
-  {
+  txPrepareCompleteEvent(bool tok) : baseEvent(static_cast<QEvent::Type>(txPrepareComplete)), _ok(tok) {
     description = "txPrepareCompleteEvent";
   }
   /** returns info string from the event */
-  bool ok() const
-  {
-    return _ok;
-  }
+  bool ok() const { return _ok; }
 
-private:
+ private:
   bool _ok;
 };
 
-class lineDisplayEvent : public baseEvent
-{
-public:
+class lineDisplayEvent : public baseEvent {
+ public:
   /** create event */
-  lineDisplayEvent(uint lineNbr) : baseEvent(static_cast<QEvent::Type>(lineDisplay)), lineNumber(lineNbr)
-  {
+  lineDisplayEvent(uint lineNbr) : baseEvent(static_cast<QEvent::Type>(lineDisplay)), lineNumber(lineNbr) {
     description = "lineDisplayEvent";
   }
   /** returns length and pointer  from the event */
-  void getInfo(uint& lineNbr) const
-  {
-    lineNbr = lineNumber;
-  }
+  void getInfo(uint& lineNbr) const { lineNbr = lineNumber; }
 
-private:
+ private:
   uint lineNumber;
 };
 
-class eraseDisplayEvent : public baseEvent
-{
-public:
+class eraseDisplayEvent : public baseEvent {
+ public:
   /** create event */
-  eraseDisplayEvent() : baseEvent(static_cast<QEvent::Type>(eraseDisp))
-  {
-    description = "eraseDisplayEvent";
-  }
+  eraseDisplayEvent() : baseEvent(static_cast<QEvent::Type>(eraseDisp)) { description = "eraseDisplayEvent"; }
 };
 
 
-class displayDRMInfoEvent : public baseEvent
-{
-public:
+class displayDRMInfoEvent : public baseEvent {
+ public:
   /** create event */
-  displayDRMInfoEvent() : baseEvent(static_cast<QEvent::Type>(displayDRMInfo))
-  {
-    description = "displayDRMInfo";
-  }
+  displayDRMInfoEvent() : baseEvent(static_cast<QEvent::Type>(displayDRMInfo)) { description = "displayDRMInfo"; }
 };
 
 // class startAutoRepeaterEvent: public baseEvent
@@ -427,295 +330,206 @@ public:
 // };
 
 
-class createModeEvent : public baseEvent
-{
-public:
+class createModeEvent : public baseEvent {
+ public:
   /** create event */
-  createModeEvent(uint m, QString t) : baseEvent(static_cast<QEvent::Type>(createMode)), mode(m), str(t)
-  {
+  createModeEvent(uint m, QString t) : baseEvent(static_cast<QEvent::Type>(createMode)), mode(m), str(t) {
     description = "createModeEvent";
   }
   /** returns info string from the event */
-  void getMode(uint& m, QString& s) const
-  {
+  void getMode(uint& m, QString& s) const {
     m = mode;
     s = str;
   }
 
-private:
+ private:
   uint mode;
   QString str;
 };
 
-class loadRXImageEvent : public baseEvent
-{
-public:
-  loadRXImageEvent(QString fn) : baseEvent(static_cast<QEvent::Type>(loadRXImage)), fileName(fn)
-  {
+class loadRXImageEvent : public baseEvent {
+ public:
+  loadRXImageEvent(QString fn) : baseEvent(static_cast<QEvent::Type>(loadRXImage)), fileName(fn) {
     description = "loadRXImageEvent";
   }
-  QString getFilename()
-  {
-    return fileName;
-  }
+  QString getFilename() { return fileName; }
 
-private:
+ private:
   QString fileName;
 };
 
 
-class moveToTxEvent : public baseEvent
-{
-public:
-  moveToTxEvent(QString fn) : baseEvent(static_cast<QEvent::Type>(moveToTx)), fileName(fn)
-  {
+class moveToTxEvent : public baseEvent {
+ public:
+  moveToTxEvent(QString fn) : baseEvent(static_cast<QEvent::Type>(moveToTx)), fileName(fn) {
     description = "moveToTxEvent";
   }
-  QString getFilename()
-  {
-    return fileName;
-  }
+  QString getFilename() { return fileName; }
 
-private:
+ private:
   QString fileName;
 };
 
 
-class saveDRMImageEvent : public baseEvent
-{
-public:
-  saveDRMImageEvent(QString fn, QString i) : baseEvent(static_cast<QEvent::Type>(saveDRMImage)), fileName(fn), info(i)
-  {
+class saveDRMImageEvent : public baseEvent {
+ public:
+  saveDRMImageEvent(QString fn, QString i) : baseEvent(static_cast<QEvent::Type>(saveDRMImage)), fileName(fn), info(i) {
     description = "saveDRMImageEvent";
   }
-  void getFilename(QString& fn)
-  {
-    fn = fileName;
-  }
-  void getInfo(QString& i)
-  {
-    i = info;
-  }
+  void getFilename(QString& fn) { fn = fileName; }
+  void getInfo(QString& i) { i = info; }
 
-private:
+ private:
   QString fileName;
   QString info;
 };
 
 
-class startImageRXEvent : public baseEvent
-{
-public:
+class startImageRXEvent : public baseEvent {
+ public:
   /** create event */
-  startImageRXEvent(QSize ims) : baseEvent(static_cast<QEvent::Type>(startImageRX)), imSize(ims)
-  {
+  startImageRXEvent(QSize ims) : baseEvent(static_cast<QEvent::Type>(startImageRX)), imSize(ims) {
     description = "startImageRXEvent";
   }
-  QSize getSize()
-  {
-    return imSize;
-  }
+  QSize getSize() { return imSize; }
 
-private:
+ private:
   QSize imSize;
 };
 
-class endImageSSTVRXEvent : public baseEvent
-{
-public:
+class endImageSSTVRXEvent : public baseEvent {
+ public:
   /** create event */
-  endImageSSTVRXEvent(esstvMode md) : baseEvent(static_cast<QEvent::Type>(endSSTVImageRX)), mode(md)
-  {
+  endImageSSTVRXEvent(esstvMode md) : baseEvent(static_cast<QEvent::Type>(endSSTVImageRX)), mode(md) {
     description = "endImageSSTVRXEvent";
   }
-  esstvMode getMode()
-  {
-    return mode;
-  }
+  esstvMode getMode() { return mode; }
 
-private:
+ private:
   esstvMode mode;
 };
 
-class endImageTXEvent : public baseEvent
-{
-public:
+class endImageTXEvent : public baseEvent {
+ public:
   /** create event */
-  endImageTXEvent() : baseEvent(static_cast<QEvent::Type>(endImageTX))
-  {
-    description = "endImageTXEvent";
-  }
+  endImageTXEvent() : baseEvent(static_cast<QEvent::Type>(endImageTX)) { description = "endImageTXEvent"; }
 };
 
 
-class stopTXEvent : public baseEvent
-{
-public:
+class stopTXEvent : public baseEvent {
+ public:
   /** create event */
-  stopTXEvent() : baseEvent(static_cast<QEvent::Type>(stoppingTX))
-  {
-    description = "stopTXEvent";
-  }
+  stopTXEvent() : baseEvent(static_cast<QEvent::Type>(stoppingTX)) { description = "stopTXEvent"; }
 };
 
 
-class outOfSyncEvent : public baseEvent
-{
-public:
+class outOfSyncEvent : public baseEvent {
+ public:
   /** create event */
-  outOfSyncEvent() : baseEvent(static_cast<QEvent::Type>(outOfSync))
-  {
-    description = "outOfSyncEvent";
-  }
+  outOfSyncEvent() : baseEvent(static_cast<QEvent::Type>(outOfSync)) { description = "outOfSyncEvent"; }
 };
 
 
-class progressTXEvent : public baseEvent
-{
-public:
+class progressTXEvent : public baseEvent {
+ public:
   /** create event */
-  progressTXEvent(double tim) : baseEvent(static_cast<QEvent::Type>(progressTX)), txTime(tim)
-  {
+  progressTXEvent(double tim) : baseEvent(static_cast<QEvent::Type>(progressTX)), txTime(tim) {
     description = "progressTXEvent";
   }
   /** returns length and pointer  from the event */
-  double getInfo()
-  {
-    return txTime;
-  }
+  double getInfo() { return txTime; }
 
-private:
+ private:
   double txTime;
 };
 
-class closeWindowsEvent : public baseEvent
-{
-public:
+class closeWindowsEvent : public baseEvent {
+ public:
   /** create event */
-  closeWindowsEvent() : baseEvent(static_cast<QEvent::Type>(closeWindows))
-  {
-    description = "closeWindowEvent";
-  }
+  closeWindowsEvent() : baseEvent(static_cast<QEvent::Type>(closeWindows)) { description = "closeWindowEvent"; }
   /** returns length and pointer  from the event */
 };
 
 
-class callEditorEvent : public baseEvent
-{
-public:
+class callEditorEvent : public baseEvent {
+ public:
   /** create event */
   callEditorEvent(imageViewer* iv, QString fn)
-      : baseEvent(static_cast<QEvent::Type>(callEditor)), filename(fn), imviewer(iv)
-  {
+      : baseEvent(static_cast<QEvent::Type>(callEditor)), filename(fn), imviewer(iv) {
     description = "callEditorEvent";
   }
   /** returns info string from the event */
-  QString getFilename() const
-  {
-    return filename;
-  }
-  imageViewer* getImageViewer()
-  {
-    return imviewer;
-  }
+  QString getFilename() const { return filename; }
+  imageViewer* getImageViewer() { return imviewer; }
 
-private:
+ private:
   QString filename;
   imageViewer* imviewer;
 };
 
 
-class templatesChangedEvent : public baseEvent
-{
-public:
+class templatesChangedEvent : public baseEvent {
+ public:
   /** create event */
-  templatesChangedEvent() : baseEvent(static_cast<QEvent::Type>(templatesChanged))
-  {
+  templatesChangedEvent() : baseEvent(static_cast<QEvent::Type>(templatesChanged)) {
     description = "templateChangeEvent";
   }
 };
 
-class editorFinishedEvent : public baseEvent
-{
-public:
+class editorFinishedEvent : public baseEvent {
+ public:
   /** create event */
-  editorFinishedEvent(bool b, QString fn) : baseEvent(static_cast<QEvent::Type>(editorFinished)), ok(b), filename(fn)
-  {
+  editorFinishedEvent(bool b, QString fn) : baseEvent(static_cast<QEvent::Type>(editorFinished)), ok(b), filename(fn) {
     description = "editorFinishedEvent";
   }
-  bool isOK()
-  {
-    return ok;
-  }
-  QString getFilename() const
-  {
-    return filename;
-  }
+  bool isOK() { return ok; }
+  QString getFilename() const { return filename; }
 
-private:
+ private:
   bool ok;
   QString filename;
 };
 
 
-class displayFFTEvent : public baseEvent
-{
-public:
+class displayFFTEvent : public baseEvent {
+ public:
   /** create event */
-  displayFFTEvent(DSPFLOAT* buf) : baseEvent(static_cast<QEvent::Type>(displayFFT)), buffer(buf)
-  {
+  displayFFTEvent(DSPFLOAT* buf) : baseEvent(static_cast<QEvent::Type>(displayFFT)), buffer(buf) {
     description = "displayFFTEvent";
   }
-  DSPFLOAT* data()
-  {
-    return buffer;
-  }
+  DSPFLOAT* data() { return buffer; }
 
-private:
+ private:
   DSPFLOAT* buffer;
 };
 
-class filterRXChangedEvent : public baseEvent
-{
-public:
+class filterRXChangedEvent : public baseEvent {
+ public:
   /** create event */
-  filterRXChangedEvent(int fIndex) : baseEvent(static_cast<QEvent::Type>(changeRXFilter)), filterIndex(fIndex)
-  {
+  filterRXChangedEvent(int fIndex) : baseEvent(static_cast<QEvent::Type>(changeRXFilter)), filterIndex(fIndex) {
     description = "filterChangedEvent";
   }
-  int index()
-  {
-    return filterIndex;
-  }
+  int index() { return filterIndex; }
 
-private:
+ private:
   int filterIndex;
 };
 
-class stopRxTxEvent : public baseEvent
-{
-public:
+class stopRxTxEvent : public baseEvent {
+ public:
   /** create event */
-  stopRxTxEvent() : baseEvent(static_cast<QEvent::Type>(stopRxTx))
-  {
-    description = "stopRxTxEvent";
-  }
+  stopRxTxEvent() : baseEvent(static_cast<QEvent::Type>(stopRxTx)) { description = "stopRxTxEvent"; }
 };
 
 
-class prepareFixEvent : public baseEvent
-{
-public:
-  prepareFixEvent(QByteArray ba) : baseEvent(static_cast<QEvent::Type>(prepareFix)), data(ba)
-  {
+class prepareFixEvent : public baseEvent {
+ public:
+  prepareFixEvent(QByteArray ba) : baseEvent(static_cast<QEvent::Type>(prepareFix)), data(ba) {
     description = "filterChangedEvent";
   }
-  QByteArray& getData()
-  {
-    return data;
-  }
+  QByteArray& getData() { return data; }
 
-private:
+ private:
   QByteArray data;
 };
 
@@ -723,88 +537,62 @@ private:
 /**
   this event is send when the dspfunc thread stops running
 */
-class displayTextEvent : public baseEvent
-{
-public:
+class displayTextEvent : public baseEvent {
+ public:
   /** create event */
-  displayTextEvent(QString t) : baseEvent(static_cast<QEvent::Type>(displayText)), str(t)
-  {
+  displayTextEvent(QString t) : baseEvent(static_cast<QEvent::Type>(displayText)), str(t) {
     description = "displayTextEvent";
   }
   /** returns info string from the event */
-  QString getStr() const
-  {
-    return str;
-  }
+  QString getStr() const { return str; }
 
-private:
+ private:
   QString str;
 };
 
-class displayMBoxEvent : public baseEvent
-{
-public:
+class displayMBoxEvent : public baseEvent {
+ public:
   /** create event */
   displayMBoxEvent(QString title, QString text)
-      : baseEvent(static_cast<QEvent::Type>(displayMBox)), str(text), title(title)
-  {
+      : baseEvent(static_cast<QEvent::Type>(displayMBox)), str(text), title(title) {
     description = "displayMBoxEvent";
   }
   /** returns info string from the event */
-  QString getStr() const
-  {
-    return str;
-  }
-  QString getTitle() const
-  {
-    return title;
-  }
+  QString getStr() const { return str; }
+  QString getTitle() const { return title; }
 
-private:
+ private:
   QString str;
   QString title;
 };
 
 
-class displayProgressFTPEvent : public baseEvent
-{
-public:
+class displayProgressFTPEvent : public baseEvent {
+ public:
   /** create event */
   displayProgressFTPEvent(quint64 byts, quint64 tot)
-      : baseEvent(static_cast<QEvent::Type>(displayProgressFTP)), bytes(byts), total(tot)
-  {
+      : baseEvent(static_cast<QEvent::Type>(displayProgressFTP)), bytes(byts), total(tot) {
     description = "displayMBoxEvent";
   }
   /** returns info string from the event */
-  quint64 getTotal() const
-  {
-    return total;
-  }
-  quint64 getBytes() const
-  {
-    return bytes;
-  }
+  quint64 getTotal() const { return total; }
+  quint64 getBytes() const { return bytes; }
 
-private:
+ private:
   quint64 bytes;
   quint64 total;
 };
 
-class statusBarMsgEvent : public baseEvent
-{
-public:
+class statusBarMsgEvent : public baseEvent {
+ public:
   /** create event */
-  statusBarMsgEvent(QString t) : baseEvent(static_cast<QEvent::Type>(statusBarMsg)), str(t)
-  {
+  statusBarMsgEvent(QString t) : baseEvent(static_cast<QEvent::Type>(statusBarMsg)), str(t) {
     description = "statusBarMsgEvent";
   }
   /** returns info string from the event */
-  QString getStr() const
-  {
-    return str;
-  }
+  QString getStr() const { return str; }
 
-private:
+ private:
   QString str;
 };
 

@@ -43,9 +43,8 @@
 
 
 /* Classes ********************************************************************/
-class CDRMTransmitter
-{
-public:
+class CDRMTransmitter {
+ public:
   CDRMTransmitter();
   virtual ~CDRMTransmitter() {}
 
@@ -56,38 +55,22 @@ public:
 
   /* Get pointer to internal modules */
   //	CSoundInInterface*		GetSoundInInterface() {return pSoundInInterface;}
-  CSoundOutInterface* GetSoundOutInterface()
-  {
-    return pSoundOutInterface;
-  }
-  CAudioSourceEncoder* GetAudSrcEnc()
-  {
-    return &AudioSourceEncoder;
-  }
-  CTransmitData* GetTransData()
-  {
-    return &TransmitData;
-  }
+  CSoundOutInterface* GetSoundOutInterface() { return pSoundOutInterface; }
+  CAudioSourceEncoder* GetAudSrcEnc() { return &AudioSourceEncoder; }
+  CTransmitData* GetTransData() { return &TransmitData; }
   //	CReadData*				GetReadData() {return &ReadData;}
 
-  CParameter* GetParameters()
-  {
-    return &TransmParam;
-  }
+  CParameter* GetParameters() { return &TransmParam; }
 
-  void SetCarOffset(const _REAL rNewCarOffset)
-  {
+  void SetCarOffset(const _REAL rNewCarOffset) {
     /* Has to be set in OFDM modulation and transmitter filter module */
     OFDMModulation.SetCarOffset(rNewCarOffset);
     TransmitData.SetCarOffset(rNewCarOffset);
     rDefCarOffset = rNewCarOffset;
   }
-  _REAL GetCarOffset()
-  {
-    return rDefCarOffset;
-  }
+  _REAL GetCarOffset() { return rDefCarOffset; }
 
-protected:
+ protected:
   void Run();
 
   /* Parameters */
@@ -136,4 +119,4 @@ protected:
 extern int partTable[BWs][MODES][PROTECTIONS][QAMS];
 
 
-#endif // !defined(DRMTRANSM_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)
+#endif  // !defined(DRMTRANSM_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)

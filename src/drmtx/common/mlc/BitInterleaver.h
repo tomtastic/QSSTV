@@ -35,16 +35,15 @@
 
 
 /* Classes ********************************************************************/
-class CBitInterleaver : public CBlockInterleaver
-{
-public:
+class CBitInterleaver : public CBlockInterleaver {
+ public:
   CBitInterleaver() {}
   virtual ~CBitInterleaver() {}
 
   void Init(int iNewx_in1, int iNewx_in2, int it_0);
   void Interleave(CVector<_DECISION>& InputData);
 
-protected:
+ protected:
   int ix_in1;
   int ix_in2;
   CVector<int> veciIntTable1;
@@ -53,16 +52,15 @@ protected:
   CVector<_DECISION> vecInterlMemory2;
 };
 
-class CBitDeinterleaver : public CBlockInterleaver
-{
-public:
+class CBitDeinterleaver : public CBlockInterleaver {
+ public:
   CBitDeinterleaver() {}
   virtual ~CBitDeinterleaver() {}
 
   void Init(int iNewx_in1, int iNewx_in2, int it_0);
   void Deinterleave(CVector<CDistance>& vecInput);
 
-protected:
+ protected:
   int ix_in1;
   int ix_in2;
   CVector<int> veciIntTable1;
@@ -72,4 +70,4 @@ protected:
 };
 
 
-#endif // !defined(BIT_INTERLEAVER_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)
+#endif  // !defined(BIT_INTERLEAVER_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)

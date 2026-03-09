@@ -69,15 +69,14 @@
 
 
 /* Bandpass filter ---------------------------------------------------------- */
-class CDRMBandpassFilt
-{
-public:
+class CDRMBandpassFilt {
+ public:
   enum EFiltType { FT_TRANSMITTER, FT_RECEIVER };
 
   void Init(const int iNewBlockSize, const _REAL rOffsetHz, const ESpecOcc eSpecOcc, const EFiltType eNFiTy);
   void Process(CVector<_COMPLEX>& veccData);
 
-protected:
+ protected:
   int iBlockSize;
 
   CComplexVector cvecDataTmp;
@@ -92,31 +91,18 @@ protected:
 
 
 /* Modified Julian Date ----------------------------------------------------- */
-class CModJulDate
-{
-public:
+class CModJulDate {
+ public:
   CModJulDate() : iYear(0), iDay(0), iMonth(0) {}
-  CModJulDate(const uint32_t iModJulDate)
-  {
-    Set(iModJulDate);
-  }
+  CModJulDate(const uint32_t iModJulDate) { Set(iModJulDate); }
 
   void Set(const uint32_t iModJulDate);
 
-  int GetYear()
-  {
-    return iYear;
-  }
-  int GetDay()
-  {
-    return iDay;
-  }
-  int GetMonth()
-  {
-    return iMonth;
-  }
+  int GetYear() { return iYear; }
+  int GetDay() { return iDay; }
+  int GetMonth() { return iMonth; }
 
-protected:
+ protected:
   int iYear, iDay, iMonth;
 };
 
@@ -126,4 +112,4 @@ struct CHamlib {
 };
 
 
-#endif // !defined(UTILITIES_H__3B0BA660_CA63_4344_B3452345D31912__INCLUDED_)
+#endif  // !defined(UTILITIES_H__3B0BA660_CA63_4344_B3452345D31912__INCLUDED_)

@@ -101,26 +101,22 @@ DEFINE_GUID(GUID_DEVINTERFACE_COMPORT, 0x86e0d1e0L, 0x8089, 0x11d0, 0x9c, 0xe4, 
 /******************************************************************************\
 * Bandpass filter                                                              *
 \******************************************************************************/
-void CDRMBandpassFilt::Process(CVector<_COMPLEX>& veccData)
-{
+void CDRMBandpassFilt::Process(CVector<_COMPLEX>& veccData) {
   int i;
 
   /* Copy CVector data in CMatlibVector */
-  for (i = 0; i < iBlockSize; i++)
-    cvecDataTmp[i] = veccData[i];
+  for (i = 0; i < iBlockSize; i++) cvecDataTmp[i] = veccData[i];
 
   /* Apply FFT filter */
   cvecDataTmp = CComplexVector(FftFilt(cvecB, Real(cvecDataTmp), rvecZReal, FftPlanBP),
                                FftFilt(cvecB, Imag(cvecDataTmp), rvecZImag, FftPlanBP));
 
   /* Copy CVector data in CMatlibVector */
-  for (i = 0; i < iBlockSize; i++)
-    veccData[i] = cvecDataTmp[i];
+  for (i = 0; i < iBlockSize; i++) veccData[i] = cvecDataTmp[i];
 }
 
 void CDRMBandpassFilt::Init(const int iNewBlockSize, const _REAL rOffsetHz, const ESpecOcc eSpecOcc,
-                            const EFiltType eNFiTy)
-{
+                            const EFiltType eNFiTy) {
   CReal rMargin = 0.0;
 
   /* Set internal parameter */
@@ -143,51 +139,51 @@ void CDRMBandpassFilt::Init(const int iNewBlockSize, const _REAL rOffsetHz, cons
     rMargin = static_cast<CReal>(0.0); /* Hz */
 
   switch (eSpecOcc) {
-  case SO_0:
-    rBPFiltBW = (static_cast<CReal>(2000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE; // pa0mbo was 4500.0 moet zijn 2250?
+    case SO_0:
+      rBPFiltBW = (static_cast<CReal>(2000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;  // pa0mbo was 4500.0 moet zijn 2250?
 
-    /* Completely on the right side of DC */
-    rNormCurFreqOffset = (rOffsetHz + static_cast<CReal>(1100.0)) / SOUNDCRD_SAMPLE_RATE; // pa0mbo
-    //			( (CReal) 7100.0  ) / SOUNDCRD_SAMPLE_RATE;    // pa0mbo
-    // printf("util Bandpass filt init SO_0  BW %g rNormOffs %g\n", rBPFiltBW, rNormCurFreqOffset);
-    break;
+      /* Completely on the right side of DC */
+      rNormCurFreqOffset = (rOffsetHz + static_cast<CReal>(1100.0)) / SOUNDCRD_SAMPLE_RATE;  // pa0mbo
+      //			( (CReal) 7100.0  ) / SOUNDCRD_SAMPLE_RATE;    // pa0mbo
+      // printf("util Bandpass filt init SO_0  BW %g rNormOffs %g\n", rBPFiltBW, rNormCurFreqOffset);
+      break;
 
-  case SO_1:
-    rBPFiltBW = (static_cast<CReal>(2500.0) + rMargin) / SOUNDCRD_SAMPLE_RATE; // pa0mbo was 5000.0 moet zijn 2500  ?
+    case SO_1:
+      rBPFiltBW = (static_cast<CReal>(2500.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;  // pa0mbo was 5000.0 moet zijn 2500  ?
 
-    /* Completely on the right side of DC */
-    rNormCurFreqOffset = (rOffsetHz + static_cast<CReal>(1250.0)) / SOUNDCRD_SAMPLE_RATE; // pa0mbo
-    //			( (CReal) 7240.0 )  / SOUNDCRD_SAMPLE_RATE;   // pa0mbo
-    // printf("util drmbandpass SO_1   BW = %g , Offset = %g \n", rBPFiltBW,  rNormCurFreqOffset);
-    break;
+      /* Completely on the right side of DC */
+      rNormCurFreqOffset = (rOffsetHz + static_cast<CReal>(1250.0)) / SOUNDCRD_SAMPLE_RATE;  // pa0mbo
+      //			( (CReal) 7240.0 )  / SOUNDCRD_SAMPLE_RATE;   // pa0mbo
+      // printf("util drmbandpass SO_1   BW = %g , Offset = %g \n", rBPFiltBW,  rNormCurFreqOffset);
+      break;
 
-  case SO_2:
-    rBPFiltBW = (static_cast<CReal>(9000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;
+    case SO_2:
+      rBPFiltBW = (static_cast<CReal>(9000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;
 
-    /* Centered */
-    rNormCurFreqOffset = rOffsetHz / SOUNDCRD_SAMPLE_RATE;
-    break;
+      /* Centered */
+      rNormCurFreqOffset = rOffsetHz / SOUNDCRD_SAMPLE_RATE;
+      break;
 
-  case SO_3:
-    rBPFiltBW = (static_cast<CReal>(10000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;
+    case SO_3:
+      rBPFiltBW = (static_cast<CReal>(10000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;
 
-    /* Centered */
-    rNormCurFreqOffset = rOffsetHz / SOUNDCRD_SAMPLE_RATE;
-    break;
+      /* Centered */
+      rNormCurFreqOffset = rOffsetHz / SOUNDCRD_SAMPLE_RATE;
+      break;
 
-  case SO_4:
-    rBPFiltBW = (static_cast<CReal>(18000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;
+    case SO_4:
+      rBPFiltBW = (static_cast<CReal>(18000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;
 
-    /* Main part on the right side of DC */
-    rNormCurFreqOffset = (rOffsetHz + static_cast<CReal>(4500.0)) / SOUNDCRD_SAMPLE_RATE;
-    break;
+      /* Main part on the right side of DC */
+      rNormCurFreqOffset = (rOffsetHz + static_cast<CReal>(4500.0)) / SOUNDCRD_SAMPLE_RATE;
+      break;
 
-  case SO_5:
-    rBPFiltBW = (static_cast<CReal>(20000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;
+    case SO_5:
+      rBPFiltBW = (static_cast<CReal>(20000.0) + rMargin) / SOUNDCRD_SAMPLE_RATE;
 
-    /* Main part on the right side of DC */
-    rNormCurFreqOffset = (rOffsetHz + static_cast<CReal>(5000.0)) / SOUNDCRD_SAMPLE_RATE;
-    break;
+      /* Main part on the right side of DC */
+      rNormCurFreqOffset = (rOffsetHz + static_cast<CReal>(5000.0)) / SOUNDCRD_SAMPLE_RATE;
+      break;
   }
   // printf("Init bandpass BW = %g rNorm %g \n", rBPFiltBW, rNormCurFreqOffset);
   /* FFT plan is initialized with the long length */
@@ -232,8 +228,7 @@ void CDRMBandpassFilt::Init(const int iNewBlockSize, const _REAL rOffsetHz, cons
 /******************************************************************************\
 * Modified Julian Date                                                         *
 \******************************************************************************/
-void CModJulDate::Set(const uint32_t iModJulDate)
-{
+void CModJulDate::Set(const uint32_t iModJulDate) {
   uint32_t iZ, iA, iAlpha, iB, iC, iD, iE;
   _REAL rJulDate;
 
@@ -269,7 +264,7 @@ void CModJulDate::Set(const uint32_t iModJulDate)
 
   // The day of the month dd (with decimals) is:
   // dd = B - D - INT(30.6001*E) + F
-  iDay = iB - iD - static_cast<int>(static_cast<_REAL>(30.6001) * iE); // + rF;
+  iDay = iB - iD - static_cast<int>(static_cast<_REAL>(30.6001) * iE);  // + rF;
 
   // The month number mm is:
   // mm = E - 1, if E < 13.5

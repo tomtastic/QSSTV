@@ -36,14 +36,12 @@
 
 
 /* Classes ********************************************************************/
-class CChannelCode
-{
-public:
+class CChannelCode {
+ public:
   CChannelCode();
   virtual ~CChannelCode() {}
 
-  inline _BINARY Convolution(const _BYTE byNewStateShiftReg, const int iGenPolyn) const
-  {
+  inline _BINARY Convolution(const _BYTE byNewStateShiftReg, const int iGenPolyn) const {
     /* Mask bits with generator polynomial and get convolution result from
        pre-calculated table (speed optimization). Since we have a AND
        operation on the "byGeneratorMatrix", the index of the convolution
@@ -57,9 +55,9 @@ public:
                                int iLevel);
 
 
-private:
+ private:
   _BINARY vecbiParity[1 << SIZEOF__BYTE];
 };
 
 
-#endif // !defined(CHANNEL_CODE_H__3B0BA660_CA63345347A0D31912__INCLUDED_)
+#endif  // !defined(CHANNEL_CODE_H__3B0BA660_CA63345347A0D31912__INCLUDED_)

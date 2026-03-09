@@ -3,16 +3,14 @@
 
 #include <QDialog>
 
-namespace Ui
-{
+namespace Ui {
 class configDialog;
 }
 
-class configDialog : public QDialog
-{
+class configDialog : public QDialog {
   Q_OBJECT
 
-public:
+ public:
   explicit configDialog(QWidget* parent = 0);
   ~configDialog();
   void readSettings();
@@ -22,12 +20,12 @@ public:
   bool guiNeedsRestart;
 
 
-signals:
+ signals:
   void bgColorChanged();
 
 
-private:
+ private:
   Ui::configDialog* ui;
 };
 
-#endif // CONFIGDIALOG_H
+#endif  // CONFIGDIALOG_H

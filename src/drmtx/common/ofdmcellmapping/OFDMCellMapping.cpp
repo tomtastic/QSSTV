@@ -40,8 +40,7 @@ const _COMPLEX cDummyCells64QAM[2] = {_COMPLEX(0.1543033499f, 0.1543033499f), _C
 const _COMPLEX cDummyCells16QAM[2] = {_COMPLEX(0.3162277660f, 0.3162277660f), _COMPLEX(0.3162277660f, -0.3162277660f)};
 
 
-void COFDMCellMapping::ProcessDataInternal(CParameter& TransmParam)
-{
+void COFDMCellMapping::ProcessDataInternal(CParameter& TransmParam) {
   const CCellMappingTable& Param = TransmParam.CellMappingTable; /*  pa0mbo */
   int iCar;
   int iMSCCounter;
@@ -99,8 +98,7 @@ void COFDMCellMapping::ProcessDataInternal(CParameter& TransmParam)
 
     /* Increase frame-counter (ID) (Used also in FAC.cpp) */
     TransmParam.iFrameIDTransm++;
-    if (TransmParam.iFrameIDTransm == NUM_FRAMES_IN_SUPERFRAME)
-      TransmParam.iFrameIDTransm = 0;
+    if (TransmParam.iFrameIDTransm == NUM_FRAMES_IN_SUPERFRAME) TransmParam.iFrameIDTransm = 0;
   }
 
   /* Set absolute symbol position (for updated relative positions) */
@@ -113,8 +111,7 @@ void COFDMCellMapping::ProcessDataInternal(CParameter& TransmParam)
       iInputBlockSize, iInputBlockSize2, iSymbolCounterAbs); */
 }
 
-void COFDMCellMapping::InitInternal(CParameter& TransmParam)
-{
+void COFDMCellMapping::InitInternal(CParameter& TransmParam) {
   const CCellMappingTable& Param = TransmParam.CellMappingTable; /*  pa0mbo */
   iNumSymPerFrame = Param.iNumSymPerFrame;
   iNumCarrier = Param.iNumCarrier;
@@ -127,16 +124,16 @@ void COFDMCellMapping::InitInternal(CParameter& TransmParam)
 
   /* Choose right dummy cells for MSC QAM scheme */
   switch (TransmParam.eMSCCodingScheme) {
-  case CS_3_HMSYM: // not use so default to case CS_2_SM
-  case CS_3_HMMIX:
-  case CS_1_SM:
-  case CS_2_SM: // pa0mbo was CParameter::CS_2_SM
-    pcDummyCells = const_cast<_COMPLEX*>(&cDummyCells16QAM[0]);
-    break;
+    case CS_3_HMSYM:  // not use so default to case CS_2_SM
+    case CS_3_HMMIX:
+    case CS_1_SM:
+    case CS_2_SM:  // pa0mbo was CParameter::CS_2_SM
+      pcDummyCells = const_cast<_COMPLEX*>(&cDummyCells16QAM[0]);
+      break;
 
-  case CS_3_SM:
-    pcDummyCells = const_cast<_COMPLEX*>(&cDummyCells64QAM[0]); // pa0mbo was CParameter::CS_#_SM
-    break;
+    case CS_3_SM:
+      pcDummyCells = const_cast<_COMPLEX*>(&cDummyCells64QAM[0]);  // pa0mbo was CParameter::CS_#_SM
+      break;
   }
 
   /* Define block-sizes for input and output of the module ---------------- */

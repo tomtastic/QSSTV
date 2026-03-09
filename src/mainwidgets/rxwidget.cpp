@@ -16,8 +16,7 @@
 #include "ftpthread.h"
 
 
-rxWidget::rxWidget(QWidget* parent) : QWidget(parent), ui(new Ui::rxWidget)
-{
+rxWidget::rxWidget(QWidget* parent) : QWidget(parent), ui(new Ui::rxWidget) {
   int i;
   ui->setupUi(this);
   rxFunctionsPtr = new rxFunctions();
@@ -48,16 +47,14 @@ rxWidget::rxWidget(QWidget* parent) : QWidget(parent), ui(new Ui::rxWidget)
   doRemove = false;
 }
 
-rxWidget::~rxWidget()
-{
+rxWidget::~rxWidget() {
   writeSettings();
   rxFunctionsPtr->terminate();
   delete rxFunctionsPtr;
   delete notifyRXIntfPtr;
 }
 
-void rxWidget::init()
-{
+void rxWidget::init() {
   splashStr += QString("Setting up RX").rightJustified(25, ' ') + "\n";
   splashPtr->showMessage(splashStr, Qt::AlignLeft, Qt::white);
 
@@ -98,8 +95,7 @@ void rxWidget::init()
   setOnlineStatus(true, onlineStatusText);
 }
 
-void rxWidget::readSettings()
-{
+void rxWidget::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("RX");
   autoSlantAdjust = qSettings.value("autoSlantAdjust", false).toBool();
@@ -112,8 +108,7 @@ void rxWidget::readSettings()
   qSettings.endGroup();
 }
 
-void rxWidget::writeSettings()
-{
+void rxWidget::writeSettings() {
   QSettings qSettings;
   qSettings.beginGroup("RX");
   getParams();
@@ -126,8 +121,7 @@ void rxWidget::writeSettings()
   qSettings.endGroup();
 }
 
-void rxWidget::getParams()
-{
+void rxWidget::getParams() {
   int temp;
   getValue(autoSlantAdjust, ui->autoSlantAdjustCheckBox);
   getValue(autoSave, ui->autoSaveCheckBox);
@@ -138,8 +132,7 @@ void rxWidget::getParams()
   getValue(minCompletion, ui->completeSpinBox);
 }
 
-void rxWidget::setParams()
-{
+void rxWidget::setParams() {
   setValue(autoSlantAdjust, ui->autoSlantAdjustCheckBox);
   setValue(autoSave, ui->autoSaveCheckBox);
   setIndex(sensitivity, ui->sensitivityComboBox);
@@ -148,83 +141,64 @@ void rxWidget::setParams()
   setValue(minCompletion, ui->completeSpinBox);
 }
 
-void rxWidget::slotGetParams()
-{
-  getParams();
-}
+void rxWidget::slotGetParams() { getParams(); }
 
 
-void rxWidget::slotStart()
-{
+void rxWidget::slotStart() {
   getParams();
   dispatcherPtr->startRX();
 }
 
-void rxWidget::slotStop()
-{
+void rxWidget::slotStop() {
   getParams();
   dispatcherPtr->idleAll();
 }
 
-void rxWidget::slotResync()
-{
-  rxFunctionsPtr->restartRX();
-}
+void rxWidget::slotResync() { rxFunctionsPtr->restartRX(); }
 
-void rxWidget::slotTransmissionMode(int rxtxMode)
-{
-  emit modeSwitch(rxtxMode);
-}
+void rxWidget::slotTransmissionMode(int rxtxMode) { emit modeSwitch(rxtxMode); }
 
 
-void rxWidget::changeTransmissionMode(int rxtxMode)
-{
+void rxWidget::changeTransmissionMode(int rxtxMode) {
   transmissionModeIndex = static_cast<etransmissionMode>(rxtxMode);
   dispatcherPtr->idleAll();
   setSettingsTab();
   switch (transmissionModeIndex) {
-  case TRXSSTV:
-    mainWindowPtr->setSSTVDRMPushButton(false);
-    ui->resyncToolButton->setEnabled(true);
-    break;
-  case TRXDRM:
-    mainWindowPtr->setSSTVDRMPushButton(true);
-    ui->resyncToolButton->setEnabled(false);
-    break;
-  default:
-    break;
+    case TRXSSTV:
+      mainWindowPtr->setSSTVDRMPushButton(false);
+      ui->resyncToolButton->setEnabled(true);
+      break;
+    case TRXDRM:
+      mainWindowPtr->setSSTVDRMPushButton(true);
+      ui->resyncToolButton->setEnabled(false);
+      break;
+    default:
+      break;
   }
   dispatcherPtr->startRX();
 }
 
-void rxWidget::slotLogCall()
-{
+void rxWidget::slotLogCall() {
   QString call;
   call = ui->callLineEdit->text().toUpper();
   dispatcherPtr->logSSTV(call, false);
 }
 
-void rxWidget::slotNewCall(QString call)
-{
+void rxWidget::slotNewCall(QString call) {
   ui->callLineEdit->setText(call);
   dispatcherPtr->logSSTV(call, true);
 }
 
-void rxWidget::slotResetCall()
-{
-  ui->callLineEdit->clear();
-}
+void rxWidget::slotResetCall() { ui->callLineEdit->clear(); }
 
-void rxWidget::slotErase()
-{
+void rxWidget::slotErase() {
   rxFunctionsPtr->eraseImage();
   imageViewerPtr->createImage(QSize(320, 256), imageBackGroundColor, imageStretch);
 }
 
 
-void rxWidget::slotSave()
-{
-  QDateTime dt(QDateTime::currentDateTime().toUTC()); // this is compatible with QT 4.6
+void rxWidget::slotSave() {
+  QDateTime dt(QDateTime::currentDateTime().toUTC());  // this is compatible with QT 4.6
   QString path;
   QString info;
   dirDialog d(this);
@@ -238,18 +212,15 @@ void rxWidget::slotSave()
 
   info = "";
   QString fileName = d.saveFileName(path, "*", "png");
-  if (fileName.isNull())
-    return;
+  if (fileName.isNull()) return;
   getImageViewerPtr()->save(fileName, defaultImageFormat, true, false);
   dispatcherPtr->saveImage(fileName, info);
 }
 
-void rxWidget::setOnlineStatus(bool online, const QString& info)
-{
+void rxWidget::setOnlineStatus(bool online, const QString& info) {
   QString fn;
 
-  if (!online)
-    dispatcherPtr->showOffLine();
+  if (!online) dispatcherPtr->showOffLine();
 
   if (ff.isBusy()) {
     return;
@@ -259,8 +230,7 @@ void rxWidget::setOnlineStatus(bool online, const QString& info)
   //  ftpFunctions ff;
   // we can use onlineStatusInt directly because this function is only used from the main thread
 
-  if (hybridFtpRemoteHost.isEmpty())
-    return;
+  if (hybridFtpRemoteHost.isEmpty()) return;
 
   if (online && onlineStatusEnabled && transmissionModeIndex == TRXDRM) {
     ff.setupFtp("OnlineStatus", hybridFtpRemoteHost, hybridFtpPort, hybridFtpLogin, hybridFtpPassword,
@@ -269,7 +239,7 @@ void rxWidget::setOnlineStatus(bool online, const QString& info)
   } else if (!online && transmissionModeIndex == TRXDRM) {
     displayMBoxEvent* stmb;
     stmb = new displayMBoxEvent("Hybrid Server", "Cleaning up files on server");
-    QApplication::postEvent(dispatcherPtr, stmb); // Qt will delete it when done
+    QApplication::postEvent(dispatcherPtr, stmb);  // Qt will delete it when done
     ff.setupFtp("OnlineStatus", hybridFtpRemoteHost, hybridFtpPort, hybridFtpLogin, hybridFtpPassword,
                 hybridFtpRemoteDirectory);
 
@@ -292,8 +262,7 @@ void rxWidget::setOnlineStatus(bool online, const QString& info)
 }
 
 
-void rxWidget::slotWho()
-{
+void rxWidget::slotWho() {
   // get a list of online callsigns
   if (!ff.isBusy() && !onlineStatusDir.isEmpty()) {
     ff.setupFtp("WhoResult", hybridFtpRemoteHost, hybridFtpPort, hybridFtpLogin, hybridFtpPassword,
@@ -303,16 +272,14 @@ void rxWidget::slotWho()
   // slotWhoResult is called when we have the info
 }
 
-void rxWidget::slotWhoResult(bool err)
-{
+void rxWidget::slotWhoResult(bool err) {
   int i;
   QString info;
   QDateTime lastModif;
   QDateTime now = QDateTime::currentDateTime();
   QList<QUrlInfo> users;
 
-  if (err)
-    return;
+  if (err) return;
 
   users = ff.getListing();
 
@@ -325,13 +292,11 @@ void rxWidget::slotWhoResult(bool err)
   ui->rxNotificationList->setPlainText(info);
 }
 
-void rxWidget::setSettingsTab()
-{
+void rxWidget::setSettingsTab() {
   int i;
   if ((transmissionModeIndex >= 0) && (transmissionModeIndex < TRXNOMODE)) {
     for (i = 0; i < TRXNOMODE; i++) {
-      if (i != transmissionModeIndex)
-        ui->settingsTableWidget->widget(i)->setEnabled(false);
+      if (i != transmissionModeIndex) ui->settingsTableWidget->widget(i)->setEnabled(false);
     }
     ui->settingsTableWidget->widget(transmissionModeIndex)->setEnabled(true);
     ui->settingsTableWidget->setCurrentIndex(transmissionModeIndex);
@@ -356,8 +321,7 @@ void rxWidget::setSettingsTab()
   }
 }
 
-void rxWidget::startRX(bool st)
-{
+void rxWidget::startRX(bool st) {
   if (st) {
     getParams();
     dispatcherPtr->startRX();
@@ -367,23 +331,11 @@ void rxWidget::startRX(bool st)
   }
 }
 
-bool rxWidget::rxBusy()
-{
-  return rxFunctionsPtr->rxBusy();
-}
+bool rxWidget::rxBusy() { return rxFunctionsPtr->rxBusy(); }
 
-void rxWidget::setSSTVStatusText(const QString& txt)
-{
-  ui->sstvStatusLineEdit->setText(txt);
-}
+void rxWidget::setSSTVStatusText(const QString& txt) { ui->sstvStatusLineEdit->setText(txt); }
 
 
-vuMeter* rxWidget::vMeterPtr()
-{
-  return ui->vuWidget;
-}
+vuMeter* rxWidget::vMeterPtr() { return ui->vuWidget; }
 
-vuMeter* rxWidget::sMeterPtr()
-{
-  return ui->syncWidget;
-}
+vuMeter* rxWidget::sMeterPtr() { return ui->syncWidget; }

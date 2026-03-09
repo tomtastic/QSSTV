@@ -34,8 +34,7 @@
 
 QSplashScreen* splash;
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
 #ifdef __APPLE__
   soundMacos::EnableAudioInput();
 #endif
@@ -67,17 +66,15 @@ int main(int argc, char** argv)
   mainWindowPtr->setWindowIcon(QPixmap(":/icons/qsstv.png"));
   while (true) {
     app.processEvents();
-    if (!tm.isActive())
-      break;
+    if (!tm.isActive()) break;
   }
   mainWindowPtr
-      ->init(); // this must follow show() because window has to be drawn first to determine fftframe window size
+      ->init();  // this must follow show() because window has to be drawn first to determine fftframe window size
   mainWindowPtr->hide();
   tm.start(100);
   while (true) {
     app.processEvents();
-    if (!tm.isActive())
-      break;
+    if (!tm.isActive()) break;
   }
   splash.finish(mainWindowPtr);
   mainWindowPtr->show();

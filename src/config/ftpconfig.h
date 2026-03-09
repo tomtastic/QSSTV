@@ -24,16 +24,14 @@ extern bool addExtension;
 extern int ftpNumImages;
 
 
-namespace Ui
-{
+namespace Ui {
 class ftpConfig;
 }
 
-class ftpConfig : public baseConfig
-{
+class ftpConfig : public baseConfig {
   Q_OBJECT
 
-public:
+ public:
   explicit ftpConfig(QWidget* parent = 0);
   ~ftpConfig();
   void readSettings();
@@ -41,11 +39,11 @@ public:
   void getParams();
   void setParams();
 
-private slots:
+ private slots:
   void slotTestFTPPushButton();
 
-private:
+ private:
   Ui::ftpConfig* ui;
 };
 
-#endif // FTPCONFIG_H
+#endif  // FTPCONFIG_H

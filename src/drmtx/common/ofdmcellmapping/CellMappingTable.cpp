@@ -41,8 +41,7 @@
 // #define _DEBUG_ 1
 
 /* Implementation *************************************************************/
-void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpectOccup)
-{
+void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpectOccup) {
   int iNoMSCDummyCells; /* Number of MSC dummy cells */
   int iNumTimePilots;   /* Number of time pilots per frame */
   CScatPilots ScatPilots;
@@ -65,17 +64,17 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
 
   /* Set Parameters and pointers to the tables ******************************/
   switch (eNewSpectOccup) {
-  case SO_0:
-    iSpecOccArrayIndex = 0;
-    break;
+    case SO_0:
+      iSpecOccArrayIndex = 0;
+      break;
 
-  case SO_1:
-    iSpecOccArrayIndex = 1;
-    break;
+    case SO_1:
+      iSpecOccArrayIndex = 1;
+      break;
 
-  default:
-    iSpecOccArrayIndex = 1;
-    break;
+    default:
+      iSpecOccArrayIndex = 1;
+      break;
   }
 
   // initialize defaults to avoid unitialized warning
@@ -86,86 +85,86 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
 
   /* The robust mode defines all other parameters */
   switch (eNewRobustnessMode) {
-  case RM_ROBUSTNESS_MODE_A:
-    iCarrierKmin = iTableCarrierKmin[iSpecOccArrayIndex][0];
-    iCarrierKmax = iTableCarrierKmax[iSpecOccArrayIndex][0];
+    case RM_ROBUSTNESS_MODE_A:
+      iCarrierKmin = iTableCarrierKmin[iSpecOccArrayIndex][0];
+      iCarrierKmax = iTableCarrierKmax[iSpecOccArrayIndex][0];
 
-    iFFTSizeN = RMA_FFT_SIZE_N;
-    RatioTgTu.iEnum = RMA_ENUM_TG_TU;
-    RatioTgTu.iDenom = RMA_DENOM_TG_TU;
+      iFFTSizeN = RMA_FFT_SIZE_N;
+      RatioTgTu.iEnum = RMA_ENUM_TG_TU;
+      RatioTgTu.iDenom = RMA_DENOM_TG_TU;
 
-    iNumSymPerFrame = RMA_NUM_SYM_PER_FRAME;
-    iNumSymbolsPerSuperframe = iNumSymPerFrame * NUM_FRAMES_IN_SUPERFRAME;
-    piTableFAC = &iTableFACRobModA[0][0];
-    iNumTimePilots = RMA_NUM_TIME_PIL;
-    piTableTimePilots = &iTableTimePilRobModA[0][0];
-    piTableFreqPilots = &iTableFreqPilRobModA[0][0];
-    iScatPilTimeInt = RMA_SCAT_PIL_TIME_INT;
-    iScatPilFreqInt = RMA_SCAT_PIL_FREQ_INT;
+      iNumSymPerFrame = RMA_NUM_SYM_PER_FRAME;
+      iNumSymbolsPerSuperframe = iNumSymPerFrame * NUM_FRAMES_IN_SUPERFRAME;
+      piTableFAC = &iTableFACRobModA[0][0];
+      iNumTimePilots = RMA_NUM_TIME_PIL;
+      piTableTimePilots = &iTableTimePilRobModA[0][0];
+      piTableFreqPilots = &iTableFreqPilRobModA[0][0];
+      iScatPilTimeInt = RMA_SCAT_PIL_TIME_INT;
+      iScatPilFreqInt = RMA_SCAT_PIL_FREQ_INT;
 
-    /* Scattered pilots phase definition */
-    ScatPilots.piConst = iTableScatPilConstRobModA;
-    ScatPilots.iColSizeWZ = SIZE_COL_WZ_ROB_MOD_A;
-    ScatPilots.piW = &iScatPilWRobModA[0][0];
-    ScatPilots.piZ = &iScatPilZRobModA[0][0];
-    ScatPilots.iQ = iScatPilQRobModA;
+      /* Scattered pilots phase definition */
+      ScatPilots.piConst = iTableScatPilConstRobModA;
+      ScatPilots.iColSizeWZ = SIZE_COL_WZ_ROB_MOD_A;
+      ScatPilots.piW = &iScatPilWRobModA[0][0];
+      ScatPilots.piZ = &iScatPilZRobModA[0][0];
+      ScatPilots.iQ = iScatPilQRobModA;
 
-    ScatPilots.piGainTable = &iScatPilGainRobModA[iSpecOccArrayIndex][0];
-    break;
+      ScatPilots.piGainTable = &iScatPilGainRobModA[iSpecOccArrayIndex][0];
+      break;
 
-  case RM_ROBUSTNESS_MODE_B:
-    iCarrierKmin = iTableCarrierKmin[iSpecOccArrayIndex][1];
-    iCarrierKmax = iTableCarrierKmax[iSpecOccArrayIndex][1];
+    case RM_ROBUSTNESS_MODE_B:
+      iCarrierKmin = iTableCarrierKmin[iSpecOccArrayIndex][1];
+      iCarrierKmax = iTableCarrierKmax[iSpecOccArrayIndex][1];
 
-    iFFTSizeN = RMB_FFT_SIZE_N;
-    RatioTgTu.iEnum = RMB_ENUM_TG_TU;
-    RatioTgTu.iDenom = RMB_DENOM_TG_TU;
+      iFFTSizeN = RMB_FFT_SIZE_N;
+      RatioTgTu.iEnum = RMB_ENUM_TG_TU;
+      RatioTgTu.iDenom = RMB_DENOM_TG_TU;
 
-    iNumSymPerFrame = RMB_NUM_SYM_PER_FRAME;
-    iNumSymbolsPerSuperframe = iNumSymPerFrame * NUM_FRAMES_IN_SUPERFRAME;
-    piTableFAC = &iTableFACRobModB[0][0];
-    iNumTimePilots = RMB_NUM_TIME_PIL;
-    piTableTimePilots = &iTableTimePilRobModB[0][0];
-    piTableFreqPilots = &iTableFreqPilRobModB[0][0];
-    iScatPilTimeInt = RMB_SCAT_PIL_TIME_INT;
-    iScatPilFreqInt = RMB_SCAT_PIL_FREQ_INT;
+      iNumSymPerFrame = RMB_NUM_SYM_PER_FRAME;
+      iNumSymbolsPerSuperframe = iNumSymPerFrame * NUM_FRAMES_IN_SUPERFRAME;
+      piTableFAC = &iTableFACRobModB[0][0];
+      iNumTimePilots = RMB_NUM_TIME_PIL;
+      piTableTimePilots = &iTableTimePilRobModB[0][0];
+      piTableFreqPilots = &iTableFreqPilRobModB[0][0];
+      iScatPilTimeInt = RMB_SCAT_PIL_TIME_INT;
+      iScatPilFreqInt = RMB_SCAT_PIL_FREQ_INT;
 
-    /* Scattered pilots phase definition */
-    ScatPilots.piConst = iTableScatPilConstRobModB;
-    ScatPilots.iColSizeWZ = SIZE_COL_WZ_ROB_MOD_B;
-    ScatPilots.piW = &iScatPilWRobModB[0][0];
-    ScatPilots.piZ = &iScatPilZRobModB[0][0];
-    ScatPilots.iQ = iScatPilQRobModB;
+      /* Scattered pilots phase definition */
+      ScatPilots.piConst = iTableScatPilConstRobModB;
+      ScatPilots.iColSizeWZ = SIZE_COL_WZ_ROB_MOD_B;
+      ScatPilots.piW = &iScatPilWRobModB[0][0];
+      ScatPilots.piZ = &iScatPilZRobModB[0][0];
+      ScatPilots.iQ = iScatPilQRobModB;
 
-    ScatPilots.piGainTable = &iScatPilGainRobModB[iSpecOccArrayIndex][0];
-    break;
-  case RM_NO_MODE_DETECTED:
-  case RM_ROBUSTNESS_MODE_D: // not used in HAM default to E joma
-  case RM_ROBUSTNESS_MODE_E:
-    iCarrierKmin = iTableCarrierKmin[iSpecOccArrayIndex][2];
-    iCarrierKmax = iTableCarrierKmax[iSpecOccArrayIndex][2];
+      ScatPilots.piGainTable = &iScatPilGainRobModB[iSpecOccArrayIndex][0];
+      break;
+    case RM_NO_MODE_DETECTED:
+    case RM_ROBUSTNESS_MODE_D:  // not used in HAM default to E joma
+    case RM_ROBUSTNESS_MODE_E:
+      iCarrierKmin = iTableCarrierKmin[iSpecOccArrayIndex][2];
+      iCarrierKmax = iTableCarrierKmax[iSpecOccArrayIndex][2];
 
-    iFFTSizeN = RME_FFT_SIZE_N;
-    RatioTgTu.iEnum = RME_ENUM_TG_TU;
-    RatioTgTu.iDenom = RME_DENOM_TG_TU;
+      iFFTSizeN = RME_FFT_SIZE_N;
+      RatioTgTu.iEnum = RME_ENUM_TG_TU;
+      RatioTgTu.iDenom = RME_DENOM_TG_TU;
 
-    iNumSymPerFrame = RME_NUM_SYM_PER_FRAME;
-    iNumSymbolsPerSuperframe = iNumSymPerFrame * NUM_FRAMES_IN_SUPERFRAME;
-    piTableFAC = &iTableFACRobModE[0][0];
-    iNumTimePilots = RME_NUM_TIME_PIL;
-    piTableTimePilots = &iTableTimePilRobModE[0][0];
-    piTableFreqPilots = &iTableFreqPilRobModE[0][0];
-    iScatPilTimeInt = RME_SCAT_PIL_TIME_INT;
-    iScatPilFreqInt = RME_SCAT_PIL_FREQ_INT;
+      iNumSymPerFrame = RME_NUM_SYM_PER_FRAME;
+      iNumSymbolsPerSuperframe = iNumSymPerFrame * NUM_FRAMES_IN_SUPERFRAME;
+      piTableFAC = &iTableFACRobModE[0][0];
+      iNumTimePilots = RME_NUM_TIME_PIL;
+      piTableTimePilots = &iTableTimePilRobModE[0][0];
+      piTableFreqPilots = &iTableFreqPilRobModE[0][0];
+      iScatPilTimeInt = RME_SCAT_PIL_TIME_INT;
+      iScatPilFreqInt = RME_SCAT_PIL_FREQ_INT;
 
-    /* Scattered pilots phase definition */
-    ScatPilots.piConst = iTableScatPilConstRobModE;
-    ScatPilots.iColSizeWZ = SIZE_COL_WZ_ROB_MOD_E;
-    ScatPilots.piW = &iScatPilWRobModE[0][0];
-    ScatPilots.piZ = &iScatPilZRobModE[0][0];
-    ScatPilots.iQ = iScatPilQRobModE;
-    ScatPilots.piGainTable = &iScatPilGainRobModE[iSpecOccArrayIndex][0];
-    break;
+      /* Scattered pilots phase definition */
+      ScatPilots.piConst = iTableScatPilConstRobModE;
+      ScatPilots.iColSizeWZ = SIZE_COL_WZ_ROB_MOD_E;
+      ScatPilots.piW = &iScatPilWRobModE[0][0];
+      ScatPilots.piZ = &iScatPilZRobModE[0][0];
+      ScatPilots.iQ = iScatPilQRobModE;
+      ScatPilots.piGainTable = &iScatPilGainRobModE[iSpecOccArrayIndex][0];
+      break;
   }
 
   /* Get number of carriers with DC */
@@ -222,8 +221,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
     iFrameSym = iSym % iNumSymPerFrame;
 
     /* Reset FAC counter at the beginning of each new frame */
-    if (iFrameSym == 0)
-      iFACCounter = 0;
+    if (iFrameSym == 0) iFACCounter = 0;
 
     /* Calculate the start value of "p" in equation for gain reference
      cells in Table 90 (8.4.4.1) */
@@ -305,8 +303,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
         _BOOLEAN bIsBoostedPilot = false;
         for (i = 0; i < NUM_BOOSTED_SCAT_PILOTS; i++) {
           /* In case of match set flag */
-          if (ScatPilots.piGainTable[i] == iCar)
-            bIsBoostedPilot = true;
+          if (ScatPilots.piGainTable[i] == iCar) bIsBoostedPilot = true;
         }
 
         /* Boosted pilot: Gain = 2, Regular pilot: Gain = sqrt(2) */
@@ -366,8 +363,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
      and second pilot, not No. 28 (NUM_FREQ_PILOTS - 1) */
           if (iFreqPilotsCounter != NUM_FREQ_PILOTS - 1) {
             /* Test for odd values of "s" (iSym) */
-            if ((iFrameSym % 2) == 1)
-              bIsFreqPilSpeciCase = true;
+            if ((iFrameSym % 2) == 1) bIsFreqPilSpeciCase = true;
           }
         }
 
@@ -391,13 +387,11 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
       /* Mark DC-carrier. Must be marked after scattered pilots, because
      in one case (Robustness Mode D) some pilots must be overwritten!
      */
-      if (iCar == 0)
-        matiMapTab[iSym][iCarArrInd] = CM_DC;
+      if (iCar == 0) matiMapTab[iSym][iCarArrInd] = CM_DC;
 
       /* In Robustness Mode A there are three "not used carriers" */
       if (eNewRobustnessMode == RM_ROBUSTNESS_MODE_A) {
-        if ((iCar == -1) || (iCar == 1))
-          matiMapTab[iSym][iCarArrInd] = CM_DC;
+        if ((iCar == -1) || (iCar == 1)) matiMapTab[iSym][iCarArrInd] = CM_DC;
       }
     }
   }
@@ -428,8 +422,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
       }
 
       /* FAC */
-      if (_IsFAC(matiMapTab[iSym][iCar]))
-        veciNumFACSym[iSym]++;
+      if (_IsFAC(matiMapTab[iSym][iCar])) veciNumFACSym[iSym]++;
 
       /* Calculations for average power per symbol (needed for SNR
      estimation and simulation). DC carrier is zero (contributes not
@@ -455,8 +448,7 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
 
     /* Set maximum for symbol */
     /* MSC */
-    if (iMaxNumMSCSym < veciNumMSCSym[iSym])
-      iMaxNumMSCSym = veciNumMSCSym[iSym];
+    if (iMaxNumMSCSym < veciNumMSCSym[iSym]) iMaxNumMSCSym = veciNumMSCSym[iSym];
   }
 
   /* Set number of useful MSC cells */
@@ -481,15 +473,15 @@ void CCellMappingTable::MakeTable(ERobMode eNewRobustnessMode, ESpecOcc eNewSpec
   /* Title */
   fprintf(pFile, "Robustness mode ");
   switch (eNewRobustnessMode) {
-  case RM_ROBUSTNESS_MODE_A:
-    fprintf(pFile, "A");
-    break;
-  case RM_ROBUSTNESS_MODE_B:
-    fprintf(pFile, "B");
-    break;
-  case RM_ROBUSTNESS_MODE_E:
-    fprintf(pFile, "E");
-    break;
+    case RM_ROBUSTNESS_MODE_A:
+      fprintf(pFile, "A");
+      break;
+    case RM_ROBUSTNESS_MODE_B:
+      fprintf(pFile, "B");
+      break;
+    case RM_ROBUSTNESS_MODE_E:
+      fprintf(pFile, "E");
+      break;
   }
   fprintf(pFile, " / Spectrum occupancy %d\n\n", iSpecOccArrayIndex);
 
@@ -558,8 +550,7 @@ the lower plot.)
   /* ########################################################################## */
 }
 
-_COMPLEX CCellMappingTable::Polar2Cart(const _REAL rAbsolute, const int iPhase) const
-{
+_COMPLEX CCellMappingTable::Polar2Cart(const _REAL rAbsolute, const int iPhase) const {
   /*
   This function takes phases normalized to 1024 as defined in the drm-
   standard.
@@ -568,8 +559,7 @@ _COMPLEX CCellMappingTable::Polar2Cart(const _REAL rAbsolute, const int iPhase) 
                   rAbsolute * sin(static_cast<_REAL>(2) * crPi * iPhase / 1024));
 }
 
-int CCellMappingTable::mod(const int ix, const int iy) const
-{
+int CCellMappingTable::mod(const int ix, const int iy) const {
   /* Modulus definition for integer numbers */
   if (ix < 0)
     return ix % iy + iy;

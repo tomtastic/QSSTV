@@ -7,22 +7,20 @@
 
 class demodulator;
 
-namespace Ui
-{
+namespace Ui {
 class drmStatusFrame;
 }
 
-class drmStatusFrame : public QFrame
-{
+class drmStatusFrame : public QFrame {
   Q_OBJECT
 
-public:
+ public:
   explicit drmStatusFrame(QWidget* parent = 0);
   ~drmStatusFrame();
   void init();
   void setStatus();
 
-private:
+ private:
   Ui::drmStatusFrame* ui;
   QString call;
   //  void paintEvent (QPaintEvent *e);
@@ -60,4 +58,4 @@ QString modeToString(uint mode);
 QString compactModeToString(uint mode);
 
 
-#endif // DRMSTATUSFRAME_H
+#endif  // DRMSTATUSFRAME_H

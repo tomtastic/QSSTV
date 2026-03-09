@@ -68,7 +68,7 @@ extern ftpThread* onlineStatusIntfPtr;
 extern ftpThread* hybridRxIntfPtr;
 extern ftpThread* saveImageIntfPtr;
 
-extern etransmissionMode transmissionModeIndex; // SSTV , DRM
+extern etransmissionMode transmissionModeIndex;  // SSTV , DRM
 
 
 #ifdef ENABLESCOPE
@@ -80,4 +80,4 @@ extern scopeView* scopeViewerSyncWide;
 void globalInit(void);
 void globalEnd(void);
 
-#endif // APPGLOBAL_H
+#endif  // APPGLOBAL_H

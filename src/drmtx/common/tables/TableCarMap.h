@@ -44,8 +44,7 @@
 */
 
 
-inline CComplex MinDist4QAM(const CComplex cI)
-{
+inline CComplex MinDist4QAM(const CComplex cI) {
   /* Return vector pointing to nearest signal point of this constellation.
      2 possible constellation points for real and imaginary axis */
   return CComplex(
@@ -55,8 +54,7 @@ inline CComplex MinDist4QAM(const CComplex cI)
       Min(Abs(rTableQAM4[0][1] - Imag(cI)), Abs(rTableQAM4[1][1] - Imag(cI))));
 }
 
-inline CComplex MinDist16QAM(const CComplex cI)
-{
+inline CComplex MinDist16QAM(const CComplex cI) {
   /* Return vector pointing to nearest signal point of this constellation.
      4 possible constellation points for real and imaginary axis */
   return CComplex(
@@ -68,8 +66,7 @@ inline CComplex MinDist16QAM(const CComplex cI)
           Abs(rTableQAM16[3][1] - Imag(cI))));
 }
 
-inline CComplex MinDist64QAM(const CComplex cI)
-{
+inline CComplex MinDist64QAM(const CComplex cI) {
   /* Return vector pointing to nearest signal point of this constellation.
      8 possible constellation points for real and imaginary axis */
   return CComplex(
@@ -156,4 +153,4 @@ const int iScatPilGainRobModB[2][NUM_BOOSTED_SCAT_PILOTS] = {{1, 3, 43, 45}, {1,
 
 const int iScatPilGainRobModE[2][NUM_BOOSTED_SCAT_PILOTS] = {{1, 29, 0, 0}, {1, 31, 0, 0}};
 
-#endif // !defined(TABLE_CAR_MAP_H__3B0_CA63_4344_BB2B_23E7912__INCLUDED_)
+#endif  // !defined(TABLE_CAR_MAP_H__3B0_CA63_4344_BB2B_23E7912__INCLUDED_)

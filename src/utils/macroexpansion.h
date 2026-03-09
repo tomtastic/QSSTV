@@ -9,18 +9,14 @@ struct sconvert {
   QString replacement;
 };
 
-class macroExpansion
-{
-public:
+class macroExpansion {
+ public:
   macroExpansion();
   QString convert(QString txt);
   void addConversion(QChar tag, QString value);
-  void clear()
-  {
-    convertList.clear();
-  }
+  void clear() { convertList.clear(); }
 
-private:
+ private:
   QList<sconvert> convertList;
 };
-#endif // MACROEXPANSION_H
+#endif  // MACROEXPANSION_H

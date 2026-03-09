@@ -7,16 +7,14 @@
 
 #define NUMTHUMBS 12
 
-namespace Ui
-{
+namespace Ui {
 class galleryWidget;
 }
 
-class galleryWidget : public QWidget
-{
+class galleryWidget : public QWidget {
   Q_OBJECT
 
-public:
+ public:
   explicit galleryWidget(QWidget* parent = 0);
   ~galleryWidget();
 
@@ -32,15 +30,15 @@ public:
   const QStringList& getFilenames();
   QString getLastRxImage();
 
-public slots:
+ public slots:
   void slotDirChanged(QString);
 
 
-private:
+ private:
   Ui::galleryWidget* ui;
   QStringList sl;
 };
 
 extern galleryWidget* galleryWidgetPtr;
 
-#endif // GALLERYWIDGET_H
+#endif  // GALLERYWIDGET_H

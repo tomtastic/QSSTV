@@ -29,21 +29,18 @@ sprofile drmPFArray[NUMBEROFPROFILES];
 drmProfileConfig* drmProfileConfigPtr;
 
 
-drmProfileConfig::drmProfileConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::drmProfileConfig)
-{
+drmProfileConfig::drmProfileConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::drmProfileConfig) {
   ui->setupUi(this);
   readSettings();
 }
 
-drmProfileConfig::~drmProfileConfig()
-{
+drmProfileConfig::~drmProfileConfig() {
   writeSettings();
   delete ui;
 }
 
 
-void drmProfileConfig::readSettings()
-{
+void drmProfileConfig::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("DRMPROFILE");
   drmPFArray[0].name = qSettings.value("drmPF1Name", "Profile 1").toString();
@@ -73,8 +70,7 @@ void drmProfileConfig::readSettings()
   setParams();
 }
 
-void drmProfileConfig::writeSettings()
-{
+void drmProfileConfig::writeSettings() {
   QSettings qSettings;
   getParams();
   qSettings.beginGroup("DRMPROFILE");
@@ -104,8 +100,7 @@ void drmProfileConfig::writeSettings()
 }
 
 
-void drmProfileConfig::getParams()
-{
+void drmProfileConfig::getParams() {
   sprofile drmPFArrayCopy[NUMBEROFPROFILES];
   drmPFArrayCopy[0] = drmPFArray[0];
   drmPFArrayCopy[1] = drmPFArray[1];
@@ -143,15 +138,13 @@ void drmProfileConfig::getParams()
     changed = true;
 }
 
-bool drmProfileConfig::diff(sprofile a, sprofile b)
-{
+bool drmProfileConfig::diff(sprofile a, sprofile b) {
   return (a.name != b.name || a.params.robMode != b.params.robMode || a.params.qam != b.params.qam ||
           a.params.bandwith != b.params.bandwith || a.params.protection != b.params.protection ||
           a.params.interleaver != b.params.interleaver || a.params.reedSolomon != b.params.reedSolomon);
 }
 
-void drmProfileConfig::setParams()
-{
+void drmProfileConfig::setParams() {
   setValue(drmPFArray[0].name, ui->namePF1LineEdit);
   setIndex(drmPFArray[0].params.robMode, ui->drmPF1ModeComboBox);
   setIndex(drmPFArray[0].params.qam, ui->drmPF1QAMComboBox);
@@ -178,8 +171,7 @@ void drmProfileConfig::setParams()
 }
 
 
-bool drmProfileConfig::getDRMParams(int idx, drmTxParams& d)
-{
+bool drmProfileConfig::getDRMParams(int idx, drmTxParams& d) {
   if ((idx < 0) || (idx >= NUMBEROFPROFILES)) {
     return false;
   }
@@ -188,8 +180,7 @@ bool drmProfileConfig::getDRMParams(int idx, drmTxParams& d)
   return true;
 }
 
-bool drmProfileConfig::getName(int idx, QString& n)
-{
+bool drmProfileConfig::getName(int idx, QString& n) {
   if ((idx < 0) || (idx >= NUMBEROFPROFILES)) {
     return false;
   }

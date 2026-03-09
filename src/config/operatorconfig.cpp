@@ -32,21 +32,16 @@ bool onlineStatusEnabled;
 QString onlineStatusText;
 
 
-operatorConfig::operatorConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::operatorConfig)
-{
+operatorConfig::operatorConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::operatorConfig) {
   ui->setupUi(this);
   QRegularExpression rx("^\\w*$");
   QValidator* validator = new QRegularExpressionValidator(rx, this);
   ui->onlineStatusText->setValidator(validator);
 }
 
-operatorConfig::~operatorConfig()
-{
-  delete ui;
-}
+operatorConfig::~operatorConfig() { delete ui; }
 
-void operatorConfig::readSettings()
-{
+void operatorConfig::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("PERSONAL");
   myCallsign = qSettings.value("callsign", QString("NOCALL")).toString();
@@ -60,8 +55,7 @@ void operatorConfig::readSettings()
   setParams();
 }
 
-void operatorConfig::writeSettings()
-{
+void operatorConfig::writeSettings() {
   QSettings qSettings;
   getParams();
   qSettings.beginGroup("PERSONAL");
@@ -75,8 +69,7 @@ void operatorConfig::writeSettings()
   qSettings.endGroup();
 }
 
-void operatorConfig::getParams()
-{
+void operatorConfig::getParams() {
   QString myCallsignCopy = myCallsign;
   QString myQthCopy = myQth;
   QString myLocatorCopy = myLocator;
@@ -102,8 +95,7 @@ void operatorConfig::getParams()
     changed = true;
 }
 
-void operatorConfig::setParams()
-{
+void operatorConfig::setParams() {
   setValue(myCallsign, ui->callsignLineEdit);
   setValue(myLastname, ui->lastnameLineEdit);
   setValue(myFirstname, ui->firstnameLineEdit);

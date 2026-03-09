@@ -35,11 +35,10 @@
 #include "maiaObject.h"
 #include "maiaXmlRpcServerConnection.h"
 
-class MaiaXmlRpcServer : public QObject
-{
+class MaiaXmlRpcServer : public QObject {
   Q_OBJECT
 
-public:
+ public:
   MaiaXmlRpcServer(const QHostAddress& address = QHostAddress::Any, quint16 port = 8080, QObject* parent = 0);
   MaiaXmlRpcServer(const QHostAddress& address = QHostAddress::Any, quint16 port = 8080,
                    QList<QHostAddress>* allowedAddresses = 0, QObject* parent = 0);
@@ -48,13 +47,13 @@ public:
   void removeMethod(QString method);
   QHostAddress getServerAddress();
 
-public slots:
+ public slots:
   void getMethod(QString method, QObject** responseObject, const char** responseSlot);
 
-private slots:
+ private slots:
   void newConnection();
 
-private:
+ private:
   QTcpServer server;
   QHash<QString, QObject*> objectMap;
   QHash<QString, const char*> slotMap;

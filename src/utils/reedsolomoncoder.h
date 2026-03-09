@@ -15,9 +15,8 @@ union long_byte_union {
 };
 
 
-class reedSolomonCoder
-{
-public:
+class reedSolomonCoder {
+ public:
   reedSolomonCoder();
   ~reedSolomonCoder();
   void init();
@@ -25,7 +24,7 @@ public:
               QList<int>& erasuresArray);
   bool encode(QByteArray& ba, QString extension, eRSType rsType);
 
-private:
+ private:
   void distribute(unsigned char* src, unsigned char* dst, int rows, int cols, int reverse);
   bool decode_and_write();
   QByteArray ec_buf; /* pointer to encoding/decoding buffer */
@@ -51,4 +50,4 @@ private:
   int numMissing;
 };
 
-#endif // REEDSOLOMONCODER_H
+#endif  // REEDSOLOMONCODER_H

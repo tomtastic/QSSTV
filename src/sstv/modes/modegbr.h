@@ -26,13 +26,12 @@
 /**
   @author Johan Maes <on4qz@telenet.be>
 */
-class modeGBR : public modeBase
-{
-public:
+class modeGBR : public modeBase {
+ public:
   modeGBR(esstvMode m, unsigned int len, bool tx, bool narrowMode);
   ~modeGBR();
 
-protected:
+ protected:
   embState rxSetupLine();
   void calcPixelPositionTable(unsigned int colorLine, bool tx);
   void setupParams(double clock);

@@ -12,36 +12,27 @@
 #include "hybridcrypt.h"
 
 
-drmTx::drmTx(QObject* parent) : QObject(parent)
-{
+drmTx::drmTx(QObject* parent) : QObject(parent) {
   txDRM = new drmTransmitter;
   txList.clear();
 
   hybridTxCount = 1;
 }
 
-drmTx::~drmTx()
-{
-  delete txDRM;
-}
+drmTx::~drmTx() { delete txDRM; }
 
 void drmTx::init() {}
 
-void drmTx::start()
-{
+void drmTx::start() {
   statusBarMsgEvent* statBar;
   statBar = new statusBarMsgEvent("Sending " + drmTxFileName.fileName());
   QApplication::postEvent(dispatcherPtr, statBar);
   txDRM->start(true);
 }
 
-void drmTx::forgetTxFileName()
-{
-  drmTxStamp = "";
-}
+void drmTx::forgetTxFileName() { drmTxStamp = ""; }
 
-QString drmTx::getTxFileName(QString fileName)
-{
+QString drmTx::getTxFileName(QString fileName) {
   QString prefix;
   QFileInfo finf;
 
@@ -50,8 +41,7 @@ QString drmTx::getTxFileName(QString fileName)
   } else {
     // Once allocated, keep the same TX name...
     // cleared by applyTemplate() or forgetTxFileName()
-    if (drmTxStamp.isEmpty())
-      drmTxStamp = QDateTime::currentDateTime().toUTC().toString("yyyyMMddHHmmss");
+    if (drmTxStamp.isEmpty()) drmTxStamp = QDateTime::currentDateTime().toUTC().toString("yyyyMMddHHmmss");
     prefix = drmTxStamp + "-";
   }
 
@@ -65,17 +55,14 @@ QString drmTx::getTxFileName(QString fileName)
   return drmTxFileName.fileName();
 }
 
-bool drmTx::initDRMImage(bool binary, QString fileName)
-{
+bool drmTx::initDRMImage(bool binary, QString fileName) {
   eRSType rsType;
   reedSolomonCoder rsd;
   QFile inf;
   setTxParams(drmParams);
 
-  if (binary && fileName.isEmpty())
-    return false;
-  if (!binary && !txWidgetPtr->getImageViewerPtr()->hasValidImage())
-    return false;
+  if (binary && fileName.isEmpty()) return false;
+  if (!binary && !txWidgetPtr->getImageViewerPtr()->hasValidImage()) return false;
 
   addToLog(QString("bin=%1, fileName=%2").arg(binary).arg(fileName), LOGDRMTX);
 
@@ -107,11 +94,11 @@ bool drmTx::initDRMImage(bool binary, QString fileName)
     }
   } else {
     hybridCrypt hc;
-    drmTxHybridParameters.bandwith = 1;    // bw 2.2
-    drmTxHybridParameters.robMode = 2;     // mode E
-    drmTxHybridParameters.interleaver = 0; // long
-    drmTxHybridParameters.protection = 0;  // high
-    drmTxHybridParameters.qam = 0;         // 4bit QAM
+    drmTxHybridParameters.bandwith = 1;     // bw 2.2
+    drmTxHybridParameters.robMode = 2;      // mode E
+    drmTxHybridParameters.interleaver = 0;  // long
+    drmTxHybridParameters.protection = 0;   // high
+    drmTxHybridParameters.qam = 0;          // 4bit QAM
     drmTxHybridParameters.callsign = myCallsign;
 
     // we have to fill in the body
@@ -123,14 +110,11 @@ bool drmTx::initDRMImage(bool binary, QString fileName)
   return true;
 }
 
-void drmTx::updateTxList()
-{
+void drmTx::updateTxList() {
   fixBlockList.clear();
-  if ((txList.count() > 0) && (txList.last().transportID == txTransportID))
-    return;
+  if ((txList.count() > 0) && (txList.last().transportID == txTransportID)) return;
 
-  if (txList.count() > 5)
-    txList.removeFirst();
+  if (txList.count() > 5) txList.removeFirst();
 
   txList.append(txSession());
   txList.last().filename = drmTxFileName.baseName();
@@ -148,8 +132,7 @@ void drmTx::updateTxList()
   txList.last().transportID = txTransportID;
 }
 
-bool drmTx::ftpDRMHybrid(QString fileName, QString destName)
-{
+bool drmTx::ftpDRMHybrid(QString fileName, QString destName) {
   QByteArray ba;
   //  ftpFunctions ff;
   //  QString ftpErrorStr;
@@ -162,8 +145,7 @@ bool drmTx::ftpDRMHybrid(QString fileName, QString destName)
 
   if (fileName.isEmpty()) {
     txWidgetPtr->getImageViewerPtr()->copyToBuffer(&ba);
-    if (!ftmp.open())
-      return false;
+    if (!ftmp.open()) return false;
     ftmp.write(ba);
     ftmp.close();
     fileName = ftmp.fileName();
@@ -176,26 +158,22 @@ bool drmTx::ftpDRMHybrid(QString fileName, QString destName)
   return true;
 }
 
-void drmTx::clearLastHybridUpload()
-{
+void drmTx::clearLastHybridUpload() {
   if (!lastHybridUpload.isEmpty()) {
     addToLog(QString("Clearing lasHybridUpload, was: %1").arg(lastHybridUpload), LOGFTPFUNC);
     lastHybridUpload = "";
   }
 }
 
-void drmTx::ftpDRMHybridNotifyCheck(QString mask)
-{
-  if (!enableHybridNotify)
-    return;
+void drmTx::ftpDRMHybridNotifyCheck(QString mask) {
+  if (!enableHybridNotify) return;
   notifyCheckEvent* ce;
   ce = new notifyCheckEvent(mask);
   QApplication::postEvent(dispatcherPtr, ce);
 }
 
 
-double drmTx::calcTxTime(int overheadTime)
-{
+double drmTx::calcTxTime(int overheadTime) {
   double tim = 0;
   //  tim= soundIOPtr->getPlaybackStartupTime();
   tim += overheadTime;
@@ -203,8 +181,7 @@ double drmTx::calcTxTime(int overheadTime)
   return tim;
 }
 
-int drmTx::processFIX(QByteArray bsrByteArray)
-{
+int drmTx::processFIX(QByteArray bsrByteArray) {
   int i, j;
   bool inSeries;
   //  bool extended; // todo check use of extended
@@ -246,15 +223,14 @@ int drmTx::processFIX(QByteArray bsrByteArray)
     else {
       if (inSeries) {
         inSeries = false;
-        for (j = lastBlock; j < block; j++)
-          fixBlockList.append(j);
+        for (j = lastBlock; j < block; j++) fixBlockList.append(j);
       }
       fixBlockList.append(block);
       lastBlock = block + 1;
     }
   }
   // check if we have a filename beyond -99
-  if ((i + 1) < sl.count()) // we need an additional 2 entries (filename and mode)
+  if ((i + 1) < sl.count())  // we need an additional 2 entries (filename and mode)
   {
     //      extended=true;
     //      fileName=sl.at(i++); // not used at this moment
@@ -263,16 +239,14 @@ int drmTx::processFIX(QByteArray bsrByteArray)
 }
 
 
-void drmTx::initDRMBSR(QByteArray* ba)
-{
+void drmTx::initDRMBSR(QByteArray* ba) {
   baDRM = *ba;
   fixBlockList.clear();
   txDRM->init(&baDRM, "bsr", "bin", drmTxParameters);
   addToLog(QString("bsr.bin send %1").arg(baDRM.size()), LOGPERFORM);
 }
 
-bool drmTx::initDRMFIX(txSession* sessionPtr)
-{
+bool drmTx::initDRMFIX(txSession* sessionPtr) {
   reedSolomonCoder rsd;
   eRSType rsType;
   rsType = static_cast<eRSType>(sessionPtr->drmParams.reedSolomon);
@@ -287,16 +261,14 @@ bool drmTx::initDRMFIX(txSession* sessionPtr)
 }
 
 
-void drmTx::sendBSR(QByteArray* p, drmTxParams dp)
-{
+void drmTx::sendBSR(QByteArray* p, drmTxParams dp) {
   setTxParams(dp);
   initDRMBSR(p);
   dispatcherPtr->startTX(txFunctions::TXSENDDRMBSR);
   addToLog("sendDRMBSR", LOGDRMTX);
 }
 
-txSession* drmTx::getSessionPtr(uint transportID)
-{
+txSession* drmTx::getSessionPtr(uint transportID) {
   int i;
   for (i = 0; i < txList.count(); i++) {
     if (txList.at(i).transportID == transportID) {
@@ -306,8 +278,7 @@ txSession* drmTx::getSessionPtr(uint transportID)
   return nullptr;
 }
 
-void drmTx::applyTemplate(QString templateFilename, bool useTemplate, imageViewer* ivPtr)
-{
+void drmTx::applyTemplate(QString templateFilename, bool useTemplate, imageViewer* ivPtr) {
   clearLastHybridUpload();
   forgetTxFileName();
   ivPtr->setParam(templateFilename, useTemplate);

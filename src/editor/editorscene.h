@@ -34,11 +34,10 @@ class QGraphicsSceneMouseEvent;
 #define CHANGE
 
 
-class editorScene : public QGraphicsScene
-{
+class editorScene : public QGraphicsScene {
   Q_OBJECT
 
-public:
+ public:
   enum eImageType {
     NONE,      /*!< no image defined */
     FLATIMAGE, /*!< loaded image is a simple image (png,jpeg,...) */
@@ -76,23 +75,17 @@ public:
   bool save(QFile& f, bool templ);
   void setImage(QImage* im);
   eMode mode;
-  eImageType getImageType()
-  {
-    return imageType;
-  }
+  eImageType getImageType() { return imageType; }
   QImage* renderImage(int w, int h);
   macroExpansion mexp;
   void overlay(QImage* ima);
   void addBorder(int w, int h);
-  QImage* getImagePtr()
-  {
-    return localImage;
-  }
+  QImage* getImagePtr() { return localImage; }
   void addConversion(QChar tag, QString value, bool clear = false);
 
   // bool event(QEvent *);
 
-public slots:
+ public slots:
   void setMode(eMode m);
   void setItemType(graphItemBase::egraphType tp);
   //    void editorLostFocus(DiagramTextItem *item);
@@ -114,20 +107,20 @@ public slots:
 #endif
 
 
-signals:
+ signals:
   //	void itemInserted(graphItemBase *itm);
   //	void textInserted(graphItemBase *itm);
   void changeSize(int, int);
   void itemSelected(graphItemBase* itm);
   void colorSelected(const QPointF& p);
 
-protected:
+ protected:
   void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent);
   void mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent);
   void mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent);
 
 
-private:
+ private:
   graphItemBase* copyItem;
   graphItemBase::egraphType itemType;
   bool leftButtonDown;

@@ -36,164 +36,153 @@ modeRobot2::modeRobot2(esstvMode m, unsigned int len, bool tx, bool narrowMode) 
 
 modeRobot2::~modeRobot2() {}
 
-void modeRobot2::setupParams(double clock)
-{
+void modeRobot2::setupParams(double clock) {
   // double tmp=(activeSSTVParam->imageTime/(double)activeSSTVParam->numberOfDataLines)*clock;
   // visibleLineLength=(tmp-fp-bp-2*blank-syncDuration)/4;
   visibleLineLength = (getLineLength(mode, clock) - fp - bp - 2 * blank - syncDuration) / 4.;
 }
 
 
-modeBase::embState modeRobot2::rxSetupLine()
-{
+modeBase::embState modeRobot2::rxSetupLine() {
   switch (subLine) {
-  case 0:
-    debugState = stBP;
-    start = lineTimeTableRX[lineCounter];
-    markerFloat = start + bp;
-    marker = static_cast<unsigned int>(round(markerFloat));
-    return MBRXWAIT;
-  case 1:
-    calcPixelPositionTable(YLINEODD, false);
-    markerFloat += 2 * visibleLineLength;
-    debugState = stColorLine0;
-    pixelArrayPtr = yArrayPtr;
-    return MBPIXELS;
-  case 2:
-    debugState = stG1;
-    markerFloat += blank;
-    marker = static_cast<unsigned int>(round(markerFloat));
-    return MBRXWAIT;
-  case 3:
-    calcPixelPositionTable(REDLINE, false);
-    markerFloat += visibleLineLength;
-    debugState = stColorLine1;
-    pixelArrayPtr = redArrayPtr;
-    return MBPIXELS;
-  case 4:
-    debugState = stG2;
-    markerFloat += blank;
-    marker = static_cast<unsigned int>(round(markerFloat));
-    return MBRXWAIT;
-  case 5:
-    calcPixelPositionTable(BLUELINE, false);
-    markerFloat += visibleLineLength;
-    debugState = stColorLine2;
-    pixelArrayPtr = blueArrayPtr;
-    return MBPIXELS;
-  case 6:
-    debugState = stFP;
-    markerFloat += fp;
-    marker = static_cast<unsigned int>(round(markerFloat));
-    return MBRXWAIT;
-  case 7:
-    debugState = stSync;
-    markerFloat += syncDuration;
-    marker = static_cast<unsigned int>(round(markerFloat));
-    syncPosition = marker;
-    return MBSYNC;
+    case 0:
+      debugState = stBP;
+      start = lineTimeTableRX[lineCounter];
+      markerFloat = start + bp;
+      marker = static_cast<unsigned int>(round(markerFloat));
+      return MBRXWAIT;
+    case 1:
+      calcPixelPositionTable(YLINEODD, false);
+      markerFloat += 2 * visibleLineLength;
+      debugState = stColorLine0;
+      pixelArrayPtr = yArrayPtr;
+      return MBPIXELS;
+    case 2:
+      debugState = stG1;
+      markerFloat += blank;
+      marker = static_cast<unsigned int>(round(markerFloat));
+      return MBRXWAIT;
+    case 3:
+      calcPixelPositionTable(REDLINE, false);
+      markerFloat += visibleLineLength;
+      debugState = stColorLine1;
+      pixelArrayPtr = redArrayPtr;
+      return MBPIXELS;
+    case 4:
+      debugState = stG2;
+      markerFloat += blank;
+      marker = static_cast<unsigned int>(round(markerFloat));
+      return MBRXWAIT;
+    case 5:
+      calcPixelPositionTable(BLUELINE, false);
+      markerFloat += visibleLineLength;
+      debugState = stColorLine2;
+      pixelArrayPtr = blueArrayPtr;
+      return MBPIXELS;
+    case 6:
+      debugState = stFP;
+      markerFloat += fp;
+      marker = static_cast<unsigned int>(round(markerFloat));
+      return MBRXWAIT;
+    case 7:
+      debugState = stSync;
+      markerFloat += syncDuration;
+      marker = static_cast<unsigned int>(round(markerFloat));
+      syncPosition = marker;
+      return MBSYNC;
 
-  default:
-    return MBENDOFLINE;
+    default:
+      return MBENDOFLINE;
   }
 }
 
 
-void modeRobot2::showLine()
-{
-  yuvConversion(yArrayPtr);
-}
+void modeRobot2::showLine() { yuvConversion(yArrayPtr); }
 
-void modeRobot2::calcPixelPositionTable(unsigned int colorLine, bool tx)
-{
+void modeRobot2::calcPixelPositionTable(unsigned int colorLine, bool tx) {
   unsigned int i;
   DSPFLOAT lineStart = start;
   int ofx = 0;
-  if (tx)
-    ofx = 1;
+  if (tx) ofx = 1;
   //  debugState=colorLine;
   switch (colorLine) {
-  case YLINEODD:
-    lineStart += bp;
-    break;
-  case REDLINE:
-    lineStart += (bp + 2 * visibleLineLength + blank);
-    break;
-  case BLUELINE:
-    lineStart += bp + 2 * blank + 3 * visibleLineLength;
-    // addToLog(QString("gbr2: redstart=%1").arg(start),DBMODES);
+    case YLINEODD:
+      lineStart += bp;
+      break;
+    case REDLINE:
+      lineStart += (bp + 2 * visibleLineLength + blank);
+      break;
+    case BLUELINE:
+      lineStart += bp + 2 * blank + 3 * visibleLineLength;
+      // addToLog(QString("gbr2: redstart=%1").arg(start),DBMODES);
 
-    break;
+      break;
   }
   switch (colorLine) {
-  case YLINEODD:
-    for (i = 0; i < activeSSTVParam->numberOfPixels; i++) {
-      pixelPositionTable[i] = static_cast<unsigned int>(
-          round(lineStart + ((static_cast<float>(i + ofx) * 2 * visibleLineLength) / activeSSTVParam->numberOfPixels)));
-    }
-    break;
-  default:
-    for (i = 0; i < activeSSTVParam->numberOfPixels; i++) {
-      pixelPositionTable[i] = static_cast<unsigned int>(
-          round(lineStart + ((static_cast<float>(i + ofx) * visibleLineLength) / activeSSTVParam->numberOfPixels)));
-    }
-    break;
+    case YLINEODD:
+      for (i = 0; i < activeSSTVParam->numberOfPixels; i++) {
+        pixelPositionTable[i] = static_cast<unsigned int>(round(
+            lineStart + ((static_cast<float>(i + ofx) * 2 * visibleLineLength) / activeSSTVParam->numberOfPixels)));
+      }
+      break;
+    default:
+      for (i = 0; i < activeSSTVParam->numberOfPixels; i++) {
+        pixelPositionTable[i] = static_cast<unsigned int>(
+            round(lineStart + ((static_cast<float>(i + ofx) * visibleLineLength) / activeSSTVParam->numberOfPixels)));
+      }
+      break;
   }
 }
 
 
-modeBase::embState modeRobot2::txSetupLine()
-{
+modeBase::embState modeRobot2::txSetupLine() {
   start = lineTimeTableTX[lineCounter];
   switch (subLine) {
-  case 0:
-    txFreq = lowerFreq;
-    txDur = static_cast<unsigned int>(rint(bp + 6));
-    return MBTXGAP;
-  case 1:
-    calcPixelPositionTable(YLINEODD, true);
-    pixelArrayPtr = yArrayPtr;
-    return MBPIXELS;
-  case 2:
-    txFreq = lowerFreq;
-    txDur = static_cast<unsigned int>(rint((2 * blank) / 3));
-    return MBTXGAP;
-  case 3:
-    txFreq = 1900.;
-    txDur = static_cast<unsigned int>(rint(blank / 3));
-    return MBTXGAP;
-  case 4:
-    calcPixelPositionTable(REDLINE, true);
-    pixelArrayPtr = redArrayPtr;
-    return MBPIXELS;
-  case 5:
-    txFreq = 2300.;
-    txDur = static_cast<unsigned int>(rint((2 * blank) / 3));
-    return MBTXGAP;
-  case 6:
-    txFreq = 1900.;
-    txDur = static_cast<unsigned int>(rint(blank / 3));
-    return MBTXGAP;
-  case 7:
-    calcPixelPositionTable(BLUELINE, true);
-    pixelArrayPtr = blueArrayPtr;
-    return MBPIXELS;
-  case 8:
-    txFreq = lowerFreq;
-    txDur = static_cast<unsigned int>(rint(fp));
-    return MBTXGAP;
-  case 9:
-    txFreq = syncFreq;
-    txDur = static_cast<unsigned int>(rint(syncDuration));
-    return MBTXGAP;
+    case 0:
+      txFreq = lowerFreq;
+      txDur = static_cast<unsigned int>(rint(bp + 6));
+      return MBTXGAP;
+    case 1:
+      calcPixelPositionTable(YLINEODD, true);
+      pixelArrayPtr = yArrayPtr;
+      return MBPIXELS;
+    case 2:
+      txFreq = lowerFreq;
+      txDur = static_cast<unsigned int>(rint((2 * blank) / 3));
+      return MBTXGAP;
+    case 3:
+      txFreq = 1900.;
+      txDur = static_cast<unsigned int>(rint(blank / 3));
+      return MBTXGAP;
+    case 4:
+      calcPixelPositionTable(REDLINE, true);
+      pixelArrayPtr = redArrayPtr;
+      return MBPIXELS;
+    case 5:
+      txFreq = 2300.;
+      txDur = static_cast<unsigned int>(rint((2 * blank) / 3));
+      return MBTXGAP;
+    case 6:
+      txFreq = 1900.;
+      txDur = static_cast<unsigned int>(rint(blank / 3));
+      return MBTXGAP;
+    case 7:
+      calcPixelPositionTable(BLUELINE, true);
+      pixelArrayPtr = blueArrayPtr;
+      return MBPIXELS;
+    case 8:
+      txFreq = lowerFreq;
+      txDur = static_cast<unsigned int>(rint(fp));
+      return MBTXGAP;
+    case 9:
+      txFreq = syncFreq;
+      txDur = static_cast<unsigned int>(rint(syncDuration));
+      return MBTXGAP;
 
-  default:
-    return MBENDOFLINE;
+    default:
+      return MBENDOFLINE;
   }
 }
 
 
-void modeRobot2::getLine()
-{
-  getLineY(false);
-}
+void modeRobot2::getLine() { getLineY(false); }

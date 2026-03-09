@@ -55,9 +55,8 @@
 
 class imageViewer;
 
-class modeBase
-{
-public:
+class modeBase {
+ public:
   enum embState {
     MBERROR,
     MBSETUPLINE,
@@ -83,8 +82,7 @@ public:
   virtual void setupParams(double clock) = 0;
 
   virtual bool getPixels();
-  virtual unsigned long adjustSyncPosition(unsigned long syncPos0, bool isRetrace)
-  {
+  virtual unsigned long adjustSyncPosition(unsigned long syncPos0, bool isRetrace) {
     if (isRetrace)
       return syncPos0;
     else
@@ -95,38 +93,17 @@ public:
   void init(DSPFLOAT clk);
   unsigned int* debugStatePtr;
   void abort();
-  esstvMode getMode()
-  {
-    return mode;
-  }
+  esstvMode getMode() { return mode; }
   eModeBase transmitImage(imageViewer* iv);
-  void setRxSampleCounter(int sc)
-  {
-    rxSampleCounter = sc;
-  }
+  void setRxSampleCounter(int sc) { rxSampleCounter = sc; }
   void saveImage();
-  int receivedLines()
-  {
-    return displayLineCounter;
-  }
-  int imageLines()
-  {
-    return activeSSTVParam->numberOfDisplayLines;
-  }
-  int imagePixels()
-  {
-    return activeSSTVParam->numberOfPixels;
-  }
-  bool aborted()
-  {
-    return !abortRun;
-  }
-  bool isNarrow()
-  {
-    return narrow;
-  }
+  int receivedLines() { return displayLineCounter; }
+  int imageLines() { return activeSSTVParam->numberOfDisplayLines; }
+  int imagePixels() { return activeSSTVParam->numberOfPixels; }
+  bool aborted() { return !abortRun; }
+  bool isNarrow() { return narrow; }
 
-protected:
+ protected:
   DSPFLOAT visibleLineLength;
   esstvMode mode;
   bool transmit;
@@ -195,7 +172,7 @@ protected:
   DSPFLOAT lowerFreq;
 
 
-private:
+ private:
   void switchState(embState newState);
   void sendPixelBuffer();
   bool abortRun;

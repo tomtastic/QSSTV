@@ -49,15 +49,13 @@ static struct {
                  {'=', "-...-"},  {'?', "..--.."},  {'_', "..--.-"},  {0, ""}};
 
 static QString cwString;
-void initCW(QString cwTxt)
-{
+void initCW(QString cwTxt) {
   cwState = CWNEW;
   dotSpacing = 1.2 / static_cast<float>(cwWPM);
   cwString = cwTxt;
 }
 
-const char* charLookupCW(const char a)
-{
+const char* charLookupCW(const char a) {
   char b;
   int i = 0;
   ;
@@ -72,8 +70,7 @@ const char* charLookupCW(const char a)
   return nullptr;
 }
 
-bool nextSymbolCW(float& duration)
-{
+bool nextSymbolCW(float& duration) {
   if (dotPtr[dotIndex] == 0) {
     return false;
   } else if (dotPtr[dotIndex] == '.') {
@@ -85,8 +82,7 @@ bool nextSymbolCW(float& duration)
   return true;
 }
 
-float getCWDuration()
-{
+float getCWDuration() {
   float tim = 0;
   float tone, duration;
   tone = 0;
@@ -96,69 +92,68 @@ float getCWDuration()
   return tim;
 }
 
-bool sendTextCW(float& tone, float& duration)
-{
+bool sendTextCW(float& tone, float& duration) {
   result = CWIDLE;
   do {
     switch (cwState) {
-    case CWNEW: {
-      charIndex = 0;
-      if (cwString[0] == 0) {
-        result = CWfalse;
-      }
-      cwState = CWNEXTCHAR;
-    } break;
-    case CWNEXTCHAR: {
-      if (cwString[charIndex] == ' ') {
-        charIndex++;
-        cwState = CWWORDSPACING;
-      } else {
-        dotPtr = charLookupCW(cwString[charIndex++].toLatin1());
-        if (dotPtr == nullptr) {
-          cwState = CWEND;
-        } else {
-          dotIndex = 0;
-          cwState = CWNEXTDOT;
+      case CWNEW: {
+        charIndex = 0;
+        if (cwString[0] == 0) {
+          result = CWfalse;
         }
-      }
-    } break;
-    case CWNEXTDOT: {
-      if (nextSymbolCW(duration)) {
-        tone = static_cast<float>(cwTone);
-        cwState = CWDOTSPACING;
+        cwState = CWNEXTCHAR;
+      } break;
+      case CWNEXTCHAR: {
+        if (cwString[charIndex] == ' ') {
+          charIndex++;
+          cwState = CWWORDSPACING;
+        } else {
+          dotPtr = charLookupCW(cwString[charIndex++].toLatin1());
+          if (dotPtr == nullptr) {
+            cwState = CWEND;
+          } else {
+            dotIndex = 0;
+            cwState = CWNEXTDOT;
+          }
+        }
+      } break;
+      case CWNEXTDOT: {
+        if (nextSymbolCW(duration)) {
+          tone = static_cast<float>(cwTone);
+          cwState = CWDOTSPACING;
+          result = CWtrue;
+        } else {
+          cwState = CWCHARSPACING;
+        }
+      } break;
+      case CWDOTSPACING: {
+        tone = 0;
+        duration = dotSpacing;
+        cwState = CWNEXTDOT;
         result = CWtrue;
-      } else {
-        cwState = CWCHARSPACING;
-      }
-    } break;
-    case CWDOTSPACING: {
-      tone = 0;
-      duration = dotSpacing;
-      cwState = CWNEXTDOT;
-      result = CWtrue;
-    } break;
-    case CWCHARSPACING: {
-      tone = 0;
-      duration = 2 * dotSpacing; // we already had a dotspace
-      cwState = CWNEXTCHAR;
-      result = CWtrue;
-    } break;
-    case CWWORDSPACING: {
-      tone = 0;
-      duration = 4 * dotSpacing; // we already had a charspace
-      cwState = CWNEXTCHAR;
-      result = CWtrue;
-    } break;
+      } break;
+      case CWCHARSPACING: {
+        tone = 0;
+        duration = 2 * dotSpacing;  // we already had a dotspace
+        cwState = CWNEXTCHAR;
+        result = CWtrue;
+      } break;
+      case CWWORDSPACING: {
+        tone = 0;
+        duration = 4 * dotSpacing;  // we already had a charspace
+        cwState = CWNEXTCHAR;
+        result = CWtrue;
+      } break;
 
-    case CWEND: {
-      tone = 0;
-      duration = 7 * dotSpacing;
-      cwState = CWFINISHED;
-      result = CWtrue;
-    } break;
-    case CWFINISHED: {
-      result = CWfalse;
-    } break;
+      case CWEND: {
+        tone = 0;
+        duration = 7 * dotSpacing;
+        cwState = CWFINISHED;
+        result = CWtrue;
+      } break;
+      case CWFINISHED: {
+        result = CWfalse;
+      } break;
     }
   } while (result == CWIDLE);
   return (result == CWtrue);

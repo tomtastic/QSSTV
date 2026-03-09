@@ -54,8 +54,7 @@ const QString stateStr[syncProcessor::RETRACEWAIT + 1] = {
  */
 
 
-syncProcessor::syncProcessor(bool narrow, QObject* parent) : QObject(parent), streamDecode(narrow)
-{
+syncProcessor::syncProcessor(bool narrow, QObject* parent) : QObject(parent), streamDecode(narrow) {
   detectNarrow = narrow;
   currentModePtr = nullptr;
   visMode = NOTVALID;
@@ -71,18 +70,15 @@ syncProcessor::syncProcessor(bool narrow, QObject* parent) : QObject(parent), st
   }
 }
 
-syncProcessor::~syncProcessor()
-{
+syncProcessor::~syncProcessor() {
   int i;
   for (i = 0; i <= ENDNARROW; i++) {
     matchArray[i].clear();
   }
-  if (currentModePtr != nullptr)
-    delete currentModePtr;
+  if (currentModePtr != nullptr) delete currentModePtr;
 }
 
-void syncProcessor::reset()
-{
+void syncProcessor::reset() {
   sampleCounter = 0;
   init();
   streamDecode.reset();
@@ -108,8 +104,7 @@ void syncProcessor::reset()
  * enableSyncDetection is set to false for AVT modes.
  *
  */
-void syncProcessor::init()
-{
+void syncProcessor::init() {
   enableSyncDetection = true;
   //  syncAvg=0;
 
@@ -130,7 +125,7 @@ void syncProcessor::init()
       }
     }
   }
-  visMode = NOTVALID; // and reset the visMode
+  visMode = NOTVALID;  // and reset the visMode
   syncProcesState = MODEDETECT;
   modifiedClock = rxClock / SUBSAMPLINGFACTOR;
   syncArrayIndex = 0;
@@ -138,7 +133,7 @@ void syncProcessor::init()
   retraceFlag = false;
   syncState = SYNCOFF;
   displaySyncEvent* ce;
-  ce = new displaySyncEvent(0); // reset sync vuMeter
+  ce = new displaySyncEvent(0);  // reset sync vuMeter
   QApplication::postEvent(dispatcherPtr, ce);
   addToLog("init called", LOGSYNCSTATE);
   clearMatchArray();
@@ -156,13 +151,12 @@ void syncProcessor::init()
  */
 
 
-void syncProcessor::process()
-{
+void syncProcessor::process() {
 #ifdef DISABLENARROW
   if (!detectNarrow) {
 #endif
 
-    streamDecode.process(freqPtr, sampleCounter); // only VIS and FSK if not narrow
+    streamDecode.process(freqPtr, sampleCounter);  // only VIS and FSK if not narrow
     extractSync();
 #ifdef DISABLENARROW
   }
@@ -195,39 +189,37 @@ void syncProcessor::process()
  *
  */
 
-void syncProcessor::extractSync()
-{
+void syncProcessor::extractSync() {
   int i;
   int lastSync;
   for (i = 0; i < RXSTRIPE; i++) {
     switch (syncState) {
-    case SYNCVALID:
-    case SYNCOFF:
-      if (inputVolumePtr[i] < sensitivityArray[sensitivity].minVolume)
-        break;
-      if (syncVolumePtr[i] > sensitivityArray[sensitivity].onRatio * inputVolumePtr[i]) {
-        syncArray[syncArrayIndex].start = sampleCounter + i;
-        syncArray[syncArrayIndex].startVolume = syncVolumePtr[i];
-        switchSyncState(SYNCACTIVE, sampleCounter + i);
-      }
-      break;
-    case SYNCACTIVE:
-      if (inputVolumePtr[i] < sensitivityArray[sensitivity].minVolume) {
-        switchSyncState(SYNCOFF, sampleCounter + i);
-        break;
-      }
-      if (syncVolumePtr[i] < sensitivityArray[sensitivity].offRatio * inputVolumePtr[i]) {
-        syncArray[syncArrayIndex].end = sampleCounter + i;
-        if (validateSync()) {
-          switchSyncState(SYNCVALID, sampleCounter + i);
-        } else {
-          switchSyncState(SYNCOFF, sampleCounter + i);
+      case SYNCVALID:
+      case SYNCOFF:
+        if (inputVolumePtr[i] < sensitivityArray[sensitivity].minVolume) break;
+        if (syncVolumePtr[i] > sensitivityArray[sensitivity].onRatio * inputVolumePtr[i]) {
+          syncArray[syncArrayIndex].start = sampleCounter + i;
+          syncArray[syncArrayIndex].startVolume = syncVolumePtr[i];
+          switchSyncState(SYNCACTIVE, sampleCounter + i);
         }
-      }
-      break;
+        break;
+      case SYNCACTIVE:
+        if (inputVolumePtr[i] < sensitivityArray[sensitivity].minVolume) {
+          switchSyncState(SYNCOFF, sampleCounter + i);
+          break;
+        }
+        if (syncVolumePtr[i] < sensitivityArray[sensitivity].offRatio * inputVolumePtr[i]) {
+          syncArray[syncArrayIndex].end = sampleCounter + i;
+          if (validateSync()) {
+            switchSyncState(SYNCVALID, sampleCounter + i);
+          } else {
+            switchSyncState(SYNCOFF, sampleCounter + i);
+          }
+        }
+        break;
     }
 #ifdef ENABLESCOPE
-    syncStateBuffer[i] = (unsigned char) syncState * STATESCALER;
+    syncStateBuffer[i] = (unsigned char)syncState * STATESCALER;
 #endif
   }
 
@@ -238,8 +230,7 @@ void syncProcessor::extractSync()
       lastSync = syncArray[activeChainPtr->last()->to].end;
       if ((sampleCounter + RXSTRIPE - RXSTRIPE / 7) >
           (lastSync + sensitivityArray[sensitivity].maxTempOutOfSyncLines * samplesPerLine)) {
-        if (sensitivity != (NUMBEROFSENSITIVITIES - 1))
-          tempOutOfSync = true; // no temp out of sync if DX
+        if (sensitivity != (NUMBEROFSENSITIVITIES - 1)) tempOutOfSync = true;  // no temp out of sync if DX
       }
       missingLines = static_cast<uint>(
           round(((sampleCounter + RXSTRIPE - RXSTRIPE / 7) - (lastSync + samplesPerLine)) / samplesPerLine + 1));
@@ -265,12 +256,11 @@ void syncProcessor::extractSync()
  */
 
 
-bool syncProcessor::validateSync()
-{
+bool syncProcessor::validateSync() {
   bool result;
 #ifndef DISABLERETRACE
   if (syncArray[syncArrayIndex].diffStartEnd() >= MINRETRACEWIDTH) {
-    syncArray[syncArrayIndex].retrace = true; // simply set retrace true
+    syncArray[syncArrayIndex].retrace = true;  // simply set retrace true
     result = true;
   } else if (syncArray[syncArrayIndex].diffStartEnd() >= MINRETRACEWIDTH / 4) {
     if ((syncArrayIndex > 2) &&
@@ -278,7 +268,7 @@ bool syncProcessor::validateSync()
         (syncArray[syncArrayIndex].start - syncArray[syncArrayIndex - 1].end) <= MINRETRACEWIDTH / 5) {
       syncArray[syncArrayIndex - 1].end = syncArray[syncArrayIndex].end;
       syncArray[syncArrayIndex - 1].retrace = true;
-      syncArray[syncArrayIndex - 1].diffStartEnd(); // just calculate the width;
+      syncArray[syncArrayIndex - 1].diffStartEnd();  // just calculate the width;
       syncArrayIndex--;
     }
     result = true;
@@ -302,54 +292,53 @@ bool syncProcessor::validateSync()
   if (result) {
     checkSyncArray();
     switch (syncProcesState) {
-    case MODEDETECT:
-      if (findMatch()) {
-        visMode = NOTVALID; // reset visMode;
+      case MODEDETECT:
+        if (findMatch()) {
+          visMode = NOTVALID;  // reset visMode;
 #ifndef DISABLEDETECT
-        // we have a new mode
-        if (!createModeBase()) {
-          addToLog("Error creating modeBase", LOGALL);
-          result = false;
-        } else {
-          falseSyncs = 0;
-          lineTolerance = LINETOLERANCEINSYNC;
-          // when we have S1,S2 or SDX then we have to set the syncposition at the beginning of the green line
-          //          syncPosition=currentModePtr->adjustSyncPosition(syncArray[0].end)- FILTERDELAYCORRECTION; // type
-          //          1 sync end
-          unsigned int syncCorrected;
-          ;
-          syncWidth = getSyncWidth(currentMode, modifiedClock);
-
-          if (syncArray[0].retrace) {
-            syncCorrected = syncArray[0].end;
+          // we have a new mode
+          if (!createModeBase()) {
+            addToLog("Error creating modeBase", LOGALL);
+            result = false;
           } else {
-            syncCorrected = (syncArray[0].start + syncArray[0].end) / 2 + syncWidth / 2;
-          }
+            falseSyncs = 0;
+            lineTolerance = LINETOLERANCEINSYNC;
+            // when we have S1,S2 or SDX then we have to set the syncposition at the beginning of the green line
+            //          syncPosition=currentModePtr->adjustSyncPosition(syncArray[0].end)- FILTERDELAYCORRECTION; //
+            //          type 1 sync end
+            unsigned int syncCorrected;
+            ;
+            syncWidth = getSyncWidth(currentMode, modifiedClock);
 
-          syncPosition = currentModePtr->adjustSyncPosition(syncCorrected, syncArray[0].retrace) +
-                         FILTERDELAYCORRECTION; // type 2 sync end
-          tempOutOfSync = false;
-          slantAdjustLine = 6;
-          slantAdjust(true);
-          switchProcessState(INSYNC);
-          addToLog(QString("Mode detected: %1, sync at %2").arg(getSSTVModeNameShort(currentMode)).arg(syncPosition),
-                   LOGSYNCEVAL);
-        }
+            if (syncArray[0].retrace) {
+              syncCorrected = syncArray[0].end;
+            } else {
+              syncCorrected = (syncArray[0].start + syncArray[0].end) / 2 + syncWidth / 2;
+            }
+
+            syncPosition = currentModePtr->adjustSyncPosition(syncCorrected, syncArray[0].retrace) +
+                           FILTERDELAYCORRECTION;  // type 2 sync end
+            tempOutOfSync = false;
+            slantAdjustLine = 6;
+            slantAdjust(true);
+            switchProcessState(INSYNC);
+            addToLog(QString("Mode detected: %1, sync at %2").arg(getSSTVModeNameShort(currentMode)).arg(syncPosition),
+                     LOGSYNCEVAL);
+          }
 #endif
-      }
-      break;
-    case INSYNC:
-      if (enableSyncDetection)
-        trackSyncs();
-      break;
-    case SYNCLOSTNEWMODE:
-    case SYNCLOSTFALSESYNC:
-    case SYNCLOSTMISSINGLINES:
-    case SYNCLOST:
-      addToLog("synclost detected", LOGSYNCSTATE);
-      break;
-    case RETRACEWAIT:
-      break;
+        }
+        break;
+      case INSYNC:
+        if (enableSyncDetection) trackSyncs();
+        break;
+      case SYNCLOSTNEWMODE:
+      case SYNCLOSTFALSESYNC:
+      case SYNCLOSTMISSINGLINES:
+      case SYNCLOST:
+        addToLog("synclost detected", LOGSYNCSTATE);
+        break;
+      case RETRACEWAIT:
+        break;
     }
     syncArrayIndex++;
     syncArray[syncArrayIndex].init();
@@ -358,8 +347,7 @@ bool syncProcessor::validateSync()
 }
 
 
-void syncProcessor::trackSyncs()
-{
+void syncProcessor::trackSyncs() {
   if (activeChainPtr == nullptr) {
     return;
   }
@@ -395,14 +383,12 @@ void syncProcessor::trackSyncs()
   }
 }
 
-void syncProcessor::slotNewCall(QString call)
-{
+void syncProcessor::slotNewCall(QString call) {
   emit callReceived(call);
   retraceFlag = true;
 }
 
-void syncProcessor::slotVisCodeDetected(int mode, uint visSampleCounter)
-{
+void syncProcessor::slotVisCodeDetected(int mode, uint visSampleCounter) {
   if ((mode >= idxStart) && (mode <= idxEnd)) {
     visMode = static_cast<esstvMode>(mode);
     if ((visMode >= AVT24) && (visMode <= AVT94)) {
@@ -417,8 +403,7 @@ void syncProcessor::slotVisCodeDetected(int mode, uint visSampleCounter)
   }
 }
 
-void syncProcessor::calcSyncQuality()
-{
+void syncProcessor::calcSyncQuality() {
   int k;
   quint16 fs = 0;
   quint16 tmp;
@@ -428,7 +413,7 @@ void syncProcessor::calcSyncQuality()
   if (activeChainPtr->count() >= 10) {
     for (k = activeChainPtr->count() - 10; k < activeChainPtr->count() - 1; k++) {
       tmp = activeChainPtr->at(k)->to - activeChainPtr->at(k)->from - 1;
-      tmp /= activeChainPtr->at(k)->lineSpacing; // this gives us the number of false syncs per line
+      tmp /= activeChainPtr->at(k)->lineSpacing;  // this gives us the number of false syncs per line
       fs += tmp;
     }
   }
@@ -442,9 +427,8 @@ void syncProcessor::calcSyncQuality()
   }
   syncQuality -= (falseSlantSync * 2);
   str += QString("falseSlantSync: %1").arg(falseSlantSync);
-  if (syncQuality < 0)
-    syncQuality = 0;
-  if ((syncQuality <= 0) && (sensitivity != (NUMBEROFSENSITIVITIES - 1))) // i.e DX Mode
+  if (syncQuality < 0) syncQuality = 0;
+  if ((syncQuality <= 0) && (sensitivity != (NUMBEROFSENSITIVITIES - 1)))  // i.e DX Mode
   {
     addToLog(QString("syncQuality SYNCLOST %1").arg(str), LOGSYNCQUALITY);
     switchProcessState(SYNCLOST);
@@ -457,8 +441,7 @@ void syncProcessor::calcSyncQuality()
  * @param toIdx
  */
 
-void syncProcessor::calculateLineNumber(uint fromIdx, uint toIdx)
-{
+void syncProcessor::calculateLineNumber(uint fromIdx, uint toIdx) {
   quint16 lnbr;
   double fract;
   lineCompare(samplesPerLine, 0, toIdx, lnbr, fract);
@@ -467,8 +450,7 @@ void syncProcessor::calculateLineNumber(uint fromIdx, uint toIdx)
   lastUpdatedSync = toIdx;
 }
 
-void syncProcessor::checkSyncArray()
-{
+void syncProcessor::checkSyncArray() {
   if (syncArray[syncArrayIndex].retrace) {
     syncArray[0] = syncArray[syncArrayIndex];
     syncArrayIndex = 0;
@@ -508,8 +490,7 @@ void syncProcessor::checkSyncArray()
 */
 
 
-bool syncProcessor::findMatch()
-{
+bool syncProcessor::findMatch() {
   int i, j, k, m;
   int fs;
   uint minTotLines = 9999;
@@ -572,8 +553,7 @@ bool syncProcessor::findMatch()
 }
 
 
-uint syncProcessor::calcTotalLines(modeMatchList* mlPtr)
-{
+uint syncProcessor::calcTotalLines(modeMatchList* mlPtr) {
   int i;
   uint lines = 0;
   for (i = 0; i < mlPtr->count(); i++) {
@@ -582,8 +562,7 @@ uint syncProcessor::calcTotalLines(modeMatchList* mlPtr)
   return lines;
 }
 
-double syncProcessor::calcTotalFract(modeMatchList* mlPtr)
-{
+double syncProcessor::calcTotalFract(modeMatchList* mlPtr) {
   int i;
   double fract = 0;
   for (i = 0; i < mlPtr->count(); i++) {
@@ -598,12 +577,10 @@ double syncProcessor::calcTotalFract(modeMatchList* mlPtr)
  * @return true if added to chain
  */
 
-bool syncProcessor::addToMatch(esstvMode mode)
-{
+bool syncProcessor::addToMatch(esstvMode mode) {
   int i;
 
-  if (syncArrayIndex < 1)
-    return false;
+  if (syncArrayIndex < 1) return false;
   for (i = syncArrayIndex - 1; i >= 0; i--) {
     if (addToChain(mode, i)) {
       return true;
@@ -613,8 +590,7 @@ bool syncProcessor::addToMatch(esstvMode mode)
 }
 
 
-bool syncProcessor::addToChain(esstvMode mode, uint fromIdx)
-{
+bool syncProcessor::addToChain(esstvMode mode, uint fromIdx) {
   int i;
   double fract;
   quint16 lineSpacing;
@@ -644,7 +620,7 @@ bool syncProcessor::addToChain(esstvMode mode, uint fromIdx)
   }
 
   bool found = false;
-  if (matchArray[mode].count() == 0) // we don't have a chain yet
+  if (matchArray[mode].count() == 0)  // we don't have a chain yet
   {
     matchArray[mode].append(new modeMatchList);
     matchArray[mode][0]->append(new smatchEntry(fromIdx, syncArrayIndex, lineSpacing, fract, syncArray[fromIdx].end,
@@ -678,8 +654,7 @@ bool syncProcessor::addToChain(esstvMode mode, uint fromIdx)
 }
 
 
-void syncProcessor::clearMatchArray()
-{
+void syncProcessor::clearMatchArray() {
   int i, j;
   for (i = idxStart; i <= idxEnd; i++) {
     for (j = 0; j < matchArray[i].count(); j++) {
@@ -691,8 +666,7 @@ void syncProcessor::clearMatchArray()
   switchProcessState(MODEDETECT);
 }
 
-void syncProcessor::removeMatchArrayChain(esstvMode mode, int chainIdx)
-{
+void syncProcessor::removeMatchArrayChain(esstvMode mode, int chainIdx) {
   int i;
   for (i = 0; i < matchArray[mode][chainIdx]->count(); i++) {
     delete matchArray[mode][chainIdx]->at(i);
@@ -702,8 +676,7 @@ void syncProcessor::removeMatchArrayChain(esstvMode mode, int chainIdx)
   matchArray[mode].takeAt(chainIdx);
 }
 
-void syncProcessor::cleanupMatchArray()
-{
+void syncProcessor::cleanupMatchArray() {
   int i, j;
   //  double fract=0;
   //  quint16 lnbr=0;
@@ -733,22 +706,17 @@ void syncProcessor::cleanupMatchArray()
   }
 }
 
-void syncProcessor::dropTop()
-{
-  deleteSyncArrayEntry(0);
-}
+void syncProcessor::dropTop() { deleteSyncArrayEntry(0); }
 
-void syncProcessor::deleteSyncArrayEntry(uint entry)
-{
+void syncProcessor::deleteSyncArrayEntry(uint entry) {
   int i, j, k;
   modeMatchList* ml;
   //  smatchEntry *tempPtr;
-  if (entry >= syncArrayIndex)
-    return;
+  if (entry >= syncArrayIndex) return;
   // delete or adapt the matchArrays
-  for (i = idxStart; i <= idxEnd; i++) // all modes
+  for (i = idxStart; i <= idxEnd; i++)  // all modes
   {
-    for (j = 0; j < matchArray[i].count();) // all chains
+    for (j = 0; j < matchArray[i].count();)  // all chains
     {
       for (k = 0; k < matchArray[i][j]->count();) {
         ml = matchArray[i][j];
@@ -800,15 +768,13 @@ void syncProcessor::recalculateMatchArray() {}
  */
 
 
-bool syncProcessor::lineCompare(DSPFLOAT samPerLine, int srcIdx, int dstIdx, quint16& lineNumber, double& fraction)
-{
+bool syncProcessor::lineCompare(DSPFLOAT samPerLine, int srcIdx, int dstIdx, quint16& lineNumber, double& fraction) {
   double delta;
   delta = static_cast<double>(syncArray[dstIdx].end - syncArray[srcIdx].end);
 
   lineNumber = (delta + samPerLine / 2.) / samPerLine;
   fraction = static_cast<double>(lineNumber) - delta / samPerLine;
-  if (fraction < 0)
-    fraction = -fraction;
+  if (fraction < 0) fraction = -fraction;
   //  if(fraction<lineTolerance)
   //  addToLog(QString("Lnbr: %1, fract: %2, delta: %3 src: %4,dest: %5, OK %6")
   //           .arg(lineNumber).arg(fraction).arg(delta).arg(srcIdx).arg(dstIdx).arg(fraction<lineTolerance)
@@ -816,87 +782,84 @@ bool syncProcessor::lineCompare(DSPFLOAT samPerLine, int srcIdx, int dstIdx, qui
   return (fraction < lineTolerance);
 }
 
-void syncProcessor::resetRetraceFlag()
-{
+void syncProcessor::resetRetraceFlag() {
   retraceFlag = false;
   clearMatchArray();
 }
 
 
-bool syncProcessor::createModeBase()
-{
+bool syncProcessor::createModeBase() {
   bool done = false;
-  if (currentModePtr)
-    delete currentModePtr;
+  if (currentModePtr) delete currentModePtr;
   currentModePtr = nullptr;
   switch (currentMode) {
-  case M1:
-  case M2:
-    currentModePtr = new modeGBR(currentMode, RXSTRIPE, false, false);
-    break;
-  case S1:
-  case S2:
-  case SDX:
-    currentModePtr = new modeGBR2(currentMode, RXSTRIPE, false, false);
-    break;
-  case R36:
-    currentModePtr = new modeRobot1(currentMode, RXSTRIPE, false, false);
-    break;
-  case R24:
-  case R72:
-  case MR73:
-  case MR90:
-  case MR115:
-  case MR140:
-  case MR175:
-  case ML180:
-  case ML240:
-  case ML280:
-  case ML320:
-    currentModePtr = new modeRobot2(currentMode, RXSTRIPE, false, false);
-    break;
-  case SC2_60:
-  case SC2_120:
-  case SC2_180:
-  case P3:
-  case P5:
-  case P7:
-  case MC110N:
-  case MC140N:
-  case MC180N:
-    currentModePtr = new modeRGB(currentMode, RXSTRIPE, false, false);
-    break;
-  case FAX480:
-  case BW8:
-  case BW12:
-    currentModePtr = new modeBW(currentMode, RXSTRIPE, false, false);
-    break;
-  case AVT24:
-  case AVT90:
-  case AVT94:
-    currentModePtr = new modeAVT(currentMode, RXSTRIPE, false, false);
-    break;
-  case PD50:
-  case PD90:
-  case PD120:
-  case PD160:
-  case PD180:
-  case PD240:
-  case PD290:
-  case MP73:
-  case MP115:
-  case MP140:
-  case MP175:
-    currentModePtr = new modePD(currentMode, RXSTRIPE, false, false);
-    break;
-  case MP73N:
-  case MP110N:
-  case MP140N:
-    currentModePtr = new modePD(currentMode, RXSTRIPE, false, true);
-    break;
-  default:
-    currentMode = NOTVALID;
-    break;
+    case M1:
+    case M2:
+      currentModePtr = new modeGBR(currentMode, RXSTRIPE, false, false);
+      break;
+    case S1:
+    case S2:
+    case SDX:
+      currentModePtr = new modeGBR2(currentMode, RXSTRIPE, false, false);
+      break;
+    case R36:
+      currentModePtr = new modeRobot1(currentMode, RXSTRIPE, false, false);
+      break;
+    case R24:
+    case R72:
+    case MR73:
+    case MR90:
+    case MR115:
+    case MR140:
+    case MR175:
+    case ML180:
+    case ML240:
+    case ML280:
+    case ML320:
+      currentModePtr = new modeRobot2(currentMode, RXSTRIPE, false, false);
+      break;
+    case SC2_60:
+    case SC2_120:
+    case SC2_180:
+    case P3:
+    case P5:
+    case P7:
+    case MC110N:
+    case MC140N:
+    case MC180N:
+      currentModePtr = new modeRGB(currentMode, RXSTRIPE, false, false);
+      break;
+    case FAX480:
+    case BW8:
+    case BW12:
+      currentModePtr = new modeBW(currentMode, RXSTRIPE, false, false);
+      break;
+    case AVT24:
+    case AVT90:
+    case AVT94:
+      currentModePtr = new modeAVT(currentMode, RXSTRIPE, false, false);
+      break;
+    case PD50:
+    case PD90:
+    case PD120:
+    case PD160:
+    case PD180:
+    case PD240:
+    case PD290:
+    case MP73:
+    case MP115:
+    case MP140:
+    case MP175:
+      currentModePtr = new modePD(currentMode, RXSTRIPE, false, false);
+      break;
+    case MP73N:
+    case MP110N:
+    case MP140N:
+      currentModePtr = new modePD(currentMode, RXSTRIPE, false, true);
+      break;
+    default:
+      currentMode = NOTVALID;
+      break;
   }
   if (currentMode != NOTVALID) {
     initializeSSTVParametersIndex(currentMode, false);
@@ -914,8 +877,7 @@ bool syncProcessor::createModeBase()
 }
 
 
-void syncProcessor::regression(DSPFLOAT& a, DSPFLOAT& b, bool initial)
-{
+void syncProcessor::regression(DSPFLOAT& a, DSPFLOAT& b, bool initial) {
   /* calculate linear regression
     formula x=a+by
     b=sum((x[i]-xm)*(y[i]-ym))/sum((y[i]-ym)*(y[i]-ym))
@@ -956,41 +918,34 @@ void syncProcessor::regression(DSPFLOAT& a, DSPFLOAT& b, bool initial)
     lastValidSyncCounter = syncArray[activeChainPtr->at(j)->to].end;
     tempCount++;
   }
-  b = ((tempCount) *sum_xy - (sum_x * sum_y)) / ((tempCount) *sum_xx - (sum_x * sum_x));
+  b = ((tempCount)*sum_xy - (sum_x * sum_y)) / ((tempCount)*sum_xx - (sum_x * sum_x));
   a = sum_y / (tempCount) - (b * sum_x) / (tempCount);
 }
 
 
-bool syncProcessor::slantAdjust(bool initial)
-{
+bool syncProcessor::slantAdjust(bool initial) {
   DSPFLOAT a, b;
-  if ((currentMode >= AVT24) && (currentMode <= AVT94))
-    return true;
-  if (currentMode == NOTVALID)
-    return true;
+  if ((currentMode >= AVT24) && (currentMode <= AVT94)) return true;
+  if (currentMode == NOTVALID) return true;
   falseSlantSync = 0;
   if (!initial) {
-    if (syncArray[activeChainPtr->last()->to].lineNumber < slantAdjustLine)
-      return false;
+    if (syncArray[activeChainPtr->last()->to].lineNumber < slantAdjustLine) return false;
   }
 
   regression(a, b, initial);
 
   //  addToLog(QString("regr. params line %1 a:%2 b:%3").arg(slantAdjustLine).arg(a).arg(b),LOGSLANT);
   slantAdjustLine += 5;
-  if (!autoSlantAdjust)
-    return false;
+  if (!autoSlantAdjust) return false;
   if (initial) {
-    if ((fabs(1. - b) > 0.02) || (fabs(a) > 100))
-      return false;
+    if ((fabs(1. - b) > 0.02) || (fabs(a) > 100)) return false;
   } else {
-    if ((fabs(1. - b) > 0.005) || (fabs(a) > 50))
-      return false;
+    if ((fabs(1. - b) > 0.005) || (fabs(a) > 50)) return false;
   }
   if (((fabs(1. - b) > 0.00001) || (fabs(a) > 1)) && autoSlantAdjust) {
     newClock = true;
     modifiedClock *= b;
-    samplesPerLine = getLineLength(currentMode, modifiedClock); // recalculate the samples per line
+    samplesPerLine = getLineLength(currentMode, modifiedClock);  // recalculate the samples per line
     addToLog(QString("new clock accepted: %1 a=%2,b=%3").arg(modifiedClock).arg(a).arg(b), LOGSLANT);
 
     syncArray[0].end += static_cast<long>(round(a));
@@ -1004,7 +959,7 @@ bool syncProcessor::slantAdjust(bool initial)
     }
 
     syncPosition = currentModePtr->adjustSyncPosition(syncCorrected, syncArray[0].retrace) +
-                   FILTERDELAYCORRECTION; // type 2 sync end
+                   FILTERDELAYCORRECTION;  // type 2 sync end
 
     recalculateMatchArray();
     addToLog(QString("slantAdjust: modified  syncpos:=%1").arg(syncPosition), LOGSLANT);
@@ -1015,8 +970,7 @@ bool syncProcessor::slantAdjust(bool initial)
 }
 
 
-void syncProcessor::switchSyncState(esyncState newState, quint32 sampleCntr)
-{
+void syncProcessor::switchSyncState(esyncState newState, quint32 sampleCntr) {
   Q_UNUSED(sampleCntr)
   if (syncState != newState) {
     addToLog(QString("switching from %1 to %2 at %3")
@@ -1028,8 +982,7 @@ void syncProcessor::switchSyncState(esyncState newState, quint32 sampleCntr)
   }
 }
 
-void syncProcessor::switchProcessState(esyncProcessState newState)
-{
+void syncProcessor::switchProcessState(esyncProcessState newState) {
   addToLog(QString("syncProcessState %1 to %2").arg(stateStr[syncProcesState]).arg(stateStr[newState]),
            LOGSYNCPROCESSSTATE);
   if ((newState == SYNCLOSTFALSESYNC) || (newState == SYNCLOSTNEWMODE) || (newState == SYNCLOSTMISSINGLINES) ||
@@ -1040,22 +993,19 @@ void syncProcessor::switchProcessState(esyncProcessState newState)
 }
 
 #ifdef ENABLESCOPE
-void syncProcessor::setOffset(unsigned int dataScopeOffset)
-{
+void syncProcessor::setOffset(unsigned int dataScopeOffset) {
   xOffset = dataScopeOffset;
   scopeViewerSyncNarrow->setOffset(xOffset);
   scopeViewerSyncWide->setOffset(xOffset);
 }
 
-void syncProcessor::setSize(unsigned int numSamples)
-{
+void syncProcessor::setSize(unsigned int numSamples) {
   xNumSamples = numSamples;
   scopeViewerSyncNarrow->setSize(xNumSamples);
   scopeViewerSyncWide->setSize(xNumSamples);
 }
 
-void syncProcessor::clear()
-{
+void syncProcessor::clear() {
   scopeViewerSyncNarrow->clear();
   scopeViewerSyncWide->clear();
   xOffset = 0;

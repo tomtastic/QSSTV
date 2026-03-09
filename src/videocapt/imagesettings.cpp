@@ -75,8 +75,7 @@
 #include <QScrollArea>
 
 
-imageSettings::imageSettings(QString cameraDevice, QWidget* parent) : QDialog(parent)
-{
+imageSettings::imageSettings(QString cameraDevice, QWidget* parent) : QDialog(parent) {
   camDev = cameraDevice.toLatin1();
   ui = new Ui::imageSettingsUi;
   ui->setupUi(this);
@@ -86,14 +85,10 @@ imageSettings::imageSettings(QString cameraDevice, QWidget* parent) : QDialog(pa
   ui->buttonBox->button(QDialogButtonBox::Cancel)->setDefault(false);
 }
 
-imageSettings::~imageSettings()
-{
-  delete ui;
-}
+imageSettings::~imageSettings() { delete ui; }
 
 
-bool imageSettings::loadCapabilities()
-{
+bool imageSettings::loadCapabilities() {
   int fd;
   struct v4l2_capability cap;
   struct v4l2_queryctrl ctrl;
@@ -101,19 +96,19 @@ bool imageSettings::loadCapabilities()
   fd = v4l2_open(camDev, O_RDWR, 0);
   if (fd < 0) {
     QString msg = QString("Unable to open file %1\n%2").arg(camDev.constData()).arg(strerror(errno));
-    (void) QMessageBox::warning(nullptr, "v4l2ucp: Unable to open file", msg, QMessageBox::Ok, QMessageBox::Ok);
+    (void)QMessageBox::warning(nullptr, "v4l2ucp: Unable to open file", msg, QMessageBox::Ok, QMessageBox::Ok);
     return false;
   }
 
   if (v4l2_ioctl(fd, VIDIOC_QUERYCAP, &cap) == -1) {
     QString msg;
     msg = QString("%1 is not a V4L2 device").arg(camDev.constData());
-    (void) QMessageBox::warning(nullptr, "v4l2ucp: Not a V4L2 device", msg, QMessageBox::Ok, QMessageBox::Ok);
+    (void)QMessageBox::warning(nullptr, "v4l2ucp: Not a V4L2 device", msg, QMessageBox::Ok, QMessageBox::Ok);
     return false;
   }
-  ui->driverLabel->setText((const char*) cap.driver);
-  ui->cardLabel->setText((const char*) cap.card);
-  ui->busLabel->setText((const char*) cap.bus_info);
+  ui->driverLabel->setText((const char*)cap.driver);
+  ui->cardLabel->setText((const char*)cap.card);
+  ui->busLabel->setText((const char*)cap.bus_info);
   ui->deviceLabel->setText(camDev.constData());
 
 #ifdef V4L2_CTRL_FLAG_NEXT_CTRL
@@ -149,37 +144,35 @@ bool imageSettings::loadCapabilities()
   return true;
 }
 
-void imageSettings::addControl(struct v4l2_queryctrl& ctrl, int fd)
-{
+void imageSettings::addControl(struct v4l2_queryctrl& ctrl, int fd) {
   QWidget* w = nullptr;
 
-  if (ctrl.flags & V4L2_CTRL_FLAG_DISABLED)
-    return;
+  if (ctrl.flags & V4L2_CTRL_FLAG_DISABLED) return;
   if ((ctrl.type != V4L2_CTRL_TYPE_CTRL_CLASS) && (gridLayout == nullptr)) {
     addNewTab("Controls");
   }
 
   switch (ctrl.type) {
-  case V4L2_CTRL_TYPE_INTEGER:
-    w = new V4L2IntegerControl(fd, ctrl, grid);
-    break;
-  case V4L2_CTRL_TYPE_BOOLEAN:
-    w = new V4L2BooleanControl(fd, ctrl, grid);
-    break;
-  case V4L2_CTRL_TYPE_MENU:
-    w = new V4L2MenuControl(fd, ctrl, grid);
-    break;
-  case V4L2_CTRL_TYPE_BUTTON:
-    w = new V4L2ButtonControl(fd, ctrl, grid);
-    break;
+    case V4L2_CTRL_TYPE_INTEGER:
+      w = new V4L2IntegerControl(fd, ctrl, grid);
+      break;
+    case V4L2_CTRL_TYPE_BOOLEAN:
+      w = new V4L2BooleanControl(fd, ctrl, grid);
+      break;
+    case V4L2_CTRL_TYPE_MENU:
+      w = new V4L2MenuControl(fd, ctrl, grid);
+      break;
+    case V4L2_CTRL_TYPE_BUTTON:
+      w = new V4L2ButtonControl(fd, ctrl, grid);
+      break;
 
-  case V4L2_CTRL_TYPE_CTRL_CLASS: {
-    addNewTab(QString((const char*) ctrl.name));
-    return;
-  }
-  case V4L2_CTRL_TYPE_INTEGER64:
-  default:
-    break;
+    case V4L2_CTRL_TYPE_CTRL_CLASS: {
+      addNewTab(QString((const char*)ctrl.name));
+      return;
+    }
+    case V4L2_CTRL_TYPE_INTEGER64:
+    default:
+      break;
   }
 
   if (!w) {
@@ -188,7 +181,7 @@ void imageSettings::addControl(struct v4l2_queryctrl& ctrl, int fd)
     new QLabel(grid);
     return;
   }
-  QLabel* l = new QLabel((const char*) ctrl.name, grid);
+  QLabel* l = new QLabel((const char*)ctrl.name, grid);
   gridLayout->addWidget(l, row, 0);
   gridLayout->addWidget(w, row, 1);
   if (ctrl.flags & V4L2_CTRL_FLAG_GRABBED) {
@@ -213,8 +206,7 @@ void imageSettings::addControl(struct v4l2_queryctrl& ctrl, int fd)
   row++;
 }
 
-void imageSettings::addNewTab(QString tabName)
-{
+void imageSettings::addNewTab(QString tabName) {
   QVBoxLayout* vLayout;
   QWidget* tab = new QWidget();
   vLayout = new QVBoxLayout(tab);
@@ -234,8 +226,7 @@ void imageSettings::addNewTab(QString tabName)
   gridLayout->setContentsMargins(0, 0, 0, 0);
 }
 
-void imageSettings::showEvent(QShowEvent* event)
-{
+void imageSettings::showEvent(QShowEvent* event) {
   ui->buttonBox->button(QDialogButtonBox::Ok)->setDefault(false);
   ui->buttonBox->button(QDialogButtonBox::Cancel)->setDefault(false);
   QDialog::showEvent(event);

@@ -44,7 +44,7 @@ extern int symbols_to_delay_list[4];
 extern int N_symbols_frequency_pilot_search;
 extern int K_min_K_max_list[2][24];
 extern float samplerate_offset_estimation;
-extern float samplerate_offset; // ON4QZ
+extern float samplerate_offset;  // ON4QZ
 extern int N_symbols_mode_detection;
 extern int time_offset_log_last;
 extern int transmission_frame_buffer_data_valid;

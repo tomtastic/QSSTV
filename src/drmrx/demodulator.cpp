@@ -24,22 +24,17 @@ float deltaFS;
 float freqOffset;
 float tempbuf[30000];
 
-demodulator::demodulator()
-{
+demodulator::demodulator() {
   addToLog("fftwf_plan_dft_1d start", LOGFFT);
   p1 = fftwf_plan_dft_1d(256, reinterpret_cast<fftwf_complex*>(ss), reinterpret_cast<fftwf_complex*>(S), FFTW_FORWARD,
                          FFTW_ESTIMATE);
   addToLog("fftwf_plan_dft_1d stop", LOGFFT);
 }
 
-demodulator::~demodulator()
-{
-  fftwf_destroy_plan(p1);
-}
+demodulator::~demodulator() { fftwf_destroy_plan(p1); }
 
 
-void demodulator::init()
-{
+void demodulator::init() {
   int i, j, k;
   FACAvailable = false;
   N_symbols_mode_detection = 20;
@@ -70,7 +65,7 @@ void demodulator::init()
 
   counter = 0;
   k = 0;
-  for (i = 0; i < 4; i++) // number of robustness modes
+  for (i = 0; i < 4; i++)  // number of robustness modes
   {
     for (j = 0; j < 6; j++) /* number of spectrumoccupancies */
     {
@@ -87,8 +82,7 @@ void demodulator::init()
   delta_freq_offset = 0;
 }
 
-bool demodulator::demodulate(float* sigin, int numSamples)
-{
+bool demodulator::demodulate(float* sigin, int numSamples) {
   int i;
   numberOfSamples = numSamples;
   transmission_frame_buffer_data_valid = 0;
@@ -134,11 +128,9 @@ bool demodulator::demodulate(float* sigin, int numSamples)
     rsbufwidx += numberOfSamples; /* index of next complex number to fill rs_buffer */
     int block = rsbufwidx / 256;
     if (block > 20) {
-      for (i = 0; i < (256 * block); i++)
-        tempbuf[i] = rs_buffer[2 * i];
+      for (i = 0; i < (256 * block); i++) tempbuf[i] = rs_buffer[2 * i];
       psdmean(tempbuf, psd, 256, block); /* globals   pa0mbo */
-      for (i = 0; i < (256 * block); i++)
-        tempbuf[i] = rs_buffer[2 * i + 1];
+      for (i = 0; i < (256 * block); i++) tempbuf[i] = rs_buffer[2 * i + 1];
       psdmean(tempbuf, cpsd, 256, block); /* globals   pa0mbo */
     }
   }
@@ -164,8 +156,7 @@ bool demodulator::demodulate(float* sigin, int numSamples)
   return true;
 }
 
-bool demodulator::timeSync()
-{
+bool demodulator::timeSync() {
   int i;
   samplerate_offset = samplerate_offset_estimation;
   if (!timeSyncFlag) {
@@ -215,10 +206,8 @@ bool demodulator::timeSync()
       symbols_per_frame = symbols_per_frame_list[robustness_mode];
       K_dc = Tu / 2;
       K_modulo = Tu;
-      for (i = 0; i < 21; i++)
-        time_ref_cells_k[i] = time_ref_cells_k_list[robustness_mode][i];
-      for (i = 0; i < 21; i++)
-        time_ref_cells_theta_1024[i] = time_ref_cells_theta_1024_list[robustness_mode][i];
+      for (i = 0; i < 21; i++) time_ref_cells_k[i] = time_ref_cells_k_list[robustness_mode][i];
+      for (i = 0; i < 21; i++) time_ref_cells_theta_1024[i] = time_ref_cells_theta_1024_list[robustness_mode][i];
       y = y_list[robustness_mode];
       symbols_per_2D_window = symbols_per_2D_window_list[robustness_mode];
       symbols_to_delay = symbols_to_delay_list[robustness_mode];
@@ -230,7 +219,7 @@ bool demodulator::timeSync()
         rs_buffer[i * 2 + 1] = rs_buffer[(i + time_offset_integer) * 2 + 1];
       }
       counter++;
-      (void) getofdm(nullptr, 0.0, 0.0, 0.0, Ts, Tu, nullptr, nullptr, 1, 1, 1); /* initialisation */
+      (void)getofdm(nullptr, 0.0, 0.0, 0.0, Ts, Tu, nullptr, nullptr, 1, 1, 1); /* initialisation */
     }
 
     else {
@@ -259,8 +248,7 @@ bool demodulator::timeSync()
 }
 
 
-bool demodulator::frequencySync()
-{
+bool demodulator::frequencySync() {
   int i, j;
   int sp_idx, K_min_, K_max_, K_dc_indx, K_dc_plus2_indx;
   int K_min_indx, K_min_minus4_indx, K_max_indx, K_max_plus1_indx;
@@ -385,8 +373,7 @@ bool demodulator::frequencySync()
   return true;
 }
 
-bool demodulator::frameSync()
-{
+bool demodulator::frameSync() {
   int i, j, k;
   int symbol0;
 
@@ -462,10 +449,10 @@ bool demodulator::frameSync()
       rs_buffer[i * 2 + 1] = rs_buffer[(i + t_smp) * 2 + 1];
     }
     for (i = 0; i < (2 * 70); i++) {
-      next_pilots[i] = 1.1; /* real part */ // modified joma was j now i
+      next_pilots[i] = 1.1; /* real part */  // modified joma was j now i
     }
     for (i = 0; i < 458; i++) {
-      actual_pilots[i] = 0.0; /* real part */ // modified joma was j now i
+      actual_pilots[i] = 0.0; /* real part */  // modified joma was j now i
     }
     for (i = 0; i < 5; i++)
       for (j = 0; j < 208; j++)
@@ -479,8 +466,7 @@ bool demodulator::frameSync()
 
 #define MIN_ABS_H (8.0E-5 * 8.0E-5)
 
-bool demodulator::channelEstimation()
-{
+bool demodulator::channelEstimation() {
   int i, j, k, m, p, temp;
   float t1, t2;
   float sigmaq_noise;
@@ -520,8 +506,8 @@ bool demodulator::channelEstimation()
 
   //  channel estimation based on pilots
 
-  N_symbols_needed = symbols_per_frame + symbols_per_2D_window - symbufwidx; // pa0mbo 24-4-07
-  N_samples_needed = (N_symbols_needed + 1) * Ts - (rsbufwidx);              // pa0mbo was rsbufwidx-1
+  N_symbols_needed = symbols_per_frame + symbols_per_2D_window - symbufwidx;  // pa0mbo 24-4-07
+  N_samples_needed = (N_symbols_needed + 1) * Ts - (rsbufwidx);               // pa0mbo was rsbufwidx-1
   if (N_samples_needed > 0) {
     input_samples_buffer_request = N_samples_needed;
     return false;
@@ -533,8 +519,7 @@ bool demodulator::channelEstimation()
     else
       spectrum_occupancy = spectrum_occupancy_estimation;
   }
-  if (spectrum_occupancy > 3)
-    spectrum_occupancy = 3; // 4 and 5 not yet supported
+  if (spectrum_occupancy > 3) spectrum_occupancy = 3;  // 4 and 5 not yet supported
   mode_and_occupancy_code = mode_and_occupancy_code_table[robustness_mode * 6 + spectrum_occupancy];
   if (mode_and_occupancy_code < 0) {
     spectrum_occupancy = 1;
@@ -545,7 +530,7 @@ bool demodulator::channelEstimation()
     K_min = K_min_K_max_list[0][spectrum_occupancy + robustness_mode * 6];
     K_max = K_min_K_max_list[1][spectrum_occupancy + robustness_mode * 6];
     carrier_per_symbol = K_max - K_min + 1;
-    (void) getofdmsync(nullptr, Ts, Tu, nullptr, K_max - K_min + 1, 0, nullptr, nullptr, 1, 1, 1); /* initialisation */
+    (void)getofdmsync(nullptr, Ts, Tu, nullptr, K_max - K_min + 1, 0, nullptr, nullptr, 1, 1, 1); /* initialisation */
     //  reformat pilot index stuff into th K_dc/K_modulo block
     //  first call listsinit to get gain_ref_cells_k etc
     //  Jan 5th 2009 changed listsinit() call to an include of all code from listsinit.c
@@ -592,8 +577,7 @@ bool demodulator::channelEstimation()
         a = sqrtf(2.0);
         // power boost
         for (i = 0; i < 4; i++) {
-          if (k == power_boost[i])
-            a = 2;
+          if (k == power_boost[i]) a = 2;
         }
 
         // is time ref cell ?
@@ -639,8 +623,7 @@ bool demodulator::channelEstimation()
     f_cut_t = 0.0675 / (1.0 * static_cast<double>(y));
     f_cut_k = 1.75 * static_cast<float>(Tg) / static_cast<float>(Tu);
 
-    for (i = 0; i < 5; i++)
-      cnt_tr_cells[i] = 0;
+    for (i = 0; i < 5; i++) cnt_tr_cells[i] = 0;
     //    start nnn-loop
     for (nnn = 0; nnn < y; nnn++) {
       for (i = 0; i < rndcnt; i++) {
@@ -670,8 +653,7 @@ bool demodulator::channelEstimation()
       //  now sort training cells in subset if necessary
       sortbrkpnt = 0;
       for (i = 1; i < cnt_tr_cells[nnn]; i++) {
-        if (gain_ref_cells_subset[nnn][i] < gain_ref_cells_subset[nnn][i - 1])
-          sortbrkpnt = i; // break in data ?
+        if (gain_ref_cells_subset[nnn][i] < gain_ref_cells_subset[nnn][i - 1]) sortbrkpnt = i;  // break in data ?
       }
       if (sortbrkpnt > 0) {
         // keep first part in sorttmp
@@ -733,16 +715,13 @@ bool demodulator::channelEstimation()
       indxlu = ivector(1, NP);
       collu = fvector(1, NP);
       for (i = 1; i <= NP; i++)
-        for (j = 1; j <= NP; j++)
-          amatrix[i][j] = PHI[i - 1][j - 1];
+        for (j = 1; j <= NP; j++) amatrix[i][j] = PHI[i - 1][j - 1];
       ludcmp(amatrix, NP, indxlu, &dlu); /* decompose just once */
       for (j = 1; j <= NP; j++) {
-        for (i = 1; i <= NP; i++)
-          collu[i] = 0.0;
+        for (i = 1; i <= NP; i++) collu[i] = 0.0;
         collu[j] = 1.0;
         lubksb(amatrix, NP, indxlu, collu);
-        for (i = 1; i <= NP; i++)
-          PHI_INV[i - 1][j - 1] = collu[i];
+        for (i = 1; i <= NP; i++) PHI_INV[i - 1][j - 1] = collu[i];
       }
       free_fvector(collu, 1, NP);
       free_ivector(indxlu, 1, NP);
@@ -775,8 +754,7 @@ bool demodulator::channelEstimation()
 
         {
           W_symbol[j] = 0.0;
-          for (k = 0; k < NP; k++)
-            W_symbol[j] += THETA[k] * PHI_INV[k][j];
+          for (k = 0; k < NP; k++) W_symbol[j] += THETA[k] * PHI_INV[k][j];
         }
         for (j = 0; j < NP; j++) {
           W_symbol_blk[nnn][j][k_index1] = W_symbol[j];
@@ -810,8 +788,7 @@ bool demodulator::channelEstimation()
         // calc matrix product THETA*PHI_INV
         for (j = 0; j < NP; j++) {
           W_pilots[j] = 0.0;
-          for (k = 0; k < NP; k++)
-            W_pilots[j] += THETA[k] * PHI_INV[k][j];
+          for (k = 0; k < NP; k++) W_pilots[j] += THETA[k] * PHI_INV[k][j];
         }
         for (j = 0; j < NP; j++) {
           W_pilots_blk[nnn][j][k_index1] = W_pilots[j];
@@ -827,10 +804,10 @@ bool demodulator::channelEstimation()
     lFAC = mkfacmap(robustness_mode, K_dc, K_modulo, FAC_cells_k);
     mode_and_occupancy_code_last = mode_and_occupancy_code;
 
-    for (i = 0; i < cnt_tr_cells[y - 1]; i++) // joma y-1 was y
+    for (i = 0; i < cnt_tr_cells[y - 1]; i++)  // joma y-1 was y
     {
-      next_pilots[2 * i] = 0.0; /* real part */ // modified joma was j now i
-      next_pilots[2 * i + 1] = 0.0;             /* imag */
+      next_pilots[2 * i] = 0.0; /* real part */  // modified joma was j now i
+      next_pilots[2 * i + 1] = 0.0;              /* imag */
     }
     gain_ref_cells_per_frame = rndcnt;
     gain_ref_cells_per_y_symbols = rndcnt / (symbols_per_frame / y);
@@ -885,8 +862,7 @@ bool demodulator::channelEstimation()
           actual_pilots[2 * j] * next_pilots[2 * j] + actual_pilots[2 * j + 1] * next_pilots[2 * j + 1]; /* real part */
       temp2 += actual_pilots[2 * j] * next_pilots[2 * j + 1] - actual_pilots[2 * j + 1] * next_pilots[2 * j];
     }
-    if (i != 0)
-      delta_freq_offset = atan2f(temp2, temp1 + MIN_ABS_H);
+    if (i != 0) delta_freq_offset = atan2f(temp2, temp1 + MIN_ABS_H);
 
     for (j = 0; j < K_max - K_min + 1; j++) {
       H[2 * j] = 0.0;

@@ -36,31 +36,25 @@
 /******************************************************************************\
 * Bit interleaver															   *
 \******************************************************************************/
-void CBitInterleaver::Interleave(CVector<_DECISION>& InputData)
-{
+void CBitInterleaver::Interleave(CVector<_DECISION>& InputData) {
   int i;
 
   /* Block 1 -------------------------------------------------------------- */
   /* Interleave data according the interleaver table */
-  for (i = 0; i < ix_in1; i++)
-    vecInterlMemory1[i] = InputData[veciIntTable1[i]];
+  for (i = 0; i < ix_in1; i++) vecInterlMemory1[i] = InputData[veciIntTable1[i]];
 
   /* Copy result in input-vector */
-  for (i = 0; i < ix_in1; i++)
-    InputData[i] = vecInterlMemory1[i];
+  for (i = 0; i < ix_in1; i++) InputData[i] = vecInterlMemory1[i];
 
   /* Block 2 -------------------------------------------------------------- */
   /* Interleave data according the interleaver table */
-  for (i = 0; i < ix_in2; i++)
-    vecInterlMemory2[i] = InputData[veciIntTable2[i] + ix_in1];
+  for (i = 0; i < ix_in2; i++) vecInterlMemory2[i] = InputData[veciIntTable2[i] + ix_in1];
 
   /* Copy result in input-vector */
-  for (i = 0; i < ix_in2; i++)
-    InputData[i + ix_in1] = vecInterlMemory2[i];
+  for (i = 0; i < ix_in2; i++) InputData[i + ix_in1] = vecInterlMemory2[i];
 }
 
-void CBitInterleaver::Init(int iNewx_in1, int iNewx_in2, int it_0)
-{
+void CBitInterleaver::Init(int iNewx_in1, int iNewx_in2, int it_0) {
   /* Set internal parameters */
   ix_in1 = iNewx_in1;
   ix_in2 = iNewx_in2;
@@ -91,31 +85,25 @@ void CBitInterleaver::Init(int iNewx_in1, int iNewx_in2, int it_0)
 /******************************************************************************\
 * Bit deinterleaver															   *
 \******************************************************************************/
-void CBitDeinterleaver::Deinterleave(CVector<CDistance>& vecInput)
-{
+void CBitDeinterleaver::Deinterleave(CVector<CDistance>& vecInput) {
   int i;
 
   /* Block 1 -------------------------------------------------------------- */
   /* Deinterleave data according the deinterleaver table */
-  for (i = 0; i < ix_in1; i++)
-    vecDeinterlMemory1[veciIntTable1[i]] = vecInput[i];
+  for (i = 0; i < ix_in1; i++) vecDeinterlMemory1[veciIntTable1[i]] = vecInput[i];
 
   /* Copy result in input-vector */
-  for (i = 0; i < ix_in1; i++)
-    vecInput[i] = vecDeinterlMemory1[i];
+  for (i = 0; i < ix_in1; i++) vecInput[i] = vecDeinterlMemory1[i];
 
   /* Block 2 -------------------------------------------------------------- */
   /* Deinterleave data according the deinterleaver table */
-  for (i = 0; i < ix_in2; i++)
-    vecDeinterlMemory2[veciIntTable2[i]] = vecInput[i + ix_in1];
+  for (i = 0; i < ix_in2; i++) vecDeinterlMemory2[veciIntTable2[i]] = vecInput[i + ix_in1];
 
   /* Copy result in input-vector */
-  for (i = 0; i < ix_in2; i++)
-    vecInput[i + ix_in1] = vecDeinterlMemory2[i];
+  for (i = 0; i < ix_in2; i++) vecInput[i + ix_in1] = vecDeinterlMemory2[i];
 }
 
-void CBitDeinterleaver::Init(int iNewx_in1, int iNewx_in2, int it_0)
-{
+void CBitDeinterleaver::Init(int iNewx_in1, int iNewx_in2, int it_0) {
   /* Set internal parameters */
   ix_in1 = iNewx_in1;
   ix_in2 = iNewx_in2;

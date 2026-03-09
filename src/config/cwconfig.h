@@ -9,16 +9,14 @@ extern int cwWPM;
 // extern bool enableCW;
 
 
-namespace Ui
-{
+namespace Ui {
 class cwConfig;
 }
 
-class cwConfig : public baseConfig
-{
+class cwConfig : public baseConfig {
   Q_OBJECT
 
-public:
+ public:
   explicit cwConfig(QWidget* parent = 0);
   ~cwConfig();
   void readSettings();
@@ -26,8 +24,8 @@ public:
   void getParams();
   void setParams();
 
-private:
+ private:
   Ui::cwConfig* ui;
 };
 
-#endif // CWCONFIG_H
+#endif  // CWCONFIG_H

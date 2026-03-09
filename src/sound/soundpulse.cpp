@@ -24,25 +24,20 @@
 #include <unistd.h>
 
 
-soundPulse::soundPulse()
-{
+soundPulse::soundPulse() {
   sd[0].stream = nullptr;
   sd[1].stream = nullptr;
 }
 
-soundPulse::~soundPulse()
-{
-  if (sd[0].stream)
-    pa_simple_free(sd[0].stream);
-  if (sd[1].stream)
-    pa_simple_free(sd[1].stream);
+soundPulse::~soundPulse() {
+  if (sd[0].stream) pa_simple_free(sd[0].stream);
+  if (sd[1].stream) pa_simple_free(sd[1].stream);
   sd[0].stream = nullptr;
   sd[1].stream = nullptr;
 }
 
 
-bool soundPulse::init(int samplerate)
-{
+bool soundPulse::init(int samplerate) {
   soundDriverOK = false;
   QString sname;
   sampleRate = samplerate;
@@ -53,10 +48,10 @@ bool soundPulse::init(int samplerate)
   sd[0].stream_params.format = PA_SAMPLE_S16LE;
   sd[0].stream_params.channels = MONOCHANNEL;
   sd[0].stream_params.rate = sampleRate;
-  sd[0].buffer_attrs.maxlength = (uint32_t) -1; // let the server decide
-  sd[0].buffer_attrs.minreq = (uint32_t) -1;
-  sd[0].buffer_attrs.prebuf = (uint32_t) -1;
-  sd[0].buffer_attrs.tlength = (uint32_t) -1;
+  sd[0].buffer_attrs.maxlength = (uint32_t)-1;  // let the server decide
+  sd[0].buffer_attrs.minreq = (uint32_t)-1;
+  sd[0].buffer_attrs.prebuf = (uint32_t)-1;
+  sd[0].buffer_attrs.tlength = (uint32_t)-1;
   sd[0].buffer_attrs.fragsize = CAPTFRAGSIZE * sizeof(short int);
 
   sd[1].stream = nullptr;
@@ -65,10 +60,10 @@ bool soundPulse::init(int samplerate)
   sd[1].stream_params.format = PA_SAMPLE_S16LE;
   sd[1].stream_params.channels = STEREOCHANNEL;
   sd[1].stream_params.rate = sampleRate;
-  sd[1].buffer_attrs.fragsize = (uint32_t) -1; // let the server decide
-  sd[1].buffer_attrs.maxlength = (uint32_t) -1;
-  sd[1].buffer_attrs.minreq = (uint32_t) -1;
-  sd[1].buffer_attrs.prebuf = (uint32_t) -1;
+  sd[1].buffer_attrs.fragsize = (uint32_t)-1;  // let the server decide
+  sd[1].buffer_attrs.maxlength = (uint32_t)-1;
+  sd[1].buffer_attrs.minreq = (uint32_t)-1;
+  sd[1].buffer_attrs.prebuf = (uint32_t)-1;
   sd[1].buffer_attrs.tlength = PLAYLENGTH * sizeof(quint32);
 
   // opening device
@@ -95,10 +90,8 @@ bool soundPulse::init(int samplerate)
 }
 
 
-int soundPulse::read(int& countAvailable)
-{
-  if (!soundDriverOK)
-    return 0;
+int soundPulse::read(int& countAvailable) {
+  if (!soundDriverOK) return 0;
   int err = PA_OK;
   pa_usec_t latency;
   latency = pa_simple_get_latency(sd[0].stream, &err);
@@ -118,10 +111,8 @@ int soundPulse::read(int& countAvailable)
   return 0;
 }
 
-int soundPulse::write(uint numFrames)
-{
-  if (!soundDriverOK)
-    return 0;
+int soundPulse::write(uint numFrames) {
+  if (!soundDriverOK) return 0;
   int err;
   if (numFrames != 0) {
     if (pa_simple_write(sd[1].stream, tempTXBuffer, sizeof(quint32) * numFrames, &err) < 0) {
@@ -135,22 +126,18 @@ int soundPulse::write(uint numFrames)
 void soundPulse::waitPlaybackEnd() {}
 
 
-void soundPulse::flushCapture()
-{
-  if (!soundDriverOK)
-    return;
+void soundPulse::flushCapture() {
+  if (!soundDriverOK) return;
   int err = PA_OK;
   pa_usec_t t = pa_simple_get_latency(sd[0].stream, &err);
   if (t && err == PA_OK) {
     size_t bytes = pa_usec_to_bytes(t, &sd[0].stream_params);
     while (bytes > sizeof(qint16) * PERIODSIZE) {
       pa_simple_read(sd[0].stream, tempRXBuffer, sizeof(qint16) * PERIODSIZE, &err);
-      if (err != PA_OK)
-        break;
+      if (err != PA_OK) break;
       bytes -= sizeof(qint16) * PERIODSIZE;
     }
-    if (bytes)
-      pa_simple_read(sd[0].stream, tempRXBuffer, bytes, &err);
+    if (bytes) pa_simple_read(sd[0].stream, tempRXBuffer, bytes, &err);
   }
 
   //  int err;
@@ -160,23 +147,18 @@ void soundPulse::flushCapture()
   //  }
 }
 
-void soundPulse::flushPlayback()
-{
+void soundPulse::flushPlayback() {
   int err;
-  if (!soundDriverOK)
-    return;
+  if (!soundDriverOK) return;
   if (pa_simple_flush(sd[1].stream, &err) < 0) {
     errorHandler("flush: ", QString(pa_strerror(err)));
   }
 }
 
-void soundPulse::closeDevices()
-{
-  if (sd[0].stream)
-    pa_simple_free(sd[0].stream);
+void soundPulse::closeDevices() {
+  if (sd[0].stream) pa_simple_free(sd[0].stream);
   sd[0].stream = 0;
-  if (sd[1].stream)
-    pa_simple_free(sd[1].stream);
+  if (sd[1].stream) pa_simple_free(sd[1].stream);
   sd[1].stream = 0;
   msleep(1000);
 }

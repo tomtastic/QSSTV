@@ -4,8 +4,7 @@
 
 static QString lastPath;
 
-dirDialog::dirDialog(QWidget* parent, QString title)
-{
+dirDialog::dirDialog(QWidget* parent, QString title) {
   parentPtr = parent;
   dialogTitle = title;
 }
@@ -23,8 +22,7 @@ dirDialog::~dirDialog() {}
 */
 
 
-QString dirDialog::openFileName(const QString& path, const QString& filter)
-{
+QString dirDialog::openFileName(const QString& path, const QString& filter) {
   QString fn;
   if (path.isEmpty() && lastPath.isEmpty()) {
     lastPath = QDir::homePath();
@@ -48,8 +46,7 @@ QString dirDialog::openFileName(const QString& path, const QString& filter)
     \return if canceled or no selection then return an empty string else return string containing absolute dirname
 */
 
-QStringList dirDialog::openFileNames(const QString& path, const QString& filter)
-{
+QStringList dirDialog::openFileNames(const QString& path, const QString& filter) {
   QStringList fl;
   if (path.isEmpty() && lastPath.isEmpty()) {
     lastPath = QDir::homePath();
@@ -74,8 +71,7 @@ QStringList dirDialog::openFileNames(const QString& path, const QString& filter)
     \return if canceled or no selection then return an empty string else return string containing absolute dirname
 */
 
-QString dirDialog::openDirName(const QString& path)
-{
+QString dirDialog::openDirName(const QString& path) {
   QString fn;
   if ((path.isEmpty()) && lastPath.isEmpty()) {
     lastPath = QDir::homePath();
@@ -101,8 +97,7 @@ QString dirDialog::openDirName(const QString& path)
     \return if canceled or no selection then return an empty string else return string containing absolute filename.
 */
 
-QString dirDialog::saveFileName(const QString& path, const QString& filter, QString extension)
-{
+QString dirDialog::saveFileName(const QString& path, const QString& filter, QString extension) {
   QString fn;
   if ((path.isEmpty()) && lastPath.isEmpty()) {
     lastPath = QDir::currentPath();
@@ -111,8 +106,7 @@ QString dirDialog::saveFileName(const QString& path, const QString& filter, QStr
   }
   QString exten(extension);
   fn = QFileDialog::getSaveFileName(parentPtr, dialogTitle, lastPath, filter);
-  if (fn.isEmpty())
-    return fn;
+  if (fn.isEmpty()) return fn;
   QFileInfo fi(fn);
   if (!exten.isEmpty()) {
     if (fi.suffix() == "") {

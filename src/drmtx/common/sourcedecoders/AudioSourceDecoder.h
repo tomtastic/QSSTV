@@ -36,29 +36,21 @@
 
 
 /* Classes ********************************************************************/
-class CAudioSourceEncoderImplementation
-{
-public:
+class CAudioSourceEncoderImplementation {
+ public:
   CAudioSourceEncoderImplementation() : bUsingTextMessage(false) {}
   virtual ~CAudioSourceEncoderImplementation();
 
   //  void SetTextMessage(const string& strText);
   //  void ClearTextMessage();
 
-  void SetPicFileName(QByteArray* ba, const QString name, const QString format)
-  {
+  void SetPicFileName(QByteArray* ba, const QString name, const QString format) {
     DataEncoder.GetSliShowEnc()->AddArray(ba, name, format);
   }
-  void ClearPicFileNames()
-  {
-    DataEncoder.GetSliShowEnc()->ClearAllFileNames();
-  }
-  _BOOLEAN GetTransStat(string& strCPi, _REAL& rCPe)
-  {
-    return DataEncoder.GetSliShowEnc()->GetTransStat(strCPi, rCPe);
-  }
+  void ClearPicFileNames() { DataEncoder.GetSliShowEnc()->ClearAllFileNames(); }
+  _BOOLEAN GetTransStat(string& strCPi, _REAL& rCPe) { return DataEncoder.GetSliShowEnc()->GetTransStat(strCPi, rCPe); }
 
-protected:
+ protected:
   //  CTextMessageEncoder		TextMessage;
   _BOOLEAN bUsingTextMessage;
   CDataEncoder DataEncoder;
@@ -67,7 +59,7 @@ protected:
   int iTotNumBitsForUsage;
 
 
-public:
+ public:
   virtual void InitInternalTx(CParameter& TransmParam, int& iOutputBlockSize);
   //		virtual void InitInternalRx(CParameter& Param, int &iInputBlockSize, int &iOutputBlockSize);
   virtual void ProcessDataInternal(CVectorEx<_BINARY>* pvecOutputData, int& iOutputBlockSize);
@@ -79,40 +71,30 @@ public:
 };
 
 
-class CAudioSourceEncoder : public CTransmitterModul<_SAMPLE, _BINARY>
-{
-public:
+class CAudioSourceEncoder : public CTransmitterModul<_SAMPLE, _BINARY> {
+ public:
   CAudioSourceEncoder() {}
   virtual ~CAudioSourceEncoder() {}
 
   //	void SetTextMessage(const string& strText) {AudioSourceEncoderImpl.SetTextMessage(strText);}
   //	void ClearTextMessage() {AudioSourceEncoderImpl.ClearTextMessage();}
 
-  void SetPicFileName(QByteArray* ba, const QString name, const QString format)
-  {
+  void SetPicFileName(QByteArray* ba, const QString name, const QString format) {
     AudioSourceEncoderImpl.SetPicFileName(ba, name, format);
   }
 
-  void ClearPicFileNames()
-  {
-    AudioSourceEncoderImpl.ClearPicFileNames();
-  }
+  void ClearPicFileNames() { AudioSourceEncoderImpl.ClearPicFileNames(); }
 
-  _BOOLEAN GetTransStat(string& strCPi, _REAL& rCPe)
-  {
-    return AudioSourceEncoderImpl.GetTransStat(strCPi, rCPe);
-  }
+  _BOOLEAN GetTransStat(string& strCPi, _REAL& rCPe) { return AudioSourceEncoderImpl.GetTransStat(strCPi, rCPe); }
 
-protected:
+ protected:
   CAudioSourceEncoderImplementation AudioSourceEncoderImpl;
 
-  virtual void InitInternal(CParameter& TransmParam)
-  {
+  virtual void InitInternal(CParameter& TransmParam) {
     AudioSourceEncoderImpl.InitInternalTx(TransmParam, iOutputBlockSize);
   }
 
-  virtual void ProcessDataInternal(CParameter&)
-  {
+  virtual void ProcessDataInternal(CParameter&) {
     AudioSourceEncoderImpl.ProcessDataInternal(pvecOutputData, iOutputBlockSize);
   }
 
@@ -123,4 +105,4 @@ protected:
 };
 
 
-#endif // !defined(AUIDOSOURCEDECODER_H__3B0BA660_CABB2B_23E7A0D31912__INCLUDED_)
+#endif  // !defined(AUIDOSOURCEDECODER_H__3B0BA660_CABB2B_23E7A0D31912__INCLUDED_)

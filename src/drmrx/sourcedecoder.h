@@ -20,8 +20,7 @@ enum edataGroupType { GENDATA, CAMESS, GENCA, MOTHEAD, MOTDATA, MOTDATACA };
 
 
 struct dataSegment {
-  dataSegment(int newSize)
-  {
+  dataSegment(int newSize) {
     crcOK = false;
     recovered = false;
     segmentNumber = -1;
@@ -29,24 +28,17 @@ struct dataSegment {
     data.fill(0XAA, newSize);
   }
 
-  void setData(QByteArray ba, short int segNumber, bool crcok)
-  {
+  void setData(QByteArray ba, short int segNumber, bool crcok) {
     crcOK = crcok;
     data = ba;
     segmentNumber = segNumber;
   }
 
-  void clearData()
-  {
-    data.clear();
-  }
+  void clearData() { data.clear(); }
   bool crcOK;
   bool recovered;
   short int segmentNumber;
-  bool hasData()
-  {
-    return (crcOK || recovered);
-  }
+  bool hasData() { return (crcOK || recovered); }
   QByteArray data;
 };
 
@@ -68,13 +60,11 @@ struct dataPacket {
   unsigned short segmentSize;
   int offset;
   int lenght;
-  unsigned int advance(int numBytes)
-  {
+  unsigned int advance(int numBytes) {
     ba.remove(0, numBytes);
     return ba.size();
   }
-  unsigned int chop(int numBytes)
-  {
+  unsigned int chop(int numBytes) {
     ba.chop(numBytes);
     return ba.size();
   }
@@ -95,14 +85,12 @@ struct dataBlock {
 
 
 struct transportBlock {
-  transportBlock(unsigned short tId)
-  {
+  transportBlock(unsigned short tId) {
     clear();
     transportID = tId;
   }
 
-  void clear()
-  {
+  void clear() {
     totalSegments = 0;
     headerReceived = false;
     segmentsReceived = 0;
@@ -113,26 +101,19 @@ struct transportBlock {
     lastSegmentReceived = false;
     defaultSegmentSize = 0;
   }
-  bool isComplete()
-  {
-    if (!headerReceived)
-      return false;
-    if (segmentsReceived < totalSegments)
-      return false;
+  bool isComplete() {
+    if (!headerReceived) return false;
+    if (segmentsReceived < totalSegments) return false;
     return true;
   }
 
-  int isAlmostComplete()
-  {
-    if (!headerReceived)
-      return 0;
-    if (totalSegments == 0)
-      return 0;
+  int isAlmostComplete() {
+    if (!headerReceived) return 0;
+    if (totalSegments == 0) return 0;
     return (segmentsReceived * 100) / totalSegments;
   }
 
-  void setAlreadyReceived(bool aRx)
-  {
+  void setAlreadyReceived(bool aRx) {
     int i;
     if (aRx) {
       alreadyReceived = true;
@@ -161,27 +142,23 @@ struct transportBlock {
   QList<dataSegment*> dataSegmentPtrList;
   int robMode;
   int interLeaver;
-  int mscMode; // qam
+  int mscMode;  // qam
   int mpx;
   int spectrum;
   QByteArray baBSR;
-  uint modeCode; // mode(A=0,B=1,E=2) BW(0=2.3,1=2.5) prot(High=0,LOW=1) QAM(4=0,16=1,64=2) ineterleaver
+  uint modeCode;  // mode(A=0,B=1,E=2) BW(0=2.3,1=2.5) prot(High=0,LOW=1) QAM(4=0,16=1,64=2) ineterleaver
 };
 
 
 struct bsrBlock {
-  bsrBlock(transportBlock* tb)
-  {
-    tbPtr = tb;
-  }
+  bsrBlock(transportBlock* tb) { tbPtr = tb; }
   transportBlock* tbPtr;
 };
 
 
-class sourceDecoder : public QObject
-{
+class sourceDecoder : public QObject {
   Q_OBJECT
-public:
+ public:
   explicit sourceDecoder(QObject* parent = 0);
   void init();
   bool decode();
@@ -192,10 +169,10 @@ public:
   bool storeBSR(transportBlock* tb, bool compat);
   //  bool rxNotifySetup();
   //  bool rxNotifyCheck(QString fn);
-private slots:
+ private slots:
   void slotDownloadDone(bool err, QString filename);
 
-private:
+ private:
   bool setupDataBlock(unsigned char* buffer, bool crcIsOK, int len);
   bool setupDataPacket(QByteArray ba);
   void addDataSegment();
@@ -222,4 +199,4 @@ private:
   uint modeCodeTmp;
   QString callsignTmp;
 };
-#endif // SOURCEDECODER_H
+#endif  // SOURCEDECODER_H

@@ -40,20 +40,15 @@ QString hybridNotifyDir;
 QString onlineStatusDir;
 
 
-hybridConfig::hybridConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::hybridConfig)
-{
+hybridConfig::hybridConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::hybridConfig) {
   ui->setupUi(this);
   //  connect(testFTPPushButton,SIGNAL(clicked()),SLOT(slotTestFTPPushButton()));
   connect(ui->testHybridPushButton, &QPushButton::clicked, this, &hybridConfig::slotTestHybridPushButton);
 }
 
-hybridConfig::~hybridConfig()
-{
-  delete ui;
-}
+hybridConfig::~hybridConfig() { delete ui; }
 
-void hybridConfig::readSettings()
-{
+void hybridConfig::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("HYBRID");
   enableHybridRx = qSettings.value("enableHybridRx", true).toBool();
@@ -72,8 +67,7 @@ void hybridConfig::readSettings()
   setParams();
 }
 
-void hybridConfig::writeSettings()
-{
+void hybridConfig::writeSettings() {
   QSettings qSettings;
   getParams();
   qSettings.beginGroup("HYBRID");
@@ -90,8 +84,7 @@ void hybridConfig::writeSettings()
   qSettings.endGroup();
 }
 
-void hybridConfig::getParams()
-{
+void hybridConfig::getParams() {
   bool enableHybridRxCopy = enableHybridRx;
   bool enableHybridNotifyCopy = enableHybridNotify;
   int hybridFtpPortCopy = hybridFtpPort;
@@ -124,8 +117,7 @@ void hybridConfig::getParams()
     changed = true;
 }
 
-void hybridConfig::setParams()
-{
+void hybridConfig::setParams() {
   setValue(enableHybridRx, ui->enableHybridRxCheckBox);
   setValue(hybridFtpPort, ui->hybridFtpPortSpinBox);
   setValue(hybridFtpRemoteHost, ui->hybridRemoteHostLineEdit);
@@ -139,8 +131,7 @@ void hybridConfig::setParams()
 }
 
 
-void hybridConfig::slotTestHybridPushButton()
-{
+void hybridConfig::slotTestHybridPushButton() {
   ftpFunctions ff;
   QString resultStr1;
   QString resultStr2;

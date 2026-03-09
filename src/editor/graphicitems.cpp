@@ -1,13 +1,9 @@
 #include "graphicitems.h"
 #include <QPainter>
 
-itemRectangle::itemRectangle(QMenu* cntxtMenu) : graphItemBase(cntxtMenu)
-{
-  param.type = RECTANGLE;
-}
+itemRectangle::itemRectangle(QMenu* cntxtMenu) : graphItemBase(cntxtMenu) { param.type = RECTANGLE; }
 
-void itemRectangle::drawItem(QPainter* painter)
-{
+void itemRectangle::drawItem(QPainter* painter) {
   QPen lpen(pen());
   lpen.setJoinStyle(Qt::MiterJoin);
   painter->setPen(lpen);
@@ -15,25 +11,17 @@ void itemRectangle::drawItem(QPainter* painter)
 }
 
 
-itemEllipse::itemEllipse(QMenu* cntxtMenu) : graphItemBase(cntxtMenu)
-{
-  param.type = ELLIPSE;
-}
+itemEllipse::itemEllipse(QMenu* cntxtMenu) : graphItemBase(cntxtMenu) { param.type = ELLIPSE; }
 
-void itemEllipse::drawItem(QPainter* painter)
-{
-  painter->drawEllipse(param.rct);
-}
+void itemEllipse::drawItem(QPainter* painter) { painter->drawEllipse(param.rct); }
 
 
-itemLine::itemLine(QMenu* cntxtMenu) : graphItemBase(cntxtMenu)
-{
+itemLine::itemLine(QMenu* cntxtMenu) : graphItemBase(cntxtMenu) {
   param.type = LINE;
   param.rct.setHeight(2);
 }
 
-void itemLine::drawItem(QPainter* painter)
-{
+void itemLine::drawItem(QPainter* painter) {
   QPen lpen(pen());
   lpen.setCapStyle(Qt::FlatCap);
   painter->setPen(lpen);
@@ -42,13 +30,9 @@ void itemLine::drawItem(QPainter* painter)
 }
 
 
-itemImage::itemImage(QMenu* cntxtMenu) : graphItemBase(cntxtMenu)
-{
-  param.type = IMAGE;
-}
+itemImage::itemImage(QMenu* cntxtMenu) : graphItemBase(cntxtMenu) { param.type = IMAGE; }
 
-void itemImage::drawItem(QPainter* painter)
-{
+void itemImage::drawItem(QPainter* painter) {
   QImage tim;
   qreal pad = pen().widthF() / 2;
   tim = param.im.scaled(param.rct.width(), param.rct.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
@@ -58,13 +42,9 @@ void itemImage::drawItem(QPainter* painter)
 }
 
 
-itemReplayImage::itemReplayImage(QMenu* cntxtMenu) : graphItemBase(cntxtMenu)
-{
-  param.type = REPLAY;
-}
+itemReplayImage::itemReplayImage(QMenu* cntxtMenu) : graphItemBase(cntxtMenu) { param.type = REPLAY; }
 
-void itemReplayImage::drawItem(QPainter* painter)
-{
+void itemReplayImage::drawItem(QPainter* painter) {
   QImage tim;
   qreal pad = pen().widthF() / 2;
   if (param.im.isNull()) {
@@ -81,14 +61,12 @@ void itemReplayImage::drawItem(QPainter* painter)
 }
 
 
-itemText::itemText(QMenu* cntxtMenu) : graphItemBase(cntxtMenu)
-{
+itemText::itemText(QMenu* cntxtMenu) : graphItemBase(cntxtMenu) {
   param.type = TEXT;
   param.font.setStyleStrategy(QFont::ForceOutline);
 }
 
-void itemText::drawItem(QPainter* painter)
-{
+void itemText::drawItem(QPainter* painter) {
   int i;
   QPainterPath textPath;
   QPainterPath testPath;
@@ -113,8 +91,7 @@ void itemText::drawItem(QPainter* painter)
 }
 
 
-QPainterPath itemText::shape() const
-{
+QPainterPath itemText::shape() const {
   int i;
   QPainterPath textPath;
   QPainterPath testPath;
@@ -132,30 +109,26 @@ QPainterPath itemText::shape() const
 }
 
 
-void itemText::setText(const QString& t)
-{
+void itemText::setText(const QString& t) {
   param.modified = true;
   param.txt = t;
   update();
 }
 
-void itemText::setFont(QFont f)
-{
+void itemText::setFont(QFont f) {
   param.modified = true;
   param.font = f;
   param.font.setStyleStrategy(QFont::ForceOutline);
   update();
 }
 
-itemBorder::itemBorder(QMenu* cntxtMenu) : graphItemBase(cntxtMenu)
-{
+itemBorder::itemBorder(QMenu* cntxtMenu) : graphItemBase(cntxtMenu) {
   param.type = SBORDER;
   setRect(0, 0, 100, 100);
   setFlags(QGraphicsItem::QGraphicsItem::ItemIgnoresTransformations);
 }
 
-void itemBorder::drawItem(QPainter* painter)
-{
+void itemBorder::drawItem(QPainter* painter) {
   QPen pen(painter->pen());
   pen.setColor(Qt::black);
   pen.setWidth(1);

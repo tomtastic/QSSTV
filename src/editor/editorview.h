@@ -33,33 +33,23 @@
 class editorForm;
 
 /** Widget to display the various canvasItems */
-class editorView : public QWidget, private Ui::editorForm
-{
+class editorView : public QWidget, private Ui::editorForm {
   Q_OBJECT
-public:
+ public:
   editorView(QWidget* parent = 0);
   ~editorView();
   void readSettings();
   void writeSettings();
 
-  bool isModified()
-  {
-    return modified;
-  }
+  bool isModified() { return modified; }
   bool open(QFile& f);
   void save(QFile& f, bool templ);
 
-  QImage* getImage()
-  {
-    return image;
-  }
+  QImage* getImage() { return image; }
   void setImage(QImage* ima);
-  editorScene* getScene()
-  {
-    return scene;
-  }
+  editorScene* getScene() { return scene; }
 
-public slots:
+ public slots:
   void slotChangeCanvasSize();
   void slotRectangle();
   void slotCircle();
@@ -93,7 +83,7 @@ public slots:
 
   void slotTextReturnPressed(const QString&);
 
-private:
+ private:
   editorScene* scene;
   bool modified;
   QImage* image;

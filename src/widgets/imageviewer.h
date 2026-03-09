@@ -33,11 +33,10 @@ class QAction;
 class editor;
 class jp2IO;
 
-class imageViewer : public QLabel
-{
+class imageViewer : public QLabel {
   Q_OBJECT
   /*! thumbnail type */
-public:
+ public:
   enum thumbType {
     RXIMG,         /*!< just for receiver */
     TXIMG,         /*!< just for transmitter */
@@ -66,15 +65,9 @@ public:
 
 
   //  void scale( int w, int h);
-  QImage* getImagePtr()
-  {
-    return &sourceImage;
-  }
+  QImage* getImagePtr() { return &sourceImage; }
   bool hasValidImage();
-  void setValidImage(bool v)
-  {
-    validImage = v;
-  }
+  void setValidImage(bool v) { validImage = v; }
 
   int diplayedImageBytecount();
 
@@ -82,18 +75,9 @@ public:
   QRgb* getScanLineAddress(int line);
   //  void copy(imageViewer *src);
   void setType(thumbType t);
-  QString getFilename()
-  {
-    return imageFileName;
-  }
-  QString getCompressedFilename()
-  {
-    return compressedFilename;
-  }
-  void enablePopup(bool en)
-  {
-    popupEnabled = en;
-  }
+  QString getFilename() { return imageFileName; }
+  QString getCompressedFilename() { return compressedFilename; }
+  void enablePopup(bool en) { popupEnabled = en; }
   void displayImage();
   QPoint mapToImage(const QPoint& pos);
   void zoom(QPoint centre, int dlevel);
@@ -102,10 +86,7 @@ public:
   //  int calcSize(int &sizeRatio);
   uint setSize(int tcommpressSize, bool usesCompression);
   void setAspectMode(Qt::AspectRatioMode mode);
-  int getFileSize()
-  {
-    return fileSize;
-  }
+  int getFileSize() { return fileSize; }
   QString toCall;
   QString toOperator;
   QString rsv;
@@ -113,8 +94,7 @@ public:
   QString comment2;
   QString comment3;
   bool stretch;
-  void getOrgSize(int& w, int& h)
-  {
+  void getOrgSize(int& w, int& h) {
     w = orgWidth;
     h = orgHeight;
   }
@@ -124,13 +104,13 @@ public:
   int applyTemplate();
 
 
-protected:
+ protected:
   void resizeEvent(QResizeEvent*);
 
-public slots:
+ public slots:
   void slotToTX();
 
-private slots:
+ private slots:
   void slotDelete();
   void slotEdit();
   void slotLoad();
@@ -147,11 +127,11 @@ private slots:
   void slotJp2ImageDone(bool success, bool fromCache);
 
 
-signals:
+ signals:
   void layoutChanged();
   void imageChanged();
 
-private:
+ private:
   QImage displayedImage;
   QImage sourceImage;
   QImage compressedImage;
@@ -180,7 +160,7 @@ private:
   QAction* zoomOutAct;
 
   //  double psizeRatio;
-  int compressSize; // target size of compressed image
+  int compressSize;  // target size of compressed image
   int fileSize;
   QString format;
   QMovie qm;

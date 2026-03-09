@@ -29,28 +29,22 @@
 #include "maiaXmlRpcServer.h"
 #include "appglobal.h"
 
-MaiaXmlRpcServerConnection::MaiaXmlRpcServerConnection(QTcpSocket* connection, QObject* parent) : QObject(parent)
-{
+MaiaXmlRpcServerConnection::MaiaXmlRpcServerConnection(QTcpSocket* connection, QObject* parent) : QObject(parent) {
   header = nullptr;
   clientConnection = connection;
   connect(clientConnection, &QTcpSocket::readyRead, this, &MaiaXmlRpcServerConnection::readFromSocket);
   connect(clientConnection, &QTcpSocket::disconnected, this, &MaiaXmlRpcServerConnection::slotDisconnect);
 }
 
-MaiaXmlRpcServerConnection::~MaiaXmlRpcServerConnection()
-{
+MaiaXmlRpcServerConnection::~MaiaXmlRpcServerConnection() {
   clientConnection->deleteLater();
   delete header;
 }
 
 
-void MaiaXmlRpcServerConnection::slotDisconnect()
-{
-  deleteLater();
-}
+void MaiaXmlRpcServerConnection::slotDisconnect() { deleteLater(); }
 
-void MaiaXmlRpcServerConnection::readFromSocket()
-{
+void MaiaXmlRpcServerConnection::readFromSocket() {
   QString lastLine;
 
   while (clientConnection->canReadLine() && !header) {
@@ -84,8 +78,7 @@ void MaiaXmlRpcServerConnection::readFromSocket()
   }
 }
 
-void MaiaXmlRpcServerConnection::sendResponse(QString content)
-{
+void MaiaXmlRpcServerConnection::sendResponse(QString content) {
   QHttpResponseHeader header(200, "OK");
   QByteArray block;
   header.setValue("Server", "MaiaXmlRpc/0.1");
@@ -98,8 +91,7 @@ void MaiaXmlRpcServerConnection::sendResponse(QString content)
   //  clientConnection->disconnectFromHost();
 }
 
-void MaiaXmlRpcServerConnection::parseCall(QString call)
-{
+void MaiaXmlRpcServerConnection::parseCall(QString call) {
   QDomDocument doc;
   QList<QVariant> args;
   QVariant ret;
@@ -155,14 +147,11 @@ void MaiaXmlRpcServerConnection::parseCall(QString call)
 /*	taken from http://delta.affinix.com/2006/08/14/invokemethodwithvariants/
   thanks to Justin Karneges once again :) */
 bool invokeMethodWithVariants(QObject* obj, const QByteArray& method, const QVariantList& args, QVariant* ret,
-                              Qt::ConnectionType type)
-{
+                              Qt::ConnectionType type) {
   // QMetaObject::invokeMethod() has a 10 argument maximum
-  if (args.count() > 10)
-    return false;
+  if (args.count() > 10) return false;
   QList<QByteArray> argTypes;
-  for (int n = 0; n < args.count(); ++n)
-    argTypes += args[n].typeName();
+  for (int n = 0; n < args.count(); ++n) argTypes += args[n].typeName();
 
   // get return type
   int metatype = 0;
@@ -173,13 +162,12 @@ bool invokeMethodWithVariants(QObject* obj, const QByteArray& method, const QVar
 #else
     metatype = QMetaType::type(retTypeName.data());
 #endif
-    if (metatype == 0) // lookup failed
+    if (metatype == 0)  // lookup failed
       return false;
   }
 
   QGenericArgument arg[10];
-  for (int n = 0; n < args.count(); ++n)
-    arg[n] = QGenericArgument(args[n].typeName(), args[n].constData());
+  for (int n = 0; n < args.count(); ++n) arg[n] = QGenericArgument(args[n].typeName(), args[n].constData());
 
   QGenericReturnArgument retarg;
   QVariant retval;
@@ -191,9 +179,9 @@ bool invokeMethodWithVariants(QObject* obj, const QByteArray& method, const QVar
 
     } else {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-      retval = QVariant(QMetaType(metatype), (const void*) 0);
+      retval = QVariant(QMetaType(metatype), (const void*)0);
 #else
-      retval = QVariant(metatype, (const void*) 0);
+      retval = QVariant(metatype, (const void*)0);
 #endif
     }
     retarg = QGenericReturnArgument(retval.typeName(), retval.data());
@@ -213,13 +201,11 @@ bool invokeMethodWithVariants(QObject* obj, const QByteArray& method, const QVar
       return false;
   }
 
-  if (retval.isValid() && ret)
-    *ret = retval;
+  if (retval.isValid() && ret) *ret = retval;
   return true;
 }
 
-QByteArray getReturnType(const QMetaObject* obj, const QByteArray& method, const QList<QByteArray> argTypes)
-{
+QByteArray getReturnType(const QMetaObject* obj, const QByteArray& method, const QList<QByteArray> argTypes) {
   for (int n = 0; n < obj->methodCount(); ++n) {
     QMetaMethod m = obj->method(n);
 #if QT_VERSION >= 0x050000
@@ -228,13 +214,10 @@ QByteArray getReturnType(const QMetaObject* obj, const QByteArray& method, const
     QByteArray sig = m.signature();
 #endif
     int offset = sig.indexOf('(');
-    if (offset == -1)
-      continue;
+    if (offset == -1) continue;
     QByteArray name = sig.mid(0, offset);
-    if (name != method)
-      continue;
-    if (m.parameterTypes() != argTypes)
-      continue;
+    if (name != method) continue;
+    if (m.parameterTypes() != argTypes) continue;
 
     return m.typeName();
   }
@@ -246,15 +229,13 @@ QByteArray getReturnType(const QMetaObject* obj, const QByteArray& method, const
 */
 
 #if QT_VERSION >= 0x050000
-QHttpRequestHeader::QHttpRequestHeader(QString headerString)
-{
+QHttpRequestHeader::QHttpRequestHeader(QString headerString) {
   this->mHeaderString = headerString;
 
   QStringList hdrs = headerString.split("\r\n");
   QStringList hdrkv;
   for (int i = 0; i < hdrs.size(); i++) {
-    if (hdrs.at(i).trimmed().isEmpty())
-      break;
+    if (hdrs.at(i).trimmed().isEmpty()) break;
     if (i == 0) {
       hdrkv = hdrs.at(i).split(" ");
       this->mMethod = hdrkv.at(0);
@@ -265,24 +246,16 @@ QHttpRequestHeader::QHttpRequestHeader(QString headerString)
   }
 }
 
-bool QHttpRequestHeader::isValid()
-{
-  if (this->mHeaderString.isEmpty())
-    return false;
-  if (this->mMethod != "GET" && this->mMethod != "POST")
-    return false;
-  if (this->mHeaders.size() < 2)
-    return false;
+bool QHttpRequestHeader::isValid() {
+  if (this->mHeaderString.isEmpty()) return false;
+  if (this->mMethod != "GET" && this->mMethod != "POST") return false;
+  if (this->mHeaders.size() < 2) return false;
   return true;
 }
 
-QString QHttpRequestHeader::method()
-{
-  return this->mMethod;
-}
+QString QHttpRequestHeader::method() { return this->mMethod; }
 
-uint QHttpRequestHeader::contentLength() const
-{
+uint QHttpRequestHeader::contentLength() const {
   uint clen = 0;
 
   clen = this->mHeaders.value("Content-length").toUInt();
@@ -290,19 +263,14 @@ uint QHttpRequestHeader::contentLength() const
   return clen;
 }
 
-QHttpResponseHeader::QHttpResponseHeader(int code, QString text)
-{
+QHttpResponseHeader::QHttpResponseHeader(int code, QString text) {
   this->mCode = code;
   this->mText = text;
 }
 
-void QHttpResponseHeader::setValue(const QString& key, const QString& value)
-{
-  this->mHeaders[key] = value;
-}
+void QHttpResponseHeader::setValue(const QString& key, const QString& value) { this->mHeaders[key] = value; }
 
-QString QHttpResponseHeader::toString() const
-{
+QString QHttpResponseHeader::toString() const {
   QMapIterator<QString, QString> it(this->mHeaders);
   QString hdrstr;
 

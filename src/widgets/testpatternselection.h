@@ -5,22 +5,20 @@
 
 enum etpSelect { TPBLACK, TPWHITE, TPGRAY, TPRASTER };
 
-namespace Ui
-{
+namespace Ui {
 class testPatternSelection;
 }
 
-class testPatternSelection : public QDialog
-{
+class testPatternSelection : public QDialog {
   Q_OBJECT
 
-public:
+ public:
   explicit testPatternSelection(QWidget* parent = 0);
   ~testPatternSelection();
   etpSelect getSelection();
 
-private:
+ private:
   Ui::testPatternSelection* ui;
 };
 
-#endif // TESTPATTERNSELECTION_H
+#endif  // TESTPATTERNSELECTION_H

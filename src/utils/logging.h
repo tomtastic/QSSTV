@@ -24,11 +24,11 @@
 // #define addToLog(x,y) logFilePtr->add(__FILE__,__func__,__LINE__,x,y,true)
 
 #else
-#define addToLog(x, y)                                                                                                 \
-  {                                                                                                                    \
+#define addToLog(x, y) \
+  {                    \
   }
-#define addToLog(x, y)                                                                                                 \
-  {                                                                                                                    \
+#define addToLog(x, y) \
+  {                    \
   }
 
 #endif
@@ -36,9 +36,8 @@
 
 class QTextStream;
 
-class logFile
-{
-public:
+class logFile {
+ public:
   logFile();
   logFile(QString logname);
   ~logFile();
@@ -56,7 +55,7 @@ public:
   void reset();
   bool reopen();
 
-private:
+ private:
   QString tmp;
   QString tmp2;
   QFile* lf;

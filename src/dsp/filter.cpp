@@ -3,8 +3,7 @@
 #include <QDebug>
 #include "arraydumper.h"
 
-filter::filter(efilterType fType, uint dataLenght)
-{
+filter::filter(efilterType fType, uint dataLenght) {
   filterType = fType;
   resetPointers();
   dataLen = dataLenght;
@@ -12,14 +11,10 @@ filter::filter(efilterType fType, uint dataLenght)
 }
 
 
-filter::~filter()
-{
-  deleteBuffers();
-}
+filter::~filter() { deleteBuffers(); }
 
 
-void filter::init()
-{
+void filter::init() {
   deleteBuffers();
   nZeroes = 0;
   nPoles = 0;
@@ -36,8 +31,7 @@ void filter::init()
   resQprev = 0;
 }
 
-void filter::resetPointers()
-{
+void filter::resetPointers() {
   coefZPtr = nullptr;
   coefPPtr = nullptr;
   sampleBufferIPtr = nullptr;
@@ -48,32 +42,24 @@ void filter::resetPointers()
   demodPtr = nullptr;
 }
 
-void filter::deleteBuffers()
-{
+void filter::deleteBuffers() {
   if (coefZPtr != nullptr && coefZPtrNewed) {
     //          qDebug() <<"delete coefZptr" << this << coefZPtr;
     delete[] coefZPtr;
     coefZPtr = nullptr;
     coefZPtrNewed = false;
   }
-  if (sampleBufferIPtr != nullptr)
-    delete[] sampleBufferIPtr;
-  if (sampleBufferQPtr != nullptr)
-    delete[] sampleBufferQPtr;
-  if (sampleBufferYIPtr != nullptr)
-    delete[] sampleBufferYIPtr;
-  if (filteredPtr != nullptr)
-    delete[] filteredPtr;
-  if (volumePtr != nullptr)
-    delete[] volumePtr;
-  if (demodPtr != nullptr)
-    delete[] demodPtr;
+  if (sampleBufferIPtr != nullptr) delete[] sampleBufferIPtr;
+  if (sampleBufferQPtr != nullptr) delete[] sampleBufferQPtr;
+  if (sampleBufferYIPtr != nullptr) delete[] sampleBufferYIPtr;
+  if (filteredPtr != nullptr) delete[] filteredPtr;
+  if (volumePtr != nullptr) delete[] volumePtr;
+  if (demodPtr != nullptr) delete[] demodPtr;
   resetPointers();
 }
 
 
-void filter::allocate()
-{
+void filter::allocate() {
   uint i;
   bufSize = nZeroes * sizeof(FILTERPARAMTYPE);
   sampleBufferIPtr = new FILTERPARAMTYPE[nZeroes + 1];
@@ -86,8 +72,7 @@ void filter::allocate()
 
   if (nPoles > 0) {
     sampleBufferYIPtr = new FILTERPARAMTYPE[nPoles + 1];
-    for (i = 0; i <= nPoles; i++)
-      sampleBufferYIPtr[i] = 0;
+    for (i = 0; i <= nPoles; i++) sampleBufferYIPtr[i] = 0;
   }
   volumePtr = new FILTERPARAMTYPE[dataLen];
   demodPtr = new quint16[dataLen];
@@ -105,8 +90,7 @@ void filter::allocate()
 }
 
 
-void filter::processFIR(FILTERPARAMTYPE* dataPtr, double* dataOutputPtr)
-{
+void filter::processFIR(FILTERPARAMTYPE* dataPtr, double* dataOutputPtr) {
   FILTERPARAMTYPE resI;
   const FILTERPARAMTYPE* cf1;
   unsigned int i, k;
@@ -114,8 +98,7 @@ void filter::processFIR(FILTERPARAMTYPE* dataPtr, double* dataOutputPtr)
   for (k = 0; k < dataLen; k++) {
     sampleBufferIPtr[fltrIndex] = dataPtr[k];
     fi = fltrIndex--;
-    if (fltrIndex < 0)
-      fltrIndex = nZeroes;
+    if (fltrIndex < 0) fltrIndex = nZeroes;
     resI = 0;
     cf1 = coefZPtr;
     for (i = 0; i <= nZeroes; i++, cf1++) {
@@ -130,8 +113,7 @@ void filter::processFIR(FILTERPARAMTYPE* dataPtr, double* dataOutputPtr)
   }
 }
 
-void filter::processFIRInt(FILTERPARAMTYPE* dataPtr, quint16* dataOutputPtr)
-{
+void filter::processFIRInt(FILTERPARAMTYPE* dataPtr, quint16* dataOutputPtr) {
   //  FILTERPARAMTYPE resI=0;
   //  FILTERPARAMTYPE *fp1;
   //  const FILTERPARAMTYPE *cf1;
@@ -157,8 +139,7 @@ void filter::processFIRInt(FILTERPARAMTYPE* dataPtr, quint16* dataOutputPtr)
   for (k = 0; k < dataLen; k++) {
     sampleBufferIPtr[fltrIndex] = dataPtr[k];
     fi = fltrIndex--;
-    if (fltrIndex < 0)
-      fltrIndex = nZeroes;
+    if (fltrIndex < 0) fltrIndex = nZeroes;
     resI = 0;
     cf1 = coefZPtr;
     for (i = 0; i <= nZeroes; i++, cf1++) {
@@ -173,8 +154,7 @@ void filter::processFIRInt(FILTERPARAMTYPE* dataPtr, quint16* dataOutputPtr)
 }
 
 
-void filter::processFIRDemod(FILTERPARAMTYPE* dataPtr, FILTERPARAMTYPE* dataOutputPtr)
-{
+void filter::processFIRDemod(FILTERPARAMTYPE* dataPtr, FILTERPARAMTYPE* dataOutputPtr) {
   FILTERPARAMTYPE resI, resQ;
   const FILTERPARAMTYPE* cf1;
   FILTERPARAMTYPE discRe, discIm;
@@ -184,8 +164,7 @@ void filter::processFIRDemod(FILTERPARAMTYPE* dataPtr, FILTERPARAMTYPE* dataOutp
   for (k = 0; k < dataLen; k++) {
     nco.multiply(sampleBufferIPtr[fltrIndex], sampleBufferQPtr[fltrIndex], dataPtr[k]);
     fi = fltrIndex--;
-    if (fltrIndex < 0)
-      fltrIndex = nZeroes;
+    if (fltrIndex < 0) fltrIndex = nZeroes;
     resI = 0;
     resQ = 0;
     cf1 = coefZPtr;
@@ -203,13 +182,10 @@ void filter::processFIRDemod(FILTERPARAMTYPE* dataPtr, FILTERPARAMTYPE* dataOutp
     discIm = -resQ * resIprev + resQprev * resI;
     resIprev = resI;
     resQprev = resQ;
-    if (discRe == 0)
-      discRe = 0.0001;
+    if (discRe == 0) discRe = 0.0001;
     temp = frCenter - atan2(discIm, discRe) * angleToFc;
-    if (temp < 500)
-      temp = prevTemp;
-    if (temp > 2600)
-      temp = prevTemp;
+    if (temp < 500) temp = prevTemp;
+    if (temp > 2600) temp = prevTemp;
     prevTemp = temp;
     dataOutputPtr[k] = temp;
     //      double vol=sqrt(resI*resI+resQ*resQ);
@@ -223,8 +199,7 @@ void filter::processFIRDemod(FILTERPARAMTYPE* dataPtr, FILTERPARAMTYPE* dataOutp
 }
 
 
-void filter::processHILBVolume(FILTERPARAMTYPE* dataPtr)
-{
+void filter::processHILBVolume(FILTERPARAMTYPE* dataPtr) {
   FILTERPARAMTYPE resI;
   FILTERPARAMTYPE resQ;
   const FILTERPARAMTYPE* cf1;
@@ -247,8 +222,7 @@ void filter::processHILBVolume(FILTERPARAMTYPE* dataPtr)
 }
 
 
-void filter::processIIRRectified(double* dataPtr)
-{
+void filter::processIIRRectified(double* dataPtr) {
   unsigned int i, j;
   double resx;
   //  arrayDump("Inp",dataPtr,dataLen,true,true);
@@ -272,8 +246,7 @@ void filter::processIIRRectified(double* dataPtr)
   //   arrayDump("SYNCFIL",filteredPtr,dataLen,true,true);
 }
 
-void filter::processIQ(FILTERPARAMTYPE* dataPtr, float* dataOutputPtr)
-{
+void filter::processIQ(FILTERPARAMTYPE* dataPtr, float* dataOutputPtr) {
   FILTERPARAMTYPE resQ = 0;
   const FILTERPARAMTYPE* cf1;
   FILTERPARAMTYPE* fp1;
@@ -282,19 +255,18 @@ void filter::processIQ(FILTERPARAMTYPE* dataPtr, float* dataOutputPtr)
     resQ = 0;
     cf1 = coefZPtr;
     fp1 = sampleBufferIPtr;
-    memmove(sampleBufferIPtr + 1, sampleBufferIPtr, bufSize); // newest at index 0
+    memmove(sampleBufferIPtr + 1, sampleBufferIPtr, bufSize);  // newest at index 0
     sampleBufferIPtr[0] = dataPtr[k];
     for (i = 0; i <= nZeroes; i++, fp1++, cf1++) {
       resQ += (*fp1) * (*cf1);
     }
-    dataOutputPtr[2 * k + 1] = sampleBufferIPtr[(nZeroes + 1) / 2]; // just delay
+    dataOutputPtr[2 * k + 1] = sampleBufferIPtr[(nZeroes + 1) / 2];  // just delay
     dataOutputPtr[2 * k] = resQ / gain;
   }
 }
 
 
-void filter::setupMatchedFilter(FILTERPARAMTYPE freq, uint numTaps)
-{
+void filter::setupMatchedFilter(FILTERPARAMTYPE freq, uint numTaps) {
   uint i;
   init();
   nZeroes = numTaps - 1;

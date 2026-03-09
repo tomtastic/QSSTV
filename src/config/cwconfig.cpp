@@ -27,18 +27,11 @@ int cwTone;
 int cwWPM;
 // bool enableCW;
 
-cwConfig::cwConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::cwConfig)
-{
-  ui->setupUi(this);
-}
+cwConfig::cwConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::cwConfig) { ui->setupUi(this); }
 
-cwConfig::~cwConfig()
-{
-  delete ui;
-}
+cwConfig::~cwConfig() { delete ui; }
 
-void cwConfig::readSettings()
-{
+void cwConfig::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("CW");
   cwText = qSettings.value("cwtext", "").toString();
@@ -49,8 +42,7 @@ void cwConfig::readSettings()
   setParams();
 }
 
-void cwConfig::writeSettings()
-{
+void cwConfig::writeSettings() {
   QSettings qSettings;
   getParams();
 
@@ -62,8 +54,7 @@ void cwConfig::writeSettings()
   qSettings.endGroup();
 }
 
-void cwConfig::getParams()
-{
+void cwConfig::getParams() {
   QString cwTextCopy = cwText;
   int cwToneCopy = cwTone;
   int cwWPMCopy = cwWPM;
@@ -72,12 +63,10 @@ void cwConfig::getParams()
   getValue(cwWPM, ui->cwWPMSpinBox);
   //  getValue(enableCW,ui->enableCWCheckBox);
   changed = false;
-  if (cwTextCopy != cwText || cwToneCopy != cwTone || cwWPMCopy != cwWPM)
-    changed = true;
+  if (cwTextCopy != cwText || cwToneCopy != cwTone || cwWPMCopy != cwWPM) changed = true;
 }
 
-void cwConfig::setParams()
-{
+void cwConfig::setParams() {
   setValue(cwText, ui->cwTextLineEdit);
   setValue(cwTone, ui->cwToneSpinBox);
   setValue(cwWPM, ui->cwWPMSpinBox);

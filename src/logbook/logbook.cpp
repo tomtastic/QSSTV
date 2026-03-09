@@ -36,20 +36,15 @@ slogParam logParamArray[NUMLOGPARAMS] = {{"program", "QSSTV 9"},
 QString monthArray[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
 
-logBook::logBook()
-{
-  ipcQueue = new ipcMessage(1238);
-}
+logBook::logBook() { ipcQueue = new ipcMessage(1238); }
 
 
-void logBook::logQSO(QString call, QString mode, QString comment)
-{
+void logBook::logQSO(QString call, QString mode, QString comment) {
   int i;
   QDateTime dt(QDateTime::currentDateTimeUtc());
   QString tmp;
   getFrequency();
-  if (frequency != -1)
-    setParam(LFREQ, QString::number(frequency / 1000000., 'g', 9));
+  if (frequency != -1) setParam(LFREQ, QString::number(frequency / 1000000., 'g', 9));
   setParam(LCALL, call);
   setParam(LNOTES, comment);
   tmp = QString::number(dt.date().day()) + " " + monthArray[dt.date().month() - 1] + " " +
@@ -68,14 +63,13 @@ void logBook::logQSO(QString call, QString mode, QString comment)
 }
 
 
-void logBook::getFrequency()
-{
+void logBook::getFrequency() {
   frequency = -1;
 
-  if (rigControllerPtr->params()->enableXMLRPC) // we get the frequency from flrig or alike
+  if (rigControllerPtr->params()->enableXMLRPC)  // we get the frequency from flrig or alike
   {
     frequency = xmlIntfPtr->getFrequency();
-  } else if (rigControllerPtr->params()->enableCAT) // we get the frequency from hamlib
+  } else if (rigControllerPtr->params()->enableCAT)  // we get the frequency from hamlib
   {
     if (!rigControllerPtr->getFrequency(frequency)) {
       frequency = -1;
@@ -83,7 +77,4 @@ void logBook::getFrequency()
   }
 }
 
-void logBook::setParam(eIndex tag, QString value)
-{
-  logParamArray[tag].val = value;
-}
+void logBook::setParam(eIndex tag, QString value) { logParamArray[tag].val = value; }

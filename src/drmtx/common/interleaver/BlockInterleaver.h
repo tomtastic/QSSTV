@@ -34,15 +34,14 @@
 
 
 /* Classes ********************************************************************/
-class CBlockInterleaver
-{
-public:
+class CBlockInterleaver {
+ public:
   CBlockInterleaver() {}
   virtual ~CBlockInterleaver() {}
 
-protected:
+ protected:
   void MakeTable(CVector<int>& veciIntTable, int iFrameSize, int it_0);
 };
 
 
-#endif // !defined(BLOCK_INTERL_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)
+#endif  // !defined(BLOCK_INTERL_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)

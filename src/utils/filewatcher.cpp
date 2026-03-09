@@ -4,8 +4,7 @@
 
 fileWatcher::fileWatcher() {}
 
-void fileWatcher::init()
-{
+void fileWatcher::init() {
   if (directories().count() > 0) {
     removePaths(directories());
   }
@@ -16,8 +15,7 @@ void fileWatcher::init()
   connect(this, &QFileSystemWatcher::directoryChanged, galleryWidgetPtr, &galleryWidget::slotDirChanged);
 }
 
-void fileWatcher::addPathRecursive(QString path)
-{
+void fileWatcher::addPathRecursive(QString path) {
   addPath(path);
   if (recursiveScanDirs) {
     QDirIterator it(path, QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);

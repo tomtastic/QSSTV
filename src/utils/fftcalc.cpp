@@ -4,26 +4,20 @@
 
 #include <string.h>
 
-fftCalc::fftCalc()
-{
+fftCalc::fftCalc() {
   plan = nullptr;
   out = nullptr;
   dataBuffer = nullptr;
   dataBufferWindowed = nullptr;
 }
 
-fftCalc::~fftCalc()
-{
-  if (plan)
-    fftw_destroy_plan(plan);
-  if (out)
-    fftw_free(out);
-  if (dataBuffer)
-    fftw_free(dataBuffer);
+fftCalc::~fftCalc() {
+  if (plan) fftw_destroy_plan(plan);
+  if (out) fftw_free(out);
+  if (dataBuffer) fftw_free(dataBuffer);
 }
 
-void fftCalc::init(int length, int nblocks, int isamplingrate)
-{
+void fftCalc::init(int length, int nblocks, int isamplingrate) {
   int i;
   windowSize = length;
   fftLength = windowSize * nblocks;
@@ -32,19 +26,15 @@ void fftCalc::init(int length, int nblocks, int isamplingrate)
   createHamming();
   samplingrate = isamplingrate;
   // prepare fft
-  if (plan)
-    fftw_destroy_plan(plan);
-  if (out)
-    fftw_free(out);
-  if (dataBuffer)
-    delete[] dataBuffer;
+  if (plan) fftw_destroy_plan(plan);
+  if (out) fftw_free(out);
+  if (dataBuffer) delete[] dataBuffer;
 
   dataBuffer = new double[fftLength];
   for (i = 0; i < fftLength; i++) {
     dataBuffer[i] = 0.;
   }
-  if (dataBufferWindowed)
-    fftw_free(dataBufferWindowed);
+  if (dataBufferWindowed) fftw_free(dataBufferWindowed);
   out = static_cast<double*>(fftw_malloc(fftLength * sizeof(double)));
   dataBufferWindowed = static_cast<double*>(fftw_malloc(fftLength * sizeof(double)));
   // create the fftw plan
@@ -53,8 +43,7 @@ void fftCalc::init(int length, int nblocks, int isamplingrate)
   addToLog("fftw_plan fftcalc stop", LOGFFT);
 }
 
-void fftCalc::createHamming()
-{
+void fftCalc::createHamming() {
   int i;
   hammingBuffer = new double[fftLength];
   for (i = 0; i < fftLength; i++) {
@@ -62,8 +51,7 @@ void fftCalc::createHamming()
   }
 }
 
-void fftCalc::realFFT(double* data)
-{
+void fftCalc::realFFT(double* data) {
   int i;
   memmove(&dataBuffer[0], &dataBuffer[windowSize], sizeof(double) * windowSize * (numBlocks - 1));
   memmove(&dataBuffer[windowSize * (numBlocks - 1)], data, sizeof(double) * windowSize);

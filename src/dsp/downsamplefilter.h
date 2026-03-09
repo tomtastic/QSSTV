@@ -29,27 +29,20 @@
 
 extern const FILTERPARAMTYPE downSampleFilterParam[DSAMPLEFILTERLEN];
 
-class downsampleFilter
-{
-public:
+class downsampleFilter {
+ public:
   downsampleFilter();
   downsampleFilter(unsigned int len, bool scaled);
   ~downsampleFilter();
   void allocate(unsigned int dataLength);
   void setFilterParams(bool scaled);
   void downSample4(short int* data);
-  FILTERPARAMTYPE* filteredDataPtr()
-  {
-    return filteredDataBuffer;
-  }
+  FILTERPARAMTYPE* filteredDataPtr() { return filteredDataBuffer; }
   void init();
   DSPFLOAT avgVolumeDb;
-  FILTERPARAMTYPE* getVolumePtr()
-  {
-    return volumeBuffer;
-  }
+  FILTERPARAMTYPE* getVolumePtr() { return volumeBuffer; }
 
-private:
+ private:
   void normalizeGain();
   FILTERPARAMTYPE* filteredDataBuffer;
   //  FILTERPARAMTYPE *volumeDataBuffer;

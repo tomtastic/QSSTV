@@ -99,4 +99,4 @@ struct elLanguage {
 
 extern const string strTableCIRAFzones[LEN_TABLE_CIRAF_ZONES];
 
-#endif // !defined(TABLE_FAC_H__3B0_CA63_4344_BGDEB2B_23E7912__INCLUDED_)
+#endif  // !defined(TABLE_FAC_H__3B0_CA63_4344_BGDEB2B_23E7912__INCLUDED_)

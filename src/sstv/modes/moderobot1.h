@@ -37,13 +37,12 @@
 /**
   @author Johan Maes <on4qz@telenet.be>
 */
-class modeRobot1 : public modeBase
-{
-public:
+class modeRobot1 : public modeBase {
+ public:
   modeRobot1(esstvMode m, unsigned int len, bool tx, bool narrowMode);
   ~modeRobot1();
 
-private:
+ private:
   embState rxSetupLine();
   void calcPixelPositionTable(unsigned int colorLine, bool tx);
   //  unsigned long adjustSyncPosition(unsigned long syncPos0);

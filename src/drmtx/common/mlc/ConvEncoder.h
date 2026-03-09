@@ -37,9 +37,8 @@
 
 
 /* Classes ********************************************************************/
-class CConvEncoder : public CChannelCode
-{
-public:
+class CConvEncoder : public CChannelCode {
+ public:
   CConvEncoder() {}
   virtual ~CConvEncoder() {}
 
@@ -48,7 +47,7 @@ public:
   void Init(ECodScheme eNewCodingScheme, EChanType eNewChannelType, int iN1, int iN2, int iNewNumInBitsPartA,
             int iNewNumInBitsPartB, int iPunctPatPartA, int iPunctPatPartB, int iLevel);
 
-protected:
+ protected:
   int iNumInBits;
   int iNumInBitsWithMemory;
 
@@ -64,4 +63,4 @@ protected:
 };
 
 
-#endif // !defined(CONNVOL_ENC_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)
+#endif  // !defined(CONNVOL_ENC_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)

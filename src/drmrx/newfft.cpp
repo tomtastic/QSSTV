@@ -35,8 +35,7 @@ static double pi = M_PI;
    frequency value.	If forward is false, rfft expects buf to contain a
    positive frequency spectrum arranged as before, and replaces it with
    2*N real values.	N MUST be a power of 2. */
-void rfft(float* buf, int N2, int forward)
-{
+void rfft(float* buf, int N2, int forward) {
   float c2, h1r, h1i, h2r, h2i, temp;
   float br, bi;
   float theta = static_cast<float>(pi / N2);
@@ -121,8 +120,7 @@ void rfft(float* buf, int N2, int forward)
    recursive Fast Fourier transform method due to Danielson
    and Lanczos.	NC MUST be a power of 2. */
 void bitreverse(float*, int);
-void cfft(float* buf, int N2, int forward)
-{
+void cfft(float* buf, int N2, int forward) {
   int delta;
   int ND = N2 << 1;
   int mmax;
@@ -164,16 +162,14 @@ void cfft(float* buf, int N2, int forward)
   if ((fabs(scale) - 1.0) < DBL_EPSILON) {
     bi = buf;
     be = buf + ND;
-    while (bi < be)
-      *bi++ *= scale;
+    while (bi < be) *bi++ *= scale;
   }
 }
 
 
 /* bitreverse places float array x containing N/2 complex values
    into bit-reversed order   */
-void bitreverse(float* buf, int N)
-{
+void bitreverse(float* buf, int N) {
   int i, j, m;
 
   for (i = j = 0; i < N; i += 2, j += m) {
@@ -186,7 +182,6 @@ void bitreverse(float* buf, int N)
       *(buf + i) = rtemp;
       *(buf + i + 1) = itemp;
     }
-    for (m = N >> 1; m >= 2 && j >= m; m >>= 1)
-      j -= m;
+    for (m = N >> 1; m >= 2 && j >= m; m >>= 1) j -= m;
   }
 }

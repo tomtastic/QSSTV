@@ -36,9 +36,8 @@
 
 
 /* Classes ********************************************************************/
-class CQAMMapping
-{
-public:
+class CQAMMapping {
+ public:
   CQAMMapping() {}
   virtual ~CQAMMapping() {}
 
@@ -47,10 +46,10 @@ public:
            CVector<_COMPLEX>* pcOutputData);
   void Init(int iNewOutputBlockSize, ECodScheme eNewCodingScheme);
 
-protected:
+ protected:
   int iOutputBlockSize;
   ECodScheme eMapType;
 };
 
 
-#endif // !defined(QAM_MAPPING_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)
+#endif  // !defined(QAM_MAPPING_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)

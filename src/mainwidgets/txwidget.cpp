@@ -24,8 +24,7 @@
 #include "testpatternselection.h"
 
 
-txWidget::txWidget(QWidget* parent) : QWidget(parent), ui(new Ui::txWidget)
-{
+txWidget::txWidget(QWidget* parent) : QWidget(parent), ui(new Ui::txWidget) {
   int i;
   QString tmp;
   ui->setupUi(this);
@@ -96,7 +95,8 @@ txWidget::txWidget(QWidget* parent) : QWidget(parent), ui(new Ui::txWidget)
   // in paintSiblingsRecursive. Using a custom stylesheet avoids the native rendering.
   // See:
   // https://stackoverflow.com/questions/69890284/qslider-in-qt-misbehaves-in-new-macos-monterey-v12-0-1-any-workaround
-  ui->sizeSlider->setStyleSheet("\
+  ui->sizeSlider->setStyleSheet(
+      "\
                       QSlider::groove:horizontal {\
                           height: 8px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */ \
                           background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);\
@@ -111,11 +111,10 @@ txWidget::txWidget(QWidget* parent) : QWidget(parent), ui(new Ui::txWidget)
                           border-radius: 3px;\
                       }\
                   ");
-#endif // __APPLE__
+#endif  // __APPLE__
 }
 
-txWidget::~txWidget()
-{
+txWidget::~txWidget() {
   writeSettings();
   txFunctionsPtr->terminate();
   delete txFunctionsPtr;
@@ -123,18 +122,11 @@ txWidget::~txWidget()
   delete ui;
 }
 
-void txWidget::showEvent(QShowEvent* event)
-{
-  QWidget::showEvent(event);
-}
+void txWidget::showEvent(QShowEvent* event) { QWidget::showEvent(event); }
 
-void txWidget::paintEvent(QPaintEvent* event)
-{
-  QWidget::paintEvent(event);
-}
+void txWidget::paintEvent(QPaintEvent* event) { QWidget::paintEvent(event); }
 
-void txWidget::init()
-{
+void txWidget::init() {
   splashStr += QString("Setting up TX").rightJustified(25, ' ') + "\n";
   splashPtr->showMessage(splashStr, Qt::AlignLeft, Qt::white);
   qApp->processEvents();
@@ -160,8 +152,7 @@ void txWidget::init()
   }
 }
 
-void txWidget::readSettings()
-{
+void txWidget::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("TX");
   sstvModeIndexTx = (static_cast<esstvMode>(qSettings.value("sstvModeIndexTx", 0).toInt()));
@@ -186,8 +177,7 @@ void txWidget::readSettings()
   setParams();
 }
 
-void txWidget::writeSettings()
-{
+void txWidget::writeSettings() {
   QSettings qSettings;
   slotGetParams();
   qSettings.beginGroup("TX");
@@ -207,8 +197,7 @@ void txWidget::writeSettings()
   qSettings.endGroup();
 }
 
-void txWidget::slotGetTXParams()
-{
+void txWidget::slotGetTXParams() {
   // get only the params that don't require re-applying the template
   // used by prepareTX() and slotGetParams()
   int temp = sstvModeIndexTx;
@@ -228,8 +217,7 @@ void txWidget::slotGetTXParams()
 }
 
 
-void txWidget::slotGetParams()
-{
+void txWidget::slotGetParams() {
   getIndex(templateIndex, ui->templatesComboBox);
   getValue(useTemplate, ui->templateCheckBox);
   getValue(useHybrid, ui->hybridCheckBox);
@@ -247,8 +235,7 @@ void txWidget::slotGetParams()
   }
 }
 
-void txWidget::setParams()
-{
+void txWidget::setParams() {
   setIndex((static_cast<int>(sstvModeIndexTx)), ui->sstvModeComboBox);
   ui->templateCheckBox->blockSignals(true);
   ui->templatesComboBox->blockSignals(true);
@@ -265,17 +252,14 @@ void txWidget::setParams()
   setIndex(drmParams.qam, ui->drmTxQAMComboBox);
   setIndex(drmParams.robMode, ui->drmTxModeComboBox);
   setIndex(drmParams.reedSolomon, ui->drmTxReedSolomonComboBox);
-  if (compressedSize < MINDRMSIZE)
-    compressedSize = MINDRMSIZE;
-  if (compressedSize > MAXDRMSIZE)
-    compressedSize = MAXDRMSIZE;
+  if (compressedSize < MINDRMSIZE) compressedSize = MINDRMSIZE;
+  if (compressedSize > MAXDRMSIZE) compressedSize = MAXDRMSIZE;
   setValue(compressedSize, ui->sizeSlider);
   ui->uploadToolButton->setEnabled(useHybrid && (transmissionModeIndex != TRXSSTV));
   updateTxTime();
 }
 
-void txWidget::copyProfile(drmTxParams d)
-{
+void txWidget::copyProfile(drmTxParams d) {
   drmParams = d;
   setIndex(drmParams.bandwith, ui->drmTxBandwidthComboBox);
   setIndex(drmParams.interleaver, ui->drmTxInterleaveComboBox);
@@ -285,8 +269,7 @@ void txWidget::copyProfile(drmTxParams d)
   setIndex(drmParams.reedSolomon, ui->drmTxReedSolomonComboBox);
 }
 
-void txWidget::initView()
-{
+void txWidget::initView() {
   imageViewerPtr->createImage(QSize(320, 256), imageBackGroundColor, imageStretch);
   imageViewerPtr->setType(imageViewer::TXIMG);
   setupTemplatesComboBox();
@@ -294,8 +277,7 @@ void txWidget::initView()
 }
 
 
-void txWidget::setupTemplatesComboBox()
-{
+void txWidget::setupTemplatesComboBox() {
   QStringList sl;
   int i;
   ui->templatesComboBox->clear();
@@ -307,21 +289,16 @@ void txWidget::setupTemplatesComboBox()
 }
 
 
-QString txWidget::getPreviewFilename()
-{
-  return ui->previewWidget->getFilename();
-}
+QString txWidget::getPreviewFilename() { return ui->previewWidget->getFilename(); }
 
-void txWidget::setPreviewWidget(const QString& fn)
-{
+void txWidget::setPreviewWidget(const QString& fn) {
   addToLog(QString("previewfile: %1").arg(fn), LOGTXMAIN);
-  QString filename = fn; // Create non-const copy for openImage
+  QString filename = fn;  // Create non-const copy for openImage
   ui->previewWidget->openImage(filename, false, false, false, true);
 }
 
 
-void txWidget::slotStart()
-{
+void txWidget::slotStart() {
   if (imageViewerPtr->hasValidImage()) {
     doTx = TXNORMAL;
     prepareTx();
@@ -330,8 +307,7 @@ void txWidget::slotStart()
   }
 }
 
-void txWidget::slotUpload()
-{
+void txWidget::slotUpload() {
   if (imageViewerPtr->hasValidImage()) {
     doTx = TXUPLOAD;
     prepareTx();
@@ -339,25 +315,23 @@ void txWidget::slotUpload()
 }
 
 
-void txWidget::prepareTx()
-{
+void txWidget::prepareTx() {
   addToLog(QString("doTx=%1").arg(doTx), LOGTXMAIN);
   enableButtons(false);
   applyTemplate();
   switch (transmissionModeIndex) {
-  case TRXSSTV:
-    txFunctionsPtr->prepareTX(txFunctions::TXPREPARESSTV);
-    break;
-  case TRXDRM:
-    txFunctionsPtr->prepareTX(txFunctions::TXPREPAREDRMPIC);
-    break;
-  case TRXNOMODE:
-    break;
+    case TRXSSTV:
+      txFunctionsPtr->prepareTX(txFunctions::TXPREPARESSTV);
+      break;
+    case TRXDRM:
+      txFunctionsPtr->prepareTX(txFunctions::TXPREPAREDRMPIC);
+      break;
+    case TRXNOMODE:
+      break;
   }
 }
 
-void txWidget::prepareTxComplete(bool ok)
-{
+void txWidget::prepareTxComplete(bool ok) {
   addToLog(QString("ok=%1, doTx=%2").arg(ok).arg(doTx), LOGTXMAIN);
   if (!ok) {
     addToLog("Upload/prepare failed", LOGTXMAIN);
@@ -388,10 +362,9 @@ void txWidget::prepareTxComplete(bool ok)
   }
 }
 
-void txWidget::startTxImage()
-{
+void txWidget::startTxImage() {
   addToLog("startTxImage", LOGTXMAIN);
-  QDateTime dt(QDateTime::currentDateTime().toUTC()); // this is compatible with QT 4.6
+  QDateTime dt(QDateTime::currentDateTime().toUTC());  // this is compatible with QT 4.6
   dt.setTimeZone(QTimeZone::UTC);
   if (!imageViewerPtr->hasValidImage()) {
     addToLog("invalidImage", LOGTXMAIN);
@@ -402,68 +375,63 @@ void txWidget::startTxImage()
   QFileInfo finf(fn);
 
   switch (transmissionModeIndex) {
-  case TRXSSTV:
-    if (saveTXimages) {
-      fn = QString("%1/%2_%3.%4")
-               .arg(txSSTVImagesPath)
-               .arg(finf.baseName())
-               .arg(dt.toString("yyyyMMdd_HHmmss"))
-               .arg(defaultImageFormat);
-      imageViewerPtr->save(fn, defaultImageFormat, true, false);
-      galleryWidgetPtr->txImageChanged();
-    }
-    addToLog("dispatch startTx", LOGTXMAIN);
-    dispatcherPtr->startTX(txFunctions::TXSSTVIMAGE);
-    break;
-  case TRXDRM:
-    if (saveTXimages) {
-      fn = QString("%1/%2_%3.%4")
-               .arg(txDRMImagesPath)
-               .arg(finf.baseName())
-               .arg(dt.toString("yyyyMMdd_HHmmss"))
-               .arg(defaultImageFormat);
-      imageViewerPtr->save(fn, defaultImageFormat, true, false);
-      galleryWidgetPtr->txImageChanged();
-    }
-    dispatcherPtr->startTX(txFunctions::TXSENDDRMPIC);
-    break;
-    //    case FAX:
-    //    break;
-  case TRXNOMODE:
-    break;
+    case TRXSSTV:
+      if (saveTXimages) {
+        fn = QString("%1/%2_%3.%4")
+                 .arg(txSSTVImagesPath)
+                 .arg(finf.baseName())
+                 .arg(dt.toString("yyyyMMdd_HHmmss"))
+                 .arg(defaultImageFormat);
+        imageViewerPtr->save(fn, defaultImageFormat, true, false);
+        galleryWidgetPtr->txImageChanged();
+      }
+      addToLog("dispatch startTx", LOGTXMAIN);
+      dispatcherPtr->startTX(txFunctions::TXSSTVIMAGE);
+      break;
+    case TRXDRM:
+      if (saveTXimages) {
+        fn = QString("%1/%2_%3.%4")
+                 .arg(txDRMImagesPath)
+                 .arg(finf.baseName())
+                 .arg(dt.toString("yyyyMMdd_HHmmss"))
+                 .arg(defaultImageFormat);
+        imageViewerPtr->save(fn, defaultImageFormat, true, false);
+        galleryWidgetPtr->txImageChanged();
+      }
+      dispatcherPtr->startTX(txFunctions::TXSENDDRMPIC);
+      break;
+      //    case FAX:
+      //    break;
+    case TRXNOMODE:
+      break;
   }
   ui->startToolButton->setEnabled(false);
 }
 
-void txWidget::sendBSR()
-{
+void txWidget::sendBSR() {
   QByteArray* p;
   bsrForm::eResult res;
   bsrForm bsrf;
   bsrf.init();
   res = static_cast<bsrForm::eResult>(bsrf.exec());
-  if (res == bsrForm::CANCEL)
-    return;
+  if (res == bsrForm::CANCEL) return;
   p = bsrf.getBA(res == bsrForm::COMPAT);
   txFunctionsPtr->sendBSR(p, bsrf.getDRMParams());
 }
 
 
-void txWidget::sendWFID()
-{
+void txWidget::sendWFID() {
   waterfallPtr->setText(myCallsign);
   dispatcherPtr->startTX(txFunctions::TXSENDWFID);
   addToLog("sendWFID", LOGTXMAIN);
 }
 
-void txWidget::sendCWID()
-{
+void txWidget::sendCWID() {
   dispatcherPtr->startTX(txFunctions::TXSENDCWID);
   addToLog("sendWFID", LOGTXMAIN);
 }
 
-void txWidget::sendWfText()
-{
+void txWidget::sendWfText() {
   waterfallForm wf;
   if ((wf.exec() == QDialog::Accepted) && (!wf.text().isEmpty())) {
     waterfallPtr->setText(wf.text());
@@ -472,16 +440,14 @@ void txWidget::sendWfText()
   }
 }
 
-void txWidget::slotStop()
-{
+void txWidget::slotStop() {
   ui->startToolButton->setEnabled(true);
   enableButtons(true);
   dispatcherPtr->startRX();
 }
 
 
-void txWidget::enableButtons(bool enable)
-{
+void txWidget::enableButtons(bool enable) {
   ui->uploadToolButton->setEnabled(enable && useHybrid && (transmissionModeIndex != TRXSSTV));
   ui->hybridCheckBox->setEnabled(enable);
   ui->startToolButton->setEnabled(enable);
@@ -496,15 +462,13 @@ void txWidget::enableButtons(bool enable)
 }
 
 
-void txWidget::slotFileOpen()
-{
+void txWidget::slotFileOpen() {
   QString fileName;
   imageViewerPtr->openImage(fileName, txStockImagesPath, true, true, true, false, true);
   applyTemplate();
 }
 
-void txWidget::slotGenerateSignal()
-{
+void txWidget::slotGenerateSignal() {
   QDialog qd;
   Ui::freqForm* ff = new Ui::freqForm;
 
@@ -519,8 +483,7 @@ void txWidget::slotGenerateSignal()
   }
 }
 
-void txWidget::slotSweepSignal()
-{
+void txWidget::slotSweepSignal() {
   QDialog qd;
   Ui::sweepForm* ff = new Ui::sweepForm;
   ff->setupUi(&qd);
@@ -538,8 +501,7 @@ void txWidget::slotSweepSignal()
 }
 
 
-void txWidget::slotGenerateRepeaterTone()
-{
+void txWidget::slotGenerateRepeaterTone() {
   //  addToLog(QString("start of buffer %1").arg(soundIOPtr->txBuffer.count()),LOGTXMAIN);
   txFunctionsPtr->setToneParam(3., 1750);
   dispatcherPtr->startTX(txFunctions::TXSENDTONE);
@@ -547,10 +509,8 @@ void txWidget::slotGenerateRepeaterTone()
 }
 
 
-void txWidget::slotEdit()
-{
-  if (ed != nullptr)
-    delete ed;
+void txWidget::slotEdit() {
+  if (ed != nullptr) delete ed;
   ed = new editor(this);
   if (txFunctionsPtr->txBusy()) {
     QMessageBox::warning(this, "Editor", "Transmission busy, editor not available");
@@ -562,8 +522,7 @@ void txWidget::slotEdit()
 }
 
 
-void txWidget::applyTemplate()
-{
+void txWidget::applyTemplate() {
   if (repeaterEnabled) {
     if (repeaterIdleImage) {
       txFunctionsPtr->applyTemplate(imageViewerPtr, repeaterIdleTemplate);
@@ -579,11 +538,9 @@ void txWidget::applyTemplate()
   updateTxTime();
 }
 
-void txWidget::updateTxTime()
-{
+void txWidget::updateTxTime() {
   int sizeKb, seconds, minutes;
-  if (!imageViewerPtr->hasValidImage())
-    return;
+  if (!imageViewerPtr->hasValidImage()) return;
   seconds = txFunctionsPtr->calcTxTime(false, 0);
   minutes = seconds / 60;
   seconds = seconds - minutes * 60;
@@ -597,22 +554,17 @@ void txWidget::updateTxTime()
 }
 
 
-void txWidget::setImage(const QString& fn)
-{
+void txWidget::setImage(const QString& fn) {
   addToLog(QString("setImage %1").arg(fn), LOGTXMAIN);
-  QString filename = fn; // Create non-const copy for openImage
+  QString filename = fn;  // Create non-const copy for openImage
   imageViewerPtr->openImage(filename, true, true, false, true);
   addToLog(QString("setImage %1 done").arg(fn), LOGTXMAIN);
 }
 
 
-void txWidget::setProgress(uint prg)
-{
-  ui->txProgressBar->setValue(prg);
-}
+void txWidget::setProgress(uint prg) { ui->txProgressBar->setValue(prg); }
 
-void txWidget::slotModeChanged(int m)
-{
+void txWidget::slotModeChanged(int m) {
   addToLog("slotModeChange", LOGTXMAIN);
   if (transmissionModeIndex == TRXSSTV) {
     sstvModeIndexTx = static_cast<esstvMode>(m);
@@ -620,25 +572,23 @@ void txWidget::slotModeChanged(int m)
   }
 }
 
-void txWidget::slotResizeChanged(int i)
-{
+void txWidget::slotResizeChanged(int i) {
   switch (i) {
-  case 0: // Stretch
-    imageViewerPtr->setAspectMode(Qt::IgnoreAspectRatio);
-    break;
-  case 1: // Crop
-    imageViewerPtr->setAspectMode(Qt::KeepAspectRatioByExpanding);
-    break;
-  case 2: // Fit
-    imageViewerPtr->setAspectMode(Qt::KeepAspectRatio);
-    break;
+    case 0:  // Stretch
+      imageViewerPtr->setAspectMode(Qt::IgnoreAspectRatio);
+      break;
+    case 1:  // Crop
+      imageViewerPtr->setAspectMode(Qt::KeepAspectRatioByExpanding);
+      break;
+    case 2:  // Fit
+      imageViewerPtr->setAspectMode(Qt::KeepAspectRatio);
+      break;
   }
   applyTemplate();
 }
 
 
-void txWidget::slotSnapshot()
-{
+void txWidget::slotSnapshot() {
 #ifndef __APPLE__
   QImage* im;
   cameraDialog camera;
@@ -647,19 +597,17 @@ void txWidget::slotSnapshot()
     if (im) {
       QTemporaryFile itmp(txStockImagesPath + "/snapshotXXXXXX.jpg");
       itmp.setAutoRemove(false);
-      if (!itmp.open())
-        return;
+      if (!itmp.open()) return;
       im->save(itmp.fileName());
       setImage(itmp.fileName());
       galleryWidgetPtr->txStockImageChanged();
     }
   }
-#endif // __APPLE__
+#endif  // __APPLE__
 }
 
 
-void txWidget::setSettingsTab()
-{
+void txWidget::setSettingsTab() {
   {
     if (transmissionModeIndex == TRXDRM) {
       ui->hybridCheckBox->setEnabled(true);
@@ -686,8 +634,7 @@ void txWidget::setSettingsTab()
 }
 
 
-void txWidget::slotSize(int fsize)
-{
+void txWidget::slotSize(int fsize) {
   QString t;
   if ((sizeChanged) || (compressedSize != static_cast<uint>(fsize))) {
     sizeChanged = true;
@@ -696,8 +643,7 @@ void txWidget::slotSize(int fsize)
   }
 }
 
-void txWidget::slotSizeApply()
-{
+void txWidget::slotSizeApply() {
   QApplication::setOverrideCursor(Qt::WaitCursor);
   sizeChanged = false;
   imageViewerPtr->setSize(compressedSize, transmissionModeIndex == TRXDRM);
@@ -706,19 +652,14 @@ void txWidget::slotSizeApply()
   QApplication::restoreOverrideCursor();
 }
 
-void txWidget::slotTransmissionMode(int rxtxMode)
-{
-  emit modeSwitch(rxtxMode);
-}
+void txWidget::slotTransmissionMode(int rxtxMode) { emit modeSwitch(rxtxMode); }
 
-void txWidget::changeTransmissionMode(int rxtxMode)
-{
+void txWidget::changeTransmissionMode(int rxtxMode) {
   int i;
   transmissionModeIndex = static_cast<etransmissionMode>(rxtxMode);
   if ((transmissionModeIndex >= 0) && (transmissionModeIndex < TRXNOMODE)) {
     for (i = 0; i < TRXNOMODE; i++) {
-      if (i != transmissionModeIndex)
-        ui->settingsTableWidget->widget(i)->setEnabled(false);
+      if (i != transmissionModeIndex) ui->settingsTableWidget->widget(i)->setEnabled(false);
     }
     ui->settingsTableWidget->widget(transmissionModeIndex)->setEnabled(true);
     ui->settingsTableWidget->blockSignals(true);
@@ -731,22 +672,19 @@ void txWidget::changeTransmissionMode(int rxtxMode)
   }
 }
 
-void txWidget::slotProfileChanged(int i)
-{
+void txWidget::slotProfileChanged(int i) {
   drmProfileConfigPtr->getDRMParams(i, drmParams);
   setParams();
 }
 
-void txWidget::reloadProfiles()
-{
+void txWidget::reloadProfiles() {
   int index;
   index = ui->drmProfileComboBox->currentIndex();
   setProfileNames();
   slotProfileChanged(index);
 }
 
-void txWidget::setProfileNames()
-{
+void txWidget::setProfileNames() {
   QString tmp;
   ui->drmProfileComboBox->clear();
   if (drmProfileConfigPtr->getName(0, tmp)) {
@@ -760,19 +698,15 @@ void txWidget::setProfileNames()
   }
 }
 
-void txWidget::slotImageChanged()
-{
+void txWidget::slotImageChanged() {
   uint temp;
   if (transmissionModeIndex == TRXDRM) {
     maxSize = imageViewerPtr->setSize(imageViewerPtr->diplayedImageBytecount(), transmissionModeIndex == TRXDRM);
-    if (maxSize > MAXDRMSIZE)
-      maxSize = MAXDRMSIZE;
+    if (maxSize > MAXDRMSIZE) maxSize = MAXDRMSIZE;
     ui->sizeSlider->setMaximum(maxSize);
     ui->sizeSlider->setMinimum(MINDRMSIZE);
-    if (compressedSize > MAXDRMSIZE)
-      compressedSize = MAXDRMSIZE;
-    if (compressedSize < MINDRMSIZE)
-      compressedSize = MINDRMSIZE;
+    if (compressedSize > MAXDRMSIZE) compressedSize = MAXDRMSIZE;
+    if (compressedSize < MINDRMSIZE) compressedSize = MINDRMSIZE;
     temp = compressedSize;
     compressedSize = 0;
     slotSize(temp);
@@ -783,36 +717,29 @@ void txWidget::slotImageChanged()
   updateTxTime();
 }
 
-void txWidget::slotBinary()
-{
+void txWidget::slotBinary() {
   slotGetParams();
   doTx = TXBINARY;
   dispatcherPtr->startDRMTxBinary();
 }
 
-void txWidget::slotHybridToggled()
-{
+void txWidget::slotHybridToggled() {
   getValue(useHybrid, ui->hybridCheckBox);
   ui->uploadToolButton->setEnabled(useHybrid && (transmissionModeIndex != TRXSSTV));
   updateTxTime();
 }
 
 
-void txWidget::txTestPattern(etpSelect sel)
-{
-  txFunctionsPtr->txTestPattern(imageViewerPtr, sel);
-}
+void txWidget::txTestPattern(etpSelect sel) { txFunctionsPtr->txTestPattern(imageViewerPtr, sel); }
 
-void txWidget::startNotifyCheck(const QString& fn)
-{
+void txWidget::startNotifyCheck(const QString& fn) {
   mask = "Dummy" + fn + "+++*";
   numberOfNotifyChecks = NUMBEROFNOTIFYCHECKS;
   notifyTimer.start();
   notifyBusy = false;
 }
 
-void txWidget::slotNotifyTimeout()
-{
+void txWidget::slotNotifyTimeout() {
   if (notifyBusy) {
     numberOfNotifyChecks--;
     if (numberOfNotifyChecks >= 0) {
@@ -826,14 +753,12 @@ void txWidget::slotNotifyTimeout()
   ff.listFiles(mask, true);
 }
 
-void txWidget::slotListingDone(bool err)
-{
+void txWidget::slotListingDone(bool err) {
   int i;
   QString info;
   QString tmp;
   QList<QUrlInfo> notifications;
-  if (err)
-    return;
+  if (err) return;
   notifications = ff.getListing();
 
   for (i = 0; i < notifications.count(); i++) {
@@ -850,8 +775,7 @@ void txWidget::slotListingDone(bool err)
   notifyBusy = false;
 }
 
-void txWidget::sendRepeaterImage(esstvMode rxMode)
-{
+void txWidget::sendRepeaterImage(esstvMode rxMode) {
   useHybrid = false;
   setValue(useHybrid, ui->hybridCheckBox);
   rxWidgetPtr->getImageViewerPtr()->slotToTX();
@@ -859,7 +783,7 @@ void txWidget::sendRepeaterImage(esstvMode rxMode)
 
   if (transmissionModeIndex == TRXSSTV) {
     if (repeaterTxMode == 0)
-      txMode = rxMode; // 0 index = Same as RX
+      txMode = rxMode;  // 0 index = Same as RX
     else
       txMode = static_cast<esstvMode>(repeaterTxMode - 1);
     slotModeChanged(txMode);
@@ -867,12 +791,11 @@ void txWidget::sendRepeaterImage(esstvMode rxMode)
 }
 
 
-void txWidget::slotRepaterDelay()
-{
+void txWidget::slotRepaterDelay() {
   addToLog("repeater send image", LOGTXMAIN);
   //  qDebug() << "starting repeater tx";
   repeaterIdleImage = false;
-  repeaterTimer->start(60000 * repeaterImageInterval); // retrigger repeater timer for idle images
+  repeaterTimer->start(60000 * repeaterImageInterval);  // retrigger repeater timer for idle images
   //
   // imPtr points to image to send
   doTx = TXNORMAL;
@@ -881,31 +804,30 @@ void txWidget::slotRepaterDelay()
 }
 
 
-void txWidget::slotRepeaterTimer()
-{
+void txWidget::slotRepeaterTimer() {
   QString fn;
   QFile fi;
-  repeaterTimer->start(60000 * repeaterImageInterval); // retrigger repeater timer
+  repeaterTimer->start(60000 * repeaterImageInterval);  // retrigger repeater timer
   if (txFunctionsPtr->txBusy() || rxWidgetPtr->rxBusy() || !repeaterEnabled) {
     return;
   }
 
   switch (repeaterIndex) {
-  case 0:
-    fn = repeaterImage1;
-    break;
-  case 1:
-    fn = repeaterImage2;
-    break;
-  case 2:
-    fn = repeaterImage3;
-    break;
-  case 3:
-    fn = repeaterImage4;
-    break;
-  default:
-    fn = repeaterImage1;
-    break;
+    case 0:
+      fn = repeaterImage1;
+      break;
+    case 1:
+      fn = repeaterImage2;
+      break;
+    case 2:
+      fn = repeaterImage3;
+      break;
+    case 3:
+      fn = repeaterImage4;
+      break;
+    default:
+      fn = repeaterImage1;
+      break;
   }
   fi.setFileName(fn);
   if (fi.exists()) {
@@ -918,6 +840,5 @@ void txWidget::slotRepeaterTimer()
     prepareTx();
   }
   repeaterIndex++;
-  if (repeaterIndex > 3)
-    repeaterIndex = 0;
+  if (repeaterIndex > 3) repeaterIndex = 0;
 }

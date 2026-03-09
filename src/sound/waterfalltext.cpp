@@ -18,8 +18,7 @@
 #define FREQ_MAX 2600.
 
 
-waterfallText::waterfallText()
-{
+waterfallText::waterfallText() {
   out = nullptr;
   outFiltered = nullptr;
   dataBuffer = nullptr;
@@ -27,34 +26,23 @@ waterfallText::waterfallText()
   phr = phi = nullptr;
 }
 
-waterfallText::~waterfallText()
-{
+waterfallText::~waterfallText() {
   fftw_destroy_plan(plan);
-  if (out)
-    fftw_free(out);
-  if (outFiltered)
-    delete[] outFiltered;
-  if (audioBuf)
-    delete[] audioBuf;
-  if (dataBuffer)
-    fftw_free(dataBuffer);
-  if (txFilter)
-    delete txFilter;
-  if (phr)
-    delete[] phr;
-  if (phi)
-    delete[] phi;
+  if (out) fftw_free(out);
+  if (outFiltered) delete[] outFiltered;
+  if (audioBuf) delete[] audioBuf;
+  if (dataBuffer) fftw_free(dataBuffer);
+  if (txFilter) delete txFilter;
+  if (phr) delete[] phr;
+  if (phi) delete[] phi;
 }
 
-void waterfallText::init()
-{
+void waterfallText::init() {
   int i;
   double ph;
   double binSize;
-  if (phr != nullptr)
-    delete phr;
-  if (phi != nullptr)
-    delete phi;
+  if (phr != nullptr) delete phr;
+  if (phi != nullptr) delete phi;
   fftLength = TXSTRIPE * SUBSAMPLINGFACTOR / 2;
   samplingrate = BASESAMPLERATE;
   binSize = static_cast<double>(BASESAMPLERATE) / (static_cast<double>(fftLength));
@@ -83,23 +71,20 @@ void waterfallText::init()
   }
 }
 
-double waterfallText::getDuration(const QString& txt)
-{
+double waterfallText::getDuration(const QString& txt) {
   if (!txt.isNull()) {
     setupImage(convert(txt));
   }
   return (static_cast<double>(line * 3 * fftLength)) / static_cast<double>(samplingrate);
 }
 
-void waterfallText::setText(const QString& txt)
-{
+void waterfallText::setText(const QString& txt) {
   QString t = convert(txt);
   setupImage(t);
 }
 
 
-DSPFLOAT* waterfallText::nextLine()
-{
+DSPFLOAT* waterfallText::nextLine() {
   QRgb* cPtr;
   int i, freqIndex;
 
@@ -133,8 +118,7 @@ DSPFLOAT* waterfallText::nextLine()
 }
 
 
-void waterfallText::setupImage(QString txt)
-{
+void waterfallText::setupImage(QString txt) {
   QRect rct;
   QPainter p;
   QPen pen;
@@ -166,8 +150,7 @@ void waterfallText::setupImage(QString txt)
 }
 
 
-QString waterfallText::convert(QString txt)
-{
+QString waterfallText::convert(QString txt) {
   mexp.clear();
   mexp.addConversion('m', myCallsign);
   mexp.addConversion('s', QString::number(lastAvgSNR, 'g', 2));

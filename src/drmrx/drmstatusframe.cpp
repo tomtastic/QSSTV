@@ -5,8 +5,7 @@
 #include <math.h>
 #include "configparams.h"
 
-drmStatusFrame::drmStatusFrame(QWidget* parent) : QFrame(parent), ui(new Ui::drmStatusFrame)
-{
+drmStatusFrame::drmStatusFrame(QWidget* parent) : QFrame(parent), ui(new Ui::drmStatusFrame) {
   ui->setupUi(this);
   greenPXM = new QPixmap(40, 30);
   greenPXM->fill(Qt::green);
@@ -17,13 +16,9 @@ drmStatusFrame::drmStatusFrame(QWidget* parent) : QFrame(parent), ui(new Ui::drm
   init();
 }
 
-drmStatusFrame::~drmStatusFrame()
-{
-  delete ui;
-}
+drmStatusFrame::~drmStatusFrame() { delete ui; }
 
-void drmStatusFrame::init()
-{
+void drmStatusFrame::init() {
   mode = "";
   bandwidth = 0;
   interleave = "";
@@ -56,8 +51,7 @@ void drmStatusFrame::init()
 }
 
 
-void drmStatusFrame::setStatus()
-{
+void drmStatusFrame::setStatus() {
   bool tmp;
 
   tmp = demodulatorPtr->isTimeSync();
@@ -67,12 +61,9 @@ void drmStatusFrame::setStatus()
       ui->timeLED->setPixmap(*greenPXM);
     } else {
       ui->timeLED->setPixmap(*redPXM);
-      if (prevFacValid)
-        ui->facLED->setPixmap(*redPXM);
-      if (prevFrameSync)
-        ui->frameLED->setPixmap(*redPXM);
-      if (prevMscValid != INVALID)
-        ui->mscLED->setPixmap(*redPXM);
+      if (prevFacValid) ui->facLED->setPixmap(*redPXM);
+      if (prevFrameSync) ui->frameLED->setPixmap(*redPXM);
+      if (prevMscValid != INVALID) ui->mscLED->setPixmap(*redPXM);
       prevFacValid = 0;
       prevFrameSync = false;
       prevMscValid = INVALID;
@@ -86,10 +77,8 @@ void drmStatusFrame::setStatus()
       ui->frameLED->setPixmap(*greenPXM);
     else {
       ui->frameLED->setPixmap(*redPXM);
-      if (prevFacValid == 1)
-        ui->facLED->setPixmap(*redPXM);
-      if (prevMscValid != INVALID)
-        ui->mscLED->setPixmap(*redPXM);
+      if (prevFacValid == 1) ui->facLED->setPixmap(*redPXM);
+      if (prevMscValid != INVALID) ui->mscLED->setPixmap(*redPXM);
       prevFacValid = 0;
       prevMscValid = INVALID;
       return;
@@ -103,8 +92,7 @@ void drmStatusFrame::setStatus()
       ui->facLED->setPixmap(*greenPXM);
     } else {
       ui->facLED->setPixmap(*redPXM);
-      if (prevMscValid != INVALID)
-        ui->mscLED->setPixmap(*redPXM);
+      if (prevMscValid != INVALID) ui->mscLED->setPixmap(*redPXM);
       prevMscValid = INVALID;
     }
   }
@@ -120,21 +108,20 @@ void drmStatusFrame::setStatus()
   }
 
   switch (robustness_mode) {
-  case 0:
-    mode = "A";
-    break;
-  case 1:
-    mode = "B";
-    break;
-  case 2:
-    mode = "E";
-    break;
-  default:
-    mode = "";
-    break;
+    case 0:
+      mode = "A";
+      break;
+    case 1:
+      mode = "B";
+      break;
+    case 2:
+      mode = "E";
+      break;
+    default:
+      mode = "";
+      break;
   }
-  if (mode == "")
-    return;
+  if (mode == "") return;
   if (prevRobustnessMode != robustness_mode) {
     prevRobustnessMode = robustness_mode;
     ui->modeEdit->setText(mode);
@@ -152,31 +139,31 @@ void drmStatusFrame::setStatus()
   if (prevMscValid != msc_valid) {
     prevMscValid = msc_valid;
     switch (msc_valid) {
-    case INVALID:
-      ui->mscLED->setPixmap(*redPXM);
-      break;
-    case VALID:
-      ui->mscLED->setPixmap(*greenPXM);
-      break;
-    case ALREADYRECEIVED:
-      ui->mscLED->setPixmap(*yellowPXM);
-      break;
+      case INVALID:
+        ui->mscLED->setPixmap(*redPXM);
+        break;
+      case VALID:
+        ui->mscLED->setPixmap(*greenPXM);
+        break;
+      case ALREADYRECEIVED:
+        ui->mscLED->setPixmap(*yellowPXM);
+        break;
     }
   }
 
   if (prevSspectrumOccupancy != spectrum_occupancy_new) {
     prevSspectrumOccupancy = spectrum_occupancy_new;
     switch (spectrum_occupancy_new) {
-    case 0:
-      bandwidth = 2.3;
-      break;
-    case 1:
-      bandwidth = 2.5;
-      ;
-      break;
-    default:
-      bandwidth = 0;
-      break;
+      case 0:
+        bandwidth = 2.3;
+        break;
+      case 1:
+        bandwidth = 2.5;
+        ;
+        break;
+      default:
+        bandwidth = 0;
+        break;
     }
     ui->bandwidthEdit->setText(QString::number(bandwidth));
   }
@@ -185,28 +172,28 @@ void drmStatusFrame::setStatus()
   if (prevProtection != multiplex_description.PL_PartB) {
     prevProtection = multiplex_description.PL_PartB;
     switch (multiplex_description.PL_PartB) {
-    case 0:
-      protection = "High";
-      break;
-    case 1:
-      protection = "Low";
-      break;
-    default:;
-      break;
+      case 0:
+        protection = "High";
+        break;
+      case 1:
+        protection = "Low";
+        break;
+      default:;
+        break;
     }
     ui->protectionEdit->setText(protection);
   }
   if (prevInterleaverDepth != interleaver_depth_new) {
     prevInterleaverDepth = interleaver_depth_new;
     switch (interleaver_depth_new) {
-    case 0:
-      interleave = "Long";
-      break;
-    case 1:
-      interleave = "Short";
-      break;
-    default:;
-      break;
+      case 0:
+        interleave = "Long";
+        break;
+      case 1:
+        interleave = "Short";
+        break;
+      default:;
+        break;
     }
     ui->interleaveEdit->setText(interleave);
   }
@@ -215,18 +202,18 @@ void drmStatusFrame::setStatus()
   if (prevMscMode != msc_mode_new) {
     prevMscMode = msc_mode_new;
     switch (msc_mode_new) {
-    case 0:
-      qam = 64;
-      break;
-    case 1:
-      qam = 16;
-      break;
-    case 3:
-      qam = 4;
-      break;
-    default:
-      qam = 0;
-      break;
+      case 0:
+        qam = 64;
+        break;
+      case 1:
+        qam = 16;
+        break;
+      case 3:
+        qam = 4;
+        break;
+      default:
+        qam = 0;
+        break;
     }
     ui->qamEdit->setText(QString::number(qam));
   }
@@ -265,144 +252,142 @@ void drmStatusFrame::setStatus()
 }
 
 
-QString modeToString(uint mode)
-{
+QString modeToString(uint mode) {
   QString tmp;
   tmp += "Mode: ";
   switch (mode / 10000) {
-  case 0:
-    tmp += "A";
-    break;
-  case 1:
-    tmp += "B";
-    break;
-  case 2:
-    tmp += "E";
-    break;
-  default:
-    tmp += "-";
-    break;
+    case 0:
+      tmp += "A";
+      break;
+    case 1:
+      tmp += "B";
+      break;
+    case 2:
+      tmp += "E";
+      break;
+    default:
+      tmp += "-";
+      break;
   }
   tmp += "\nBW: ";
   mode -= (mode / 10000) * 10000;
   switch (mode / 1000) {
-  case 0:
-    tmp += "2.3";
-    break;
-  case 1:
-    tmp += "2.5";
-    ;
-    break;
-  default:
-    tmp += "---";
-    break;
+    case 0:
+      tmp += "2.3";
+      break;
+    case 1:
+      tmp += "2.5";
+      ;
+      break;
+    default:
+      tmp += "---";
+      break;
   }
   tmp += "\nProt: ";
   mode -= (mode / 1000) * 1000;
   switch (mode / 100) {
-  case 0:
-    tmp += "High";
-    break;
-  case 1:
-    tmp += "Low";
-    break;
-  default:
-    tmp += "---";
-    break;
+    case 0:
+      tmp += "High";
+      break;
+    case 1:
+      tmp += "Low";
+      break;
+    default:
+      tmp += "---";
+      break;
   }
 
   tmp += "\nQAM: ";
   mode -= (mode / 100) * 100;
   switch (mode / 10) {
-  case 0:
-    tmp += "4";
-    break;
-  case 1:
-    tmp += "16";
-    break;
-  case 2:
-    tmp += "64";
-    break;
-  default:
-    tmp += "--";
-    break;
+    case 0:
+      tmp += "4";
+      break;
+    case 1:
+      tmp += "16";
+      break;
+    case 2:
+      tmp += "64";
+      break;
+    default:
+      tmp += "--";
+      break;
   }
   return tmp;
 }
 
-QString compactModeToString(uint mode)
-{
+QString compactModeToString(uint mode) {
   QString tmp;
   switch (mode / 10000) {
-  case 0:
-    tmp += "A";
-    break;
-  case 1:
-    tmp += "B";
-    break;
-  case 2:
-    tmp += "E";
-    break;
-  default:
-    tmp += "-";
-    break;
+    case 0:
+      tmp += "A";
+      break;
+    case 1:
+      tmp += "B";
+      break;
+    case 2:
+      tmp += "E";
+      break;
+    default:
+      tmp += "-";
+      break;
   }
-  tmp += "/"; // bandwidth
+  tmp += "/";  // bandwidth
   mode -= (mode / 10000) * 10000;
   switch (mode / 1000) {
-  case 0:
-    tmp += "2.3";
-    break;
-  case 1:
-    tmp += "2.5";
-    ;
-    break;
-  default:
-    tmp += "---";
-    break;
+    case 0:
+      tmp += "2.3";
+      break;
+    case 1:
+      tmp += "2.5";
+      ;
+      break;
+    default:
+      tmp += "---";
+      break;
   }
   tmp += "/";
   mode -= (mode / 1000) * 1000;
 
   switch (mode / 100) {
-  case 0:
-    tmp += "Hi";
-    break;
-  case 1:
-    tmp += "Lo";
-    break;
-  default:
-    tmp += "--";
-    break;
+    case 0:
+      tmp += "Hi";
+      break;
+    case 1:
+      tmp += "Lo";
+      break;
+    default:
+      tmp += "--";
+      break;
   }
 
   tmp += "/";
   mode -= (mode / 100) * 100;
   switch (mode / 10) {
-  case 0:
-    tmp += "4";
-    break;
-  case 1:
-    tmp += "16";
-    break;
-  case 2:
-    tmp += "64";
-    break;
-  default:
-    tmp += "--";
-    break;
+    case 0:
+      tmp += "4";
+      break;
+    case 1:
+      tmp += "16";
+      break;
+    case 2:
+      tmp += "64";
+      break;
+    default:
+      tmp += "--";
+      break;
   }
   tmp += "/";
   switch (mode & 1) {
-  case 0:
-    tmp += "Long";
-    break;
-  case 1:
-    tmp += "Short";
-    break;
-  default:
-    tmp += "--";
-    break;
+    case 0:
+      tmp += "Long";
+      break;
+    case 1:
+      tmp += "Short";
+      break;
+    default:
+      tmp += "--";
+      break;
   }
   return tmp;
 }

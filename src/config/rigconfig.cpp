@@ -29,8 +29,7 @@
 #include <QMessageBox>
 
 
-rigConfig::rigConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::rigConfig)
-{
+rigConfig::rigConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::rigConfig) {
   ui->setupUi(this);
   connect(ui->enableCATCheckBox, &QCheckBox::clicked, this, &rigConfig::slotEnableCAT);
   connect(ui->enablePTTCheckBox, &QCheckBox::clicked, this, &rigConfig::slotEnablePTT);
@@ -46,18 +45,11 @@ rigConfig::rigConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::rigConfig
 }
 
 
-rigConfig::~rigConfig()
-{
-  delete ui;
-}
+rigConfig::~rigConfig() { delete ui; }
 
-void rigConfig::attachRigController(rigControl* rigCtrl)
-{
-  rigController = rigCtrl;
-}
+void rigConfig::attachRigController(rigControl* rigCtrl) { rigController = rigCtrl; }
 
-void rigConfig::readSettings()
-{
+void rigConfig::readSettings() {
   cp = rigController->params();
   QSettings qSettings;
   qSettings.beginGroup(cp->configLabel);
@@ -87,8 +79,7 @@ void rigConfig::readSettings()
   setParams();
 }
 
-void rigConfig::writeSettings()
-{
+void rigConfig::writeSettings() {
   QSettings qSettings;
   getParams();
   qSettings.beginGroup(cp->configLabel);
@@ -117,13 +108,11 @@ void rigConfig::writeSettings()
   qSettings.endGroup();
 }
 
-void rigConfig::getParams()
-{
+void rigConfig::getParams() {
   scatParams* cpCopy = new scatParams;
   *cpCopy = *cp;
   getValue(cp->serialPort, ui->serialPortLineEdit);
-  if (ui->radioModelComboBox->count() != 0)
-    getValue(cp->radioModel, ui->radioModelComboBox);
+  if (ui->radioModelComboBox->count() != 0) getValue(cp->radioModel, ui->radioModelComboBox);
   getValue(cp->civAddress, ui->civAddressLineEdit);
   getValue(cp->baudrate, ui->baudrateComboBox);
   getValue(cp->parity, ui->parityComboBox);
@@ -137,16 +126,11 @@ void rigConfig::getParams()
   getValue(cp->activeDTR, ui->DTRCheckBox);
   getValue(cp->nactiveRTS, ui->nRTSCheckBox);
   getValue(cp->nactiveDTR, ui->nDTRCheckBox);
-  if (ui->noPttRadioButton->isChecked())
-    cp->pttType = RIG_PTT_NONE;
-  if (ui->catVoiceRadioButton->isChecked())
-    cp->pttType = RIG_PTT_RIG;
-  if (ui->catDataRadioButton->isChecked())
-    cp->pttType = RIG_PTT_RIG_MICDATA;
-  if (ui->rtsRadioButton->isChecked())
-    cp->pttType = RIG_PTT_SERIAL_RTS;
-  if (ui->dtrRadioButton->isChecked())
-    cp->pttType = RIG_PTT_SERIAL_DTR;
+  if (ui->noPttRadioButton->isChecked()) cp->pttType = RIG_PTT_NONE;
+  if (ui->catVoiceRadioButton->isChecked()) cp->pttType = RIG_PTT_RIG;
+  if (ui->catDataRadioButton->isChecked()) cp->pttType = RIG_PTT_RIG_MICDATA;
+  if (ui->rtsRadioButton->isChecked()) cp->pttType = RIG_PTT_SERIAL_RTS;
+  if (ui->dtrRadioButton->isChecked()) cp->pttType = RIG_PTT_SERIAL_DTR;
   getValue(cp->txOnDelay, ui->txOnDelayDoubleSpinBox);
   getValue(cp->enableXMLRPC, ui->enableXMLRPCCheckBox);
   getValue(cp->XMLRPCPort, ui->XMLRPCPortLineEdit);
@@ -168,10 +152,8 @@ void rigConfig::getParams()
 }
 
 
-void rigConfig::setParams()
-{
-  if (rigController->getRadioList(ui->radioModelComboBox))
-    setValue(cp->radioModel, ui->radioModelComboBox);
+void rigConfig::setParams() {
+  if (rigController->getRadioList(ui->radioModelComboBox)) setValue(cp->radioModel, ui->radioModelComboBox);
   setValue(cp->serialPort, ui->serialPortLineEdit);
   setValue(cp->civAddress, ui->civAddressLineEdit);
   setValue(cp->baudrate, ui->baudrateComboBox);
@@ -182,31 +164,29 @@ void rigConfig::setParams()
   setValue(cp->enableCAT, ui->enableCATCheckBox);
   setValue(cp->enableSerialPTT, ui->enablePTTCheckBox);
   setValue(cp->pttSerialPort, ui->pttSerialPortLineEdit);
-  if (cp->activeRTS)
-    cp->nactiveRTS = false;
-  if (cp->activeDTR)
-    cp->nactiveDTR = false;
+  if (cp->activeRTS) cp->nactiveRTS = false;
+  if (cp->activeDTR) cp->nactiveDTR = false;
 
   setValue(cp->activeRTS, ui->RTSCheckBox);
   setValue(cp->activeDTR, ui->DTRCheckBox);
   setValue(cp->nactiveRTS, ui->nRTSCheckBox);
   setValue(cp->nactiveDTR, ui->nDTRCheckBox);
   switch (cp->pttType) {
-  case RIG_PTT_RIG:
-    setValue(true, ui->catVoiceRadioButton);
-    break;
-  case RIG_PTT_RIG_MICDATA:
-    setValue(true, ui->catDataRadioButton);
-    break;
-  case RIG_PTT_SERIAL_RTS:
-    setValue(true, ui->rtsRadioButton);
-    break;
-  case RIG_PTT_SERIAL_DTR:
-    setValue(true, ui->dtrRadioButton);
-    break;
-  default:
-    setValue(true, ui->noPttRadioButton);
-    break;
+    case RIG_PTT_RIG:
+      setValue(true, ui->catVoiceRadioButton);
+      break;
+    case RIG_PTT_RIG_MICDATA:
+      setValue(true, ui->catDataRadioButton);
+      break;
+    case RIG_PTT_SERIAL_RTS:
+      setValue(true, ui->rtsRadioButton);
+      break;
+    case RIG_PTT_SERIAL_DTR:
+      setValue(true, ui->dtrRadioButton);
+      break;
+    default:
+      setValue(true, ui->noPttRadioButton);
+      break;
   }
   if (cp->enableCAT && cp->enableSerialPTT) {
     if (cp->serialPort == cp->pttSerialPort) {
@@ -223,8 +203,7 @@ void rigConfig::setParams()
 }
 
 
-void rigConfig::slotEnableCAT()
-{
+void rigConfig::slotEnableCAT() {
   if (ui->enableCATCheckBox->isChecked() && ui->enablePTTCheckBox->isChecked()) {
     if (ui->pttSerialPortLineEdit->text() == ui->serialPortLineEdit->text()) {
       QMessageBox::critical(this, "Configuration error",
@@ -242,8 +221,7 @@ void rigConfig::slotEnableCAT()
 }
 
 
-void rigConfig::slotEnablePTT()
-{
+void rigConfig::slotEnablePTT() {
   if (ui->enableCATCheckBox->isChecked() && ui->enablePTTCheckBox->isChecked()) {
     if (ui->pttSerialPortLineEdit->text() == ui->serialPortLineEdit->text()) {
       QMessageBox::critical(this, "Configuration error",
@@ -258,14 +236,12 @@ void rigConfig::slotEnablePTT()
   getParams();
 }
 
-void rigConfig::slotEnableXMLRPC()
-{
+void rigConfig::slotEnableXMLRPC() {
   ui->enableCATCheckBox->setChecked(false);
   ui->enablePTTCheckBox->setChecked(false);
 }
 
-void rigConfig::slotEnableHamlibNet()
-{
+void rigConfig::slotEnableHamlibNet() {
   if (ui->enableHamlibNetCheckBox->isChecked()) {
     ui->enableCATCheckBox->setChecked(false);
     ui->enableXMLRPCCheckBox->setChecked(false);
@@ -273,8 +249,7 @@ void rigConfig::slotEnableHamlibNet()
   getParams();
 }
 
-void rigConfig::slotRestart()
-{
+void rigConfig::slotRestart() {
   getParams();
   if (ui->enableCATCheckBox->isChecked()) {
     if (rigController->init()) {
@@ -286,39 +261,25 @@ void rigConfig::slotRestart()
 }
 
 
-void rigConfig::slotCheckPTT0()
-{
-  checkPTT(0, ui->RTSCheckBox->isChecked());
-}
-void rigConfig::slotCheckPTT1()
-{
-  checkPTT(1, ui->DTRCheckBox->isChecked());
-}
-void rigConfig::slotCheckPTT2()
-{
-  checkPTT(2, ui->nRTSCheckBox->isChecked());
-}
-void rigConfig::slotCheckPTT3()
-{
-  checkPTT(3, ui->nDTRCheckBox->isChecked());
-}
+void rigConfig::slotCheckPTT0() { checkPTT(0, ui->RTSCheckBox->isChecked()); }
+void rigConfig::slotCheckPTT1() { checkPTT(1, ui->DTRCheckBox->isChecked()); }
+void rigConfig::slotCheckPTT2() { checkPTT(2, ui->nRTSCheckBox->isChecked()); }
+void rigConfig::slotCheckPTT3() { checkPTT(3, ui->nDTRCheckBox->isChecked()); }
 
-void rigConfig::checkPTT(int p, bool b)
-{
-  if (!b)
-    return;
+void rigConfig::checkPTT(int p, bool b) {
+  if (!b) return;
   switch (p) {
-  case 0:
-    setValue(false, ui->nRTSCheckBox);
-    break;
-  case 1:
-    setValue(false, ui->nDTRCheckBox);
-    break;
-  case 2:
-    setValue(false, ui->RTSCheckBox);
-    break;
-  case 3:
-    setValue(false, ui->DTRCheckBox);
-    break;
+    case 0:
+      setValue(false, ui->nRTSCheckBox);
+      break;
+    case 1:
+      setValue(false, ui->nDTRCheckBox);
+      break;
+    case 2:
+      setValue(false, ui->RTSCheckBox);
+      break;
+    case 3:
+      setValue(false, ui->DTRCheckBox);
+      break;
   }
 }

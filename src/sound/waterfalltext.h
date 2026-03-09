@@ -11,25 +11,18 @@ class imageViewer;
 class wfFilter;
 
 
-class waterfallText
-{
-public:
+class waterfallText {
+ public:
   waterfallText();
   ~waterfallText();
   void init();
   void setText(const QString& txt);
-  QImage* getImagePtr()
-  {
-    return &image;
-  }
+  QImage* getImagePtr() { return &image; }
   DSPFLOAT* nextLine();
-  int getLength()
-  {
-    return fftLength;
-  }
+  int getLength() { return fftLength; }
   double getDuration(const QString& txt = QString());
 
-private:
+ private:
   int fftLength;
   int samplingrate;
   fftw_complex* out;
@@ -54,4 +47,4 @@ private:
   macroExpansion mexp;
 };
 
-#endif // WATERFALLTEXT_H
+#endif  // WATERFALLTEXT_H

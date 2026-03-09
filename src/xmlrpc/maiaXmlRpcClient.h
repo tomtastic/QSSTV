@@ -34,11 +34,10 @@
 
 #include "maiaObject.h"
 
-class MaiaXmlRpcClient : public QObject
-{
+class MaiaXmlRpcClient : public QObject {
   Q_OBJECT
 
-public:
+ public:
   MaiaXmlRpcClient(QObject* parent = 0);
   MaiaXmlRpcClient(QUrl url, QObject* parent = 0);
   MaiaXmlRpcClient(QUrl url, QString userAgent, QObject* parent = 0);
@@ -49,13 +48,13 @@ public:
   void setSslConfiguration(const QSslConfiguration& config);
   QSslConfiguration sslConfiguration() const;
 
-signals:
+ signals:
   void sslErrors(QNetworkReply* reply, const QList<QSslError>& errors);
 
-private slots:
+ private slots:
   void replyFinished(QNetworkReply*);
 
-private:
+ private:
   void init();
   QNetworkAccessManager manager;
   QNetworkRequest request;

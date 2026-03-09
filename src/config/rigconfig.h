@@ -7,16 +7,14 @@ class rigControl;
 struct scatParams;
 
 
-namespace Ui
-{
+namespace Ui {
 class rigConfig;
 }
 
-class rigConfig : public baseConfig
-{
+class rigConfig : public baseConfig {
   Q_OBJECT
 
-public:
+ public:
   explicit rigConfig(QWidget* parent = 0);
   ~rigConfig();
   void attachRigController(rigControl* rigCtrl);
@@ -25,7 +23,7 @@ public:
   void getParams();
   void setParams();
 
-public slots:
+ public slots:
   void slotEnableCAT();
   void slotEnablePTT();
   void slotEnableXMLRPC();
@@ -36,11 +34,11 @@ public slots:
   void slotCheckPTT2();
   void slotCheckPTT3();
 
-private:
+ private:
   Ui::rigConfig* ui;
   scatParams* cp;
   rigControl* rigController;
   void checkPTT(int p, bool b);
 };
 
-#endif // RIGCONFIG_H
+#endif  // RIGCONFIG_H

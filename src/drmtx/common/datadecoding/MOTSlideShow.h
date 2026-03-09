@@ -36,24 +36,17 @@
 
 /* Classes ********************************************************************/
 /* Encoder ------------------------------------------------------------------ */
-class CMOTSlideShowEncoder
-{
-public:
-  CMOTSlideShowEncoder() : vecPicFileNames(0)
-  {
-    strCurObjName = "";
-  }
+class CMOTSlideShowEncoder {
+ public:
+  CMOTSlideShowEncoder() : vecPicFileNames(0) { strCurObjName = ""; }
   virtual ~CMOTSlideShowEncoder() {}
   void Init(CParameter& TParam);
   void GetDataUnit(CVector<_BINARY>& vecbiNewData);
   void AddArray(QByteArray* ba, const QString name, const QString format);
-  void ClearAllFileNames()
-  {
-    vecPicFileNames.Init(0);
-  }
+  void ClearAllFileNames() { vecPicFileNames.Init(0); }
   _BOOLEAN GetTransStat(string& strCurPict, _REAL& rCurPerc) const;
 
-protected:
+ protected:
   struct SPicDescr {
     QByteArray* arrayPtr;
     QString name;
@@ -70,4 +63,4 @@ protected:
   int bytesToBeUsed;
 };
 
-#endif // !defined(MOTSLIDESHOW_H__3B0UBVE98732KJVEW363LIHGEW982__INCLUDED_)
+#endif  // !defined(MOTSLIDESHOW_H__3B0UBVE98732KJVEW363LIHGEW982__INCLUDED_)

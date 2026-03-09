@@ -6,4 +6,4 @@
 
 
 bool hexFromString(QString s, QByteArray& ba, bool toHex);
-#endif // HEXCONVERTOR_H
+#endif  // HEXCONVERTOR_H

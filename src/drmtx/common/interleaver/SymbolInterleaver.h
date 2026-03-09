@@ -44,13 +44,12 @@
 
 
 /* Classes ********************************************************************/
-class CSymbInterleaver : public CTransmitterModul<_COMPLEX, _COMPLEX>, public CBlockInterleaver
-{
-public:
+class CSymbInterleaver : public CTransmitterModul<_COMPLEX, _COMPLEX>, public CBlockInterleaver {
+ public:
   CSymbInterleaver() {}
   virtual ~CSymbInterleaver() {}
 
-protected:
+ protected:
   int iN_MUX;
   CMatrix<_COMPLEX> matcInterlMemory;
   CVector<int> veciCurIndex;
@@ -62,4 +61,4 @@ protected:
 };
 
 
-#endif // !defined(CONVINTERLEAVER_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)
+#endif  // !defined(CONVINTERLEAVER_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)

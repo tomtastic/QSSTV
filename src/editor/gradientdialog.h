@@ -26,10 +26,7 @@
 
 struct sgradientParam {
   enum gType { NONE, LINEAR, RADIAL, CONICAL };
-  sgradientParam()
-  {
-    type = NONE;
-  }
+  sgradientParam() { type = NONE; }
   QColor color1;
   QColor color2;
   QColor color3;
@@ -50,26 +47,22 @@ struct sgradientParam {
 class gradientForm;
 
 /** Widget to display the various canvasItems */
-class gradientDialog : public QDialog, private Ui::gradientForm
-{
+class gradientDialog : public QDialog, private Ui::gradientForm {
   Q_OBJECT
-public:
+ public:
   gradientDialog(QWidget* parent = 0);
   ~gradientDialog();
   void readSettings();
   void writeSettings();
   void selectGradient();
-  sgradientParam param()
-  {
-    return gParam;
-  }
+  sgradientParam param() { return gParam; }
 
   //	QGradient *constructGradient( QRectF f);
-public slots:
+ public slots:
   void slotColorDialog();
   void slotUpdate();
 
-private:
+ private:
   sgradientParam gParam;
   void update();
   QGradient* g;

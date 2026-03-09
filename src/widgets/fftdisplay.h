@@ -13,35 +13,22 @@
 #define FFTMAX 6
 #define RANGE 30.
 
-class fftDisplay : public QLabel
-{
+class fftDisplay : public QLabel {
   Q_OBJECT
 
-public:
+ public:
   explicit fftDisplay(QWidget* parent = 0);
   ~fftDisplay();
   void init(int length, int slices, int isamplingrate);
   void showFFT(double* fftData);
-  void setMaxDb(int mb)
-  {
-    fftMax = mb;
-  }
-  void setRange(int rg)
-  {
-    range = rg;
-  }
-  void displayWaterfall(bool wf)
-  {
-    showWaterfall = wf;
-  }
+  void setMaxDb(int mb) { fftMax = mb; }
+  void setRange(int rg) { range = rg; }
+  void displayWaterfall(bool wf) { showWaterfall = wf; }
   void setMarkers(int mrk1 = 0, int mrk2 = 0, int mrk3 = 0);
-  void setAvg(double d)
-  {
-    avgVal = d;
-  }
+  void setAvg(double d) { avgVal = d; }
   QImage* getImage();
 
-private:
+ private:
   void drawMarkers(QPainter* painter, int top, int bot);
   void paintEvent(QPaintEvent* p);
   //  void mousePressEvent( QMouseEvent *e );
@@ -63,7 +50,7 @@ private:
   int marker1;
   int marker2;
   int marker3;
-  double step; // freq step per bin
+  double step;  // freq step per bin
   int binBegin;
   int binEnd;
   int binDiff;
@@ -73,4 +60,4 @@ private:
   int displayCounter;
 };
 
-#endif // FFTDISPLAY_H
+#endif  // FFTDISPLAY_H

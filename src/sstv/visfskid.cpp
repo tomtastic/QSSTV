@@ -16,15 +16,13 @@ const QString visStateStr[visDecoder::GETCODE + 1] = {"VISINIT",   "WAITS1200", 
 // };
 
 
-fskDecoder::fskDecoder()
-{
+fskDecoder::fskDecoder() {
   sampleCounter = 0;
   syncSampleCounter = 0;
 }
 
 
-bool fskDecoder::waitStartFreq(unsigned int freqL, unsigned int freqH)
-{
+bool fskDecoder::waitStartFreq(unsigned int freqL, unsigned int freqH) {
   if ((avgFreq >= freqL) && (avgFreq <= freqH)) {
     if (avgCounter < avgCount)
       avgCounter++;
@@ -33,14 +31,12 @@ bool fskDecoder::waitStartFreq(unsigned int freqL, unsigned int freqH)
       return true;
     }
   } else {
-    if (avgCounter)
-      avgCounter--;
+    if (avgCounter) avgCounter--;
   }
   return false;
 }
 
-bool fskDecoder::waitStartFreq(unsigned int freqL, unsigned int freqH, unsigned long maxWait, bool& timeout)
-{
+bool fskDecoder::waitStartFreq(unsigned int freqL, unsigned int freqH, unsigned long maxWait, bool& timeout) {
   if ((avgFreq >= freqL) && (avgFreq <= freqH)) {
     if (avgCounter < avgCount) {
       avgCounter++;
@@ -49,8 +45,7 @@ bool fskDecoder::waitStartFreq(unsigned int freqL, unsigned int freqH, unsigned 
       return true;
     }
   } else {
-    if (avgCounter)
-      avgCounter--;
+    if (avgCounter) avgCounter--;
   }
   if (timeoutCounter++ > maxWait) {
     timeout = true;
@@ -60,22 +55,19 @@ bool fskDecoder::waitStartFreq(unsigned int freqL, unsigned int freqH, unsigned 
   return false;
 }
 
-bool fskDecoder::waitEndFreq(unsigned int freqL, unsigned int freqH)
-{
+bool fskDecoder::waitEndFreq(unsigned int freqL, unsigned int freqH) {
   if ((avgFreq < freqL) || (avgFreq > freqH)) {
     if (avgCounter)
       avgCounter--;
     else
       return true;
   } else {
-    if (avgCounter < avgCount)
-      avgCounter++;
+    if (avgCounter < avgCount) avgCounter++;
   }
   return false;
 }
 
-bool fskDecoder::waitEndFreq(unsigned int freqL, unsigned int freqH, unsigned long maxWait, bool& timeout)
-{
+bool fskDecoder::waitEndFreq(unsigned int freqL, unsigned int freqH, unsigned long maxWait, bool& timeout) {
   if ((avgFreq < freqL) || (avgFreq > freqH)) {
     if (avgCounter < avgCount)
       avgCounter++;
@@ -84,8 +76,7 @@ bool fskDecoder::waitEndFreq(unsigned int freqL, unsigned int freqH, unsigned lo
       return true;
     }
   } else {
-    if (avgCounter)
-      avgCounter--;
+    if (avgCounter) avgCounter--;
   }
   if (timeoutCounter++ > maxWait) {
     timeout = true;
@@ -96,8 +87,7 @@ bool fskDecoder::waitEndFreq(unsigned int freqL, unsigned int freqH, unsigned lo
 }
 
 
-void fskDecoder::init()
-{
+void fskDecoder::init() {
   avgCounter = 0;
   bitCounter = 0;
   code = 0;
@@ -107,14 +97,10 @@ void fskDecoder::init()
 }
 
 
-fskIdDecoder::fskIdDecoder()
-{
-  fskState = FSKINIT;
-}
+fskIdDecoder::fskIdDecoder() { fskState = FSKINIT; }
 
 
-bool fskIdDecoder::assemble(bool reset)
-{
+bool fskIdDecoder::assemble(bool reset) {
   if (reset) {
     checksum = 0;
     headerFound = false;
@@ -122,14 +108,14 @@ bool fskIdDecoder::assemble(bool reset)
     fskIDStr.clear();
     return true;
   }
-  if (!headerFound) // waiting for start
+  if (!headerFound)  // waiting for start
   {
     if (symbol == 0x2A) {
       addToLog("headerFound", LOGFSKID);
       headerFound = true;
       return false;
     }
-    return true; // indicate resync
+    return true;  // indicate resync
   }
   if (symbol == 0x01) {
     endFound = true;
@@ -154,22 +140,19 @@ bool fskIdDecoder::assemble(bool reset)
   return false;
 }
 
-void fskIdDecoder::reset()
-{
+void fskIdDecoder::reset() {
   avgCount = FSKAVGCOUNT;
   switchState(FSKINIT, 0);
   init();
 }
 
-QString fskIdDecoder::getFSKId()
-{
+QString fskIdDecoder::getFSKId() {
   QString tmp(fskIDStr);
   fskIDStr.clear();
   return tmp;
 }
 
-void fskIdDecoder::switchState(efskState newState, unsigned int i)
-{
+void fskIdDecoder::switchState(efskState newState, unsigned int i) {
   Q_UNUSED(i);
   addToLog(QString("%1 to %2 at samplecounter:%3 total: %4")
                .arg(fskStateStr[fskState])
@@ -181,95 +164,93 @@ void fskIdDecoder::switchState(efskState newState, unsigned int i)
 }
 
 
-void fskIdDecoder::extract(unsigned int syncSampleCtr, bool narrow)
-{
+void fskIdDecoder::extract(unsigned int syncSampleCtr, bool narrow) {
   int i;
-  if (narrow)
-    return;
+  if (narrow) return;
   syncSampleCounter = syncSampleCtr;
   bool timeout;
   for (i = 0; i < RXSTRIPE; i++) {
     avgFreq = freqPtr[i];
     switch (fskState) {
-    case FSKINIT:
-      sampleCounter = 0;
-      avgCounter = 0;
-      switchState(WAITSTART1500, i);
-      timeoutCounter = 0;
-      break;
-    case WAITSTART1500:
-      if (waitStartFreq(1400, 1600)) {
-        switchState(WAITEND1500, i);
-        startSampleCounter = sampleCounter + i;
-      }
-      break;
-    case WAITEND1500: {
-      if (waitEndFreq(1400, 1600)) {
-        if (((sampleCounter + i - startSampleCounter) >= FSKMIN1500)) {
-          switchState(WAITSTART2100, i);
-          timeoutCounter = 0;
-        } else
-          switchState(FSKINIT, i);
-      }
-    } break;
-
-    case WAITSTART2100:
-      if (waitStartFreq(2000, 2200, 100, timeout)) {
-        switchState(WAITEND2100, i);
-        startSampleCounter = sampleCounter + i;
-      } else if (timeout) {
-        switchState(FSKINIT, i);
-      }
-      break;
-
-
-    case WAITEND2100: {
-      if (waitEndFreq(2000, 2200)) {
-        if (((sampleCounter + i - startSampleCounter) >= FSKMIN2100) &&
-            ((sampleCounter + i - startSampleCounter) < 2 * FSKMIN2100)) {
-          switchState(WAITSTART1900, i);
-          timeoutCounter = 0;
-        } else
-          switchState(FSKINIT, i);
-      }
-    } break;
-
-    case WAITSTART1900:
-      if (waitStartFreq(1800, 2000, 50, timeout)) {
-        switchState(WAITEND1900, i);
-        startSampleCounter = sampleCounter + i;
-      } else if (timeout) {
-        switchState(FSKINIT, i);
-      }
-      break;
-    case WAITEND1900: {
-      if ((sampleCounter + i - startSampleCounter) >= (FSKBIT / 2 - avgCount - 56)) {
-        switchState(GETID, i);
-        startSampleCounter = sampleCounter + i;
-        assemble(true);
-        bitCounter = 0;
-        symbol = 0;
-      }
-    } break;
-    case GETID:
-      if ((sampleCounter + i - startSampleCounter) >= FSKBIT) {
-        startSampleCounter = sampleCounter + i;
-        symbol >>= 1;
-
-        if (avgFreq < 2000) {
-          symbol |= 0x20;
+      case FSKINIT:
+        sampleCounter = 0;
+        avgCounter = 0;
+        switchState(WAITSTART1500, i);
+        timeoutCounter = 0;
+        break;
+      case WAITSTART1500:
+        if (waitStartFreq(1400, 1600)) {
+          switchState(WAITEND1500, i);
+          startSampleCounter = sampleCounter + i;
         }
-        addToLog(QString("bit %1, %2 - %3 ").arg(bitCounter).arg(sampleCounter + i).arg(QString::number(symbol, 2)),
-                 LOGFSKID);
-        bitCounter++;
-        if (bitCounter == 6) {
-          if (assemble(false)) {
+        break;
+      case WAITEND1500: {
+        if (waitEndFreq(1400, 1600)) {
+          if (((sampleCounter + i - startSampleCounter) >= FSKMIN1500)) {
+            switchState(WAITSTART2100, i);
+            timeoutCounter = 0;
+          } else
             switchState(FSKINIT, i);
-          }
-          bitCounter = 0;
         }
-      }
-      break;
+      } break;
+
+      case WAITSTART2100:
+        if (waitStartFreq(2000, 2200, 100, timeout)) {
+          switchState(WAITEND2100, i);
+          startSampleCounter = sampleCounter + i;
+        } else if (timeout) {
+          switchState(FSKINIT, i);
+        }
+        break;
+
+
+      case WAITEND2100: {
+        if (waitEndFreq(2000, 2200)) {
+          if (((sampleCounter + i - startSampleCounter) >= FSKMIN2100) &&
+              ((sampleCounter + i - startSampleCounter) < 2 * FSKMIN2100)) {
+            switchState(WAITSTART1900, i);
+            timeoutCounter = 0;
+          } else
+            switchState(FSKINIT, i);
+        }
+      } break;
+
+      case WAITSTART1900:
+        if (waitStartFreq(1800, 2000, 50, timeout)) {
+          switchState(WAITEND1900, i);
+          startSampleCounter = sampleCounter + i;
+        } else if (timeout) {
+          switchState(FSKINIT, i);
+        }
+        break;
+      case WAITEND1900: {
+        if ((sampleCounter + i - startSampleCounter) >= (FSKBIT / 2 - avgCount - 56)) {
+          switchState(GETID, i);
+          startSampleCounter = sampleCounter + i;
+          assemble(true);
+          bitCounter = 0;
+          symbol = 0;
+        }
+      } break;
+      case GETID:
+        if ((sampleCounter + i - startSampleCounter) >= FSKBIT) {
+          startSampleCounter = sampleCounter + i;
+          symbol >>= 1;
+
+          if (avgFreq < 2000) {
+            symbol |= 0x20;
+          }
+          addToLog(QString("bit %1, %2 - %3 ").arg(bitCounter).arg(sampleCounter + i).arg(QString::number(symbol, 2)),
+                   LOGFSKID);
+          bitCounter++;
+          if (bitCounter == 6) {
+            if (assemble(false)) {
+              switchState(FSKINIT, i);
+            }
+            bitCounter = 0;
+          }
+        }
+        break;
     }
   }
   sampleCounter += RXSTRIPE;
@@ -290,26 +271,18 @@ void fskIdDecoder::extract(unsigned int syncSampleCtr, bool narrow)
 // d6 1100 Hz 30 (1)  - 1300 Hz (0)
 // d7 1100 Hz 30 (1)  - 1300 Hz (0)
 // c2 1200 Hz 30
-visDecoder::visDecoder()
-{
-  visState = VISINIT;
-}
+visDecoder::visDecoder() { visState = VISINIT; }
 
 
-void visDecoder::reset()
-{
+void visDecoder::reset() {
   avgCount = VISAVGCOUNT;
   switchState(VISINIT, 0);
   init();
 }
 
-uint visDecoder::getCode()
-{
-  return code;
-}
+uint visDecoder::getCode() { return code; }
 
-void visDecoder::switchState(evisState newState, unsigned int i)
-{
+void visDecoder::switchState(evisState newState, unsigned int i) {
   Q_UNUSED(i);
   //  addToLog(QString("%1 to %2 at samplecounter:%3
   //  samplecounter%4").arg(visStateStr[visState]).arg(visStateStr[newState]).arg(sampleCounter+i).arg(sampleCounter+i),LOGVISCODE);
@@ -317,8 +290,7 @@ void visDecoder::switchState(evisState newState, unsigned int i)
 }
 
 
-void visDecoder::extract(unsigned int syncSampleCtr, bool narrow)
-{
+void visDecoder::extract(unsigned int syncSampleCtr, bool narrow) {
   syncSampleCounter = syncSampleCtr;
   if (narrow)
     extractNarrow();
@@ -327,8 +299,7 @@ void visDecoder::extract(unsigned int syncSampleCtr, bool narrow)
 }
 
 
-void visDecoder::extractNarrow()
-{
+void visDecoder::extractNarrow() {
   int i;
   unsigned int syncTemp;
   Q_UNUSED(syncTemp);
@@ -337,195 +308,195 @@ void visDecoder::extractNarrow()
     syncTemp = syncSampleCounter + i;
     avgFreq = freqPtr[i];
     switch (visState) {
-    case VISINIT:
-      sampleCounter = 0;
-      avgCounter = 0;
-      switchState(WAITSTART1900, i);
-      break;
+      case VISINIT:
+        sampleCounter = 0;
+        avgCounter = 0;
+        switchState(WAITSTART1900, i);
+        break;
 
-    case WAITSTART1900:
-      if (waitStartFreq(1800, 2000)) {
-        switchState(WAITEND1900, i);
-        startSampleCounter = sampleCounter + i;
-      }
-      break;
-    case WAITEND1900: {
-      if (waitEndFreq(1800, 2000)) {
-        if (((sampleCounter + i - startSampleCounter) >= VISMIN1900) &&
-            ((sampleCounter + i - startSampleCounter) < 2 * VISMIN1900)) {
-          switchState(WAITSTART2100, i);
-        } else
-          switchState(VISINIT, i);
-      }
-    } break;
-    case WAITSTART2100:
-      if (waitStartFreq(2000, 2200, 50, timeout)) {
-        switchState(WAITEND2100, i);
-        startSampleCounter = sampleCounter + i;
-      } else if (timeout) {
-        switchState(VISINIT, i);
-      }
-      break;
-    case WAITEND2100:
-      if (waitEndFreq(2000, 2200, 1250, timeout)) {
-        switchState(WAITSTARTBIT, i);
-        startSampleCounter = sampleCounter + i;
-      } else if (timeout) {
-        switchState(VISINIT, i);
-      }
-      break;
-    case WAITSTARTBIT:
-      if (waitEndFreq(1800, 2000, VISBITNARROW / 2, timeout)) {
-        switchState(VISINIT, i); // too short
-      }
-      if (timeout) {
-        validCode = false;
-        switchState(GETCODE, i);
-        startSampleCounter = sampleCounter + i;
-        bitCounter = 0;
-        bit = 1;
-        symbol = 0;
-      }
-      break;
-    case GETCODE:
-      if ((sampleCounter + i - startSampleCounter) >= VISBITNARROW) {
-        startSampleCounter = sampleCounter + i;
-        if (avgFreq < 2000) {
-          symbol |= bit; // 24 bits
+      case WAITSTART1900:
+        if (waitStartFreq(1800, 2000)) {
+          switchState(WAITEND1900, i);
+          startSampleCounter = sampleCounter + i;
         }
-        addToLog(QString("bit %1, %2 - %3 ").arg(bitCounter).arg(syncSampleCounter + i).arg(QString::number(symbol, 2)),
-                 LOGFSKID);
-        bitCounter++;
-        bit <<= 1;
-        if (bitCounter == 24) {
-          // check for validity
-          if ((symbol & 0xFFF) != 0x56D) {
-            validCode = false;
-          } else {
-            quint8 NVIS = ((symbol >> 12) & 0x3F);
-            quint8 XNVIS = ((symbol >> 18) & 0x3F);
-            if ((NVIS ^ 0x15) != XNVIS) {
+        break;
+      case WAITEND1900: {
+        if (waitEndFreq(1800, 2000)) {
+          if (((sampleCounter + i - startSampleCounter) >= VISMIN1900) &&
+              ((sampleCounter + i - startSampleCounter) < 2 * VISMIN1900)) {
+            switchState(WAITSTART2100, i);
+          } else
+            switchState(VISINIT, i);
+        }
+      } break;
+      case WAITSTART2100:
+        if (waitStartFreq(2000, 2200, 50, timeout)) {
+          switchState(WAITEND2100, i);
+          startSampleCounter = sampleCounter + i;
+        } else if (timeout) {
+          switchState(VISINIT, i);
+        }
+        break;
+      case WAITEND2100:
+        if (waitEndFreq(2000, 2200, 1250, timeout)) {
+          switchState(WAITSTARTBIT, i);
+          startSampleCounter = sampleCounter + i;
+        } else if (timeout) {
+          switchState(VISINIT, i);
+        }
+        break;
+      case WAITSTARTBIT:
+        if (waitEndFreq(1800, 2000, VISBITNARROW / 2, timeout)) {
+          switchState(VISINIT, i);  // too short
+        }
+        if (timeout) {
+          validCode = false;
+          switchState(GETCODE, i);
+          startSampleCounter = sampleCounter + i;
+          bitCounter = 0;
+          bit = 1;
+          symbol = 0;
+        }
+        break;
+      case GETCODE:
+        if ((sampleCounter + i - startSampleCounter) >= VISBITNARROW) {
+          startSampleCounter = sampleCounter + i;
+          if (avgFreq < 2000) {
+            symbol |= bit;  // 24 bits
+          }
+          addToLog(
+              QString("bit %1, %2 - %3 ").arg(bitCounter).arg(syncSampleCounter + i).arg(QString::number(symbol, 2)),
+              LOGFSKID);
+          bitCounter++;
+          bit <<= 1;
+          if (bitCounter == 24) {
+            // check for validity
+            if ((symbol & 0xFFF) != 0x56D) {
               validCode = false;
             } else {
-              validCode = true;
-              if ((mode = lookupVIS(symbol)) != NOTVALID) {
-                emit visCodeNarrowDetected(static_cast<int>(mode), syncSampleCounter + i);
+              quint8 NVIS = ((symbol >> 12) & 0x3F);
+              quint8 XNVIS = ((symbol >> 18) & 0x3F);
+              if ((NVIS ^ 0x15) != XNVIS) {
+                validCode = false;
+              } else {
+                validCode = true;
+                if ((mode = lookupVIS(symbol)) != NOTVALID) {
+                  emit visCodeNarrowDetected(static_cast<int>(mode), syncSampleCounter + i);
+                }
               }
+              switchState(VISINIT, i);
             }
-            switchState(VISINIT, i);
           }
+          addToLog(
+              QString("bit %1, %2 - %3 ").arg(bitCounter).arg(syncSampleCounter + i).arg(QString::number(symbol, 2)),
+              LOGFSKID);
         }
-        addToLog(QString("bit %1, %2 - %3 ").arg(bitCounter).arg(syncSampleCounter + i).arg(QString::number(symbol, 2)),
-                 LOGFSKID);
-      }
-      break;
-    default:
-      switchState(VISINIT, i);
-      break;
+        break;
+      default:
+        switchState(VISINIT, i);
+        break;
     }
   }
   sampleCounter += RXSTRIPE;
 }
 
 
-void visDecoder::extractWide()
-{
+void visDecoder::extractWide() {
   int i;
   bool timeout = false;
   for (i = 0; i < RXSTRIPE; i++) {
     avgFreq = freqPtr[i];
     switch (visState) {
-    case VISINIT:
-      sampleCounter = 0;
-      avgCounter = 0;
-      switchState(WAITSTART1900, i);
-      break;
+      case VISINIT:
+        sampleCounter = 0;
+        avgCounter = 0;
+        switchState(WAITSTART1900, i);
+        break;
 
-    case WAITSTART1900:
-      if (waitStartFreq(1800, 2000)) {
-        switchState(WAITEND1900, i);
-        startSampleCounter = sampleCounter + i;
-      }
-      break;
-    case WAITEND1900: {
-      if (waitEndFreq(1800, 2000)) {
-        if (((sampleCounter + i - startSampleCounter) >= VISMIN1900) &&
-            ((sampleCounter + i - startSampleCounter) < 2 * VISMIN1900)) {
-          addToLog(QString("end1900 at %1").arg(syncSampleCounter + i), LOGVISCODE);
-          switchState(WAITSTART1200, i);
-          timeoutCounter = 0;
-        } else
-          switchState(VISINIT, i);
-      }
-    } break;
-    case WAITSTART1200:
-      if (waitStartFreq(1100, 1300, 50, timeout)) {
-        addToLog(QString("start1200 at %1").arg(syncSampleCounter + i), LOGVISCODE);
-        switchState(WAITEND1200, i);
-        startSampleCounter = sampleCounter + i;
-        timeoutCounter = 0;
-      } else if (timeout) {
-        switchState(VISINIT, i);
-      }
-      break;
-    case WAITEND1200: {
-      if (waitEndFreq(1100, 1300, VISBITWIDE / 2 - 50, timeout)) {
-        switchState(VISINIT, i); // too short
-      }
-      if (timeout) {
-        validCode = false;
-        switchState(GETCODE, i);
-        startSampleCounter = sampleCounter + i;
-        addToLog(QString("startbit at %1").arg(syncSampleCounter + i), LOGVISCODE);
-        bitCounter = 0;
-        bit = 1;
-        symbol = 0;
-      }
-    } break;
-    case GETCODE:
-      if ((sampleCounter + i - startSampleCounter) >= VISBITWIDE) {
-        if (avgFreq > 1400) {
-          // end of VIS detected
-          validCode = true;
-          addToLog(QString("end bits at %1").arg(syncSampleCounter + i - VISBITWIDE / 2), LOGVISCODE);
-          if (bitCounter <= 11) {
-            symbol &= 0xFF;
-          } else {
-            symbol &= 0xFFFF;
-          }
-          // check for validity
-          if ((mode = lookupVIS(symbol)) != NOTVALID) {
-            //                      emit visCodeWideDetected((int)mode,syncSampleCounter+i-VISBITWIDE/2);
-            emit visCodeWideDetected(static_cast<int>(mode), syncSampleCounter + i);
-          }
-
-          switchState(VISINIT, i);
-        } else {
+      case WAITSTART1900:
+        if (waitStartFreq(1800, 2000)) {
+          switchState(WAITEND1900, i);
           startSampleCounter = sampleCounter + i;
-          //              symbol>>=1;
-
-          if (avgFreq < 1200) {
-            symbol |= bit; // 16 bits
-          }
-          addToLog(
-              QString("bit %1, %2 - %3 ").arg(bitCounter).arg(syncSampleCounter + i).arg(QString::number(symbol, 2)),
-              LOGVISCODE);
-          bitCounter++;
-          bit <<= 1;
         }
-      }
-      break;
-    default:
-      switchState(VISINIT, i);
-      break;
+        break;
+      case WAITEND1900: {
+        if (waitEndFreq(1800, 2000)) {
+          if (((sampleCounter + i - startSampleCounter) >= VISMIN1900) &&
+              ((sampleCounter + i - startSampleCounter) < 2 * VISMIN1900)) {
+            addToLog(QString("end1900 at %1").arg(syncSampleCounter + i), LOGVISCODE);
+            switchState(WAITSTART1200, i);
+            timeoutCounter = 0;
+          } else
+            switchState(VISINIT, i);
+        }
+      } break;
+      case WAITSTART1200:
+        if (waitStartFreq(1100, 1300, 50, timeout)) {
+          addToLog(QString("start1200 at %1").arg(syncSampleCounter + i), LOGVISCODE);
+          switchState(WAITEND1200, i);
+          startSampleCounter = sampleCounter + i;
+          timeoutCounter = 0;
+        } else if (timeout) {
+          switchState(VISINIT, i);
+        }
+        break;
+      case WAITEND1200: {
+        if (waitEndFreq(1100, 1300, VISBITWIDE / 2 - 50, timeout)) {
+          switchState(VISINIT, i);  // too short
+        }
+        if (timeout) {
+          validCode = false;
+          switchState(GETCODE, i);
+          startSampleCounter = sampleCounter + i;
+          addToLog(QString("startbit at %1").arg(syncSampleCounter + i), LOGVISCODE);
+          bitCounter = 0;
+          bit = 1;
+          symbol = 0;
+        }
+      } break;
+      case GETCODE:
+        if ((sampleCounter + i - startSampleCounter) >= VISBITWIDE) {
+          if (avgFreq > 1400) {
+            // end of VIS detected
+            validCode = true;
+            addToLog(QString("end bits at %1").arg(syncSampleCounter + i - VISBITWIDE / 2), LOGVISCODE);
+            if (bitCounter <= 11) {
+              symbol &= 0xFF;
+            } else {
+              symbol &= 0xFFFF;
+            }
+            // check for validity
+            if ((mode = lookupVIS(symbol)) != NOTVALID) {
+              //                      emit visCodeWideDetected((int)mode,syncSampleCounter+i-VISBITWIDE/2);
+              emit visCodeWideDetected(static_cast<int>(mode), syncSampleCounter + i);
+            }
+
+            switchState(VISINIT, i);
+          } else {
+            startSampleCounter = sampleCounter + i;
+            //              symbol>>=1;
+
+            if (avgFreq < 1200) {
+              symbol |= bit;  // 16 bits
+            }
+            addToLog(
+                QString("bit %1, %2 - %3 ").arg(bitCounter).arg(syncSampleCounter + i).arg(QString::number(symbol, 2)),
+                LOGVISCODE);
+            bitCounter++;
+            bit <<= 1;
+          }
+        }
+        break;
+      default:
+        switchState(VISINIT, i);
+        break;
     }
   }
   sampleCounter += RXSTRIPE;
 }
 
 
-streamDecoder::streamDecoder(bool narrow)
-{
+streamDecoder::streamDecoder(bool narrow) {
   fskCoder.setDataPtr(avgBuffer);
   visCoder.setDataPtr(avgBuffer);
   //  retracer.setDataPtr(avgBuffer);
@@ -533,16 +504,14 @@ streamDecoder::streamDecoder(bool narrow)
 }
 
 
-void streamDecoder::reset()
-{
+void streamDecoder::reset() {
   avgFreq = 0;
   fskCoder.reset();
   visCoder.reset();
   //  retracer.reset();
 }
 
-void streamDecoder::process(quint16* freqPtr, unsigned int syncSampleCtr)
-{
+void streamDecoder::process(quint16* freqPtr, unsigned int syncSampleCtr) {
   int i;
   for (i = 0; i < RXSTRIPE; i++) {
     avgFreq = avgFreq * (1 - FREQAVG) + FREQAVG * static_cast<DSPFLOAT>(freqPtr[i]);

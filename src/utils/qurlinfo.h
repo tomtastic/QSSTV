@@ -52,9 +52,8 @@ QT_BEGIN_NAMESPACE
 class QUrl;
 class QUrlInfoPrivate;
 
-class QUrlInfo
-{
-public:
+class QUrlInfo {
+ public:
   enum PermissionSpec {
     ReadOwner = 00400,
     WriteOwner = 00200,
@@ -112,15 +111,12 @@ public:
   static bool equal(const QUrlInfo& i1, const QUrlInfo& i2, int sortBy);
 
   bool operator==(const QUrlInfo& i) const;
-  inline bool operator!=(const QUrlInfo& i) const
-  {
-    return !operator==(i);
-  }
+  inline bool operator!=(const QUrlInfo& i) const { return !operator==(i); }
 
-private:
+ private:
   QUrlInfoPrivate* d;
 };
 
 QT_END_NAMESPACE
 
-#endif // QURLINFO_H
+#endif  // QURLINFO_H

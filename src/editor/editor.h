@@ -37,18 +37,17 @@ This editor allows the creation of images and templates.
 /*!
 @author Johan Maes - ON4QZ
 */
-class editor : public QMainWindow
-{
+class editor : public QMainWindow {
   Q_OBJECT
 
-public:
+ public:
   editor(QWidget* parent = 0);
   ~editor();
   bool openFile(QString fn);
   void readSettings();
   bool setImage(QImage* im);
 
-public slots:
+ public slots:
   void slotFileNew();
   void slotFileOpen();
   void slotFileSave();
@@ -57,7 +56,7 @@ public slots:
   void slotFileQuit();
 
 
-private:
+ private:
   editorView* ev;
   void closeEvent(QCloseEvent*);
   void initActions();

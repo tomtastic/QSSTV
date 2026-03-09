@@ -10,8 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-void crc8_c(/*@out@ */ double checksum[], double in[], int N)
-{
+void crc8_c(/*@out@ */ double checksum[], double in[], int N) {
   int i;
   unsigned int b = 0xFF;
   unsigned int x = 0x1D; /* (1) 00011101 */

@@ -6,10 +6,7 @@
 #include "maiaXmlRpcServerConnection.h"
 
 struct sxmlInfo {
-  sxmlInfo()
-  {
-    frequency = -1.;
-  }
+  sxmlInfo() { frequency = -1.; }
   QString rigName;
   QString bandWidth;
   double frequency;
@@ -18,15 +15,14 @@ struct sxmlInfo {
   int notch;
 };
 
-class xmlInterface : public QObject
-{
+class xmlInterface : public QObject {
   Q_OBJECT
-public:
+ public:
   explicit xmlInterface(QObject* parent = 0);
   void activatePTT(bool b);
 
 
-public slots:
+ public slots:
   void takeControl();
   void setName(QString t);
   void setModes(QVariantList t);
@@ -43,11 +39,11 @@ public slots:
   int getNotch(int t);
 
 
-private:
+ private:
   MaiaXmlRpcServer* rpcServer;
   void log(QString cmd, QString t);
   void log(QString cmd, QVariantList t);
   sxmlInfo rigInfo;
 };
 
-#endif // XMLINTERFACE_H
+#endif  // XMLINTERFACE_H

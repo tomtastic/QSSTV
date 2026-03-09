@@ -44,15 +44,14 @@
 
 
 /* Classes ********************************************************************/
-class CSDCTransmit
-{
-public:
+class CSDCTransmit {
+ public:
   CSDCTransmit() {}
   virtual ~CSDCTransmit() {}
 
   void SDCParam(CVector<_BINARY>* pbiData, CParameter& Parameter);
 
-protected:
+ protected:
   void DataEntityType0(CVector<_BINARY>& vecbiData, CParameter& Parameter);
   void DataEntityType1(CVector<_BINARY>& vecbiData, int ServiceID, CParameter& Parameter);
   // ...
@@ -64,4 +63,4 @@ protected:
 };
 
 
-#endif // !defined(SDC_H__3B0BA660_CA63SDBOJKEWROBNER89NE877A0D312__INCLUDED_)
+#endif  // !defined(SDC_H__3B0BA660_CA63SDBOJKEWROBNER89NE877A0D312__INCLUDED_)

@@ -40,11 +40,9 @@
 /******************************************************************************\
 * Encoder                                                                      *
 \******************************************************************************/
-void CMOTSlideShowEncoder::GetDataUnit(CVector<_BINARY>& vecbiNewData)
-{
+void CMOTSlideShowEncoder::GetDataUnit(CVector<_BINARY>& vecbiNewData) {
   if (allDataSend) {
-    if (extraBlocks-- <= 0)
-      stopDRM = true;
+    if (extraBlocks-- <= 0) stopDRM = true;
   }
 
   /* Get new data group from MOT encoder. If the last MOT object was
@@ -52,14 +50,13 @@ void CMOTSlideShowEncoder::GetDataUnit(CVector<_BINARY>& vecbiNewData)
      a new picture to the MOT encoder object */
   if (MOTDAB.GetDataGroup(vecbiNewData) == true) {
     allDataSend = true;
-    AddNextPicture(); // basically the same
+    AddNextPicture();  // basically the same
     //        addToLog("loading raw data",LOGDRMMOT);
   }
   //    arrayBinDump(QString("slice %1").arg(sliceCounter++),vecbiNewData,32,true);
 }
 
-_BOOLEAN CMOTSlideShowEncoder::GetTransStat(string& strCurPict, _REAL& rCurPerc) const
-{
+_BOOLEAN CMOTSlideShowEncoder::GetTransStat(string& strCurPict, _REAL& rCurPerc) const {
   /*
     Name and current percentage of transmitted data of current picture.
   */
@@ -72,8 +69,7 @@ _BOOLEAN CMOTSlideShowEncoder::GetTransStat(string& strCurPict, _REAL& rCurPerc)
     return false;
 }
 
-void CMOTSlideShowEncoder::Init(CParameter& TParam)
-{
+void CMOTSlideShowEncoder::Init(CParameter& TParam) {
   bytesToBeUsed = (TParam.iNumDecodedBitsMSC / SIZEOF__BYTE);
   iPictureCnt = 0;
   strCurObjName = "";
@@ -82,12 +78,11 @@ void CMOTSlideShowEncoder::Init(CParameter& TParam)
   allDataSend = false;
   extraBlocks = 5;
   sliceCounter = 0;
-  MOTDAB.prepareSegmentList(1); // one repitition
+  MOTDAB.prepareSegmentList(1);  // one repitition
   addToLog("Init and loading raw data", LOGDRMMOT);
 }
 
-void CMOTSlideShowEncoder::AddNextPicture()
-{
+void CMOTSlideShowEncoder::AddNextPicture() {
   int i;
   unsigned char byteIn;
 
@@ -111,13 +106,11 @@ void CMOTSlideShowEncoder::AddNextPicture()
     MOTDAB.SetMOTObject(MOTPicture, bytesToBeUsed);
     /* Set file counter to next picture, test for wrap around */
     iPictureCnt++;
-    if (iPictureCnt == vecPicFileNames.Size())
-      iPictureCnt = 0;
+    if (iPictureCnt == vecPicFileNames.Size()) iPictureCnt = 0;
   }
 }
 
-void CMOTSlideShowEncoder::AddArray(QByteArray* ba, const QString name, const QString format)
-{
+void CMOTSlideShowEncoder::AddArray(QByteArray* ba, const QString name, const QString format) {
   /* Only ContentSubType "JFIF" (JPEG) and ContentSubType "PNG" are allowed
      for SlideShow application (not tested here!) */
   /* Add file name to the list */

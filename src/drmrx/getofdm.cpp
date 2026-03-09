@@ -36,8 +36,7 @@
 #define PI (atan(1.0) * 4.0)
 int getofdm(/*@null@ */ float* rs, float time_offset_fractional_init, float freq_offset_init,
             float delta_time_offset_I_init, int Ts, int Tu, /*@null@ */ float Zi[], /*@null@ */ float* out, int init,
-            int TIME_SYNC_ENABLE, int FREQ_SYNC_ENABLE)
-{
+            int TIME_SYNC_ENABLE, int FREQ_SYNC_ENABLE) {
   float EPSILON = 1.0E-10;
   float max_theta = 10.0;
   //  float max_time_offset_ctrl = 10.0;
@@ -177,7 +176,7 @@ int getofdm(/*@null@ */ float* rs, float time_offset_fractional_init, float freq
         temp5[1] += -rs[i * 2] * rs[(Tu + i) * 2 + 1] + rs[i * 2 + 1] * rs[(Tu + i) * 2];
         temp6 += rs[i * 2] * rs[i * 2] + rs[i * 2 + 1] * rs[i * 2 + 1]; /* 1-5 * 1-5' */
         temp7 += rs[(i + Tu) * 2] * rs[(i + Tu) * 2] + rs[(i + Tu) * 2 + 1] * rs[(i + Tu) * 2 + 1];
-            /* Tu_1_5 * Tu_1_5' */ /* pa0mbo check for OK */
+        /* Tu_1_5 * Tu_1_5' */ /* pa0mbo check for OK */
         temp8[0] += rs[(i + Tg - 3) * 2] * rs[(i + Tu + Tg - 3) * 2] +
                     rs[(i + Tg - 3) * 2 + 1] * rs[(i + Tu + Tg - 3) * 2 + 1]; /* Tg -2 +2 * Tg + Tu -2 +2 */
         temp8[1] += -rs[(i + Tg - 3) * 2] * rs[(i + Tu + Tg - 3) * 2 + 1] + rs[(i + Tg - 3) * 2 + 1] +
@@ -194,10 +193,8 @@ int getofdm(/*@null@ */ float* rs, float time_offset_fractional_init, float freq
       delta_theta = (theta_plus - theta_minus) * Tgh / temp4;
 
       /* now limit the delta_theta value */
-      if (delta_theta < -max_theta)
-        delta_theta = -max_theta;
-      if (delta_theta > max_theta)
-        delta_theta = max_theta;
+      if (delta_theta < -max_theta) delta_theta = -max_theta;
+      if (delta_theta > max_theta) delta_theta = max_theta;
 
       /* P-I controller for theta */
       time_offset_ctrl = delta_theta - time_offset_fractional;
@@ -211,10 +208,8 @@ int getofdm(/*@null@ */ float* rs, float time_offset_fractional_init, float freq
       //          %5").arg(time_offset_ctrl).arg(delta_time_offset_I).arg(delta_time_offset_P).arg(delta_time_offset).arg(delta_time_offset_integer));
 
       /* now limit delta_time_offset_integer */
-      if (delta_time_offset_integer < -1)
-        delta_time_offset_integer = -1;
-      if (delta_time_offset_integer > 1)
-        delta_time_offset_integer = 1;
+      if (delta_time_offset_integer < -1) delta_time_offset_integer = -1;
+      if (delta_time_offset_integer > 1) delta_time_offset_integer = 1;
       time_offset_fractional = delta_time_offset - delta_time_offset_integer;
 
       /* printf("delta_time_offset_integer as used in phi_freq_corr %d phifcl %g \n",

@@ -4,21 +4,19 @@
 #include <QDialog>
 #include <QMovie>
 
-namespace Ui
-{
+namespace Ui {
 class extViewer;
 }
 
-class extViewer : public QDialog
-{
+class extViewer : public QDialog {
   Q_OBJECT
 
-public:
+ public:
   explicit extViewer(QWidget* parent = 0);
   ~extViewer();
   void setup(const QString& fn);
 
-private:
+ private:
   Ui::extViewer* ui;
   int w, h;
   int labelWidth, labelHeight;
@@ -28,4 +26,4 @@ private:
   bool activeMovie;
 };
 
-#endif // EXTVIEWER_H
+#endif  // EXTVIEWER_H

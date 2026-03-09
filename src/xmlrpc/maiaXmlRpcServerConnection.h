@@ -34,9 +34,8 @@
 #include "maiaFault.h"
 
 #if QT_VERSION >= 0x050000
-class QHttpRequestHeader
-{
-public:
+class QHttpRequestHeader {
+ public:
   explicit QHttpRequestHeader(QString headerString);
   virtual ~QHttpRequestHeader() {}
 
@@ -44,25 +43,21 @@ public:
   QString method();
   uint contentLength() const;
 
-private:
+ private:
   QString mHeaderString;
   QString mMethod;
   QMap<QString, QString> mHeaders;
 };
 
-class QHttpResponseHeader
-{
-public:
+class QHttpResponseHeader {
+ public:
   explicit QHttpResponseHeader(int code, QString text);
   virtual ~QHttpResponseHeader() {}
   void setValue(const QString& key, const QString& value);
   virtual QString toString() const;
-  void setContentLength(int len)
-  {
-    setValue("Content-length", QString::number(len));
-  }
+  void setContentLength(int len) { setValue("Content-length", QString::number(len)); }
 
-private:
+ private:
   int mCode;
   QString mText;
   QMap<QString, QString> mHeaders;
@@ -70,22 +65,21 @@ private:
 #endif
 
 
-class MaiaXmlRpcServerConnection : public QObject
-{
+class MaiaXmlRpcServerConnection : public QObject {
   Q_OBJECT
 
-public:
+ public:
   MaiaXmlRpcServerConnection(QTcpSocket* connection, QObject* parent = 0);
   ~MaiaXmlRpcServerConnection();
 
-signals:
+ signals:
   void getMethod(QString method, QObject** responseObject, const char** responseSlot);
 
-private slots:
+ private slots:
   void readFromSocket();
   void slotDisconnect();
 
-private:
+ private:
   void sendResponse(QString content);
   void parseCall(QString call);
 

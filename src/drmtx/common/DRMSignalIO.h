@@ -64,7 +64,7 @@
 
 #define RNIP_SEARCH_RANGE_NARROW 5100.0
 #define RNIP_SEARCH_RANGE_WIDE 15100.0
-#define RNIP_EXCLUDE_BINS 2 // either side of the peak
+#define RNIP_EXCLUDE_BINS 2  // either side of the peak
 
 /* Use raw 16 bit data or in text form for file format for DRM data. Defining
    the following macro will enable the raw data option */
@@ -72,35 +72,26 @@
 
 
 /* Classes ********************************************************************/
-class CTransmitData : public CTransmitterModul<_COMPLEX, _COMPLEX>
-{
-public:
+class CTransmitData : public CTransmitterModul<_COMPLEX, _COMPLEX> {
+ public:
   enum EOutFormat { OF_REAL_VAL /* real valued */, OF_IQ_POS, OF_IQ_NEG /* I / Q */, OF_EP /* envelope / phase */ };
 
   CTransmitData(CSoundOutInterface* pNS)
-      : pFileTransmitter(nullptr), pSound(pNS), eOutputFormat(OF_REAL_VAL),
+      : pFileTransmitter(nullptr),
+        pSound(pNS),
+        eOutputFormat(OF_REAL_VAL),
         rDefCarOffset(static_cast<_REAL>(VIRTUAL_INTERMED_FREQ))
   //  , strOutFileName("test/TransmittedData.txt")
-  {
-  }
+  {}
   virtual ~CTransmitData();
 
-  void SetIQOutput(const EOutFormat eFormat)
-  {
-    eOutputFormat = eFormat;
-  }
-  EOutFormat GetIQOutput()
-  {
-    return eOutputFormat;
-  }
+  void SetIQOutput(const EOutFormat eFormat) { eOutputFormat = eFormat; }
+  EOutFormat GetIQOutput() { return eOutputFormat; }
 
-  void SetCarOffset(const CReal rNewCarOffset)
-  {
-    rDefCarOffset = rNewCarOffset;
-  }
+  void SetCarOffset(const CReal rNewCarOffset) { rDefCarOffset = rNewCarOffset; }
 
 
-protected:
+ protected:
   FILE* pFileTransmitter;
   CSoundOutInterface* pSound;
   CVector<short> vecsDataOut;
@@ -116,4 +107,4 @@ protected:
   virtual void ProcessDataInternal(CParameter& Parameter);
 };
 
-#endif // !defined(DRMSIGNALIO_H__3B0BA660_CA63_4344_B_23E7A0D31912__INCLUDED_)
+#endif  // !defined(DRMSIGNALIO_H__3B0BA660_CA63_4344_B_23E7A0D31912__INCLUDED_)

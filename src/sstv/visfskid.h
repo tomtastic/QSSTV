@@ -25,20 +25,16 @@
 
 #define MINRETRACEWIDTH ((SAMPLERATE * 290) / 1000)
 
-class fskDecoder : public QObject
-{
+class fskDecoder : public QObject {
   Q_OBJECT
-public:
+ public:
   fskDecoder();
   virtual void extract(unsigned int syncSampleCtr, bool narrow) = 0;
-  void setDataPtr(DSPFLOAT* dataPtr)
-  {
-    freqPtr = dataPtr;
-  }
+  void setDataPtr(DSPFLOAT* dataPtr) { freqPtr = dataPtr; }
   virtual void reset() = 0;
 
 
-protected:
+ protected:
   unsigned char bitCounter;
   quint32 symbol;
   quint32 bit;
@@ -65,20 +61,19 @@ protected:
   void init();
 };
 
-class fskIdDecoder : public fskDecoder
-{
+class fskIdDecoder : public fskDecoder {
   Q_OBJECT
-public:
+ public:
   enum efskState { FSKINIT, WAITSTART1500, WAITEND1500, WAITSTART1900, WAITEND1900, WAITSTART2100, WAITEND2100, GETID };
   fskIdDecoder();
   void extract(unsigned int syncSampleCtr, bool narrow);
   void reset();
   QString getFSKId();
 
-signals:
+ signals:
   void callReceived(QString);
 
-private:
+ private:
   void switchState(efskState newState, unsigned int i);
   bool assemble(bool reset);
   unsigned int fskIDChar;
@@ -92,10 +87,9 @@ private:
 };
 
 
-class visDecoder : public fskDecoder
-{
+class visDecoder : public fskDecoder {
   Q_OBJECT
-public:
+ public:
   enum evisState {
     VISINIT,
     WAITSTART1200,
@@ -114,11 +108,11 @@ public:
   void reset();
   uint getCode();
   esstvMode mode;
-signals:
+ signals:
   void visCodeNarrowDetected(int, uint);
   void visCodeWideDetected(int, uint);
 
-private:
+ private:
   void switchState(evisState newState, unsigned int i);
   evisState visState;
 };
@@ -136,26 +130,16 @@ private:
 //   eretraceState  retraceState;
 // };
 
-class streamDecoder
-{
-public:
+class streamDecoder {
+ public:
   streamDecoder(bool narrow);
   void reset();
   void process(quint16* freqPtr, unsigned int syncSampleCtr);
-  uint getVisCode()
-  {
-    return visCoder.getCode();
-  }
-  fskIdDecoder* getFskDecoderPtr()
-  {
-    return &fskCoder;
-  }
-  visDecoder* getVisDecoderPtr()
-  {
-    return &visCoder;
-  }
+  uint getVisCode() { return visCoder.getCode(); }
+  fskIdDecoder* getFskDecoderPtr() { return &fskCoder; }
+  visDecoder* getVisDecoderPtr() { return &visCoder; }
 
-private:
+ private:
   DSPFLOAT avgFreq;
   DSPFLOAT avgBuffer[RXSTRIPE];
   fskIdDecoder fskCoder;
@@ -166,4 +150,4 @@ private:
 };
 
 
-#endif // VISFSKID_H
+#endif  // VISFSKID_H

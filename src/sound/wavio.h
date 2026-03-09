@@ -57,56 +57,45 @@ The "data" subchunk contains the size of the data and the actual sound:
 
 
 struct sWave {
-  char chunkID[4];         //!< Contains the letters "RIFF"
-  int chunkSize;           //!< 36 + SubChunk2Size
-  char format[4];          //!< Contains the letters "WAVE"
-  char subChunk1ID[4];     //!< Contains the letters "fmt "
-  int subChunk1Size;       //!< 16 for PCM
-  short int audioFormat;   //!< PCM = 1 (i.e. Linear quantization)
-  short int numChannels;   //!< Mono = 1, Stereo = 2, etc.
-  unsigned int sampleRate; //!< 8000, 44100, etc.
-  unsigned int byteRate;   //!< == SampleRate * NumChannels * BitsPerSample/8
-  short int blockAlign;    //!< == NumChannels * BitsPerSample/8
-  short int bitsPerSample; //!< 8 bits = 8, 16 bits = 16, etc.
-  char subChunk2ID[4];     //!< Contains the letters "data"
-  int subChunk2Size;       //!< NumSamples * NumChannels * BitsPerSample/8
+  char chunkID[4];          //!< Contains the letters "RIFF"
+  int chunkSize;            //!< 36 + SubChunk2Size
+  char format[4];           //!< Contains the letters "WAVE"
+  char subChunk1ID[4];      //!< Contains the letters "fmt "
+  int subChunk1Size;        //!< 16 for PCM
+  short int audioFormat;    //!< PCM = 1 (i.e. Linear quantization)
+  short int numChannels;    //!< Mono = 1, Stereo = 2, etc.
+  unsigned int sampleRate;  //!< 8000, 44100, etc.
+  unsigned int byteRate;    //!< == SampleRate * NumChannels * BitsPerSample/8
+  short int blockAlign;     //!< == NumChannels * BitsPerSample/8
+  short int bitsPerSample;  //!< 8 bits = 8, 16 bits = 16, etc.
+  char subChunk2ID[4];      //!< Contains the letters "data"
+  int subChunk2Size;        //!< NumSamples * NumChannels * BitsPerSample/8
 };
 
 //! class for accessing .wav files
-class wavIO
-{
-public:
+class wavIO {
+ public:
   wavIO(unsigned int samplingR = BASESAMPLERATE);
   ~wavIO();
   bool openFileForRead(QString fname, bool ask);
   bool openFileForWrite(QString fname, bool ask, bool isStereo);
   int read(short int* dPtr, uint len);
   bool write(quint16* dPtr, uint len, bool isStereo);
-  void setSamplingrate(int sr)
-  {
-    samplingrate = sr;
-  }
-  int getNumberOfChannels()
-  {
-    return numberOfChannels;
-  }
+  void setSamplingrate(int sr) { samplingrate = sr; }
+  int getNumberOfChannels() { return numberOfChannels; }
   void closeFile();
 
   /** return the number of samples in the opened file */
-  unsigned int getNumberOfSamples()
-  {
-    return numberOfSamples;
-  }
+  unsigned int getNumberOfSamples() { return numberOfSamples; }
   /** close all opened files */
-  void close()
-  {
+  void close() {
     if (inopf.isOpen()) {
-      write(nullptr, 0, true); // flush everything in case we are writing
+      write(nullptr, 0, true);  // flush everything in case we are writing
       closeFile();
     }
   }
 
-private:
+ private:
   sWave waveHeader;
   unsigned int numberOfSamples;
   unsigned int samplesRead;

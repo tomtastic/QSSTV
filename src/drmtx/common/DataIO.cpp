@@ -35,13 +35,11 @@
 * FAC data																	   *
 \******************************************************************************/
 /* Transmitter */
-void CGenerateFACData::ProcessDataInternal(CParameter& TransmParam)
-{
+void CGenerateFACData::ProcessDataInternal(CParameter& TransmParam) {
   FACTransmit.FACParam(pvecOutputData, TransmParam);
 }
 
-void CGenerateFACData::InitInternal(CParameter& TransmParam)
-{
+void CGenerateFACData::InitInternal(CParameter& TransmParam) {
   FACTransmit.Init(TransmParam);
 
   /* Define block-size for output */
@@ -53,13 +51,11 @@ void CGenerateFACData::InitInternal(CParameter& TransmParam)
 * SDC data																	   *
 \******************************************************************************/
 /* Transmitter */
-void CGenerateSDCData::ProcessDataInternal(CParameter& TransmParam)
-{
+void CGenerateSDCData::ProcessDataInternal(CParameter& TransmParam) {
   SDCTransmit.SDCParam(pvecOutputData, TransmParam);
 }
 
-void CGenerateSDCData::InitInternal(CParameter& TransmParam)
-{
+void CGenerateSDCData::InitInternal(CParameter& TransmParam) {
   /* Define block-size for output */
   iOutputBlockSize = TransmParam.iNumSDCBitsPerSFrame;
 }

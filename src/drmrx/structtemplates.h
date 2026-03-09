@@ -123,7 +123,7 @@ struct dfltMOTobjasmbly {
   char header[900]; /* pa0mbo check max 900 dim */
   int hdrcnt;
   // char body[120000];          /* pa0mbo check max dim 100 */
-  char body[140000]; // joma   /* pa0mbo check max dim 100 */
+  char body[140000];  // joma   /* pa0mbo check max dim 100 */
   int bodycnt;
 };
 struct dfltMOTobjasmblyinfo {

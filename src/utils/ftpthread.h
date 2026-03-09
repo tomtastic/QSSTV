@@ -17,24 +17,20 @@ class QFile;
 
 enum eftpError { FTPOK, FTPERROR, FTPTIMEOUT };
 
-class ftpThread : public QObject
-{
+class ftpThread : public QObject {
   Q_OBJECT
-public:
+ public:
   explicit ftpThread(QString id);
   ~ftpThread();
 
   void setHostParams(QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory);
-public slots:
+ public slots:
   //  void slotStart();
   void customEvent(QEvent* ev);
-  QList<QUrlInfo> getList()
-  {
-    return listingResults;
-  }
+  QList<QUrlInfo> getList() { return listingResults; }
   void disconnectFtp();
 
-private slots:
+ private slots:
   void slotInit();
   void slotTimeout();
   void slotDisconnect();
@@ -46,14 +42,14 @@ private slots:
   void slotRawCommandReply(int, const QString&);
   void slotProgress(qint64, qint64);
 
-signals:
+ signals:
   void finished();
   void commandsDone(int error, QString errorStr);
   void listingComplete(bool err);
   void downloadFinished(bool err, QString fn);
   void ftpQuit();
 
-private:
+ private:
   QString idName;
   bool canCloseWhenDone;
   bool displayProgress;
@@ -111,4 +107,4 @@ private:
   bool removeFiles;
 };
 
-#endif // FTPTHREAD_H
+#endif  // FTPTHREAD_H

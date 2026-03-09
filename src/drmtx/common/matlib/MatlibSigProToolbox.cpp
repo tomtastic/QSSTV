@@ -29,8 +29,7 @@
 
 
 /* Implementation *************************************************************/
-CMatlibVector<CReal> Hann(const int iLen)
-{
+CMatlibVector<CReal> Hann(const int iLen) {
   int iHalf, i;
   CMatlibVector<CReal> fvRet(iLen, VTY_TEMP);
 
@@ -41,8 +40,7 @@ CMatlibVector<CReal> Hann(const int iLen)
     /* Hanning window */
     CMatlibVector<CReal> vecTemp(iHalf);
     CMatlibVector<CReal> w(iHalf);
-    for (i = 0; i < iHalf; i++)
-      vecTemp[i] = static_cast<CReal>(i);
+    for (i = 0; i < iHalf; i++) vecTemp[i] = static_cast<CReal>(i);
 
     w = static_cast<CReal>(0.5) * (1 - Cos(static_cast<CReal>(2.0) * crPi * vecTemp / (iLen - 1)));
 
@@ -55,8 +53,7 @@ CMatlibVector<CReal> Hann(const int iLen)
     /* Hanning window */
     CMatlibVector<CReal> vecTemp(iHalf);
     CMatlibVector<CReal> w(iHalf);
-    for (i = 0; i < iHalf; i++)
-      vecTemp[i] = static_cast<CReal>(i);
+    for (i = 0; i < iHalf; i++) vecTemp[i] = static_cast<CReal>(i);
 
     w = static_cast<CReal>(0.5) * (1 - Cos(static_cast<CReal>(2.0) * crPi * vecTemp / (iLen - 1)));
 
@@ -65,8 +62,7 @@ CMatlibVector<CReal> Hann(const int iLen)
   }
 }
 
-CMatlibVector<CReal> Hamming(const int iLen)
-{
+CMatlibVector<CReal> Hamming(const int iLen) {
   int iHalf, i;
   CMatlibVector<CReal> fvRet(iLen, VTY_TEMP);
 
@@ -77,8 +73,7 @@ CMatlibVector<CReal> Hamming(const int iLen)
     /* Hanning window */
     CMatlibVector<CReal> vecTemp(iHalf);
     CMatlibVector<CReal> w(iHalf);
-    for (i = 0; i < iHalf; i++)
-      vecTemp[i] = static_cast<CReal>(i);
+    for (i = 0; i < iHalf; i++) vecTemp[i] = static_cast<CReal>(i);
 
     w = static_cast<CReal>(0.54) -
         static_cast<CReal>(0.46) * Cos(static_cast<CReal>(2.0) * crPi * vecTemp / (iLen - 1));
@@ -92,8 +87,7 @@ CMatlibVector<CReal> Hamming(const int iLen)
     /* Hanning window */
     CMatlibVector<CReal> vecTemp(iHalf);
     CMatlibVector<CReal> w(iHalf);
-    for (i = 0; i < iHalf; i++)
-      vecTemp[i] = static_cast<CReal>(i);
+    for (i = 0; i < iHalf; i++) vecTemp[i] = static_cast<CReal>(i);
 
     w = static_cast<CReal>(0.54) -
         static_cast<CReal>(0.46) * Cos(static_cast<CReal>(2.0) * crPi * vecTemp / (iLen - 1));
@@ -103,8 +97,7 @@ CMatlibVector<CReal> Hamming(const int iLen)
   }
 }
 
-CMatlibVector<CReal> Nuttallwin(const int iLen)
-{
+CMatlibVector<CReal> Nuttallwin(const int iLen) {
   CMatlibVector<CReal> fvRet(iLen, VTY_TEMP);
 
   /* Nuttall coefficients */
@@ -122,14 +115,12 @@ CMatlibVector<CReal> Nuttallwin(const int iLen)
   return fvRet;
 }
 
-CMatlibVector<CReal> Bartlett(const int iLen)
-{
+CMatlibVector<CReal> Bartlett(const int iLen) {
   const int iHalf = static_cast<int>(Ceil(static_cast<CReal>(iLen) / 2));
   CMatlibVector<CReal> fvHalfWin(iHalf);
   CMatlibVector<CReal> fvRet(iLen, VTY_TEMP);
 
-  for (int i = 0; i < iHalf; i++)
-    fvHalfWin[i] = static_cast<CReal>(2.0) * i / (iLen - 1);
+  for (int i = 0; i < iHalf; i++) fvHalfWin[i] = static_cast<CReal>(2.0) * i / (iLen - 1);
 
   /* Build complete output vector depending on odd or even input length */
   if (iLen % 2)
@@ -140,21 +131,18 @@ CMatlibVector<CReal> Bartlett(const int iLen)
   return fvRet;
 }
 
-CMatlibVector<CReal> Triang(const int iLen)
-{
+CMatlibVector<CReal> Triang(const int iLen) {
   const int iHalf = static_cast<int>(Ceil(static_cast<CReal>(iLen) / 2));
   CMatlibVector<CReal> fvHalfWin(iHalf);
   CMatlibVector<CReal> fvRet(iLen, VTY_TEMP);
 
   /* Build complete output vector depending on odd or even input length */
   if (iLen % 2) {
-    for (int i = 0; i < iHalf; i++)
-      fvHalfWin[i] = static_cast<CReal>(2.0) * (i + 1) / (iLen + 1);
+    for (int i = 0; i < iHalf; i++) fvHalfWin[i] = static_cast<CReal>(2.0) * (i + 1) / (iLen + 1);
 
     fvRet.Merge(fvHalfWin, fvHalfWin(iHalf - 1, -1, 1)); /* Odd */
   } else {
-    for (int i = 0; i < iHalf; i++)
-      fvHalfWin[i] = (static_cast<CReal>(2.0) * (i + 1) - 1) / iLen;
+    for (int i = 0; i < iHalf; i++) fvHalfWin[i] = (static_cast<CReal>(2.0) * (i + 1) - 1) / iLen;
 
     fvRet.Merge(fvHalfWin, fvHalfWin(iHalf, -1, 1)); /* Even */
   }
@@ -162,8 +150,7 @@ CMatlibVector<CReal> Triang(const int iLen)
   return fvRet;
 }
 
-CMatlibVector<CReal> Kaiser(const int iLen, const CReal rBeta)
-{
+CMatlibVector<CReal> Kaiser(const int iLen, const CReal rBeta) {
   CReal rX;
   const int iIsOdd = iLen % 2;
   const int n = (iLen + 1) / 2; /* Half vector size, round up */
@@ -191,8 +178,7 @@ CMatlibVector<CReal> Kaiser(const int iLen, const CReal rBeta)
   return Abs(fvRet);
 }
 
-CReal Besseli(const CReal rNu, const CReal rZ)
-{
+CReal Besseli(const CReal rNu, const CReal rZ) {
   const CReal rEp = static_cast<CReal>(10e-9); /* Define accuracy */
   const CReal rY = rZ / static_cast<CReal>(2.0);
   CReal rReturn = static_cast<CReal>(1.0);
@@ -215,17 +201,15 @@ CReal Besseli(const CReal rNu, const CReal rZ)
   return rReturn;
 }
 
-CMatlibVector<CReal> Randn(const int iLen)
-{
+CMatlibVector<CReal> Randn(const int iLen) {
   /* Add some constant distributed random processes together */
   _VECOP(CReal, iLen,
-         static_cast<CReal>((((CReal) rand() + rand() + rand() + rand() + rand() + rand() + rand()) / RAND_MAX - 0.5) *
+         static_cast<CReal>((((CReal)rand() + rand() + rand() + rand() + rand() + rand() + rand()) / RAND_MAX - 0.5) *
                             /* sqrt(3) * 2 / sqrt(7) */ 1.3093));
 }
 
 CMatlibVector<CReal> Filter(const CMatlibVector<CReal>& fvB, const CMatlibVector<CReal>& fvA,
-                            const CMatlibVector<CReal>& fvX, CMatlibVector<CReal>& fvZ)
-{
+                            const CMatlibVector<CReal>& fvX, CMatlibVector<CReal>& fvZ) {
   int m, n, iLenCoeff;
   const int iSizeA = fvA.GetSize();
   const int iSizeB = fvB.GetSize();
@@ -246,8 +230,7 @@ CMatlibVector<CReal> Filter(const CMatlibVector<CReal>& fvB, const CMatlibVector
     for (m = 0; m < iSizeX; m++) {
       fvY[m] = static_cast<CReal>(0.0);
 
-      for (n = 0; n < iSizeB; n++)
-        fvY[m] += fvB[n] * rvXNew[m + iSizeB - n - 1];
+      for (n = 0; n < iSizeB; n++) fvY[m] += fvB[n] * rvXNew[m + iSizeB - n - 1];
     }
 
     /* Save last samples in state vector */
@@ -288,8 +271,7 @@ CMatlibVector<CReal> Filter(const CMatlibVector<CReal>& fvB, const CMatlibVector
   return fvY;
 }
 
-CMatlibVector<CReal> FirLP(const CReal rNormBW, const CMatlibVector<CReal>& rvWin)
-{
+CMatlibVector<CReal> FirLP(const CReal rNormBW, const CMatlibVector<CReal>& rvWin) {
   /*
     Lowpass filter design using windowing method
   */
@@ -298,8 +280,7 @@ CMatlibVector<CReal> FirLP(const CReal rNormBW, const CMatlibVector<CReal>& rvWi
   CMatlibVector<CReal> fvRet(iLen, VTY_TEMP);
 
   /* Generate truncuated ideal response */
-  for (int i = 0; i < iLen; i++)
-    fvRet[i] = rNormBW * Sinc(rNormBW * (i - iHalfLen));
+  for (int i = 0; i < iLen; i++) fvRet[i] = rNormBW * Sinc(rNormBW * (i - iHalfLen));
 
   /* Apply window */
   fvRet *= rvWin;
@@ -308,8 +289,7 @@ CMatlibVector<CReal> FirLP(const CReal rNormBW, const CMatlibVector<CReal>& rvWi
 }
 
 CMatlibVector<CComplex> FirFiltDec(const CMatlibVector<CComplex>& cvB, const CMatlibVector<CComplex>& cvX,
-                                   CMatlibVector<CComplex>& cvZ, const int iDecFact)
-{
+                                   CMatlibVector<CComplex>& cvZ, const int iDecFact) {
   int m, n, iCurPos;
   const int iSizeX = cvX.GetSize();
   const int iSizeZ = cvZ.GetSize();
@@ -348,8 +328,7 @@ CMatlibVector<CComplex> FirFiltDec(const CMatlibVector<CComplex>& cvB, const CMa
 
     cvY[m] = static_cast<CReal>(0.0);
 
-    for (n = 0; n < iSizeB; n++)
-      cvY[m] += cvB[n] * cvXNew[iCurPos - n];
+    for (n = 0; n < iSizeB; n++) cvY[m] += cvB[n] * cvXNew[iCurPos - n];
   }
 
   /* Save last samples in state vector */
@@ -359,8 +338,7 @@ CMatlibVector<CComplex> FirFiltDec(const CMatlibVector<CComplex>& cvB, const CMa
   return cvY;
 }
 
-CMatlibVector<CReal> Levinson(const CMatlibVector<CReal>& vecrRx, const CMatlibVector<CReal>& vecrB)
-{
+CMatlibVector<CReal> Levinson(const CMatlibVector<CReal>& vecrRx, const CMatlibVector<CReal>& vecrB) {
   /*
     The levinson recursion [S. Haykin]
 
@@ -404,42 +382,36 @@ CMatlibVector<CReal> Levinson(const CMatlibVector<CReal>& vecrRx, const CMatlibV
 
     // (a) Compute the new gamma
     rGamma = vecrRx[iNextInd];
-    for (i = 1; i < iNextInd; i++)
-      rGamma += vecrA[i] * vecrRx[iNextInd - i];
+    for (i = 1; i < iNextInd; i++) rGamma += vecrA[i] * vecrRx[iNextInd - i];
 
     // (b), (d) Compute and output the reflection coefficient
     // (which is also equal to the last AR parameter)
     vecrA[j + 1] = rGammaCap = -rGamma / rE;
 
     // (c)
-    for (i = 1; i < iNextInd; i++)
-      vecraP[i] = vecrA[i] + rGammaCap * vecrA[iNextInd - i];
+    for (i = 1; i < iNextInd; i++) vecraP[i] = vecrA[i] + rGammaCap * vecrA[iNextInd - i];
 
     // Swap a and aP for next order recurrence
-    for (i = 1; i < iNextInd; i++)
-      vecrA[i] = vecraP[i];
+    for (i = 1; i < iNextInd; i++) vecrA[i] = vecraP[i];
 
     // (e) Update the prediction error power
     rE = rE * (static_cast<CReal>(1.0) - rGammaCap * rGammaCap);
 
     // (f)
     rDelta = static_cast<CReal>(0.0);
-    for (i = 0; i < iNextInd; i++)
-      rDelta += vecrX[i] * vecrRx[iNextInd - i];
+    for (i = 0; i < iNextInd; i++) rDelta += vecrX[i] * vecrRx[iNextInd - i];
 
     // (g), (i)
     vecrX[iNextInd] = rQ = (vecrB[iNextInd] - rDelta) / rE;
 
     // (h)
-    for (i = 0; i < iNextInd; i++)
-      vecrX[i] = vecrX[i] + rQ * vecrA[iNextInd - i];
+    for (i = 0; i < iNextInd; i++) vecrX[i] = vecrX[i] + rQ * vecrA[iNextInd - i];
   }
 
   return vecrX;
 }
 
-CMatlibVector<CComplex> Levinson(const CMatlibVector<CComplex>& veccRx, const CMatlibVector<CComplex>& veccB)
-{
+CMatlibVector<CComplex> Levinson(const CMatlibVector<CComplex>& veccRx, const CMatlibVector<CComplex>& veccB) {
   /*
     The levinson recursion [S. Haykin]
     COMPLEX version!
@@ -484,42 +456,36 @@ CMatlibVector<CComplex> Levinson(const CMatlibVector<CComplex>& veccRx, const CM
 
     // (a) Compute the new gamma
     cGamma = veccRx[iNextInd];
-    for (i = 1; i < iNextInd; i++)
-      cGamma += veccA[i] * veccRx[iNextInd - i];
+    for (i = 1; i < iNextInd; i++) cGamma += veccA[i] * veccRx[iNextInd - i];
 
     // (b), (d) Compute and output the reflection coefficient
     // (which is also equal to the last AR parameter)
     veccA[iNextInd] = cGammaCap = -cGamma / rE;
 
     // (c)
-    for (i = 1; i < iNextInd; i++)
-      veccaP[i] = veccA[i] + cGammaCap * Conj(veccA[iNextInd - i]);
+    for (i = 1; i < iNextInd; i++) veccaP[i] = veccA[i] + cGammaCap * Conj(veccA[iNextInd - i]);
 
     // Swap a and aP for next order recurrence
-    for (i = 1; i < iNextInd; i++)
-      veccA[i] = veccaP[i];
+    for (i = 1; i < iNextInd; i++) veccA[i] = veccaP[i];
 
     // (e) Update the prediction error power
     rE = rE * (static_cast<CReal>(1.0) - SqMag(cGammaCap));
 
     // (f)
     cDelta = static_cast<CReal>(0.0);
-    for (i = 0; i < iNextInd; i++)
-      cDelta += veccX[i] * veccRx[iNextInd - i];
+    for (i = 0; i < iNextInd; i++) cDelta += veccX[i] * veccRx[iNextInd - i];
 
     // (g), (i)
     veccX[iNextInd] = cQ = (veccB[iNextInd] - cDelta) / rE;
 
     // (h)
-    for (i = 0; i < iNextInd; i++)
-      veccX[i] = veccX[i] + cQ * Conj(veccA[iNextInd - i]);
+    for (i = 0; i < iNextInd; i++) veccX[i] = veccX[i] + cQ * Conj(veccA[iNextInd - i]);
   }
 
   return veccX;
 }
 
-CMatlibVector<CReal> DomEig(const CMatlibMatrix<CReal>& rmI, const CReal rEpsilon)
-{
+CMatlibVector<CReal> DomEig(const CMatlibMatrix<CReal>& rmI, const CReal rEpsilon) {
   const int iMaxNumIt = 150; /* Maximum number of iterations */
   const int iSize = rmI.GetColSize();
   CMatlibVector<CReal> vecrV(iSize, VTY_TEMP);
@@ -551,8 +517,7 @@ CMatlibVector<CReal> DomEig(const CMatlibMatrix<CReal>& rmI, const CReal rEpsilo
   return vecrV;
 }
 
-CReal LinRegr(const CMatlibVector<CReal>& rvX, const CMatlibVector<CReal>& rvY)
-{
+CReal LinRegr(const CMatlibVector<CReal>& rvX, const CMatlibVector<CReal>& rvY) {
   /* Linear regression */
   CReal Xm(Mean(rvX));
   CReal Ym(Mean(rvY));

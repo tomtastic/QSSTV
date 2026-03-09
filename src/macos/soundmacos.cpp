@@ -56,29 +56,24 @@ static std::string sPrintf(const char *format, ...)
 }
 */
 
-namespace soundMacos
-{
-static void EnableAudioInputCB(int allowed, void* context)
-{
+namespace soundMacos {
+static void EnableAudioInputCB(int allowed, void* context) {
   auto result = static_cast<std::promise<bool>*>(context);
   result->set_value(allowed);
 }
 
-bool EnableAudioInput()
-{
+bool EnableAudioInput() {
   std::promise<bool> result;
   CaptureDeviceAuthorizationStatus(EnableAudioInputCB, &result);
   return result.get_future().get();
 }
 
 
-class exception : public std::runtime_error
-{
-public:
+class exception : public std::runtime_error {
+ public:
   using runtime_error::runtime_error;
 
-  exception(const char* format, ...) : runtime_error(format)
-  {
+  exception(const char* format, ...) : runtime_error(format) {
     va_list ap;
     va_start(ap, format);
     char* s;
@@ -91,8 +86,7 @@ public:
   }
 };
 
-static bool DeviceHasBuffersInScope(AudioObjectID deviceID, AudioObjectPropertyScope scope)
-{
+static bool DeviceHasBuffersInScope(AudioObjectID deviceID, AudioObjectPropertyScope scope) {
   assert(deviceID != kAudioObjectUnknown);
 
   AudioObjectPropertyAddress propertyAddress = {.mSelector = kAudioDevicePropertyStreamConfiguration,
@@ -101,28 +95,23 @@ static bool DeviceHasBuffersInScope(AudioObjectID deviceID, AudioObjectPropertyS
 
   UInt32 dataSize = 0;
   OSStatus result = AudioObjectGetPropertyDataSize(deviceID, &propertyAddress, 0, nullptr, &dataSize);
-  if (result != kAudioHardwareNoError)
-    return false;
+  if (result != kAudioHardwareNoError) return false;
 
   std::vector<char> buffer(dataSize);
   AudioBufferList* bufferList = reinterpret_cast<AudioBufferList*>(buffer.data());
-  if (!bufferList)
-    return false;
+  if (!bufferList) return false;
 
   result = AudioObjectGetPropertyData(deviceID, &propertyAddress, 0, nullptr, &dataSize, bufferList);
-  if (result != kAudioHardwareNoError)
-    return false;
+  if (result != kAudioHardwareNoError) return false;
 
   return bufferList->mNumberBuffers > 0;
 }
 
-bool DeviceSupportsInput(AudioObjectID deviceID)
-{
+bool DeviceSupportsInput(AudioObjectID deviceID) {
   return DeviceHasBuffersInScope(deviceID, kAudioObjectPropertyScopeInput);
 }
 
-bool DeviceSupportsOutput(AudioObjectID deviceID)
-{
+bool DeviceSupportsOutput(AudioObjectID deviceID) {
   return DeviceHasBuffersInScope(deviceID, kAudioObjectPropertyScopeOutput);
 }
 
@@ -130,8 +119,7 @@ static AudioObjectPropertyAddress DevicesPropertyAddress = {.mSelector = kAudioH
                                                             .mScope = kAudioObjectPropertyScopeGlobal,
                                                             .mElement = kAudioObjectPropertyElementMain};
 
-static std::vector<AudioObjectID> getAudioDevices()
-{
+static std::vector<AudioObjectID> getAudioDevices() {
   OSStatus ret;
   UInt32 Size = 0;
   ret = AudioObjectGetPropertyDataSize(kAudioObjectSystemObject, &DevicesPropertyAddress, 0, nullptr, &Size);
@@ -150,91 +138,59 @@ static std::vector<AudioObjectID> getAudioDevices()
 }
 
 
-std::string to_string(CFStringRef s)
-{
+std::string to_string(CFStringRef s) {
   auto ptr = CFStringGetCStringPtr(s, kCFStringEncodingUTF8);
-  if (ptr)
-    return ptr;
+  if (ptr) return ptr;
   std::vector<char> buffer(CFStringGetMaximumSizeForEncoding(CFStringGetLength(s), kCFStringEncodingUTF8) + 1);
-  if (!CFStringGetCString(s, buffer.data(), buffer.size(), kCFStringEncodingUTF8))
-    return "";
+  if (!CFStringGetCString(s, buffer.data(), buffer.size(), kCFStringEncodingUTF8)) return "";
   return buffer.data();
 }
 
-class CFString
-{
+class CFString {
   CFStringRef s = nullptr;
 
-public:
+ public:
   CFString() {}
   explicit CFString(CFStringRef s) : s(s) {};
   explicit CFString(const char* s) : s(CFStringCreateWithCString(kCFAllocatorDefault, s, kCFStringEncodingUTF8)) {}
 
   CFString(const CFString& other) : s(static_cast<CFStringRef>(CFRetain(other.s))) {}
-  CFString(CFString&& other) : s(other.s)
-  {
-    other.s = nullptr;
-  }
+  CFString(CFString&& other) : s(other.s) { other.s = nullptr; }
 
-  ~CFString()
-  {
-    reset();
-  }
+  ~CFString() { reset(); }
 
-  CFString& operator=(const CFString& other)
-  {
+  CFString& operator=(const CFString& other) {
     reset();
     s = static_cast<CFStringRef>(CFRetain(other.s));
     return *this;
   }
 
-  CFString& operator=(CFString&& other)
-  {
+  CFString& operator=(CFString&& other) {
     reset();
     s = other.s;
     other.s = nullptr;
     return *this;
   }
 
-  void reset()
-  {
-    if (s)
-      CFRelease(s);
+  void reset() {
+    if (s) CFRelease(s);
   }
 
-  void reset(CFStringRef other)
-  {
+  void reset(CFStringRef other) {
     reset();
-    if (other)
-      s = other;
+    if (other) s = other;
   }
 
-  const CFStringRef* operator&() const
-  {
-    return &s;
-  }
-  CFStringRef* operator&()
-  {
-    return &s;
-  }
+  const CFStringRef* operator&() const { return &s; }
+  CFStringRef* operator&() { return &s; }
 
-  operator CFStringRef()
-  {
-    return s;
-  }
-  operator CFStringRef() const
-  {
-    return s;
-  }
+  operator CFStringRef() { return s; }
+  operator CFStringRef() const { return s; }
 
-  explicit operator bool() const
-  {
-    return s;
-  }
+  explicit operator bool() const { return s; }
 };
 
-std::string getDeviceName(AudioObjectID Id)
-{
+std::string getDeviceName(AudioObjectID Id) {
   static AudioObjectPropertyAddress DeviceNamePropertyAddress = {.mSelector = kAudioDevicePropertyDeviceNameCFString,
                                                                  .mScope = kAudioObjectPropertyScopeGlobal,
                                                                  .mElement = kAudioObjectPropertyElementMain};
@@ -249,8 +205,7 @@ std::string getDeviceName(AudioObjectID Id)
   return to_string(DeviceName);
 }
 
-std::string getDeviceUID(AudioObjectID Id)
-{
+std::string getDeviceUID(AudioObjectID Id) {
   static AudioObjectPropertyAddress DeviceUIDPropertyAddress = {.mSelector = kAudioDevicePropertyDeviceUID,
                                                                 .mScope = kAudioObjectPropertyScopeGlobal,
                                                                 .mElement = kAudioObjectPropertyElementMain};
@@ -265,13 +220,11 @@ std::string getDeviceUID(AudioObjectID Id)
   return to_string(DeviceName);
 }
 
-std::list<soundCard> getCardList()
-{
+std::list<soundCard> getCardList() {
   std::list<soundCard> ret;
 
   struct makeSoundCard : public soundCard {
-    makeSoundCard(AudioObjectID device)
-    {
+    makeSoundCard(AudioObjectID device) {
       Label = getDeviceName(device);
       UID = getDeviceUID(device);
       SupportsInput = DeviceSupportsInput(device);
@@ -279,14 +232,12 @@ std::list<soundCard> getCardList()
     }
   };
 
-  for (auto device : getAudioDevices())
-    ret.push_back(makeSoundCard(device));
+  for (auto device : getAudioDevices()) ret.push_back(makeSoundCard(device));
   return ret;
 }
 
-class audio_channel
-{
-protected:
+class audio_channel {
+ protected:
   static const int sample_size_in_bytes = sizeof(int16_t);
   static const int buffer_size_in_samples = 1024;
   const int buffers_for_one_second;
@@ -300,15 +251,14 @@ protected:
   mutable std::mutex buffers_mutex;
   std::condition_variable buffers_condition;
 
-public:
+ public:
   audio_channel(const audio_channel&) = delete;
   audio_channel& operator=(const audio_channel&) = delete;
 
   audio_channel(int rate, int channels)
       : buffers_for_one_second{(rate + buffer_size_in_samples - 1) / buffer_size_in_samples},
         buffer_size_in_bytes{buffer_size_in_samples * sample_size_in_bytes * channels},
-        usecs_per_buffer{1000000 * buffer_size_in_samples / rate}
-  {
+        usecs_per_buffer{1000000 * buffer_size_in_samples / rate} {
     memset(&format, 0, sizeof(format));
     format.mSampleRate = rate;
     format.mFormatID = kAudioFormatLinearPCM;
@@ -321,24 +271,20 @@ public:
     format.mReserved = 0;
   }
 
-  virtual ~audio_channel()
-  {
+  virtual ~audio_channel() {
     if (queue) {
       auto ret = AudioQueueDispose(queue, 1);
-      if (ret)
-        fprintf(stderr, "%s: AudioQueueDispose() failed: %d", __FUNCTION__, ret);
+      if (ret) fprintf(stderr, "%s: AudioQueueDispose() failed: %d", __FUNCTION__, ret);
     }
   }
 
-protected:
-  std::deque<AudioQueueBufferRef> make_buffers(size_t n)
-  {
+ protected:
+  std::deque<AudioQueueBufferRef> make_buffers(size_t n) {
     std::deque<AudioQueueBufferRef> buffers;
     for (unsigned i = 0; i < n; i++) {
       AudioQueueBufferRef buffer;
       auto ret = AudioQueueAllocateBuffer(queue, buffer_size_in_bytes, &buffer);
-      if (ret)
-        throw exception("AudioQueueAllocateBuffer", ret);
+      if (ret) throw exception("AudioQueueAllocateBuffer", ret);
 
       buffers.push_front(buffer);
     }
@@ -346,41 +292,35 @@ protected:
   }
 };
 
-class input_channel : public audio_channel
-{
+class input_channel : public audio_channel {
   size_t bytes_consumed = 0;
   mutable std::atomic<unsigned> overruns{0};
   size_t queued_size = 0;
 
-public:
-  input_channel(int rate, int channels, const char* uid) : audio_channel(rate, channels)
-  {
+ public:
+  input_channel(int rate, int channels, const char* uid) : audio_channel(rate, channels) {
     printf("XXX: input_channel(%s)\n", uid);
     EnableAudioInput();
     auto ret =
         AudioQueueNewInput(&format, staticCallback, this, CFRunLoopGetCurrent(), kCFRunLoopCommonModes, 0, &queue);
-    if (ret)
-      throw exception("AudioQueueNewInput", ret);
+    if (ret) throw exception("AudioQueueNewInput", ret);
 
     for (auto buffer : make_buffers(buffers_for_one_second)) {
       auto ret = AudioQueueEnqueueBuffer(queue, buffer, 0, nullptr);
-      if (ret)
-        exception("AudioQueueEnqueueBuffer", ret);
+      if (ret) exception("AudioQueueEnqueueBuffer", ret);
     }
 
     const auto UID = CFString(uid);
     AudioQueueSetProperty(queue, kAudioQueueProperty_CurrentDevice, &UID, sizeof(UID));
 
     ret = AudioQueueStart(queue, nullptr);
-    if (ret)
-      throw exception("AudioQueueStart", ret);
+    if (ret) throw exception("AudioQueueStart", ret);
   }
 
-private:
+ private:
   static void staticCallback(void* ctx, AudioQueueRef queue, AudioQueueBufferRef buffer,
                              const AudioTimeStamp* inStartTime, UInt32 inNumberPacketDescriptions,
-                             const AudioStreamPacketDescription* inPacketDescs)
-  {
+                             const AudioStreamPacketDescription* inPacketDescs) {
     auto ch = static_cast<input_channel*>(ctx);
     assert(ch);
     assert(queue == ch->queue);
@@ -388,11 +328,10 @@ private:
   }
 
   void Callback(AudioQueueBufferRef buffer, const AudioTimeStamp* inStartTime, UInt32 inNumberPacketDescriptions,
-                const AudioStreamPacketDescription* inPacketDescs)
-  {
-    (void) inStartTime;
-    (void) inNumberPacketDescriptions;
-    (void) inPacketDescs;
+                const AudioStreamPacketDescription* inPacketDescs) {
+    (void)inStartTime;
+    (void)inNumberPacketDescriptions;
+    (void)inPacketDescs;
     //		printf("XXX: input_channel::Callback()\n");
     std::unique_lock<std::mutex> Lock(buffers_mutex);
     buffers.push_front(buffer);
@@ -403,7 +342,7 @@ private:
     }
 
 #ifdef XXX
-    auto casted_buffer = (const int16_t*) buffer->mAudioData;
+    auto casted_buffer = (const int16_t*)buffer->mAudioData;
 
     int16_t min_sample = 0;
     int16_t max_sample = 0;
@@ -419,23 +358,20 @@ private:
 #endif
   }
 
-public:
-  size_t bytes_available() const
-  {
+ public:
+  size_t bytes_available() const {
     std::unique_lock<std::mutex> Lock(buffers_mutex);
     auto bytes_avail = queued_size - bytes_consumed;
     Lock.unlock();
     auto lost = overruns.exchange(0);
-    if (lost)
-      printf("%s: %zu bytes available, lost %u\n", __FUNCTION__, bytes_avail, lost);
+    if (lost) printf("%s: %zu bytes available, lost %u\n", __FUNCTION__, bytes_avail, lost);
     //			else
     // 				printf("%s: %u usecs\n", __FUNCTION__, ret);
     return bytes_avail;
   }
 
-private:
-  void recyle_buffer()
-  {
+ private:
+  void recyle_buffer() {
     auto buffer = buffers.back();
     buffers.pop_back();
 
@@ -444,9 +380,8 @@ private:
     bytes_consumed = 0;
   }
 
-public:
-  void read(void* data, size_t bytes)
-  {
+ public:
+  void read(void* data, size_t bytes) {
     //			printf("read(%zu bytes)\n", bytes);
     std::unique_lock<std::mutex> Lock(buffers_mutex);
     auto bytes_avail = queued_size - bytes_consumed;
@@ -458,53 +393,44 @@ public:
       bytes_consumed += n;
       bytes -= n;
       data = static_cast<char*>(data) + n;
-      if (bytes_consumed >= buffer->mAudioDataByteSize)
-        recyle_buffer();
+      if (bytes_consumed >= buffer->mAudioDataByteSize) recyle_buffer();
     }
   }
 
-  void drain()
-  {
+  void drain() {
     std::unique_lock<std::mutex> Lock(buffers_mutex);
-    while (!buffers.empty())
-      recyle_buffer();
+    while (!buffers.empty()) recyle_buffer();
     overruns.exchange(0);
   }
 };
 
-class output_channel : public audio_channel
-{
+class output_channel : public audio_channel {
   std::atomic<unsigned> buffers_in_queue{0};
   bool started = false;
 
-public:
-  output_channel(int rate, int channels, const char* uid) : audio_channel(rate, channels)
-  {
+ public:
+  output_channel(int rate, int channels, const char* uid) : audio_channel(rate, channels) {
     printf("XXX: output_channel(%s)\n", uid);
 
     auto ret =
         AudioQueueNewOutput(&format, staticCallback, this, CFRunLoopGetCurrent(), kCFRunLoopCommonModes, 0, &queue);
-    if (ret)
-      throw exception("AudioQueueNewOutput", ret);
+    if (ret) throw exception("AudioQueueNewOutput", ret);
 
-    for (auto buffer : make_buffers(10))
-      buffers.push_front(buffer);
+    for (auto buffer : make_buffers(10)) buffers.push_front(buffer);
 
     const auto UID = CFString(uid);
     AudioQueueSetProperty(queue, kAudioQueueProperty_CurrentDevice, &UID, sizeof(UID));
   }
 
-private:
-  static void staticCallback(void* ctx, AudioQueueRef queue, AudioQueueBufferRef buffer)
-  {
+ private:
+  static void staticCallback(void* ctx, AudioQueueRef queue, AudioQueueBufferRef buffer) {
     auto ch = static_cast<output_channel*>(ctx);
     assert(ch);
     assert(queue == ch->queue);
     ch->Callback(buffer);
   }
 
-  void Callback(AudioQueueBufferRef buffer)
-  {
+  void Callback(AudioQueueBufferRef buffer) {
     //			printf("XXX: mac_output_channel::Callback()\n");
     std::unique_lock<std::mutex> Lock(buffers_mutex);
     assert(buffers_in_queue);
@@ -513,22 +439,19 @@ private:
     buffers_condition.notify_all();
   }
 
-  AudioQueueBufferRef get_buffer()
-  {
+  AudioQueueBufferRef get_buffer() {
     std::unique_lock<std::mutex> Lock(buffers_mutex);
-    while (buffers.empty())
-      buffers_condition.wait(Lock);
+    while (buffers.empty()) buffers_condition.wait(Lock);
     auto buffer = buffers.back();
     buffers.pop_back();
     return buffer;
   }
 
-public:
-  void write(const void* data, size_t bytes)
-  {
+ public:
+  void write(const void* data, size_t bytes) {
 //		printf("XXX: mac_output_channel::write(%zu bytes)\n", bytes);
 #ifdef XXX
-    auto casted_buffer = (const int16_t*) data;
+    auto casted_buffer = (const int16_t*)data;
 
     int16_t min_sample = 0;
     int16_t max_sample = 0;
@@ -555,28 +478,23 @@ public:
       data = static_cast<const char*>(data) + n;
       if (!started) {
         auto ret = AudioQueueStart(queue, nullptr);
-        if (ret)
-          throw exception("AudioQueueStart", ret);
+        if (ret) throw exception("AudioQueueStart", ret);
         printf("XXX: mac_output_channelwrite(): started\n");
         started = true;
       }
     }
   }
 
-  void stop(bool wait_queue_empty)
-  {
-    if (!started)
-      return;
+  void stop(bool wait_queue_empty) {
+    if (!started) return;
 
     if (wait_queue_empty) {
       std::unique_lock<std::mutex> Lock(buffers_mutex);
-      while (buffers_in_queue)
-        buffers_condition.wait(Lock);
+      while (buffers_in_queue) buffers_condition.wait(Lock);
     }
 
     auto ret = AudioQueueStop(queue, true);
-    if (ret)
-      throw exception("AudioQueueStop", ret);
+    if (ret) throw exception("AudioQueueStop", ret);
     started = false;
   }
 };
@@ -587,8 +505,7 @@ struct impl : public soundBase {
   std::unique_ptr<output_channel> output;
 
 
-  bool init(int samplerate) override
-  {
+  bool init(int samplerate) override {
     printf("XXX: %s(samplerate=%d)\n", __FUNCTION__, samplerate);
     try {
       input.reset(new input_channel(samplerate, 1, inputAudioDevice.toLatin1().data()));
@@ -605,22 +522,18 @@ struct impl : public soundBase {
     return false;
   }
 
-  void closeDevices() override
-  {
+  void closeDevices() override {
     printf("XXX: %s()\n", __FUNCTION__);
     input.reset();
     output.reset();
   }
 
 
-  int read(int& countAvailable) override
-  {
-    if (!input)
-      return 0;
+  int read(int& countAvailable) override {
+    if (!input) return 0;
     try {
       countAvailable = static_cast<int>(input->bytes_available());
-      if (static_cast<size_t>(countAvailable) < sizeof(qint16) * DOWNSAMPLESIZE)
-        return 0;
+      if (static_cast<size_t>(countAvailable) < sizeof(qint16) * DOWNSAMPLESIZE) return 0;
 
       //			printf("XXX: %s(%d bytes available)\n", __FUNCTION__, countAvailable);
 
@@ -632,13 +545,10 @@ struct impl : public soundBase {
     return -1;
   }
 
-  int write(uint numFrames) override
-  {
+  int write(uint numFrames) override {
     //		printf("XXX: %s(numFrames=%u)\n", __FUNCTION__, numFrames);
-    if (!output)
-      return 0;
-    if (!numFrames)
-      return 0;
+    if (!output) return 0;
+    if (!numFrames) return 0;
     try {
       output->write(tempTXBuffer, sizeof(qint16) * 2 * numFrames);
       return numFrames;
@@ -647,30 +557,24 @@ struct impl : public soundBase {
     }
     return -1;
   }
-  void flushCapture() override
-  {
+  void flushCapture() override {
     printf("XXX: %s()\n", __FUNCTION__);
     input->drain();
     output->stop(false);
   }
 
-  void flushPlayback() override
-  {
+  void flushPlayback() override {
     printf("XXX: %s()\n", __FUNCTION__);
     output->stop(false);
   }
 
-  void waitPlaybackEnd() override
-  {
+  void waitPlaybackEnd() override {
     printf("XXX: %s()\n", __FUNCTION__);
     output->stop(true);
   }
 };
 
 
-soundBase* Create()
-{
-  return new impl();
-}
+soundBase* Create() { return new impl(); }
 
-} // namespace soundMacos
+}  // namespace soundMacos

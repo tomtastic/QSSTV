@@ -29,8 +29,7 @@ QStringList passBandList;
 QString additionalCommand;
 bool additionalCommandHex;
 
-frequencySelectWidget::frequencySelectWidget(QWidget* parent) : baseConfig(parent), ui(new Ui::frequencySelectWidget)
-{
+frequencySelectWidget::frequencySelectWidget(QWidget* parent) : baseConfig(parent), ui(new Ui::frequencySelectWidget) {
   ui->setupUi(this);
   QStringList sl;
   sl << "Frequencyy" << "Mode" << "Modulation" << "Passband";
@@ -46,14 +45,12 @@ frequencySelectWidget::frequencySelectWidget(QWidget* parent) : baseConfig(paren
   lastRowSelected = -1;
 }
 
-frequencySelectWidget::~frequencySelectWidget()
-{
+frequencySelectWidget::~frequencySelectWidget() {
   writeSettings();
   delete ui;
 }
 
-void frequencySelectWidget::readSettings()
-{
+void frequencySelectWidget::readSettings() {
   int i;
   QSettings qSettings;
   qSettings.beginGroup("FREQSELECT");
@@ -81,8 +78,7 @@ void frequencySelectWidget::readSettings()
   qSettings.endGroup();
 }
 
-void frequencySelectWidget::writeSettings()
-{
+void frequencySelectWidget::writeSettings() {
   QSettings qSettings;
   getParams();
   qSettings.beginGroup("FREQSELECT");
@@ -95,8 +91,7 @@ void frequencySelectWidget::writeSettings()
   qSettings.endGroup();
 }
 
-void frequencySelectWidget::constructTable()
-{
+void frequencySelectWidget::constructTable() {
   int i;
   while (ui->tableWidget->rowCount() > 0) {
     ui->tableWidget->removeRow(0);
@@ -116,8 +111,7 @@ void frequencySelectWidget::constructTable()
   }
 }
 
-void frequencySelectWidget::getParams()
-{
+void frequencySelectWidget::getParams() {
   int i;
   bool ok;
   freqList.clear();
@@ -143,16 +137,14 @@ void frequencySelectWidget::getParams()
   getValue(additionalCommandHex, ui->additionalCommandHexCheckBox);
 }
 
-void frequencySelectWidget::setParams()
-{
+void frequencySelectWidget::setParams() {
   constructTable();
   setValue(additionalCommand, ui->additionalCommandLineEdit);
   setValue(additionalCommandHex, ui->additionalCommandHexCheckBox);
 }
 
 
-void frequencySelectWidget::slotFreqAdd()
-{
+void frequencySelectWidget::slotFreqAdd() {
   freqList.append("");
   modeList.append("SSTV");
   sbModeList.append("LSB");
@@ -160,8 +152,7 @@ void frequencySelectWidget::slotFreqAdd()
   createEntry(freqList.count() - 1);
 }
 
-void frequencySelectWidget::slotFreqDelete()
-{
+void frequencySelectWidget::slotFreqDelete() {
   int curRow = lastRowSelected;
   freqList.takeAt(curRow);
   modeList.takeAt(curRow);
@@ -173,8 +164,7 @@ void frequencySelectWidget::slotFreqDelete()
     setLastRowSelected();
   }
 }
-void frequencySelectWidget::slotFreqUp()
-{
+void frequencySelectWidget::slotFreqUp() {
   int curRow = lastRowSelected;
   QString f, m, sb;
   if (curRow > 0) {
@@ -194,8 +184,7 @@ void frequencySelectWidget::slotFreqUp()
   }
 }
 
-void frequencySelectWidget::slotFreqDown()
-{
+void frequencySelectWidget::slotFreqDown() {
   int curRow = lastRowSelected;
   QString f, m, sb;
   if (curRow < (ui->tableWidget->rowCount() - 1) && curRow >= 0) {
@@ -215,8 +204,7 @@ void frequencySelectWidget::slotFreqDown()
   }
 }
 
-void frequencySelectWidget::createEntry(int row)
-{
+void frequencySelectWidget::createEntry(int row) {
   QComboBox *cb, *sb, *pb;
   QTableWidgetItem* ct;
   if (row > (ui->tableWidget->rowCount() - 1)) {
@@ -261,19 +249,12 @@ void frequencySelectWidget::createEntry(int row)
   ui->tableWidget->blockSignals(false);
 }
 
-void frequencySelectWidget::slotItemChanged()
-{
-  getParams();
-}
+void frequencySelectWidget::slotItemChanged() { getParams(); }
 
-void frequencySelectWidget::setLastRowSelected()
-{
+void frequencySelectWidget::setLastRowSelected() {
   lastRowSelected = ui->tableWidget->currentRow();
   if (lastRowSelected >= ui->tableWidget->rowCount()) {
     lastRowSelected = -1;
   }
 }
-void frequencySelectWidget::slotCellClicked(int r, int)
-{
-  lastRowSelected = r;
-}
+void frequencySelectWidget::slotCellClicked(int r, int) { lastRowSelected = r; }

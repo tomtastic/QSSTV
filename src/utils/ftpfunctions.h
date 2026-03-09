@@ -9,10 +9,9 @@
 
 class ftpThread;
 
-class ftpFunctions : public QObject
-{
+class ftpFunctions : public QObject {
   Q_OBJECT
-public:
+ public:
   ftpFunctions();
   ~ftpFunctions();
   bool test(QString name, QString tHost, int tPort, QString tUser, QString tPasswd, QString tDirectory, bool doSetup);
@@ -25,36 +24,29 @@ public:
   void listFiles(QString mask, bool closeWhenDone);
   void mremove(QString mask, bool wait, bool closeWhenDone);
   void disconnectFtp();
-  eftpError getLastError()
-  {
-    return lastError;
-  }
-  eftpError getLastErrorStr(QString& lastErrorString)
-  {
+  eftpError getLastError() { return lastError; }
+  eftpError getLastErrorStr(QString& lastErrorString) {
     lastErrorString = lastErrorStr;
     return lastError;
   }
   QList<QUrlInfo> getListing();
-  bool isBusy()
-  {
-    return busy;
-  }
+  bool isBusy() { return busy; }
   void changePath(QString source, bool wait);
   void changeThreadName(QString tidName);
 
 
-private slots:
+ private slots:
   void slotCommandsDone(int err, QString errStr);
   void slotThreadFinished();
   void slotDownloadFinished(bool err, QString filename);
   void slotListingFinished(bool err);
 
 
-signals:
+ signals:
   void downloadDone(bool, QString);
   void listingDone(bool err);
 
-private:
+ private:
   void setupFtp();
 
   bool checkUpload(QString fn, QString rfn);
@@ -81,4 +73,4 @@ private:
   bool mremoveCmd;
 };
 
-#endif // FTPFUNCTIONS_H
+#endif  // FTPFUNCTIONS_H

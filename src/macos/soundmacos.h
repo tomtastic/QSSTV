@@ -27,8 +27,7 @@ class soundBase;
 #include <string>
 #include <list>
 
-namespace soundMacos
-{
+namespace soundMacos {
 bool EnableAudioInput();
 
 struct soundCard {
@@ -42,6 +41,6 @@ std::list<soundCard> getCardList();
 
 soundBase* Create();
 
-} // namespace soundMacos
+}  // namespace soundMacos
 
 #endif /* SOUNDMACOS_H */

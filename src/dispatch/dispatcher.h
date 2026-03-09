@@ -17,11 +17,10 @@ enum eftpResult { DFTPWAITING, DFTPOK, DFTPERROR };
 /**
 @author Johan Maes
 */
-class dispatcher : public QObject
-{
+class dispatcher : public QObject {
   Q_OBJECT
 
-public:
+ public:
   dispatcher();
   ~dispatcher();
   void init();
@@ -46,12 +45,12 @@ public:
   //  eftpResult notifyTxDone;
 
 
-private slots:
+ private slots:
   //  void slotRXNotification(QString info);
   void slotTXNotification(QString);
   void slotRenameListing(bool err);
 
-private:
+ private:
   void saveRxSSTVImage(esstvMode mode);
   bool inList(QList<QUrlInfo> lst, QString fn);
   void timerEvent(QTimerEvent* event);

@@ -35,8 +35,7 @@ QString docURL;
 bool recursiveScanDirs;
 
 
-directoriesConfig::directoriesConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::directoriesConfig)
-{
+directoriesConfig::directoriesConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::directoriesConfig) {
   ui->setupUi(this);
   connect(ui->rxSSTVImagesPathBrowseButton, &QPushButton::clicked, this,
           &directoriesConfig::slotBrowseRxSSTVImagesPath);
@@ -50,13 +49,9 @@ directoriesConfig::directoriesConfig(QWidget* parent) : baseConfig(parent), ui(n
   connect(ui->audioPathBrowseButton, &QPushButton::clicked, this, &directoriesConfig::slotBrowseAudioPath);
 }
 
-directoriesConfig::~directoriesConfig()
-{
-  delete ui;
-}
+directoriesConfig::~directoriesConfig() { delete ui; }
 
-void directoriesConfig::readSettings()
-{
+void directoriesConfig::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("DIRECTORIES");
   rxSSTVImagesPath = qSettings.value("rxSSTVImagesPath", QString(getenv("HOME")) + "/qsstv/rx_sstv/").toString();
@@ -73,8 +68,7 @@ void directoriesConfig::readSettings()
   setParams();
 }
 
-void directoriesConfig::writeSettings()
-{
+void directoriesConfig::writeSettings() {
   QSettings qSettings;
   getParams();
   qSettings.beginGroup("DIRECTORIES");
@@ -91,8 +85,7 @@ void directoriesConfig::writeSettings()
   qSettings.endGroup();
 }
 
-void directoriesConfig::getParams()
-{
+void directoriesConfig::getParams() {
   QString rxSSTVImagePathSaved = rxSSTVImagesPath;
   QString rxDRMImagePathSaved = rxDRMImagesPath;
   QString txSSTVImagePathSaved = txSSTVImagesPath;
@@ -113,11 +106,10 @@ void directoriesConfig::getParams()
   if (rxSSTVImagePathSaved != rxSSTVImagesPath || rxDRMImagePathSaved != rxDRMImagesPath ||
       txSSTVImagePathSaved != txSSTVImagesPath || txDRMImagePathSaved != txDRMImagesPath ||
       txStockImagePathSaved != txStockImagesPath || templatesPathSaved != templatesPath)
-    changed = true; // always save it
+    changed = true;  // always save it
 }
 
-void directoriesConfig::setParams()
-{
+void directoriesConfig::setParams() {
   setValue(rxSSTVImagesPath, ui->rxSSTVImagesPathLineEdit);
   setValue(rxDRMImagesPath, ui->rxDRMImagesPathLineEdit);
   setValue(txSSTVImagesPath, ui->txSSTVImagesPathLineEdit);
@@ -144,8 +136,7 @@ void directoriesConfig::setParams()
   createDir(audioPath);
 }
 
-void directoriesConfig::createDir(QString path)
-{
+void directoriesConfig::createDir(QString path) {
   QDir dd(path);
   if (!dd.exists()) {
     dd.mkpath(path);
@@ -158,49 +149,28 @@ void directoriesConfig::createDir(QString path)
 */
 
 
-void directoriesConfig::slotBrowseRxSSTVImagesPath()
-{
-  browseDir(ui->rxSSTVImagesPathLineEdit, rxSSTVImagesPath);
-}
+void directoriesConfig::slotBrowseRxSSTVImagesPath() { browseDir(ui->rxSSTVImagesPathLineEdit, rxSSTVImagesPath); }
 
-void directoriesConfig::slotBrowseRxDRMImagesPath()
-{
-  browseDir(ui->rxDRMImagesPathLineEdit, rxDRMImagesPath);
-}
+void directoriesConfig::slotBrowseRxDRMImagesPath() { browseDir(ui->rxDRMImagesPathLineEdit, rxDRMImagesPath); }
 
 /**
   Browse function for path where the tximages are stored
 */
 
-void directoriesConfig::slotBrowseTxSSTVImagesPath()
-{
-  browseDir(ui->txSSTVImagesPathLineEdit, txSSTVImagesPath);
-}
+void directoriesConfig::slotBrowseTxSSTVImagesPath() { browseDir(ui->txSSTVImagesPathLineEdit, txSSTVImagesPath); }
 
-void directoriesConfig::slotBrowseTxDRMImagesPath()
-{
-  browseDir(ui->txDRMImagesPathLineEdit, txDRMImagesPath);
-}
+void directoriesConfig::slotBrowseTxDRMImagesPath() { browseDir(ui->txDRMImagesPathLineEdit, txDRMImagesPath); }
 
-void directoriesConfig::slotBrowseTxStockImagesPath()
-{
-  browseDir(ui->txStockImagesPathLineEdit, txStockImagesPath);
-}
+void directoriesConfig::slotBrowseTxStockImagesPath() { browseDir(ui->txStockImagesPathLineEdit, txStockImagesPath); }
 
 /**
   Browse function for path where the templates are stored
 */
 
-void directoriesConfig::slotBrowseTemplatesPath()
-{
-  browseDir(ui->templatesPathLineEdit, templatesPath);
-}
+void directoriesConfig::slotBrowseTemplatesPath() { browseDir(ui->templatesPathLineEdit, templatesPath); }
 
 /**
   Browse function for audio path
 */
 
-void directoriesConfig::slotBrowseAudioPath()
-{
-  browseDir(ui->audioPathLineEdit, audioPath);
-}
+void directoriesConfig::slotBrowseAudioPath() { browseDir(ui->audioPathLineEdit, audioPath); }

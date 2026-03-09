@@ -30,8 +30,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-int* deinterleaver(int xinA, int tA, int xinB, int tB)
-{
+int* deinterleaver(int xinA, int tA, int xinB, int tB) {
   int* deinterl;
   int i;
   int sA, sB, qA, qB;

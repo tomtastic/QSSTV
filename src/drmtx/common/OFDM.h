@@ -36,22 +36,18 @@
 
 /* Definitions ****************************************************************/
 /* Time constant for IIR averaging of PSD estimation */
-#define TICONST_PSD_EST_OFDM ((CReal) 1.0) /* sec */
+#define TICONST_PSD_EST_OFDM ((CReal)1.0) /* sec */
 
 
 /* Classes ********************************************************************/
-class COFDMModulation : public CTransmitterModul<_COMPLEX, _COMPLEX>
-{
-public:
+class COFDMModulation : public CTransmitterModul<_COMPLEX, _COMPLEX> {
+ public:
   COFDMModulation() : rDefCarOffset(static_cast<_REAL>(VIRTUAL_INTERMED_FREQ)) {}
   virtual ~COFDMModulation() {}
 
-  void SetCarOffset(const _REAL rNewCarOffset)
-  {
-    rDefCarOffset = rNewCarOffset;
-  }
+  void SetCarOffset(const _REAL rNewCarOffset) { rDefCarOffset = rNewCarOffset; }
 
-protected:
+ protected:
   CFftPlans FftPlan;
 
   CComplexVector veccFFTInput;
@@ -71,4 +67,4 @@ protected:
 };
 
 
-#endif // !defined(OFDM_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)
+#endif  // !defined(OFDM_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)

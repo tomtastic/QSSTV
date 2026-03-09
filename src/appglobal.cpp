@@ -49,7 +49,7 @@ bool useHybrid;
 bool inStartup;
 
 
-etransmissionMode transmissionModeIndex; // SSTV , DRM
+etransmissionMode transmissionModeIndex;  // SSTV , DRM
 
 
 QPixmap* greenPXMPtr;
@@ -62,8 +62,7 @@ scopeView* scopeViewerSyncWide;
 #endif
 
 
-void globalInit()
-{
+void globalInit() {
   logFilePtr = new logFile();
   logFilePtr->open(LOGVERSION);
   QSettings qSettings;
@@ -76,8 +75,7 @@ void globalInit()
   qSettings.endGroup();
 }
 
-void globalEnd(void)
-{
+void globalEnd(void) {
   logFilePtr->writeSettings();
   logFilePtr->close();
 }

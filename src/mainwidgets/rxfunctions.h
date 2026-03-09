@@ -13,10 +13,9 @@ class modeBase;
 class sstvRx;
 class drmRx;
 
-class rxFunctions : public QThread
-{
+class rxFunctions : public QThread {
   Q_OBJECT
-public:
+ public:
   enum erxState { RXIDLE, RXRUNNING, RXRESTART, RXINIT };
   explicit rxFunctions(QObject* parent = 0);
   ~rxFunctions();
@@ -34,7 +33,7 @@ public:
 #ifdef ENABLESCOPE
   unsigned int setScopeParam(unsigned int offset, unsigned int numSamples, bool ask);
 #endif
-private:
+ private:
   drmRx* drmRxPtr;
   bool abort;
   erxState rxState;
@@ -43,4 +42,4 @@ private:
   void forceInit();
 };
 
-#endif // RXFUNCTIONS_H
+#endif  // RXFUNCTIONS_H

@@ -55,29 +55,30 @@
 #define TIME_AV_AUDIO_SPECT_MS 500 /* ms */
 
 /* Number of blocks for averaging the audio spectrum */
-#define NUM_BLOCKS_AV_AUDIO_SPEC                                                                                       \
-  Ceil(((_REAL) SOUNDCRD_SAMPLE_RATE * TIME_AV_AUDIO_SPECT_MS / 1000 / NUM_SMPLS_4_AUDIO_SPECTRUM))
+#define NUM_BLOCKS_AV_AUDIO_SPEC \
+  Ceil(((_REAL)SOUNDCRD_SAMPLE_RATE * TIME_AV_AUDIO_SPECT_MS / 1000 / NUM_SMPLS_4_AUDIO_SPECTRUM))
 
 /* Normalization constant for two mixed signals. If this constant is 2, no
    overrun of the "short" variable can happen but signal has quite much lower
    power -> compromise */
-#define MIX_OUT_CHAN_NORM_CONST ((_REAL) 1.0 / sqrt((_REAL) 2.0))
+#define MIX_OUT_CHAN_NORM_CONST ((_REAL)1.0 / sqrt((_REAL)2.0))
 
 
-class CGenSimData : public CTransmitterModul<_BINARY, _BINARY>
-{
-public:
+class CGenSimData : public CTransmitterModul<_BINARY, _BINARY> {
+ public:
   CGenSimData()
-      : eCntType(CT_TIME), iNumSimBlocks(DEFAULT_NUM_SIM_BLOCKS), iNumErrors(0), iCounter(0),
-        strFileName("SimTime.dat"), tiStartTime(0)
-  {
-  }
+      : eCntType(CT_TIME),
+        iNumSimBlocks(DEFAULT_NUM_SIM_BLOCKS),
+        iNumErrors(0),
+        iCounter(0),
+        strFileName("SimTime.dat"),
+        tiStartTime(0) {}
   virtual ~CGenSimData() {}
 
   void SetSimTime(int iNewTi, string strNewFileName);
   void SetNumErrors(int iNewNE, string strNewFileName);
 
-protected:
+ protected:
   enum ECntType { CT_TIME, CT_ERRORS };
   ECntType eCntType;
   int iNumSimBlocks;
@@ -93,13 +94,12 @@ protected:
 
 
 /* FAC ---------------------------------------------------------------------- */
-class CGenerateFACData : public CTransmitterModul<_BINARY, _BINARY>
-{
-public:
+class CGenerateFACData : public CTransmitterModul<_BINARY, _BINARY> {
+ public:
   CGenerateFACData() {}
   virtual ~CGenerateFACData() {}
 
-protected:
+ protected:
   CFACTransmit FACTransmit;
 
   virtual void InitInternal(CParameter& TransmParam);
@@ -108,13 +108,12 @@ protected:
 
 
 /* SDC ---------------------------------------------------------------------- */
-class CGenerateSDCData : public CTransmitterModul<_BINARY, _BINARY>
-{
-public:
+class CGenerateSDCData : public CTransmitterModul<_BINARY, _BINARY> {
+ public:
   CGenerateSDCData() {}
   virtual ~CGenerateSDCData() {}
 
-protected:
+ protected:
   CSDCTransmit SDCTransmit;
 
   virtual void InitInternal(CParameter& TransmParam);
@@ -122,4 +121,4 @@ protected:
 };
 
 
-#endif // !defined(DATA_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)
+#endif  // !defined(DATA_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)

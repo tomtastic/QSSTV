@@ -3,9 +3,8 @@
 #include "filterparam.h"
 #include "nco.h"
 
-class filter
-{
-public:
+class filter {
+ public:
   enum efilterType { FTNONE, FTFIR, FTIIR, FTHILB };
   filter(efilterType fType, uint dataLenght);
   ~filter();
@@ -35,7 +34,7 @@ public:
   unsigned int coefIndex;
   bool coefZPtrNewed;
 
-private:
+ private:
   void resetPointers();
   void deleteBuffers();
 
@@ -59,4 +58,4 @@ private:
 };
 
 
-#endif // FILTER_H
+#endif  // FILTER_H

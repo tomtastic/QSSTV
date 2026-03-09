@@ -12,4 +12,4 @@ void arrayDump(const QString& label, quint32* data, unsigned int len, bool inHex
 // void arrayBinDump(QString label, CVector<_BINARY> data, unsigned int len, bool toAux);
 // void arrayComplexDump(QString label,CVectorEx<_COMPLEX> data,unsigned int len,bool toAux);
 
-#endif // ARRAYDUMPER_H
+#endif  // ARRAYDUMPER_H

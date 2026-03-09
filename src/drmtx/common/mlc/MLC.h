@@ -43,15 +43,14 @@
 
 
 /* Classes ********************************************************************/
-class CMLC
-{
-public:
+class CMLC {
+ public:
   CMLC() : iN_mux(0), eChannelType(CT_MSC) {}
   virtual ~CMLC() {}
 
   void CalculateParam(CParameter& Parameter, int iNewChannelType);
 
-protected:
+ protected:
   int iLevels;
   /* No input bits for each level. First index: Level, second index:
      Protection level.
@@ -71,13 +70,12 @@ protected:
   ECodScheme eCodingScheme;
 };
 
-class CMLCEncoder : public CTransmitterModul<_BINARY, _COMPLEX>, public CMLC
-{
-public:
+class CMLCEncoder : public CTransmitterModul<_BINARY, _COMPLEX>, public CMLC {
+ public:
   CMLCEncoder() {}
   virtual ~CMLCEncoder() {}
 
-protected:
+ protected:
   CConvEncoder ConvEncoder[MC_MAX_NUM_LEVELS];
   /* Two different types of interleaver table */
   CBitInterleaver BitInterleaver[2];
@@ -96,11 +94,9 @@ protected:
 /******************************************************************************\
 * Customized channel (de-)coders											   *
 \******************************************************************************/
-class CMSCMLCEncoder : public CMLCEncoder
-{
-protected:
-  virtual void InitInternal(CParameter& TransmParam)
-  {
+class CMSCMLCEncoder : public CMLCEncoder {
+ protected:
+  virtual void InitInternal(CParameter& TransmParam) {
     /* Set corresponding type */
     eChannelType = CT_MSC;
 
@@ -109,11 +105,9 @@ protected:
   };
 };
 
-class CSDCMLCEncoder : public CMLCEncoder
-{
-protected:
-  virtual void InitInternal(CParameter& TransmParam)
-  {
+class CSDCMLCEncoder : public CMLCEncoder {
+ protected:
+  virtual void InitInternal(CParameter& TransmParam) {
     /* Set corresponding type */
     eChannelType = CT_SDC;
 
@@ -122,11 +116,9 @@ protected:
   };
 };
 
-class CFACMLCEncoder : public CMLCEncoder
-{
-protected:
-  virtual void InitInternal(CParameter& TransmParam)
-  {
+class CFACMLCEncoder : public CMLCEncoder {
+ protected:
+  virtual void InitInternal(CParameter& TransmParam) {
     /* Set corresponding type */
     eChannelType = CT_FAC;
 
@@ -136,4 +128,4 @@ protected:
 };
 
 
-#endif // !defined(MLC_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)
+#endif  // !defined(MLC_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)

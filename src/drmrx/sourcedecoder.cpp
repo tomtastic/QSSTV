@@ -40,15 +40,13 @@
 #include <math.h>
 #include <float.h>
 
-sourceDecoder::sourceDecoder(QObject* parent) : QObject(parent)
-{
+sourceDecoder::sourceDecoder(QObject* parent) : QObject(parent) {
   transportBlockPtrList.clear();
   ff = new ftpFunctions;
   connect(ff, &ftpFunctions::downloadDone, this, &sourceDecoder::slotDownloadDone);
 }
 
-void sourceDecoder::init()
-{
+void sourceDecoder::init() {
   lastTransportBlockPtr = nullptr;
   bodyTotalSegments = 0;
   checkIt = false;
@@ -68,14 +66,12 @@ void sourceDecoder::init()
 
  \return bool return true if successful
 */
-bool sourceDecoder::decode()
-{
+bool sourceDecoder::decode() {
   double checksum;
   int N_partB;
   //  if(!demodulatorPtr->isTimeSync())
 
-  if (channel_decoded_data_buffer_data_valid != 1)
-    return false;
+  if (channel_decoded_data_buffer_data_valid != 1) return false;
   if (audio_data_flag == 0) {
     addToLog("audio decoding not implemented in qsstv !\n", LOGDRMSRC);
     return false;
@@ -99,34 +95,31 @@ bool sourceDecoder::decode()
   }
   // at this point we have a dataPacket we now check header / data and buils a transport stream
   switch (currentDataPacket.dataGroupType) {
-  case MOTDATA:
-    addToLog("Datasegment", LOGDRMSRC);
-    addDataSegment();
-    break;
-  case MOTHEAD:
-    addToLog("Headersegment", LOGDRMSRC);
-    addHeaderSegment();
-    break;
-  default:
-    return false;
-    break;
+    case MOTDATA:
+      addToLog("Datasegment", LOGDRMSRC);
+      addDataSegment();
+      break;
+    case MOTHEAD:
+      addToLog("Headersegment", LOGDRMSRC);
+      addHeaderSegment();
+      break;
+    default:
+      return false;
+      break;
   }
   return true;
 }
 
 
-bool sourceDecoder::setupDataBlock(unsigned char* buffer, bool crcIsOK, int len)
-{
+bool sourceDecoder::setupDataBlock(unsigned char* buffer, bool crcIsOK, int len) {
   currentDataBlock.length = len;
   unsigned char header = buffer[0];
   unsigned int availableBytes;
   const char* bufPtr;
   currentDataBlock.ba = QByteArray(reinterpret_cast<char*>(buffer), len);
   currentDataBlock.firstFlag = currentDataBlock.lastFlag = false;
-  if (header & 0x80)
-    currentDataBlock.firstFlag = true;
-  if (header & 0x40)
-    currentDataBlock.lastFlag = true;
+  if (header & 0x80) currentDataBlock.firstFlag = true;
+  if (header & 0x40) currentDataBlock.lastFlag = true;
   currentDataBlock.packetID = (header & 0x30) >> 4;
   currentDataBlock.PPI = (header & 0x8) >> 3;
   currentDataBlock.continuityIndex = (header & 0x7);
@@ -158,8 +151,7 @@ bool sourceDecoder::setupDataBlock(unsigned char* buffer, bool crcIsOK, int len)
   return false;
 }
 
-void dataBlock::log()
-{
+void dataBlock::log() {
   addToLog(QString("FFlag %1,LFlag %2, PacketID %3,PPI %4,ContIdx %5, CRC %6 len %7")
                .arg(firstFlag)
                .arg(lastFlag)
@@ -212,13 +204,12 @@ void dataBlock::log()
 // B12-B0  Length of the data that follows
 
 
-bool sourceDecoder::setupDataPacket(QByteArray ba)
-{
+bool sourceDecoder::setupDataPacket(QByteArray ba) {
   double checksum;
   unsigned char lengthIndicator;
   unsigned char header;
 
-  currentDataPacket.ba = ba; // drop crc
+  currentDataPacket.ba = ba;  // drop crc
   header = ba.at(0);
   currentDataPacket.transportID = 0xFFFF;
   currentDataPacket.extFlag = false;
@@ -228,13 +219,10 @@ bool sourceDecoder::setupDataPacket(QByteArray ba)
   currentDataPacket.lastSegment = false;
   currentDataPacket.crcOK = currentDataBlock.crcOK;
 
-  if (header & 0x10)
-    currentDataPacket.userFlag = true;
+  if (header & 0x10) currentDataPacket.userFlag = true;
   currentDataPacket.dataGroupType = static_cast<edataGroupType>(header & 0x07);
-  if (header & 0x80)
-    currentDataPacket.extFlag = true;
-  if (header & 0x20)
-    currentDataPacket.sessionFlag = true;
+  if (header & 0x80) currentDataPacket.extFlag = true;
+  if (header & 0x20) currentDataPacket.sessionFlag = true;
 
   if (header & 0x40) {
     currentDataPacket.crcFlag = true;
@@ -247,11 +235,10 @@ bool sourceDecoder::setupDataPacket(QByteArray ba)
       msc_valid = INVALID;
       return false;
     }
-    currentDataPacket.chop(2); // drop crc
+    currentDataPacket.chop(2);  // drop crc
   }
-  currentDataPacket.advance(2); // skip header and continuity bits
-  if (currentDataPacket.extFlag)
-    currentDataPacket.advance(2); // just skip the extension bytes
+  currentDataPacket.advance(2);                                 // skip header and continuity bits
+  if (currentDataPacket.extFlag) currentDataPacket.advance(2);  // just skip the extension bytes
 
   if (currentDataPacket.sessionFlag) {
     currentDataPacket.segmentNumber = ((static_cast<unsigned char>(currentDataPacket.ba.at(0)) & 0x7F)) * 256 +
@@ -282,8 +269,7 @@ bool sourceDecoder::setupDataPacket(QByteArray ba)
 }
 
 
-void dataPacket::log()
-{
+void dataPacket::log() {
   addToLog(QString("extF %1,dType %2, sessionF %3, lastSegment %4, segment# %5, userF %6, transportId %7, len %8")
                .arg(extFlag)
                .arg(dataGroupType)
@@ -297,8 +283,7 @@ void dataPacket::log()
 }
 
 
-bool sourceDecoder::addHeaderSegment()
-{
+bool sourceDecoder::addHeaderSegment() {
   loadRXImageEvent* stce;
   displayMBoxEvent* stmb;
   transportBlock* tbPtr;
@@ -312,7 +297,7 @@ bool sourceDecoder::addHeaderSegment()
       alreadyDisplayed = true;
       // redisplay
       stce = new loadRXImageEvent(QString("%1").arg(tbPtr->newFileName));
-      QApplication::postEvent(dispatcherPtr, stce); // Qt will delete it when done
+      QApplication::postEvent(dispatcherPtr, stce);  // Qt will delete it when done
       stmb = new displayMBoxEvent("DRM Receive", QString("File %1 already received").arg(tbPtr->newFileName));
       QApplication::postEvent(dispatcherPtr, stmb);
     }
@@ -338,7 +323,7 @@ bool sourceDecoder::addHeaderSegment()
   tbPtr->contentType = ((static_cast<unsigned int>(dataPtr[5]) & 0x7E) >> 1);
   tbPtr->contentSubtype =
       (((static_cast<unsigned int>(dataPtr[5])) & 0x1) << 8) + (static_cast<unsigned int>(dataPtr[6]));
-  currentDataPacket.advance(7); // size of header core
+  currentDataPacket.advance(7);  // size of header core
   // The header core is followed by a number of parameter blocks
   // the first byte of every parameter block contains a 2-bits PLI (B7 and B6) indicating the type of parameter block.
 
@@ -347,65 +332,62 @@ bool sourceDecoder::addHeaderSegment()
     PLI = dataPtr[0] >> 6;
     paramID = dataPtr[0] & 0x3F;
     switch (PLI) {
-    case 0:
-      currentDataPacket.advance(1);
-      break;
-    case 1:
-      loadParams(tbPtr, paramID, 1);
-      currentDataPacket.advance(2);
-      break;
-    case 2:
-      loadParams(tbPtr, paramID, 4);
-      currentDataPacket.advance(5);
-      break;
-    case 3:
-      extBit = dataPtr[0] & 0x80;
-      if (extBit) {
-        dataFieldLength = 256 * (dataPtr[0] & 0x7F) + dataPtr[1];
-        currentDataPacket.advance(2);
-      } else {
-        dataFieldLength = dataPtr[0] & 0x7F;
+      case 0:
         currentDataPacket.advance(1);
-      }
-      loadParams(tbPtr, paramID, dataFieldLength);
-      currentDataPacket.advance(dataFieldLength);
-      break;
+        break;
+      case 1:
+        loadParams(tbPtr, paramID, 1);
+        currentDataPacket.advance(2);
+        break;
+      case 2:
+        loadParams(tbPtr, paramID, 4);
+        currentDataPacket.advance(5);
+        break;
+      case 3:
+        extBit = dataPtr[0] & 0x80;
+        if (extBit) {
+          dataFieldLength = 256 * (dataPtr[0] & 0x7F) + dataPtr[1];
+          currentDataPacket.advance(2);
+        } else {
+          dataFieldLength = dataPtr[0] & 0x7F;
+          currentDataPacket.advance(1);
+        }
+        loadParams(tbPtr, paramID, dataFieldLength);
+        currentDataPacket.advance(dataFieldLength);
+        break;
     }
   }
   return true;
 }
 
-void sourceDecoder::loadParams(transportBlock* tbPtr, unsigned char paramID, int len)
-{
+void sourceDecoder::loadParams(transportBlock* tbPtr, unsigned char paramID, int len) {
   //  QByteArray testBA;
   //  char *data;
   //  unsigned int ct;
   rxDRMStatusEvent* stce;
   QString tmp, t;
   switch (paramID) {
-  case 5: // expiration
-    break;
-  case 6:
-    break;
-  case 12:
-    tbPtr->fileName = QString::fromLatin1(currentDataPacket.ba.data() + 1).left(len - 1);
-    stce = new rxDRMStatusEvent(QString("%1").arg(tbPtr->fileName));
-    QApplication::postEvent(dispatcherPtr, stce); // Qt will delete it when done
-    break;
-  default:
-    break;
+    case 5:  // expiration
+      break;
+    case 6:
+      break;
+    case 12:
+      tbPtr->fileName = QString::fromLatin1(currentDataPacket.ba.data() + 1).left(len - 1);
+      stce = new rxDRMStatusEvent(QString("%1").arg(tbPtr->fileName));
+      QApplication::postEvent(dispatcherPtr, stce);  // Qt will delete it when done
+      break;
+    default:
+      break;
   }
 }
 
 
-void sourceDecoder::addDataSegment()
-{
+void sourceDecoder::addDataSegment() {
   int i;
   transportBlock* tbPtr;
   tbPtr = getTransporPtr(currentDataPacket.transportID, true);
   rxTransportID = currentDataPacket.transportID;
-  if (callsignValid)
-    tbPtr->callsign = drmCallsign;
+  if (callsignValid) tbPtr->callsign = drmCallsign;
   addToLog(
       QString("Data segsize: %1 segment# %2").arg(currentDataPacket.segmentSize).arg(currentDataPacket.segmentNumber),
       LOGDRMSRC);
@@ -448,8 +430,7 @@ void sourceDecoder::addDataSegment()
   writeData(tbPtr);
 }
 
-void sourceDecoder::writeData(transportBlock* tbPtr)
-{
+void sourceDecoder::writeData(transportBlock* tbPtr) {
   int i;
 
   QByteArray ba;
@@ -488,8 +469,7 @@ void sourceDecoder::writeData(transportBlock* tbPtr)
 }
 
 
-void sourceDecoder::saveImage(transportBlock* tbPtr)
-{
+void sourceDecoder::saveImage(transportBlock* tbPtr) {
   int i;
   QByteArray hybridBa;
   displayMBoxEvent* stmb = 0;
@@ -502,10 +482,8 @@ void sourceDecoder::saveImage(transportBlock* tbPtr)
     addToLog("Image already received", LOGDRMSRC);
     return;
   }
-  if (tbPtr->fileName.isEmpty())
-    return;
-  if (tbPtr->retrieveTries == 0)
-    lastAvgSNR = avgSNR;
+  if (tbPtr->fileName.isEmpty()) return;
+  if (tbPtr->retrieveTries == 0) lastAvgSNR = avgSNR;
   isHybrid = false;
   if ((tbPtr->fileName.left(3) == ".de") || (tbPtr->fileName.left(3) == "de_")) {
     isHybrid = true;
@@ -528,7 +506,7 @@ void sourceDecoder::saveImage(transportBlock* tbPtr)
       } else {
         if (tbPtr->retrieveTries == 0) {
           stmb = new displayMBoxEvent("Hybrid Error", "No file downloaded");
-          QApplication::postEvent(dispatcherPtr, stmb); // Qt will delete it when done
+          QApplication::postEvent(dispatcherPtr, stmb);  // Qt will delete it when done
           return;
         }
       }
@@ -536,7 +514,7 @@ void sourceDecoder::saveImage(transportBlock* tbPtr)
       downloadF.clear();
     }
     tbPtr->newFileName = downloadF;
-  } // end of hybrid.
+  }  // end of hybrid.
   else {
     displayReceivedImage(false, tbPtr->newFileName);
   }
@@ -544,10 +522,8 @@ void sourceDecoder::saveImage(transportBlock* tbPtr)
 }
 
 
-void sourceDecoder::slotDownloadDone(bool err, QString filename)
-{
-  if (err)
-    return;
+void sourceDecoder::slotDownloadDone(bool err, QString filename) {
+  if (err) return;
   displayReceivedImage(true, filename);
   // send notification
 
@@ -566,8 +542,7 @@ void sourceDecoder::slotDownloadDone(bool err, QString filename)
 }
 
 
-void sourceDecoder::displayReceivedImage(bool isHybrid, QString filename)
-{
+void sourceDecoder::displayReceivedImage(bool isHybrid, QString filename) {
   bool saveOK = false;
   bool done = false;
   bool textMode = false;
@@ -575,18 +550,16 @@ void sourceDecoder::displayReceivedImage(bool isHybrid, QString filename)
   displayTextEvent* stce;
 
   QImage test;
-  if (filename.isEmpty())
-    return;
+  if (filename.isEmpty()) return;
   if (!test.load(filename)) {
     // maybe text
     QFileInfo finfo(filename);
     if ((finfo.suffix() == "txt") || (finfo.suffix() == "chat")) {
       QFile fi(filename);
-      if (!fi.open(QIODevice::ReadOnly))
-        return;
+      if (!fi.open(QIODevice::ReadOnly)) return;
       t = fi.readAll();
       stce = new displayTextEvent(t);
-      QApplication::postEvent(dispatcherPtr, stce); // Qt will delete it when done
+      QApplication::postEvent(dispatcherPtr, stce);  // Qt will delete it when done
       textMode = true;
     }
     saveOK = true;
@@ -597,8 +570,7 @@ void sourceDecoder::displayReceivedImage(bool isHybrid, QString filename)
     QFileInfo tfi(filename);
     QString modestr(tfi.fileName());
     modestr += QString(" %1dB ").arg(lastAvgSNR, 0, 'f', 0);
-    if (isHybrid)
-      modestr += "Hybrid ";
+    if (isHybrid) modestr += "Hybrid ";
     modestr += compactModeToString(modeCodeTmp);
     logBookPtr->logQSO(callsignTmp, "DSSTV", modestr);
   }
@@ -624,8 +596,7 @@ void sourceDecoder::displayReceivedImage(bool isHybrid, QString filename)
 }
 
 
-bool sourceDecoder::checkSaveImage(QByteArray ba, transportBlock* tbPtr)
-{
+bool sourceDecoder::checkSaveImage(QByteArray ba, transportBlock* tbPtr) {
   prepareFixEvent* pe;
   QFile outFile;
   reedSolomonCoder rsd;
@@ -636,22 +607,18 @@ bool sourceDecoder::checkSaveImage(QByteArray ba, transportBlock* tbPtr)
   QByteArray baFile;
   QByteArray* baFilePtr;
 
-  if (!checkIt)
-    return false;
+  if (!checkIt) return false;
   QFileInfo qfinf(fileName);
   extension = qfinf.suffix().toLower();
   if ((extension == "rs1") || (extension == "rs2") || (extension == "rs3") || (extension == "rs4")) {
     // try to decode
     addToLog("Try to decode", LOGDRMSRC);
-    if (tbPtr->alreadyReceived)
-      return false;
-    if (!rsd.decode(ba, fileName, tbPtr->newFileName, baFile, extension, erasureList))
-      return false;
+    if (tbPtr->alreadyReceived) return false;
+    if (!rsd.decode(ba, fileName, tbPtr->newFileName, baFile, extension, erasureList)) return false;
     baFilePtr = &baFile;
   } else {
     addToLog("Check complete", LOGDRMSRC);
-    if (!tbPtr->isComplete())
-      return false;
+    if (!tbPtr->isComplete()) return false;
     tbPtr->newFileName = fileName;
     if ((tbPtr->fileName == "bsr.bin") && (!tbPtr->alreadyReceived)) {
       tbPtr->setAlreadyReceived(true);
@@ -675,25 +642,21 @@ bool sourceDecoder::checkSaveImage(QByteArray ba, transportBlock* tbPtr)
   return false;
 }
 
-QList<bsrBlock>* sourceDecoder::getBSR()
-{
+QList<bsrBlock>* sourceDecoder::getBSR() {
   int i;
   transportBlock* tbPtr;
   bsrList.clear();
 
   for (i = 0; i < transportBlockPtrList.size(); i++) {
     tbPtr = transportBlockPtrList.at(i);
-    if (tbPtr->alreadyReceived)
-      continue;
-    if (tbPtr->fileName == "bsr.bin")
-      continue;
+    if (tbPtr->alreadyReceived) continue;
+    if (tbPtr->fileName == "bsr.bin") continue;
     bsrList.append(bsrBlock(tbPtr));
   }
   return &bsrList;
 }
 
-bool sourceDecoder::storeBSR(transportBlock* tb, bool compat)
-{
+bool sourceDecoder::storeBSR(transportBlock* tb, bool compat) {
   int i;
   int needsFiller;
   int prevErasure = 0;
@@ -707,8 +670,7 @@ bool sourceDecoder::storeBSR(transportBlock* tb, bool compat)
     }
   }
   tb->baBSR.clear();
-  if (erasureList.size() < 3)
-    return false; // erasurelist has already totalSegments and defaultSegmentSize
+  if (erasureList.size() < 3) return false;  // erasurelist has already totalSegments and defaultSegmentSize
   tb->baBSR.append(QString::number(tb->transportID).toLatin1().data());
   tb->baBSR.append("\n");
   tb->baBSR.append("H_OK\n");
@@ -719,7 +681,7 @@ bool sourceDecoder::storeBSR(transportBlock* tb, bool compat)
 
   prevErasure = erasureList.at(2);
   needsFiller = false;
-  for (i = 3; i < erasureList.size(); i++) // skip
+  for (i = 3; i < erasureList.size(); i++)  // skip
   {
     if (((prevErasure + 1) == erasureList.at(i)) && (compat)) {
       needsFiller = true;
@@ -746,16 +708,14 @@ bool sourceDecoder::storeBSR(transportBlock* tb, bool compat)
     QString temp;
     tb->baBSR.append(tb->fileName.toLatin1() + "\n");
     temp = QString::number(tb->modeCode);
-    while (temp.length() < 5)
-      temp.prepend("0");
+    while (temp.length() < 5) temp.prepend("0");
     tb->baBSR.append(temp.toLatin1());
   }
   return true;
 }
 
 
-transportBlock* sourceDecoder::getTransporPtr(unsigned short tId, bool create)
-{
+transportBlock* sourceDecoder::getTransporPtr(unsigned short tId, bool create) {
   int i;
   rxDRMStatusEvent* stce;
   bool found = false;
@@ -772,7 +732,7 @@ transportBlock* sourceDecoder::getTransporPtr(unsigned short tId, bool create)
     bodyTotalSegments = 0;
     drmBlockList.clear();
     stce = new rxDRMStatusEvent("");
-    QApplication::postEvent(dispatcherPtr, stce); // Qt will delete it when done
+    QApplication::postEvent(dispatcherPtr, stce);  // Qt will delete it when done
     if (transportBlockPtrList.size() >= MAXTRANSPORTLISTS) {
       // delete the oldest
       transportBlockPtrList.removeFirst();
@@ -787,18 +747,15 @@ transportBlock* sourceDecoder::getTransporPtr(unsigned short tId, bool create)
     lastTransportBlockPtr = transportBlockPtrList.last();
     lastTransportBlockPtr->robMode = robustness_mode;
     lastTransportBlockPtr->interLeaver = interleaver_depth_new;
-    lastTransportBlockPtr->mscMode = msc_mode_new; // qam
+    lastTransportBlockPtr->mscMode = msc_mode_new;  // qam
     lastTransportBlockPtr->mpx = multiplex_description.PL_PartB;
     lastTransportBlockPtr->spectrum = spectrum_occupancy_new;
     // remap msc_new to modeCode
-    int mCode = 1; // default QAM16
-    if (msc_mode_new == 3)
-      mCode = 0;
-    if (msc_mode_new == 0)
-      mCode = 2;
+    int mCode = 1;  // default QAM16
+    if (msc_mode_new == 3) mCode = 0;
+    if (msc_mode_new == 0) mCode = 2;
     int protection = 0;
-    if (multiplex_description.PL_PartB == 1)
-      protection = 1;
+    if (multiplex_description.PL_PartB == 1) protection = 1;
     lastTransportBlockPtr->modeCode =
         robustness_mode * 10000 + spectrum_occupancy_new * 1000 + protection * 100 + mCode * 10 + interleaver_depth_new;
   } else {
@@ -807,8 +764,7 @@ transportBlock* sourceDecoder::getTransporPtr(unsigned short tId, bool create)
   return lastTransportBlockPtr;
 }
 
-void sourceDecoder::removeTransporPtr(transportBlock* ptr)
-{
+void sourceDecoder::removeTransporPtr(transportBlock* ptr) {
   int i;
   for (i = 0; i < transportBlockPtrList.size(); i++) {
     if (transportBlockPtrList.at(i) == ptr) {

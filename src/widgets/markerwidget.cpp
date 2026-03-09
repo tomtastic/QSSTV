@@ -5,8 +5,7 @@
 markerWidget::markerWidget(QWidget* parent) : QLabel(parent) {}
 
 
-void markerWidget::paintEvent(QPaintEvent* p)
-{
+void markerWidget::paintEvent(QPaintEvent* p) {
   QPen pn;
   QPainter painter(this);
   pn.setColor(Qt::red);

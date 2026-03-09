@@ -32,8 +32,7 @@
 
 #include <stdio.h>
 
-void drmfilter1(float* sigin, float* out, float* coef, int dataLen, int coefLen)
-{
+void drmfilter1(float* sigin, float* out, float* coef, int dataLen, int coefLen) {
   int i, j;
 
 

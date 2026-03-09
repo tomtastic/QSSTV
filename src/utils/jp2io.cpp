@@ -15,20 +15,17 @@
 #define J2K_CODESTREAM_MAGIC "\xff\x4f\xff\x51"
 
 
-static size_t opj_strnlen_s(const char* src, size_t max_len)
-{
+static size_t opj_strnlen_s(const char* src, size_t max_len) {
   size_t len;
 
   if (src == nullptr) {
     return 0U;
   }
-  for (len = 0U; (*src != '\0') && (len < max_len); src++, len++)
-    ;
+  for (len = 0U; (*src != '\0') && (len < max_len); src++, len++);
   return len;
 }
 
-static int opj_strcpy_s(char* dst, size_t dst_size, const char* src)
-{
+static int opj_strcpy_s(char* dst, size_t dst_size, const char* src) {
   size_t src_len = 0U;
   if ((dst == nullptr) || (dst_size == 0U)) {
     return EINVAL;
@@ -50,27 +47,24 @@ static int opj_strcpy_s(char* dst, size_t dst_size, const char* src)
 /**
 sample error callback expecting a FILE* client object
 */
-static void error_callback(const char* msg, void* client_data)
-{
-  (void) client_data;
+static void error_callback(const char* msg, void* client_data) {
+  (void)client_data;
   Q_UNUSED(msg)
   addToLog(QString("[ERROR] %1").arg(msg), LOGIMAG);
 }
 /**
 sample warning callback expecting a FILE* client object
 */
-static void warning_callback(const char* msg, void* client_data)
-{
-  (void) client_data;
+static void warning_callback(const char* msg, void* client_data) {
+  (void)client_data;
   Q_UNUSED(msg)
   addToLog(QString("[WARNING] %1").arg(msg), LOGIMAG);
 }
 /**
 sample debug callback expecting no client object
 */
-static void info_callback(const char* msg, void* client_data)
-{
-  (void) client_data;
+static void info_callback(const char* msg, void* client_data) {
+  (void)client_data;
   Q_UNUSED(msg)
   addToLog(QString("[INFO] %1").arg(msg), LOGIMAG);
 }
@@ -79,30 +73,24 @@ static void info_callback(const char* msg, void* client_data)
  * Divide an integer by a power of 2 and round upwards.
  */
 // -------------------- int_ceildivpow2() ------------------------------------
-static inline int int_ceildivpow2(int a, int b)
-{
-  return (a + (1 << b) - 1) >> b;
-}
+static inline int int_ceildivpow2(int a, int b) { return (a + (1 << b) - 1) >> b; }
 // ---------------------------------------------------------------------------
 
 jp2IO::jp2IO() {}
 
-void jp2IO::init()
-{
+void jp2IO::init() {
   jp2Image = nullptr;
   l_stream = nullptr; /* Stream */
   l_codec = nullptr;  /* Handle to a decompressor */
   cstr_index = nullptr;
 }
 
-bool jp2IO::check(QString fileName)
-{
+bool jp2IO::check(QString fileName) {
   quint64 size;
   char data[12];
   QFile fi(fileName);
-  set_default_parameters(&parameters); // set decoding parameters to default values
-  if (!fi.open(QIODevice::ReadOnly))
-    return false;
+  set_default_parameters(&parameters);  // set decoding parameters to default values
+  if (!fi.open(QIODevice::ReadOnly)) return false;
   size = fi.read(data, 12);
   fi.close();
   if (size != 12) {
@@ -120,8 +108,7 @@ bool jp2IO::check(QString fileName)
   return true;
 }
 
-void jp2IO::set_default_parameters(opj_decompress_parameters* parameters)
-{
+void jp2IO::set_default_parameters(opj_decompress_parameters* parameters) {
   if (parameters) {
     memset(parameters, 0, sizeof(opj_decompress_parameters));
 
@@ -134,8 +121,7 @@ void jp2IO::set_default_parameters(opj_decompress_parameters* parameters)
   }
 }
 
-void jp2IO::destroy_parameters(opj_decompress_parameters* parameters)
-{
+void jp2IO::destroy_parameters(opj_decompress_parameters* parameters) {
   if (parameters) {
     if (parameters->precision) {
       free(parameters->precision);
@@ -144,8 +130,7 @@ void jp2IO::destroy_parameters(opj_decompress_parameters* parameters)
   }
 }
 
-void jp2IO::slotStart()
-{
+void jp2IO::slotStart() {
   bool result;
   result = check(threadFilename);
   if (result) {
@@ -155,11 +140,10 @@ void jp2IO::slotStart()
 }
 
 
-QImage jp2IO::decode(QString fileName)
-{
+QImage jp2IO::decode(QString fileName) {
   QImage qimage;
-  int width;  // image width and height
-  int wr, hr; // taken from OpenJPEG
+  int width;   // image width and height
+  int wr, hr;  // taken from OpenJPEG
   init();
 
   l_stream = opj_stream_create_default_file_stream(fileName.toLatin1(), 1);
@@ -173,28 +157,28 @@ QImage jp2IO::decode(QString fileName)
   /* ---------------------- */
 
   switch (parameters.decod_format) {
-  case J2K_CFMT: /* JPEG-2000 codestream */
-  {
-    /* Get a decoder handle */
-    l_codec = opj_create_decompress(OPJ_CODEC_J2K);
-    break;
-  }
-  case JP2_CFMT: /* JPEG 2000 compressed image data */
-  {
-    /* Get a decoder handle */
-    l_codec = opj_create_decompress(OPJ_CODEC_JP2);
-    break;
-  }
-  case JPT_CFMT: /* JPEG 2000, JPIP */
-  {
-    /* Get a decoder handle */
-    l_codec = opj_create_decompress(OPJ_CODEC_JPT);
-    break;
-  }
-  default:
-    //      fprintf(stderr, "skipping file..\n");
-    destroy_parameters(&parameters);
-    opj_stream_destroy(l_stream);
+    case J2K_CFMT: /* JPEG-2000 codestream */
+    {
+      /* Get a decoder handle */
+      l_codec = opj_create_decompress(OPJ_CODEC_J2K);
+      break;
+    }
+    case JP2_CFMT: /* JPEG 2000 compressed image data */
+    {
+      /* Get a decoder handle */
+      l_codec = opj_create_decompress(OPJ_CODEC_JP2);
+      break;
+    }
+    case JPT_CFMT: /* JPEG 2000, JPIP */
+    {
+      /* Get a decoder handle */
+      l_codec = opj_create_decompress(OPJ_CODEC_JPT);
+      break;
+    }
+    default:
+      //      fprintf(stderr, "skipping file..\n");
+      destroy_parameters(&parameters);
+      opj_stream_destroy(l_stream);
   }
 
   /* catch events using our callbacks and give a local context */
@@ -275,16 +259,16 @@ QImage jp2IO::decode(QString fileName)
   /* ---------------- */
   if (parameters.force_rgb) {
     switch (jp2Image->color_space) {
-    case OPJ_CLRSPC_SRGB:
-      break;
-    case OPJ_CLRSPC_GRAY:
-      jp2Image = convert_gray_to_rgb(jp2Image);
-      break;
-    default:
-      fprintf(stderr, "ERROR -> opj_decompress: don't know how to convert image to RGB colorspace!\n");
-      opj_image_destroy(jp2Image);
-      jp2Image = nullptr;
-      break;
+      case OPJ_CLRSPC_SRGB:
+        break;
+      case OPJ_CLRSPC_GRAY:
+        jp2Image = convert_gray_to_rgb(jp2Image);
+        break;
+      default:
+        fprintf(stderr, "ERROR -> opj_decompress: don't know how to convert image to RGB colorspace!\n");
+        opj_image_destroy(jp2Image);
+        jp2Image = nullptr;
+        break;
     }
     if (jp2Image == nullptr) {
       fprintf(stderr, "ERROR -> opj_decompress: failed to convert to RGB image!\n");
@@ -326,8 +310,7 @@ QImage jp2IO::decode(QString fileName)
   return qimage;
 }
 
-opj_image_t* jp2IO::convert_gray_to_rgb(opj_image_t* original)
-{
+opj_image_t* jp2IO::convert_gray_to_rgb(opj_image_t* original) {
   OPJ_UINT32 compno;
   opj_image_t* l_new_image = nullptr;
   opj_image_cmptparm_t* l_new_components = nullptr;
@@ -399,8 +382,7 @@ opj_image_t* jp2IO::convert_gray_to_rgb(opj_image_t* original)
   return l_new_image;
 }
 
-QByteArray jp2IO::encode(QImage qimage, QImage& newImage, int& fileSize, int compressionRatio)
-{
+QByteArray jp2IO::encode(QImage qimage, QImage& newImage, int& fileSize, int compressionRatio) {
   QByteArray byteArray;
   QString fn = QString("%1/%2").arg(QDir::tempPath()).arg("qsstv.tmp");
   //  char *of=fn.toLatin1().data();
@@ -475,12 +457,9 @@ QByteArray jp2IO::encode(QImage qimage, QImage& newImage, int& fileSize, int com
   opj_image_destroy(jp2Image);
 
   /* free user parameters structure */
-  if (cparameters.cp_comment)
-    free(cparameters.cp_comment);
-  if (cparameters.cp_matrice)
-    free(cparameters.cp_matrice);
-  if (raw_cp.rawComps)
-    free(raw_cp.rawComps);
+  if (cparameters.cp_comment) free(cparameters.cp_comment);
+  if (cparameters.cp_matrice) free(cparameters.cp_matrice);
+  if (raw_cp.rawComps) free(raw_cp.rawComps);
   QFile fi(fn);
   if (fi.open(QIODevice::ReadOnly)) {
     byteArray = fi.readAll();
@@ -494,8 +473,7 @@ QByteArray jp2IO::encode(QImage qimage, QImage& newImage, int& fileSize, int com
   return byteArray;
 }
 
-bool jp2IO::createImage(QImage qimage)
-{
+bool jp2IO::createImage(QImage qimage) {
   int i;
   int numcmpts = 3;
   opj_image_cmptparm_t cmptparm[4]; /* maximum of 4 components */
@@ -511,8 +489,7 @@ bool jp2IO::createImage(QImage qimage)
   }
 
   jp2Image = opj_image_create(numcmpts, &cmptparm[0], OPJ_CLRSPC_SRGB);
-  if (!jp2Image)
-    return false;
+  if (!jp2Image) return false;
   if (numcmpts == 4) {
     jp2Image->comps[3].alpha = 1;
   }

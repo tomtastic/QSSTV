@@ -50,11 +50,10 @@
 
 class QFtpPrivate;
 
-class QFtp : public QObject
-{
+class QFtp : public QObject {
   Q_OBJECT
 
-public:
+ public:
   explicit QFtp(QObject* parent = 0);
   virtual ~QFtp();
 
@@ -114,10 +113,10 @@ public:
   Error error() const;
   QString errorString() const;
 
-public slots:
+ public slots:
   void abort();
 
-signals:
+ signals:
   void stateChanged(int);
   void listInfo(const QUrlInfo&);
   void readyRead();
@@ -128,7 +127,7 @@ signals:
   void commandFinished(int, bool);
   void done(bool);
 
-private:
+ private:
   Q_DISABLE_COPY(QFtp)
   QScopedPointer<QFtpPrivate> d;
 
@@ -139,4 +138,4 @@ private:
   Q_PRIVATE_SLOT(d, void _q_piFtpReply(int, const QString&))
 };
 
-#endif // QFTP_H
+#endif  // QFTP_H

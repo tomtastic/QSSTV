@@ -49,8 +49,7 @@ soundBase::edataDst soundRoutingOutput;
 quint32 recordingSize;
 
 
-soundConfig::soundConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::soundConfig)
-{
+soundConfig::soundConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::soundConfig) {
   QStringList inputPCMList, outputPCMList;
   ui->setupUi(this);
 #ifdef __APPLE__
@@ -72,21 +71,15 @@ soundConfig::soundConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::sound
 }
 
 
-soundConfig::~soundConfig()
-{
-  delete ui;
-}
+soundConfig::~soundConfig() { delete ui; }
 
-void soundConfig::readSettings()
-{
+void soundConfig::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("SOUND");
   rxClock = qSettings.value("rxclock", BASESAMPLERATE).toDouble();
   txClock = qSettings.value("txclock", BASESAMPLERATE).toDouble();
-  if (fabs(1 - rxClock / BASESAMPLERATE) > 0.002)
-    rxClock = BASESAMPLERATE;
-  if (fabs(1 - txClock / BASESAMPLERATE) > 0.002)
-    txClock = BASESAMPLERATE;
+  if (fabs(1 - rxClock / BASESAMPLERATE) > 0.002) rxClock = BASESAMPLERATE;
+  if (fabs(1 - txClock / BASESAMPLERATE) > 0.002) txClock = BASESAMPLERATE;
   samplingrate = BASESAMPLERATE;
   inputAudioDevice = qSettings.value("inputAudioDevice", "default").toString();
   outputAudioDevice = qSettings.value("outputAudioDevice", "default").toString();
@@ -101,8 +94,7 @@ void soundConfig::readSettings()
   setParams();
 }
 
-void soundConfig::writeSettings()
-{
+void soundConfig::writeSettings() {
   QSettings qSettings;
   getParams();
   qSettings.beginGroup("SOUND");
@@ -121,18 +113,15 @@ void soundConfig::writeSettings()
 }
 
 
-void soundConfig::setParams()
-{
+void soundConfig::setParams() {
   setValue(rxClock, ui->inputClockLineEdit, 9);
   setValue(txClock, ui->outputClockLineEdit, 9);
 #ifdef __APPLE__
   int i;
   i = ui->inputPCMNameComboBox->findData(inputAudioDevice);
-  if (i >= 0)
-    ui->inputPCMNameComboBox->setCurrentIndex(i);
+  if (i >= 0) ui->inputPCMNameComboBox->setCurrentIndex(i);
   i = ui->outputPCMNameComboBox->findData(outputAudioDevice);
-  if (i >= 0)
-    ui->outputPCMNameComboBox->setCurrentIndex(i);
+  if (i >= 0) ui->outputPCMNameComboBox->setCurrentIndex(i);
 #else
   setValue(inputAudioDevice, ui->inputPCMNameComboBox);
   setValue(outputAudioDevice, ui->outputPCMNameComboBox);
@@ -155,8 +144,7 @@ void soundConfig::setParams()
   setValue(recordingSize, ui->mbSpinBox);
 }
 
-void soundConfig::getParams()
-{
+void soundConfig::getParams() {
   QString inputAudioDeviceCopy = inputAudioDevice;
   QString outputAudioDeviceCopy = outputAudioDevice;
   bool alsaSelectedCopy = alsaSelected;

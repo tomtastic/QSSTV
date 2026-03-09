@@ -26,20 +26,15 @@
 #include "filewatcher.h"
 
 
-configDialog::configDialog(QWidget* parent) : QDialog(parent), ui(new Ui::configDialog)
-{
+configDialog::configDialog(QWidget* parent) : QDialog(parent), ui(new Ui::configDialog) {
   ui->setupUi(this);
   ui->catWidget->attachRigController(rigControllerPtr);
   ui->configTabWidget->setCurrentIndex(0);
 }
 
-configDialog::~configDialog()
-{
-  delete ui;
-}
+configDialog::~configDialog() { delete ui; }
 
-void configDialog::readSettings()
-{
+void configDialog::readSettings() {
   ui->cwWidget->readSettings();
   ui->directoryWidget->readSettings();
   ui->drmProfilesWidget->readSettings();
@@ -54,8 +49,7 @@ void configDialog::readSettings()
   ui->freqSelectWidget->readSettings();
 }
 
-void configDialog::writeSettings()
-{
+void configDialog::writeSettings() {
   ui->operatorWidget->writeSettings();
   ui->directoryWidget->writeSettings();
   ui->soundWidget->writeSettings();
@@ -80,8 +74,7 @@ void configDialog::writeSettings()
     Opens the configuration dialog
 */
 
-int configDialog::exec()
-{
+int configDialog::exec() {
   if (QDialog::exec()) {
     writeSettings();
     if (ui->directoryWidget->hasChanged() || ui->guiWidget->hasChanged()) {

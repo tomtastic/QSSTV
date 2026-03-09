@@ -11,16 +11,14 @@ extern QStringList passBandList;
 extern QString additionalCommand;
 extern bool additionalCommandHex;
 
-namespace Ui
-{
+namespace Ui {
 class frequencySelectWidget;
 }
 
-class frequencySelectWidget : public baseConfig
-{
+class frequencySelectWidget : public baseConfig {
   Q_OBJECT
 
-public:
+ public:
   explicit frequencySelectWidget(QWidget* parent = 0);
   ~frequencySelectWidget();
   void readSettings();
@@ -28,7 +26,7 @@ public:
   void getParams();
   void setParams();
 
-private slots:
+ private slots:
   void slotFreqAdd();
   void slotFreqDelete();
   void slotFreqUp();
@@ -36,7 +34,7 @@ private slots:
   void slotItemChanged();
   void slotCellClicked(int r, int);
 
-private:
+ private:
   Ui::frequencySelectWidget* ui;
   void constructTable();
   void createEntry(int row);
@@ -44,4 +42,4 @@ private:
   int lastRowSelected;
 };
 
-#endif // FREQUENCYSELECTWIDGET_H
+#endif  // FREQUENCYSELECTWIDGET_H

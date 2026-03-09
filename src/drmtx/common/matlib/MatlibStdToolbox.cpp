@@ -29,20 +29,17 @@
 
 
 /* Implementation *************************************************************/
-CReal Min(const CMatlibVector<CReal>& rvI)
-{
+CReal Min(const CMatlibVector<CReal>& rvI) {
   const int iSize = rvI.GetSize();
   CReal rMinRet = rvI[0];
   for (int i = 1; i < iSize; i++) {
-    if (rvI[i] < rMinRet)
-      rMinRet = rvI[i];
+    if (rvI[i] < rMinRet) rMinRet = rvI[i];
   }
 
   return rMinRet;
 }
 
-void Min(CReal& rMinVal, int& iMinInd, const CMatlibVector<CReal>& rvI)
-{
+void Min(CReal& rMinVal, int& iMinInd, const CMatlibVector<CReal>& rvI) {
   const int iSize = rvI.GetSize();
   rMinVal = rvI[0]; /* Init actual minimum value */
   iMinInd = 0;      /* Init index of minimum */
@@ -54,8 +51,7 @@ void Min(CReal& rMinVal, int& iMinInd, const CMatlibVector<CReal>& rvI)
   }
 }
 
-CReal Max(const CMatlibVector<CReal>& rvI)
-{
+CReal Max(const CMatlibVector<CReal>& rvI) {
   CReal rMaxRet;
   int iMaxInd; /* Not used by this function */
   Max(rMaxRet, iMaxInd, rvI);
@@ -63,8 +59,7 @@ CReal Max(const CMatlibVector<CReal>& rvI)
   return rMaxRet;
 }
 
-void Max(CReal& rMaxVal, int& iMaxInd, const CMatlibVector<CReal>& rvI)
-{
+void Max(CReal& rMaxVal, int& iMaxInd, const CMatlibVector<CReal>& rvI) {
   const int iSize = rvI.GetSize();
   rMaxVal = rvI[0]; /* Init actual maximum value */
   iMaxInd = 0;      /* Init index of maximum */
@@ -76,8 +71,7 @@ void Max(CReal& rMaxVal, int& iMaxInd, const CMatlibVector<CReal>& rvI)
   }
 }
 
-CMatlibVector<CReal> Sort(const CMatlibVector<CReal>& rvI)
-{
+CMatlibVector<CReal> Sort(const CMatlibVector<CReal>& rvI) {
   const int iSize = rvI.GetSize();
   const int iEnd = iSize - 1;
   CMatlibVector<CReal> fvRet(iSize, VTY_TEMP);
@@ -101,8 +95,7 @@ CMatlibVector<CReal> Sort(const CMatlibVector<CReal>& rvI)
   return fvRet;
 }
 
-CMatlibMatrix<CReal> Eye(const int iLen)
-{
+CMatlibMatrix<CReal> Eye(const int iLen) {
   CMatlibMatrix<CReal> matrRet(iLen, iLen, VTY_TEMP);
 
   /* Set all values except of the diagonal to zero, diagonal entries = 1 */
@@ -118,8 +111,7 @@ CMatlibMatrix<CReal> Eye(const int iLen)
   return matrRet;
 }
 
-CMatlibMatrix<CComplex> Diag(const CMatlibVector<CComplex>& cvI)
-{
+CMatlibMatrix<CComplex> Diag(const CMatlibVector<CComplex>& cvI) {
   const int iSize = cvI.GetSize();
   CMatlibMatrix<CComplex> matcRet(iSize, iSize, VTY_TEMP);
 
@@ -136,19 +128,16 @@ CMatlibMatrix<CComplex> Diag(const CMatlibVector<CComplex>& cvI)
   return matcRet;
 }
 
-CReal Trace(const CMatlibMatrix<CReal>& rmI)
-{
+CReal Trace(const CMatlibMatrix<CReal>& rmI) {
   const int iSize = rmI.GetRowSize(); /* matrix must be square */
   CReal rReturn = static_cast<CReal>(0.0);
 
-  for (int i = 0; i < iSize; i++)
-    rReturn += rmI[i][i];
+  for (int i = 0; i < iSize; i++) rReturn += rmI[i][i];
 
   return rReturn;
 }
 
-CMatlibMatrix<CComplex> Toeplitz(const CMatlibVector<CComplex>& cvI)
-{
+CMatlibMatrix<CComplex> Toeplitz(const CMatlibVector<CComplex>& cvI) {
   const int iSize = cvI.GetSize();
   CMatlibMatrix<CComplex> matcRet(iSize, iSize, VTY_TEMP);
 
@@ -165,8 +154,7 @@ CMatlibMatrix<CComplex> Toeplitz(const CMatlibVector<CComplex>& cvI)
   return matcRet;
 }
 
-CMatlibMatrix<CComplex> Transp(const CMatlibMatrix<CComplex>& cmI)
-{
+CMatlibMatrix<CComplex> Transp(const CMatlibMatrix<CComplex>& cmI) {
   const int iRowSize = cmI.GetRowSize();
   const int iColSize = cmI.GetColSize();
 
@@ -175,15 +163,13 @@ CMatlibMatrix<CComplex> Transp(const CMatlibMatrix<CComplex>& cmI)
 
   /* Transpose matrix */
   for (int i = 0; i < iRowSize; i++) {
-    for (int j = 0; j < iColSize; j++)
-      matcRet[j][i] = cmI[i][j];
+    for (int j = 0; j < iColSize; j++) matcRet[j][i] = cmI[i][j];
   }
 
   return matcRet;
 }
 
-CMatlibMatrix<CComplex> Inv(const CMatlibMatrix<CComplex>& matrI)
-{
+CMatlibMatrix<CComplex> Inv(const CMatlibMatrix<CComplex>& matrI) {
   /*
     Parts of the following code are taken from Ptolemy
     (http://ptolemy.eecs.berkeley.edu/)
@@ -208,8 +194,7 @@ CMatlibMatrix<CComplex> Inv(const CMatlibMatrix<CComplex>& matrI)
       /* Swap with a row below this one that has a non-zero element
          in the same column */
       for (row = i + 1; row < iSize; row++) {
-        if ((Real(work[i][i]) != 0) || (Imag(work[i][i]) != 0))
-          break;
+        if ((Real(work[i][i]) != 0) || (Imag(work[i][i]) != 0)) break;
       }
 
       // TEST
@@ -255,8 +240,7 @@ CMatlibMatrix<CComplex> Inv(const CMatlibMatrix<CComplex>& matrI)
 /* This function is not listed in the header file. It shall be used only for
    Matlib internal calculations */
 CComplex _integral(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b, const CReal errorBound, CReal& integralBound,
-                   _BOOLEAN& integralError, const CReal ru)
-{
+                   _BOOLEAN& integralError, const CReal ru) {
   /*
     The following code (inclusive the actual Quad() function) is based on a
     JavaScript Example written by Lucio Tavernini. The code is hosted at
@@ -276,8 +260,7 @@ CComplex _integral(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b, const C
   CComplex fa, fb, v1, v2, error, value;
   int m1, jend, mstart, j;
 
-  if (integralError)
-    return _MAXREAL; /* NaN */
+  if (integralError) return _MAXREAL; /* NaN */
 
   /* Integrate over [a,b]. Initialize */
   const int max = 1024;
@@ -339,8 +322,7 @@ CComplex _integral(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b, const C
       if ((Abs(error) <= bound) || (Abs(v1 + v2) < Abs(value) * ru))
         value = ((v1 + v2) + value) - error;
       else {
-        if (integralError)
-          return _MAXREAL; /* NaN */
+        if (integralError) return _MAXREAL; /* NaN */
 
         /* Are we out of memory? */
         if (m == j) {
@@ -389,8 +371,7 @@ CComplex _integral(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b, const C
     return value;
 }
 
-CComplex Quad(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b, const CReal errorBound)
-{
+CComplex Quad(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b, const CReal errorBound) {
   /* Set globals */
   /* Generate rounding unit */
   CReal value;
@@ -409,8 +390,7 @@ CComplex Quad(MATLIB_CALLBACK_QAUD f, const CReal a, const CReal b, const CReal 
   return _integral(f, a, b, errorBound, integralBound, integralError, ru);
 }
 
-CMatlibVector<CComplex> Fft(const CMatlibVector<CComplex>& cvI, const CFftPlans& FftPlans)
-{
+CMatlibVector<CComplex> Fft(const CMatlibVector<CComplex>& cvI, const CFftPlans& FftPlans) {
   int i;
   CFftPlans* pCurPlan;
   fftw_complex* pFftwComplexIn;
@@ -421,8 +401,7 @@ CMatlibVector<CComplex> Fft(const CMatlibVector<CComplex>& cvI, const CFftPlans&
   CMatlibVector<CComplex> cvReturn(n, VTY_TEMP);
 
   /* If input vector has zero length, return */
-  if (n == 0)
-    return cvReturn;
+  if (n == 0) return cvReturn;
 
   /* Check, if plans are already created, else: create it */
   if (!FftPlans.IsInitialized()) {
@@ -447,17 +426,14 @@ CMatlibVector<CComplex> Fft(const CMatlibVector<CComplex>& cvI, const CFftPlans&
   /* Actual fftw call */
   fftw_execute(pCurPlan->FFTPlForw);
 
-  for (i = 0; i < n; i++)
-    cvReturn[i] = CComplex(pFftwComplexOut[i][0], pFftwComplexOut[i][1]);
+  for (i = 0; i < n; i++) cvReturn[i] = CComplex(pFftwComplexOut[i][0], pFftwComplexOut[i][1]);
 
-  if (!FftPlans.IsInitialized())
-    delete pCurPlan;
+  if (!FftPlans.IsInitialized()) delete pCurPlan;
 
   return cvReturn;
 }
 
-CMatlibVector<CComplex> Ifft(const CMatlibVector<CComplex>& cvI, const CFftPlans& FftPlans)
-{
+CMatlibVector<CComplex> Ifft(const CMatlibVector<CComplex>& cvI, const CFftPlans& FftPlans) {
   int i;
   CFftPlans* pCurPlan;
   fftw_complex* pFftwComplexIn;
@@ -467,8 +443,7 @@ CMatlibVector<CComplex> Ifft(const CMatlibVector<CComplex>& cvI, const CFftPlans
   CMatlibVector<CComplex> cvReturn(n, VTY_TEMP);
 
   /* If input vector has zero length, return */
-  if (n == 0)
-    return cvReturn;
+  if (n == 0) return cvReturn;
 
   /* Check, if plans are already created, else: create it */
   if (!FftPlans.IsInitialized()) {
@@ -501,14 +476,12 @@ CMatlibVector<CComplex> Ifft(const CMatlibVector<CComplex>& cvI, const CFftPlans
     //         printf("returnvalue %d is %g %g \n", i, pFftwComplexOut[i][0], pFftwComplexOut[i][1]);
   }
 
-  if (!FftPlans.IsInitialized())
-    delete pCurPlan;
+  if (!FftPlans.IsInitialized()) delete pCurPlan;
 
   return cvReturn;
 }
 
-CMatlibVector<CComplex> rfft(const CMatlibVector<CReal>& fvI, const CFftPlans& FftPlans)
-{
+CMatlibVector<CComplex> rfft(const CMatlibVector<CReal>& fvI, const CFftPlans& FftPlans) {
   int i;
   CFftPlans* pCurPlan;
   double* pFftwRealIn;
@@ -525,8 +498,7 @@ CMatlibVector<CComplex> rfft(const CMatlibVector<CReal>& fvI, const CFftPlans& F
                                    VTY_TEMP);
 
   /* If input vector has zero length, return */
-  if (iLongLength == 0)
-    return cvReturn;
+  if (iLongLength == 0) return cvReturn;
 
   /* Check, if plans are already created, else: create it */
   if (!FftPlans.IsInitialized()) {
@@ -543,8 +515,7 @@ CMatlibVector<CComplex> rfft(const CMatlibVector<CReal>& fvI, const CFftPlans& F
   pFftwRealOut = pCurPlan->pFftwRealOut;
 
   /* fftw (Homepage: http://www.fftw.org/) */
-  for (i = 0; i < iSizeI; i++)
-    pFftwRealIn[i] = fvI[i];
+  for (i = 0; i < iSizeI; i++) pFftwRealIn[i] = fvI[i];
 
   /* Actual fftw call */
   fftw_execute(pCurPlan->RFFTPlForw);
@@ -552,22 +523,18 @@ CMatlibVector<CComplex> rfft(const CMatlibVector<CReal>& fvI, const CFftPlans& F
   /* Now build complex output vector */
   /* Zero frequency */
   cvReturn[0] = pFftwRealOut[0];
-  for (i = 1; i < iUpRoundShortLength; i++)
-    cvReturn[i] = CComplex(pFftwRealOut[i], pFftwRealOut[iLongLength - i]);
+  for (i = 1; i < iUpRoundShortLength; i++) cvReturn[i] = CComplex(pFftwRealOut[i], pFftwRealOut[iLongLength - i]);
 
   /* If N is even, include Nyquist frequency */
-  if (iLongLength % 2 == 0)
-    cvReturn[iShortLength] = pFftwRealOut[iShortLength];
+  if (iLongLength % 2 == 0) cvReturn[iShortLength] = pFftwRealOut[iShortLength];
 
-  if (!FftPlans.IsInitialized())
-    delete pCurPlan;
+  if (!FftPlans.IsInitialized()) delete pCurPlan;
 
   return cvReturn;
 }
 
 
-CMatlibVector<CReal> rifft(const CMatlibVector<CComplex>& cvI, const CFftPlans& FftPlans)
-{
+CMatlibVector<CReal> rifft(const CMatlibVector<CComplex>& cvI, const CFftPlans& FftPlans) {
   /*
     This function only works with EVEN N!
   */
@@ -582,8 +549,7 @@ CMatlibVector<CReal> rifft(const CMatlibVector<CComplex>& cvI, const CFftPlans& 
   CMatlibVector<CReal> fvReturn(iLongLength, VTY_TEMP);
 
   /* If input vector is too short, return */
-  if (iShortLength <= 0)
-    return fvReturn;
+  if (iShortLength <= 0) return fvReturn;
 
   /* Check, if plans are already created, else: create it */
   if (!FftPlans.IsInitialized()) {
@@ -613,18 +579,15 @@ CMatlibVector<CReal> rifft(const CMatlibVector<CComplex>& cvI, const CFftPlans& 
 
   /* Scale output vector */
   const CReal scale = static_cast<CReal>(1.0) / iLongLength;
-  for (i = 0; i < iLongLength; i++)
-    fvReturn[i] = pFftwRealOut[i] * scale;
+  for (i = 0; i < iLongLength; i++) fvReturn[i] = pFftwRealOut[i] * scale;
 
-  if (!FftPlans.IsInitialized())
-    delete pCurPlan;
+  if (!FftPlans.IsInitialized()) delete pCurPlan;
 
   return fvReturn;
 }
 
 CMatlibVector<CReal> FftFilt(const CMatlibVector<CComplex>& rvH, const CMatlibVector<CReal>& rvI,
-                             CMatlibVector<CReal>& rvZ, const CFftPlans& FftPlans)
-{
+                             CMatlibVector<CReal>& rvZ, const CFftPlans& FftPlans) {
   /*
     This function only works with EVEN N!
   */
@@ -660,8 +623,7 @@ CMatlibVector<CReal> FftFilt(const CMatlibVector<CComplex>& rvH, const CMatlibVe
 
 
 /* FftPlans implementation -------------------------------------------------- */
-CFftPlans::~CFftPlans()
-{
+CFftPlans::~CFftPlans() {
   if (bInitialized) {
     /* Delete old plans and intermediate buffers */
     fftw_destroy_plan(RFFTPlForw);
@@ -676,8 +638,7 @@ CFftPlans::~CFftPlans()
   }
 }
 
-void CFftPlans::Init(const int iFSi)
-{
+void CFftPlans::Init(const int iFSi) {
   if (bInitialized) {
     /* Delete old plans and intermediate buffers */
     fftw_destroy_plan(RFFTPlForw);

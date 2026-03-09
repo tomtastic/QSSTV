@@ -23,16 +23,14 @@ enum etxMode { TXUPLOAD, TXBINARY, TXNORMAL };
 
 
 class drmTransmitter;
-namespace Ui
-{
+namespace Ui {
 class txWidget;
 }
 
-class txWidget : public QWidget
-{
+class txWidget : public QWidget {
   Q_OBJECT
 
-public:
+ public:
   explicit txWidget(QWidget* parent = 0);
   ~txWidget();
   void init();
@@ -49,26 +47,14 @@ public:
   void setupTemplatesComboBox();
   void setPreviewWidget(const QString& fn);
   void setSettingsTab();
-  txFunctions* functionsPtr()
-  {
-    return txFunctionsPtr;
-  }
-  imageViewer* getImageViewerPtr()
-  {
-    return imageViewerPtr;
-  }
+  txFunctions* functionsPtr() { return txFunctionsPtr; }
+  imageViewer* getImageViewerPtr() { return imageViewerPtr; }
   QString getPreviewFilename();
   void txTestPattern(etpSelect sel);
   void startNotifyCheck(const QString& tmask);
 
-  void setDRMNotifyText(const QString& txt)
-  {
-    ui->txNotificationList->setPlainText(txt);
-  }
-  void appendDRMNotifyText(const QString& txt)
-  {
-    ui->txNotificationList->appendPlainText(txt);
-  }
+  void setDRMNotifyText(const QString& txt) { ui->txNotificationList->setPlainText(txt); }
+  void appendDRMNotifyText(const QString& txt) { ui->txNotificationList->appendPlainText(txt); }
 
   //  bool prepareHybrid(QString fn);
   bool prepareText(QString txt);
@@ -85,7 +71,7 @@ public:
   void sendWFID();
   void sendCWID();
 
-public slots:
+ public slots:
   void slotGetTXParams();
   void slotGetParams();
   void slotStart();
@@ -113,18 +99,18 @@ public slots:
   void slotListingDone(bool err);
 
 
-private slots:
+ private slots:
   void slotRepaterDelay();
   void slotImageChanged();
 
-signals:
+ signals:
   void modeSwitch(int);
 
-protected:
+ protected:
   void showEvent(QShowEvent* event) override;
   void paintEvent(QPaintEvent* event) override;
 
-private:
+ private:
   void initView();
   void setParams();
   void sendHybrid(const QString& fn);
@@ -161,4 +147,4 @@ private:
   float fileSize;
 };
 
-#endif // TXWIDGET_H
+#endif  // TXWIDGET_H

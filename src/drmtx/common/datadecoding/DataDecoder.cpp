@@ -33,8 +33,7 @@
 /******************************************************************************\
 * Encoder                                                                      *
 \******************************************************************************/
-void CDataEncoder::GeneratePacket(CVector<_BINARY>& vecbiPacket)
-{
+void CDataEncoder::GeneratePacket(CVector<_BINARY>& vecbiPacket) {
   int i;
   _BOOLEAN bLastFlag;
 
@@ -75,15 +74,13 @@ void CDataEncoder::GeneratePacket(CVector<_BINARY>& vecbiPacket)
 
   /* Increment index modulo 8 (1 << 3) */
   iContinInd++;
-  if (iContinInd == 8)
-    iContinInd = 0;
+  if (iContinInd == 8) iContinInd = 0;
 
   /* Body ----------------------------------------------------------------- */
   if (iRemainSize >= iPacketLen) {
     if (iRemainSize == iPacketLen) {
       /* Last packet */
-      for (i = 0; i < iPacketLen; i++)
-        vecbiPacket.Enqueue(vecbiCurDataUnit.Separate(1), 1);
+      for (i = 0; i < iPacketLen; i++) vecbiPacket.Enqueue(vecbiCurDataUnit.Separate(1), 1);
     } else {
       for (i = 0; i < iPacketLen; i++) {
         vecbiPacket.Enqueue(vecbiCurDataUnit.Separate(1), 1);
@@ -97,12 +94,10 @@ void CDataEncoder::GeneratePacket(CVector<_BINARY>& vecbiPacket)
     vecbiPacket.Enqueue(static_cast<uint32_t>(iRemainSize / SIZEOF__BYTE), SIZEOF__BYTE);
 
     /* Data */
-    for (i = 0; i < iRemainSize; i++)
-      vecbiPacket.Enqueue(vecbiCurDataUnit.Separate(1), 1);
+    for (i = 0; i < iRemainSize; i++) vecbiPacket.Enqueue(vecbiCurDataUnit.Separate(1), 1);
 
     /* Padding */
-    for (i = 0; i < iPacketLen - iRemainSize; i++)
-      vecbiPacket.Enqueue(vecbiCurDataUnit.Separate(1), 1);
+    for (i = 0; i < iPacketLen - iRemainSize; i++) vecbiPacket.Enqueue(vecbiCurDataUnit.Separate(1), 1);
   }
 
   /* If this was the last packet, get data for next data unit */
@@ -132,21 +127,20 @@ void CDataEncoder::GeneratePacket(CVector<_BINARY>& vecbiPacket)
   vecbiPacket.Enqueue(CRCObject.GetCRC(), 16);
 }
 
-int CDataEncoder::Init(CParameter& Param)
-{
+int CDataEncoder::Init(CParameter& Param) {
   /* Init packet length and total packet size (the total packet length is
      three bytes longer as it includes the header and CRC fields) */
 
   // TODO we only use always the first service right now
   const int iCurSelDataServ = 0;
 
-  Param.Lock(); // was in werkende afgecommentaard pa0mbo
-                // printf("In CDataEncoder na Param.Lock \n");
+  Param.Lock();  // was in werkende afgecommentaard pa0mbo
+                 // printf("In CDataEncoder na Param.Lock \n");
   iPacketLen = Param.Service[iCurSelDataServ].DataParam.iPacketLen * SIZEOF__BYTE;
   iTotalPacketSize = iPacketLen + 24 /* CRC + header = 24 bits */;
   iPacketID = Param.Service[iCurSelDataServ].DataParam.iPacketID;
 
-  Param.Unlock(); // was in werkende afgecommentaard pa0mbo
+  Param.Unlock();  // was in werkende afgecommentaard pa0mbo
 
   /*  printf("in CDataEncoder::Init  iPackectLen = %d iTotalPacketSize = %d packetID = %d\n",
            iPacketLen, iTotalPacketSize, iPacketID ); */

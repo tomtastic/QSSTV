@@ -11,28 +11,22 @@
 #include "txwidget.h"
 
 
-galleryWidget::galleryWidget(QWidget* parent) : QWidget(parent), ui(new Ui::galleryWidget)
-{
+galleryWidget::galleryWidget(QWidget* parent) : QWidget(parent), ui(new Ui::galleryWidget) {
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0);
   ui->templateMatrix->setSortFlag(QDir::Name);
 }
 
-galleryWidget::~galleryWidget()
-{
+galleryWidget::~galleryWidget() {
   writeSettings();
   delete ui;
 }
 
 
-void galleryWidget::init()
-{
-  readSettings();
-}
+void galleryWidget::init() { readSettings(); }
 
 
-void galleryWidget::changedMatrix()
-{
+void galleryWidget::changedMatrix() {
   changedMatrix(imageViewer::RXSSTVTHUMB);
   changedMatrix(imageViewer::RXDRMTHUMB);
   changedMatrix(imageViewer::TXSSTVTHUMB);
@@ -41,8 +35,7 @@ void galleryWidget::changedMatrix()
   changedMatrix(imageViewer::TEMPLATETHUMB);
 }
 
-void galleryWidget::slotDirChanged(QString dn)
-{
+void galleryWidget::slotDirChanged(QString dn) {
   if (recursiveScanDirs) {
     fileWatcherPtr->addPathRecursive(dn);
   }
@@ -56,29 +49,28 @@ void galleryWidget::slotDirChanged(QString dn)
 }
 
 
-void galleryWidget::changedMatrix(imageViewer::thumbType itype)
-{
+void galleryWidget::changedMatrix(imageViewer::thumbType itype) {
   switch (itype) {
-  case imageViewer::RXSSTVTHUMB:
-    ui->rxSSTVMatrix->init(galleryRows, galleryColumns, rxSSTVImagesPath, imageViewer::RXSSTVTHUMB);
-    break;
-  case imageViewer::RXDRMTHUMB:
-    ui->rxDRMMatrix->init(galleryRows, galleryColumns, rxDRMImagesPath, imageViewer::RXDRMTHUMB);
-    break;
-  case imageViewer::TXSSTVTHUMB:
-    ui->txSSTVMatrix->init(galleryRows, galleryColumns, txSSTVImagesPath, imageViewer::TXSSTVTHUMB);
-    break;
-  case imageViewer::TXDRMTHUMB:
-    ui->txDRMMatrix->init(galleryRows, galleryColumns, txDRMImagesPath, imageViewer::TXDRMTHUMB);
-    break;
-  case imageViewer::TXSTOCKTHUMB:
-    ui->txStockMatrix->init(galleryRows, galleryColumns, txStockImagesPath, imageViewer::TXSTOCKTHUMB);
-    break;
-  case imageViewer::TEMPLATETHUMB:
-    ui->templateMatrix->init(galleryRows, galleryColumns, templatesPath, imageViewer::TEMPLATETHUMB);
-    break;
-  default:
-    break;
+    case imageViewer::RXSSTVTHUMB:
+      ui->rxSSTVMatrix->init(galleryRows, galleryColumns, rxSSTVImagesPath, imageViewer::RXSSTVTHUMB);
+      break;
+    case imageViewer::RXDRMTHUMB:
+      ui->rxDRMMatrix->init(galleryRows, galleryColumns, rxDRMImagesPath, imageViewer::RXDRMTHUMB);
+      break;
+    case imageViewer::TXSSTVTHUMB:
+      ui->txSSTVMatrix->init(galleryRows, galleryColumns, txSSTVImagesPath, imageViewer::TXSSTVTHUMB);
+      break;
+    case imageViewer::TXDRMTHUMB:
+      ui->txDRMMatrix->init(galleryRows, galleryColumns, txDRMImagesPath, imageViewer::TXDRMTHUMB);
+      break;
+    case imageViewer::TXSTOCKTHUMB:
+      ui->txStockMatrix->init(galleryRows, galleryColumns, txStockImagesPath, imageViewer::TXSTOCKTHUMB);
+      break;
+    case imageViewer::TEMPLATETHUMB:
+      ui->templateMatrix->init(galleryRows, galleryColumns, templatesPath, imageViewer::TEMPLATETHUMB);
+      break;
+    default:
+      break;
   }
 }
 
@@ -87,8 +79,7 @@ void galleryWidget::changedMatrix(imageViewer::thumbType itype)
   reads the settings (saved images for tx,rx,templates)
 */
 
-void galleryWidget::readSettings()
-{
+void galleryWidget::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("Gallery");
 
@@ -113,8 +104,7 @@ void galleryWidget::readSettings()
 /*!
   writes the settings (saved images for tx,rx,templates)
 */
-void galleryWidget::writeSettings()
-{
+void galleryWidget::writeSettings() {
   QSettings qSettings;
   qSettings.beginGroup("Gallery");
   qSettings.endGroup();
@@ -137,8 +127,7 @@ void galleryWidget::writeSettings()
   \return QString containing filename, check with QString.isNull for validity
 */
 
-QString galleryWidget::getTemplateFileName(int tm)
-{
+QString galleryWidget::getTemplateFileName(int tm) {
   int i;
   QString str;
   QStringList slTemp;
@@ -153,8 +142,7 @@ QString galleryWidget::getTemplateFileName(int tm)
     return QString();
 }
 
-const QStringList& galleryWidget::getFilenames()
-{
+const QStringList& galleryWidget::getFilenames() {
   QString str;
   sl.clear();
   int i;
@@ -173,8 +161,7 @@ const QStringList& galleryWidget::getFilenames()
 
 */
 
-void galleryWidget::putRxImage(const QString& fn)
-{
+void galleryWidget::putRxImage(const QString& fn) {
   if (transmissionModeIndex == TRXSSTV) {
     statusBarPtr->showMessage("Saved: " + fn);
     ui->rxSSTVMatrix->changed();
@@ -184,8 +171,7 @@ void galleryWidget::putRxImage(const QString& fn)
   }
 }
 
-void galleryWidget::txImageChanged()
-{
+void galleryWidget::txImageChanged() {
   if (transmissionModeIndex == TRXSSTV) {
     ui->txSSTVMatrix->changed();
   } else {
@@ -193,10 +179,7 @@ void galleryWidget::txImageChanged()
   }
 }
 
-void galleryWidget::txStockImageChanged()
-{
-  ui->txStockMatrix->changed();
-}
+void galleryWidget::txStockImageChanged() { ui->txStockMatrix->changed(); }
 
 
 /*!
@@ -205,7 +188,4 @@ void galleryWidget::txStockImageChanged()
   \return QString containing filename, check with QString.isEmpty for validity
 
 */
-QString galleryWidget::getLastRxImage()
-{
-  return ui->rxDRMMatrix->getLastFile();
-}
+QString galleryWidget::getLastRxImage() { return ui->rxDRMMatrix->getLastFile(); }

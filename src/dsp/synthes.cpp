@@ -34,8 +34,7 @@
 
 synthesizer* synthesPtr;
 
-synthesizer::synthesizer(double txSmpClock)
-{
+synthesizer::synthesizer(double txSmpClock) {
   // generate the table
   int i;
   txSamplingClock = txSmpClock;
@@ -55,23 +54,20 @@ synthesizer::synthesizer(double txSmpClock)
 
 synthesizer::~synthesizer() {}
 
-void synthesizer::sendTone(double duration, double lowerFrequency, double upperFrequency, bool concat)
-{
+void synthesizer::sendTone(double duration, double lowerFrequency, double upperFrequency, bool concat) {
   //  fillBuffer();
   if (upperFrequency != 0) {
     sendSweep(duration, lowerFrequency, upperFrequency);
     return;
   }
-  if (!concat)
-    adjust = 0.;
+  if (!concat) adjust = 0.;
   // convert duration to number of samples
   unsigned int ns = static_cast<unsigned int>((duration + adjust) * txSamplingClock + 0.5);
   adjust += duration - (static_cast<double>(ns)) / txSamplingClock;
   sendSamples(ns, lowerFrequency);
 }
 
-void synthesizer::sendWFText()
-{
+void synthesizer::sendWFText() {
   DSPFLOAT* dataPtr;
   int len;
   int i;
@@ -86,16 +82,14 @@ void synthesizer::sendWFText()
   addToLog("end of id", LOGSYNTHES);
 }
 
-void synthesizer::sendSamples(unsigned int numSamples, double frequency)
-{
+void synthesizer::sendSamples(unsigned int numSamples, double frequency) {
   unsigned int i;
   for (i = 0; i < numSamples; i++) {
     sendSample(frequency);
   }
 }
 
-void synthesizer::sendSweep(unsigned int duration, double lowerFrequency, double upperFrequency)
-{
+void synthesizer::sendSweep(unsigned int duration, double lowerFrequency, double upperFrequency) {
   unsigned int i;
   unsigned int numSamples = duration * txSamplingClock;
   double deltaFreq = (upperFrequency - lowerFrequency) / numSamples;
@@ -104,8 +98,7 @@ void synthesizer::sendSweep(unsigned int duration, double lowerFrequency, double
   }
 }
 
-void synthesizer::sendSilence(double duration)
-{
+void synthesizer::sendSilence(double duration) {
   unsigned int i;
   // convert duration to number of samples
   unsigned int ns = static_cast<uint>(duration * txSamplingClock + 0.5);
@@ -114,15 +107,13 @@ void synthesizer::sendSilence(double duration)
   }
 }
 
-void synthesizer::sendSample(double freq)
-{
+void synthesizer::sendSample(double freq) {
   sample = nextSample(freq);
   write(sample);
 }
 
 
-SOUNDFRAME synthesizer::filter(double sample)
-{
+SOUNDFRAME synthesizer::filter(double sample) {
   quint32 tst;
   quint32 ptt;
   tst = static_cast<quint32>(round(sample));
@@ -140,8 +131,7 @@ SOUNDFRAME synthesizer::filter(double sample)
   return tst;
 }
 
-void synthesizer::write(double sample)
-{
+void synthesizer::write(double sample) {
   quint32 smp = filter(sample);
   //  while((!soundIOPtr->txBuffer.put(smp)) && (soundIOPtr->isPlaying()))
   while ((!soundIOPtr->txBuffer.put(smp))) {
@@ -151,8 +141,7 @@ void synthesizer::write(double sample)
 
 
 // buffer must already contain correct stereo information
-void synthesizer::writeBuffer(quint32* buffer, int len)
-{
+void synthesizer::writeBuffer(quint32* buffer, int len) {
   int i;
   if (swapChannel) {
     for (i = 0; i < len; i++) {
@@ -165,17 +154,16 @@ void synthesizer::writeBuffer(quint32* buffer, int len)
 }
 
 
-void synthesizer::setFilter(efilterType txFilterType)
-{
+void synthesizer::setFilter(efilterType txFilterType) {
   //  filterLength=TXNUMTAPS;
   switch (txFilterType) {
-    //      case F400:
-    //      case F600:
-    //      case F1000:
-    //      case F800:
-    // filterI=f800TX;
-  default:
-    break;
+      //      case F400:
+      //      case F600:
+      //      case F1000:
+      //      case F800:
+      // filterI=f800TX;
+    default:
+      break;
   }
 }
 

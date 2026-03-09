@@ -321,4 +321,4 @@ const int iInterlSequ16SM[MC_MAX_NUM_LEVELS] = {0, 1, -1, -1, -1, -1};
 const int iInterlSequ64SM[MC_MAX_NUM_LEVELS] = {-1, 0, 1, -1, -1, -1};
 
 
-#endif // !defined(_TABLE_MLC_H__3B0_CA63_4344_BB2B_23E7912__INCLUDED_)
+#endif  // !defined(_TABLE_MLC_H__3B0_CA63_4344_BB2B_23E7912__INCLUDED_)

@@ -144,8 +144,7 @@
 #define PRBS_SHIFT(reg) reg = (((reg ^ (reg >> 4)) & 0x1) << 8) | (reg >> 1)
 int msdhardfac(double /*@out@ */* received_real, double /*@out@ */* received_imag, int Lrxdata, /*@out@ */ double* snr,
                int N1, double* L, int dimL, int Lvspp, int* Deinterleaver, int* PL, int maxiter, int SDCorMSC,
-               double* facdata)
-{
+               double* facdata) {
   double *received, *first_received, *L1, *L2, L1_real[10], *L2_real, *L1_imag, *L2_imag;
   double *PL1, *PL2, PL1_real[10], *PL2_real, *PL1_imag, *PL2_imag, *output_ptr, L_dummy[3] = {0, 0, 0};
   float *metric_real, *metric_imag, *metric, *first_metric, closest_one, closest_zero, sample, *llr, dist;

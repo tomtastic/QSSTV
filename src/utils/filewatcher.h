@@ -4,14 +4,13 @@
 #include <QObject>
 #include <QFileSystemWatcher>
 
-class fileWatcher : public QFileSystemWatcher
-{
-public:
+class fileWatcher : public QFileSystemWatcher {
+ public:
   fileWatcher();
   void init();
 
-public slots:
+ public slots:
   void addPathRecursive(QString path);
 };
 
-#endif // FILEWATCHER_H
+#endif  // FILEWATCHER_H

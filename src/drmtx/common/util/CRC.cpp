@@ -35,8 +35,7 @@
 
 
 /* Implementation *************************************************************/
-void CCRC::Reset(const int iNewDegree)
-{
+void CCRC::Reset(const int iNewDegree) {
   /* Build mask of bit, which was shifted out of the shift register */
   iBitOutPosMask = 1 << iNewDegree;
 
@@ -48,8 +47,7 @@ void CCRC::Reset(const int iNewDegree)
   iStateShiftReg = ~static_cast<uint32_t>(0);
 }
 
-void CCRC::AddByte(const _BYTE byNewInput)
-{
+void CCRC::AddByte(const _BYTE byNewInput) {
   for (int i = 0; i < SIZEOF__BYTE; i++) {
     /* Shift bits in shift-register for transistion */
     iStateShiftReg <<= 1;
@@ -57,41 +55,33 @@ void CCRC::AddByte(const _BYTE byNewInput)
     /* Take bit, which was shifted out of the register-size and place it
        at the beginning (LSB)
        (If condition is not satisfied, implicitely a "0" is added) */
-    if ((iStateShiftReg & iBitOutPosMask) > 0)
-      iStateShiftReg |= 1;
+    if ((iStateShiftReg & iBitOutPosMask) > 0) iStateShiftReg |= 1;
 
     /* Add new data bit to the LSB */
-    if ((byNewInput & (1 << (SIZEOF__BYTE - i - 1))) > 0)
-      iStateShiftReg ^= 1;
+    if ((byNewInput & (1 << (SIZEOF__BYTE - i - 1))) > 0) iStateShiftReg ^= 1;
 
     /* Add mask to shift-register if first bit is true */
-    if (iStateShiftReg & 1)
-      iStateShiftReg ^= iPolynMask[iDegIndex];
+    if (iStateShiftReg & 1) iStateShiftReg ^= iPolynMask[iDegIndex];
   }
 }
 
-void CCRC::AddBit(const _BINARY biNewInput)
-{
+void CCRC::AddBit(const _BINARY biNewInput) {
   /* Shift bits in shift-register for transistion */
   iStateShiftReg <<= 1;
 
   /* Take bit, which was shifted out of the register-size and place it
      at the beginning (LSB)
      (If condition is not satisfied, implicitely a "0" is added) */
-  if ((iStateShiftReg & iBitOutPosMask) > 0)
-    iStateShiftReg |= 1;
+  if ((iStateShiftReg & iBitOutPosMask) > 0) iStateShiftReg |= 1;
 
   /* Add new data bit to the LSB */
-  if (biNewInput > 0)
-    iStateShiftReg ^= 1;
+  if (biNewInput > 0) iStateShiftReg ^= 1;
 
   /* Add mask to shift-register if first bit is true */
-  if (iStateShiftReg & 1)
-    iStateShiftReg ^= iPolynMask[iDegIndex];
+  if (iStateShiftReg & 1) iStateShiftReg ^= iPolynMask[iDegIndex];
 }
 
-uint32_t CCRC::GetCRC()
-{
+uint32_t CCRC::GetCRC() {
   /* Return inverted shift-register (1's complement) */
   iStateShiftReg = ~iStateShiftReg;
 
@@ -99,16 +89,14 @@ uint32_t CCRC::GetCRC()
   return iStateShiftReg & (iBitOutPosMask - 1);
 }
 
-_BOOLEAN CCRC::CheckCRC(const uint32_t iCRC)
-{
+_BOOLEAN CCRC::CheckCRC(const uint32_t iCRC) {
   if (iCRC == GetCRC())
     return true;
   else
     return false;
 }
 
-CCRC::CCRC()
-{
+CCRC::CCRC() {
   /* These polynominals are used in the DRM-standard */
   iPolynMask[0] = 0;
   iPolynMask[1] = 1 << 1;
@@ -177,8 +165,7 @@ CCRC::CCRC()
 /******************************************************************************/
 /* function                                                                   */
 /******************************************************************************/
-void CCRC::crc16_bytewise(double checksum[], unsigned char in[], long N)
-{
+void CCRC::crc16_bytewise(double checksum[], unsigned char in[], long N) {
   long int i;
   int j;
   unsigned int b = 0xFFFF;

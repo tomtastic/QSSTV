@@ -7,9 +7,8 @@
 class modeBase;
 class imageViewer;
 
-class sstvTx
-{
-public:
+class sstvTx {
+ public:
   sstvTx();
   ~sstvTx();
   void init();
@@ -21,7 +20,7 @@ public:
   void createTestPattern(imageViewer* ivPtr, etpSelect sel);
 
 
-private:
+ private:
   modeBase* currentMode;
   bool create(esstvMode m, DSPFLOAT clock);
   void sendPreamble();
@@ -31,4 +30,4 @@ private:
   double FSKIDTime();
 };
 
-#endif // SSTVTX_H
+#endif  // SSTVTX_H

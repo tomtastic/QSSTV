@@ -36,8 +36,7 @@
 /******************************************************************************\
 * OFDM-modulation                                                              *
 \******************************************************************************/
-void COFDMModulation::ProcessDataInternal(CParameter&)
-{
+void COFDMModulation::ProcessDataInternal(CParameter&) {
   int i;
   // printf("In COFDMModul iShiftKmin %d iEndIndex %d , iDFTSize %d iGuardSize %d\n",
   //			iShiftedKmin, iEndIndex, iDFTSize, iGuardSize);
@@ -54,12 +53,10 @@ void COFDMModulation::ProcessDataInternal(CParameter&)
   veccFFTOutput = Ifft(veccFFTInput, FftPlan);
 
   /* Copy complex FFT output in output buffer and scale */
-  for (i = 0; i < iDFTSize; i++)
-    (*pvecOutputData)[i + iGuardSize] = veccFFTOutput[i] * static_cast<CReal>(iDFTSize);
+  for (i = 0; i < iDFTSize; i++) (*pvecOutputData)[i + iGuardSize] = veccFFTOutput[i] * static_cast<CReal>(iDFTSize);
 
   /* Copy data from the end to the guard-interval (Add guard-interval) */
-  for (i = 0; i < iGuardSize; i++)
-    (*pvecOutputData)[i] = (*pvecOutputData)[iDFTSize + i];
+  for (i = 0; i < iGuardSize; i++) (*pvecOutputData)[i] = (*pvecOutputData)[iDFTSize + i];
 
   /* tbv test printout pa0mbo
         printf("===========\n");
@@ -71,7 +68,7 @@ void COFDMModulation::ProcessDataInternal(CParameter&)
   /* Only apply shifting if phase is not zero */
   if (cExpStep != _COMPLEX(static_cast<_REAL>(1.0), static_cast<_REAL>(0.0))) {
     for (i = 0; i < iOutputBlockSize; i++) {
-      (*pvecOutputData)[i] = (*pvecOutputData)[i] * Conj(cCurExp); // pa0mbo shift off
+      (*pvecOutputData)[i] = (*pvecOutputData)[i] * Conj(cCurExp);  // pa0mbo shift off
 
       /* Rotate exp-pointer on step further by complex multiplication
          with precalculated rotation vector cExpStep. This saves us from
@@ -82,8 +79,7 @@ void COFDMModulation::ProcessDataInternal(CParameter&)
   }
 }
 
-void COFDMModulation::InitInternal(CParameter& TransmParam)
-{
+void COFDMModulation::InitInternal(CParameter& TransmParam) {
   TransmParam.Lock();
   /* Get global parameters */
   iDFTSize = TransmParam.CellMappingTable.iFFTSizeN;

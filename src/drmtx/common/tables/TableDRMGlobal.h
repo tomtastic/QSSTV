@@ -40,26 +40,26 @@
    i.e. the frequency pilots which have to be continuous. Our IF must be a
    multiple of 1500 Hz and must also be chosen so that the largest mode (20 kHz)
    must fit into the range of the FFT-size. Therefore 6000 Hz was chosen */
-#define VIRTUAL_INTERMED_FREQ 6000 // Hz
+#define VIRTUAL_INTERMED_FREQ 6000  // Hz
 
-#define SOUNDCRD_SAMPLE_RATE 48000 // Hz  pa0mbo was 48000
+#define SOUNDCRD_SAMPLE_RATE 48000  // Hz  pa0mbo was 48000
 
 #define AUD_DEC_TRANSFORM_LENGTH 960
 
 /* DRM parameters */
 #define NUM_FRAMES_IN_SUPERFRAME 3
 
-#define RMA_FFT_SIZE_N 1152 // RMB: Robustness Mode A
+#define RMA_FFT_SIZE_N 1152  // RMB: Robustness Mode A
 #define RMA_NUM_SYM_PER_FRAME 15
 #define RMA_ENUM_TG_TU 1
 #define RMA_DENOM_TG_TU 9
 
-#define RMB_FFT_SIZE_N 1024 // RMA: Robustness Mode B
+#define RMB_FFT_SIZE_N 1024  // RMA: Robustness Mode B
 #define RMB_NUM_SYM_PER_FRAME 15
 #define RMB_ENUM_TG_TU 1
 #define RMB_DENOM_TG_TU 4
 
-#define RME_FFT_SIZE_N 640 // RME: Robustness Mode E
+#define RME_FFT_SIZE_N 640  // RME: Robustness Mode E
 #define RME_NUM_SYM_PER_FRAME 20
 #define RME_ENUM_TG_TU 1
 #define RME_DENOM_TG_TU 2
@@ -85,4 +85,4 @@
    (6.5.1) */
 #define NUM_BYTES_TEXT_MESS_IN_AUD_STR 4
 
-#endif // !defined(TABLE_DRM_GLOB_H__3B0_CA63_4344_BB2B_23E7912__INCLUDED_)
+#endif  // !defined(TABLE_DRM_GLOB_H__3B0_CA63_4344_BB2B_23E7912__INCLUDED_)

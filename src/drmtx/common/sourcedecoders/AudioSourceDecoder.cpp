@@ -37,14 +37,12 @@
 * Encoder                                                                      *
 \******************************************************************************/
 
-void CAudioSourceEncoderImplementation::ProcessDataInternal(CVectorEx<_BINARY>* pvecOutputData, int& iOutputBlockSize)
-{
+void CAudioSourceEncoderImplementation::ProcessDataInternal(CVectorEx<_BINARY>* pvecOutputData, int& iOutputBlockSize) {
   int i;
 
   /* Reset data to zero. This is important since usually not all data is used
      and this data has to be set to zero as defined in the DRM standard */
-  for (i = 0; i < iOutputBlockSize; i++)
-    (*pvecOutputData)[i] = 0;
+  for (i = 0; i < iOutputBlockSize; i++) (*pvecOutputData)[i] = 0;
   /* Data service and text message application ---------------------------- */
   if (bIsDataService == true) {
     // TODO: make a separate modul for data encoding
@@ -53,7 +51,7 @@ void CAudioSourceEncoderImplementation::ProcessDataInternal(CVectorEx<_BINARY>* 
     const int iNumPack = iOutputBlockSize / iTotPacketSize;
 
     //	printf("In process data AudioSourceEnc iOutputBlcksi %d iTotPacketSize = %d \n", iOutputBlockSize,
-    //iTotPacketSize);
+    // iTotPacketSize);
     int iPos = 0;
 
     for (int j = 0; j < iNumPack; j++) {
@@ -70,10 +68,9 @@ void CAudioSourceEncoderImplementation::ProcessDataInternal(CVectorEx<_BINARY>* 
 }
 
 
-void CAudioSourceEncoderImplementation::InitInternalTx(CParameter& TransmParam, int& iOutputBlockSize)
-{
+void CAudioSourceEncoderImplementation::InitInternalTx(CParameter& TransmParam, int& iOutputBlockSize) {
   int iCurStreamID;
-  int iCurSelServ = 0; // TEST
+  int iCurSelServ = 0;  // TEST
   TransmParam.Lock();
 
   // Calculate number of input samples in mono. Audio block are always 400 ms long

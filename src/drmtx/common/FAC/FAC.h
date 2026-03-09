@@ -37,9 +37,8 @@
 
 
 /* Classes ********************************************************************/
-class CFACTransmit
-{
-public:
+class CFACTransmit {
+ public:
   CFACTransmit() : FACRepetitionCounter(0) {}
   virtual ~CFACTransmit() {}
 
@@ -47,25 +46,24 @@ public:
   void FACParam(CVector<_BINARY>* pbiFACData, CParameter& Parameter);
   void Init(CParameter& Parameter);
 
-protected:
+ protected:
   CCRC CRCObject;
   vector<int> FACRepetition; /* See 6.3.6 */
   size_t FACNumRep;
   size_t FACRepetitionCounter;
 };
 
-class CFACReceive
-{
-public:
+class CFACReceive {
+ public:
   CFACReceive() {}
   virtual ~CFACReceive() {}
 
   /* "pbiFACData" contains 72 bits */
   _BOOLEAN FACParam(CVector<_BINARY>* pbiFACData, CParameter& Parameter);
 
-protected:
+ protected:
   CCRC CRCObject;
 };
 
 
-#endif // !defined(FAC_H__3B0BA660_CA63VEUASDVN89LKVNE877A0D31912__INCLUDED_)
+#endif  // !defined(FAC_H__3B0BA660_CA63VEUASDVN89LKVNE877A0D31912__INCLUDED_)

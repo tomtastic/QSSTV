@@ -40,16 +40,16 @@
 
 /* Classes ********************************************************************/
 /* CModul ------------------------------------------------------------------- */
-template <class TInput, class TOutput> class CModul
-{
-public:
+template <class TInput, class TOutput>
+class CModul {
+ public:
   CModul();
   virtual ~CModul() {}
 
   virtual void Init(CParameter& Parameter);
   virtual void Init(CParameter& Parameter, CBuffer<TOutput>& OutputBuffer);
 
-protected:
+ protected:
   CVectorEx<TInput>* pvecInputData;
   CVectorEx<TOutput>* pvecOutputData;
 
@@ -59,29 +59,23 @@ protected:
   int iInputBlockSize;
   int iOutputBlockSize;
 
-  void Lock()
-  {
-    Mutex.Lock();
-  }
-  void Unlock()
-  {
-    Mutex.Unlock();
-  }
+  void Lock() { Mutex.Lock(); }
+  void Unlock() { Mutex.Unlock(); }
 
   void InitThreadSave(CParameter& Parameter);
   virtual void InitInternal(CParameter& Parameter) = 0;
   void ProcessDataThreadSave(CParameter& Parameter);
   virtual void ProcessDataInternal(CParameter& Parameter) = 0;
 
-private:
+ private:
   CMutex Mutex;
 };
 
 
 /* CTransmitterModul -------------------------------------------------------- */
-template <class TInput, class TOutput> class CTransmitterModul : public CModul<TInput, TOutput>
-{
-public:
+template <class TInput, class TOutput>
+class CTransmitterModul : public CModul<TInput, TOutput> {
+ public:
   CTransmitterModul();
   virtual ~CTransmitterModul() {}
 
@@ -95,7 +89,7 @@ public:
                            CBuffer<TOutput>& OutputBuffer);
   virtual _BOOLEAN WriteData(CParameter& Parameter, CBuffer<TInput>& InputBuffer);
 
-protected:
+ protected:
   /* Additional buffers if the derived class has multiple input streams */
   CVectorEx<TInput>* pvecInputData2;
   CVectorEx<TInput>* pvecInputData3;
@@ -110,8 +104,8 @@ protected:
 /******************************************************************************\
 * CModul                                                                       *
 \******************************************************************************/
-template <class TInput, class TOutput> CModul<TInput, TOutput>::CModul()
-{
+template <class TInput, class TOutput>
+CModul<TInput, TOutput>::CModul() {
   /* Initialize everything with zeros */
   iMaxOutputBlockSize = 0;
   iInputBlockSize = 0;
@@ -120,8 +114,8 @@ template <class TInput, class TOutput> CModul<TInput, TOutput>::CModul()
   pvecOutputData = nullptr;
 }
 
-template <class TInput, class TOutput> void CModul<TInput, TOutput>::ProcessDataThreadSave(CParameter& Parameter)
-{
+template <class TInput, class TOutput>
+void CModul<TInput, TOutput>::ProcessDataThreadSave(CParameter& Parameter) {
   /* Get a lock for the resources */
   Lock();
 
@@ -132,8 +126,8 @@ template <class TInput, class TOutput> void CModul<TInput, TOutput>::ProcessData
   Unlock();
 }
 
-template <class TInput, class TOutput> void CModul<TInput, TOutput>::InitThreadSave(CParameter& Parameter)
-{
+template <class TInput, class TOutput>
+void CModul<TInput, TOutput>::InitThreadSave(CParameter& Parameter) {
   /* Get a lock for the resources */
   Lock();
 
@@ -154,8 +148,8 @@ template <class TInput, class TOutput> void CModul<TInput, TOutput>::InitThreadS
   }
 }
 
-template <class TInput, class TOutput> void CModul<TInput, TOutput>::Init(CParameter& Parameter)
-{
+template <class TInput, class TOutput>
+void CModul<TInput, TOutput>::Init(CParameter& Parameter) {
   /* Init some internal variables */
   iInputBlockSize = 0;
 
@@ -164,8 +158,7 @@ template <class TInput, class TOutput> void CModul<TInput, TOutput>::Init(CParam
 }
 
 template <class TInput, class TOutput>
-void CModul<TInput, TOutput>::Init(CParameter& Parameter, CBuffer<TOutput>& OutputBuffer)
-{
+void CModul<TInput, TOutput>::Init(CParameter& Parameter, CBuffer<TOutput>& OutputBuffer) {
   /* Init some internal variables */
   iMaxOutputBlockSize = 0;
   iInputBlockSize = 0;
@@ -178,8 +171,7 @@ void CModul<TInput, TOutput>::Init(CParameter& Parameter, CBuffer<TOutput>& Outp
   if (iMaxOutputBlockSize != 0)
     OutputBuffer.Init(iMaxOutputBlockSize);
   else {
-    if (iOutputBlockSize != 0)
-      OutputBuffer.Init(iOutputBlockSize);
+    if (iOutputBlockSize != 0) OutputBuffer.Init(iOutputBlockSize);
   }
 }
 
@@ -187,8 +179,8 @@ void CModul<TInput, TOutput>::Init(CParameter& Parameter, CBuffer<TOutput>& Outp
 /******************************************************************************\
 * Transmitter modul (CTransmitterModul)                                        *
 \******************************************************************************/
-template <class TInput, class TOutput> CTransmitterModul<TInput, TOutput>::CTransmitterModul()
-{
+template <class TInput, class TOutput>
+CTransmitterModul<TInput, TOutput>::CTransmitterModul() {
   /* Initialize all member variables with zeros */
   iInputBlockSize2 = 0;
   iInputBlockSize3 = 0;
@@ -196,8 +188,8 @@ template <class TInput, class TOutput> CTransmitterModul<TInput, TOutput>::CTran
   pvecInputData3 = nullptr;
 }
 
-template <class TInput, class TOutput> void CTransmitterModul<TInput, TOutput>::Init(CParameter& Parameter)
-{
+template <class TInput, class TOutput>
+void CTransmitterModul<TInput, TOutput>::Init(CParameter& Parameter) {
   /* Init some internal variables */
   iInputBlockSize2 = 0;
   iInputBlockSize3 = 0;
@@ -207,8 +199,7 @@ template <class TInput, class TOutput> void CTransmitterModul<TInput, TOutput>::
 }
 
 template <class TInput, class TOutput>
-void CTransmitterModul<TInput, TOutput>::Init(CParameter& Parameter, CBuffer<TOutput>& OutputBuffer)
-{
+void CTransmitterModul<TInput, TOutput>::Init(CParameter& Parameter, CBuffer<TOutput>& OutputBuffer) {
   /* Init some internal variables */
   iInputBlockSize2 = 0;
   iInputBlockSize3 = 0;
@@ -219,8 +210,7 @@ void CTransmitterModul<TInput, TOutput>::Init(CParameter& Parameter, CBuffer<TOu
 
 template <class TInput, class TOutput>
 _BOOLEAN CTransmitterModul<TInput, TOutput>::ProcessData(CParameter& Parameter, CBuffer<TInput>& InputBuffer,
-                                                         CBuffer<TOutput>& OutputBuffer)
-{
+                                                         CBuffer<TOutput>& OutputBuffer) {
   // printf("Tx Par Inp Outp request is %d\n", OutputBuffer.GetRequestFlag());
   /* OUTPUT-DRIVEN modul implementation in the transmitter ---------------- */
   /* Look in output buffer if data is requested */
@@ -260,8 +250,7 @@ template <class TInput, class TOutput>
 void CTransmitterModul<TInput, TOutput>::ProcessData(CParameter& Parameter, CBuffer<TInput>& InputBuffer,
                                                      CBuffer<TInput>& InputBuffer2,
                                                      //			CBuffer<TInput>& InputBuffer3,    pa0mbo
-                                                     CBuffer<TOutput>& OutputBuffer)
-{
+                                                     CBuffer<TOutput>& OutputBuffer) {
   /* OUTPUT-DRIVEN modul implementation in the transmitter ---------------- */
   /* Look in output buffer if data is requested */
   // printf("Tx Par Inp1 Inp2 Outp request is %d  inp1size %d inp2size %d \n",
@@ -311,8 +300,7 @@ void CTransmitterModul<TInput, TOutput>::ProcessData(CParameter& Parameter, CBuf
 }
 
 template <class TInput, class TOutput>
-void CTransmitterModul<TInput, TOutput>::ProcessData(CParameter& Parameter, CBuffer<TOutput>& OutputBuffer)
-{
+void CTransmitterModul<TInput, TOutput>::ProcessData(CParameter& Parameter, CBuffer<TOutput>& OutputBuffer) {
   // printf("Tx par Outp request  flag is %d\n", OutputBuffer.GetRequestFlag());
   /* OUTPUT-DRIVEN modul implementation in the transmitter ---------------- */
   /* Look in output buffer if data is requested */
@@ -334,8 +322,7 @@ void CTransmitterModul<TInput, TOutput>::ProcessData(CParameter& Parameter, CBuf
 }
 
 template <class TInput, class TOutput>
-void CTransmitterModul<TInput, TOutput>::ReadData(CParameter& Parameter, CBuffer<TOutput>& OutputBuffer)
-{
+void CTransmitterModul<TInput, TOutput>::ReadData(CParameter& Parameter, CBuffer<TOutput>& OutputBuffer) {
   // printf("CTransmitterModul entry flag is %d\n", OutputBuffer.GetRequestFlag());
   /* OUTPUT-DRIVEN modul implementation in the transmitter ---------------- */
   /* Look in output buffer if data is requested */
@@ -357,8 +344,7 @@ void CTransmitterModul<TInput, TOutput>::ReadData(CParameter& Parameter, CBuffer
 }
 
 template <class TInput, class TOutput>
-_BOOLEAN CTransmitterModul<TInput, TOutput>::WriteData(CParameter& Parameter, CBuffer<TInput>& InputBuffer)
-{
+_BOOLEAN CTransmitterModul<TInput, TOutput>::WriteData(CParameter& Parameter, CBuffer<TInput>& InputBuffer) {
   // printf("WriteData fill %d Inpblk size %d \n",
   //		InputBuffer.GetFillLevel(), this->iInputBlockSize);
 
@@ -381,4 +367,4 @@ _BOOLEAN CTransmitterModul<TInput, TOutput>::WriteData(CParameter& Parameter, CB
   return true;
 }
 
-#endif // !defined(AFX_MODUL_H__41E39CD3_2AEC_400E_907B_148C0EC17A43__INCLUDED_)
+#endif  // !defined(AFX_MODUL_H__41E39CD3_2AEC_400E_907B_148C0EC17A43__INCLUDED_)

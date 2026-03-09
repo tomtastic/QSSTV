@@ -35,18 +35,14 @@ class QwtPlotPicker;
  *@author Johan Maes -- ON4QZ
  */
 
-class scopePlot : public QMainWindow
-{
+class scopePlot : public QMainWindow {
   Q_OBJECT
-public:
+ public:
   scopePlot(QString title, QWidget* parent = 0);
   ~scopePlot();
   void setXScaleMultiplier(double mul);
   void setAlternativeScaleMultiplier(double mul);
-  void setOffset(unsigned int offset)
-  {
-    xOffset = offset;
-  }
+  void setOffset(unsigned int offset) { xOffset = offset; }
   void init(QString title = QString());
 
   void add1(short int* data, unsigned long len, QString curveName, QString yLeftLabel);
@@ -66,62 +62,39 @@ public:
 
   void show();
   void plot1DUpdate(double* data);
-  void XYL(unsigned int i, int ix, int iy)
-  {
-    x[i] = (double) ix;
-    c1[i] = (double) iy;
+  void XYL(unsigned int i, int ix, int iy) {
+    x[i] = (double)ix;
+    c1[i] = (double)iy;
   }
-  void X(unsigned int i, int ix)
-  {
-    x[i] = (double) ix;
-  }
-  void YL(unsigned int i, int iy)
-  {
-    c1[i] = (double) iy;
-  }
-  void YR(unsigned int i, int iy)
-  {
-    c3[i] = (double) iy;
-  }
-  void XYLYR(unsigned int i, int ix, int iyl, int iyr)
-  {
-    x[i] = (double) ix;
-    c1[i] = (double) iyl;
-    c3[i] = (double) iyr;
+  void X(unsigned int i, int ix) { x[i] = (double)ix; }
+  void YL(unsigned int i, int iy) { c1[i] = (double)iy; }
+  void YR(unsigned int i, int iy) { c3[i] = (double)iy; }
+  void XYLYR(unsigned int i, int ix, int iyl, int iyr) {
+    x[i] = (double)ix;
+    c1[i] = (double)iyl;
+    c3[i] = (double)iyr;
   }
 
-  void XYL(unsigned int i, double ix, double iy)
-  {
+  void XYL(unsigned int i, double ix, double iy) {
     x[i] = ix;
     c1[i] = iy;
   }
 
-  void X(unsigned int i, double ix)
-  {
-    x[i] = ix;
-  }
-  void YL(unsigned int i, double iy)
-  {
-    c1[i] = iy;
-  }
-  void YR(unsigned int i, double iy)
-  {
-    c3[i] = iy;
-  }
-  void XYLYR(unsigned int i, double ix, double iyl, double iyr)
-  {
+  void X(unsigned int i, double ix) { x[i] = ix; }
+  void YL(unsigned int i, double iy) { c1[i] = iy; }
+  void YR(unsigned int i, double iy) { c3[i] = iy; }
+  void XYLYR(unsigned int i, double ix, double iyl, double iyr) {
     x[i] = ix;
     c1[i] = iyl;
     c3[i] = iyr;
   }
-  void resize(unsigned long i)
-  {
+  void resize(unsigned long i) {
     x.resize(i);
     c1.resize(i);
     c3.resize(i);
   }
   void refresh();
-public slots:
+ public slots:
   void slotZoom(bool b);
   void slotOffsetChanged(double offset);
   void slotRangeChanged(double range);
@@ -130,21 +103,15 @@ public slots:
   //  void plotMouseMoved(const QMouseEvent &e);
   //	void plotMouseReleased(const QMouseEvent &e);
   void legendClicked(const QVariant& itemInfo, bool on);
-  void slotNext()
-  {
-    emit next();
-  }
-  void slotPrevious()
-  {
-    emit previous();
-  }
+  void slotNext() { emit next(); }
+  void slotPrevious() { emit previous(); }
   void slotSamplesButtton();
   void setCurveOn(int i, bool b);
-signals:
+ signals:
   void next();
   void previous();
 
-private:
+ private:
   QwtPlot* plW;
   QToolBar* toolsToolbar;
   QMenu* toolsMenu;

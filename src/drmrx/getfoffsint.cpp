@@ -40,8 +40,7 @@ struct cmplxnmbr {
   float re;
   float im;
 };
-float getfoffsint(float* symbolbuf, int N_symbols, int K_dc, int K_modulo, int Tu)
-{
+float getfoffsint(float* symbolbuf, int N_symbols, int K_dc, int K_modulo, int Tu) {
   int i, j;
   struct cmplxnmbr S[288][30]; /* Tu x 30 ? pa0mbo? */
   float dS_sum[288 * 2];

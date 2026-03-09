@@ -5,8 +5,7 @@ int numTxFrames;
 drmTxParams drmParams;
 QList<short unsigned int> fixBlockList;
 
-drmTxParams modeToParams(unsigned int mode)
-{
+drmTxParams modeToParams(unsigned int mode) {
   drmTxParams prm;
   prm.robMode = mode / 10000;
   mode -= (mode / 10000) * 10000;
@@ -20,8 +19,7 @@ drmTxParams modeToParams(unsigned int mode)
   return prm;
 }
 
-unsigned int paramsToMode(drmTxParams prm)
-{
+unsigned int paramsToMode(drmTxParams prm) {
   uint mode = 1;
   mode += prm.robMode * 10000;
   mode += prm.bandwith * 1000;

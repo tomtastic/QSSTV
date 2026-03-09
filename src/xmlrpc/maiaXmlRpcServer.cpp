@@ -28,15 +28,13 @@
 #include "maiaXmlRpcServer.h"
 #include "maiaFault.h"
 
-MaiaXmlRpcServer::MaiaXmlRpcServer(const QHostAddress& address, quint16 port, QObject* parent) : QObject(parent)
-{
+MaiaXmlRpcServer::MaiaXmlRpcServer(const QHostAddress& address, quint16 port, QObject* parent) : QObject(parent) {
   allowedAddresses = nullptr;
   connect(&server, &QTcpServer::newConnection, this, &MaiaXmlRpcServer::newConnection);
   server.listen(address, port);
 }
 
-MaiaXmlRpcServer::MaiaXmlRpcServer(quint16 port, QObject* parent) : QObject(parent)
-{
+MaiaXmlRpcServer::MaiaXmlRpcServer(quint16 port, QObject* parent) : QObject(parent) {
   allowedAddresses = nullptr;
   connect(&server, &QTcpServer::newConnection, this, &MaiaXmlRpcServer::newConnection);
   server.listen(QHostAddress::Any, port);
@@ -44,27 +42,23 @@ MaiaXmlRpcServer::MaiaXmlRpcServer(quint16 port, QObject* parent) : QObject(pare
 
 MaiaXmlRpcServer::MaiaXmlRpcServer(const QHostAddress& address, quint16 port, QList<QHostAddress>* allowedAddresses,
                                    QObject* parent)
-    : QObject(parent)
-{
+    : QObject(parent) {
   this->allowedAddresses = allowedAddresses;
   connect(&server, &QTcpServer::newConnection, this, &MaiaXmlRpcServer::newConnection);
   server.listen(address, port);
 }
 
-void MaiaXmlRpcServer::addMethod(QString method, QObject* responseObject, const char* responseSlot)
-{
+void MaiaXmlRpcServer::addMethod(QString method, QObject* responseObject, const char* responseSlot) {
   objectMap[method] = responseObject;
   slotMap[method] = responseSlot;
 }
 
-void MaiaXmlRpcServer::removeMethod(QString method)
-{
+void MaiaXmlRpcServer::removeMethod(QString method) {
   objectMap.remove(method);
   slotMap.remove(method);
 }
 
-void MaiaXmlRpcServer::getMethod(QString method, QObject** responseObject, const char** responseSlot)
-{
+void MaiaXmlRpcServer::getMethod(QString method, QObject** responseObject, const char** responseSlot) {
   if (!objectMap.contains(method)) {
     *responseObject = nullptr;
     *responseSlot = nullptr;
@@ -74,8 +68,7 @@ void MaiaXmlRpcServer::getMethod(QString method, QObject** responseObject, const
   *responseSlot = slotMap[method];
 }
 
-void MaiaXmlRpcServer::newConnection()
-{
+void MaiaXmlRpcServer::newConnection() {
   QTcpSocket* connection = server.nextPendingConnection();
   if (!this->allowedAddresses || this->allowedAddresses->isEmpty() ||
       this->allowedAddresses->contains(connection->peerAddress())) {
@@ -87,7 +80,4 @@ void MaiaXmlRpcServer::newConnection()
   }
 }
 
-QHostAddress MaiaXmlRpcServer::getServerAddress()
-{
-  return server.serverAddress();
-}
+QHostAddress MaiaXmlRpcServer::getServerAddress() { return server.serverAddress(); }

@@ -54,8 +54,7 @@
 #include <QSize>
 
 
-videoCapture::videoCapture()
-{
+videoCapture::videoCapture() {
   dev = 0;
   opened = false;
   allocated = false;
@@ -63,28 +62,22 @@ videoCapture::videoCapture()
   numBuffers = 2;
 }
 
-videoCapture::~videoCapture()
-{
-  if (localImage != nullptr)
-    delete localImage;
+videoCapture::~videoCapture() {
+  if (localImage != nullptr) delete localImage;
   close();
 }
 
-void videoCapture::close()
-{
-  if (!opened)
-    return;
+void videoCapture::close() {
+  if (!opened) return;
 
   v4l2_close(dev);
   opened = false;
   allocated = false;
 }
 
-bool videoCapture::open(QString videoDev)
-{
+bool videoCapture::open(QString videoDev) {
   videoDevice = videoDev;
-  if (opened)
-    return true;
+  if (opened) return true;
   addToLog("opening Videocapture device", LOGCAM);
 
   dev = v4l2_open(videoDevice.toLatin1().data(), O_RDWR);
@@ -98,8 +91,7 @@ bool videoCapture::open(QString videoDev)
 }
 
 
-bool videoCapture::init(int pixelFormat, int width, int height)
-{
+bool videoCapture::init(int pixelFormat, int width, int height) {
   getFormat(srcFmt);
   srcFmt.fmt.pix.pixelformat = static_cast<uint>(pixelFormat);
   srcFmt.fmt.pix.width = static_cast<uint>(width);
@@ -120,11 +112,10 @@ bool videoCapture::init(int pixelFormat, int width, int height)
 
   if (needsConversion) {
     v4lconvert_try_format(convertData, &dstFmt, &srcFmt);
-    getFormat(srcFmt); // restore srcFmt
+    getFormat(srcFmt);  // restore srcFmt
   }
 
-  if (localImage)
-    delete localImage;
+  if (localImage) delete localImage;
   localImage = new QImage(static_cast<int>(dstFmt.fmt.pix.width), static_cast<int>(dstFmt.fmt.pix.height), qFmt);
   if (!allocated) {
     if (allocateBuffers(numBuffers) >= 0) {
@@ -133,7 +124,7 @@ bool videoCapture::init(int pixelFormat, int width, int height)
       return false;
     }
   } else {
-    allocateBuffers(0); // deallocate buffers
+    allocateBuffers(0);  // deallocate buffers
     if (allocateBuffers(numBuffers) >= 0) {
       allocated = true;
     } else {
@@ -143,8 +134,7 @@ bool videoCapture::init(int pixelFormat, int width, int height)
   return true;
 }
 
-int videoCapture::allocateBuffers(uint numBufs)
-{
+int videoCapture::allocateBuffers(uint numBufs) {
   int ret;
   memset(&rb, 0, sizeof rb);
   rb.count = static_cast<uint>(numBufs);
@@ -159,8 +149,7 @@ int videoCapture::allocateBuffers(uint numBufs)
 }
 
 
-bool videoCapture::setFormat(v4l2_format& fmt)
-{
+bool videoCapture::setFormat(v4l2_format& fmt) {
   addToLog("setFormat", LOGCAM);
   //  memset(&fmt, 0, sizeof fmt);
   fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -179,8 +168,7 @@ bool videoCapture::setFormat(v4l2_format& fmt)
   return true;
 }
 
-bool videoCapture::getFormat(v4l2_format& fmt)
-{
+bool videoCapture::getFormat(v4l2_format& fmt) {
   addToLog("getFormat", LOGCAM);
   memset(&fmt, 0, sizeof fmt);
   fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -192,8 +180,7 @@ bool videoCapture::getFormat(v4l2_format& fmt)
 }
 
 
-int videoCapture::getFrame()
-{
+int videoCapture::getFrame() {
   int ret = 0;
   // Dequeue a buffer.
   errorString.clear();
@@ -221,8 +208,7 @@ int videoCapture::getFrame()
 }
 
 
-bool videoCapture::convert(unsigned char* src)
-{
+bool videoCapture::convert(unsigned char* src) {
   int result = 0;
   //  if (localImage!=nullptr) delete localImage;
   //  localImage=new QImage( dstFmt.fmt.pix.width,dstFmt.fmt.pix.height,qFmt);
@@ -236,35 +222,23 @@ bool videoCapture::convert(unsigned char* src)
     memcpy(localImage->bits(), src, static_cast<uint>(localImage->sizeInBytes()));
 #endif
   }
-  if (result < 0)
-    return false;
+  if (result < 0) return false;
   return true;
 }
 
 
-int videoCapture::currentWidth(v4l2_format fmt) const
-{
-  return (static_cast<int>(fmt.fmt.pix.width));
-}
+int videoCapture::currentWidth(v4l2_format fmt) const { return (static_cast<int>(fmt.fmt.pix.width)); }
 
-int videoCapture::currentHeight(v4l2_format fmt) const
-{
-  return (static_cast<int>(fmt.fmt.pix.height));
-}
+int videoCapture::currentHeight(v4l2_format fmt) const { return (static_cast<int>(fmt.fmt.pix.height)); }
 
-int videoCapture::currentPixelFormat(v4l2_format fmt) const
-{
-  return (static_cast<int>(fmt.fmt.pix.pixelformat));
-}
+int videoCapture::currentPixelFormat(v4l2_format fmt) const { return (static_cast<int>(fmt.fmt.pix.pixelformat)); }
 
 
-bool videoCapture::captureStop()
-{
+bool videoCapture::captureStop() {
   int type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   int ret;
 
-  if (!streaming)
-    return false;
+  if (!streaming) return false;
   ret = v4l2_ioctl(dev, VIDIOC_STREAMOFF, &type);
   if (ret < 0) {
     addToLog(QString("Unable  to stop capture, %1").arg(errno), LOGCAM);
@@ -275,12 +249,10 @@ bool videoCapture::captureStop()
   return true;
 }
 
-bool videoCapture::captureStart()
-{
+bool videoCapture::captureStart() {
   uint i;
   int ret;
-  if (!opened)
-    return false;
+  if (!opened) return false;
   addToLog("captureStart", LOGCAM);
 
   // Allocate buffers
@@ -329,20 +301,17 @@ bool videoCapture::captureStart()
   return true;
 }
 
-bool videoCapture::stopStreaming()
-{
+bool videoCapture::stopStreaming() {
   uint i;
   bool ok = true;
-  if (!streaming)
-    return false;
+  if (!streaming) return false;
   for (i = 0; i < numBuffers; i++) {
     if (v4l2_munmap(mem[i], bufLength) == -1) {
       addToLog(QString("videoCapture::stopStreaming : munmap %1 failed. errno = %2").arg(i).arg(errno), LOGCAM);
       ok = false;
     }
   }
-  if (ok)
-    mmapped = false;
+  if (ok) mmapped = false;
 
   if (captureStop()) {
     streaming = false;
@@ -352,71 +321,56 @@ bool videoCapture::stopStreaming()
 }
 
 
-bool videoCapture::startSnapshots()
-{
-  if (!opened)
-    return false;
-  if (!captureStart())
-    return false;
+bool videoCapture::startSnapshots() {
+  if (!opened) return false;
+  if (!captureStart()) return false;
   return true;
 }
 
-enum QImage::Format videoCapture::checkConversionNeeded()
-{
+enum QImage::Format videoCapture::checkConversionNeeded() {
   QImage::Format qfmt;
   switch (srcFmt.fmt.pix.pixelformat) {
-  case V4L2_PIX_FMT_BGR32:
-    qfmt = QImage::Format_RGB32;
-    break;
-  case V4L2_PIX_FMT_RGB24:
-    qfmt = QImage::Format_RGB888;
-    break;
-  case V4L2_PIX_FMT_RGB565:
-    qfmt = QImage::Format_RGB16;
-    break;
-  case V4L2_PIX_FMT_RGB555:
-    qfmt = QImage::Format_RGB555;
-    break;
-  case V4L2_PIX_FMT_RGB444:
-    qfmt = QImage::Format_RGB444;
-    break;
-  default:
-    qfmt = QImage::Format_Invalid;
+    case V4L2_PIX_FMT_BGR32:
+      qfmt = QImage::Format_RGB32;
+      break;
+    case V4L2_PIX_FMT_RGB24:
+      qfmt = QImage::Format_RGB888;
+      break;
+    case V4L2_PIX_FMT_RGB565:
+      qfmt = QImage::Format_RGB16;
+      break;
+    case V4L2_PIX_FMT_RGB555:
+      qfmt = QImage::Format_RGB555;
+      break;
+    case V4L2_PIX_FMT_RGB444:
+      qfmt = QImage::Format_RGB444;
+      break;
+    default:
+      qfmt = QImage::Format_Invalid;
   }
   return qfmt;
 }
 
 
-void videoCapture::dumpCaps(v4l2_capability& cap)
-{
-  if (cap.capabilities & V4L2_CAP_VIDEO_CAPTURE)
-    addToLog("The device supports the Video Capture interface", LOGCAM);
-  if (cap.capabilities & V4L2_CAP_VIDEO_OUTPUT)
-    addToLog("The device supports the Video Output interface", LOGCAM);
-  if (cap.capabilities & V4L2_CAP_VIDEO_OVERLAY)
-    addToLog("The device supports the Video Overlay interface", LOGCAM);
-  if (cap.capabilities & V4L2_CAP_VBI_CAPTURE)
-    addToLog("The device supports the Raw VBI Capture interface", LOGCAM);
-  if (cap.capabilities & V4L2_CAP_VBI_OUTPUT)
-    addToLog("The device supports the Raw VBI Output interface", LOGCAM);
+void videoCapture::dumpCaps(v4l2_capability& cap) {
+  if (cap.capabilities & V4L2_CAP_VIDEO_CAPTURE) addToLog("The device supports the Video Capture interface", LOGCAM);
+  if (cap.capabilities & V4L2_CAP_VIDEO_OUTPUT) addToLog("The device supports the Video Output interface", LOGCAM);
+  if (cap.capabilities & V4L2_CAP_VIDEO_OVERLAY) addToLog("The device supports the Video Overlay interface", LOGCAM);
+  if (cap.capabilities & V4L2_CAP_VBI_CAPTURE) addToLog("The device supports the Raw VBI Capture interface", LOGCAM);
+  if (cap.capabilities & V4L2_CAP_VBI_OUTPUT) addToLog("The device supports the Raw VBI Output interface", LOGCAM);
   if (cap.capabilities & V4L2_CAP_SLICED_VBI_CAPTURE)
     addToLog("The device supports the Sliced VBI Capture interface", LOGCAM);
   if (cap.capabilities & V4L2_CAP_SLICED_VBI_OUTPUT)
     addToLog("The device supports the Sliced VBI Output interface", LOGCAM);
-  if (cap.capabilities & V4L2_CAP_RDS_CAPTURE)
-    addToLog("[to be defined]", LOGCAM);
+  if (cap.capabilities & V4L2_CAP_RDS_CAPTURE) addToLog("[to be defined]", LOGCAM);
 #ifdef V4L2_CAP_VIDEO_OUTPUT_OVERLAY
   if (cap.capabilities & V4L2_CAP_VIDEO_OUTPUT_OVERLAY)
     addToLog("The device supports the Video Output Overlay (OSD) interface", LOGCAM);
 #endif
-  if (cap.capabilities & V4L2_CAP_TUNER)
-    addToLog("The device has some sort of tuner or modulator", LOGCAM);
-  if (cap.capabilities & V4L2_CAP_AUDIO)
-    addToLog("The device has audio inputs or outputs.", LOGCAM);
+  if (cap.capabilities & V4L2_CAP_TUNER) addToLog("The device has some sort of tuner or modulator", LOGCAM);
+  if (cap.capabilities & V4L2_CAP_AUDIO) addToLog("The device has audio inputs or outputs.", LOGCAM);
   if (cap.capabilities & V4L2_CAP_READWRITE)
     addToLog("The device supports the read() and/or write() I/O methods.", LOGCAM);
-  if (cap.capabilities & V4L2_CAP_ASYNCIO)
-    addToLog("The device supports the asynchronous I/O methods.", LOGCAM);
-  if (cap.capabilities & V4L2_CAP_STREAMING)
-    addToLog("The device supports the streaming I/O method.", LOGCAM);
+  if (cap.capabilities & V4L2_CAP_ASYNCIO) addToLog("The device supports the asynchronous I/O methods.", LOGCAM);
+  if (cap.capabilities & V4L2_CAP_STREAMING) addToLog("The device supports the streaming I/O method.", LOGCAM);
 }

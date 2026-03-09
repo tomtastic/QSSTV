@@ -7,9 +7,8 @@
 
 void getCardList(QStringList& alsaInputList, QStringList& alsaOutputList);
 
-class soundAlsa : public soundBase
-{
-public:
+class soundAlsa : public soundBase {
+ public:
   soundAlsa();
   ~soundAlsa();
   bool init(int samplerate);
@@ -18,13 +17,13 @@ public:
   int read(int& countAvailable);
   int write(uint numFrames);
 
-protected:
+ protected:
   void flushCapture();
   void flushPlayback();
   void closeDevices();
   void waitPlaybackEnd();
 
-private:
+ private:
   bool setupSoundParams(bool isCapture);
   bool alsaErrorHandler(int err, QString Info);
   snd_pcm_uframes_t playbackPeriodSize;
@@ -42,4 +41,4 @@ private:
   bool is32bit;
 };
 
-#endif // SOUNDALSA_H
+#endif  // SOUNDALSA_H

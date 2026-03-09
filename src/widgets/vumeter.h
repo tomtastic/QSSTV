@@ -28,55 +28,30 @@
 #endif
 
 
-class vuMeter : public QWidget
-{
+class vuMeter : public QWidget {
   Q_OBJECT
 
-  QColor colorBg() const
-  {
-    return colBack;
-  }
-  QColor colorValue() const
-  {
-    return colValue;
-  }
-  QColor colorLow() const
-  {
-    return colLow;
-  }
-  QColor colorHigh() const
-  {
-    return colHigh;
-  }
-  double value() const
-  {
-    return val;
-  }
-  double minValue() const
-  {
-    return min;
-  }
-  double maxValue() const
-  {
-    return max;
-  }
+  QColor colorBg() const { return colBack; }
+  QColor colorValue() const { return colValue; }
+  QColor colorLow() const { return colLow; }
+  QColor colorHigh() const { return colHigh; }
+  double value() const { return val; }
+  double minValue() const { return min; }
+  double maxValue() const { return max; }
 
-public:
+ public:
   vuMeter(QWidget* parent = 0);
   QSize minimumSizeHint() const;
   QSize sizeHint() const;
-  void setHorizontal(bool h)
-  {
-    horizontal = h;
-  }
+  void setHorizontal(bool h) { horizontal = h; }
   void setLabelText(const QString& t);
 
 
-signals:
+ signals:
 
   void valueChanged(double);
 
-public slots:
+ public slots:
 
   void setColorBg(QColor);
   void setColorValue(QColor);
@@ -84,22 +59,19 @@ public slots:
   void setColorMid(QColor);
   void setColorLow(QColor);
   void setColors(QColor, QColor, QColor);
-  void setDivisions(int div)
-  {
-    divisions = div;
-  }
+  void setDivisions(int div) { divisions = div; }
   void setValue(double);
   void setMaximum(double);
   void setMinimum(double);
 
 
-protected:
+ protected:
   void paintEvent(QPaintEvent*);
   void paintBorder();
   void paintBar();
 
 
-private:
+ private:
   double min;
   double max;
   double val;

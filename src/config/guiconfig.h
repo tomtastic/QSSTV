@@ -15,16 +15,14 @@ extern bool lowRes;
 extern bool confirmDeletion;
 extern bool confirmClose;
 
-namespace Ui
-{
+namespace Ui {
 class guiConfig;
 }
 
-class guiConfig : public baseConfig
-{
+class guiConfig : public baseConfig {
   Q_OBJECT
 
-public:
+ public:
   explicit guiConfig(QWidget* parent = 0);
   ~guiConfig();
   void readSettings();
@@ -32,13 +30,13 @@ public:
   void getParams();
   void setParams();
   bool backGroundColorChanged;
-private slots:
+ private slots:
   void slotBGColorSelect();
   void slotIBGColorSelect();
 
-private:
+ private:
   Ui::guiConfig* ui;
   void setColorLabel(QColor c, bool image);
 };
 
-#endif // GUICONFIG_H
+#endif  // GUICONFIG_H

@@ -37,11 +37,10 @@
 /******************************************************************************\
 * Transmitter                                                                  *
 \******************************************************************************/
-void CTransmitData::ProcessDataInternal(CParameter&)
-{
+void CTransmitData::ProcessDataInternal(CParameter&) {
   int i;
   const int iNs2 = iInputBlockSize * 2;
-  rNormFactor = 1000.0; // pa0mbo (was 16000)
+  rNormFactor = 1000.0;  // pa0mbo (was 16000)
   for (i = 0; i < iNs2; i += 2) {
     const int iCurIndex = iBlockCnt * iNs2 + i;
 
@@ -55,46 +54,45 @@ void CTransmitData::ProcessDataInternal(CParameter&)
                                                   static_cast<_REAL>(5000.0)); /* 2^15 / pi / 2 -> approx. 5000 */
 
     switch (eOutputFormat) {
-    case OF_REAL_VAL:
-      //          vecsDataOut[iCurIndex]  = sCurOutReal;
-      vecsDataOut[iCurIndex] = sCurOutReal;
-      vecsDataOut[iCurIndex + 1] = 0;
+      case OF_REAL_VAL:
+        //          vecsDataOut[iCurIndex]  = sCurOutReal;
+        vecsDataOut[iCurIndex] = sCurOutReal;
+        vecsDataOut[iCurIndex + 1] = 0;
 
 
-      //                  (short) 15000.0*sin(pi*1500.0*i/48000.0) ; //  pa0mbo 1500 Hz test signaal
-      //                printf("%d %d \n", i/2 , vecsDataOut[iCurIndex]);
-      break;
+        //                  (short) 15000.0*sin(pi*1500.0*i/48000.0) ; //  pa0mbo 1500 Hz test signaal
+        //                printf("%d %d \n", i/2 , vecsDataOut[iCurIndex]);
+        break;
 
-    case OF_IQ_POS:
-      /* Send inphase and quadrature (I / Q) signal to stereo sound card
-     output. I: left channel, Q: right channel */
-      vecsDataOut[iCurIndex] = sCurOutReal;
-      vecsDataOut[iCurIndex + 1] = sCurOutImag;
-      break;
+      case OF_IQ_POS:
+        /* Send inphase and quadrature (I / Q) signal to stereo sound card
+       output. I: left channel, Q: right channel */
+        vecsDataOut[iCurIndex] = sCurOutReal;
+        vecsDataOut[iCurIndex + 1] = sCurOutImag;
+        break;
 
-    case OF_IQ_NEG:
-      /* Send inphase and quadrature (I / Q) signal to stereo sound card output. I: right channel, Q: left channel */
-      vecsDataOut[iCurIndex] = sCurOutImag;
-      vecsDataOut[iCurIndex + 1] = sCurOutReal;
-      break;
+      case OF_IQ_NEG:
+        /* Send inphase and quadrature (I / Q) signal to stereo sound card output. I: right channel, Q: left channel */
+        vecsDataOut[iCurIndex] = sCurOutImag;
+        vecsDataOut[iCurIndex + 1] = sCurOutReal;
+        break;
 
-    case OF_EP:
-      /* Send envelope and phase signal to stereo sound card output. Envelope: left channel, Phase: right channel */
-      vecsDataOut[iCurIndex] = sCurOutEnv;
-      vecsDataOut[iCurIndex + 1] = sCurOutPhase;
-      break;
+      case OF_EP:
+        /* Send envelope and phase signal to stereo sound card output. Envelope: left channel, Phase: right channel */
+        vecsDataOut[iCurIndex] = sCurOutEnv;
+        vecsDataOut[iCurIndex + 1] = sCurOutPhase;
+        break;
     }
   }
   iBlockCnt++;
   if (iBlockCnt == iNumBlocks) {
     iBlockCnt = 0;
-    pSound->Write(vecsDataOut); //  printf("DRMSignalIO na pSound-> write\n");
+    pSound->Write(vecsDataOut);  //  printf("DRMSignalIO na pSound-> write\n");
     addToLog(QString("writing vecsDataOut:%1").arg(vecsDataOut.size()), LOGDRMTX);
   }
 }
 
-void CTransmitData::InitInternal(CParameter& TransmParam)
-{
+void CTransmitData::InitInternal(CParameter& TransmParam) {
   /*
     float*	pCurFilt;
     int		iNumTapsTransmFilt;
@@ -129,15 +127,13 @@ void CTransmitData::InitInternal(CParameter& TransmParam)
   /* All robustness modes and spectrum occupancies should have the same output
      power. Calculate the normaization factor based on the average power of
      symbol (the number 3000 was obtained through output tests) */
-  rNormFactor =
-      static_cast<CReal>(6000.0) / Sqrt(TransmParam.CellMappingTable.rAvPowPerSymbol); // pa0mbo was 3000.0 nu as in ham
+  rNormFactor = static_cast<CReal>(6000.0) /
+                Sqrt(TransmParam.CellMappingTable.rAvPowPerSymbol);  // pa0mbo was 3000.0 nu as in ham
   /* Define block-size for input */
   iInputBlockSize = iSymbolBlockSize;
 }
 
-CTransmitData::~CTransmitData()
-{
+CTransmitData::~CTransmitData() {
   /* Close file */
-  if (pFileTransmitter != nullptr)
-    fclose(pFileTransmitter);
+  if (pFileTransmitter != nullptr) fclose(pFileTransmitter);
 }

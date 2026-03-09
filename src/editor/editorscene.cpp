@@ -38,8 +38,7 @@
 #include "templateviewer.h"
 #endif
 
-editorScene::editorScene(QGraphicsView* parent) : QGraphicsScene(parent)
-{
+editorScene::editorScene(QGraphicsView* parent) : QGraphicsScene(parent) {
   contextMenu = new QMenu();
   arrange = new QMenu("Arrange");
   arrange->setTearOffEnabled(true);
@@ -73,19 +72,15 @@ editorScene::editorScene(QGraphicsView* parent) : QGraphicsScene(parent)
   penWidth = 1;
 }
 
-editorScene::~editorScene()
-{
-  if (localImage != nullptr)
-    delete localImage;
-  if ((!pasted) && (copyItem != nullptr))
-    delete copyItem;
+editorScene::~editorScene() {
+  if (localImage != nullptr) delete localImage;
+  if ((!pasted) && (copyItem != nullptr)) delete copyItem;
   delete arrange;
   delete contextMenu;
 }
 
 
-bool editorScene::load(QFile& f)
-{
+bool editorScene::load(QFile& f) {
   bool borderSet = false;
   QImage im;
   graphItemBase* item;
@@ -93,10 +88,8 @@ bool editorScene::load(QFile& f)
   QString version;
   quint16 streamVersion;
   int type;
-  if (f.fileName().isEmpty())
-    return false;
-  if (!f.open(QIODevice::ReadOnly))
-    return false;
+  if (f.fileName().isEmpty()) return false;
+  if (!f.open(QIODevice::ReadOnly)) return false;
   QDataStream str(&f);
   str >> magic;
   if (magic != MAGICNUMBER) {
@@ -125,50 +118,49 @@ bool editorScene::load(QFile& f)
     }
   }
   imageType = TEMPLATE;
-  str >> version; // at this moment we do not use the version
+  str >> version;  // at this moment we do not use the version
   str >> streamVersion;
   str.setVersion(streamVersion);
   while (!str.atEnd()) {
     str >> type;
     switch (type) {
-    case graphItemBase::RECTANGLE:
-      item = new itemRectangle(contextMenu);
-      break;
-    case graphItemBase::ELLIPSE:
-      item = new itemEllipse(contextMenu);
-      break;
-    case graphItemBase::LINE:
-      item = new itemLine(contextMenu);
-      break;
-    case graphItemBase::TEXT:
-      item = new itemText(contextMenu);
-      break;
-    case graphItemBase::IMAGE:
-      item = new itemImage(contextMenu);
-      break;
-    case graphItemBase::REPLAY:
-      item = new itemReplayImage(contextMenu);
-      break;
-    case graphItemBase::SBORDER:
-      borderSet = true;
-      item = new itemImage(contextMenu);
-      item->load(str);
-      border = item->rect();
-      delete item;
-      continue;
-      break;
-    default:
-      addToLog("Error in datastream", LOGEDIT);
-      f.close();
-      return false;
-      break;
+      case graphItemBase::RECTANGLE:
+        item = new itemRectangle(contextMenu);
+        break;
+      case graphItemBase::ELLIPSE:
+        item = new itemEllipse(contextMenu);
+        break;
+      case graphItemBase::LINE:
+        item = new itemLine(contextMenu);
+        break;
+      case graphItemBase::TEXT:
+        item = new itemText(contextMenu);
+        break;
+      case graphItemBase::IMAGE:
+        item = new itemImage(contextMenu);
+        break;
+      case graphItemBase::REPLAY:
+        item = new itemReplayImage(contextMenu);
+        break;
+      case graphItemBase::SBORDER:
+        borderSet = true;
+        item = new itemImage(contextMenu);
+        item->load(str);
+        border = item->rect();
+        delete item;
+        continue;
+        break;
+      default:
+        addToLog("Error in datastream", LOGEDIT);
+        f.close();
+        return false;
+        break;
     }
     item->load(str);
     addItem(item);
   }
   optimizeDepth();
-  if (!borderSet)
-    border = QRectF(0, 0, 320, 256);
+  if (!borderSet) border = QRectF(0, 0, 320, 256);
   addToLog(QString("border position %1,%2 size: %3 x %4 border set=%5")
                .arg(border.topLeft().x())
                .arg(border.topLeft().y())
@@ -181,11 +173,9 @@ bool editorScene::load(QFile& f)
   return true;
 }
 
-QImage* editorScene::renderImage(int w, int h)
-{
+QImage* editorScene::renderImage(int w, int h) {
   clearSelection();
-  if (localImage != nullptr)
-    delete localImage;
+  if (localImage != nullptr) delete localImage;
   if (w == 0) {
     localImage = new QImage(border.width(), border.height(), QImage::Format_ARGB32_Premultiplied);
   } else {
@@ -212,12 +202,10 @@ QImage* editorScene::renderImage(int w, int h)
 }
 
 
-void editorScene::overlay(QImage* ima)
-{
+void editorScene::overlay(QImage* ima) {
   clearSelection();
   setSceneRect(border);
-  if (localImage != nullptr)
-    delete localImage;
+  if (localImage != nullptr) delete localImage;
   localImage = new QImage(ima->copy());
   addToLog(QString("localImageSize %1,%2").arg(localImage->width()).arg(localImage->height()), LOGEDIT);
   convertText();
@@ -233,8 +221,7 @@ void editorScene::overlay(QImage* ima)
 #endif
 }
 
-bool editorScene::save(QFile& f, bool templ)
-{
+bool editorScene::save(QFile& f, bool templ) {
   QImage im(border.width(), border.height(), QImage::Format_ARGB32_Premultiplied);
   im.fill(0);
   setSceneRect(border);
@@ -267,8 +254,7 @@ bool editorScene::save(QFile& f, bool templ)
     im.save(&f, "PNG");
     return true;
   }
-  if (!f.open(QIODevice::WriteOnly))
-    return false;
+  if (!f.open(QIODevice::WriteOnly)) return false;
   QDataStream str(&f);
   str.setVersion(QDataStream::Qt_4_4);
   // Header with a "magic number" and a version
@@ -286,10 +272,8 @@ bool editorScene::save(QFile& f, bool templ)
   return true;
 }
 
-void editorScene::flattenImage(int w, int h)
-{
-  if (localImage != nullptr)
-    delete localImage;
+void editorScene::flattenImage(int w, int h) {
+  if (localImage != nullptr) delete localImage;
   setSceneRect(border);
   localImage = new QImage(w, h, QImage::Format_ARGB32_Premultiplied);
   convertText();
@@ -301,15 +285,13 @@ void editorScene::flattenImage(int w, int h)
 }
 
 
-void editorScene::convertReplayImage()
-{
+void editorScene::convertReplayImage() {
 #ifndef STANDALONE
   QString fn;
   imageViewer imv;
 
   fn = txWidgetPtr->getPreviewFilename();
-  if (fn.isEmpty())
-    return;
+  if (fn.isEmpty()) return;
   if (imv.openImage(fn, false, false, false, false)) {
     foreach (QGraphicsItem* t, items()) {
       if (t->type() == graphItemBase::REPLAY) {
@@ -322,8 +304,7 @@ void editorScene::convertReplayImage()
 }
 
 
-void editorScene::convertText()
-{
+void editorScene::convertText() {
   foreach (QGraphicsItem* t, items()) {
     if (t->type() == graphItemBase::TEXT) {
       itemText* itt = qgraphicsitem_cast<itemText*>(t);
@@ -333,24 +314,17 @@ void editorScene::convertText()
 }
 
 
-void editorScene::setMode(eMode m)
-{
+void editorScene::setMode(eMode m) {
   mode = m;
-  if (mode == INSERT)
-    clearSelection();
+  if (mode == INSERT) clearSelection();
 }
 
-void editorScene::setItemType(graphItemBase::egraphType tp)
-{
-  itemType = tp;
-}
+void editorScene::setItemType(graphItemBase::egraphType tp) { itemType = tp; }
 
-void editorScene::apply(changeFlags cf)
-{
+void editorScene::apply(changeFlags cf) {
   QPen p;
   graphItemBase* it;
-  if (selectedItems().isEmpty())
-    return; // nothing to do
+  if (selectedItems().isEmpty()) return;  // nothing to do
   foreach (QGraphicsItem* t, selectedItems()) {
     it = qgraphicsitem_cast<graphItemBase*>(t);
     if (cf & DFILLCOLOR) {
@@ -378,17 +352,14 @@ void editorScene::apply(changeFlags cf)
     }
     if (t->type() == graphItemBase::TEXT) {
       itemText* itt = qgraphicsitem_cast<itemText*>(t);
-      if (cf & DFONT)
-        itt->setFont(font);
-      if (cf & DTEXT)
-        itt->setText(text);
+      if (cf & DFONT) itt->setFont(font);
+      if (cf & DTEXT) itt->setText(text);
     }
     it->update();
   }
 }
 
-void editorScene::clearAll()
-{
+void editorScene::clearAll() {
   graphItemBase* r;
   foreach (QGraphicsItem* t, items()) {
     r = qgraphicsitem_cast<graphItemBase*>(t);
@@ -403,8 +374,7 @@ void editorScene::clearAll()
 }
 
 
-void editorScene::itemSetup(graphItemBase* item)
-{
+void editorScene::itemSetup(graphItemBase* item) {
   QPen p;
   gradientDialog gd;
   sgradientParam tmp;
@@ -421,8 +391,7 @@ void editorScene::itemSetup(graphItemBase* item)
   addItem(item);
 }
 
-void editorScene::setImage(QImage* im)
-{
+void editorScene::setImage(QImage* im) {
   graphItemBase* item;
   item = new itemImage(contextMenu);
   item->setImage(*im);
@@ -433,77 +402,71 @@ void editorScene::setImage(QImage* im)
   emit changeSize(im->width(), im->height());
 }
 
-void editorScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
-{
+void editorScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent) {
   graphItemBase* item;
   QImage im;
   if (mouseEvent->button() == Qt::LeftButton) {
     switch (mode) {
-    case INSERT:
-      switch (itemType) {
-      case graphItemBase::RECTANGLE:
-        item = new itemRectangle(contextMenu);
-        itemSetup(item);
-        item->setPos(mouseEvent->scenePos());
-        break;
-      case graphItemBase::LINE:
-        item = new itemLine(contextMenu);
-        itemSetup(item);
-        item->setPos(mouseEvent->scenePos());
-        break;
-      case graphItemBase::ELLIPSE:
-        item = new itemEllipse(contextMenu);
-        itemSetup(item);
-        item->setPos(mouseEvent->scenePos());
-        break;
-      case graphItemBase::TEXT:
-        if (!text.isEmpty()) {
-          item = new itemText(contextMenu);
-          item->setFont(font);
-          item->setText(text);
-          itemSetup(item);
-          item->setPos(mouseEvent->scenePos());
+      case INSERT:
+        switch (itemType) {
+          case graphItemBase::RECTANGLE:
+            item = new itemRectangle(contextMenu);
+            itemSetup(item);
+            item->setPos(mouseEvent->scenePos());
+            break;
+          case graphItemBase::LINE:
+            item = new itemLine(contextMenu);
+            itemSetup(item);
+            item->setPos(mouseEvent->scenePos());
+            break;
+          case graphItemBase::ELLIPSE:
+            item = new itemEllipse(contextMenu);
+            itemSetup(item);
+            item->setPos(mouseEvent->scenePos());
+            break;
+          case graphItemBase::TEXT:
+            if (!text.isEmpty()) {
+              item = new itemText(contextMenu);
+              item->setFont(font);
+              item->setText(text);
+              itemSetup(item);
+              item->setPos(mouseEvent->scenePos());
+            }
+            break;
+          case graphItemBase::IMAGE:
+            if (fl.isEmpty()) break;
+            if (im.load(fl)) {
+              item = new itemImage(contextMenu);
+              item->setImage(im);
+              itemSetup(item);
+              item->setPos(mouseEvent->scenePos());
+            }
+            break;
+          case graphItemBase::REPLAY:
+            item = new itemReplayImage(contextMenu);
+            itemSetup(item);
+            item->setPos(mouseEvent->scenePos());
+            break;
+          case graphItemBase::SBORDER:
+          case graphItemBase::BASE:
+            break;
         }
         break;
-      case graphItemBase::IMAGE:
-        if (fl.isEmpty())
-          break;
-        if (im.load(fl)) {
-          item = new itemImage(contextMenu);
-          item->setImage(im);
-          itemSetup(item);
-          item->setPos(mouseEvent->scenePos());
-        }
+      case MOVE:
+        //          if(!selectedItems().isEmpty())
+        //            {
+        //              item=qgraphicsitem_cast<graphItemBase *>(selectedItems().first());
+        //            }
         break;
-      case graphItemBase::REPLAY:
-        item = new itemReplayImage(contextMenu);
-        itemSetup(item);
-        item->setPos(mouseEvent->scenePos());
-        break;
-      case graphItemBase::SBORDER:
-      case graphItemBase::BASE:
-        break;
-      }
-      break;
-    case MOVE:
-      //          if(!selectedItems().isEmpty())
-      //            {
-      //              item=qgraphicsitem_cast<graphItemBase *>(selectedItems().first());
-      //            }
-      break;
     }
   }
   QGraphicsScene::mousePressEvent(mouseEvent);
   update();
 }
 
-void editorScene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent)
-{
-  QGraphicsScene::mouseMoveEvent(mouseEvent);
-}
+void editorScene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent) { QGraphicsScene::mouseMoveEvent(mouseEvent); }
 
-void editorScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
-{
+void editorScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent) {
   graphItemBase* item;
   if (mode == MOVE) {
     if (!selectedItems().isEmpty()) {
@@ -516,50 +479,45 @@ void editorScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
 }
 
 
-void editorScene::slotCopy()
-{
+void editorScene::slotCopy() {
   graphItemBase* item;
-  if ((!pasted) && (copyItem != nullptr))
-    delete copyItem;
-  if (selectedItems().isEmpty())
-    return; // nothing to do
+  if ((!pasted) && (copyItem != nullptr)) delete copyItem;
+  if (selectedItems().isEmpty()) return;  // nothing to do
   item = qgraphicsitem_cast<graphItemBase*>(selectedItems().first());
   makeCopy(item);
 }
 
-void editorScene::makeCopy(graphItemBase* it)
-{
+void editorScene::makeCopy(graphItemBase* it) {
   graphItemBase* item = it;
   graphItemBase::egraphType type = static_cast<graphItemBase::egraphType>(item->type());
   switch (type) {
-  case graphItemBase::RECTANGLE:
-    copyItem = new itemRectangle(item->getParam().menu);
-    break;
-  case graphItemBase::LINE:
-    copyItem = new itemLine(item->getParam().menu);
-    break;
-  case graphItemBase::ELLIPSE:
-    copyItem = new itemEllipse(item->getParam().menu);
-    break;
-  case graphItemBase::TEXT:
-    copyItem = new itemText(item->getParam().menu);
-    break;
-  case graphItemBase::IMAGE:
-    copyItem = new itemImage(item->getParam().menu);
-    break;
-  case graphItemBase::REPLAY:
-    copyItem = new itemReplayImage(item->getParam().menu);
-    break;
-  default:
-    return;
+    case graphItemBase::RECTANGLE:
+      copyItem = new itemRectangle(item->getParam().menu);
+      break;
+    case graphItemBase::LINE:
+      copyItem = new itemLine(item->getParam().menu);
+      break;
+    case graphItemBase::ELLIPSE:
+      copyItem = new itemEllipse(item->getParam().menu);
+      break;
+    case graphItemBase::TEXT:
+      copyItem = new itemText(item->getParam().menu);
+      break;
+    case graphItemBase::IMAGE:
+      copyItem = new itemImage(item->getParam().menu);
+      break;
+    case graphItemBase::REPLAY:
+      copyItem = new itemReplayImage(item->getParam().menu);
+      break;
+    default:
+      return;
   }
   copyItem->setParam(item->getParam());
   copyItem->setPos(item->pos() + QPointF(10, 10));
   pasted = false;
 }
 
-void editorScene::slotPaste()
-{
+void editorScene::slotPaste() {
   clearSelection();
   copyItem->setZValue(zMax + 1);
   zMax += 1;
@@ -568,11 +526,9 @@ void editorScene::slotPaste()
   clearSelection();
 }
 
-void editorScene::slotExpand()
-{
+void editorScene::slotExpand() {
   graphItemBase* it;
-  if (selectedItems().isEmpty())
-    return; // nothing to do
+  if (selectedItems().isEmpty()) return;  // nothing to do
   foreach (QGraphicsItem* t, selectedItems()) {
     it = qgraphicsitem_cast<graphItemBase*>(t);
     if (it->type() != graphItemBase::TEXT) {
@@ -582,16 +538,13 @@ void editorScene::slotExpand()
   }
 }
 
-void editorScene::slotChangeText()
-{
-  if (selectedItems().isEmpty())
-    return; // nothing to do
+void editorScene::slotChangeText() {
+  if (selectedItems().isEmpty()) return;  // nothing to do
   itemText* item = qgraphicsitem_cast<itemText*>(selectedItems().first());
   if (!item) {
     return;
   }
-  if (item->type() != graphItemBase::TEXT)
-    return;
+  if (item->type() != graphItemBase::TEXT) return;
   QDialog d(0);
   Ui::textForm t;
   t.setupUi(&d);
@@ -602,11 +555,9 @@ void editorScene::slotChangeText()
 }
 
 #ifndef QT_NO_DEBUG
-void editorScene::slotProperties()
-{
+void editorScene::slotProperties() {
   sitemParam* paramPtr;
-  if (selectedItems().isEmpty())
-    return; // nothing to do
+  if (selectedItems().isEmpty()) return;  // nothing to do
   itemText* item = qgraphicsitem_cast<itemText*>(selectedItems().first());
   if (!item) {
     return;
@@ -618,18 +569,18 @@ void editorScene::slotProperties()
   //  qDebug() << "font" << font.family() << "size" << font.pointSize();
   QString gradientType;
   switch (gr.type) {
-  case sgradientParam::LINEAR:
-    gradientType = "LinearGradient";
-    break;
-  case sgradientParam::RADIAL:
-    gradientType = "RadialGradient";
-    break;
-  case sgradientParam::CONICAL:
-    gradientType = "ConicalGradient";
-    break;
-  case sgradientParam::NONE:
-    gradientType = "NoGradient";
-    break;
+    case sgradientParam::LINEAR:
+      gradientType = "LinearGradient";
+      break;
+    case sgradientParam::RADIAL:
+      gradientType = "RadialGradient";
+      break;
+    case sgradientParam::CONICAL:
+      gradientType = "ConicalGradient";
+      break;
+    case sgradientParam::NONE:
+      gradientType = "NoGradient";
+      break;
   }
 
   //  qDebug() << "gradient" << gradientType;
@@ -641,11 +592,9 @@ void editorScene::slotProperties()
 }
 #endif
 
-void editorScene::slotDeleteItem()
-{
+void editorScene::slotDeleteItem() {
   graphItemBase* r;
-  if (selectedItems().isEmpty())
-    return; // nothing to do
+  if (selectedItems().isEmpty()) return;  // nothing to do
   foreach (QGraphicsItem* t, selectedItems()) {
     r = qgraphicsitem_cast<graphItemBase*>(t);
     if ((r->getParamPtr()->type > graphItemBase::BASE) && (r->getParamPtr()->type != graphItemBase::SBORDER)) {
@@ -658,22 +607,18 @@ void editorScene::slotDeleteItem()
 }
 
 
-void editorScene::slotLock()
-{
+void editorScene::slotLock() {
   graphItemBase* it;
-  if (selectedItems().isEmpty())
-    return; // nothing to do
+  if (selectedItems().isEmpty()) return;  // nothing to do
   foreach (QGraphicsItem* t, selectedItems()) {
     it = qgraphicsitem_cast<graphItemBase*>(t);
     it->setLocked(true);
   }
 }
 
-void editorScene::slotUnlock()
-{
+void editorScene::slotUnlock() {
   graphItemBase* it;
-  if (selectedItems().isEmpty())
-    return; // nothing to do
+  if (selectedItems().isEmpty()) return;  // nothing to do
   foreach (QGraphicsItem* t, selectedItems()) {
     it = qgraphicsitem_cast<graphItemBase*>(t);
     it->setLocked(false);
@@ -681,10 +626,8 @@ void editorScene::slotUnlock()
 }
 
 
-void editorScene::slotBringToFront()
-{
-  if (selectedItems().isEmpty())
-    return; // nothing to do
+void editorScene::slotBringToFront() {
+  if (selectedItems().isEmpty()) return;  // nothing to do
   foreach (QGraphicsItem* t, selectedItems()) {
     zMax += 1;
     t->setZValue(zMax);
@@ -692,10 +635,8 @@ void editorScene::slotBringToFront()
   optimizeDepth();
 }
 
-void editorScene::slotSendToBack()
-{
-  if (selectedItems().isEmpty())
-    return; // nothing to do
+void editorScene::slotSendToBack() {
+  if (selectedItems().isEmpty()) return;  // nothing to do
   foreach (QGraphicsItem* t, selectedItems()) {
     t->setZValue(0.5);
   }
@@ -703,28 +644,23 @@ void editorScene::slotSendToBack()
 }
 
 
-void editorScene::slotSendBackward()
-{
-  if (selectedItems().isEmpty())
-    return; // nothing to do
+void editorScene::slotSendBackward() {
+  if (selectedItems().isEmpty()) return;  // nothing to do
   foreach (QGraphicsItem* t, selectedItems()) {
     t->setZValue(t->zValue() - 1.5);
   }
   optimizeDepth();
 }
 
-void editorScene::slotSendForward()
-{
-  if (selectedItems().isEmpty())
-    return; // nothing to do
+void editorScene::slotSendForward() {
+  if (selectedItems().isEmpty()) return;  // nothing to do
   foreach (QGraphicsItem* t, selectedItems()) {
     t->setZValue(t->zValue() + 1.5);
   }
   optimizeDepth();
 }
 
-void editorScene::optimizeDepth()
-{
+void editorScene::optimizeDepth() {
   graphItemBase* it;
   zMax = items().count();
   qreal i = 0;
@@ -740,8 +676,7 @@ void editorScene::optimizeDepth()
   }
 }
 
-void editorScene::addBorder(int w, int h)
-{
+void editorScene::addBorder(int w, int h) {
   if (borderItemPtr == nullptr) {
     borderItemPtr = new itemBorder(contextMenu);
     itemSetup(borderItemPtr);
@@ -754,21 +689,18 @@ void editorScene::addBorder(int w, int h)
 }
 
 
-void editorScene::addConversion(QChar tag, QString value, bool clear)
-{
-  if (clear)
-    mexp.clear();
+void editorScene::addConversion(QChar tag, QString value, bool clear) {
+  if (clear) mexp.clear();
   mexp.addConversion(tag, value);
 }
 
 #ifndef QT_NO_DEBUG
-void editorScene::dumpItems()
-{
+void editorScene::dumpItems() {
   QString t;
   int i;
   QList<QGraphicsItem*> l = items();
   graphItemBase* b;
-  addToLog(QString("dump editorView of items: %1").arg(l.count()), LOGEDIT); // exclude border
+  addToLog(QString("dump editorView of items: %1").arg(l.count()), LOGEDIT);  // exclude border
   for (i = 0; i < l.count(); i++) {
     //      if(l.at(i)->type()>=BASE)
     {

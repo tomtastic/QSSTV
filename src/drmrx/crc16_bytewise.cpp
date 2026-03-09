@@ -57,8 +57,7 @@
 /* function                                                                   */
 
 /******************************************************************************/
-void crc16_bytewise(double /*@out@ */ checksum[], unsigned char in[], long N)
-{
+void crc16_bytewise(double /*@out@ */ checksum[], unsigned char in[], long N) {
   long int i;
   int j;
   unsigned int b = 0xFFFF;

@@ -41,21 +41,12 @@ using namespace std; /* Because of the library: "complex" */
 /******************************************************************************\
 * CVector base class                                                           *
 \******************************************************************************/
-template <class TData> class CVector : public vector<TData>
-{
-public:
-  CVector() : iBitArrayCounter(0), iVectorSize(0)
-  {
-    pData = this->begin();
-  }
-  CVector(const int iNeSi)
-  {
-    Init(iNeSi);
-  }
-  CVector(const int iNeSi, const TData tInVa)
-  {
-    Init(iNeSi, tInVa);
-  }
+template <class TData>
+class CVector : public vector<TData> {
+ public:
+  CVector() : iBitArrayCounter(0), iVectorSize(0) { pData = this->begin(); }
+  CVector(const int iNeSi) { Init(iNeSi); }
+  CVector(const int iNeSi, const TData tInVa) { Init(iNeSi, tInVa); }
   virtual ~CVector() {}
 
   /* Copy constructor: The order of the initialization list must not be
@@ -63,8 +54,7 @@ public:
      pointer must be set to the new data source. The bit access is, by
      default, reset */
   CVector(const CVector<TData>& vecI)
-      : vector<TData>(static_cast<const vector<TData>&>(vecI)), iBitArrayCounter(0), iVectorSize(vecI.Size())
-  {
+      : vector<TData>(static_cast<const vector<TData>&>(vecI)), iBitArrayCounter(0), iVectorSize(vecI.Size()) {
     pData = this->begin();
   }
 
@@ -75,21 +65,16 @@ public:
   void Reset(const TData tResetVal);
 
   void Enlarge(const int iAddedSize);
-  void Add(const TData& tI)
-  {
+  void Add(const TData& tI) {
     Enlarge(1);
     pData[iVectorSize - 1] = tI;
   }
 
-  inline int Size() const
-  {
-    return iVectorSize;
-  }
+  inline int Size() const { return iVectorSize; }
 
   /* This operator allows for a l-value assignment of this object:
      CVector[x] = y is possible */
-  inline TData& operator[](const int iPos)
-  {
+  inline TData& operator[](const int iPos) {
 #ifdef _DEBUG_
     if ((iPos < 0) || (iPos > iVectorSize - 1)) {
       DebugError("Writing vector out of bounds", "Vector size", iVectorSize, "New parameter", iPos);
@@ -98,8 +83,7 @@ public:
     return pData[iPos];
   }
 
-  inline TData operator[](const int iPos) const
-  {
+  inline TData operator[](const int iPos) const {
 #ifdef _DEBUG_
     if ((iPos < 0) || (iPos > iVectorSize - 1)) {
       DebugError("Reading vector out of bounds", "Vector size", iVectorSize, "New parameter", iPos);
@@ -108,8 +92,7 @@ public:
     return pData[iPos];
   }
 
-  inline CVector<TData>& operator=(const CVector<TData>& vecI)
-  {
+  inline CVector<TData>& operator=(const CVector<TData>& vecI) {
 #ifdef _DEBUG_
     /* Vectors which shall be copied MUST have same size! (If this is
        satisfied, the parameter "iVectorSize" must not be adjusted as
@@ -131,12 +114,9 @@ public:
   /* Bit operation functions */
   void Enqueue(uint32_t iInformation, const int iNumOfBits);
   uint32_t Separate(const int iNumOfBits);
-  void ResetBitAccess()
-  {
-    iBitArrayCounter = 0;
-  }
+  void ResetBitAccess() { iBitArrayCounter = 0; }
 
-protected:
+ protected:
   typename vector<TData>::iterator pData;
   int iBitArrayCounter;
   int iVectorSize;
@@ -144,8 +124,8 @@ protected:
 
 
 /* Implementation *************************************************************/
-template <class TData> void CVector<TData>::Init(const int iNewSize)
-{
+template <class TData>
+void CVector<TData>::Init(const int iNewSize) {
   iVectorSize = iNewSize;
 
   /* Clear old buffer and reserve memory for new buffer, get iterator
@@ -155,8 +135,8 @@ template <class TData> void CVector<TData>::Init(const int iNewSize)
   pData = this->begin();
 }
 
-template <class TData> void CVector<TData>::Init(const int iNewSize, const TData tIniVal)
-{
+template <class TData>
+void CVector<TData>::Init(const int iNewSize, const TData tIniVal) {
   /* Call actual init routine */
   Init(iNewSize);
 
@@ -164,8 +144,8 @@ template <class TData> void CVector<TData>::Init(const int iNewSize, const TData
   Reset(tIniVal);
 }
 
-template <class TData> void CVector<TData>::Enlarge(const int iAddedSize)
-{
+template <class TData>
+void CVector<TData>::Enlarge(const int iAddedSize) {
   iVectorSize += iAddedSize;
   this->resize(iVectorSize);
 
@@ -174,15 +154,14 @@ template <class TData> void CVector<TData>::Enlarge(const int iAddedSize)
   pData = this->begin();
 }
 
-template <class TData> void CVector<TData>::Reset(const TData tResetVal)
-{
+template <class TData>
+void CVector<TData>::Reset(const TData tResetVal) {
   /* Set all values to reset value */
-  for (int i = 0; i < iVectorSize; i++)
-    pData[i] = tResetVal;
+  for (int i = 0; i < iVectorSize; i++) pData[i] = tResetVal;
 }
 
-template <class TData> void CVector<TData>::Enqueue(uint32_t iInformation, const int iNumOfBits)
-{
+template <class TData>
+void CVector<TData>::Enqueue(uint32_t iInformation, const int iNumOfBits) {
   /* Enqueue bits in bit array */
   for (int i = 0; i < iNumOfBits; i++) {
     /* We want to put the bits on the array with the MSB first */
@@ -195,14 +174,13 @@ template <class TData> void CVector<TData>::Enqueue(uint32_t iInformation, const
   iBitArrayCounter += iNumOfBits;
 }
 
-template <class TData> uint32_t CVector<TData>::Separate(const int iNumOfBits)
-{
+template <class TData>
+uint32_t CVector<TData>::Separate(const int iNumOfBits) {
   uint32_t iInformation;
 
   /* Check, if current position plus new bit-size is smaller than the maximum
      length of the bit vector. Error code: return a "0" */
-  if (iBitArrayCounter + iNumOfBits > iVectorSize)
-    return 0;
+  if (iBitArrayCounter + iNumOfBits > iVectorSize) return 0;
 
   /* Separate out bits from bit-array */
   iInformation = 0;
@@ -222,9 +200,9 @@ template <class TData> uint32_t CVector<TData>::Separate(const int iNumOfBits)
 /******************************************************************************\
 * CShiftRegister class                                                         *
 \******************************************************************************/
-template <class TData> class CShiftRegister : public CVector<TData>
-{
-public:
+template <class TData>
+class CShiftRegister : public CVector<TData> {
+ public:
   CShiftRegister() : CVector<TData>() {}
   CShiftRegister(const int iNeSi) : CVector<TData>(iNeSi) {}
   CShiftRegister(const int iNeSi, const TData tInVa) : CVector<TData>(iNeSi, tInVa) {}
@@ -241,135 +219,123 @@ public:
 
 
 /* Implementation *************************************************************/
-template <class TData> void CShiftRegister<TData>::AddBegin(const TData tNewD)
-{
+template <class TData>
+void CShiftRegister<TData>::AddBegin(const TData tNewD) {
   /* Shift old values */
-  for (int i = this->iVectorSize - 1; i > 0; i--)
-    this->pData[i] = this->pData[i - 1];
+  for (int i = this->iVectorSize - 1; i > 0; i--) this->pData[i] = this->pData[i - 1];
 
   /* Add new value */
   this->pData[0] = tNewD;
 }
 
-template <class TData> void CShiftRegister<TData>::AddEnd(const TData tNewD)
-{
+template <class TData>
+void CShiftRegister<TData>::AddEnd(const TData tNewD) {
   /* Shift old values */
-  for (int i = 0; i < this->iVectorSize - 1; i++)
-    this->pData[i] = this->pData[i + 1];
+  for (int i = 0; i < this->iVectorSize - 1; i++) this->pData[i] = this->pData[i + 1];
 
   /* Add new value */
   this->pData[this->iVectorSize - 1] = tNewD;
 }
 
-template <class TData> void CShiftRegister<TData>::AddEnd(const CVector<TData>& vectNewD, const int iLen)
-{
+template <class TData>
+void CShiftRegister<TData>::AddEnd(const CVector<TData>& vectNewD, const int iLen) {
   int i, iBlockEnd, iMovLen;
 
   iBlockEnd = this->iVectorSize - iLen;
   iMovLen = iLen;
 
   /* Shift old values */
-  for (i = 0; i < iBlockEnd; i++)
-    this->pData[i] = this->pData[iMovLen++];
+  for (i = 0; i < iBlockEnd; i++) this->pData[i] = this->pData[iMovLen++];
 
   /* Add new block of data */
-  for (i = 0; i < iLen; i++)
-    this->pData[iBlockEnd++] = vectNewD[i];
+  for (i = 0; i < iLen; i++) this->pData[iBlockEnd++] = vectNewD[i];
 }
 
 
 /******************************************************************************\
 * CFIFO class (first in, first out)                                            *
 \******************************************************************************/
-template <class TData> class CFIFO : public CVector<TData>
-{
-public:
+template <class TData>
+class CFIFO : public CVector<TData> {
+ public:
   CFIFO() : CVector<TData>(), iCurIdx(0) {}
   CFIFO(const int iNeSi) : CVector<TData>(iNeSi), iCurIdx(0) {}
   CFIFO(const int iNeSi, const TData tInVa) : CVector<TData>(iNeSi, tInVa), iCurIdx(0) {}
 
   void Add(const TData tNewD);
-  inline TData Get()
-  {
-    return this->pData[iCurIdx];
-  }
+  inline TData Get() { return this->pData[iCurIdx]; }
 
   virtual void Init(const int iNewSize);
   virtual void Init(const int iNewSize, const TData tIniVal);
 
-protected:
+ protected:
   int iCurIdx;
 };
 
-template <class TData> void CFIFO<TData>::Init(const int iNewSize)
-{
+template <class TData>
+void CFIFO<TData>::Init(const int iNewSize) {
   iCurIdx = 0;
   CVector<TData>::Init(iNewSize);
 }
 
-template <class TData> void CFIFO<TData>::Init(const int iNewSize, const TData tIniVal)
-{
+template <class TData>
+void CFIFO<TData>::Init(const int iNewSize, const TData tIniVal) {
   iCurIdx = 0;
   CVector<TData>::Init(iNewSize, tIniVal);
 }
 
-template <class TData> void CFIFO<TData>::Add(const TData tNewD)
-{
+template <class TData>
+void CFIFO<TData>::Add(const TData tNewD) {
   this->pData[iCurIdx] = tNewD;
 
   /* Increment index */
   iCurIdx++;
-  if (iCurIdx >= this->iVectorSize)
-    iCurIdx = 0;
+  if (iCurIdx >= this->iVectorSize) iCurIdx = 0;
 }
 
 
 /******************************************************************************\
 * CMovingAv class (moving average)                                             *
 \******************************************************************************/
-template <class TData> class CMovingAv : public CVector<TData>
-{
-public:
+template <class TData>
+class CMovingAv : public CVector<TData> {
+ public:
   CMovingAv() : CVector<TData>(), iCurIdx(0) {}
   CMovingAv(const int iNeSi) : CVector<TData>(iNeSi), iCurIdx(0) {}
   CMovingAv(const int iNeSi, const TData tInVa) : CVector<TData>(iNeSi, tInVa), iCurIdx(0) {}
 
   void Add(const TData tNewD);
-  inline TData GetAverage()
-  {
-    return tCurAvResult;
-  }
+  inline TData GetAverage() { return tCurAvResult; }
 
   virtual void Init(const int iNewSize);
   void InitVec(const int iNewSize, const int iNewVecSize);
 
-protected:
+ protected:
   int iCurIdx;
   TData tCurAvResult;
 };
 
-template <class TData> void CMovingAv<TData>::InitVec(const int iNewSize, const int iNewVecSize)
-{
+template <class TData>
+void CMovingAv<TData>::InitVec(const int iNewSize, const int iNewVecSize) {
   iCurIdx = 0;
   CVector<TData>::Init(iNewSize);
 
   /* Init each vector in vector */
-  for (int i = 0; i < iNewSize; i++)
-    this->pData[i].Init(iNewVecSize, 0);
+  for (int i = 0; i < iNewSize; i++) this->pData[i].Init(iNewVecSize, 0);
 
   /* Init current average result */
   tCurAvResult.Init(iNewVecSize, 0);
 }
 
-template <class TData> void CMovingAv<TData>::Init(const int iNewSize)
-{
+template <class TData>
+void CMovingAv<TData>::Init(const int iNewSize) {
   iCurIdx = 0;
   tCurAvResult = TData(0); /* Only for scalars! */
   CVector<TData>::Init(iNewSize);
 }
 
-template <class TData> void CMovingAv<TData>::Add(const TData tNewD)
-{
+template <class TData>
+void CMovingAv<TData>::Add(const TData tNewD) {
   /*
     Optimized calculation of the moving average. We only add a new value and
     subtract the old value from the result. We only need one addition and a
@@ -384,17 +350,15 @@ template <class TData> void CMovingAv<TData>::Add(const TData tNewD)
 
   /* Increase position pointer and test if wrap */
   iCurIdx++;
-  if (iCurIdx >= this->iVectorSize)
-    iCurIdx = 0;
+  if (iCurIdx >= this->iVectorSize) iCurIdx = 0;
 }
 
 
 /******************************************************************************\
 * CVectorEx class (Extended vector with additional information)                *
 \******************************************************************************/
-class CExtendedVecData
-{
-public:
+class CExtendedVecData {
+ public:
   /* Symbol ID of the current block. This number only identyfies the
      position in a frame, NOT in a super-frame */
   int iSymbolID;
@@ -407,22 +371,16 @@ public:
   int iCurTimeCorr;
 };
 
-template <class TData> class CVectorEx : public CVector<TData>
-{
-public:
+template <class TData>
+class CVectorEx : public CVector<TData> {
+ public:
   CVectorEx() {}
   virtual ~CVectorEx() {}
 
-  CExtendedVecData& GetExData()
-  {
-    return ExtendedData;
-  }
-  void SetExData(CExtendedVecData& NewExData)
-  {
-    ExtendedData = NewExData;
-  }
+  CExtendedVecData& GetExData() { return ExtendedData; }
+  void SetExData(CExtendedVecData& NewExData) { ExtendedData = NewExData; }
 
-protected:
+ protected:
   CExtendedVecData ExtendedData;
 };
 
@@ -430,23 +388,15 @@ protected:
 /******************************************************************************\
 * CMatrix base class                                                           *
 \******************************************************************************/
-template <class TData> class CMatrix
-{
-public:
+template <class TData>
+class CMatrix {
+ public:
   CMatrix() : ppData(nullptr), iRow(0), iCol(0) {}
-  CMatrix(const int iNewR, const int iNewC)
-  {
-    Init(iNewR, iNewC);
-  }
-  CMatrix(const int iNewR, const int iNewC, const TData tInVa)
-  {
-    Init(iNewR, iNewC, tInVa);
-  }
-  CMatrix(const CMatrix& m) : ppData(nullptr)
-  {
+  CMatrix(const int iNewR, const int iNewC) { Init(iNewR, iNewC); }
+  CMatrix(const int iNewR, const int iNewC, const TData tInVa) { Init(iNewR, iNewC, tInVa); }
+  CMatrix(const CMatrix& m) : ppData(nullptr) {
     Init(m.iRow, m.iCol);
-    for (int i = 0; i < m.NumRows(); i++)
-      ppData[i] = m[i];
+    for (int i = 0; i < m.NumRows(); i++) ppData[i] = m[i];
   }
   virtual ~CMatrix();
 
@@ -456,8 +406,7 @@ public:
   void Init(const int iNewRow, const int iNewColumn, const TData tIniVal);
   void Reset(const TData tResetVal);
 
-  inline CVector<TData>& operator[](const int iPos) const
-  {
+  inline CVector<TData>& operator[](const int iPos) const {
 #ifdef _DEBUG_
     if ((iPos < 0) || (iPos > iRow - 1)) {
       DebugError("Matrix: Writing vector out of bounds", "Row size", iRow, "New parameter", iPos);
@@ -466,33 +415,24 @@ public:
     return ppData[iPos];
   }
 
-  inline CMatrix& operator=(const CMatrix& m)
-  {
+  inline CMatrix& operator=(const CMatrix& m) {
     this->Init(m.NumRows(), m.NumColumns());
-    for (int i = 0; i < m.NumRows(); i++)
-      this->ppData[i] = m[i];
+    for (int i = 0; i < m.NumRows(); i++) this->ppData[i] = m[i];
     return *this;
   }
 
 #ifdef _DEBUG_
-  inline CVector<TData> operator[](const int iPos) const
-  {
+  inline CVector<TData> operator[](const int iPos) const {
     if ((iPos < 0) || (iPos > iRow - 1)) {
       DebugError("Matrix: Reading vector out of bounds", "Row size", iRow, "New parameter", iPos);
     }
     return ppData[iPos];
   }
 #endif
-  inline int NumRows(void) const
-  {
-    return iRow;
-  }
-  inline int NumColumns(void) const
-  {
-    return iCol;
-  }
+  inline int NumRows(void) const { return iRow; }
+  inline int NumColumns(void) const { return iCol; }
 
-protected:
+ protected:
   CVector<TData>* ppData;
   int iRow;
   int iCol;
@@ -500,25 +440,23 @@ protected:
 
 
 /* Implementation *************************************************************/
-template <class TData> void CMatrix<TData>::Init(const int iNewRow, const int iNewColumn)
-{
+template <class TData>
+void CMatrix<TData>::Init(const int iNewRow, const int iNewColumn) {
   iRow = iNewRow;
   iCol = iNewColumn;
 
   if (iRow > 0) {
     /* Delete resources from previous init */
-    if (ppData != nullptr)
-      delete[] ppData;
+    if (ppData != nullptr) delete[] ppData;
 
     /* Allocate new memory for history buffer */
     ppData = new CVector<TData>[iRow];
-    for (int i = 0; i < iRow; i++)
-      ppData[i].Init(iNewColumn);
+    for (int i = 0; i < iRow; i++) ppData[i].Init(iNewColumn);
   }
 }
 
-template <class TData> void CMatrix<TData>::Init(const int iNewRow, const int iNewColumn, const TData tIniVal)
-{
+template <class TData>
+void CMatrix<TData>::Init(const int iNewRow, const int iNewColumn, const TData tIniVal) {
   /* Call actual init routine */
   Init(iNewRow, iNewColumn);
 
@@ -526,20 +464,18 @@ template <class TData> void CMatrix<TData>::Init(const int iNewRow, const int iN
   Reset(tIniVal);
 }
 
-template <class TData> void CMatrix<TData>::Reset(const TData tResetVal)
-{
+template <class TData>
+void CMatrix<TData>::Reset(const TData tResetVal) {
   /* Set all values to reset value */
   for (int i = 0; i < iRow; i++)
-    for (int j = 0; j < ppData[i].Size(); j++)
-      ppData[i][j] = tResetVal;
+    for (int j = 0; j < ppData[i].Size(); j++) ppData[i][j] = tResetVal;
 }
 
-template <class TData> CMatrix<TData>::~CMatrix()
-{
+template <class TData>
+CMatrix<TData>::~CMatrix() {
   /* Delete buffer */
-  if (ppData != nullptr)
-    delete[] ppData;
+  if (ppData != nullptr) delete[] ppData;
 }
 
 
-#endif // !defined(VECTOR_H__3B0BA660_CA6LIUBEFIB2B_23E7A0D31912__INCLUDED_)
+#endif  // !defined(VECTOR_H__3B0BA660_CA6LIUBEFIB2B_23E7A0D31912__INCLUDED_)

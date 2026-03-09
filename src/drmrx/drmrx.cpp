@@ -6,19 +6,14 @@
 #include "filters.h"
 
 
-drmRx::drmRx(QObject* parent) : QObject(parent), iqFilter(RXSTRIPE)
-{
+drmRx::drmRx(QObject* parent) : QObject(parent), iqFilter(RXSTRIPE) {
   srcDecoder = new sourceDecoder;
   demodulatorPtr = new demodulator;
 }
 
-drmRx::~drmRx()
-{
-  delete srcDecoder;
-}
+drmRx::~drmRx() { delete srcDecoder; }
 
-void drmRx::init()
-{
+void drmRx::init() {
   avgSNR = 0;
   avgSNRAvailable = false;
   n = DRMBUFSIZE;
@@ -37,16 +32,14 @@ void drmRx::init()
 }
 
 
-void drmRx::run(DSPFLOAT* dataPtr)
-{
+void drmRx::run(DSPFLOAT* dataPtr) {
   bool done = false;
   DSPFLOAT temp;
   displayDRMStatEvent* ce1;
   displayDRMInfoEvent* ce2;
 
   temp = WMERFAC;
-  if (temp < 0)
-    temp = 0;
+  if (temp < 0) temp = 0;
   if (avgSNRAvailable) {
     avgSNR = (1 - 0.05) * avgSNR + 0.05 * temp;
     ce1 = new displayDRMStatEvent(avgSNR);

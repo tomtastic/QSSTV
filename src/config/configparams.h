@@ -14,4 +14,4 @@
 #include "waterfallconfig.h"
 #include "frequencyselectwidget.h"
 
-#endif // CONFIGPARAMS_H
+#endif  // CONFIGPARAMS_H

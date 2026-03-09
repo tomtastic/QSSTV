@@ -12,22 +12,21 @@
 #include <pulse/simple.h>
 #include <pulse/error.h>
 
-class soundPulse : public soundBase
-{
-public:
+class soundPulse : public soundBase {
+ public:
   soundPulse();
   ~soundPulse();
   bool init(int samplerate);
   int read(int& countAvailable);
   int write(uint numFrames);
 
-protected:
+ protected:
   void flushCapture();
   void flushPlayback();
   void closeDevices();
   void waitPlaybackEnd();
 
-private:
+ private:
   struct stream_data {
     pa_simple* stream;
     pa_sample_spec stream_params;
@@ -37,4 +36,4 @@ private:
     size_t blocksize;
   } sd[2];
 };
-#endif // SOUNDPULSE_H
+#endif  // SOUNDPULSE_H

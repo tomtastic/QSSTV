@@ -75,8 +75,7 @@
 #include "viterbi_decode.h"
 int viterbi_decode(float* llr, int N, int N_PartA, signed char* puncturing1, signed char* puncturing2,
                    signed char* puncturing3, char* infoout, char* cwout, int bitpos, int* Deinterleaver, int L,
-                   int N_tail, char* memory_ptr)
-{
+                   int N_tail, char* memory_ptr) {
   float *old_metrics, *new_metrics, inf = static_cast<float>(1e20);
   char* path_reg;
   signed char* puncture_ptr;
@@ -130,43 +129,43 @@ int viterbi_decode(float* llr, int N, int N_PartA, signed char* puncturing1, sig
       /*  printf(" part = %d symbol_index %d symbol_pos %d puncturing switch = %d N_Part %d\n",
          part, symbol_index, symbol_pos,  (*puncture_ptr) , N_Part ) ;   pa0mbo */
       switch (*puncture_ptr) {
-      case 3:
-        symbol_pos = Deinterleaver[symbol_index + 1];
-        symbols_acc[0] += -llr[symbol_pos];
-        symbols_acc[1] += -llr[symbol_pos];
-        symbols_acc[2] += llr[symbol_pos];
-        symbols_acc[3] += llr[symbol_pos];
-        symbol_index += 2;
-        break;
-      case 5:
-        symbol_pos = Deinterleaver[symbol_index + 1];
-        symbols_acc[0] += -llr[symbol_pos];
-        symbols_acc[1] += -llr[symbol_pos];
-        symbols_acc[2] += -llr[symbol_pos];
-        symbols_acc[3] += -llr[symbol_pos];
-        symbol_index += 2;
-        break;
-      case 7:
-        symbol_pos = Deinterleaver[symbol_index + 1];
-        symbol_pos2 = Deinterleaver[symbol_index + 2];
-        symbols_acc[0] += -llr[symbol_pos] - llr[symbol_pos2];
-        symbols_acc[1] += -llr[symbol_pos] - llr[symbol_pos2];
-        symbols_acc[2] += llr[symbol_pos] - llr[symbol_pos2];
-        symbols_acc[3] += llr[symbol_pos] - llr[symbol_pos2];
-        symbol_index += 3;
-        break;
-      case 15:
-        symbol_pos = Deinterleaver[symbol_index + 1];
-        symbol_pos2 = Deinterleaver[symbol_index + 2];
-        symbol_pos3 = Deinterleaver[symbol_index + 3];
-        symbols_acc[0] += -llr[symbol_pos] - llr[symbol_pos2] - llr[symbol_pos3];
-        symbols_acc[1] += -llr[symbol_pos] - llr[symbol_pos2] + llr[symbol_pos3];
-        symbols_acc[2] += llr[symbol_pos] - llr[symbol_pos2] - llr[symbol_pos3];
-        symbols_acc[3] += llr[symbol_pos] - llr[symbol_pos2] + llr[symbol_pos3];
-        symbol_index += 4;
-        break;
-      default:
-        symbol_index++;
+        case 3:
+          symbol_pos = Deinterleaver[symbol_index + 1];
+          symbols_acc[0] += -llr[symbol_pos];
+          symbols_acc[1] += -llr[symbol_pos];
+          symbols_acc[2] += llr[symbol_pos];
+          symbols_acc[3] += llr[symbol_pos];
+          symbol_index += 2;
+          break;
+        case 5:
+          symbol_pos = Deinterleaver[symbol_index + 1];
+          symbols_acc[0] += -llr[symbol_pos];
+          symbols_acc[1] += -llr[symbol_pos];
+          symbols_acc[2] += -llr[symbol_pos];
+          symbols_acc[3] += -llr[symbol_pos];
+          symbol_index += 2;
+          break;
+        case 7:
+          symbol_pos = Deinterleaver[symbol_index + 1];
+          symbol_pos2 = Deinterleaver[symbol_index + 2];
+          symbols_acc[0] += -llr[symbol_pos] - llr[symbol_pos2];
+          symbols_acc[1] += -llr[symbol_pos] - llr[symbol_pos2];
+          symbols_acc[2] += llr[symbol_pos] - llr[symbol_pos2];
+          symbols_acc[3] += llr[symbol_pos] - llr[symbol_pos2];
+          symbol_index += 3;
+          break;
+        case 15:
+          symbol_pos = Deinterleaver[symbol_index + 1];
+          symbol_pos2 = Deinterleaver[symbol_index + 2];
+          symbol_pos3 = Deinterleaver[symbol_index + 3];
+          symbols_acc[0] += -llr[symbol_pos] - llr[symbol_pos2] - llr[symbol_pos3];
+          symbols_acc[1] += -llr[symbol_pos] - llr[symbol_pos2] + llr[symbol_pos3];
+          symbols_acc[2] += llr[symbol_pos] - llr[symbol_pos2] - llr[symbol_pos3];
+          symbols_acc[3] += llr[symbol_pos] - llr[symbol_pos2] + llr[symbol_pos3];
+          symbol_index += 4;
+          break;
+        default:
+          symbol_index++;
       }
 
       /*                printf("puncture_ptr %p pp_increm = %d \n", puncture_ptr, *(puncture_ptr+1));   */
@@ -227,34 +226,34 @@ int viterbi_decode(float* llr, int N, int N_PartA, signed char* puncturing1, sig
       /* code bits ouput and interleaving: */
       codebits = CODER_OUTPUT[state & ~(NOOFBF)] ^ mask;
       switch (*puncture_ptr) {
-      case 3:
-        cwout[Deinterleaver[symbol_index]] &= ~(0x1 << bitpos);
-        cwout[Deinterleaver[symbol_index]] |= ((codebits & 0x2) >> 1) << bitpos;
-        symbol_index -= 2;
-        break;
-      case 5:
-        cwout[Deinterleaver[symbol_index]] &= ~(0x1 << bitpos);
-        cwout[Deinterleaver[symbol_index]] |= ((codebits & 0x4) >> 2) << bitpos;
-        symbol_index -= 2;
-        break;
-      case 7:
-        cwout[Deinterleaver[symbol_index]] &= ~(0x1 << bitpos);
-        cwout[Deinterleaver[symbol_index]] |= ((codebits & 0x4) >> 2) << bitpos;
-        cwout[Deinterleaver[symbol_index - 1]] &= ~(0x1 << bitpos);
-        cwout[Deinterleaver[symbol_index - 1]] |= ((codebits & 0x2) >> 1) << bitpos;
-        symbol_index -= 3;
-        break;
-      case 15:
-        cwout[Deinterleaver[symbol_index]] &= ~(0x1 << bitpos);
-        cwout[Deinterleaver[symbol_index]] |= (codebits & 0x1) << bitpos;
-        cwout[Deinterleaver[symbol_index - 1]] &= ~(0x1 << bitpos);
-        cwout[Deinterleaver[symbol_index - 1]] |= ((codebits & 0x4) >> 2) << bitpos;
-        cwout[Deinterleaver[symbol_index - 2]] &= ~(0x1 << bitpos);
-        cwout[Deinterleaver[symbol_index - 2]] |= ((codebits & 0x2) >> 1) << bitpos;
-        symbol_index -= 4;
-        break;
-      default:
-        symbol_index--;
+        case 3:
+          cwout[Deinterleaver[symbol_index]] &= ~(0x1 << bitpos);
+          cwout[Deinterleaver[symbol_index]] |= ((codebits & 0x2) >> 1) << bitpos;
+          symbol_index -= 2;
+          break;
+        case 5:
+          cwout[Deinterleaver[symbol_index]] &= ~(0x1 << bitpos);
+          cwout[Deinterleaver[symbol_index]] |= ((codebits & 0x4) >> 2) << bitpos;
+          symbol_index -= 2;
+          break;
+        case 7:
+          cwout[Deinterleaver[symbol_index]] &= ~(0x1 << bitpos);
+          cwout[Deinterleaver[symbol_index]] |= ((codebits & 0x4) >> 2) << bitpos;
+          cwout[Deinterleaver[symbol_index - 1]] &= ~(0x1 << bitpos);
+          cwout[Deinterleaver[symbol_index - 1]] |= ((codebits & 0x2) >> 1) << bitpos;
+          symbol_index -= 3;
+          break;
+        case 15:
+          cwout[Deinterleaver[symbol_index]] &= ~(0x1 << bitpos);
+          cwout[Deinterleaver[symbol_index]] |= (codebits & 0x1) << bitpos;
+          cwout[Deinterleaver[symbol_index - 1]] &= ~(0x1 << bitpos);
+          cwout[Deinterleaver[symbol_index - 1]] |= ((codebits & 0x4) >> 2) << bitpos;
+          cwout[Deinterleaver[symbol_index - 2]] &= ~(0x1 << bitpos);
+          cwout[Deinterleaver[symbol_index - 2]] |= ((codebits & 0x2) >> 1) << bitpos;
+          symbol_index -= 4;
+          break;
+        default:
+          symbol_index--;
       }
       cwout[Deinterleaver[symbol_index + 1]] &= ~(0x1 << bitpos);
       cwout[Deinterleaver[symbol_index + 1]] |= (codebits & 0x1) << bitpos;

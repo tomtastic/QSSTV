@@ -49,8 +49,7 @@ int viterbi_decode(float*, int, int, signed char*, signed char*, signed char*, c
 int msdhardmsc(double* received_real, double* received_imag, int Lrxdata, double* snr, int N1, double* L, int rowdimL,
                int coldimL, int Lvspp, int* Deinterleaver, int* PL, int maxiter, int SDCorMSC,
                /*@out@ */ double* SPPhard,
-               /*@out@ */ double* VSPPhard, double* iterations, double* calc_variance, double* noise_signal)
-{
+               /*@out@ */ double* VSPPhard, double* iterations, double* calc_variance, double* noise_signal) {
   double *received, *first_received, *L1, *L2, L1_real[10], *L2_real, *L1_imag, *L2_imag;
   double *PL1, *PL2, PL1_real[10], *PL2_real, *PL1_imag, *PL2_imag, *output_ptr, L_dummy[3] = {0, 0, 0};
   float *metric_real, *metric_imag, *metric, *first_metric, closest_one, closest_zero, sample, *llr, dist;

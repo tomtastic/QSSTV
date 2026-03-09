@@ -37,8 +37,7 @@
 #include <math.h>
 #include <sys/types.h>
 void cfft(float*, int, int);
-void psdcmean(float* rsbuf, float* cpsd, int lblock, int nblocks)
-{
+void psdcmean(float* rsbuf, float* cpsd, int lblock, int nblocks) {
   float* pinput;
   int i, j;
   float tmpinbuf[2048];

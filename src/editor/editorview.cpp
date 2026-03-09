@@ -42,8 +42,7 @@ struct sCanvasSize {
 #define BORDER 4
 /** editorview */
 
-editorView::editorView(QWidget* parent) : QWidget(parent), Ui::editorForm()
-{
+editorView::editorView(QWidget* parent) : QWidget(parent), Ui::editorForm() {
   setupUi(this);
   scene = new editorScene(canvas);
   canvas->setScene(scene);
@@ -109,18 +108,14 @@ editorView::editorView(QWidget* parent) : QWidget(parent), Ui::editorForm()
 }
 
 
-editorView::~editorView()
-{
+editorView::~editorView() {
   QMenu* menuPtr;
   menuPtr = fillToolButton->menu();
-  if (menuPtr)
-    delete menuPtr;
+  if (menuPtr) delete menuPtr;
   menuPtr = lineToolButton->menu();
-  if (menuPtr)
-    delete menuPtr;
+  if (menuPtr) delete menuPtr;
   menuPtr = gradientToolButton->menu();
-  if (menuPtr)
-    delete menuPtr;
+  if (menuPtr) delete menuPtr;
   writeSettings();
 }
 
@@ -128,8 +123,7 @@ editorView::~editorView()
   reads the settings (saved images for tx,rx,templates)
 */
 
-void editorView::readSettings()
-{
+void editorView::readSettings() {
   QSettings qSettings;
 
   qSettings.beginGroup("Editor");
@@ -151,8 +145,7 @@ void editorView::readSettings()
 /*!
   writes the settings (saved images for tx,rx,templates)
 */
-void editorView::writeSettings()
-{
+void editorView::writeSettings() {
   QSettings qSettings;
   getParams();
   qSettings.beginGroup("Editor");
@@ -170,8 +163,7 @@ void editorView::writeSettings()
   qSettings.endGroup();
 }
 
-void editorView::getParams()
-{
+void editorView::getParams() {
   getValue(bold, boldButton);
   getValue(underline, underlineButton);
   getValue(italic, italicButton);
@@ -184,8 +176,7 @@ void editorView::getParams()
   gradientColor = scene->gradientColor;
 }
 
-void editorView::setParams()
-{
+void editorView::setParams() {
   QFont fnt;
   fontComboBox->setCurrentIndex(fontComboBox->findText(fontFamily));
   setValue(bold, boldButton);
@@ -205,36 +196,31 @@ void editorView::setParams()
 }
 
 
-void editorView::slotRectangle()
-{
+void editorView::slotRectangle() {
   scene->setMode(editorScene::INSERT);
   scene->setItemType(graphItemBase::RECTANGLE);
   modified = true;
 }
 
 
-void editorView::slotCircle()
-{
+void editorView::slotCircle() {
   scene->setMode(editorScene::INSERT);
   scene->setItemType(graphItemBase::ELLIPSE);
   modified = true;
 }
 
 
-void editorView::slotMacro(QString entry)
-{
+void editorView::slotMacro(QString entry) {
   // All entries which represent actual macros start with %<letter>,
   // so just pick the first two letters, and add them to the text
   // edit widget.
-  if (entry[0] != '%')
-    return;
+  if (entry[0] != '%') return;
   QString macro = entry.left(2);
   textEdit->insertPlainText(macro);
 }
 
 
-void editorView::slotText()
-{
+void editorView::slotText() {
   QDialog d(this);
   Ui::textForm t;
   t.setupUi(&d);
@@ -251,16 +237,14 @@ void editorView::slotText()
   modified = true;
 }
 
-void editorView::slotLine()
-{
+void editorView::slotLine() {
   scene->setMode(editorScene::INSERT);
   scene->setItemType(graphItemBase::LINE);
   modified = true;
 }
 
 
-void editorView::slotImage()
-{
+void editorView::slotImage() {
   QString fileName;
   dirDialog dd(this, "editor");
   scene->fl = dd.openFileName(QString());
@@ -269,15 +253,13 @@ void editorView::slotImage()
   modified = true;
 }
 
-void editorView::slotReplay()
-{
+void editorView::slotReplay() {
   scene->setMode(editorScene::INSERT);
   scene->setItemType(graphItemBase::REPLAY);
   modified = true;
 }
 
-void editorView::changeCanvasSize()
-{
+void editorView::changeCanvasSize() {
   hshearSlider->setValue(0);
   vshearSlider->setValue(0);
   setTransform();
@@ -287,8 +269,7 @@ void editorView::changeCanvasSize()
 }
 
 
-void editorView::slotChangeCanvasSize()
-{
+void editorView::slotChangeCanvasSize() {
   QRect r;
   canvasSizeForm csize;
   csize.setSize(canvasWidth, canvasHeight);
@@ -300,8 +281,7 @@ void editorView::slotChangeCanvasSize()
   }
 }
 
-void editorView::slotFontChanged(const QFont& f)
-{
+void editorView::slotFontChanged(const QFont& f) {
   scene->font = f;
   scene->font.setPointSize(fontSizeSpinBox->value());
   scene->font.setBold(boldButton->isChecked());
@@ -311,54 +291,44 @@ void editorView::slotFontChanged(const QFont& f)
   modified = true;
 }
 
-void editorView::slotFontSizeChanged(int sz)
-{
+void editorView::slotFontSizeChanged(int sz) {
   scene->font.setPointSize(sz);
   scene->apply(editorScene::DFONT);
   modified = true;
 }
 
-void editorView::slotPenWidthChanged(double pw)
-{
+void editorView::slotPenWidthChanged(double pw) {
   scene->penWidth = pw;
   scene->apply(editorScene::DPEN);
   modified = true;
 }
-void editorView::slotBold(bool b)
-{
+void editorView::slotBold(bool b) {
   scene->font.setBold(b);
   scene->apply(editorScene::DFONT);
   modified = true;
 }
-void editorView::slotItalic(bool b)
-{
+void editorView::slotItalic(bool b) {
   scene->font.setItalic(b);
   scene->apply(editorScene::DFONT);
   modified = true;
 }
-void editorView::slotUnderline(bool b)
-{
+void editorView::slotUnderline(bool b) {
   scene->font.setUnderline(b);
   scene->apply(editorScene::DFONT);
   modified = true;
 }
 
-void editorView::setImage(QImage*)
-{
+void editorView::setImage(QImage*) {
   scene->setMode(editorScene::INSERT);
   scene->setItemType(graphItemBase::IMAGE);
   modified = true;
 }
 
 
-void editorView::slotClearAll()
-{
-  scene->clearAll();
-}
+void editorView::slotClearAll() { scene->clearAll(); }
 
 
-void editorView::slotButtonTriggered()
-{
+void editorView::slotButtonTriggered() {
   QToolButton* act;
   act = qobject_cast<QToolButton*>(sender());
   if (act == fillToolButton) {
@@ -373,49 +343,44 @@ void editorView::slotButtonTriggered()
   update();
 }
 
-void editorView::slotColorDialog()
-{
+void editorView::slotColorDialog() {
   int tp;
   QAction* act;
   QColor c;
   act = qobject_cast<QAction*>(sender());
   tp = act->data().toInt();
   switch (tp) {
-  case TBFILL:
-    c = QColorDialog::getColor(scene->fillColor, this, "", QColorDialog::ShowAlphaChannel);
-    if (c.isValid()) {
-      scene->fillColor = c;
-      fillToolButton->setIcon(createColorToolButtonIcon(":/icons/colorfill.png", scene->fillColor));
-    }
-    break;
-  case TBLINE:
-    c = QColorDialog::getColor(scene->lineColor, this, "", QColorDialog::ShowAlphaChannel);
-    if (c.isValid()) {
-      scene->lineColor = c;
-      lineToolButton->setIcon(createColorToolButtonIcon(":/icons/colorline.png", scene->lineColor));
-    }
-    break;
-  default:
-    break;
+    case TBFILL:
+      c = QColorDialog::getColor(scene->fillColor, this, "", QColorDialog::ShowAlphaChannel);
+      if (c.isValid()) {
+        scene->fillColor = c;
+        fillToolButton->setIcon(createColorToolButtonIcon(":/icons/colorfill.png", scene->fillColor));
+      }
+      break;
+    case TBLINE:
+      c = QColorDialog::getColor(scene->lineColor, this, "", QColorDialog::ShowAlphaChannel);
+      if (c.isValid()) {
+        scene->lineColor = c;
+        lineToolButton->setIcon(createColorToolButtonIcon(":/icons/colorline.png", scene->lineColor));
+      }
+      break;
+    default:
+      break;
   }
 }
 
-void editorView::slotGradientDialog()
-{
+void editorView::slotGradientDialog() {
   gradientDialog gDiag(this);
   gDiag.selectGradient();
 }
 
-void editorView::save(QFile& f, bool templ)
-{
+void editorView::save(QFile& f, bool templ) {
   scene->save(f, templ);
   modified = false;
 }
 
-bool editorView::open(QFile& f)
-{
-  if (!scene->load(f))
-    return false;
+bool editorView::open(QFile& f) {
+  if (!scene->load(f)) return false;
   canvasWidth = scene->border.width();
   canvasHeight = scene->border.height();
   changeCanvasSize();
@@ -426,8 +391,7 @@ bool editorView::open(QFile& f)
 }
 
 
-void editorView::setTransform()
-{
+void editorView::setTransform() {
   //	int r=450-rotateDial->value();
   //	if ( r >= 360 )	r-=360;
   scene->hShear = static_cast<double>(hshearSlider->value()) / 10.;
@@ -440,16 +404,14 @@ void editorView::setTransform()
 void editorView::slotTextReturnPressed(const QString&) {}
 
 
-void editorView::slotShearChanged(int)
-{
+void editorView::slotShearChanged(int) {
   QString tmp;
   double shearVal;
   QSlider* sl;
   sl = qobject_cast<QSlider*>(sender());
   shearVal = (static_cast<double>(sl->value())) / 10;
   tmp = QString("%1").arg(shearVal, 4, 'g', 2, QChar('0'));
-  if (shearVal >= 0)
-    tmp.insert(0, " ");
+  if (shearVal >= 0) tmp.insert(0, " ");
   if (sl == hshearSlider) {
     hshearLCD->display(tmp);
   } else {
@@ -458,8 +420,7 @@ void editorView::slotShearChanged(int)
   setTransform();
 }
 
-QIcon editorView::createColorToolButtonIcon(const QString& imageFile, QColor color)
-{
+QIcon editorView::createColorToolButtonIcon(const QString& imageFile, QColor color) {
   QPixmap pixmap(22, 30);
   pixmap.fill(Qt::transparent);
   QPainter painter(&pixmap);
@@ -471,8 +432,7 @@ QIcon editorView::createColorToolButtonIcon(const QString& imageFile, QColor col
   return QIcon(pixmap);
 }
 
-QMenu* editorView::createColorMenu(void (editorView::*slot)(), int type, QString text)
-{
+QMenu* editorView::createColorMenu(void (editorView::*slot)(), int type, QString text) {
   QMenu* colorMenu = new QMenu;
   QAction* action = new QAction(text, this);
   action->setData(type);
@@ -481,8 +441,7 @@ QMenu* editorView::createColorMenu(void (editorView::*slot)(), int type, QString
   return colorMenu;
 }
 
-void editorView::slotItemSelected(graphItemBase* ib)
-{
+void editorView::slotItemSelected(graphItemBase* ib) {
   sitemParam p;
   p = ib->getParam();
   if (p.type == graphItemBase::TEXT) {
@@ -499,8 +458,5 @@ void editorView::slotItemSelected(graphItemBase* ib)
 
 
 #ifndef QT_NO_DEBUG
-void editorView::slotDump()
-{
-  scene->dumpItems();
-}
+void editorView::slotDump() { scene->dumpItems(); }
 #endif

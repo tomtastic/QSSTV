@@ -38,31 +38,26 @@
 /******************************************************************************\
 * Symbol interleaver														   *
 \******************************************************************************/
-void CSymbInterleaver::ProcessDataInternal(CParameter&)
-{
+void CSymbInterleaver::ProcessDataInternal(CParameter&) {
   int i, j;
 
   /* Write data in interleaver-memory (always index "0") */
-  for (i = 0; i < iInputBlockSize; i++)
-    matcInterlMemory[veciCurIndex[0]][i] = (*pvecInputData)[i];
+  for (i = 0; i < iInputBlockSize; i++) matcInterlMemory[veciCurIndex[0]][i] = (*pvecInputData)[i];
 
   /* Interleave data according to the interleaver table. Use the
      the interleaver-blocks described in the DRM-standard
      (Ro(i) = i (mod D)  -> "i % iD") */
-  for (i = 0; i < iInputBlockSize; i++)
-    (*pvecOutputData)[i] = matcInterlMemory[veciCurIndex[i % iD]][veciIntTable[i]];
+  for (i = 0; i < iInputBlockSize; i++) (*pvecOutputData)[i] = matcInterlMemory[veciCurIndex[i % iD]][veciIntTable[i]];
 
   /* Set new indices. Move blocks (virtually) forward */
   for (j = 0; j < iD; j++) {
     veciCurIndex[j]--;
 
-    if (veciCurIndex[j] < 0)
-      veciCurIndex[j] = iD - 1;
+    if (veciCurIndex[j] < 0) veciCurIndex[j] = iD - 1;
   }
 }
 
-void CSymbInterleaver::InitInternal(CParameter& TransmParam)
-{
+void CSymbInterleaver::InitInternal(CParameter& TransmParam) {
   int i;
 
   TransmParam.Lock();
@@ -78,13 +73,13 @@ void CSymbInterleaver::InitInternal(CParameter& TransmParam)
 
   /* Set interleaver depth */
   switch (TransmParam.eSymbolInterlMode) {
-  case CParameter::SI_LONG:
-    iD = D_LENGTH_LONG_INTERL;
-    break;
+    case CParameter::SI_LONG:
+      iD = D_LENGTH_LONG_INTERL;
+      break;
 
-  case CParameter::SI_SHORT:
-    iD = D_LENGTH_SHORT_INTERL;
-    break;
+    case CParameter::SI_SHORT:
+      iD = D_LENGTH_SHORT_INTERL;
+      break;
   }
 
   /* Always allocate memory for long interleaver case (interleaver memory) */
@@ -92,8 +87,7 @@ void CSymbInterleaver::InitInternal(CParameter& TransmParam)
 
   /* Index for addressing the buffers */
   veciCurIndex.Init(D_LENGTH_LONG_INTERL);
-  for (i = 0; i < D_LENGTH_LONG_INTERL; i++)
-    veciCurIndex[i] = i;
+  for (i = 0; i < D_LENGTH_LONG_INTERL; i++) veciCurIndex[i] = i;
 
   /* Define block-sizes for input and output */
   iInputBlockSize = iN_MUX;

@@ -4,17 +4,16 @@
 #include <QPlainTextEdit>
 #include <QFocusEvent>
 
-class xyzPlainTextEdit : public QPlainTextEdit
-{
+class xyzPlainTextEdit : public QPlainTextEdit {
   Q_OBJECT
-public:
+ public:
   explicit xyzPlainTextEdit(QWidget* parent = 0);
   void focusOutEvent(QFocusEvent* event);
 
-signals:
+ signals:
   void editingFinished();
 
-public slots:
+ public slots:
 };
 
-#endif // XYZPLAINTEXTEDIT_H
+#endif  // XYZPLAINTEXTEDIT_H

@@ -3,16 +3,15 @@
 #include <fftw3.h>
 #include <math.h>
 
-class fftCalc
-{
-public:
+class fftCalc {
+ public:
   fftCalc();
   ~fftCalc();
   void init(int length, int nblocks, int isamplingrate);
   void realFFT(double* data);
   double* out;
 
-private:
+ private:
   void createHamming();
   double* hammingBuffer;
   double* dataBuffer;
@@ -25,4 +24,4 @@ private:
   fftw_plan plan;
 };
 
-#endif // FFTCALC_H
+#endif  // FFTCALC_H

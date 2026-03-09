@@ -28,8 +28,7 @@
 #define OFFSET 50
 
 
-vuMeter::vuMeter(QWidget* parent) : QWidget(parent)
-{
+vuMeter::vuMeter(QWidget* parent) : QWidget(parent) {
   colBack = QColor(50, 50, 255);
   colValue = Qt::white;
   colHigh = Qt::red;
@@ -44,14 +43,10 @@ vuMeter::vuMeter(QWidget* parent) : QWidget(parent)
   labelText = "V";
 }
 
-void vuMeter::setLabelText(const QString& t)
-{
-  labelText = t;
-}
+void vuMeter::setLabelText(const QString& t) { labelText = t; }
 
 
-void vuMeter::paintEvent(QPaintEvent*)
-{
+void vuMeter::paintEvent(QPaintEvent*) {
   if (width() > height())
     horizontal = true;
   else
@@ -60,12 +55,12 @@ void vuMeter::paintEvent(QPaintEvent*)
     w = LG;
     h = SG;
     rw = 5;
-    rh = 30; // rect rounding
+    rh = 30;  // rect rounding
   } else {
     w = SG;
     h = LG;
     rw = 30;
-    rh = 5; // rect rounding
+    rh = 5;  // rect rounding
   }
   if (!slowCPU) {
     paintBorder();
@@ -73,8 +68,7 @@ void vuMeter::paintEvent(QPaintEvent*)
   paintBar();
 }
 
-void vuMeter::paintBorder()
-{
+void vuMeter::paintBorder() {
   QLinearGradient linGrad;
   QLinearGradient linGrad1;
   QRectF border1;
@@ -124,8 +118,7 @@ void vuMeter::paintBorder()
   painter.drawText(rct, Qt::AlignCenter, labelText);
 }
 
-void vuMeter::paintBar()
-{
+void vuMeter::paintBar() {
   QLinearGradient linGrad;
   int i;
   double bar;
@@ -176,47 +169,40 @@ void vuMeter::paintBar()
 }
 
 
-void vuMeter::setColorBg(QColor color)
-{
+void vuMeter::setColorBg(QColor color) {
   colBack = color;
   update();
 }
 
-void vuMeter::setColorValue(QColor color)
-{
+void vuMeter::setColorValue(QColor color) {
   colValue = color;
   update();
 }
 
-void vuMeter::setColorHigh(QColor color)
-{
+void vuMeter::setColorHigh(QColor color) {
   colHigh = color;
   update();
 }
 
-void vuMeter::setColorMid(QColor color)
-{
+void vuMeter::setColorMid(QColor color) {
   colMid = color;
   update();
 }
 
-void vuMeter::setColors(QColor cL, QColor cM, QColor cH)
-{
+void vuMeter::setColors(QColor cL, QColor cM, QColor cH) {
   colLow = cL;
   colMid = cM;
   colHigh = cH;
   update();
 }
 
-void vuMeter::setColorLow(QColor color)
-{
+void vuMeter::setColorLow(QColor color) {
   colLow = color;
   update();
 }
 
 
-void vuMeter::setValue(double value)
-{
+void vuMeter::setValue(double value) {
   if ((fabs(1 - (value / prevValue)) < 0.05) && (slowCPU)) {
     return;
   }
@@ -232,8 +218,7 @@ void vuMeter::setValue(double value)
 }
 
 
-void vuMeter::setMinimum(double minValue)
-{
+void vuMeter::setMinimum(double minValue) {
   if (minValue > max) {
     min = max;
     max = minValue;
@@ -244,8 +229,7 @@ void vuMeter::setMinimum(double minValue)
   }
 }
 
-void vuMeter::setMaximum(double maxValue)
-{
+void vuMeter::setMaximum(double maxValue) {
   if (maxValue < min) {
     max = min;
     min = maxValue;
@@ -256,12 +240,6 @@ void vuMeter::setMaximum(double maxValue)
   }
 }
 
-QSize vuMeter::minimumSizeHint() const
-{
-  return QSize(10, 54);
-}
+QSize vuMeter::minimumSizeHint() const { return QSize(10, 54); }
 
-QSize vuMeter::sizeHint() const
-{
-  return QSize(100, 540);
-}
+QSize vuMeter::sizeHint() const { return QSize(100, 540); }

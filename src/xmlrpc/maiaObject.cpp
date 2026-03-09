@@ -29,13 +29,11 @@
 #include "maiaObject.h"
 #include "appglobal.h"
 
-MaiaObject::MaiaObject(QObject* parent) : QObject(parent)
-{
+MaiaObject::MaiaObject(QObject* parent) : QObject(parent) {
   QDomImplementation::setInvalidDataPolicy(QDomImplementation::DropInvalidChars);
 }
 
-QDomElement MaiaObject::toXml(QVariant arg)
-{
+QDomElement MaiaObject::toXml(QVariant arg) {
   // dummy document
   QDomDocument doc;
   // value element, we need this in each case
@@ -58,169 +56,168 @@ QDomElement MaiaObject::toXml(QVariant arg)
 #endif
   {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-  case QMetaType::QString:
+    case QMetaType::QString:
 #else
-  case QVariant::String:
+    case QVariant::String:
 #endif
-  {
+    {
 
-    QDomElement tagString = doc.createElement("string");
-    QDomText textString = doc.createTextNode(arg.toString());
+      QDomElement tagString = doc.createElement("string");
+      QDomText textString = doc.createTextNode(arg.toString());
 
-    tagValue.appendChild(tagString);
-    tagString.appendChild(textString);
+      tagValue.appendChild(tagString);
+      tagString.appendChild(textString);
 
-    return tagValue;
-  }
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-  case QMetaType::Int:
-#else
-  case QVariant::Int:
-#endif
-  {
-
-    QDomElement tagInt = doc.createElement("int");
-    QDomText textInt = doc.createTextNode(QString::number(arg.toInt()));
-
-    tagValue.appendChild(tagInt);
-    tagInt.appendChild(textInt);
-
-    return tagValue;
-  }
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-  case QMetaType::Double:
-#else
-  case QVariant::Double:
-#endif
-  {
-
-    QDomElement tagDouble = doc.createElement("double");
-    QDomText textDouble = doc.createTextNode(QString::number(arg.toDouble(), 'g', 9));
-
-    tagValue.appendChild(tagDouble);
-    tagDouble.appendChild(textDouble);
-
-    return tagValue;
-  }
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-  case QMetaType::Bool:
-#else
-  case QVariant::Bool:
-#endif
-  {
-
-    QString textValue = arg.toBool() ? "1" : "0";
-
-    QDomElement tag = doc.createElement("boolean");
-    QDomText text = doc.createTextNode(textValue);
-
-    tagValue.appendChild(tag);
-    tag.appendChild(text);
-
-    return tagValue;
-  }
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-  case QMetaType::QByteArray:
-#else
-  case QVariant::ByteArray:
-#endif
-  {
-
-    QString textValue = arg.toByteArray().toBase64();
-
-    QDomElement tag = doc.createElement("base64");
-    QDomText text = doc.createTextNode(textValue);
-
-    tagValue.appendChild(tag);
-    tag.appendChild(text);
-
-    return tagValue;
-  }
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-  case QMetaType::QDateTime:
-#else
-  case QVariant::DateTime:
-#endif
-  {
-
-    QString textValue = arg.toDateTime().toString("yyyyMMddThh:mm:ss");
-
-    QDomElement tag = doc.createElement("datetime.iso8601");
-    QDomText text = doc.createTextNode(textValue);
-
-    tagValue.appendChild(tag);
-    tag.appendChild(text);
-
-    return tagValue;
-  }
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-  case QMetaType::QVariantList:
-#else
-  case QVariant::List:
-#endif
-  {
-
-    QDomElement tagArray = doc.createElement("array");
-    QDomElement tagData = doc.createElement("data");
-    tagArray.appendChild(tagData);
-    tagValue.appendChild(tagArray);
-
-    const QList<QVariant> args = arg.toList();
-    for (const auto& arg : args) {
-      tagData.appendChild(toXml(arg));
+      return tagValue;
     }
-
-    return tagValue;
-  }
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-  case QMetaType::QVariantMap:
+    case QMetaType::Int:
 #else
-  case QVariant::Map:
+    case QVariant::Int:
 #endif
-  {
+    {
 
-    QDomElement tagStruct = doc.createElement("struct");
-    QDomElement member;
-    QDomElement name;
+      QDomElement tagInt = doc.createElement("int");
+      QDomText textInt = doc.createTextNode(QString::number(arg.toInt()));
 
-    tagValue.appendChild(tagStruct);
+      tagValue.appendChild(tagInt);
+      tagInt.appendChild(textInt);
 
-    QMap<QString, QVariant> map = arg.toMap();
-    QMapIterator<QString, QVariant> i(map);
-    while (i.hasNext()) {
-      i.next();
-
-      member = doc.createElement("member");
-      name = doc.createElement("name");
-
-      // (key) -> name -> member -> struct
-      tagStruct.appendChild(member);
-      member.appendChild(name);
-      name.appendChild(doc.createTextNode(i.key()));
-
-      // add variables by recursion
-      member.appendChild(toXml(i.value()));
+      return tagValue;
     }
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    case QMetaType::Double:
+#else
+    case QVariant::Double:
+#endif
+    {
 
-    return tagValue;
-  }
-  default:
+      QDomElement tagDouble = doc.createElement("double");
+      QDomText textDouble = doc.createTextNode(QString::number(arg.toDouble(), 'g', 9));
+
+      tagValue.appendChild(tagDouble);
+      tagDouble.appendChild(textDouble);
+
+      return tagValue;
+    }
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    case QMetaType::Bool:
+#else
+    case QVariant::Bool:
+#endif
+    {
+
+      QString textValue = arg.toBool() ? "1" : "0";
+
+      QDomElement tag = doc.createElement("boolean");
+      QDomText text = doc.createTextNode(textValue);
+
+      tagValue.appendChild(tag);
+      tag.appendChild(text);
+
+      return tagValue;
+    }
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    case QMetaType::QByteArray:
+#else
+    case QVariant::ByteArray:
+#endif
+    {
+
+      QString textValue = arg.toByteArray().toBase64();
+
+      QDomElement tag = doc.createElement("base64");
+      QDomText text = doc.createTextNode(textValue);
+
+      tagValue.appendChild(tag);
+      tag.appendChild(text);
+
+      return tagValue;
+    }
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    case QMetaType::QDateTime:
+#else
+    case QVariant::DateTime:
+#endif
+    {
+
+      QString textValue = arg.toDateTime().toString("yyyyMMddThh:mm:ss");
+
+      QDomElement tag = doc.createElement("datetime.iso8601");
+      QDomText text = doc.createTextNode(textValue);
+
+      tagValue.appendChild(tag);
+      tag.appendChild(text);
+
+      return tagValue;
+    }
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    case QMetaType::QVariantList:
+#else
+    case QVariant::List:
+#endif
+    {
+
+      QDomElement tagArray = doc.createElement("array");
+      QDomElement tagData = doc.createElement("data");
+      tagArray.appendChild(tagData);
+      tagValue.appendChild(tagArray);
+
+      const QList<QVariant> args = arg.toList();
+      for (const auto& arg : args) {
+        tagData.appendChild(toXml(arg));
+      }
+
+      return tagValue;
+    }
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    case QMetaType::QVariantMap:
+#else
+    case QVariant::Map:
+#endif
+    {
+
+      QDomElement tagStruct = doc.createElement("struct");
+      QDomElement member;
+      QDomElement name;
+
+      tagValue.appendChild(tagStruct);
+
+      QMap<QString, QVariant> map = arg.toMap();
+      QMapIterator<QString, QVariant> i(map);
+      while (i.hasNext()) {
+        i.next();
+
+        member = doc.createElement("member");
+        name = doc.createElement("name");
+
+        // (key) -> name -> member -> struct
+        tagStruct.appendChild(member);
+        member.appendChild(name);
+        name.appendChild(doc.createTextNode(i.key()));
+
+        // add variables by recursion
+        member.appendChild(toXml(i.value()));
+      }
+
+      return tagValue;
+    }
+    default:
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    errorOut() << "Failed to marshal unknown variant type: " << arg.typeId() << Qt::endl;
+      errorOut() << "Failed to marshal unknown variant type: " << arg.typeId() << Qt::endl;
 
 #else
-    errorOut() << "Failed to marshal unknown variant type: " << arg.type() << Qt::endl;
+      errorOut() << "Failed to marshal unknown variant type: " << arg.type() << Qt::endl;
 #endif
 #else
-    errorOut() << "Failed to marshal unknown variant type: " << arg.type() << endl;
+      errorOut() << "Failed to marshal unknown variant type: " << arg.type() << endl;
 #endif
   }
-  return QDomElement(); // QString();
+  return QDomElement();  // QString();
 }
 
-QVariant MaiaObject::fromXml(const QDomElement& elem)
-{
+QVariant MaiaObject::fromXml(const QDomElement& elem) {
   if (elem.tagName().toLower() != "value") {
     return QVariant();
   }
@@ -249,7 +246,7 @@ QVariant MaiaObject::fromXml(const QDomElement& elem)
   else if (typeName == "datetime" || typeName == "datetime.iso8601")
     return QVariant(QDateTime::fromString(typeElement.text(), "yyyyMMddThh:mm:ss"));
   else if (typeName == "nil")
-    return QVariant(); // Non-standard extension: http://ontosys.com/xml-rpc/extensions.php
+    return QVariant();  // Non-standard extension: http://ontosys.com/xml-rpc/extensions.php
   else if (typeName == "array") {
     QList<QVariant> values;
     QDomNode valueNode = typeElement.firstChild().firstChild();
@@ -275,8 +272,7 @@ QVariant MaiaObject::fromXml(const QDomElement& elem)
 }
 
 
-QString MaiaObject::prepareCall(QString method, QList<QVariant> args)
-{
+QString MaiaObject::prepareCall(QString method, QList<QVariant> args) {
   QDomDocument doc;
 
   QDomProcessingInstruction header =
@@ -303,8 +299,7 @@ QString MaiaObject::prepareCall(QString method, QList<QVariant> args)
   return doc.toString();
 }
 
-QString MaiaObject::prepareResponse(QVariant arg)
-{
+QString MaiaObject::prepareResponse(QVariant arg) {
   QDomDocument doc;
 
   QDomProcessingInstruction header =
@@ -328,8 +323,7 @@ QString MaiaObject::prepareResponse(QVariant arg)
   return doc.toString(-1);
 }
 
-void MaiaObject::parseResponse(QString response, QNetworkReply* reply)
-{
+void MaiaObject::parseResponse(QString response, QNetworkReply* reply) {
   QDomDocument doc;
   QVariant arg;
   auto parseResult = doc.setContent(response);

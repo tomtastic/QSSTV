@@ -5,8 +5,7 @@
 #include "logging.h"
 #include "markerwidget.h"
 
-spectrumWidget::spectrumWidget(QWidget* parent) : QFrame(parent), ui(new Ui::spectrumWidget)
-{
+spectrumWidget::spectrumWidget(QWidget* parent) : QFrame(parent), ui(new Ui::spectrumWidget) {
   ui->setupUi(this);
   readSettings();
   connect(ui->maxDbSpinbox, QOverload<int>::of(&QSpinBox::valueChanged), this, &spectrumWidget::slotMaxDbChanged);
@@ -15,14 +14,12 @@ spectrumWidget::spectrumWidget(QWidget* parent) : QFrame(parent), ui(new Ui::spe
           &spectrumWidget::slotAvgChanged);
 }
 
-spectrumWidget::~spectrumWidget()
-{
+spectrumWidget::~spectrumWidget() {
   writeSettings();
   delete ui;
 }
 
-void spectrumWidget::init(int length, int numBlocks, int isamplingrate)
-{
+void spectrumWidget::init(int length, int numBlocks, int isamplingrate) {
   //  addToLog(QString("Size: %1, Number of blocks %2, Samplingrate
   //  %3").arg(length).arg(numBlocks).arg(isamplingrate),LOGFFT);
   fftFunc.init(length, numBlocks, isamplingrate);
@@ -31,16 +28,14 @@ void spectrumWidget::init(int length, int numBlocks, int isamplingrate)
 }
 
 
-void spectrumWidget::realFFT(double* iBuffer)
-{
+void spectrumWidget::realFFT(double* iBuffer) {
   fftFunc.realFFT(iBuffer);
   ui->spectrWidget->showFFT(fftFunc.out);
   ui->waterfallWidget->showFFT(fftFunc.out);
 }
 
 
-void spectrumWidget::readSettings()
-{
+void spectrumWidget::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("SPECTRUM");
   maxdb = qSettings.value("maxdb", -25).toInt();
@@ -51,8 +46,7 @@ void spectrumWidget::readSettings()
 }
 
 
-void spectrumWidget::writeSettings()
-{
+void spectrumWidget::writeSettings() {
   QSettings qSettings;
   getParams();
   qSettings.beginGroup("SPECTRUM");
@@ -62,15 +56,13 @@ void spectrumWidget::writeSettings()
   qSettings.endGroup();
 }
 
-void spectrumWidget::getParams()
-{
+void spectrumWidget::getParams() {
   getValue(maxdb, ui->maxDbSpinbox);
   getValue(range, ui->rangeSpinbox);
   getValue(avg, ui->avgDoubleSpinBox);
 }
 
-void spectrumWidget::setParams()
-{
+void spectrumWidget::setParams() {
   setValue(maxdb, ui->maxDbSpinbox);
   setValue(range, ui->rangeSpinbox);
   setValue(avg, ui->avgDoubleSpinBox);
@@ -79,8 +71,7 @@ void spectrumWidget::setParams()
   slotAvgChanged(avg);
 }
 
-void spectrumWidget::displaySettings(bool drm)
-{
+void spectrumWidget::displaySettings(bool drm) {
   ui->spectrWidget->displayWaterfall(false);
   ui->waterfallWidget->displayWaterfall(true);
   if (drm) {
@@ -97,26 +88,20 @@ void spectrumWidget::displaySettings(bool drm)
   }
 }
 
-QImage* spectrumWidget::getImage()
-{
-  return ui->waterfallWidget->getImage();
-}
+QImage* spectrumWidget::getImage() { return ui->waterfallWidget->getImage(); }
 
-void spectrumWidget::slotMaxDbChanged(int mb)
-{
+void spectrumWidget::slotMaxDbChanged(int mb) {
   ui->spectrWidget->setMaxDb(mb);
   ui->waterfallWidget->setMaxDb(mb);
   maxdb = mb;
 }
-void spectrumWidget::slotRangeChanged(int rg)
-{
+void spectrumWidget::slotRangeChanged(int rg) {
   ui->spectrWidget->setRange(rg);
   ui->waterfallWidget->setRange(rg);
   range = rg;
 }
 
-void spectrumWidget::slotAvgChanged(double d)
-{
+void spectrumWidget::slotAvgChanged(double d) {
   ui->spectrWidget->setAvg(d);
   ui->waterfallWidget->setAvg(d);
 }

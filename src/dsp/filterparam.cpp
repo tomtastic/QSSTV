@@ -181,8 +181,7 @@ const FILTERPARAMTYPE drmHilbertCoef[DRMHILBERTTAPS] = {
     0};
 
 
-DSPFLOAT calculateGain(const DSPFLOAT* fp, unsigned int len)
-{
+DSPFLOAT calculateGain(const DSPFLOAT* fp, unsigned int len) {
   unsigned int i;
   DSPFLOAT fs = 0.;
   for (i = 0; i < len; i++) {

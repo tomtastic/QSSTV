@@ -40,8 +40,7 @@ struct cmplxnmbr {
 
 #define PI (4.0 * atan(1.00))
 int getsymbolidx(float* symbol_buffer, int symbols_per_frame, int* time_ref_cells_k, int* time_ref_cells_theta_1024,
-                 int K_dc, int K_modulo, int n_time_ref_cells)
-{
+                 int K_dc, int K_modulo, int n_time_ref_cells) {
   struct cmplxnmbr S[288][25]; /* max 24 symbols per frame */
   int i, j, n, symbol0;
   float sum_real_xx[25];

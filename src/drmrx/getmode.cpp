@@ -44,10 +44,8 @@ static /*@only@ */ float *in_, *abs_in_, *abs_in_in_;
 static /*@only@ */ float *conv_in_, *conv_abs_in_in_;
 static bool initDone = false;
 
-void initGetmode(int n)
-{
-  if (initDone)
-    return;
+void initGetmode(int n) {
+  if (initDone) return;
   initDone = true;
   /* create and initialize  arrays */
   in_ = static_cast<float*>(malloc((n - Tu_D) * 2 * sizeof(float))); /* complex data */
@@ -89,8 +87,7 @@ void initGetmode(int n)
 } /* end initializations */
 
 
-void getmode(float* input, int n, smode_info* result)
-{
+void getmode(float* input, int n, smode_info* result) {
   float EPSILON = 1.0E-10;
   float SNR_mode_det = static_cast<float>(exp(15.0 * log(10) / 10.0));
   float rho;
@@ -112,7 +109,7 @@ void getmode(float* input, int n, smode_info* result)
 
   rho = SNR_mode_det / (SNR_mode_det + 1);
   N_symbols_mode_det = ((n + 1) / Ts_A) - 1;
-  for (mode = 0; mode < 3; mode++) // ON4QZ 3 was 4
+  for (mode = 0; mode < 3; mode++)  // ON4QZ 3 was 4
   {
     Ts = Ts_list[mode];
     Tu = Tu_list[mode];
@@ -131,7 +128,7 @@ void getmode(float* input, int n, smode_info* result)
       in_[2 * i + 1] = -input[2 * i] * input[(i + Tu) * 2 + 1] + input[2 * i + 1] * input[(i + Tu) * 2];
     }
     //      arrayDump("gM1",input,16,true);
-    my_rect[0] = 0.5; // ON4QZ
+    my_rect[0] = 0.5;  // ON4QZ
     for (i = 1; i < Tg; i++) {
       my_rect[i] = 1.0;
     }
@@ -198,10 +195,10 @@ void getmode(float* input, int n, smode_info* result)
   }
   //              <<max_abs_gamma_rel_list[1] << max_abs_gamma_rel_list[2] << max_abs_gamma_rel_list[3];
   /* check if result is reliable */
-  maxOK = 1;                   /* start with reliable */
-  if (max_abs_gamma_rel > 0.6) // was 0.6
+  maxOK = 1;                    /* start with reliable */
+  if (max_abs_gamma_rel > 0.6)  // was 0.6
   {
-    for (i = 0; i < 3; i++) // ON4QZ 3 was 4
+    for (i = 0; i < 3; i++)  // ON4QZ 3 was 4
     {
       if ((i != mode) && (max_abs_gamma_rel_list[i] > 0.6)) {
         maxOK = 0;
@@ -293,19 +290,13 @@ void getmode(float* input, int n, smode_info* result)
   // mode).arg(result->time_offset).arg(result->sample_rate_offset).arg(result->freq_offset_fract));
 }
 
-void cleanupGetmode()
-{
+void cleanupGetmode() {
   if (initDone) {
-    if (in_)
-      free(in_);
-    if (conv_in_)
-      free(conv_in_);
-    if (abs_in_)
-      free(abs_in_);
-    if (abs_in_in_)
-      free(abs_in_in_);
-    if (conv_abs_in_in_)
-      free(conv_abs_in_in_);
+    if (in_) free(in_);
+    if (conv_in_) free(conv_in_);
+    if (abs_in_) free(abs_in_);
+    if (abs_in_in_) free(abs_in_in_);
+    if (conv_abs_in_in_) free(conv_abs_in_in_);
     in_ = nullptr;
     conv_in_ = nullptr;
     abs_in_ = nullptr;

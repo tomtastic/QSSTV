@@ -37,60 +37,51 @@ modeBW::modeBW(esstvMode m, unsigned int len, bool tx, bool narrowMode) : modeBa
 modeBW::~modeBW() {}
 
 
-void modeBW::setupParams(double clock)
-{
-  visibleLineLength = (getLineLength(mode, clock) - fp - bp - syncDuration);
-}
+void modeBW::setupParams(double clock) { visibleLineLength = (getLineLength(mode, clock) - fp - bp - syncDuration); }
 
-modeBase::embState modeBW::rxSetupLine()
-{
+modeBase::embState modeBW::rxSetupLine() {
   start = lineTimeTableRX[lineCounter];
   switch (subLine) {
-  case 0:
-    debugState = stBP;
-    start = lineTimeTableRX[lineCounter];
-    markerFloat = start + bp;
-    marker = static_cast<unsigned int>(round(markerFloat));
-    return MBRXWAIT;
-  case 1:
-    calcPixelPositionTable(GREENLINE, false);
-    markerFloat += visibleLineLength;
-    debugState = stColorLine0;
-    pixelArrayPtr = greenArrayPtr;
-    return MBPIXELS;
-  case 2:
-    debugState = stFP;
-    markerFloat += fp;
-    marker = static_cast<unsigned int>(round(markerFloat));
-    return MBRXWAIT;
-  case 3:
-    debugState = stSync;
-    syncPosition = static_cast<unsigned int>(round(lineTimeTableRX[lineCounter + 1]));
-    return MBSYNC;
-    break;
-  default:
-    return MBENDOFLINE;
+    case 0:
+      debugState = stBP;
+      start = lineTimeTableRX[lineCounter];
+      markerFloat = start + bp;
+      marker = static_cast<unsigned int>(round(markerFloat));
+      return MBRXWAIT;
+    case 1:
+      calcPixelPositionTable(GREENLINE, false);
+      markerFloat += visibleLineLength;
+      debugState = stColorLine0;
+      pixelArrayPtr = greenArrayPtr;
+      return MBPIXELS;
+    case 2:
+      debugState = stFP;
+      markerFloat += fp;
+      marker = static_cast<unsigned int>(round(markerFloat));
+      return MBRXWAIT;
+    case 3:
+      debugState = stSync;
+      syncPosition = static_cast<unsigned int>(round(lineTimeTableRX[lineCounter + 1]));
+      return MBSYNC;
+      break;
+    default:
+      return MBENDOFLINE;
   }
 }
 
 
-void modeBW::showLine()
-{
-  grayConversion();
-}
+void modeBW::showLine() { grayConversion(); }
 
 
-void modeBW::calcPixelPositionTable(unsigned int colorLine, bool tx)
-{
+void modeBW::calcPixelPositionTable(unsigned int colorLine, bool tx) {
   unsigned int i;
   DSPFLOAT lineStart = start;
   int ofx = 0;
-  if (tx)
-    ofx = 1;
+  if (tx) ofx = 1;
   switch (colorLine) {
-  case GREENLINE:
-    lineStart += bp;
-    break;
+    case GREENLINE:
+      lineStart += bp;
+      break;
   }
   for (i = 0; i < activeSSTVParam->numberOfPixels; i++) {
     pixelPositionTable[i] = static_cast<unsigned int>(
@@ -98,28 +89,27 @@ void modeBW::calcPixelPositionTable(unsigned int colorLine, bool tx)
   }
 }
 
-modeBase::embState modeBW::txSetupLine()
-{
+modeBase::embState modeBW::txSetupLine() {
   start = lineTimeTableTX[lineCounter];
   switch (subLine) {
-  case 1:
-    calcPixelPositionTable(GREENLINE, true);
-    pixelArrayPtr = greenArrayPtr;
-    return MBPIXELS;
-  case 2:
-    txFreq = lowerFreq;
-    txDur = static_cast<unsigned int>(rint(fp));
-    return MBTXGAP;
-  case 3:
-    txFreq = syncFreq;
-    txDur = static_cast<unsigned int>(rint(syncDuration));
-    return MBTXGAP;
-  case 0:
-    txFreq = lowerFreq;
-    txDur = static_cast<unsigned int>(rint(bp));
-    return MBTXGAP;
-  default:
-    return MBENDOFLINE;
+    case 1:
+      calcPixelPositionTable(GREENLINE, true);
+      pixelArrayPtr = greenArrayPtr;
+      return MBPIXELS;
+    case 2:
+      txFreq = lowerFreq;
+      txDur = static_cast<unsigned int>(rint(fp));
+      return MBTXGAP;
+    case 3:
+      txFreq = syncFreq;
+      txDur = static_cast<unsigned int>(rint(syncDuration));
+      return MBTXGAP;
+    case 0:
+      txFreq = lowerFreq;
+      txDur = static_cast<unsigned int>(rint(bp));
+      return MBTXGAP;
+    default:
+      return MBENDOFLINE;
   }
 }
 
@@ -127,7 +117,4 @@ modeBase::embState modeBW::txSetupLine()
   \brief get the pixel information for transmission in B&W
 */
 
-void modeBW::getLine()
-{
-  getLineBW();
-}
+void modeBW::getLine() { getLineBW(); }

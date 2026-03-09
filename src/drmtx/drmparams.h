@@ -25,4 +25,4 @@ extern drmTxParams drmParams;
 extern QList<short unsigned int> fixBlockList;
 
 
-#endif // DRMPARAMS_H
+#endif  // DRMPARAMS_H

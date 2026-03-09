@@ -6,7 +6,7 @@
 #include "drmparams.h"
 #include "testpatternselection.h"
 
-#define SILENCEDELAY 0.600 // send silence after transmission
+#define SILENCEDELAY 0.600  // send silence after transmission
 
 extern int templateIndex;
 extern bool useTemplate;
@@ -18,12 +18,11 @@ class drmTx;
 class imageViewer;
 
 
-class txFunctions : public QThread
-{
+class txFunctions : public QThread {
   Q_OBJECT
-public:
+ public:
   enum etxState {
-    TXIDLE, //!< in idle loop
+    TXIDLE,  //!< in idle loop
     TXACTIVE,
     TXSENDTONE,
     TXSENDWFID,
@@ -51,8 +50,7 @@ public:
   void startTX(etxState state);
   void prepareTX(etxState state);
   void stopAndWait();
-  void setToneParam(double duration, double lowerFreq, double upperFreq = 0)
-  {
+  void setToneParam(double duration, double lowerFreq, double upperFreq = 0) {
     toneDuration = duration;
     toneLowerFrequency = lowerFreq;
     toneUpperFrequency = upperFreq;
@@ -62,10 +60,7 @@ public:
   void sendBSR(QByteArray* p, drmTxParams dp);
   void applyTemplate(imageViewer* ivPtr, QString templateFilename);
   void forgetTxFileName();
-  etxState getTXState()
-  {
-    return txState;
-  }
+  etxState getTXState() { return txState; }
   void setDRMTxParams(drmTxParams params);
   //  void setOnlineStatus(bool online, QString info="");
   //  bool initDRMFIX(txSession *sessionPtr);
@@ -73,7 +68,7 @@ public:
   void txTestPattern(imageViewer* ivPtr, etpSelect sel);
   bool txBusy();
 
-private:
+ private:
   void waitTxOn();
   void waitEnd();
   void sendCW();
@@ -95,4 +90,4 @@ private:
   drmTx* drmTxPtr;
 };
 
-#endif // TXFUNCTIONS_H
+#endif  // TXFUNCTIONS_H

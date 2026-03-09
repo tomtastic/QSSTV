@@ -49,8 +49,7 @@
 */
 
 
-imageViewer::imageViewer(QWidget* parent) : QLabel(parent)
-{
+imageViewer::imageViewer(QWidget* parent) : QLabel(parent) {
   addToLog("image creation", LOGIMAG);
   validImage = false;
   setFrameStyle(QFrame::Sunken | QFrame::Panel);
@@ -102,8 +101,7 @@ imageViewer::imageViewer(QWidget* parent) : QLabel(parent)
 
 imageViewer::~imageViewer() {}
 
-void imageViewer::init(thumbType tp)
-{
+void imageViewer::init(thumbType tp) {
   setScaledContents(false);
   setAlignment(Qt::AlignCenter);
   setAutoFillBackground(true);
@@ -115,8 +113,7 @@ void imageViewer::init(thumbType tp)
 }
 
 bool imageViewer::openImage(QString& filename, QString start, bool ask, bool showMessage, bool temitSignal,
-                            bool fromCache, bool background)
-{
+                            bool fromCache, bool background) {
   // background=false;
   tempFilename = filename;
   emitSignal = temitSignal;
@@ -132,8 +129,7 @@ bool imageViewer::openImage(QString& filename, QString start, bool ask, bool sho
     activeMovie = false;
     qm.stop();
   }
-  if (tempFilename.isEmpty() && !ask)
-    return false;
+  if (tempFilename.isEmpty() && !ask) return false;
   if (ask) {
     dirDialog dd(static_cast<QWidget*>(this), "Browse");
     tempFilename = dd.openFileName(start, "*");
@@ -201,13 +197,12 @@ bool imageViewer::openImage(QString& filename, QString start, bool ask, bool sho
   return processImageDisplay(success, showMessage, fromCache);
 }
 
-bool imageViewer::processImageDisplay(bool success, bool showMessage, bool fromCache)
-{
+bool imageViewer::processImageDisplay(bool success, bool showMessage, bool fromCache) {
   displayMBoxEvent* stmb = 0;
   if (!success) {
     if (showMessage) {
       stmb = new displayMBoxEvent("Image Loader", QString("Unable to load image:\n%1").arg(tempFilename));
-      QApplication::postEvent(dispatcherPtr, stmb); // Qt will delete it when done
+      QApplication::postEvent(dispatcherPtr, stmb);  // Qt will delete it when done
     }
     validImage = false;
     imageFileName = "";
@@ -255,34 +250,30 @@ bool imageViewer::processImageDisplay(bool success, bool showMessage, bool fromC
         qm.start();
         displayedImage = QImage();
       } else {
-        displayImage(); // we have a single image gif
+        displayImage();  // we have a single image gif
       }
     }
   } else {
     displayImage();
   }
   validImage = true;
-  if (emitSignal)
-    emit imageChanged();
+  if (emitSignal) emit imageChanged();
   return true;
 }
 
 
-void imageViewer::slotJp2ImageDone(bool success, bool fromCache)
-{
-  cacheHit = false; // force creation of cache file
+void imageViewer::slotJp2ImageDone(bool success, bool fromCache) {
+  cacheHit = false;  // force creation of cache file
   processImageDisplay(success, false, fromCache);
   threadIm->exit(0);
 }
 
 
-bool imageViewer::openImage(QString& filename, bool showMessage, bool emitSignal, bool fromCache, bool background)
-{
+bool imageViewer::openImage(QString& filename, bool showMessage, bool emitSignal, bool fromCache, bool background) {
   return openImage(filename, "", false, showMessage, emitSignal, fromCache, background);
 }
 
-bool imageViewer::openImage(QImage im)
-{
+bool imageViewer::openImage(QImage im) {
   imageFileName = "";
   if (!im.isNull()) {
     validImage = true;
@@ -296,8 +287,7 @@ bool imageViewer::openImage(QImage im)
   return false;
 }
 
-bool imageViewer::openImage(QByteArray* ba)
-{
+bool imageViewer::openImage(QByteArray* ba) {
   QImage tempImage;
   QBuffer buffer(ba);
   buffer.open(QIODevice::ReadOnly);
@@ -308,8 +298,7 @@ bool imageViewer::openImage(QByteArray* ba)
   return false;
 }
 
-void imageViewer::clear()
-{
+void imageViewer::clear() {
   validImage = false;
   imageFileName.clear();
   sourceImage = QImage();
@@ -323,13 +312,9 @@ void imageViewer::clear()
   useTemplate = false;
 }
 
-bool imageViewer::hasValidImage()
-{
-  return validImage;
-}
+bool imageViewer::hasValidImage() { return validImage; }
 
-void imageViewer::createImage(QSize sz, QColor fill, bool scale)
-{
+void imageViewer::createImage(QSize sz, QColor fill, bool scale) {
   clear();
   displayedImage = QImage(sz, QImage::Format_ARGB32_Premultiplied);
   if (!displayedImage.isNull()) {
@@ -349,14 +334,10 @@ void imageViewer::createImage(QSize sz, QColor fill, bool scale)
 // }
 
 
-QRgb* imageViewer::getScanLineAddress(int line)
-{
-  return reinterpret_cast<QRgb*>(displayedImage.scanLine(line));
-}
+QRgb* imageViewer::getScanLineAddress(int line) { return reinterpret_cast<QRgb*>(displayedImage.scanLine(line)); }
 
 
-void imageViewer::displayImage()
-{
+void imageViewer::displayImage() {
   if (displayedImage.isNull()) {
     return;
   }
@@ -378,8 +359,7 @@ void imageViewer::displayImage()
   }
 }
 
-void imageViewer::zoom(const QPoint centre, int dlevel)
-{
+void imageViewer::zoom(const QPoint centre, int dlevel) {
   addToLog(QString("centre=%1,%2 dlevel=%3").arg(centre.x()).arg(centre.y()).arg(dlevel), LOGIMAG);
   if (view.isNull()) {
     view = displayedImage.rect();
@@ -407,21 +387,16 @@ void imageViewer::zoom(const QPoint centre, int dlevel)
     view.moveCenter(centre);
 
     // ensure the view is within the image
-    if (view.x() < 0)
-      view.moveLeft(0);
-    if (view.y() < 0)
-      view.moveTop(0);
-    if (view.x() + view.width() > displayedImage.width())
-      view.moveRight(displayedImage.width());
-    if (view.y() + view.height() > displayedImage.height())
-      view.moveBottom(displayedImage.height());
+    if (view.x() < 0) view.moveLeft(0);
+    if (view.y() < 0) view.moveTop(0);
+    if (view.x() + view.width() > displayedImage.width()) view.moveRight(displayedImage.width());
+    if (view.y() + view.height() > displayedImage.height()) view.moveBottom(displayedImage.height());
   }
   addToLog(QString("View:%1,%2,%3,%4").arg(view.x()).arg(view.y()).arg(view.width()).arg(view.height()), LOGIMAG);
   displayImage();
 }
 
-QPoint imageViewer::mapToImage(const QPoint& pos)
-{
+QPoint imageViewer::mapToImage(const QPoint& pos) {
   QRect cr = contentsRect();
 
   cr.adjust(margin(), margin(), -margin(), -margin());
@@ -448,33 +423,32 @@ QPoint imageViewer::mapToImage(const QPoint& pos)
   return c;
 }
 
-void imageViewer::setType(thumbType tp)
-{
+void imageViewer::setType(thumbType tp) {
   ttype = tp;
   switch (ttype) {
-  case RXIMG:
-  case EXTVIEW:
-  case PREVIEW:
-  case RXSSTVTHUMB:
-    imageFilePath = rxSSTVImagesPath;
-    break;
-  case RXDRMTHUMB:
-    imageFilePath = rxDRMImagesPath;
-    break;
+    case RXIMG:
+    case EXTVIEW:
+    case PREVIEW:
+    case RXSSTVTHUMB:
+      imageFilePath = rxSSTVImagesPath;
+      break;
+    case RXDRMTHUMB:
+      imageFilePath = rxDRMImagesPath;
+      break;
 
-  case TXSSTVTHUMB:
-    imageFilePath = txSSTVImagesPath;
-    break;
-  case TXDRMTHUMB:
-    imageFilePath = txDRMImagesPath;
-    break;
-  case TXIMG:
-  case TXSTOCKTHUMB:
-    imageFilePath = txStockImagesPath;
-    break;
-  case TEMPLATETHUMB:
-    imageFilePath = templatesPath;
-    break;
+    case TXSSTVTHUMB:
+      imageFilePath = txSSTVImagesPath;
+      break;
+    case TXDRMTHUMB:
+      imageFilePath = txDRMImagesPath;
+      break;
+    case TXIMG:
+    case TXSTOCKTHUMB:
+      imageFilePath = txStockImagesPath;
+      break;
+    case TEMPLATETHUMB:
+      imageFilePath = templatesPath;
+      break;
   }
   if ((tp == RXSSTVTHUMB) || (tp == RXDRMTHUMB) || (tp == TXSSTVTHUMB) || (tp == TXDRMTHUMB) || (tp == TXSTOCKTHUMB) ||
       (tp == TEMPLATETHUMB)) {
@@ -491,68 +465,67 @@ void imageViewer::setType(thumbType tp)
   popup->removeAction(viewAct);
   popup->removeAction(propertiesAct);
   switch (tp) {
-  case EXTVIEW:
-    popup->addAction(zoomInAct);
-    popup->addAction(zoomOutAct);
-    popup->addAction(propertiesAct);
-    break;
+    case EXTVIEW:
+      popup->addAction(zoomInAct);
+      popup->addAction(zoomOutAct);
+      popup->addAction(propertiesAct);
+      break;
 
-  case RXIMG:
-    popup->addAction(viewAct);
-    popup->addAction(propertiesAct);
-    break;
+    case RXIMG:
+      popup->addAction(viewAct);
+      popup->addAction(propertiesAct);
+      break;
 
-  case TXIMG:
-    popup->addAction(newAct);
-    popup->addAction(loadAct);
-    popup->addAction(editAct);
-    popup->addAction(printAct);
-    popup->addAction(viewAct);
-    popup->addAction(propertiesAct);
-    break;
+    case TXIMG:
+      popup->addAction(newAct);
+      popup->addAction(loadAct);
+      popup->addAction(editAct);
+      popup->addAction(printAct);
+      popup->addAction(viewAct);
+      popup->addAction(propertiesAct);
+      break;
 
-  case PREVIEW:
-    popup->addAction(loadAct);
-    popup->addAction(toTXAct);
-    popup->addAction(viewAct);
-    popup->addAction(propertiesAct);
-    break;
+    case PREVIEW:
+      popup->addAction(loadAct);
+      popup->addAction(toTXAct);
+      popup->addAction(viewAct);
+      popup->addAction(propertiesAct);
+      break;
 
-  case RXSSTVTHUMB:
-  case RXDRMTHUMB:
-    popup->addAction(uploadAct);
-    popup->addAction(toTXAct);
-    popup->addAction(printAct);
-    popup->addAction(deleteAct);
-    popup->addAction(viewAct);
-    popup->addAction(propertiesAct);
-    break;
-  case TXSSTVTHUMB:
-  case TXDRMTHUMB:
-    popup->addAction(toTXAct);
-    popup->addAction(printAct);
-    popup->addAction(deleteAct);
-    popup->addAction(viewAct);
-    popup->addAction(propertiesAct);
-    break;
+    case RXSSTVTHUMB:
+    case RXDRMTHUMB:
+      popup->addAction(uploadAct);
+      popup->addAction(toTXAct);
+      popup->addAction(printAct);
+      popup->addAction(deleteAct);
+      popup->addAction(viewAct);
+      popup->addAction(propertiesAct);
+      break;
+    case TXSSTVTHUMB:
+    case TXDRMTHUMB:
+      popup->addAction(toTXAct);
+      popup->addAction(printAct);
+      popup->addAction(deleteAct);
+      popup->addAction(viewAct);
+      popup->addAction(propertiesAct);
+      break;
 
-  case TXSTOCKTHUMB:
-  case TEMPLATETHUMB:
-    popup->addAction(newAct);
-    popup->addAction(loadAct);
-    popup->addAction(toTXAct);
-    popup->addAction(editAct);
-    popup->addAction(printAct);
-    popup->addAction(deleteAct);
-    popup->addAction(viewAct);
-    popup->addAction(propertiesAct);
-    break;
+    case TXSTOCKTHUMB:
+    case TEMPLATETHUMB:
+      popup->addAction(newAct);
+      popup->addAction(loadAct);
+      popup->addAction(toTXAct);
+      popup->addAction(editAct);
+      popup->addAction(printAct);
+      popup->addAction(deleteAct);
+      popup->addAction(viewAct);
+      popup->addAction(propertiesAct);
+      break;
   }
   popupEnabled = true;
 }
 
-void imageViewer::mousePressEvent(QMouseEvent* e)
-{
+void imageViewer::mousePressEvent(QMouseEvent* e) {
   if (e->button() == Qt::LeftButton) {
     if (e->type() == QEvent::MouseButtonDblClick) {
       clickTimer.stop();
@@ -566,8 +539,7 @@ void imageViewer::mousePressEvent(QMouseEvent* e)
             zoom(c, +1);
         }
       } else {
-        if (hasValidImage())
-          slotView();
+        if (hasValidImage()) slotView();
       }
     } else if (e->type() == QEvent::MouseButtonPress) {
       if (ttype == EXTVIEW) {
@@ -581,30 +553,25 @@ void imageViewer::mousePressEvent(QMouseEvent* e)
   } else if (e->button() == Qt::RightButton) {
     if (popupEnabled) {
       //              if (pixmap())
-      if (hasValidImage())
-
-        clickPos = mapToImage(e->pos());
+      if (hasValidImage()) clickPos = mapToImage(e->pos());
       popup->popup(QCursor::pos());
     }
   }
 }
 
-void imageViewer::slotLeftClick()
-{
+void imageViewer::slotLeftClick() {
   switch (ttype) {
-  case EXTVIEW:
-    zoom(clickPos, 0);
-    break;
-  default:
-    break;
+    case EXTVIEW:
+      zoom(clickPos, 0);
+      break;
+    default:
+      break;
   }
 }
 
-void imageViewer::slotDelete()
-{
+void imageViewer::slotDelete() {
   int exit = QMessageBox::Yes;
-  if (imageFileName.isEmpty())
-    return;
+  if (imageFileName.isEmpty()) return;
   if (confirmDeletion) {
     exit =
         QMessageBox::question(this, "Delete file", "Do you want to delete the file and\n move it to the trash folder?",
@@ -618,20 +585,17 @@ void imageViewer::slotDelete()
   emit layoutChanged();
 }
 
-void imageViewer::slotEdit()
-{
+void imageViewer::slotEdit() {
   if (imageFileName.isEmpty()) {
     slotLoad();
-    if (imageFileName.isEmpty())
-      return;
+    if (imageFileName.isEmpty()) return;
   }
   callEditorEvent* ce = new callEditorEvent(this, imageFileName);
-  QApplication::postEvent(dispatcherPtr, ce); // Qt will delete it when done
+  QApplication::postEvent(dispatcherPtr, ce);  // Qt will delete it when done
 }
 
 
-void imageViewer::slotLoad()
-{
+void imageViewer::slotLoad() {
   QString fileNameTmp;
   dirDialog dd(this, "Browse");
   fileNameTmp = dd.openFileName(imageFilePath);
@@ -639,7 +603,7 @@ void imageViewer::slotLoad()
     imageFileName = fileNameTmp;
     if (ttype == TEMPLATETHUMB) {
       templatesChangedEvent* ce = new templatesChangedEvent();
-      QApplication::postEvent(dispatcherPtr, ce); // Qt will delete it when done
+      QApplication::postEvent(dispatcherPtr, ce);  // Qt will delete it when done
     } else if ((ttype == TXIMG) || (ttype == PREVIEW)) {
       emit imageChanged();
     }
@@ -647,44 +611,39 @@ void imageViewer::slotLoad()
 }
 
 
-void imageViewer::slotNew()
-{
+void imageViewer::slotNew() {
   callEditorEvent* ce = new callEditorEvent(this, nullptr);
-  QApplication::postEvent(dispatcherPtr, ce); // Qt will delete it when done
+  QApplication::postEvent(dispatcherPtr, ce);  // Qt will delete it when done
 }
 
 
 void imageViewer::slotPrint() {}
 
 
-void imageViewer::slotUploadFTP()
-{
+void imageViewer::slotUploadFTP() {
   QString remoteDir;
   switch (ttype) {
-  case RXSSTVTHUMB:
-    remoteDir = ftpRemoteSSTVDirectory;
-    break;
-  case RXDRMTHUMB:
-    remoteDir = ftpRemoteDRMDirectory;
-    break;
-  default:
-    break;
+    case RXSSTVTHUMB:
+      remoteDir = ftpRemoteSSTVDirectory;
+      break;
+    case RXDRMTHUMB:
+      remoteDir = ftpRemoteDRMDirectory;
+      break;
+    default:
+      break;
   }
-  if (!remoteDir.isEmpty())
-    dispatcherPtr->uploadToRXServer(remoteDir, imageFileName);
+  if (!remoteDir.isEmpty()) dispatcherPtr->uploadToRXServer(remoteDir, imageFileName);
 }
 
 
-void imageViewer::slotView()
-{
+void imageViewer::slotView() {
   extViewer vm(this);
   vm.setup(imageFileName);
   vm.exec();
 }
 
 
-void imageViewer::slotBGColorChanged()
-{
+void imageViewer::slotBGColorChanged() {
   QPalette mpalette;
   mpalette.setColor(QPalette::Window, backGroundColor);
   setBackgroundRole(QPalette::Window);
@@ -692,8 +651,7 @@ void imageViewer::slotBGColorChanged()
   setPalette(mpalette);
 }
 
-void imageViewer::slotProperties()
-{
+void imageViewer::slotProperties() {
   QFileInfo fi(imageFileName);
   if (fi.exists()) {
     QMessageBox::information(this, "Image Properties",
@@ -702,42 +660,32 @@ void imageViewer::slotProperties()
                                  QString::number(orgHeight) + "\n Last Modified: " + fi.lastModified().toString(),
                              QMessageBox::Ok);
   } else {
-    QMessageBox::information(this, "Image Properties",
-                             " Image width:   " + QString::number(orgWidth) +
-                                 "\n Image height:  " + QString::number(orgHeight),
-                             QMessageBox::Ok);
+    QMessageBox::information(
+        this, "Image Properties",
+        " Image width:   " + QString::number(orgWidth) + "\n Image height:  " + QString::number(orgHeight),
+        QMessageBox::Ok);
   }
 }
 
-void imageViewer::slotZoomIn()
-{
-  zoom(clickPos, +1);
-}
+void imageViewer::slotZoomIn() { zoom(clickPos, +1); }
 
-void imageViewer::slotZoomOut()
-{
-  zoom(clickPos, -1);
-}
+void imageViewer::slotZoomOut() { zoom(clickPos, -1); }
 
 
-void imageViewer::slotToTX()
-{
+void imageViewer::slotToTX() {
   moveToTxEvent* mt = 0;
   addToLog(QString("ToTx: %1").arg(imageFileName), LOGTXMAIN);
   mt = new moveToTxEvent(imageFileName);
-  QApplication::postEvent(dispatcherPtr, mt); // Qt will delete it when done
+  QApplication::postEvent(dispatcherPtr, mt);  // Qt will delete it when done
 }
 
 
-void imageViewer::save(const QString& fileName, const QString& fmt, bool convertRGB, bool source)
-{
+void imageViewer::save(const QString& fileName, const QString& fmt, bool convertRGB, bool source) {
   QImage im;
   if (source) {
-    if (sourceImage.isNull())
-      return;
+    if (sourceImage.isNull()) return;
   } else {
-    if (displayedImage.isNull())
-      return;
+    if (displayedImage.isNull()) return;
   }
   if (!convertRGB) {
     if (source)
@@ -753,8 +701,7 @@ void imageViewer::save(const QString& fileName, const QString& fmt, bool convert
   im.save(fileName, fmt.toUpper().toLatin1().data());
 }
 
-bool imageViewer::copyToBuffer(QByteArray* ba)
-{
+bool imageViewer::copyToBuffer(QByteArray* ba) {
   QImage im;
   QImage cvimg;
   jp2IO jp2;
@@ -786,9 +733,8 @@ bool imageViewer::copyToBuffer(QByteArray* ba)
 }
 
 
-uint imageViewer::setSize(int tcompressSize, bool usesCompression)
-{
-  compressSize = tcompressSize; // always set it
+uint imageViewer::setSize(int tcompressSize, bool usesCompression) {
+  compressSize = tcompressSize;  // always set it
   if (!usesCompression) {
     applyTemplate();
 #if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
@@ -802,14 +748,10 @@ uint imageViewer::setSize(int tcompressSize, bool usesCompression)
   return fileSize;
 }
 
-bool imageViewer::reload()
-{
-  return openImage(imageFileName, true, false, false, true);
-}
+bool imageViewer::reload() { return openImage(imageFileName, true, false, false, true); }
 
 
-void imageViewer::setParam(const QString& templateFn, bool usesTemplate, int width, int height)
-{
+void imageViewer::setParam(const QString& templateFn, bool usesTemplate, int width, int height) {
   targetWidth = width;
   targetHeight = height;
   templateFileName = templateFn;
@@ -818,13 +760,9 @@ void imageViewer::setParam(const QString& templateFn, bool usesTemplate, int wid
   displayImage();
 }
 
-void imageViewer::setAspectMode(Qt::AspectRatioMode mode)
-{
-  aspectRatioMode = mode;
-}
+void imageViewer::setAspectMode(Qt::AspectRatioMode mode) { aspectRatioMode = mode; }
 
-int imageViewer::applyTemplate()
-{
+int imageViewer::applyTemplate() {
   //  qDebug() << "applyTemplate";
   QImage* resultImage;
   jp2IO jp2;
@@ -833,11 +771,9 @@ int imageViewer::applyTemplate()
   int compRatio;
   int byteCount;
 
-  if (sourceImage.isNull())
-    return 0;
+  if (sourceImage.isNull()) return 0;
   QFile fi(templateFileName);
-  if (ttype != TXIMG)
-    return 0;
+  if (ttype != TXIMG) return 0;
   editorScene tscene(0);
   resultImage = &sourceImage;
   if (transmissionModeIndex == TRXDRM) {
@@ -847,10 +783,10 @@ int imageViewer::applyTemplate()
   }
 #if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
   compRatio = ((sourceImage.convertToFormat(QImage::Format_RGB32).byteCount() * 3) / 4) /
-              compressSize; // first estimate without template
+              compressSize;  // first estimate without template
 #else
   compRatio = ((sourceImage.convertToFormat(QImage::Format_RGB32).sizeInBytes() * 3) / 4) /
-              compressSize; // first estimate without template
+              compressSize;  // first estimate without template
 #endif
   if (tWidth == 0 && tHeight == 0 && useCompression && (sourceImage.width() > 1000 || sourceImage.height() > 1000)) {
     // if this is going DRM, and its not already a small image
@@ -996,8 +932,7 @@ int imageViewer::applyTemplate()
   }
 }
 
-int imageViewer::diplayedImageBytecount()
-{
+int imageViewer::diplayedImageBytecount() {
 #if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
   return (displayedImage.byteCount() * 3) / 4;
 #else
@@ -1006,15 +941,9 @@ int imageViewer::diplayedImageBytecount()
 }
 
 
-void imageViewer::resizeEvent(QResizeEvent*)
-{
-  displayImage();
-}
+void imageViewer::resizeEvent(QResizeEvent*) { displayImage(); }
 
-QImage* imageViewer::getDisplayedImage()
-{
-  return &displayedImage;
-}
+QImage* imageViewer::getDisplayedImage() { return &displayedImage; }
 
 // void imageViewer::slotTest()
 //{
@@ -1032,11 +961,9 @@ QImage* imageViewer::getDisplayedImage()
 
 
 #ifdef IMAGETESTVIEWER
-void imageViewer::imageTestViewer(QImage* im, QString infoStr)
-{
+void imageViewer::imageTestViewer(QImage* im, QString infoStr) {
   Q_UNUSED(infoStr);
-  if (inStartup)
-    return;
+  if (inStartup) return;
   //  QImage imc=*im;
 
   //  QPainter painter(im);

@@ -35,20 +35,15 @@
 #include "supportfunctions.h"
 
 /* Implementation *************************************************************/
-void CDRMTransmitter::Start()
-{
-  TransmParam.bRunThread = true; // Set run flag
-                                 //  Init(); // Initialization of the modules
+void CDRMTransmitter::Start() {
+  TransmParam.bRunThread = true;  // Set run flag
+                                  //  Init(); // Initialization of the modules
   Run();
 }
 
-void CDRMTransmitter::Stop()
-{
-  TransmParam.bRunThread = false;
-}
+void CDRMTransmitter::Stop() { TransmParam.bRunThread = false; }
 
-void CDRMTransmitter::Run()
-{
+void CDRMTransmitter::Run() {
   /*
   The hand over of data is done via an intermediate-buffer. The calling
   convention is always "input-buffer, output-buffer". Additional, the
@@ -82,11 +77,10 @@ void CDRMTransmitter::Run()
   }
 }
 
-void CDRMTransmitter::Init()
-{
-  int PacLen, nr_decoded_bits; // added pa0mbo
+void CDRMTransmitter::Init() {
+  int PacLen, nr_decoded_bits;  // added pa0mbo
 
-  OFDMCellMapping.Init(TransmParam, CarMapBuf); // Defines number of cells, important!
+  OFDMCellMapping.Init(TransmParam, CarMapBuf);  // Defines number of cells, important!
   //	SDCMLCEncoder.Init(TransmParam, SDCMapBuf); // Defines number of SDC bits per super-frame
   MSCMLCEncoder.Init(TransmParam, MLCEncBuf);
   nr_decoded_bits = TransmParam.iNumDecodedBitsMSC;
@@ -111,15 +105,13 @@ void CDRMTransmitter::Init()
 }
 
 CDRMTransmitter::CDRMTransmitter()
-    : pSoundOutInterface(new CSoundOut), TransmitData(pSoundOutInterface),
+    : pSoundOutInterface(new CSoundOut),
+      TransmitData(pSoundOutInterface),
 
       // UEP only works with Dream receiver, FIXME! -> disabled for now
-      bUseUEP(false)
-{
-}
+      bUseUEP(false) {}
 
-void CDRMTransmitter::init_base()
-{
+void CDRMTransmitter::init_base() {
   TransmParam.init();
   /* Init streams */
   TransmParam.ResetServicesStreams();
@@ -149,7 +141,7 @@ void CDRMTransmitter::init_base()
      SO_5: 20 kHz
 
            PA0MBO: for ham use now only modes A, B and E */
-  TransmParam.InitCellMapTable(RM_ROBUSTNESS_MODE_E, SO_1); // was B pa0mbo 21-10-2011
+  TransmParam.InitCellMapTable(RM_ROBUSTNESS_MODE_E, SO_1);  // was B pa0mbo 21-10-2011
 
   /* Protection levels for MSC. Depend on the modulation scheme. Look at
      TableMLC.h, iCodRateCombMSC16SM, iCodRateCombMSC64SM,
@@ -202,7 +194,7 @@ void CDRMTransmitter::init_base()
      64-QAM standard mapping (SM): CS_3_SM,
      64-QAM symmetrical hierarchical mapping (HMsym): CS_3_HMSYM,
      64-QAM mixture of the previous two mappings (HMmix): CS_3_HMMIX */
-  TransmParam.eMSCCodingScheme = CS_2_SM; // was CS_3_SM pa0mbo 21-11-2011
+  TransmParam.eMSCCodingScheme = CS_2_SM;  // was CS_3_SM pa0mbo 21-11-2011
 
   /* SDC modulation scheme. Available modes:
      4-QAM standard mapping (SM): CS_1_SM,

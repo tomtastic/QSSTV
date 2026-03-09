@@ -1,14 +1,10 @@
 #include "macroexpansion.h"
 
 
-macroExpansion::macroExpansion()
-{
-  convertList.clear();
-}
+macroExpansion::macroExpansion() { convertList.clear(); }
 
 
-QString macroExpansion::convert(QString txt)
-{
+QString macroExpansion::convert(QString txt) {
   int i, j;
   bool special = false;
   QChar c;
@@ -39,8 +35,7 @@ QString macroExpansion::convert(QString txt)
 }
 
 
-void macroExpansion::addConversion(QChar tag, QString value)
-{
+void macroExpansion::addConversion(QChar tag, QString value) {
   sconvert cnv;
   cnv.tag = tag;
   cnv.replacement = value;

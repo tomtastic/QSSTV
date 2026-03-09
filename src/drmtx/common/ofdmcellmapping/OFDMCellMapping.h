@@ -37,13 +37,12 @@
 
 
 /* Classes ********************************************************************/
-class COFDMCellMapping : public CTransmitterModul<_COMPLEX, _COMPLEX>
-{
-public:
+class COFDMCellMapping : public CTransmitterModul<_COMPLEX, _COMPLEX> {
+ public:
   COFDMCellMapping() {}
   virtual ~COFDMCellMapping() {}
 
-protected:
+ protected:
   int iNumSymPerFrame;
   int iNumCarrier;
   int iSymbolCounter;
@@ -54,4 +53,4 @@ protected:
 };
 
 
-#endif // !defined(OFDMCELLMAPPING_H__3B0BA660_CA63_4344_BB2BE7A0D31912__INCLUDED_)
+#endif  // !defined(OFDMCELLMAPPING_H__3B0BA660_CA63_4344_BB2BE7A0D31912__INCLUDED_)

@@ -125,7 +125,7 @@ typedef unsigned long long uint64_t;
 /* Define type-specific information */
 #define SIZEOF__BYTE 8
 #define _MAXSHORT 32767
-#define _MAXREAL ((_REAL) 3.4e38) /* Max for float */
+#define _MAXREAL ((_REAL)3.4e38) /* Max for float */
 
 #ifdef USE_ERASURE_FOR_FASTER_ACQ
 /* Use max-value for showing that this is an erasure */
@@ -136,15 +136,9 @@ typedef unsigned long long uint64_t;
 /* MAP ---------------------------------------------------------------------- */
 #ifdef USE_MAX_LOG_MAP
 typedef _REAL _DECISION;
-#define ML_SOFT_INF_MAX_VALUE ((_DECISION) 1e10)
-inline _BINARY ExtractBit(_DECISION dD)
-{
-  return dD > 0 ? 1 : 0;
-}
-inline _DECISION BitToSoft(_BINARY biB)
-{
-  return biB == 0 ? -1.0 : 1.0;
-}
+#define ML_SOFT_INF_MAX_VALUE ((_DECISION)1e10)
+inline _BINARY ExtractBit(_DECISION dD) { return dD > 0 ? 1 : 0; }
+inline _DECISION BitToSoft(_BINARY biB) { return biB == 0 ? -1.0 : 1.0; }
 #else
 typedef _BINARY _DECISION;
 #define ExtractBit(a) (a)
@@ -173,7 +167,7 @@ enum ERobMode {
   RM_ROBUSTNESS_MODE_A,
   RM_ROBUSTNESS_MODE_B,
   RM_ROBUSTNESS_MODE_E,
-  RM_ROBUSTNESS_MODE_D, // pa0mbo was MODE_D
+  RM_ROBUSTNESS_MODE_D,  // pa0mbo was MODE_D
   RM_NO_MODE_DETECTED
 }; /* RM: Robustness Mode */
 
@@ -195,18 +189,16 @@ const _REAL crPi = (static_cast<_REAL>(3.14159265358979323846));
 
 /* Classes ********************************************************************/
 /* For metric */
-class CDistance
-{
-public:
+class CDistance {
+ public:
   /* Distance towards 0 or towards 1 */
   _REAL rTow0;
   _REAL rTow1;
 };
 
 /* Viterbi needs information of equalized received signal and channel */
-class CEquSig
-{
-public:
+class CEquSig {
+ public:
   CEquSig() : cSig(_COMPLEX(static_cast<_REAL>(0.0), static_cast<_REAL>(0.0))), rChan(static_cast<_REAL>(0.0)) {}
   CEquSig(const _COMPLEX cNS, const _REAL rNC) : cSig(cNS), rChan(rNC) {}
 
@@ -222,34 +214,25 @@ public:
 #else
 #include <qmutex.h>
 #endif
-class CMutex
-{
-public:
-  void Lock()
-  {
-    Mutex.lock();
-  }
-  void Unlock()
-  {
-    Mutex.unlock();
-  }
+class CMutex {
+ public:
+  void Lock() { Mutex.lock(); }
+  void Unlock() { Mutex.unlock(); }
 
-protected:
+ protected:
   QMutex Mutex;
 };
 #else
 /* No GUI and no threads, we do not need mutex in this case */
-class CMutex
-{
-public:
+class CMutex {
+ public:
   void Lock() {}
   void Unlock() {}
 };
 #endif
 
-class CGenErr
-{
-public:
+class CGenErr {
+ public:
   CGenErr(string strNE) : strError(strNE) {}
   string strError;
 };
@@ -257,9 +240,9 @@ public:
 // FIXME something nicer than using "MAX_NUM_TAPS_DRM_CHAN"
 /* For simulation, data from channel simulation */
 #define MAX_NUM_TAPS_DRM_CHAN 4
-template <class T> class CChanSimData
-{
-public:
+template <class T>
+class CChanSimData {
+ public:
   T tIn;                                   /* Channel input data */
   T tOut;                                  /* Output of the channel (with noise) */
   T tRef;                                  /* Channel reference signal (without noise) */
@@ -286,18 +269,15 @@ void ErrorMessage(string strErrorString);
 
 /* Global functions ***********************************************************/
 /* Converting _REAL to _SAMPLE */
-inline _SAMPLE Real2Sample(const _REAL rInput)
-{
+inline _SAMPLE Real2Sample(const _REAL rInput) {
   /* Lower bound */
-  if (rInput < -_MAXSHORT)
-    return -_MAXSHORT;
+  if (rInput < -_MAXSHORT) return -_MAXSHORT;
 
   /* Upper bound */
-  if (rInput > _MAXSHORT)
-    return _MAXSHORT;
+  if (rInput > _MAXSHORT) return _MAXSHORT;
 
   return static_cast<_SAMPLE>(rInput);
 }
 
 
-#endif // !defined(DEF_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)
+#endif  // !defined(DEF_H__3B0BA660_CA63_4344_BB2B_23E7A0D31912__INCLUDED_)

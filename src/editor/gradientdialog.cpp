@@ -23,8 +23,7 @@
 #include <QColorDialog>
 
 
-gradientDialog::gradientDialog(QWidget* parent) : QDialog(parent), Ui::gradientForm()
-{
+gradientDialog::gradientDialog(QWidget* parent) : QDialog(parent), Ui::gradientForm() {
   setupUi(this);
   readSettings();
   connect(color1Button, &QPushButton::clicked, this, &gradientDialog::slotColorDialog);
@@ -46,15 +45,12 @@ gradientDialog::gradientDialog(QWidget* parent) : QDialog(parent), Ui::gradientF
   connect(conicalGradientButton, &QPushButton::clicked, this, &gradientDialog::slotUpdate);
 }
 
-gradientDialog::~gradientDialog()
-{
+gradientDialog::~gradientDialog() {
   writeSettings();
-  if (g == nullptr)
-    delete g;
+  if (g == nullptr) delete g;
 }
 
-void gradientDialog::readSettings()
-{
+void gradientDialog::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("Editor");
   gParam.color1 = qSettings.value("gradcolor1", QColor(Qt::red)).value<QColor>();
@@ -70,7 +66,7 @@ void gradientDialog::readSettings()
   pos3SpinBox->setValue(gParam.pos3);
   pos4SpinBox->setValue(gParam.pos4);
   gParam.direction = qSettings.value("graddirection", 0).toInt();
-  directionDial->setValue((gParam.direction + 90) % 360); // 0 degrees is East not North
+  directionDial->setValue((gParam.direction + 90) % 360);  // 0 degrees is East not North
   directionLCD->display(gParam.direction);
   if (qSettings.value("nogradbutton", 1).toBool()) {
     noGradientButton->setChecked(true);
@@ -89,8 +85,7 @@ void gradientDialog::readSettings()
   qSettings.endGroup();
 }
 
-void gradientDialog::writeSettings()
-{
+void gradientDialog::writeSettings() {
   QSettings qSettings;
   qSettings.beginGroup("Editor");
 
@@ -110,8 +105,7 @@ void gradientDialog::writeSettings()
   qSettings.endGroup();
 }
 
-void sgradientParam::load(QDataStream& str)
-{
+void sgradientParam::load(QDataStream& str) {
   int t;
   str >> color1;
   str >> color2;
@@ -125,8 +119,7 @@ void sgradientParam::load(QDataStream& str)
   type = static_cast<gType>(t);
   str >> direction;
 }
-void sgradientParam::save(QDataStream& str)
-{
+void sgradientParam::save(QDataStream& str) {
   str << color1;
   str << color2;
   str << color3;
@@ -140,38 +133,32 @@ void sgradientParam::save(QDataStream& str)
 }
 
 
-void gradientDialog::slotColorDialog()
-{
+void gradientDialog::slotColorDialog() {
   QColor c;
   QPushButton* act = qobject_cast<QPushButton*>(sender());
   if (act == color1Button) {
     c = QColorDialog::getColor(gParam.color1, this, "", QColorDialog::ShowAlphaChannel);
-    if (c.isValid())
-      gParam.color1 = c;
+    if (c.isValid()) gParam.color1 = c;
   } else if (act == color2Button) {
     c = QColorDialog::getColor(gParam.color2, this, "", QColorDialog::ShowAlphaChannel);
-    if (c.isValid())
-      gParam.color2 = c;
+    if (c.isValid()) gParam.color2 = c;
   } else if (act == color3Button) {
     c = QColorDialog::getColor(gParam.color3, this, "", QColorDialog::ShowAlphaChannel);
-    if (c.isValid())
-      gParam.color3 = c;
+    if (c.isValid()) gParam.color3 = c;
   } else if (act == color4Button) {
     c = QColorDialog::getColor(gParam.color4, this, "", QColorDialog::ShowAlphaChannel);
-    if (c.isValid())
-      gParam.color4 = c;
+    if (c.isValid()) gParam.color4 = c;
   }
   slotUpdate();
 }
 
 /*! \todo split param update from graphic creation
  */
-void gradientDialog::slotUpdate()
-{
+void gradientDialog::slotUpdate() {
   QString s;
   QPalette palette;
   QBrush brush;
-  gParam.direction = (270 + directionDial->value()) % 360; // 0 degrees is East not North
+  gParam.direction = (270 + directionDial->value()) % 360;  // 0 degrees is East not North
   directionLCD->display(gParam.direction);
   gParam.pos1 = pos1SpinBox->value();
   gParam.pos2 = pos2SpinBox->value();
@@ -216,27 +203,19 @@ void gradientDialog::slotUpdate()
 }
 
 
-void gradientDialog::selectGradient()
-{
-  exec();
-}
+void gradientDialog::selectGradient() { exec(); }
 
-void grSetup(sgradientParam prm, QGradient& g)
-{
+void grSetup(sgradientParam prm, QGradient& g) {
   g.setColorAt(prm.pos1 / 100., prm.color1);
-  if (prm.pos2 <= prm.pos1)
-    return;
+  if (prm.pos2 <= prm.pos1) return;
   g.setColorAt(prm.pos2 / 100., prm.color2);
-  if (prm.pos3 <= prm.pos2)
-    return;
+  if (prm.pos3 <= prm.pos2) return;
   g.setColorAt(prm.pos3 / 100., prm.color3);
-  if (prm.pos4 <= prm.pos3)
-    return;
+  if (prm.pos4 <= prm.pos3) return;
   g.setColorAt(prm.pos4 / 100., prm.color4);
 }
 
-QGradient buildGradient(sgradientParam prm, QRectF f)
-{
+QGradient buildGradient(sgradientParam prm, QRectF f) {
   qreal w = f.width();
   qreal h = f.height();
   qreal d = static_cast<double>(prm.direction);

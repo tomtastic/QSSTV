@@ -29,11 +29,10 @@ extern tableFormat sizeList[];
 extern tableFormat fpsList[];
 
 
-class videoCapture : public QObject
-{
+class videoCapture : public QObject {
   Q_OBJECT
 
-public:
+ public:
   videoCapture();
   ~videoCapture();
 
@@ -47,21 +46,15 @@ public:
   int currentWidth(v4l2_format fmt) const;
   int currentHeight(v4l2_format fmt) const;
   int currentPixelFormat(v4l2_format fmt) const;
-  QImage* getImage()
-  {
-    return localImage;
-  }
+  QImage* getImage() { return localImage; }
   bool captureStart();
   bool captureStop();
   bool stopStreaming();
   bool startSnapshots();
   bool init(int pixelFormat, int width, int height);
-  QString getErrorString()
-  {
-    return errorString;
-  }
+  QString getErrorString() { return errorString; }
 
-private:
+ private:
   int dev;
   v4l2_format srcFmt;
   v4l2_format dstFmt;

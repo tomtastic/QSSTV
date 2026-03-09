@@ -43,9 +43,8 @@
 
 //};
 
-class CSoundOutInterface
-{
-public:
+class CSoundOutInterface {
+ public:
   virtual ~CSoundOutInterface() {}
 
   /* sound card interface - used by WriteData */

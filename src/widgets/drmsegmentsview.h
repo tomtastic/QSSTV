@@ -4,17 +4,15 @@
 #include <QLabel>
 
 
-class drmSegmentsView : public QLabel
-{
+class drmSegmentsView : public QLabel {
   Q_OBJECT
 
-public:
+ public:
   explicit drmSegmentsView(QWidget* parent = 0);
   ~drmSegmentsView();
   void setColorFail(QColor color);
   void setColorOK(QColor color);
-  void setMaxBlocks(int mb)
-  {
+  void setMaxBlocks(int mb) {
     if (mb == 0)
       maxBlocks = 1;
     else
@@ -22,10 +20,10 @@ public:
   }
   void setBlocks(QList<short unsigned int> blkList);
 
-protected:
+ protected:
   void paintEvent(QPaintEvent* e);
 
-private:
+ private:
   QColor colFail;
   QColor colOK;
   QList<short unsigned int> blockList;
@@ -33,4 +31,4 @@ private:
   int blockListCount;
 };
 
-#endif // DRMSEGMENTSVIEW_H
+#endif  // DRMSEGMENTSVIEW_H

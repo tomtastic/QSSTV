@@ -72,15 +72,14 @@ void deleteFiles(QString dirPath, QString extension);
 bool trash(QString filename, bool forceDelete);
 
 
-class timingAnalyser
-{
-public:
+class timingAnalyser {
+ public:
   timingAnalyser();
   ~timingAnalyser();
   void start();
   unsigned long result();
 
-private:
+ private:
   QElapsedTimer tm;
 };
 

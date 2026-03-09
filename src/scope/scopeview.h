@@ -46,9 +46,8 @@ extern unsigned int scopeArraySize;
 enum ecurve { SCDATA1, SCDATA2, SCDATA3, SCDATA4 };
 #define NUMCURVES 4
 
-class scopeView : public scopePlot
-{
-public:
+class scopeView : public scopePlot {
+ public:
   scopeView(QString title);
   ~scopeView();
   void init();
@@ -68,14 +67,13 @@ public:
 
   void show(bool data, bool sync, bool state, bool d4);
   void setCurveName(QString title, int idx);
-  void setAxisTitles(QString x, QString yData1, QString yData2)
-  {
+  void setAxisTitles(QString x, QString yData1, QString yData2) {
     xTitle = x;
     yLeftTitle = yData1;
     yRightTitle = yData2;
   }
 
-private:
+ private:
   void allocateArray();
   double* array1Ptr;
   double* array2Ptr;

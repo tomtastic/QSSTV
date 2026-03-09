@@ -1,60 +1,23 @@
 ---
 # Clang-Format configuration for QSSTV
-# Based on existing code style
+# Using Google C++ Style Guide
 
 Language: Cpp
-BasedOnStyle: LLVM
+BasedOnStyle: Google
 
-# Indentation
+# Indentation (keep existing 2-space indent)
 IndentWidth: 2
 TabWidth: 2
 UseTab: Never
 ColumnLimit: 120
 
-# Braces
-BreakBeforeBraces: Linux
-BraceWrapping:
-  AfterClass: false
-  AfterControlStatement: Never
-  AfterEnum: false
-  AfterFunction: true
-  AfterNamespace: false
-  AfterStruct: false
-  AfterUnion: false
-  BeforeCatch: false
-  BeforeElse: false
-
-# Spacing
-SpaceAfterCStyleCast: true
-SpaceBeforeParens: ControlStatements
-SpaceInEmptyParentheses: false
-SpacesInParentheses: false
-SpacesInSquareBrackets: false
-SpacesInAngles: Never
-
-# Alignment
-AlignAfterOpenBracket: Align
-AlignConsecutiveAssignments: None
-AlignConsecutiveDeclarations: None
-AlignOperands: Align
-AlignTrailingComments: true
-
-# Line breaks
-AllowShortBlocksOnASingleLine: Empty
-AllowShortFunctionsOnASingleLine: Empty
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLoopsOnASingleLine: false
-AlwaysBreakAfterReturnType: None
-AlwaysBreakBeforeMultilineStrings: false
-
-# Includes
+# Includes - preserve order to avoid breaking dependencies
 SortIncludes: Never
 IncludeBlocks: Preserve
 
-# Pointers and references
+# Pointers and references - keep left alignment
 DerivePointerAlignment: false
 PointerAlignment: Left
 
-# Other
+# Other customizations
 MaxEmptyLinesToKeep: 2
-KeepEmptyLinesAtTheStartOfBlocks: false

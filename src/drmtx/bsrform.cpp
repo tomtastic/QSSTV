@@ -3,8 +3,7 @@
 #include "drmstatusframe.h"
 #include "drm.h"
 
-bsrForm::bsrForm(QWidget* parent) : QDialog(parent), ui(new Ui::bsrForm)
-{
+bsrForm::bsrForm(QWidget* parent) : QDialog(parent), ui(new Ui::bsrForm) {
   ui->setupUi(this);
   connect(ui->bsrComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &bsrForm::slotBSRSelection);
   connect(ui->cancelPushButton, &QPushButton::clicked, this, &bsrForm::slotCanceled);
@@ -12,13 +11,9 @@ bsrForm::bsrForm(QWidget* parent) : QDialog(parent), ui(new Ui::bsrForm)
   connect(ui->compatiblePushButton, &QPushButton::clicked, this, &bsrForm::slotCompatible);
 }
 
-bsrForm::~bsrForm()
-{
-  delete ui;
-}
+bsrForm::~bsrForm() { delete ui; }
 
-void bsrForm::init()
-{
+void bsrForm::init() {
   int i;
   bsrPtr = srcDecoder->getBSR();
   if (bsrPtr->count() == 0) {
@@ -26,20 +21,16 @@ void bsrForm::init()
     ui->infoTextEdit->appendPlainText("No BSR available");
     return;
   }
-  for (i = bsrPtr->count() - 1; i >= 0; i--) // latest first
+  for (i = bsrPtr->count() - 1; i >= 0; i--)  // latest first
   {
     ui->bsrComboBox->addItem(bsrPtr->at(i).tbPtr->fileName);
   }
   slotBSRSelection(0);
 }
 
-bool bsrForm::hasBSR()
-{
-  return (bsrPtr->count() > 0);
-}
+bool bsrForm::hasBSR() { return (bsrPtr->count() > 0); }
 
-QByteArray* bsrForm::getBA(bool compat)
-{
+QByteArray* bsrForm::getBA(bool compat) {
   int i;
   i = bsrPtr->count() - 1 - ui->bsrComboBox->currentIndex();
   if (srcDecoder->storeBSR(bsrPtr->at(i).tbPtr, compat)) {
@@ -53,8 +44,7 @@ QByteArray* bsrForm::getBA(bool compat)
   return nullptr;
 }
 
-void bsrForm::slotBSRSelection(int idx)
-{
+void bsrForm::slotBSRSelection(int idx) {
   int i;
   transportBlock* tbPtr;
   i = bsrPtr->count() - 1 - idx;
@@ -66,18 +56,9 @@ void bsrForm::slotBSRSelection(int idx)
   ui->infoTextEdit->appendPlainText(modeToString(tbPtr->modeCode));
 }
 
-void bsrForm::slotCanceled()
-{
-  done(CANCEL);
-}
+void bsrForm::slotCanceled() { done(CANCEL); }
 
 
-void bsrForm::slotEasypal()
-{
-  done(EASYPAL);
-}
+void bsrForm::slotEasypal() { done(EASYPAL); }
 
-void bsrForm::slotCompatible()
-{
-  done(COMPAT);
-}
+void bsrForm::slotCompatible() { done(COMPAT); }

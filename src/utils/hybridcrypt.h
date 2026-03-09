@@ -3,34 +3,18 @@
 #include <QByteArray>
 #include <QString>
 
-class hybridCrypt
-{
-public:
+class hybridCrypt {
+ public:
   hybridCrypt();
   bool enCrypt(QByteArray* ba);
   bool deCrypt(QByteArray* ba);
-  QString host()
-  {
-    return hcFtpRemoteHost;
-  }
-  QString user()
-  {
-    return hcFtpLogin;
-  }
-  QString passwd()
-  {
-    return hcFtpPassword;
-  }
-  QString dir()
-  {
-    return hcFtpRemoteDirectory;
-  }
-  int port()
-  {
-    return hcFtpPort;
-  }
+  QString host() { return hcFtpRemoteHost; }
+  QString user() { return hcFtpLogin; }
+  QString passwd() { return hcFtpPassword; }
+  QString dir() { return hcFtpRemoteDirectory; }
+  int port() { return hcFtpPort; }
 
-private:
+ private:
   QString hcFtpRemoteHost;
   QString hcFtpLogin;
   QString hcFtpPassword;
@@ -42,4 +26,4 @@ private:
   QString charToHex(QChar c);
 };
 
-#endif // HYBRIDCRYPT_H
+#endif  // HYBRIDCRYPT_H

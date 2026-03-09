@@ -29,18 +29,16 @@
 
 QString lastPath("");
 
-bool getValue(int& val, QLineEdit* input)
-{
+bool getValue(int& val, QLineEdit* input) {
   bool ok;
   QString s;
   s = input->text();
   val = s.toInt(
-      &ok, 0); // allow ayutomatic conversion from hex to decimal in the classic C++ way : 0x is hex other are decimal
+      &ok, 0);  // allow ayutomatic conversion from hex to decimal in the classic C++ way : 0x is hex other are decimal
   return ok;
 }
 
-bool getValue(double& val, QLineEdit* input)
-{
+bool getValue(double& val, QLineEdit* input) {
   bool ok;
   QString s;
   s = input->text();
@@ -48,52 +46,31 @@ bool getValue(double& val, QLineEdit* input)
   return ok;
 }
 
-bool getValue(int& val, QString input)
-{
+bool getValue(int& val, QString input) {
   bool ok;
   val = input.toInt(&ok);
   return ok;
 }
-bool getValue(double& val, QString input)
-{
+bool getValue(double& val, QString input) {
   bool ok;
   val = input.toDouble(&ok);
   return ok;
 }
 
-void getValue(bool& val, QCheckBox* input)
-{
-  val = input->isChecked();
-}
+void getValue(bool& val, QCheckBox* input) { val = input->isChecked(); }
 
-void getValue(int& val, QSpinBox* input)
-{
-  val = input->value();
-}
+void getValue(int& val, QSpinBox* input) { val = input->value(); }
 
-void getValue(uint& val, QSpinBox* input)
-{
-  val = input->value();
-}
+void getValue(uint& val, QSpinBox* input) { val = input->value(); }
 
-void getValue(double& val, QDoubleSpinBox* input)
-{
-  val = input->value();
-}
+void getValue(double& val, QDoubleSpinBox* input) { val = input->value(); }
 
-void getValue(QString& s, QLineEdit* input)
-{
-  s = input->text();
-}
+void getValue(QString& s, QLineEdit* input) { s = input->text(); }
 
-void getValue(QString& s, QPlainTextEdit* input)
-{
-  s = input->toPlainText();
-}
+void getValue(QString& s, QPlainTextEdit* input) { s = input->toPlainText(); }
 
 
-void getValue(int& s, QComboBox* input)
-{
+void getValue(int& s, QComboBox* input) {
   bool ok;
   int val = input->currentText().toInt(&ok);
   if (ok) {
@@ -102,51 +79,24 @@ void getValue(int& s, QComboBox* input)
   // If conversion fails, s retains its previous value
 }
 
-void getIndex(int& s, QComboBox* input)
-{
-  s = input->currentIndex();
-}
+void getIndex(int& s, QComboBox* input) { s = input->currentIndex(); }
 
-void getValue(QString& s, QComboBox* input)
-{
-  s = input->currentText();
-}
+void getValue(QString& s, QComboBox* input) { s = input->currentText(); }
 
-void getValue(bool& val, QPushButton* input)
-{
-  val = input->isChecked();
-}
+void getValue(bool& val, QPushButton* input) { val = input->isChecked(); }
 
 
-void getValue(int& s, QButtonGroup* input)
-{
-  s = input->checkedId();
-}
+void getValue(int& s, QButtonGroup* input) { s = input->checkedId(); }
 
-void getValue(bool& s, QRadioButton* input)
-{
-  s = input->isChecked();
-}
+void getValue(bool& s, QRadioButton* input) { s = input->isChecked(); }
 
-void getValue(int& val, QSlider* input)
-{
-  val = input->value();
-}
+void getValue(int& val, QSlider* input) { val = input->value(); }
 
-void getValue(uint& val, QSlider* input)
-{
-  val = input->value();
-}
+void getValue(uint& val, QSlider* input) { val = input->value(); }
 
-void setValue(int val, QLineEdit* output)
-{
-  output->setText(QString::number(val));
-}
+void setValue(int val, QLineEdit* output) { output->setText(QString::number(val)); }
 
-void setValue(double val, QLineEdit* output)
-{
-  output->setText(QString::number(val));
-}
+void setValue(double val, QLineEdit* output) { output->setText(QString::number(val)); }
 /**
   \brief sets double number in a QlineEdit
   \param val  the value to set
@@ -154,43 +104,21 @@ void setValue(double val, QLineEdit* output)
   \param prec the required precision
 */
 
-void setValue(double val, QLineEdit* output, int prec)
-{
-  output->setText(QString::number(val, 'g', prec));
-}
+void setValue(double val, QLineEdit* output, int prec) { output->setText(QString::number(val, 'g', prec)); }
 
-void setValue(bool val, QCheckBox* input)
-{
-  input->setChecked(val);
-}
+void setValue(bool val, QCheckBox* input) { input->setChecked(val); }
 
-void setValue(int val, QSpinBox* input)
-{
-  input->setValue(val);
-}
+void setValue(int val, QSpinBox* input) { input->setValue(val); }
 
-void setValue(uint val, QSpinBox* input)
-{
-  input->setValue(val);
-}
+void setValue(uint val, QSpinBox* input) { input->setValue(val); }
 
-void setValue(double val, QDoubleSpinBox* input)
-{
-  input->setValue(val);
-}
+void setValue(double val, QDoubleSpinBox* input) { input->setValue(val); }
 
-void setValue(const QString& s, QLineEdit* input)
-{
-  input->setText(s);
-}
+void setValue(const QString& s, QLineEdit* input) { input->setText(s); }
 
-void setValue(QString s, QPlainTextEdit* input)
-{
-  input->setPlainText(s);
-}
+void setValue(QString s, QPlainTextEdit* input) { input->setPlainText(s); }
 
-void setValue(int s, QComboBox* input)
-{
+void setValue(int s, QComboBox* input) {
   int i;
   for (i = 0; i < input->count(); i++) {
     if (input->itemText(i).toInt() == s) {
@@ -201,13 +129,9 @@ void setValue(int s, QComboBox* input)
   input->setCurrentIndex(0);
 }
 
-void setIndex(int s, QComboBox* input)
-{
-  input->setCurrentIndex(s);
-}
+void setIndex(int s, QComboBox* input) { input->setCurrentIndex(s); }
 
-void setValue(QString s, QComboBox* input)
-{
+void setValue(QString s, QComboBox* input) {
   int i;
   for (i = 0; i < input->count(); i++) {
     if (input->itemText(i) == s) {
@@ -218,66 +142,44 @@ void setValue(QString s, QComboBox* input)
   input->setCurrentIndex(0);
 }
 
-void setValue(bool s, QPushButton* input)
-{
-  input->setChecked(s);
-}
+void setValue(bool s, QPushButton* input) { input->setChecked(s); }
 
-void setValue(int s, QButtonGroup* input)
-{
-  input->button(s)->setChecked(true);
-}
+void setValue(int s, QButtonGroup* input) { input->button(s)->setChecked(true); }
 
-void setValue(bool s, QRadioButton* input)
-{
-  input->setChecked(s);
-}
+void setValue(bool s, QRadioButton* input) { input->setChecked(s); }
 
-void setValue(int val, QSlider* input)
-{
-  input->setValue(val);
-}
+void setValue(int val, QSlider* input) { input->setValue(val); }
 
 
-bool browseGetFile(QLineEdit* le, QString deflt, const QString& filter)
-{
-  dirDialog d((QWidget*) le, "Browse");
+bool browseGetFile(QLineEdit* le, QString deflt, const QString& filter) {
+  dirDialog d((QWidget*)le, "Browse");
   QString s = d.openFileName(deflt, filter);
-  if (s.isNull())
-    return false;
-  if (s.isEmpty())
-    return false;
+  if (s.isNull()) return false;
+  if (s.isEmpty()) return false;
   le->setText(s);
   return true;
 }
 
-bool browseSaveFile(QLineEdit* le, QString deflt, const QString& filter)
-{
-  dirDialog d((QWidget*) le, "Browse");
+bool browseSaveFile(QLineEdit* le, QString deflt, const QString& filter) {
+  dirDialog d((QWidget*)le, "Browse");
   QString s = d.saveFileName(deflt, filter, "");
-  if (s.isNull())
-    return false;
-  if (s.isEmpty())
-    return false;
+  if (s.isNull()) return false;
+  if (s.isEmpty()) return false;
   le->setText(s);
   return true;
 }
 
-bool browseDir(QLineEdit* le, QString deflt)
-{
-  dirDialog d((QWidget*) le, "Browse");
+bool browseDir(QLineEdit* le, QString deflt) {
+  dirDialog d((QWidget*)le, "Browse");
   QString s = d.openDirName(deflt);
-  if (s.isNull())
-    return false;
-  if (s.isEmpty())
-    return false;
+  if (s.isNull()) return false;
+  if (s.isEmpty()) return false;
   le->setText(s);
   return true;
 }
 
 
-void deleteFiles(QString dirPath, QString extension)
-{
+void deleteFiles(QString dirPath, QString extension) {
   int i;
   QDir dir(dirPath);
   QStringList filters;
@@ -291,8 +193,7 @@ void deleteFiles(QString dirPath, QString extension)
   }
 }
 
-bool trash(QString filename, bool forceDelete)
-{
+bool trash(QString filename, bool forceDelete) {
   QString tmp;
   QFile orgFile(filename);
   QFileInfo modifiedFileInfo(filename);
@@ -304,16 +205,14 @@ bool trash(QString filename, bool forceDelete)
   QDir filesDir;
   QString infoTxt;
   trDir.setPath(getenv("XDG_DATA_HOME"));
-  if (trDir.path().isEmpty())
-    trDir.setPath(QDir::homePath() + "/.local/share/Trash");
+  if (trDir.path().isEmpty()) trDir.setPath(QDir::homePath() + "/.local/share/Trash");
   infoDir.setPath(trDir.path() + "/info");
   filesDir.setPath(trDir.path() + "/files");
   infoFile.setFileName(infoDir.path() + "/" + info.fileName() + ".trashinfo");
   modifiedFile.setFileName(filesDir.path() + "/" + modifiedFileInfo.fileName());
   int counter = 0;
   do {
-    if (!modifiedFile.exists())
-      break;
+    if (!modifiedFile.exists()) break;
     counter++;
     tmp = QString("%1/%2_%3.%4")
               .arg(filesDir.path())
@@ -335,15 +234,13 @@ bool trash(QString filename, bool forceDelete)
 
   if ((!trDir.exists()) || (!infoDir.exists()) || (!filesDir.exists())) {
     errorOut() << "Trash folder or one of its components does not exist";
-    if (forceDelete)
-      orgFile.remove();
+    if (forceDelete) orgFile.remove();
     return false;
   }
 
   if (!infoFile.open(QIODevice::WriteOnly)) {
     errorOut() << QString("Trash folder: can't open %1 for writing").arg(infoFile.fileName());
-    if (forceDelete)
-      orgFile.remove();
+    if (forceDelete) orgFile.remove();
     return false;
   }
   infoFile.write(infoTxt.toLatin1().data());
@@ -353,8 +250,7 @@ bool trash(QString filename, bool forceDelete)
   target = QString("%1").arg(modifiedFile.fileName());
   if (!trashFile.rename(filename, target)) {
     errorOut() << QString("Trash folder: can't rename %1 to %2").arg(filename).arg(target);
-    if (forceDelete)
-      orgFile.remove();
+    if (forceDelete) orgFile.remove();
     return false;
   }
   return true;
@@ -364,12 +260,6 @@ bool trash(QString filename, bool forceDelete)
 timingAnalyser::timingAnalyser() {}
 
 timingAnalyser::~timingAnalyser() {}
-void timingAnalyser::start()
-{
-  tm.start();
-}
+void timingAnalyser::start() { tm.start(); }
 
-unsigned long timingAnalyser::result()
-{
-  return tm.elapsed();
-}
+unsigned long timingAnalyser::result() { return tm.elapsed(); }

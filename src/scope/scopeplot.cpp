@@ -32,8 +32,7 @@
 #include <QMenu>
 #include <QMenuBar>
 
-scopePlot::scopePlot(QString title, QWidget* parent) : QMainWindow(parent)
-{
+scopePlot::scopePlot(QString title, QWidget* parent) : QMainWindow(parent) {
   wd = new QWidget(this);
   ui.setupUi(wd);
   mrk1 = 0;
@@ -62,8 +61,7 @@ scopePlot::scopePlot(QString title, QWidget* parent) : QMainWindow(parent)
   init(title);
 }
 
-scopePlot::~scopePlot()
-{
+scopePlot::~scopePlot() {
   delete curve1;
   delete curve2;
   delete curve3;
@@ -71,19 +69,14 @@ scopePlot::~scopePlot()
   delete toolsMenu;
 }
 
-void scopePlot::setXScaleMultiplier(double mul)
-{
+void scopePlot::setXScaleMultiplier(double mul) {
   xPrimeScaleMul = mul;
   xScaleMul = mul;
 }
 
-void scopePlot::setAlternativeScaleMultiplier(double mul)
-{
-  xAltScaleMul = mul;
-}
+void scopePlot::setAlternativeScaleMultiplier(double mul) { xAltScaleMul = mul; }
 
-void scopePlot::initActions()
-{
+void scopePlot::initActions() {
   zoomAction = new QAction(QIcon(":/icons/viewmagplus.png"), tr("&Zoom"), this);
   zoomAction->setCheckable(true);
   zoomAction->setStatusTip(tr("Zoom in or out"));
@@ -91,8 +84,7 @@ void scopePlot::initActions()
 }
 
 
-void scopePlot::initMenuBar()
-{
+void scopePlot::initMenuBar() {
   toolsMenu = new QMenu(tr("&Zoom"));
   toolsMenu->addAction(zoomAction);
   menuBar()->addMenu(toolsMenu);
@@ -103,8 +95,7 @@ void scopePlot::initToolBar() {}
 void scopePlot::initStatusBar() {}
 
 
-void scopePlot::init(QString title)
-{
+void scopePlot::init(QString title) {
   setup = true;
   setCentralWidget(wd);
   connect(ui.offsetWheel, SIGNAL(valueChanged(double)), SLOT(slotOffsetChanged(double)));
@@ -191,11 +182,9 @@ void scopePlot::init(QString title)
 }
 
 
-void scopePlot::setCurveOn(int i, bool b)
-{
+void scopePlot::setCurveOn(int i, bool b) {
   QwtPlotItemList items = plW->itemList(QwtPlotItem::Rtti_PlotCurve);
-  if (i >= items.size())
-    return;
+  if (i >= items.size()) return;
   const QVariant itemInfo = plW->itemToInfo(items[i]);
   QwtLegendLabel* legendLabel = qobject_cast<QwtLegendLabel*>(legend->legendWidget(itemInfo));
   if (legendLabel) {
@@ -205,8 +194,7 @@ void scopePlot::setCurveOn(int i, bool b)
   items[i]->setVisible(b);
 }
 
-void scopePlot::slotSamplesButtton()
-{
+void scopePlot::slotSamplesButtton() {
   long i;
   if (ui.samplesPushButton->isChecked()) {
     ui.samplesPushButton->setText(xAltAxisTitle);
@@ -229,21 +217,16 @@ void scopePlot::slotSamplesButtton()
 
   ui.offsetWheel->setPageStepCount(10);
   ui.rangeWheel->setPageStepCount(10);
-  if (x.size() == c1.size())
-    curve1->setSamples(x.data(), c1.data(), x.size());
-  if (x.size() == c3.size())
-    curve2->setSamples(x.data(), c3.data(), x.size());
-  if (x.size() == c3.size())
-    curve3->setSamples(x.data(), c3.data(), x.size());
-  if (x.size() == c4.size())
-    curve4->setSamples(x.data(), c4.data(), x.size());
+  if (x.size() == c1.size()) curve1->setSamples(x.data(), c1.data(), x.size());
+  if (x.size() == c3.size()) curve2->setSamples(x.data(), c3.data(), x.size());
+  if (x.size() == c3.size()) curve3->setSamples(x.data(), c3.data(), x.size());
+  if (x.size() == c4.size()) curve4->setSamples(x.data(), c4.data(), x.size());
   setupWheels(x.size());
   plW->replot();
 }
 
 
-void scopePlot::plot1DUpdate(double* data)
-{
+void scopePlot::plot1DUpdate(double* data) {
   for (long i = 0; i < c1.size(); i++) {
     c1[i] = data[i];
   }
@@ -252,35 +235,31 @@ void scopePlot::plot1DUpdate(double* data)
 }
 
 void scopePlot::plotData(unsigned int size, short int* iData, QString curve1Name, QString yLLabel, double* dData,
-                         QString curve2Name, QString yRLabel)
-{
+                         QString curve2Name, QString yRLabel) {
   add1(iData, size, curve1Name, yLLabel);
   add3(dData, size, curve2Name, yRLabel);
   show();
 }
 
 void scopePlot::plotData(unsigned int size, double* dData1, QString curve1Name, QString yLLabel, double* dData2,
-                         QString curve2Name, QString yRLabel)
-{
+                         QString curve2Name, QString yRLabel) {
   add1(dData1, size, curve1Name, yLLabel);
   add3(dData2, size, curve2Name, yRLabel);
   show();
 }
 
 
-void scopePlot::add1(short int* data, unsigned long len, QString name, QString yLeftLabel)
-{
+void scopePlot::add1(short int* data, unsigned long len, QString name, QString yLeftLabel) {
   x.resize(len);
   c1.resize(len);
   for (unsigned long i = 0; i < len; i++) {
     x[i] = static_cast<double>(i + xOffset) * xScaleMul;
-    c1[i] = (double) data[i];
+    c1[i] = (double)data[i];
   }
   plot1(name, yLeftLabel);
 }
 
-void scopePlot::add1(double* data, unsigned long len, QString curveName, QString yLeftLabel)
-{
+void scopePlot::add1(double* data, unsigned long len, QString curveName, QString yLeftLabel) {
   x.resize(len);
   c1.resize(len);
   for (unsigned long i = 0; i < len; i++) {
@@ -291,8 +270,7 @@ void scopePlot::add1(double* data, unsigned long len, QString curveName, QString
 }
 
 
-void scopePlot::add2(double* data, unsigned long len, QString curveName)
-{
+void scopePlot::add2(double* data, unsigned long len, QString curveName) {
   c2.resize(len);
   for (unsigned long i = 0; i < len; i++) {
     c2[i] = data[i];
@@ -300,8 +278,7 @@ void scopePlot::add2(double* data, unsigned long len, QString curveName)
   plot2(curveName);
 }
 
-void scopePlot::add3(double* data, unsigned long len, QString curveName, QString yRightLabel)
-{
+void scopePlot::add3(double* data, unsigned long len, QString curveName, QString yRightLabel) {
   c3.resize(len);
   for (unsigned long i = 0; i < len; i++) {
     c3[i] = data[i];
@@ -309,8 +286,7 @@ void scopePlot::add3(double* data, unsigned long len, QString curveName, QString
   plot3(curveName, yRightLabel);
 }
 
-void scopePlot::add4(double* data, unsigned long len, QString curveName)
-{
+void scopePlot::add4(double* data, unsigned long len, QString curveName) {
   c4.resize(len);
   for (unsigned long i = 0; i < len; i++) {
     c4[i] = data[i];
@@ -318,21 +294,16 @@ void scopePlot::add4(double* data, unsigned long len, QString curveName)
   plot4(curveName);
 }
 
-void scopePlot::show()
-{
+void scopePlot::show() {
   QMainWindow::show();
   plW->show();
   //  plW->replot();
 }
 
-void scopePlot::refresh()
-{
-  plW->replot();
-}
+void scopePlot::refresh() { plW->replot(); }
 
 
-void scopePlot::plot1(QString curveName, QString yLeftLabel)
-{
+void scopePlot::plot1(QString curveName, QString yLeftLabel) {
   plW->setAxisTitle(QwtPlot::yLeft, yLeftLabel);
   plW->setAxisAutoScale(QwtPlot::yLeft);
   plW->setAxisAutoScale(QwtPlot::xBottom);
@@ -344,8 +315,7 @@ void scopePlot::plot1(QString curveName, QString yLeftLabel)
 }
 
 
-void scopePlot::plot2(QString curveName)
-{
+void scopePlot::plot2(QString curveName) {
   // axes
   plW->setAxisAutoScale(QwtPlot::yLeft);
   plW->enableAxis(QwtPlot::yLeft);
@@ -356,8 +326,7 @@ void scopePlot::plot2(QString curveName)
   plW->replot();
 }
 
-void scopePlot::plot3(QString curveName, QString yRightLabel)
-{
+void scopePlot::plot3(QString curveName, QString yRightLabel) {
   // axes
   plW->setAxisTitle(QwtPlot::yRight, yRightLabel);
   plW->enableAxis(QwtPlot::yRight);
@@ -369,8 +338,7 @@ void scopePlot::plot3(QString curveName, QString yRightLabel)
   plW->replot();
 }
 
-void scopePlot::plot4(QString curveName)
-{
+void scopePlot::plot4(QString curveName) {
   // axes
   plW->setAxisAutoScale(QwtPlot::yRight);
   plW->enableAxis(QwtPlot::yRight);
@@ -384,10 +352,8 @@ void scopePlot::plot4(QString curveName)
 
 void scopePlot::slotZoom(bool) {}
 
-void scopePlot::slotOffsetChanged(double ioffset)
-{
-  if (setup)
-    return;
+void scopePlot::slotOffsetChanged(double ioffset) {
+  if (setup) return;
   if ((ioffset - range / 2) < startPoint) {
     ui.offsetWheel->setValue(startPoint + range / 2);
     return;
@@ -401,10 +367,8 @@ void scopePlot::slotOffsetChanged(double ioffset)
   plW->replot();
 }
 
-void scopePlot::slotRangeChanged(double irange)
-{
-  if (setup)
-    return;
+void scopePlot::slotRangeChanged(double irange) {
+  if (setup) return;
 
   if ((dispCenter - irange / 2) < startPoint) {
     ui.rangeWheel->setValue((dispCenter - startPoint) * 1.999);
@@ -420,8 +384,7 @@ void scopePlot::slotRangeChanged(double irange)
   plW->replot();
 }
 
-void scopePlot::setupWheels(int size)
-{
+void scopePlot::setupWheels(int size) {
   setup = true;
   // offset is from 0 to size-range
   // range is from 10 to
@@ -450,8 +413,7 @@ void scopePlot::setupWheels(int size)
 }
 
 
-void scopePlot::pickerMoved(const QPointF& pos)
-{
+void scopePlot::pickerMoved(const QPointF& pos) {
   QString info;
   info = QString("x=%1,yL=%2, yR=%3")
 
@@ -463,8 +425,7 @@ void scopePlot::pickerMoved(const QPointF& pos)
 }
 
 
-void scopePlot::pickerSelected(const QPointF& pos)
-{
+void scopePlot::pickerSelected(const QPointF& pos) {
   if (!toggleMarker) {
     marker1->setValue(pos);
   } else {
@@ -476,8 +437,7 @@ void scopePlot::pickerSelected(const QPointF& pos)
 }
 
 
-void scopePlot::showMarker()
-{
+void scopePlot::showMarker() {
   QString t1, t2, t3;
 
   t1 = "M1 : " + QString::number(marker1->xValue(), 'g', 7).rightJustified(11) +
@@ -492,8 +452,7 @@ void scopePlot::showMarker()
 }
 
 
-void scopePlot::legendClicked(const QVariant& itemInfo, bool on)
-{
+void scopePlot::legendClicked(const QVariant& itemInfo, bool on) {
   QwtPlotItem* plotItem = plW->infoToItem(itemInfo);
   if (plotItem) {
     plotItem->setVisible(on);

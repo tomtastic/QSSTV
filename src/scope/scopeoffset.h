@@ -3,16 +3,14 @@
 
 #include <QDialog>
 
-namespace Ui
-{
+namespace Ui {
 class scopeOffset;
 }
 
-class scopeOffset : public QDialog
-{
+class scopeOffset : public QDialog {
   Q_OBJECT
 
-public:
+ public:
   explicit scopeOffset(QWidget* parent = 0);
   ~scopeOffset();
   void setNumSamples(uint numSamples);
@@ -20,8 +18,8 @@ public:
   void setOffset(uint offset);
   unsigned int getOffset();
 
-private:
+ private:
   Ui::scopeOffset* ui;
 };
 
-#endif // SCOPEOFFSET_H
+#endif  // SCOPEOFFSET_H

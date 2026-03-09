@@ -45,17 +45,13 @@ struct scatParams {
   int hamlibPort;
 };
 
-class rigControl : public QObject
-{
+class rigControl : public QObject {
   Q_OBJECT
-public:
+ public:
   rigControl(int radioIndex);
   ~rigControl();
   bool init();
-  bool enabled()
-  {
-    return rigControlEnabled;
-  }
+  bool enabled() { return rigControlEnabled; }
   bool getFrequency(double& frequency);
   bool setFrequency(double frequency);
   bool getMode(QString& mode);
@@ -64,26 +60,20 @@ public:
   int getRadioModelIndex();
   bool getRadioList(QComboBox* cb);
   void disable();
-  scatParams* params()
-  {
-    return &catParams;
-  }
+  scatParams* params() { return &catParams; }
   void activatePTT(bool b);
-  double getTxDelay()
-  {
-    return catParams.txOnDelay;
-  }
+  double getTxDelay() { return catParams.txOnDelay; }
   int rawCommand(QByteArray ba);
   QString initError;
 
-private:
-  RIG* my_rig;   // handle to rig (nstance)
-  freq_t freq;   // frequency
-  rmode_t rmode; // radio mode of operation
+ private:
+  RIG* my_rig;    // handle to rig (nstance)
+  freq_t freq;    // frequency
+  rmode_t rmode;  // radio mode of operation
   pbwidth_t width;
-  vfo_t vfo;    // vfo selection
-  int strength; // S-Meter level
-  int retcode;  // generic return code from functions
+  vfo_t vfo;     // vfo selection
+  int strength;  // S-Meter level
+  int retcode;   // generic return code from functions
   rig_model_t myrig_model;
   bool rigControlEnabled;
   void errorMessage(int errorCode, QString command);

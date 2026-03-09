@@ -50,12 +50,10 @@ esstvMode sstvModeIndexTx;
   \param clock the adjusted samplingrate
   \param transmit true if time table for transmit
 */
-void setupSSTVLineTimeTable(esstvMode modeIndex, DSPFLOAT clock, bool transmit)
-{
+void setupSSTVLineTimeTable(esstvMode modeIndex, DSPFLOAT clock, bool transmit) {
   unsigned int i;
   if (transmit) {
-    if (lineTimeTableTX != nullptr)
-      delete[] lineTimeTableTX;
+    if (lineTimeTableTX != nullptr) delete[] lineTimeTableTX;
     lineTimeTableTX = new DSPFLOAT[SSTVTable[modeIndex].numberOfDataLines + 1];
     for (i = 0; i < SSTVTable[modeIndex].numberOfDataLines + 1; i++) {
       lineTimeTableTX[i] = ((SSTVTable[modeIndex].imageTime * (static_cast<DSPFLOAT>(i))) /
@@ -63,8 +61,7 @@ void setupSSTVLineTimeTable(esstvMode modeIndex, DSPFLOAT clock, bool transmit)
                            clock;
     }
   } else {
-    if (lineTimeTableRX != nullptr)
-      delete[] lineTimeTableRX;
+    if (lineTimeTableRX != nullptr) delete[] lineTimeTableRX;
     lineTimeTableRX = new DSPFLOAT[SSTVTable[modeIndex].numberOfDataLines + 1];
     for (i = 0; i < SSTVTable[modeIndex].numberOfDataLines + 1; i++) {
       lineTimeTableRX[i] = ((SSTVTable[modeIndex].imageTime * (static_cast<DSPFLOAT>(i))) /
@@ -78,13 +75,11 @@ void setupSSTVLineTimeTable(esstvMode modeIndex, DSPFLOAT clock, bool transmit)
   return the linelength expressed in number of samples
 */
 
-DSPFLOAT getLineLength(esstvMode modeIndex, DSPFLOAT clock)
-{
+DSPFLOAT getLineLength(esstvMode modeIndex, DSPFLOAT clock) {
   return (SSTVTable[modeIndex].imageTime / static_cast<DSPFLOAT>(SSTVTable[modeIndex].numberOfDataLines)) * clock;
 }
 
-void dumpSamplesPerLine()
-{
+void dumpSamplesPerLine() {
   int i;
   for (i = 0; i < ENDNARROW; i++) {
     QString msg = QString("%1  %2")
@@ -100,10 +95,7 @@ void dumpSamplesPerLine()
   return the sync width expressed in number of samples
 */
 
-DSPFLOAT getSyncWidth(esstvMode modeIndex, DSPFLOAT clock)
-{
-  return (SSTVTable[modeIndex].sync * clock);
-}
+DSPFLOAT getSyncWidth(esstvMode modeIndex, DSPFLOAT clock) { return (SSTVTable[modeIndex].sync * clock); }
 
 
 /**
@@ -114,8 +106,7 @@ DSPFLOAT getSyncWidth(esstvMode modeIndex, DSPFLOAT clock)
   \param[in] tx if set to true then parameters for transmit
   \return Returns the modeIndex if successful else NOTVALID
 */
-esstvMode initializeParametersVIS(unsigned int viscode, bool tx)
-{
+esstvMode initializeParametersVIS(unsigned int viscode, bool tx) {
   esstvMode t;
   t = lookupVIS(viscode);
   initializeSSTVParametersIndex(t, tx);
@@ -131,8 +122,7 @@ esstvMode initializeParametersVIS(unsigned int viscode, bool tx)
  * \param[in] tx if set to true then parameters for transmit
  * \return true if successful
 */
-bool initializeSSTVParametersIndex(esstvMode modeIndex, bool tx)
-{
+bool initializeSSTVParametersIndex(esstvMode modeIndex, bool tx) {
   if (modeIndex < NUMSSTVMODES) {
     if (tx)
       txSSTVParam = SSTVTable[modeIndex];
@@ -152,8 +142,7 @@ bool initializeSSTVParametersIndex(esstvMode modeIndex, bool tx)
 
 
 #ifndef QT_NO_DEBUG
-void printActiveSSTVParam(bool tx)
-{
+void printActiveSSTVParam(bool tx) {
   double clock;
   sSSTVParam* SSTVParam;
   if (tx) {
@@ -185,10 +174,8 @@ void printActiveSSTVParam(bool) {}
  * @param vc VIS code of the mode to select
  * @return Returns the modeIndex if successful else NOTVALID
  */
-esstvMode lookupVIS(unsigned int vc)
-{
-  if (vc == 0)
-    return NOTVALID;
+esstvMode lookupVIS(unsigned int vc) {
+  if (vc == 0) return NOTVALID;
   esstvMode t = M1;
   do {
     if (SSTVTable[static_cast<int>(t)].VISCode == vc) {
@@ -196,8 +183,7 @@ esstvMode lookupVIS(unsigned int vc)
     }
     t = static_cast<esstvMode>(t + 1);
   } while (t < NUMSSTVMODES);
-  if (t >= NUMSSTVMODES)
-    return NOTVALID;
+  if (t >= NUMSSTVMODES) return NOTVALID;
   return t;
 }
 
@@ -209,10 +195,8 @@ esstvMode lookupVIS(unsigned int vc)
   \return  short name of the mode or empty string if not a valid mode
 */
 
-QString getSSTVModeNameLong(esstvMode modeIndex)
-{
-  if (modeIndex == NOTVALID)
-    return QString("");
+QString getSSTVModeNameLong(esstvMode modeIndex) {
+  if (modeIndex == NOTVALID) return QString("");
   return (SSTVTable[static_cast<int>(modeIndex)].name);
 }
 
@@ -224,10 +208,8 @@ QString getSSTVModeNameLong(esstvMode modeIndex)
   \return short name of the mode or empty string  if not a valid mode
 */
 
-QString getSSTVModeNameShort(esstvMode modeIndex)
-{
-  if (modeIndex == NOTVALID)
-    return QString("");
+QString getSSTVModeNameShort(esstvMode modeIndex) {
+  if (modeIndex == NOTVALID) return QString("");
   return (SSTVTable[static_cast<int>(modeIndex)].shortName);
 }
 
@@ -253,8 +235,7 @@ QString getSSTVModeNameShort(esstvMode modeIndex)
   \return returns the modeIndex or NOTVALID if none found
 */
 
-esstvMode modeLookup(unsigned int lineLength, DSPFLOAT clock)
-{
+esstvMode modeLookup(unsigned int lineLength, DSPFLOAT clock) {
   int i;
   DSPFLOAT errLine, totalError;
   totalError = 9999999;
@@ -268,13 +249,11 @@ esstvMode modeLookup(unsigned int lineLength, DSPFLOAT clock)
       totalError = errLine;
     }
   }
-  if (totalError < 0.001)
-    return lmode;
+  if (totalError < 0.001) return lmode;
   return NOTVALID;
 }
 
-bool lineIsValid(esstvMode mode, unsigned int lineLength, DSPFLOAT clock)
-{
+bool lineIsValid(esstvMode mode, unsigned int lineLength, DSPFLOAT clock) {
   DSPFLOAT errLine;
   errLine = 1. - static_cast<DSPFLOAT>(lineLength) /
                      ((SSTVTable[mode].imageTime / (static_cast<DSPFLOAT>(SSTVTable[mode].numberOfDataLines))) * clock);
@@ -285,15 +264,13 @@ bool lineIsValid(esstvMode mode, unsigned int lineLength, DSPFLOAT clock)
 /**
   returns the value (in samples) of the longest line in the table
   */
-DSPFLOAT longestLine(DSPFLOAT clock)
-{
+DSPFLOAT longestLine(DSPFLOAT clock) {
   int i;
   DSPFLOAT highest = 0;
   DSPFLOAT length;
   for (i = 0; i < static_cast<int>(AVT24); i++) {
     length = (SSTVTable[i].imageTime / static_cast<DSPFLOAT>(SSTVTable[i].numberOfDataLines)) * clock;
-    if (length > highest)
-      highest = length;
+    if (length > highest) highest = length;
   }
   return highest;
 }
@@ -407,16 +384,16 @@ sSSTVParam SSTVTable[NUMSSTVMODES + 1] = {
 // sFAXParam FAXTable[NUMFAXMODES+1]=
 //{
 ////  name      shortName     mode      modulation     lpm  ioc  lines  pixels carr dev  start sFreq stop sFreq  phL
-///invert  colorM
+/// invert  colorM
 
 //	{"NOAA"    	 ,"NOAA",		 NOAA       ,DEMODAM,      120.,  576,  800, 1810, 2400, 400,  0   , 300,  0,  450 ,  0,
-//false,  1},
+// false,  1},
 //	{"HFFAX"   	 ,"HFFXAX",	 HFFAX      ,DEMODFM,      120.,  288,  800,  905, 1900, 400,  5   , 300,  5,  450 , 20,
-//false,  1},
+// false,  1},
 //	{"Custom"    ,"Custom",	 FAXCUSTOM  ,DEMODAM,      121.,  288,  180,  905, 1900, 400,  5   , 300,  5,  450 , 20,
-//false,  1},
+// false,  1},
 //	{"No Mode"   ,"NOTVALID",FAXNONE    ,0,         0,    0,    0,     0,  0,   0,  0   ,   0,  0,    0 ,  0,  false,
-//0},
+// 0},
 //};
 
 // #ifndef QT_NO_DEBUG
@@ -508,15 +485,13 @@ sSSTVParam SSTVTable[NUMSSTVMODES + 1] = {
 
 //}
 
-quint32 getMaxLineSamples()
-{
+quint32 getMaxLineSamples() {
   int i;
   DSPFLOAT maxTime = 0;
   DSPFLOAT time;
   for (i = M1; i <= FAX480; i++) {
     time = SSTVTable[i].imageTime / static_cast<DSPFLOAT>(SSTVTable[i].numberOfDataLines);
-    if (time > maxTime)
-      maxTime = time;
+    if (time > maxTime) maxTime = time;
   }
   return rint(maxTime * SAMPLERATE);
 }

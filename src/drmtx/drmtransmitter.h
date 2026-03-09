@@ -6,20 +6,16 @@
 #include "drmparams.h"
 
 
-class drmTransmitter
-{
-public:
+class drmTransmitter {
+ public:
   drmTransmitter();
   ~drmTransmitter();
   void init(QByteArray* ba, QString name, QString format, drmTxParams params);
   void start(bool startTx);
-  double getDuration()
-  {
-    return duration;
-  } // expressed in seconds
+  double getDuration() { return duration; }  // expressed in seconds
   double transmissionTime;
 
-private:
+ private:
   CDRMTransmitter* DRMTransmitter;
   CParameter* TransmParam;
   int dataLength;
@@ -27,4 +23,4 @@ private:
 };
 
 
-#endif // DRMTRANSMITTER_H
+#endif  // DRMTRANSMITTER_H

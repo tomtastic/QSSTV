@@ -14,16 +14,14 @@ extern bool saveTXimages;
 extern QString docURL;
 extern bool recursiveScanDirs;
 
-namespace Ui
-{
+namespace Ui {
 class directoriesConfig;
 }
 
-class directoriesConfig : public baseConfig
-{
+class directoriesConfig : public baseConfig {
   Q_OBJECT
 
-public:
+ public:
   explicit directoriesConfig(QWidget* parent = 0);
   ~directoriesConfig();
   void readSettings();
@@ -31,7 +29,7 @@ public:
   void getParams();
   void setParams();
 
-private slots:
+ private slots:
   void slotBrowseRxSSTVImagesPath();
   void slotBrowseRxDRMImagesPath();
   void slotBrowseTxSSTVImagesPath();
@@ -40,9 +38,9 @@ private slots:
   void slotBrowseTemplatesPath();
   void slotBrowseAudioPath();
 
-private:
+ private:
   Ui::directoriesConfig* ui;
   void createDir(QString path);
 };
 
-#endif // DIRECTORIES_H
+#endif  // DIRECTORIES_H

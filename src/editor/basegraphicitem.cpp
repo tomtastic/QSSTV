@@ -18,14 +18,12 @@ QString itemTypeStr[NUMITEMTYPES] = {"Base", "Rectangle", "Ellipse", "Image", "L
 
 const qreal penWidthZero = static_cast<qreal>(0.00000001);
 
-QPainterPath graphItemBase::qt_graphicsItem_shapeFromPath(const QPainterPath& path, const QPen& pen) const
-{
+QPainterPath graphItemBase::qt_graphicsItem_shapeFromPath(const QPainterPath& path, const QPen& pen) const {
   // We unfortunately need this hack as QPainterPathStroker will set a width of 1.0
   // if we pass a value of 0.0 to QPainterPathStroker::setWidth()
 
 
-  if (path == QPainterPath())
-    return path;
+  if (path == QPainterPath()) return path;
   QPainterPathStroker ps;
   ps.setCapStyle(pen.capStyle());
   if (pen.widthF() <= 0.0)
@@ -40,10 +38,9 @@ QPainterPath graphItemBase::qt_graphicsItem_shapeFromPath(const QPainterPath& pa
 }
 
 
-graphItemBase::graphItemBase(QMenu* cntxtMenu)
-{
+graphItemBase::graphItemBase(QMenu* cntxtMenu) {
   param.rct = QRectF(0, 0, 100, 100);
-  m_ResizeHandles.fill(QRect(0, 0, 0, 0), 8); // initially empty handles
+  m_ResizeHandles.fill(QRect(0, 0, 0, 0), 8);  // initially empty handles
   m_MousePressed = false;
   m_IsResizing = false;
   setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges | QGraphicsItem::ItemIsSelectable);
@@ -56,26 +53,18 @@ graphItemBase::graphItemBase(QMenu* cntxtMenu)
   markedForDeletion = false;
 }
 
-graphItemBase::~graphItemBase()
-{
-  prepareGeometryChange();
-}
+graphItemBase::~graphItemBase() { prepareGeometryChange(); }
 
-QPainterPath graphItemBase::shape() const
-{
+QPainterPath graphItemBase::shape() const {
   QPainterPath path;
   path.addRect(param.rct.adjusted(-2 * HSIZE, -2 * HSIZE, 2 * HSIZE, 2 * HSIZE));
   return qt_graphicsItem_shapeFromPath(path, pen());
 }
 
-QRectF graphItemBase::boundingRect() const
-{
-  return shape().boundingRect();
-}
+QRectF graphItemBase::boundingRect() const { return shape().boundingRect(); }
 
 
-void graphItemBase::load(QDataStream& str)
-{
+void graphItemBase::load(QDataStream& str) {
   //	str << type(); this item is already read by the loader
   QTransform f;
   QPointF p;
@@ -116,8 +105,7 @@ void graphItemBase::load(QDataStream& str)
   getParam();
 }
 
-void graphItemBase::save(QDataStream& str)
-{
+void graphItemBase::save(QDataStream& str) {
   str << type();
   str << param.rotation;
   str << param.hShear;
@@ -136,16 +124,14 @@ void graphItemBase::save(QDataStream& str)
   param.gradient.save(str);
 }
 
-void graphItemBase::setTransform(int rot, double hs, double vs)
-{
+void graphItemBase::setTransform(int rot, double hs, double vs) {
   param.rotation = rot;
   param.hShear = hs;
   param.vShear = vs;
   setTransform();
 }
 
-void graphItemBase::setTransform()
-{
+void graphItemBase::setTransform() {
   QTransform tx;
   tx.translate(rect().x() + rect().width() / 2, rect().y() + rect().height() / 2);
   tx.shear(param.hShear, param.vShear);
@@ -155,8 +141,7 @@ void graphItemBase::setTransform()
   update();
 }
 
-sitemParam graphItemBase::getParam()
-{
+sitemParam graphItemBase::getParam() {
   param.zValue = zValue();
   param.type = type();
   param.pen = pen();
@@ -165,8 +150,7 @@ sitemParam graphItemBase::getParam()
   return param;
 }
 
-void graphItemBase::setParam(sitemParam sp)
-{
+void graphItemBase::setParam(sitemParam sp) {
   setPen(sp.pen);
   setBrush(sp.fillColor);
   setFont(sp.font);
@@ -186,8 +170,7 @@ void graphItemBase::setParam(sitemParam sp)
   param.menu = sp.menu;
 }
 
-void graphItemBase::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
-{
+void graphItemBase::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
   Q_UNUSED(widget)
   QPointF center;
   QRectF br;
@@ -197,48 +180,47 @@ void graphItemBase::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
   } else {
     selected = false;
   }
-  if (!scene())
-    return;
+  if (!scene()) return;
   if (scene()->views().isEmpty()) {
     scale = 1;
   } else {
-    scale = scene()->views().at(0)->transform().m11(); // get current scale factor
+    scale = scene()->views().at(0)->transform().m11();  // get current scale factor
   }
 
 
-  float rectSize = RSIZE / scale; // this is to maintain same size for resize handle rects
+  float rectSize = RSIZE / scale;  // this is to maintain same size for resize handle rects
   QRectF handles(0, 0, rectSize, rectSize);
   br = boundingRect();
   if (selected) {
     painter->fillRect(br, QBrush(QColor(128, 128, 255, 128)));
     if (param.type != LINE) {
       // resize handles
-      handles.moveTopLeft(br.topLeft()); // TopLeft
+      handles.moveTopLeft(br.topLeft());  // TopLeft
       m_ResizeHandles.replace(0, handles);
 
-      handles.moveTopRight(br.topRight()); // TopRight
+      handles.moveTopRight(br.topRight());  // TopRight
       m_ResizeHandles.replace(2, handles);
 
-      handles.moveBottomRight(br.bottomRight()); // BottomRight
+      handles.moveBottomRight(br.bottomRight());  // BottomRight
       m_ResizeHandles.replace(4, handles);
 
-      handles.moveBottomLeft(br.bottomLeft()); // BottomLeft
+      handles.moveBottomLeft(br.bottomLeft());  // BottomLeft
       m_ResizeHandles.replace(6, handles);
 
-      center = QPointF(br.center().x(), br.top() + HSIZE); // Top
+      center = QPointF(br.center().x(), br.top() + HSIZE);  // Top
       handles.moveCenter(center);
       m_ResizeHandles.replace(1, handles);
 
-      center = QPointF(br.center().x(), br.bottom() - HSIZE); // Bottom
+      center = QPointF(br.center().x(), br.bottom() - HSIZE);  // Bottom
       handles.moveCenter(center);
       m_ResizeHandles.replace(5, handles);
     }
 
-    center = QPointF(br.right() - HSIZE, br.center().y()); // Right
+    center = QPointF(br.right() - HSIZE, br.center().y());  // Right
     handles.moveCenter(center);
     m_ResizeHandles.replace(3, handles);
 
-    center = QPointF(br.left() + HSIZE, br.center().y()); // Left
+    center = QPointF(br.left() + HSIZE, br.center().y());  // Left
     handles.moveCenter(center);
     m_ResizeHandles.replace(7, handles);
 
@@ -251,8 +233,7 @@ void graphItemBase::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     qreal arrowSize = ARROWSIZE / scale;
     QPointF point = m_RotateLine.p2();
     double angle = ::acos(m_RotateLine.dx() / m_RotateLine.length());
-    if (m_RotateLine.dy() >= 0)
-      angle = (2.0 * M_PI) - angle;
+    if (m_RotateLine.dy() >= 0) angle = (2.0 * M_PI) - angle;
     QPointF destArrowP1 = point + QPointF(sin(angle - M_PI / 3.0) * arrowSize, cos(angle - M_PI / 3.0) * arrowSize);
     QPointF destArrowP2 =
         point + QPointF(sin(angle - M_PI + M_PI / 3.0) * arrowSize, cos(angle - M_PI + M_PI / 3.0) * arrowSize);
@@ -269,7 +250,7 @@ void graphItemBase::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
   drawItem(painter);
 
   QPen pens;
-  pens.setCosmetic(true); // to maintain same width of pen across zoom levels
+  pens.setCosmetic(true);  // to maintain same width of pen across zoom levels
 
   painter->setPen(pens);
 
@@ -292,8 +273,7 @@ void graphItemBase::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
   }
 }
 
-void graphItemBase::drawBorder(QPainter* painter)
-{
+void graphItemBase::drawBorder(QPainter* painter) {
   QPen lpen(pen());
   qreal pad = lpen.widthF() / 2;
   painter->setBrush(Qt::NoBrush);
@@ -303,20 +283,17 @@ void graphItemBase::drawBorder(QPainter* painter)
 }
 
 
-void graphItemBase::mousePressEvent(QGraphicsSceneMouseEvent* event)
-{
+void graphItemBase::mousePressEvent(QGraphicsSceneMouseEvent* event) {
   m_MousePressed = true;
-  m_IsResizing = mousePosOnHandles(event->scenePos()); // to check event on corners or not
+  m_IsResizing = mousePosOnHandles(event->scenePos());  // to check event on corners or not
   if (m_IsResizing) {
     m_ActualRect = param.rct;
   }
   QGraphicsItem::mousePressEvent(event);
 }
 
-void graphItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
-{
-  if (param.locked)
-    return;
+void graphItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+  if (param.locked) return;
 
   QRectF m_BoundingRect(boundingRect());
 
@@ -396,10 +373,8 @@ void graphItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
       param.rotation = round(rotation());
     }
     if (changed) {
-      if (m_BoundingRect.width() < 4 * HSIZE)
-        m_BoundingRect.setWidth(4 * HSIZE);
-      if (m_BoundingRect.height() < 4 * HSIZE)
-        m_BoundingRect.setHeight(4 * HSIZE);
+      if (m_BoundingRect.width() < 4 * HSIZE) m_BoundingRect.setWidth(4 * HSIZE);
+      if (m_BoundingRect.height() < 4 * HSIZE) m_BoundingRect.setHeight(4 * HSIZE);
       param.rct = m_BoundingRect.adjusted(2 * HSIZE, 2 * HSIZE, -2 * HSIZE, -2 * HSIZE);
       qreal penw = pen().widthF() / 2;
       param.rct = param.rct.adjusted(penw, penw, -penw, -penw);
@@ -414,12 +389,11 @@ void graphItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
   }
 }
 
-void graphItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
-{
+void graphItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
   QRectF m_BoundingRect(param.rct.adjusted(-2 * HSIZE, -2 * HSIZE, 2 * HSIZE, 2 * HSIZE));
   m_MousePressed = false;
   m_IsResizing = false;
-  if (m_ActualRect != m_BoundingRect) { // Rotating won't trigger this, only resizing.
+  if (m_ActualRect != m_BoundingRect) {  // Rotating won't trigger this, only resizing.
     QPointF oldScenePos = scenePos();
     setTransformOriginPoint(m_BoundingRect.center());
     QPointF newScenePos = scenePos();
@@ -435,10 +409,8 @@ void graphItemBase::hoverEnterEvent(QGraphicsSceneHoverEvent*) {}
 
 void graphItemBase::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {}
 
-void graphItemBase::hoverMoveEvent(QGraphicsSceneHoverEvent*)
-{
-  if (param.type == SBORDER)
-    return;
+void graphItemBase::hoverMoveEvent(QGraphicsSceneHoverEvent*) {
+  if (param.type == SBORDER) return;
   if (param.locked) {
     setCursor(Qt::ForbiddenCursor);
   } else {
@@ -448,17 +420,14 @@ void graphItemBase::hoverMoveEvent(QGraphicsSceneHoverEvent*)
 
 void graphItemBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) {}
 
-void graphItemBase::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
-{
-  if (param.type == SBORDER)
-    return;
+void graphItemBase::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+  if (param.type == SBORDER) return;
   setSelected(true);
   param.menu->exec(event->screenPos());
 }
 
 
-bool graphItemBase::mousePosOnHandles(QPointF pos)
-{
+bool graphItemBase::mousePosOnHandles(QPointF pos) {
   bool resizable = false;
   int rem4Index = 8;
 

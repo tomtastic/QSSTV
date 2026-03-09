@@ -34,8 +34,7 @@
 
 
 /* Implementation *************************************************************/
-void CEngergyDispersal::ProcessData(CVector<_BINARY>* pbiData)
-{
+void CEngergyDispersal::ProcessData(CVector<_BINARY>* pbiData) {
   int i;
   uint32_t iTempShiftRegister;
   _BINARY biPRBSbit;
@@ -76,8 +75,7 @@ void CEngergyDispersal::ProcessData(CVector<_BINARY>* pbiData)
   }
 }
 
-void CEngergyDispersal::Init(int iNewNumInBits, int iNewLengthVSPP)
-{
+void CEngergyDispersal::Init(int iNewNumInBits, int iNewLengthVSPP) {
   /* Set the internal parameters */
   iNumInBits = iNewNumInBits;
   iEndIndVSPP = iNewLengthVSPP;

@@ -32,8 +32,7 @@ const QString stateStr[modeBase::MBTXGAPROBOT + 1] = {"ERROR",  "SETUPLINE", "PI
                                                       "RXWAIT", "MB1500",    "MB2300", "TXGAP", "TXGAPROBOT"};
 
 
-modeBase::modeBase(esstvMode m, unsigned int len, bool tx, bool narrowMode)
-{
+modeBase::modeBase(esstvMode m, unsigned int len, bool tx, bool narrowMode) {
   mode = m;
   narrow = narrowMode;
   if (narrow) {
@@ -54,7 +53,7 @@ modeBase::modeBase(esstvMode m, unsigned int len, bool tx, bool narrowMode)
   pixelArrayPtr = nullptr;
   pixelPositionTable = nullptr;
   debugStatePtr = nullptr;
-  addToLog(QString("mb constructor mode=%1").arg((int) m), LOGMODES);
+  addToLog(QString("mb constructor mode=%1").arg((int)m), LOGMODES);
   if (transmit) {
     localClock = txClock;
     activeSSTVParam = &txSSTVParam;
@@ -64,10 +63,7 @@ modeBase::modeBase(esstvMode m, unsigned int len, bool tx, bool narrowMode)
   }
 }
 
-modeBase::~modeBase()
-{
-  deleteBuffers();
-}
+modeBase::~modeBase() { deleteBuffers(); }
 
 
 /**
@@ -75,20 +71,13 @@ modeBase::~modeBase()
 
     Deletes all buffers, and sets the pointers to nullptr;
  */
-void modeBase::deleteBuffers()
-{
-  if (pixelPositionTable)
-    delete[] pixelPositionTable;
-  if (greenArrayPtr)
-    delete[] greenArrayPtr;
-  if (blueArrayPtr)
-    delete[] blueArrayPtr;
-  if (redArrayPtr)
-    delete[] redArrayPtr;
-  if (yArrayPtr)
-    delete[] yArrayPtr;
-  if (debugStatePtr)
-    delete[] debugStatePtr;
+void modeBase::deleteBuffers() {
+  if (pixelPositionTable) delete[] pixelPositionTable;
+  if (greenArrayPtr) delete[] greenArrayPtr;
+  if (blueArrayPtr) delete[] blueArrayPtr;
+  if (redArrayPtr) delete[] redArrayPtr;
+  if (yArrayPtr) delete[] yArrayPtr;
+  if (debugStatePtr) delete[] debugStatePtr;
   greenArrayPtr = blueArrayPtr = redArrayPtr = yArrayPtr = nullptr;
   debugStatePtr = nullptr;
   pixelPositionTable = nullptr;
@@ -103,8 +92,7 @@ void modeBase::deleteBuffers()
   \param[in] clk adjusted receive clock
 */
 
-void modeBase::init(DSPFLOAT clk)
-{
+void modeBase::init(DSPFLOAT clk) {
   localClock = clk;
   lineCounter = 0;
   displayLineCounter = 0;
@@ -149,17 +137,15 @@ void modeBase::init(DSPFLOAT clk)
 }
 
 
-void modeBase::redrawFast(bool r)
-{
+void modeBase::redrawFast(bool r) {
   fastRedraw = r;
   if (!fastRedraw) {
     lineDisplayEvent* ce = new lineDisplayEvent(displayLineCounter);
-    QApplication::postEvent(dispatcherPtr, ce); // Qt will delete it when done
+    QApplication::postEvent(dispatcherPtr, ce);  // Qt will delete it when done
   }
 }
 
-modeBase::eModeBase modeBase::process(quint16* demod, unsigned int syncPos, bool goToSync, unsigned int rxPos)
-{
+modeBase::eModeBase modeBase::process(quint16* demod, unsigned int syncPos, bool goToSync, unsigned int rxPos) {
   Q_UNUSED(rxPos);
   unsigned int i = 0;
   if (goToSync) {
@@ -167,8 +153,7 @@ modeBase::eModeBase modeBase::process(quint16* demod, unsigned int syncPos, bool
       addToLog(QString("modebase:process: syncPos: %1 > length %2").arg(syncPos).arg(length), LOGMODES);
       return MBENDOFIMAGE;
     } else {
-      for (i = 0; i < syncPos; i++)
-        ; // debugStatePtr[i]=debugState;
+      for (i = 0; i < syncPos; i++);  // debugStatePtr[i]=debugState;
     }
     rxSampleCounter += syncPos;
   }
@@ -179,7 +164,7 @@ modeBase::eModeBase modeBase::process(quint16* demod, unsigned int syncPos, bool
         showLine();
         if (!fastRedraw) {
           lineDisplayEvent* ce = new lineDisplayEvent(displayLineCounter);
-          QApplication::postEvent(dispatcherPtr, ce); // Qt will delete it when done
+          QApplication::postEvent(dispatcherPtr, ce);  // Qt will delete it when done
         }
         lineCounter++;
         if (displayLineCounter >= activeSSTVParam->numberOfDisplayLines) {
@@ -196,74 +181,72 @@ modeBase::eModeBase modeBase::process(quint16* demod, unsigned int syncPos, bool
     debugStatePtr[i] = debugState;
 
     switch (state) {
-    case MBPIXELS:
-      if (getPixels()) {
-        switchState(MBSETUPLINE);
-      }
-      break;
-    case MBEOIMAGE:
-      return MBENDOFIMAGE;
-      break;
-    case MBRXWAIT:
-      if (sampleCounter >= marker) {
-        switchState(MBSETUPLINE);
-      }
-      break;
-    case MBSYNC:
-      if (sampleCounter >= syncPosition) {
-        //    addToLog(QString("modebase:mbsync =%1").arg(sampleCounter+rxSampleCounter),LOGMODES);
-        switchState(MBSETUPLINE);
-      }
-      break;
-    case MB1500: {
-      // check ODD/EVEN Line for Robot 12/36
-      if (sampleCounter >= marker) {
-        logFilePtr->addToAux(QString("m15avg\t%1\t%2\t%3")
-                                 .arg(avgFreqGap)
-                                 .arg(avgFreqGapCounter - AVGFRQOFFSET)
-                                 .arg(avgFreqGap / (avgFreqGapCounter - AVGFRQOFFSET)));
-        avgFreqGap /= (avgFreqGapCounter - AVGFRQOFFSET);
-        addToLog(QString("GapCounter1 %1 at %2").arg(avgFreqGap).arg(sampleCounter), LOGMODES);
-        if (avgFreqGap > 2100) {
-          //                    subLine=10;
-          avgOddEvenFreq = avgFreqGap;
-          logFilePtr->addToAux(QString("m15 eval: %1").arg(avgOddEvenFreq));
+      case MBPIXELS:
+        if (getPixels()) {
+          switchState(MBSETUPLINE);
         }
-        switchState(MBSETUPLINE);
-      } else {
-        if (avgFreqGapCounter >= AVGFRQOFFSET)
-          avgFreqGap += demod[i];
-        avgFreqGapCounter++;
-        logFilePtr->addToAux(QString("m15\t%1\t%2\t%3").arg(demod[i]).arg(avgFreqGapCounter).arg(avgFreqGap));
-      }
-    } break;
-    case MB2300: {
-      // check ODD/EVEN Line for Robot 12/36
-      if (sampleCounter >= marker) {
-        logFilePtr->addToAux(QString("m23avg\t%1\t%2\t%3")
-                                 .arg(avgFreqGap)
-                                 .arg(avgFreqGapCounter - AVGFRQOFFSET)
-                                 .arg(avgFreqGap / (avgFreqGapCounter - AVGFRQOFFSET)));
-        avgFreqGap /= (avgFreqGapCounter - AVGFRQOFFSET);
-        addToLog(QString("GapCounter2 %1 at %2").arg(avgFreqGap).arg(sampleCounter), LOGMODES);
-        if (avgFreqGap < 1700) {
-          addToLog(QString("Switching to 1500 GapCounter2 %1 at %2").arg(avgFreqGap).arg(i + rxPos), LOGMODES);
-          if (avgOddEvenFreq > avgFreqGap) {
-            subLine = 3;
-            logFilePtr->addToAux("m23 switch subline 3");
+        break;
+      case MBEOIMAGE:
+        return MBENDOFIMAGE;
+        break;
+      case MBRXWAIT:
+        if (sampleCounter >= marker) {
+          switchState(MBSETUPLINE);
+        }
+        break;
+      case MBSYNC:
+        if (sampleCounter >= syncPosition) {
+          //    addToLog(QString("modebase:mbsync =%1").arg(sampleCounter+rxSampleCounter),LOGMODES);
+          switchState(MBSETUPLINE);
+        }
+        break;
+      case MB1500: {
+        // check ODD/EVEN Line for Robot 12/36
+        if (sampleCounter >= marker) {
+          logFilePtr->addToAux(QString("m15avg\t%1\t%2\t%3")
+                                   .arg(avgFreqGap)
+                                   .arg(avgFreqGapCounter - AVGFRQOFFSET)
+                                   .arg(avgFreqGap / (avgFreqGapCounter - AVGFRQOFFSET)));
+          avgFreqGap /= (avgFreqGapCounter - AVGFRQOFFSET);
+          addToLog(QString("GapCounter1 %1 at %2").arg(avgFreqGap).arg(sampleCounter), LOGMODES);
+          if (avgFreqGap > 2100) {
+            //                    subLine=10;
+            avgOddEvenFreq = avgFreqGap;
+            logFilePtr->addToAux(QString("m15 eval: %1").arg(avgOddEvenFreq));
           }
+          switchState(MBSETUPLINE);
+        } else {
+          if (avgFreqGapCounter >= AVGFRQOFFSET) avgFreqGap += demod[i];
+          avgFreqGapCounter++;
+          logFilePtr->addToAux(QString("m15\t%1\t%2\t%3").arg(demod[i]).arg(avgFreqGapCounter).arg(avgFreqGap));
         }
-        switchState(MBSETUPLINE);
-      } else {
-        if (avgFreqGapCounter >= AVGFRQOFFSET)
-          avgFreqGap += demod[i];
-        avgFreqGapCounter++;
-        logFilePtr->addToAux(QString("m23\t%1\t%2\t%3").arg(demod[i]).arg(avgFreqGapCounter).arg(avgFreqGap));
-      }
-    } break;
-    default:
-      addToLog(QString("unknown state in modeBase: %1 receive").arg((int) state), LOGMODES);
-      break;
+      } break;
+      case MB2300: {
+        // check ODD/EVEN Line for Robot 12/36
+        if (sampleCounter >= marker) {
+          logFilePtr->addToAux(QString("m23avg\t%1\t%2\t%3")
+                                   .arg(avgFreqGap)
+                                   .arg(avgFreqGapCounter - AVGFRQOFFSET)
+                                   .arg(avgFreqGap / (avgFreqGapCounter - AVGFRQOFFSET)));
+          avgFreqGap /= (avgFreqGapCounter - AVGFRQOFFSET);
+          addToLog(QString("GapCounter2 %1 at %2").arg(avgFreqGap).arg(sampleCounter), LOGMODES);
+          if (avgFreqGap < 1700) {
+            addToLog(QString("Switching to 1500 GapCounter2 %1 at %2").arg(avgFreqGap).arg(i + rxPos), LOGMODES);
+            if (avgOddEvenFreq > avgFreqGap) {
+              subLine = 3;
+              logFilePtr->addToAux("m23 switch subline 3");
+            }
+          }
+          switchState(MBSETUPLINE);
+        } else {
+          if (avgFreqGapCounter >= AVGFRQOFFSET) avgFreqGap += demod[i];
+          avgFreqGapCounter++;
+          logFilePtr->addToAux(QString("m23\t%1\t%2\t%3").arg(demod[i]).arg(avgFreqGapCounter).arg(avgFreqGap));
+        }
+      } break;
+      default:
+        addToLog(QString("unknown state in modeBase: %1 receive").arg((int)state), LOGMODES);
+        break;
     }
     sampleCounter++;
   }
@@ -277,8 +260,7 @@ modeBase::eModeBase modeBase::process(quint16* demod, unsigned int syncPos, bool
   \return true if end of line (all pixels stored)
 */
 
-bool modeBase::getPixels()
-{
+bool modeBase::getPixels() {
   int color;
   double dev = activeSSTVParam->deviation * 2;
   double fc = activeSSTVParam->subcarrier;
@@ -288,18 +270,15 @@ bool modeBase::getPixels()
     //      addToLog(QString("modebase:getPixels[0] =%1").arg(sampleCounter+rxSampleCounter),LOGMODES);
     //      color=128+lround(((double)avgSample/(double)avgSampleCounter-fc)*255./dev);
     color = 128 + lround((static_cast<double>(sample) - fc) * 255. / dev);
-    if (color < 0)
-      color = 0;
-    if (color > 255)
-      color = 255;
+    if (color < 0) color = 0;
+    if (color > 255) color = 255;
     pixelArrayPtr[pixelCounter] = static_cast<unsigned char>(color);
     pixelCounter++;
     avgSample = 0;
     avgSampleCounter = 0;
-    if (pixelCounter >= activeSSTVParam->numberOfPixels)
-      return true;
+    if (pixelCounter >= activeSSTVParam->numberOfPixels) return true;
   }
-  return false; // indicate, it's not the end of the line
+  return false;  // indicate, it's not the end of the line
 }
 
 /**
@@ -309,18 +288,14 @@ bool modeBase::getPixels()
   classes for all other colour modes.
 */
 
-void modeBase::showLine()
-{
-  combineColors();
-}
+void modeBase::showLine() { combineColors(); }
 /**
   \brief transfer data to rxImage in RGB mode
 
   Combine  R, G and B arrays (like in Martin mode) into the rxImage and advances the displayCounter
 */
 
-void modeBase::combineColors()
-{
+void modeBase::combineColors() {
   unsigned int i;
   QRgb* pixelArray = rxWidgetPtr->getImageViewerPtr()->getScanLineAddress(displayLineCounter);
   for (i = 0; i < activeSSTVParam->numberOfPixels; i++) {
@@ -340,8 +315,7 @@ void modeBase::combineColors()
 */
 
 
-void modeBase::grayConversion()
-{
+void modeBase::grayConversion() {
   unsigned int i;
   QRgb* pixelArray = rxWidgetPtr->getImageViewerPtr()->getScanLineAddress(displayLineCounter);
   for (i = 0; i < activeSSTVParam->numberOfPixels; i++) {
@@ -356,8 +330,7 @@ void modeBase::grayConversion()
   Combine  Y, U  and V arrays (like in PD modes) into the rxImage and advances the displayCounter
 */
 
-void modeBase::yuvConversion(unsigned char* array)
-{
+void modeBase::yuvConversion(unsigned char* array) {
   unsigned int i;
   int r, g, b;
   QRgb* pixelArray = rxWidgetPtr->getImageViewerPtr()->getScanLineAddress(displayLineCounter);
@@ -377,11 +350,9 @@ void modeBase::yuvConversion(unsigned char* array)
   displayLineCounter++;
 }
 
-modeBase::eModeBase modeBase::transmitImage(imageViewer* iv)
-{
+modeBase::eModeBase modeBase::transmitImage(imageViewer* iv) {
   txImPtr = iv;
-  if (!iv->hasValidImage())
-    return MBENDOFIMAGE;
+  if (!iv->hasValidImage()) return MBENDOFIMAGE;
   addToLog(QString("Starting Transmit Image"), LOGMODES);
   displayLineCounter = 0;
   lineCounter = 0;
@@ -399,33 +370,33 @@ modeBase::eModeBase modeBase::transmitImage(imageViewer* iv)
       pixelCounter = 0;
     }
     switch (state) {
-    case MBPIXELS: {
-      addToLog(QString("MBPIXELS: samplcntr=%1").arg(sampleCounter), LOGMODES);
-      sendPixelBuffer();
-      switchState(MBSETUPLINE); // check for end of subline
-    } break;
-    case MBTXGAP: {
-      //       addToLog(QString("MBTXGAP: samplcntr=%1").arg(sampleCounter),LOGMODES);
-      synthesPtr->sendSamples(txDur, txFreq); // expressed in samples;
-      sampleCounter += txDur;
+      case MBPIXELS: {
+        addToLog(QString("MBPIXELS: samplcntr=%1").arg(sampleCounter), LOGMODES);
+        sendPixelBuffer();
+        switchState(MBSETUPLINE);  // check for end of subline
+      } break;
+      case MBTXGAP: {
+        //       addToLog(QString("MBTXGAP: samplcntr=%1").arg(sampleCounter),LOGMODES);
+        synthesPtr->sendSamples(txDur, txFreq);  // expressed in samples;
+        sampleCounter += txDur;
 
-      switchState(MBSETUPLINE);
-    } break;
-    case MBENDOFLINE: {
-      //     addToLog(QString("MBENDOFLINE samplcntr=%1 line: %2").arg(sampleCounter).arg(lineCounter),LOGMODES);
-      if (++lineCounter >= activeSSTVParam->numberOfDataLines)
-        state = MBEOIMAGE;
-      else {
-        getLine();
         switchState(MBSETUPLINE);
-        subLine = 0;
-      }
+      } break;
+      case MBENDOFLINE: {
+        //     addToLog(QString("MBENDOFLINE samplcntr=%1 line: %2").arg(sampleCounter).arg(lineCounter),LOGMODES);
+        if (++lineCounter >= activeSSTVParam->numberOfDataLines)
+          state = MBEOIMAGE;
+        else {
+          getLine();
+          switchState(MBSETUPLINE);
+          subLine = 0;
+        }
 
-    } break;
-    default:
-      //   addToLog(QString("default: samplcntr=%1").arg(sampleCounter),LOGMODES);
-      sampleCounter = 0;
-      return MBENDOFIMAGE;
+      } break;
+      default:
+        //   addToLog(QString("default: samplcntr=%1").arg(sampleCounter),LOGMODES);
+        sampleCounter = 0;
+        return MBENDOFIMAGE;
     }
   }
   isRunning = false;
@@ -440,8 +411,7 @@ modeBase::eModeBase modeBase::transmitImage(imageViewer* iv)
   Only used for aborting a transmission
 */
 
-void modeBase::abort()
-{
+void modeBase::abort() {
   abortRun = true;
   addToLog("modebase: abort received", LOGMODES);
 }
@@ -453,18 +423,15 @@ void modeBase::abort()
 
 */
 
-void modeBase::sendPixelBuffer()
-{
+void modeBase::sendPixelBuffer() {
   double f;
   // addToLog (QString(" sendPixelBuffer: pixelBuffer: %1").arg(QString::number((ulong)pixelArrayPtr,16)),LOGMODES);
   do {
     f = lowerFreq + (static_cast<double>(pixelArrayPtr[pixelCounter]) * (2300 - lowerFreq) / 255.);
 
     while (sampleCounter < pixelPositionTable[pixelCounter]) {
-      if (f > 2300)
-        f = 2300;
-      if (f < lowerFreq)
-        f = lowerFreq;
+      if (f > 2300) f = 2300;
+      if (f < lowerFreq) f = lowerFreq;
       synthesPtr->sendSample(f);
       sampleCounter++;
     }
@@ -481,14 +448,12 @@ void modeBase::sendPixelBuffer()
 
 */
 
-void modeBase::getLineY(bool evenodd)
-{
+void modeBase::getLineY(bool evenodd) {
   // we will process 2 lines at a time
   //	QColor c;
   int tO, tE;
   int r, yo, ye, b;
-  if ((displayLineCounter & 1) && (evenodd))
-    return; // only even lines accepted
+  if ((displayLineCounter & 1) && (evenodd)) return;  // only even lines accepted
   //  txImPtr->createImage(QSize(activeSSTVParam->numberOfPixels,activeSSTVParam->numberOfDisplayLines),QColor(128,128,128),imageStretch);
   unsigned int* pixelArrayE = txImPtr->getScanLineAddress(displayLineCounter);
   if (evenodd) {
@@ -536,8 +501,7 @@ void modeBase::getLineY(bool evenodd)
 
 */
 
-void modeBase::getLineBW()
-{
+void modeBase::getLineBW() {
   unsigned int t;
   //  txImPtr->createImage(QSize(activeSSTVParam->numberOfPixels,activeSSTVParam->numberOfDisplayLines),QColor(128,128,128),imageStretch);
   unsigned int* pixelArray = txImPtr->getScanLineAddress(displayLineCounter);
@@ -556,8 +520,7 @@ void modeBase::getLineBW()
 
 */
 
-void modeBase::getLine()
-{
+void modeBase::getLine() {
   unsigned int t;
 
   //  txImPtr->createImage(QSize(activeSSTVParam->numberOfPixels,activeSSTVParam->numberOfDisplayLines),QColor(128,128,128));
@@ -580,8 +543,7 @@ void modeBase::getLine()
   displayLineCounter++;
 }
 
-void modeBase::switchState(embState newState)
-{
+void modeBase::switchState(embState newState) {
   //  addToLog(QString("%1 to %2").arg(stateStr[state]).arg(stateStr[newState]),LOGMODES);
   state = newState;
 }

@@ -2,26 +2,21 @@
 #include "configparams.h"
 
 
-soundAlsa::soundAlsa()
-{
+soundAlsa::soundAlsa() {
   captureHandle = nullptr;
   playbackHandle = nullptr;
 }
 
 soundAlsa::~soundAlsa() {}
 
-void soundAlsa::closeDevices()
-{
-  if (captureHandle != nullptr)
-    snd_pcm_close(captureHandle);
+void soundAlsa::closeDevices() {
+  if (captureHandle != nullptr) snd_pcm_close(captureHandle);
   captureHandle = nullptr;
-  if (playbackHandle != nullptr)
-    snd_pcm_close(playbackHandle);
+  if (playbackHandle != nullptr) snd_pcm_close(playbackHandle);
   playbackHandle = nullptr;
 }
 
-bool soundAlsa::init(int samplerate)
-{
+bool soundAlsa::init(int samplerate) {
   int iteration = 0;
   soundDriverOK = false;
   sampleRate = samplerate;
@@ -30,39 +25,33 @@ bool soundAlsa::init(int samplerate)
   tempDevice = outputAudioDevice.left(outputAudioDevice.indexOf(" "));
   for (iteration = 0; iteration < 20; iteration++) {
     err = snd_pcm_open(&playbackHandle, tempDevice.toLatin1().data(), SND_PCM_STREAM_PLAYBACK,
-                       0); // open in blocking mode
+                       0);  // open in blocking mode
     if (err == -EBUSY) {
       msleep(500);
-      continue; // give it another try
+      continue;  // give it another try
     } else {
-      if (!alsaErrorHandler(err, "Unable to open " + outputAudioDevice))
-        return false;
+      if (!alsaErrorHandler(err, "Unable to open " + outputAudioDevice)) return false;
       break;
     }
   }
-  if (!alsaErrorHandler(err, "Unable to open " + outputAudioDevice))
-    return false;
+  if (!alsaErrorHandler(err, "Unable to open " + outputAudioDevice)) return false;
   tempDevice = inputAudioDevice.left(inputAudioDevice.indexOf(" "));
   err = snd_pcm_open(&captureHandle, tempDevice.toLatin1().data(), SND_PCM_STREAM_CAPTURE, 0);
-  if (!alsaErrorHandler(err, "Unable to open " + inputAudioDevice))
-    return false;
+  if (!alsaErrorHandler(err, "Unable to open " + inputAudioDevice)) return false;
   snd_pcm_hw_params_malloc(&hwparams);
   snd_pcm_sw_params_malloc(&swparams);
 
   if (setupSoundParams(true)) {
-    if (setupSoundParams(false))
-      soundDriverOK = true;
+    if (setupSoundParams(false)) soundDriverOK = true;
   }
   snd_pcm_hw_params_free(hwparams);
   snd_pcm_sw_params_free(swparams);
   return soundDriverOK;
 }
 
-void soundAlsa::prepareCapture()
-{
+void soundAlsa::prepareCapture() {
   int err;
-  if (!soundDriverOK)
-    return;
+  if (!soundDriverOK) return;
 #ifdef __FreeBSD__
   snd_pcm_drop(captureHandle);
   snd_pcm_reset(captureHandle);
@@ -75,10 +64,8 @@ void soundAlsa::prepareCapture()
   }
 }
 
-void soundAlsa::preparePlayback()
-{
-  if (!soundDriverOK)
-    return;
+void soundAlsa::preparePlayback() {
+  if (!soundDriverOK) return;
 #ifdef __FreeBSD__
   snd_pcm_drop(captureHandle);
   snd_pcm_reset(captureHandle);
@@ -86,13 +73,11 @@ void soundAlsa::preparePlayback()
   snd_pcm_prepare(playbackHandle);
 }
 
-int soundAlsa::read(int& countAvailable)
-{
+int soundAlsa::read(int& countAvailable) {
   int i, count;
-  if (!soundDriverOK)
-    return 0;
+  if (!soundDriverOK) return 0;
   //  addToLog("1",LOGPERFORM);
-  countAvailable = snd_pcm_avail(captureHandle); // check for available frames
+  countAvailable = snd_pcm_avail(captureHandle);  // check for available frames
   if (countAvailable >= DOWNSAMPLESIZE) {
     addToLog(QString("countAV %1").arg(countAvailable), LOGPERFORM);
     count = snd_pcm_readi(captureHandle, tempRXBuffer, DOWNSAMPLESIZE);
@@ -137,11 +122,9 @@ int soundAlsa::read(int& countAvailable)
   return 0;
 }
 
-int soundAlsa::write(uint numFrames)
-{
+int soundAlsa::write(uint numFrames) {
   int error, framesWritten;
-  if (!soundDriverOK)
-    return 0;
+  if (!soundDriverOK) return 0;
   snd_pcm_sframes_t availp;
   snd_pcm_sframes_t delayp;
   if ((framesWritten = snd_pcm_writei(playbackHandle, tempTXBuffer, numFrames)) < 0) {
@@ -165,7 +148,7 @@ int soundAlsa::write(uint numFrames)
     }
     return -1;
   }
-  if (framesWritten != (int) numFrames) {
+  if (framesWritten != (int)numFrames) {
     errorHandler("Sound write error", QString("Frames written = %1").arg(framesWritten));
   }
   snd_pcm_avail_delay(playbackHandle, &availp, &delayp);
@@ -173,13 +156,11 @@ int soundAlsa::write(uint numFrames)
   return framesWritten;
 }
 
-void soundAlsa::waitPlaybackEnd()
-{
+void soundAlsa::waitPlaybackEnd() {
   //  int i;
   //  snd_pcm_sframes_t availp;
   //  snd_pcm_sframes_t delayp;
-  if (!soundDriverOK)
-    return;
+  if (!soundDriverOK) return;
 
   addToLog("waitPlaybackend", LOGSOUND);
   snd_pcm_drain(playbackHandle);
@@ -193,13 +174,11 @@ void soundAlsa::waitPlaybackEnd()
 }
 
 
-void soundAlsa::flushCapture()
-{
+void soundAlsa::flushCapture() {
   int countAvailable, count;
-  if (!soundDriverOK)
-    return;
-  snd_pcm_readi(captureHandle, tempRXBuffer, DOWNSAMPLESIZE); // dummy read
-  countAvailable = snd_pcm_avail(captureHandle);              // check for available frames
+  if (!soundDriverOK) return;
+  snd_pcm_readi(captureHandle, tempRXBuffer, DOWNSAMPLESIZE);  // dummy read
+  countAvailable = snd_pcm_avail(captureHandle);               // check for available frames
   //  addToLog(QString("counts available %1").arg(countAvailable),LOGPERFORM);
   while (countAvailable >= DOWNSAMPLESIZE) {
     count = snd_pcm_readi(captureHandle, tempRXBuffer, DOWNSAMPLESIZE);
@@ -211,8 +190,7 @@ void soundAlsa::flushCapture()
 
 void soundAlsa::flushPlayback() {}
 
-bool soundAlsa::setupSoundParams(bool isCapture)
-{
+bool soundAlsa::setupSoundParams(bool isCapture) {
   int err = 0;
   int dir = 0;
   snd_pcm_t* handle;
@@ -240,8 +218,7 @@ bool soundAlsa::setupSoundParams(bool isCapture)
 
   /* Set the interleaved read/write format */
   err = snd_pcm_hw_params_set_access(handle, hwparams, SND_PCM_ACCESS_RW_INTERLEAVED);
-  if (!alsaErrorHandler(err, "Access type not available : "))
-    return false;
+  if (!alsaErrorHandler(err, "Access type not available : ")) return false;
 
   /* Set the sample format */
   is32bit = false;
@@ -258,28 +235,25 @@ bool soundAlsa::setupSoundParams(bool isCapture)
     snd_pcm_hw_params_get_channels_min(hwparams, &minChannelsCapture);
     snd_pcm_hw_params_get_channels_max(hwparams, &maxChannelsCapture);
     err = snd_pcm_hw_params_set_channels(handle, hwparams, minChannelsCapture);
-    if (!alsaErrorHandler(err, "Channels count not correct; "))
-      return false;
+    if (!alsaErrorHandler(err, "Channels count not correct; ")) return false;
   } else {
     snd_pcm_hw_params_get_channels_min(hwparams, &minChannelsPlayback);
     snd_pcm_hw_params_get_channels_max(hwparams, &maxChannelsPlayback);
-    err = snd_pcm_hw_params_set_channels(handle, hwparams, 2); // always stereo output
+    err = snd_pcm_hw_params_set_channels(handle, hwparams, 2);  // always stereo output
     if (!alsaErrorHandler(err, "Channels count not correct; ")) {
       return false;
     }
   }
 
   err = snd_pcm_hw_params_set_rate(handle, hwparams, sampleRate, 0);
-  if (!alsaErrorHandler(err, QString("Samplerate %1 not available").arg(sampleRate)))
-    return false;
+  if (!alsaErrorHandler(err, QString("Samplerate %1 not available").arg(sampleRate))) return false;
 
   if (isCapture) {
     err = snd_pcm_hw_params_set_period_size_near(handle, hwparams, &capturePeriodSize, &dir);
     if (!alsaErrorHandler(err, QString("Unable to set period size %1 for capture").arg(capturePeriodSize)))
       return false;
     err = snd_pcm_hw_params_set_buffer_size_near(handle, hwparams, &captureBufferSize);
-    if (!alsaErrorHandler(err, QString("Unable to set buffersize %1 for capture").arg(captureBufferSize)))
-      return false;
+    if (!alsaErrorHandler(err, QString("Unable to set buffersize %1 for capture").arg(captureBufferSize))) return false;
   } else {
     err = snd_pcm_hw_params_set_period_size_near(handle, hwparams, &playbackPeriodSize, &dir);
     if (!alsaErrorHandler(err, QString("Unable to set period size %1 for playback").arg(playbackPeriodSize)))
@@ -290,31 +264,24 @@ bool soundAlsa::setupSoundParams(bool isCapture)
   }
   err = snd_pcm_hw_params(handle, hwparams);
   if (isCapture) {
-    if (!alsaErrorHandler(err, QString("Unable to set hw params for capture:")))
-      return false;
+    if (!alsaErrorHandler(err, QString("Unable to set hw params for capture:"))) return false;
   } else {
-    if (!alsaErrorHandler(err, QString("Unable to set hw params for playback:")))
-      return false;
+    if (!alsaErrorHandler(err, QString("Unable to set hw params for playback:"))) return false;
   }
 
   /* Get the current swparams */
   err = snd_pcm_sw_params_current(handle, swparams);
-  if (!alsaErrorHandler(err, "Unable to determine current swparams"))
-    return false;
+  if (!alsaErrorHandler(err, "Unable to determine current swparams")) return false;
   err = snd_pcm_sw_params_set_start_threshold(handle, swparams, 128);
-  if (!alsaErrorHandler(err, "Unable to set start threshold mode"))
-    return false;
+  if (!alsaErrorHandler(err, "Unable to set start threshold mode")) return false;
   /* Write the parameters to the record/playback device */
   err = snd_pcm_sw_params(handle, swparams);
-  if (!alsaErrorHandler(err, "Unable to set sw params for output"))
-    return false;
-  if (minChannelsCapture == STEREOCHANNEL)
-    isStereo = true;
+  if (!alsaErrorHandler(err, "Unable to set sw params for output")) return false;
+  if (minChannelsCapture == STEREOCHANNEL) isStereo = true;
   return true;
 }
 
-bool soundAlsa::alsaErrorHandler(int err, QString info)
-{
+bool soundAlsa::alsaErrorHandler(int err, QString info) {
   if (err < 0) {
     errorHandler(info, QString(snd_strerror(err)));
     return false;
@@ -323,8 +290,7 @@ bool soundAlsa::alsaErrorHandler(int err, QString info)
 }
 
 
-void getCardList(QStringList& alsaInputList, QStringList& alsaOutputList)
-{
+void getCardList(QStringList& alsaInputList, QStringList& alsaOutputList) {
   bool isOutput, isInput;
   QString deviceName;
   QString deviceDescription;
@@ -335,17 +301,14 @@ void getCardList(QStringList& alsaInputList, QStringList& alsaOutputList)
   alsaOutputList.clear();
 
 
-  if (snd_device_name_hint(-1, "pcm", &hints) < 0)
-    return;
+  if (snd_device_name_hint(-1, "pcm", &hints) < 0) return;
   n = hints;
   while (*n != nullptr) {
     isInput = isOutput = true;
     io = snd_device_name_get_hint(*n, "IOID");
     if (io != nullptr) {
-      if (strcmp(io, "Input") == 0)
-        isOutput = false;
-      if (strcmp(io, "Output") == 0)
-        isInput = false;
+      if (strcmp(io, "Input") == 0) isOutput = false;
+      if (strcmp(io, "Output") == 0) isInput = false;
     }
     name = snd_device_name_get_hint(*n, "NAME");
     descr = snd_device_name_get_hint(*n, "DESC");
@@ -361,18 +324,13 @@ void getCardList(QStringList& alsaInputList, QStringList& alsaOutputList)
 
 
     ) {
-      if (isInput)
-        alsaInputList.append(deviceName + " -- " + deviceDescription);
-      if (isOutput)
-        alsaOutputList.append(deviceName + " -- " + deviceDescription);
+      if (isInput) alsaInputList.append(deviceName + " -- " + deviceDescription);
+      if (isOutput) alsaOutputList.append(deviceName + " -- " + deviceDescription);
     }
 
-    if (name != nullptr)
-      free(name);
-    if (descr != nullptr)
-      free(descr);
-    if (io != nullptr)
-      free(io);
+    if (name != nullptr) free(name);
+    if (descr != nullptr) free(descr);
+    if (io != nullptr) free(io);
     n++;
   }
   snd_device_name_free_hint(hints);
@@ -380,15 +338,12 @@ void getCardList(QStringList& alsaInputList, QStringList& alsaOutputList)
 
   snd_config_t* pcmc;
   snd_pcm_t* pcm;
-  if (!snd_config)
-    snd_config_update();
+  if (!snd_config) snd_config_update();
   if (snd_config_search(snd_config, "pcm", &pcmc) == 0) {
     snd_config_iterator_t i, next;
-    snd_config_for_each(i, next, pcmc)
-    {
+    snd_config_for_each(i, next, pcmc) {
       snd_config_t* n = snd_config_iterator_entry(i);
-      if (snd_config_get_type(n) != SND_CONFIG_TYPE_COMPOUND)
-        continue;
+      if (snd_config_get_type(n) != SND_CONFIG_TYPE_COMPOUND) continue;
       const char* id;
       if (snd_config_get_id(n, &id) == 0) {
         deviceName = QString(id);

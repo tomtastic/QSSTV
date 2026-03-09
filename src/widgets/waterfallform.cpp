@@ -4,8 +4,7 @@
 #include "waterfalltext.h"
 
 
-waterfallForm::waterfallForm(QWidget* parent) : QDialog(parent), ui(new Ui::waterfallForm)
-{
+waterfallForm::waterfallForm(QWidget* parent) : QDialog(parent), ui(new Ui::waterfallForm) {
   ui->setupUi(this);
   connect(ui->text1PushButton, &QPushButton::clicked, this, &waterfallForm::slotText1);
   connect(ui->text2PushButton, &QPushButton::clicked, this, &waterfallForm::slotText2);
@@ -15,65 +14,56 @@ waterfallForm::waterfallForm(QWidget* parent) : QDialog(parent), ui(new Ui::wate
   txt = "";
 }
 
-waterfallForm::~waterfallForm()
-{
+waterfallForm::~waterfallForm() {
   writeSettings();
   delete ui;
 }
 
 
-void waterfallForm::accept()
-{
+void waterfallForm::accept() {
   writeSettings();
   done(QDialog::Accepted);
 }
 
-void waterfallForm::slotText1()
-{
+void waterfallForm::slotText1() {
   getParams();
   txt = txt1;
   accept();
 }
 
-void waterfallForm::slotText2()
-{
+void waterfallForm::slotText2() {
   getParams();
   txt = txt2;
   accept();
 }
 
-void waterfallForm::slotText3()
-{
+void waterfallForm::slotText3() {
   getParams();
   txt = txt3;
   accept();
 }
 
-void waterfallForm::slotText4()
-{
+void waterfallForm::slotText4() {
   getParams();
   txt = txt4;
   accept();
 }
 
-void waterfallForm::getParams()
-{
+void waterfallForm::getParams() {
   txt1 = ui->wfText1->toPlainText();
   txt2 = ui->wfText2->toPlainText();
   txt3 = ui->wfText3->toPlainText();
   txt4 = ui->wfText4->toPlainText();
 }
 
-void waterfallForm::setParams()
-{
+void waterfallForm::setParams() {
   ui->wfText1->setPlainText(txt1);
   ui->wfText2->setPlainText(txt2);
   ui->wfText3->setPlainText(txt3);
   ui->wfText4->setPlainText(txt4);
 }
 
-void waterfallForm::readSettings()
-{
+void waterfallForm::readSettings() {
   QFont ft;
   QSettings qSettings;
   qSettings.beginGroup("Waterfall");
@@ -85,8 +75,7 @@ void waterfallForm::readSettings()
   setParams();
 }
 
-void waterfallForm::writeSettings()
-{
+void waterfallForm::writeSettings() {
   getParams();
   QSettings qSettings;
   qSettings.beginGroup("Waterfall");

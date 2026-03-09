@@ -47,17 +47,13 @@
  *
  * @param parent parent widget pointer
  */
-calibration::calibration(QWidget* parent) : QDialog(parent), ui(new Ui::calibration)
-{
+calibration::calibration(QWidget* parent) : QDialog(parent), ui(new Ui::calibration) {
   ui->setupUi(this);
   init();
 }
 
 
-calibration::~calibration()
-{
-  delete ui;
-}
+calibration::~calibration() { delete ui; }
 
 
 /**
@@ -70,21 +66,17 @@ calibration::~calibration()
  *
  * @return bool true if calibration is successful. Return false if an error occurred or the dialog was canceled
  */
-int calibration::exec()
-{
+int calibration::exec() {
   init();
   show();
   ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-  if (!start(true))
-    return QDialog::Rejected;
-  if (!start(false))
-    return QDialog::Rejected;
+  if (!start(true)) return QDialog::Rejected;
+  if (!start(false)) return QDialog::Rejected;
   ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
   while (!stopped) {
     qApp->processEvents();
   }
-  if (!canceled)
-    return QDialog::Accepted;
+  if (!canceled) return QDialog::Accepted;
   return QDialog::Rejected;
 }
 
@@ -96,8 +88,7 @@ int calibration::exec()
  *
  */
 
-void calibration::init()
-{
+void calibration::init() {
   stopped = false;
   canceled = false;
   // find out if we working with nanoseconds or microseconds
@@ -117,11 +108,9 @@ void calibration::init()
  * set the bool canceled to false or true depending on the CANCEL or OK button being pressed.
  **/
 
-void calibration::hasFinished(int result)
-{
+void calibration::hasFinished(int result) {
   stopped = true;
-  if (result == QDialog::Rejected)
-    canceled = true;
+  if (result == QDialog::Rejected) canceled = true;
 }
 
 
@@ -139,8 +128,7 @@ void calibration::hasFinished(int result)
  *
  **/
 
-bool calibration::start(bool isRX)
-{
+bool calibration::start(bool isRX) {
   unsigned int i;
   double clock = 0;
   unsigned int frames;
@@ -158,7 +146,7 @@ bool calibration::start(bool isRX)
       logFilePtr->addToAux(QString("%1\t%2\t%3").arg(frames).arg(elapsedTime).arg(elapsedTime - elapsed));
       elapsed = elapsedTime;
       if (i % 2 == 0) {
-        clock = (static_cast<double>(frames) * CALIBRATIONSIZE) / (elapsedTime); // debug joma
+        clock = (static_cast<double>(frames) * CALIBRATIONSIZE) / (elapsedTime);  // debug joma
         if (isRX) {
           display(static_cast<int>(round(clock)), ui->rxLCD);
           ui->rxProgress->setValue(i);
@@ -181,8 +169,7 @@ bool calibration::start(bool isRX)
 }
 
 
-void calibration::display(int value, QLCDNumber* dspl)
-{
+void calibration::display(int value, QLCDNumber* dspl) {
   //  QString tmp=QString::number(value,'g',6);
   //  if(tmp.length()==5) tmp+=".0";
   dspl->display(value);

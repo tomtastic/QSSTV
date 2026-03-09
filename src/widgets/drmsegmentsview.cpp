@@ -6,7 +6,8 @@
 #include <math.h>
 
 
-drmSegmentsView::drmSegmentsView(QWidget* parent) : QLabel(parent)
+drmSegmentsView::drmSegmentsView(QWidget* parent)
+    : QLabel(parent)
 
 {
   maxBlocks = 1;
@@ -21,8 +22,7 @@ drmSegmentsView::drmSegmentsView(QWidget* parent) : QLabel(parent)
 
 drmSegmentsView::~drmSegmentsView() {}
 
-void drmSegmentsView::paintEvent(QPaintEvent* e)
-{
+void drmSegmentsView::paintEvent(QPaintEvent* e) {
   int i;
   int blockX;
   float blockWidth;
@@ -51,17 +51,8 @@ void drmSegmentsView::paintEvent(QPaintEvent* e)
   }
 }
 
-void drmSegmentsView::setColorFail(QColor color)
-{
-  colFail = color;
-}
+void drmSegmentsView::setColorFail(QColor color) { colFail = color; }
 
-void drmSegmentsView::setColorOK(QColor color)
-{
-  colOK = color;
-}
+void drmSegmentsView::setColorOK(QColor color) { colOK = color; }
 
-void drmSegmentsView::setBlocks(QList<unsigned short> blkList)
-{
-  blockList = blkList;
-}
+void drmSegmentsView::setBlocks(QList<unsigned short> blkList) { blockList = blkList; }

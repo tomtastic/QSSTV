@@ -52,22 +52,20 @@
 
 class QCameraImageCapture;
 
-namespace Ui
-{
+namespace Ui {
 class imageSettingsUi;
 }
 
 
-class imageSettings : public QDialog
-{
+class imageSettings : public QDialog {
   Q_OBJECT
 
-public:
+ public:
   imageSettings(QString cameraDevice, QWidget* parent = 0);
   ~imageSettings();
 
 
-private:
+ private:
   QByteArray camDev;
   Ui::imageSettingsUi* ui;
   QCameraImageCapture* imagecapture;
@@ -80,4 +78,4 @@ private:
   void showEvent(QShowEvent* event);
 };
 
-#endif // IMAGESETTINGS_H
+#endif  // IMAGESETTINGS_H

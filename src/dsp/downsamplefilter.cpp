@@ -29,8 +29,7 @@
 #define VOLINTEGRATOR 0.5
 
 
-downsampleFilter::downsampleFilter()
-{
+downsampleFilter::downsampleFilter() {
   filteredDataBuffer = nullptr;
   volumeBuffer = nullptr;
   filterParams = nullptr;
@@ -40,8 +39,7 @@ downsampleFilter::downsampleFilter()
   filterLength = 0;
 }
 
-downsampleFilter::downsampleFilter(unsigned int len, bool scaled)
-{
+downsampleFilter::downsampleFilter(unsigned int len, bool scaled) {
   filteredDataBuffer = nullptr;
   volumeBuffer = nullptr;
   filterParams = nullptr;
@@ -54,36 +52,26 @@ downsampleFilter::downsampleFilter(unsigned int len, bool scaled)
   init();
 }
 
-downsampleFilter::~downsampleFilter()
-{
-  if (filteredDataBuffer)
-    delete[] filteredDataBuffer;
-  if (filterParams)
-    delete[] filterParams;
-  if (samplesI)
-    delete[] samplesI;
-  if (samplesQ)
-    delete[] samplesQ;
-  if (volSamples)
-    delete[] volSamples;
-  if (volumeBuffer)
-    delete[] volumeBuffer;
+downsampleFilter::~downsampleFilter() {
+  if (filteredDataBuffer) delete[] filteredDataBuffer;
+  if (filterParams) delete[] filterParams;
+  if (samplesI) delete[] samplesI;
+  if (samplesQ) delete[] samplesQ;
+  if (volSamples) delete[] volSamples;
+  if (volumeBuffer) delete[] volumeBuffer;
   //  if(volumeDataBuffer) delete [] volumeDataBuffer;
 }
 
 
-void downsampleFilter::allocate(unsigned int len)
-{
+void downsampleFilter::allocate(unsigned int len) {
   length = len;
-  if (filteredDataBuffer)
-    delete[] filteredDataBuffer;
+  if (filteredDataBuffer) delete[] filteredDataBuffer;
   filteredDataBuffer = new FILTERPARAMTYPE[length / 4];
   volumeBuffer = new FILTERPARAMTYPE[length / 4 + CONVDELAY];
 }
 
 
-void downsampleFilter::init()
-{
+void downsampleFilter::init() {
   unsigned int i;
   first = true;
   for (i = 0; i < filterLength; i++) {
@@ -102,18 +90,14 @@ void downsampleFilter::init()
   avgVolumeDb = 0;
 }
 
-void downsampleFilter::setFilterParams(bool scaled)
-{
+void downsampleFilter::setFilterParams(bool scaled) {
   unsigned int i;
 
   filterLength = DSAMPLEFILTERLEN;
-  if (filterParams)
-    delete[] filterParams;
+  if (filterParams) delete[] filterParams;
   filterParams = new FILTERPARAMTYPE[filterLength];
-  if (samplesI)
-    delete[] samplesI;
-  if (samplesQ)
-    delete[] samplesQ;
+  if (samplesI) delete[] samplesI;
+  if (samplesQ) delete[] samplesQ;
   samplesI = new FILTERPARAMTYPE[filterLength];
   samplesQ = new FILTERPARAMTYPE[filterLength];
   volSamples = new DSPFLOAT[CONVLENGTH];
@@ -135,8 +119,7 @@ void downsampleFilter::setFilterParams(bool scaled)
 }
 
 
-void downsampleFilter::downSample4(short int* data)
-{
+void downsampleFilter::downSample4(short int* data) {
   unsigned int i, k;
   DSPFLOAT tmpVol;
   FILTERPARAMTYPE res;

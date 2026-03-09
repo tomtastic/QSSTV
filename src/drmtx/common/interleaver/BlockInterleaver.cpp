@@ -32,8 +32,7 @@
 /******************************************************************************\
 * Block-interleaver base class												   *
 \******************************************************************************/
-void CBlockInterleaver::MakeTable(CVector<int>& veciIntTable, int iFrameSize, int it_0)
-{
+void CBlockInterleaver::MakeTable(CVector<int>& veciIntTable, int iFrameSize, int it_0) {
   int i;
   int iHighestOne;
   int is, iq;
@@ -60,7 +59,6 @@ void CBlockInterleaver::MakeTable(CVector<int>& veciIntTable, int iFrameSize, in
 
   for (i = 1; i < iFrameSize; i++) {
     veciIntTable[i] = (it_0 * veciIntTable[i - 1] + iq) % is;
-    while (veciIntTable[i] >= iFrameSize)
-      veciIntTable[i] = (it_0 * veciIntTable[i] + iq) % is;
+    while (veciIntTable[i] >= iFrameSize) veciIntTable[i] = (it_0 * veciIntTable[i] + iq) % is;
   }
 }

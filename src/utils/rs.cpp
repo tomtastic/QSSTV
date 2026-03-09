@@ -48,14 +48,13 @@ static gf Index_of[NN + 1];
 
 /* Generator polynomial g(x) in index form */
 // static gf Gg[NN - KK + 1];
-static gf Gg[NN - RSDSIZERS4 + 1]; // worst case
-static int RS_init = 0;            /* Initialization flag */
+static gf Gg[NN - RSDSIZERS4 + 1];  // worst case
+static int RS_init = 0;             /* Initialization flag */
 
 /* Compute x % NN, where NN is 2**MM - 1,
  * without a slow divide
  */
-static gf modnn(int x)
-{
+static gf modnn(int x) {
   while (x >= NN) {
     x -= NN;
     x = (x >> MM) + (x & NN);
@@ -65,25 +64,22 @@ static gf modnn(int x)
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 
-#define CLEAR(a, n)                                                                                                    \
-  {                                                                                                                    \
-    int ci;                                                                                                            \
-    for (ci = (n) - 1; ci >= 0; ci--)                                                                                  \
-      (a)[ci] = 0;                                                                                                     \
+#define CLEAR(a, n)                                \
+  {                                                \
+    int ci;                                        \
+    for (ci = (n) - 1; ci >= 0; ci--) (a)[ci] = 0; \
   }
 
-#define COPY(a, b, n)                                                                                                  \
-  {                                                                                                                    \
-    int ci;                                                                                                            \
-    for (ci = (n) - 1; ci >= 0; ci--)                                                                                  \
-      (a)[ci] = (b)[ci];                                                                                               \
+#define COPY(a, b, n)                                    \
+  {                                                      \
+    int ci;                                              \
+    for (ci = (n) - 1; ci >= 0; ci--) (a)[ci] = (b)[ci]; \
   }
 
-#define COPYDOWN(a, b, n)                                                                                              \
-  {                                                                                                                    \
-    int ci;                                                                                                            \
-    for (ci = (n) - 1; ci >= 0; ci--)                                                                                  \
-      (a)[ci] = (b)[ci];                                                                                               \
+#define COPYDOWN(a, b, n)                                \
+  {                                                      \
+    int ci;                                              \
+    for (ci = (n) - 1; ci >= 0; ci--) (a)[ci] = (b)[ci]; \
   }
 
 #define Ldec 1
@@ -120,8 +116,7 @@ static gf modnn(int x)
 
 */
 
-static void generate_gf(void)
-{
+static void generate_gf(void) {
   int i, mask;
 
   mask = 1;
@@ -130,9 +125,8 @@ static void generate_gf(void)
     Alpha_to[i] = mask;
     Index_of[Alpha_to[i]] = i;
     /* If Pp[i] == 1 then, term @^i occurs in poly-repr of @^MM */
-    if (Pp[i] != 0)
-      Alpha_to[MM] ^= mask; /* Bit-wise EXOR operation */
-    mask <<= 1;             /* single left-shift */
+    if (Pp[i] != 0) Alpha_to[MM] ^= mask; /* Bit-wise EXOR operation */
+    mask <<= 1;                           /* single left-shift */
   }
   Index_of[Alpha_to[MM]] = MM;
   /*
@@ -165,8 +159,7 @@ static void generate_gf(void)
  * If B0 = 0, TT = 2. deg(g(x)) = 2*TT = 4.
  * g(x) = (x+1) (x+@) (x+@**2) (x+@**3)
  */
-static void gen_poly(void)
-{
+static void gen_poly(void) {
   int i, j;
 
   Gg[0] = 1;
@@ -185,8 +178,7 @@ static void gen_poly(void)
     Gg[0] = Alpha_to[modnn(Index_of[Gg[0]] + (B0 + i) * PRIM)];
   }
   /* convert Gg[] to index form for quicker encoding */
-  for (i = 0; i <= NN - KK; i++)
-    Gg[i] = Index_of[Gg[i]];
+  for (i = 0; i <= NN - KK; i++) Gg[i] = Index_of[Gg[i]];
 }
 
 
@@ -198,8 +190,7 @@ static void gen_poly(void)
  * elements of Gg[], which was generated above. Codeword is   c(X) =
  * data(X)*X**(NN-KK)+ b(X)
  */
-int encode_rs(dtype data[], dtype bb[])
-{
+int encode_rs(dtype data[], dtype bb[]) {
   int i, j;
   gf feedback;
   CLEAR(bb, NN - KK);
@@ -216,8 +207,7 @@ int encode_rs(dtype data[], dtype bb[])
       bb[0] = Alpha_to[modnn(Gg[0] + feedback)];
     } else { /* feedback term is zero. encoder becomes a
               * single-byte shifter */
-      for (j = NN - KK - 1; j > 0; j--)
-        bb[j] = bb[j - 1];
+      for (j = NN - KK - 1; j > 0; j--) bb[j] = bb[j - 1];
       bb[0] = 0;
     }
   }
@@ -242,8 +232,7 @@ int encode_rs(dtype data[], dtype bb[])
  * will result. The decoder *could* check for this condition, but it would involve
  * extra time on every decoding operation.
  */
-int eras_dec_rs(dtype data[], int eras_pos[], int no_eras)
-{
+int eras_dec_rs(dtype data[], int eras_pos[], int no_eras) {
   int deg_lambda, el, deg_omega;
   int i, j, r, k;
 
@@ -262,13 +251,11 @@ int eras_dec_rs(dtype data[], int eras_pos[], int no_eras)
     s[i] = data[0];
   }
   for (j = 1; j < NN; j++) {
-    if (data[j] == 0)
-      continue;
+    if (data[j] == 0) continue;
     tmp = Index_of[data[j]];
 
     /*	s[i] ^= Alpha_to[modnn(tmp + (B0+i-1)*j)]; */
-    for (i = 1; i <= NN - KK; i++)
-      s[i] ^= Alpha_to[modnn(tmp + (B0 + i - 1) * PRIM * j)];
+    for (i = 1; i <= NN - KK; i++) s[i] ^= Alpha_to[modnn(tmp + (B0 + i - 1) * PRIM * j)];
   }
   /* Convert syndromes to index form, checking for nonzero condition */
   syn_error = 0;
@@ -300,8 +287,7 @@ int eras_dec_rs(dtype data[], int eras_pos[], int no_eras)
       }
     }
   }
-  for (i = 0; i < NN - KK + 1; i++)
-    b[i] = Index_of[lambda[i]];
+  for (i = 0; i < NN - KK + 1; i++) b[i] = Index_of[lambda[i]];
 
   /*
    * Begin Berlekamp-Massey algorithm to determine error+erasure
@@ -337,8 +323,7 @@ int eras_dec_rs(dtype data[], int eras_pos[], int no_eras)
          * 2 lines below: B(x) <-- inv(discr_r) *
          * lambda(x)
          */
-        for (i = 0; i <= NN - KK; i++)
-          b[i] = (lambda[i] == 0) ? A0 : modnn(Index_of[lambda[i]] - discr_r + NN);
+        for (i = 0; i <= NN - KK; i++) b[i] = (lambda[i] == 0) ? A0 : modnn(Index_of[lambda[i]] - discr_r + NN);
       } else {
         /* 2 lines below: B(x) <-- x*B(x) */
         COPYDOWN(&b[1], b, NN - KK);
@@ -352,8 +337,7 @@ int eras_dec_rs(dtype data[], int eras_pos[], int no_eras)
   deg_lambda = 0;
   for (i = 0; i < NN - KK + 1; i++) {
     lambda[i] = Index_of[lambda[i]];
-    if (lambda[i] != A0)
-      deg_lambda = i;
+    if (lambda[i] != A0) deg_lambda = i;
   }
   /*
    * Find roots of the error+erasure locator polynomial by Chien
@@ -369,16 +353,14 @@ int eras_dec_rs(dtype data[], int eras_pos[], int no_eras)
         q ^= Alpha_to[reg[j]];
       }
     }
-    if (q != 0)
-      continue;
+    if (q != 0) continue;
     /* store root (index-form) and error location number */
     root[count] = i;
     loc[count] = k;
     /* If we've already found max possible roots,
      * abort the search to save time
      */
-    if (++count == deg_lambda)
-      break;
+    if (++count == deg_lambda) break;
   }
   if (deg_lambda != count) {
     /*
@@ -397,11 +379,9 @@ int eras_dec_rs(dtype data[], int eras_pos[], int no_eras)
     tmp = 0;
     j = (deg_lambda < i) ? deg_lambda : i;
     for (; j >= 0; j--) {
-      if ((s[i + 1 - j] != A0) && (lambda[j] != A0))
-        tmp ^= Alpha_to[modnn(s[i + 1 - j] + lambda[j])];
+      if ((s[i + 1 - j] != A0) && (lambda[j] != A0)) tmp ^= Alpha_to[modnn(s[i + 1 - j] + lambda[j])];
     }
-    if (tmp != 0)
-      deg_omega = i;
+    if (tmp != 0) deg_omega = i;
     omega[i] = Index_of[tmp];
   }
   omega[NN - KK] = A0;
@@ -413,16 +393,14 @@ int eras_dec_rs(dtype data[], int eras_pos[], int no_eras)
   for (j = count - 1; j >= 0; j--) {
     num1 = 0;
     for (i = deg_omega; i >= 0; i--) {
-      if (omega[i] != A0)
-        num1 ^= Alpha_to[modnn(omega[i] + i * root[j])];
+      if (omega[i] != A0) num1 ^= Alpha_to[modnn(omega[i] + i * root[j])];
     }
     num2 = Alpha_to[modnn(root[j] * (B0 - 1) + NN)];
     den = 0;
 
     /* lambda[i+1] for i even is the formal derivative lambda_pr of lambda[i] */
     for (i = min(deg_lambda, NN - KK - 1) & ~1; i >= 0; i -= 2) {
-      if (lambda[i + 1] != A0)
-        den ^= Alpha_to[modnn(lambda[i + 1] + i * root[j])];
+      if (lambda[i + 1] != A0) den ^= Alpha_to[modnn(lambda[i + 1] + i * root[j])];
     }
     if (den == 0) {
       /* Convert to dual- basis */
@@ -437,15 +415,13 @@ int eras_dec_rs(dtype data[], int eras_pos[], int no_eras)
 finish:
   if (eras_pos != nullptr) {
     for (i = 0; i < count; i++) {
-      if (eras_pos != nullptr)
-        eras_pos[i] = loc[i];
+      if (eras_pos != nullptr) eras_pos[i] = loc[i];
     }
   }
   return count;
 }
 /* Encoder/decoder initialization - call this first! */
-void init_rs(int kk)
-{
+void init_rs(int kk) {
   KK = kk;
   generate_gf();
   gen_poly();

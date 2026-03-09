@@ -19,16 +19,14 @@ bool getDRMParams(int idx, drmTxParams& d);
 bool getName(int idx, QString& n);
 
 
-namespace Ui
-{
+namespace Ui {
 class drmProfileConfig;
 }
 
-class drmProfileConfig : public baseConfig
-{
+class drmProfileConfig : public baseConfig {
   Q_OBJECT
 
-public:
+ public:
   explicit drmProfileConfig(QWidget* parent = 0);
   ~drmProfileConfig();
   void readSettings();
@@ -38,7 +36,7 @@ public:
   bool getDRMParams(int idx, drmTxParams& d);
   bool getName(int idx, QString& n);
 
-private:
+ private:
   Ui::drmProfileConfig* ui;
   bool diff(sprofile a, sprofile b);
 };
@@ -46,4 +44,4 @@ private:
 extern drmProfileConfig* drmProfileConfigPtr;
 
 
-#endif // DRMPROFILECONFIG
+#endif  // DRMPROFILECONFIG

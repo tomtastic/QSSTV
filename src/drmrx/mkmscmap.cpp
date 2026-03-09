@@ -46,8 +46,7 @@ extern int mode_and_occupancy_code_table[24];
 extern int time_ref_cells_cnt_list[4];
 extern int lFAC;
 extern int MSC_Demapper[6][2959];
-int mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth, int K_dc, int K_modulo)
-{
+int mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth, int K_dc, int K_modulo) {
   int frames_per_superframe = 3;
   int K_min;
   int K_max;
@@ -261,8 +260,7 @@ int mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
   /*  for (i=0; i < cnt_msc_cells_3_superframes; i++)
      printf("MSC_cells3..[%d] = %d\n", i, MSC_cells_3_superframes[i]);
      printf("====\n");    */
-  if (PICMSC_inv != nullptr)
-    free(PICMSC_inv);
+  if (PICMSC_inv != nullptr) free(PICMSC_inv);
   PICMSC_inv = deinterleaver(0, 1, N_MUX, 5);
 
 
@@ -282,10 +280,8 @@ int mkmscmap(int robustness_mode, int spectrum_occupancy, int interleaver_depth,
     /* printf("ncGIMSC = %d\n", ncGIMSC); */
     columnv[0] = 1;
     rowv[0] = 0;
-    for (i = 1; i < D; i++)
-      columnv[i] = columnv[i - 1] + step;
-    for (i = 1; i < ncGIMSC; i++)
-      rowv[i] = rowv[i - 1] + D;
+    for (i = 1; i < D; i++) columnv[i] = columnv[i - 1] + step;
+    for (i = 1; i < ncGIMSC; i++) rowv[i] = rowv[i - 1] + D;
     for (i = 0; i < D; i++)
 
     {

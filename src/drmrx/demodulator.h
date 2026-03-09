@@ -17,31 +17,18 @@ extern int Tu_list[DRMNUMMODES];
 extern int Tg_list[DRMNUMMODES];
 extern bool FACAvailable;
 
-class demodulator
-{
-public:
+class demodulator {
+ public:
   demodulator();
   ~demodulator();
   void init();
   bool demodulate(float* sigin, int numSamples);
-  bool isTimeSync()
-  {
-    return timeSyncFlag;
-  }
-  bool isFrequencySync()
-  {
-    return frequencySyncFlag;
-  }
-  bool isFrameSync()
-  {
-    return frameSyncFlag;
-  }
-  bool isFACAvailable()
-  {
-    return FACAvailable;
-  }
+  bool isTimeSync() { return timeSyncFlag; }
+  bool isFrequencySync() { return frequencySyncFlag; }
+  bool isFrameSync() { return frameSyncFlag; }
+  bool isFACAvailable() { return FACAvailable; }
 
-private:
+ private:
   int iterationCounter;
   bool timeSync();
   bool frequencySync();
@@ -95,7 +82,7 @@ private:
   int cnt_tr_cells[5];
   int gain_ref_cells_per_frame;
   int gain_ref_cells_per_y_symbols;
-  float next_pilots[2 * 70]; /* complex */ // joma
+  float next_pilots[2 * 70]; /* complex */  // joma
   int K_min, K_max;
   float W_symbol_blk[5][208][229];
   float W_symbol[208];
@@ -128,4 +115,4 @@ private:
   bool initChannelEstimation;
 };
 
-#endif // DEMODULATOR_H
+#endif  // DEMODULATOR_H

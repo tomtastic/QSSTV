@@ -29,13 +29,11 @@
 #define SINTABLEN 2048
 #define TONEBUFLEN (BASESAMPLERATE / 1200)
 
-class synthesizer
-{
-public:
+class synthesizer {
+ public:
   synthesizer(double txSmpClock);
   ~synthesizer();
-  double nextSample(double freq)
-  {
+  double nextSample(double freq) {
     double temp;
     int t;
     temp = (freq / txSamplingClock) * static_cast<double>(SINTABLEN) + oldAngle;
@@ -52,7 +50,7 @@ public:
   void sendWFText();
   void writeBuffer(quint32* buffer, int len);
 
-private:
+ private:
   double txSamplingClock;
   double oldAngle;
   double sineTable[SINTABLEN];

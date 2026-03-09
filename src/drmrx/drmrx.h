@@ -7,24 +7,23 @@
 #include "filters.h"
 
 
-class drmRx : public QObject
-{
+class drmRx : public QObject {
   Q_OBJECT
-public:
+ public:
   explicit drmRx(QObject* parent = 0);
   ~drmRx();
   void init();
   void run(DSPFLOAT* dataPtr);
   void eraseImage() {}
 
-signals:
+ signals:
 
-public slots:
-private:
+ public slots:
+ private:
   int n, im;
   float rRation;
   float resamp_signal[2 * DRMBUFSIZE];
   drmHilbertFilter iqFilter;
 };
 
-#endif // DRMRX_H
+#endif  // DRMRX_H

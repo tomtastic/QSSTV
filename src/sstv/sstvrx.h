@@ -17,10 +17,9 @@ class videoFilter;
 class rectConvolution;
 class integrator;
 
-class sstvRx : public QObject
-{
+class sstvRx : public QObject {
   Q_OBJECT
-public:
+ public:
   enum eSSTVState { HUNTING, PROCESSING, WAITFORSYNC, SLANTADJUST, RESTART, SYNCLOST, WAIT, END };
   explicit sstvRx(QObject* parent = 0);
   ~sstvRx();
@@ -30,19 +29,16 @@ public:
   void eraseImage();
   syncProcessor syncNarrowProc;
   syncProcessor syncWideProc;
-  bool isBusy()
-  {
-    return ((SSTVState != HUNTING) && (SSTVState != END));
-  }
+  bool isBusy() { return ((SSTVState != HUNTING) && (SSTVState != END)); }
 #ifdef ENABLESCOPE
   unsigned int setScopeParam(unsigned int offset, unsigned int numSamples, bool ask);
 //  unsigned int setNumSamples(unsigned int numSamples,bool ask);
 #endif
 
-signals:
+ signals:
   void resetCall();
 
-private:
+ private:
   //  void getData();
   void process();
   void switchState(eSSTVState newState);
@@ -53,12 +49,12 @@ private:
 
 
   //  DSPFLOAT rxHoldingBuffer[RXSTRIPE];
-  buffer<quint16, 22> bufferVideoDemod; // 2^22= 4194304, divided by samplingrate 12000 gives 349 seconds buffering
+  buffer<quint16, 22> bufferVideoDemod;  // 2^22= 4194304, divided by samplingrate 12000 gives 349 seconds buffering
   //  buffer<quint16,22> bufferSyncDemod;  // 2^22= 4194304, divided by samplingrate 12000 gives 349 seconds buffering
-  buffer<DSPFLOAT, 22> bufferSync1200Vol; // 2^22= 4194304, divided by samplingrate 12000 gives 349 seconds buffering
-  buffer<DSPFLOAT, 22> bufferSync1900Vol; // 2^22= 4194304, divided by samplingrate 12000 gives 349 seconds buffering
-  buffer<DSPFLOAT, 22> bufferTest;        // 2^22= 4194304, divided by samplingrate 12000 gives 349 seconds buffering
-  buffer<DSPFLOAT, 22> bufferInputVol;    // 2^22= 4194304, divided by samplingrate 12000 gives 349 seconds buffering
+  buffer<DSPFLOAT, 22> bufferSync1200Vol;  // 2^22= 4194304, divided by samplingrate 12000 gives 349 seconds buffering
+  buffer<DSPFLOAT, 22> bufferSync1900Vol;  // 2^22= 4194304, divided by samplingrate 12000 gives 349 seconds buffering
+  buffer<DSPFLOAT, 22> bufferTest;         // 2^22= 4194304, divided by samplingrate 12000 gives 349 seconds buffering
+  buffer<DSPFLOAT, 22> bufferInputVol;     // 2^22= 4194304, divided by samplingrate 12000 gives 349 seconds buffering
   //  buffer<unsigned int,22> bufferInputVol;  // 2^22= 4194304, divided by samplingrate 12000 gives 349 seconds
   //  buffering buffer<quint16,22> bufferInputVolume;
 
@@ -77,4 +73,4 @@ private:
   DSPFLOAT agcVolume;
 };
 
-#endif // SSTVRX_H
+#endif  // SSTVRX_H

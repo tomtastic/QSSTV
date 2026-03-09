@@ -37,94 +37,90 @@ modeGBR2::modeGBR2(esstvMode m, unsigned int len, bool tx, bool narrowMode) : mo
 
 modeGBR2::~modeGBR2() {}
 
-void modeGBR2::setupParams(double clock)
-{
+void modeGBR2::setupParams(double clock) {
   visibleLineLength = (getLineLength(mode, clock) - fp - bp - 2 * blank - syncDuration) / 3.;
 }
 
-modeBase::embState modeGBR2::rxSetupLine()
-{
+modeBase::embState modeGBR2::rxSetupLine() {
   // the start of the Scottie mode is always at the start of the green line
 
   // if(subLine==0) addToLog(QString("modeGBR2: subLine %1, line=%2").arg(subLine).arg(lineCounter),DBMODES);
   switch (subLine) {
-  case 0:
-    debugState = stG1;
-    start = lineTimeTableRX[lineCounter];
-    markerFloat = start + blank;
-    marker = static_cast<unsigned int>(round(markerFloat));
-    return MBRXWAIT;
-  case 1:
-    calcPixelPositionTable(GREENLINE, false);
-    markerFloat += visibleLineLength;
-    debugState = stColorLine0;
-    pixelArrayPtr = greenArrayPtr;
-    return MBPIXELS;
-  case 2:
-    debugState = stG2;
-    markerFloat += blank;
-    marker = static_cast<unsigned int>(round(markerFloat));
-    return MBRXWAIT;
-  case 3:
-    calcPixelPositionTable(BLUELINE, false);
-    markerFloat += visibleLineLength;
-    debugState = stColorLine1;
-    pixelArrayPtr = blueArrayPtr;
-    return MBPIXELS;
-  case 4:
-    debugState = stFP;
-    markerFloat += fp;
-    marker = static_cast<unsigned int>(round(markerFloat));
-    return MBRXWAIT;
-  case 5:
-    debugState = stSync;
-    markerFloat += syncDuration;
-    marker = static_cast<unsigned int>(round(markerFloat));
-    syncPosition = marker;
-    return MBSYNC;
-  case 6:
-    debugState = stBP;
-    markerFloat += bp;
-    marker = static_cast<unsigned int>(round(markerFloat));
-    return MBRXWAIT;
-  case 7:
-    calcPixelPositionTable(REDLINE, false);
-    markerFloat += visibleLineLength;
-    debugState = stColorLine2;
-    pixelArrayPtr = redArrayPtr;
-    return MBPIXELS;
-    break;
-  default:
-    return MBENDOFLINE;
+    case 0:
+      debugState = stG1;
+      start = lineTimeTableRX[lineCounter];
+      markerFloat = start + blank;
+      marker = static_cast<unsigned int>(round(markerFloat));
+      return MBRXWAIT;
+    case 1:
+      calcPixelPositionTable(GREENLINE, false);
+      markerFloat += visibleLineLength;
+      debugState = stColorLine0;
+      pixelArrayPtr = greenArrayPtr;
+      return MBPIXELS;
+    case 2:
+      debugState = stG2;
+      markerFloat += blank;
+      marker = static_cast<unsigned int>(round(markerFloat));
+      return MBRXWAIT;
+    case 3:
+      calcPixelPositionTable(BLUELINE, false);
+      markerFloat += visibleLineLength;
+      debugState = stColorLine1;
+      pixelArrayPtr = blueArrayPtr;
+      return MBPIXELS;
+    case 4:
+      debugState = stFP;
+      markerFloat += fp;
+      marker = static_cast<unsigned int>(round(markerFloat));
+      return MBRXWAIT;
+    case 5:
+      debugState = stSync;
+      markerFloat += syncDuration;
+      marker = static_cast<unsigned int>(round(markerFloat));
+      syncPosition = marker;
+      return MBSYNC;
+    case 6:
+      debugState = stBP;
+      markerFloat += bp;
+      marker = static_cast<unsigned int>(round(markerFloat));
+      return MBRXWAIT;
+    case 7:
+      calcPixelPositionTable(REDLINE, false);
+      markerFloat += visibleLineLength;
+      debugState = stColorLine2;
+      pixelArrayPtr = redArrayPtr;
+      return MBPIXELS;
+      break;
+    default:
+      return MBENDOFLINE;
   }
 }
 
-void modeGBR2::calcPixelPositionTable(unsigned int colorLine, bool tx)
-{
+void modeGBR2::calcPixelPositionTable(unsigned int colorLine, bool tx) {
   unsigned int i;
   DSPFLOAT lineStart = start;
   int ofx = 0;
-  if (tx)
-    ofx = 1;
+  if (tx) ofx = 1;
   //  debugState=colorLine;
   switch (colorLine) {
-  case GREENLINE:
-    lineStart += blank;
-    // addToLog(QString("gbr2: greenstart=%1").arg(start),DBMODES);
+    case GREENLINE:
+      lineStart += blank;
+      // addToLog(QString("gbr2: greenstart=%1").arg(start),DBMODES);
 
-    break;
-  case BLUELINE:
-    lineStart += (blank + visibleLineLength + blank);
-    syncEndPosition = static_cast<unsigned int>(lineStart + fp + syncDuration);
+      break;
+    case BLUELINE:
+      lineStart += (blank + visibleLineLength + blank);
+      syncEndPosition = static_cast<unsigned int>(lineStart + fp + syncDuration);
 
-    // addToLog(QString("gbr2: bluestart=%1").arg(start),DBMODES);
+      // addToLog(QString("gbr2: bluestart=%1").arg(start),DBMODES);
 
-    break;
-  case REDLINE:
-    lineStart += 2 * blank + fp + syncDuration + bp + 2. * visibleLineLength;
-    // addToLog(QString("gbr2: redstart=%1").arg(start),DBMODES);
+      break;
+    case REDLINE:
+      lineStart += 2 * blank + fp + syncDuration + bp + 2. * visibleLineLength;
+      // addToLog(QString("gbr2: redstart=%1").arg(start),DBMODES);
 
-    break;
+      break;
   }
   for (i = 0; i < activeSSTVParam->numberOfPixels; i++) {
     pixelPositionTable[i] = static_cast<unsigned int>(
@@ -133,11 +129,9 @@ void modeGBR2::calcPixelPositionTable(unsigned int colorLine, bool tx)
 }
 
 
-unsigned long modeGBR2::adjustSyncPosition(unsigned long syncPos0, bool isRetrace)
-{
+unsigned long modeGBR2::adjustSyncPosition(unsigned long syncPos0, bool isRetrace) {
 #define SCOTTYCOMPENSATION 15
-  if (isRetrace)
-    return syncPos0 + SCOTTYCOMPENSATION;
+  if (isRetrace) return syncPos0 + SCOTTYCOMPENSATION;
   if (syncPos0 < static_cast<unsigned long>(fp + 2 * visibleLineLength + 2 * blank + syncDuration / 2)) {
     return syncPos0 + static_cast<unsigned long>(bp + visibleLineLength) + SCOTTYCOMPENSATION;
   } else {
@@ -151,44 +145,43 @@ unsigned long modeGBR2::adjustSyncPosition(unsigned long syncPos0, bool isRetrac
 //   return syncPos-static_cast<unsigned long>(blank+visibleLineLength+syncDuration);
 // }
 
-modeBase::embState modeGBR2::txSetupLine()
-{
+modeBase::embState modeGBR2::txSetupLine() {
   start = lineTimeTableTX[lineCounter];
   // if(subLine==0) addToLog(QString("modeGBR2: subLine %1, line=%2").arg(subLine).arg(lineCounter),DBMODES);
   switch (subLine) {
-  case 0:
-    calcPixelPositionTable(GREENLINE, true);
-    pixelArrayPtr = greenArrayPtr;
-    return MBPIXELS;
-  case 1:
-    txFreq = lowerFreq;
-    txDur = static_cast<unsigned int>(rint(blank));
-    return MBTXGAP;
-  case 2:
-    calcPixelPositionTable(BLUELINE, true);
-    pixelArrayPtr = blueArrayPtr;
-    return MBPIXELS;
-  case 3:
-    txFreq = lowerFreq;
-    txDur = static_cast<unsigned int>(rint(fp));
-    return MBTXGAP;
-  case 4:
-    txFreq = syncFreq;
-    txDur = static_cast<unsigned int>(rint(syncDuration));
-    return MBTXGAP;
-  case 5:
-    txFreq = lowerFreq;
-    txDur = static_cast<unsigned int>(rint(bp));
-    return MBTXGAP;
-  case 6:
-    calcPixelPositionTable(REDLINE, true);
-    pixelArrayPtr = redArrayPtr;
-    return MBPIXELS;
-  case 7:
-    txFreq = lowerFreq;
-    txDur = static_cast<unsigned int>(rint(blank));
-    return MBTXGAP;
-  default:
-    return MBENDOFLINE;
+    case 0:
+      calcPixelPositionTable(GREENLINE, true);
+      pixelArrayPtr = greenArrayPtr;
+      return MBPIXELS;
+    case 1:
+      txFreq = lowerFreq;
+      txDur = static_cast<unsigned int>(rint(blank));
+      return MBTXGAP;
+    case 2:
+      calcPixelPositionTable(BLUELINE, true);
+      pixelArrayPtr = blueArrayPtr;
+      return MBPIXELS;
+    case 3:
+      txFreq = lowerFreq;
+      txDur = static_cast<unsigned int>(rint(fp));
+      return MBTXGAP;
+    case 4:
+      txFreq = syncFreq;
+      txDur = static_cast<unsigned int>(rint(syncDuration));
+      return MBTXGAP;
+    case 5:
+      txFreq = lowerFreq;
+      txDur = static_cast<unsigned int>(rint(bp));
+      return MBTXGAP;
+    case 6:
+      calcPixelPositionTable(REDLINE, true);
+      pixelArrayPtr = redArrayPtr;
+      return MBPIXELS;
+    case 7:
+      txFreq = lowerFreq;
+      txDur = static_cast<unsigned int>(rint(blank));
+      return MBTXGAP;
+    default:
+      return MBENDOFLINE;
   }
 }

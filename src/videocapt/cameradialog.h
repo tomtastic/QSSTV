@@ -4,8 +4,7 @@
 #include <QDialog>
 #include <QTimer>
 
-namespace Ui
-{
+namespace Ui {
 class cameraDialog;
 }
 
@@ -13,8 +12,7 @@ class videoCapture;
 
 
 struct scameraSizes {
-  scameraSizes(int w, int h, QString desc)
-  {
+  scameraSizes(int w, int h, QString desc) {
     description = desc;
     width = w;
     height = h;
@@ -25,8 +23,7 @@ struct scameraSizes {
 };
 
 struct sformats {
-  sformats(int frmt, QString desc, QList<scameraSizes> cs)
-  {
+  sformats(int frmt, QString desc, QList<scameraSizes> cs) {
     format = frmt;
     description = desc;
     cameraSizes = cs;
@@ -40,8 +37,7 @@ struct sformats {
 };
 
 struct scameraDevice {
-  scameraDevice(QString devName, QString devDescription, QString driv, QString bus, QList<sformats> frmts)
-  {
+  scameraDevice(QString devName, QString devDescription, QString driv, QString bus, QList<sformats> frmts) {
     deviceName = devName;
     deviceDescription = devDescription;
     driver = driv;
@@ -58,23 +54,22 @@ struct scameraDevice {
 };
 
 
-class cameraDialog : public QDialog
-{
+class cameraDialog : public QDialog {
   Q_OBJECT
 
-public:
+ public:
   explicit cameraDialog(QWidget* parent = 0);
   ~cameraDialog();
   int exec();
   QImage* getImage();
-private slots:
+ private slots:
   void slotSettings();
   void slotDeviceChanged(int idx);
   void slotFormatChanged(int idx);
   void slotSizeChanged(int idx);
 
 
-private:
+ private:
   Ui::cameraDialog* ui;
   void listCameraDevices();
   QList<scameraDevice> cameraList;
@@ -92,4 +87,4 @@ private:
   void deactivateTimer();
 };
 
-#endif // CAMERADIALOG_H
+#endif  // CAMERADIALOG_H

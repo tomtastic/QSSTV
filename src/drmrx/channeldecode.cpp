@@ -38,7 +38,7 @@
 #define PI (4.0 * atan(1.0))
 
 #define CHANNELDECODING 1
-char localDrmCallsign[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0}; // changed ON4QZ
+char localDrmCallsign[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};  // changed ON4QZ
 
 #define MSD_ITER 4
 extern int transmission_frame_buffer_data_valid;
@@ -66,8 +66,8 @@ extern int audio_data_flag;
 extern int length_decoded_data;
 extern int MSC_Demapper[6][2959];
 
-int lMSC;                           // changed ON4QZ
-float MSC_cells_sequence[2 * 2959]; // changed ON4QZ
+int lMSC;                            // changed ON4QZ
+float MSC_cells_sequence[2 * 2959];  // changed ON4QZ
 bool MSCAvailable;
 int spectrum_occupancy_new;
 int msc_mode_new;
@@ -76,8 +76,7 @@ bool callsignValid;
 
 char getfacchar(double*);
 
-void channel_decoding(void)
-{
+void channel_decoding(void) {
   static int /*@only@ */* FAC_Deinterleaver;
   static double RX[13] = {1, 3, 1, 4, 1, 4, 3, 2, 8, 3, 4, 7, 8};
   static double RY[13] = {4, 10, 3, 11, 2, 7, 5, 3, 11, 4, 5, 8, 9};
@@ -146,8 +145,7 @@ void channel_decoding(void)
   if (runstate == RUN_STATE_POWER_ON)
 
   {
-    if (FAC_Deinterleaver != nullptr)
-      free(FAC_Deinterleaver);
+    if (FAC_Deinterleaver != nullptr) free(FAC_Deinterleaver);
     FAC_Deinterleaver = deinterleaver(0, 1, 90, 21);
 
     return;
@@ -302,10 +300,8 @@ void channel_decoding(void)
     msc_mode = -1;
     robustness_mode_old = -1;
     interleaver_depth = -1;
-    for (i = 0; i < 41490; i++)
-      squared_noise_signal_buffer[i] = 0.0;
-    for (i = 0; i < 461; i++)
-      noise_power_density[i] = 0.0;
+    for (i = 0; i < 41490; i++) squared_noise_signal_buffer[i] = 0.0;
+    for (i = 0; i < 461; i++) noise_power_density[i] = 0.0;
     SNR_estimation_valid = 0;
     fac_valid = -1;
     //      audio_service_index = 1;
@@ -332,8 +328,7 @@ void channel_decoding(void)
   msc_parameters_changed = 0;
 
   if (robustness_mode != robustness_mode_old) {
-    if (robustness_mode < 0)
-      return;
+    if (robustness_mode < 0) return;
     symbol_period = Tu_list[robustness_mode];
     lFAC = mkfacmap(robustness_mode, K_dc, K_modulo, FAC_cells_k);
   }
@@ -358,7 +353,7 @@ void channel_decoding(void)
   L_FAC[1] = 48.0;
   PL_FAC[0] = 0;
   PL_FAC[1] = 6;
-  (void) msdhardfac(received_real, received_imag, lFAC, snr, 0, L_FAC, 2, 0, FAC_Deinterleaver, PL_FAC, 4, 0, fac_data);
+  (void)msdhardfac(received_real, received_imag, lFAC, snr, 0, L_FAC, 2, 0, FAC_Deinterleaver, PL_FAC, 4, 0, fac_data);
 
   for (i = 0; i < 40; i++) {
     facblock[i] = fac_data[i];
@@ -536,8 +531,7 @@ void channel_decoding(void)
   application_information.application_domain[1] = 0;
   application_information.application_domain[2] = 0;
   application_information.application_domain[3] = 0;
-  for (i = 0; i < 16; i++)
-    application_information.application_data[0][i] = 0;
+  for (i = 0; i < 16; i++) application_information.application_data[0][i] = 0;
 
   /* ***   MSC DECODING *** */
   N_MUX = lMSC;
@@ -564,17 +558,13 @@ void channel_decoding(void)
       coldimL = 2;
       xin1 = 2 * N1;
       xin2 = 2 * N2;
-      for (i = 0; i < xin1 + xin2; i++)
-        Deinterleaver[i] = i;
-      if (Part_Deinterleaver != nullptr)
-        free(Part_Deinterleaver);
+      for (i = 0; i < xin1 + xin2; i++) Deinterleaver[i] = i;
+      if (Part_Deinterleaver != nullptr) free(Part_Deinterleaver);
       Part_Deinterleaver = deinterleaver(xin1, 13, xin2, 13);
-      for (i = 0; i < xin1 + xin2; i++)
-        Deinterleaver[i + xin1 + xin2] = Part_Deinterleaver[i];
+      for (i = 0; i < xin1 + xin2; i++) Deinterleaver[i + xin1 + xin2] = Part_Deinterleaver[i];
       free(Part_Deinterleaver);
       Part_Deinterleaver = deinterleaver(xin1, 21, xin2, 21);
-      for (i = 0; i < xin1 + xin2; i++)
-        Deinterleaver[i + 2 * (xin1 + xin2)] = Part_Deinterleaver[i];
+      for (i = 0; i < xin1 + xin2; i++) Deinterleaver[i + 2 * (xin1 + xin2)] = Part_Deinterleaver[i];
 
       for (i = 0; i < 3; i++) {
         PL[i] = ratesA[i];
@@ -585,13 +575,13 @@ void channel_decoding(void)
     else if (msc_mode == 1) /* 16-QAM SM */
     {
       //	  rylcm = RYlcmSM16[multiplex_description.PL_PartA];
-      for (i = 0; i < 2; i++) // joma
+      for (i = 0; i < 2; i++)  // joma
       {
         ratesA[i] = RatesSM16[multiplex_description.PL_PartA][i] - 1;
       }
       N1 = 0;
       N2 = N_MUX - N1;
-      for (i = 0; i < 2; i++) // changed ON4QZ
+      for (i = 0; i < 2; i++)  // changed ON4QZ
       {
         ratesB[i] = RatesSM16[multiplex_description.PL_PartB][i] - 1;
       }
@@ -604,15 +594,12 @@ void channel_decoding(void)
       Lvspp = 0;
       xin1 = 2 * N1;
       xin2 = 2 * N2;
-      if (Part_Deinterleaver != nullptr)
-        free(Part_Deinterleaver);
+      if (Part_Deinterleaver != nullptr) free(Part_Deinterleaver);
       Part_Deinterleaver = deinterleaver(xin1, 13, xin2, 13);
-      for (i = 0; i < xin1 + xin2; i++)
-        Deinterleaver[i] = Part_Deinterleaver[i];
+      for (i = 0; i < xin1 + xin2; i++) Deinterleaver[i] = Part_Deinterleaver[i];
       free(Part_Deinterleaver);
       Part_Deinterleaver = deinterleaver(xin1, 21, xin2, 21);
-      for (i = 0; i < xin1 + xin2; i++)
-        Deinterleaver[i + (xin1 + xin2)] = Part_Deinterleaver[i];
+      for (i = 0; i < xin1 + xin2; i++) Deinterleaver[i + (xin1 + xin2)] = Part_Deinterleaver[i];
       for (i = 0; i < 2; i++) {
         PL[i] = ratesA[i];
         PL[i + 2] = ratesB[i];
@@ -660,11 +647,9 @@ void channel_decoding(void)
       Lvspp = 0;
       xin1 = 2 * N1;
       xin2 = 2 * N2;
-      if (Part_Deinterleaver != nullptr)
-        free(Part_Deinterleaver);
+      if (Part_Deinterleaver != nullptr) free(Part_Deinterleaver);
       Part_Deinterleaver = deinterleaver(xin1, 21, xin2, 21);
-      for (i = 0; i < xin1 + xin2; i++)
-        Deinterleaver[i] = Part_Deinterleaver[i];
+      for (i = 0; i < xin1 + xin2; i++) Deinterleaver[i] = Part_Deinterleaver[i];
       PL[0] = 0;
       PL[1] = 6;
       rowdimL = 1;
@@ -713,8 +698,7 @@ void channel_decoding(void)
         }
       } else {
         for (i = 0; i < 461; i++) {
-          if (fabs(noise_power_density[i] - 0.0) < DBL_EPSILON)
-            noise_power_density[i] = 1.0;
+          if (fabs(noise_power_density[i] - 0.0) < DBL_EPSILON) noise_power_density[i] = 1.0;
         }
         for (i = 0; i < lMSC; i++) {
           if (noise_power_density[MSC_Demapper_symbolwise[frame_index - 1][i]] <= 0.0) {
@@ -767,8 +751,7 @@ void channel_decoding(void)
       }
       for (i = 0; i < cnt_MSC_used_carriers; i++) {
         sum1 = 0.0;
-        for (j = 0; j < symbols_per_frame; j++)
-          sum1 += samples_resorted[MSC_used_carriers[i]][j];
+        for (j = 0; j < symbols_per_frame; j++) sum1 += samples_resorted[MSC_used_carriers[i]][j];
         noise_power_density[MSC_used_carriers[i]] = noise_power_density[MSC_used_carriers[i]] * (1.0 - 0.2) +
                                                     0.2 * sum1 / MSC_carrier_usage[MSC_used_carriers[i]];
       }
@@ -784,12 +767,9 @@ void channel_decoding(void)
         HPPlength += 8 * multiplex_description.stream_lengths[0][i];
       }
       n = 0;
-      for (i = 0; i < HPPlength; i++)
-        channel_decoded_data_buffer[n++] = SPPhard[i];
-      for (i = 0; i < VSPPlength; i++)
-        channel_decoded_data_buffer[n++] = VSPPhard[i];
-      for (i = 0; i < n_SPPhard - HPPlength; i++)
-        channel_decoded_data_buffer[n++] = SPPhard[HPPlength + i];
+      for (i = 0; i < HPPlength; i++) channel_decoded_data_buffer[n++] = SPPhard[i];
+      for (i = 0; i < VSPPlength; i++) channel_decoded_data_buffer[n++] = VSPPhard[i];
+      for (i = 0; i < n_SPPhard - HPPlength; i++) channel_decoded_data_buffer[n++] = SPPhard[HPPlength + i];
     } else {
       for (i = 0; i < n_SPPhard; i++) {
         channel_decoded_data_buffer[i] = SPPhard[i];
@@ -802,8 +782,7 @@ void channel_decoding(void)
   return;
 }
 
-char getfacchar(double* facdata)
-{
+char getfacchar(double* facdata) {
   char karakter;
   int macht, i;
   macht = 64;

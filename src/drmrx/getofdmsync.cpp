@@ -57,8 +57,7 @@ static float /*@only@ */* out1 = nullptr;
 
 int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int lH, float delta_freq_offset,
                 /*@null@ */ float* Zi, /*@null@ */
-                float* out, int init, int TIME_SYNC_ENABLE, int FREQ_SYNC_ENABLE)
-{
+                float* out, int init, int TIME_SYNC_ENABLE, int FREQ_SYNC_ENABLE) {
   int max_delta_theta;
   int max_delta_time_offset_integer = 3;
   int max_symbol_position_offset;
@@ -97,10 +96,8 @@ int getofdmsync(/*@null@ */ float* rs, int Ts, int Tu, /*@null@ */ float* H, int
     /* printf("Tg %d, Tgh %d, Tc %d,Tu %d,  Tgs %d, Tgsh %d\n",
        Tg, Tgh, Tc, Tu, Tgs, Tgsh);   */
     /* malloc space for arrays */
-    if (exp_temp != nullptr)
-      free(exp_temp);
-    if (out1 != nullptr)
-      free(out1);
+    if (exp_temp != nullptr) free(exp_temp);
+    if (out1 != nullptr) free(out1);
 
     if ((exp_temp = static_cast<float*>(malloc((Tu * 2 + 2) * sizeof(float)))) == nullptr)
 

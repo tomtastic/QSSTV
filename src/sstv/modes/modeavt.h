@@ -27,14 +27,13 @@ enum eTrailerState { D1900, D1900END, DELAYHALF, DELAYFULL, BITS, CALCDELAY, WAI
 /**
   @author Johan Maes <on4qz@telenet.be>
 */
-class modeAVT : public modeBase
-{
-public:
+class modeAVT : public modeBase {
+ public:
   modeAVT(esstvMode m, unsigned int len, bool tx, bool narrowMode);
   ~modeAVT();
   eModeBase process(quint16* demod, unsigned int, bool, unsigned int rxPos);
 
-protected:
+ protected:
   embState rxSetupLine();
   void calcPixelPositionTable(unsigned int colorLine, bool tx);
   void setupParams(double clock);
@@ -48,7 +47,7 @@ protected:
   DSPFLOAT avgSample;
   unsigned int delay;
 
-private:
+ private:
   void switchTrailerState(eTrailerState newState);
 };
 

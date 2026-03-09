@@ -17,7 +17,7 @@ class imageViewer;
 
 struct txSession {
   drmTxParams drmParams;
-  QByteArray ba; // contains the image data in jpg, jp2 .... format
+  QByteArray ba;  // contains the image data in jpg, jp2 .... format
   uint transportID;
   QString filename;
   QString extension;
@@ -26,10 +26,9 @@ struct txSession {
 
 class drmTransmitter;
 
-class drmTx : public QObject
-{
+class drmTx : public QObject {
   Q_OBJECT
-public:
+ public:
   explicit drmTx(QObject* parent = 0);
   ~drmTx();
   void init();
@@ -49,18 +48,15 @@ public:
   void applyTemplate(QString templateFilename, bool useTemplate, imageViewer* ivPtr);
 
 
-  void setTxParams(drmTxParams params)
-  {
-    drmTxParameters = params;
-  }
+  void setTxParams(drmTxParams params) { drmTxParameters = params; }
   double calcTxTime(int overheadTime);
   void clearLastHybridUpload();
 
 
-private slots:
+ private slots:
   //  void rxNotification(QString info);
 
-private:
+ private:
   void runRx();
   void ftpDRMHybridNotifyCheck(QString mask);
   drmTransmitter* txDRM;
@@ -76,4 +72,4 @@ private:
   ftpFunctions ff;
 };
 
-#endif // DRMTX_H
+#endif  // DRMTX_H

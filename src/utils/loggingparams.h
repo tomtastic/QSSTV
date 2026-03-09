@@ -53,4 +53,4 @@ enum debugLevels {
 #define NUMDEBUGLEVELS (LOGPERFORM + 1)
 
 extern QString levelStr[NUMDEBUGLEVELS];
-#endif // LOGGINGPARAMS_H
+#endif  // LOGGINGPARAMS_H

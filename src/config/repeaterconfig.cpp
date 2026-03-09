@@ -37,10 +37,9 @@ QString repeaterAcknowledge;
 QString repeaterTemplate;
 QString repeaterIdleTemplate;
 int repeaterTxDelay;
-int repeaterImageSize; // in kB
+int repeaterImageSize;  // in kB
 
-repeaterConfig::repeaterConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::repeaterConfig)
-{
+repeaterConfig::repeaterConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::repeaterConfig) {
   int i;
   ui->setupUi(this);
   ui->repeaterTxModeComboBox->addItem("Same as RX");
@@ -59,13 +58,9 @@ repeaterConfig::repeaterConfig(QWidget* parent) : baseConfig(parent), ui(new Ui:
   ui->txDRMImageSizeSpinBox->setMaximum(MAXDRMSIZE / 1000);
 }
 
-repeaterConfig::~repeaterConfig()
-{
-  delete ui;
-}
+repeaterConfig::~repeaterConfig() { delete ui; }
 
-void repeaterConfig::readSettings()
-{
+void repeaterConfig::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("REPEATER");
   repeaterImageInterval = qSettings.value("repeaterImageInterval", 10).toInt();
@@ -85,8 +80,7 @@ void repeaterConfig::readSettings()
   setParams();
 }
 
-void repeaterConfig::writeSettings()
-{
+void repeaterConfig::writeSettings() {
   QSettings qSettings;
   getParams();
   qSettings.beginGroup("REPEATER");
@@ -106,8 +100,7 @@ void repeaterConfig::writeSettings()
   qSettings.endGroup();
 }
 
-void repeaterConfig::getParams()
-{
+void repeaterConfig::getParams() {
   int temp;
   bool repeaterEnabledCopy = repeaterEnabled;
   int repeaterImageIntervalCopy = repeaterImageInterval;
@@ -148,8 +141,7 @@ void repeaterConfig::getParams()
     changed = true;
 }
 
-void repeaterConfig::setParams()
-{
+void repeaterConfig::setParams() {
   ;
   setValue(repeaterImageInterval, ui->imageIntervalSpinBox);
   setValue(repeaterEnabled, ui->repeaterEnabledCheckBox);
@@ -166,29 +158,13 @@ void repeaterConfig::setParams()
 }
 
 
-void repeaterConfig::slotRp1Browse()
-{
-  browseGetFile(ui->repeaterImage1LineEdit, txStockImagesPath);
-}
+void repeaterConfig::slotRp1Browse() { browseGetFile(ui->repeaterImage1LineEdit, txStockImagesPath); }
 
-void repeaterConfig::slotRp2Browse()
-{
-  browseGetFile(ui->repeaterImage2LineEdit, txStockImagesPath);
-}
-void repeaterConfig::slotRp3Browse()
-{
-  browseGetFile(ui->repeaterImage3LineEdit, txStockImagesPath);
-}
-void repeaterConfig::slotRp4Browse()
-{
-  browseGetFile(ui->repeaterImage4LineEdit, txStockImagesPath);
-}
+void repeaterConfig::slotRp2Browse() { browseGetFile(ui->repeaterImage2LineEdit, txStockImagesPath); }
+void repeaterConfig::slotRp3Browse() { browseGetFile(ui->repeaterImage3LineEdit, txStockImagesPath); }
+void repeaterConfig::slotRp4Browse() { browseGetFile(ui->repeaterImage4LineEdit, txStockImagesPath); }
 
-void repeaterConfig::slotRepeaterIdleTemplateBrowse()
-{
+void repeaterConfig::slotRepeaterIdleTemplateBrowse() {
   browseGetFile(ui->repeaterIdleTemplateLineEdit, templatesPath);
 }
-void repeaterConfig::slotRepeaterTemplateBrowse()
-{
-  browseGetFile(ui->repeaterTemplateLineEdit, templatesPath);
-}
+void repeaterConfig::slotRepeaterTemplateBrowse() { browseGetFile(ui->repeaterTemplateLineEdit, templatesPath); }

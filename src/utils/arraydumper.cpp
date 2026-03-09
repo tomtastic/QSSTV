@@ -2,8 +2,7 @@
 #include "appglobal.h"
 
 
-void arrayDump(const QString& label, short int* data, unsigned int len, bool toAux, bool singleColumn)
-{
+void arrayDump(const QString& label, short int* data, unsigned int len, bool toAux, bool singleColumn) {
   unsigned int i, j;
   QString dumpStr, tmp;
   if (!singleColumn) {
@@ -37,16 +36,14 @@ void arrayDump(const QString& label, short int* data, unsigned int len, bool toA
   }
 }
 
-void arrayDump(const QString& label, int* data, unsigned int len, bool toAux)
-{
+void arrayDump(const QString& label, int* data, unsigned int len, bool toAux) {
   unsigned int i, j;
   QString dumpStr, tmp;
   for (i = 0; i < len; i += 16) {
     dumpStr = label + " ";
     for (j = 0; (j < 16) && ((i + j) < len); j++) {
       tmp = QString::number(data[i + j], 16);
-      while (tmp.length() < 4)
-        tmp.prepend("0");
+      while (tmp.length() < 4) tmp.prepend("0");
       dumpStr += tmp + " ";
     }
     dumpStr.chop(1);
@@ -58,8 +55,7 @@ void arrayDump(const QString& label, int* data, unsigned int len, bool toAux)
   }
 }
 
-void arrayDump(const QString& label, quint16* data, unsigned int len, bool inHex, bool toAux)
-{
+void arrayDump(const QString& label, quint16* data, unsigned int len, bool inHex, bool toAux) {
   unsigned int i, j;
   QString dumpStr, tmp;
   for (i = 0; i < len; i += 16) {
@@ -67,8 +63,7 @@ void arrayDump(const QString& label, quint16* data, unsigned int len, bool inHex
     for (j = 0; (j < 16) && ((i + j) < len); j++) {
       if (inHex) {
         tmp = QString::number(data[i + j], 16);
-        while (tmp.length() < 4)
-          tmp.prepend("0");
+        while (tmp.length() < 4) tmp.prepend("0");
       } else {
         tmp = QString::number(data[i + j]).rightJustified(5);
       }
@@ -83,8 +78,7 @@ void arrayDump(const QString& label, quint16* data, unsigned int len, bool inHex
   }
 }
 
-void arrayDump(const QString& label, quint32* data, unsigned int len, bool inHex, bool toAux)
-{
+void arrayDump(const QString& label, quint32* data, unsigned int len, bool inHex, bool toAux) {
   unsigned int i, j;
   QString dumpStr, tmp;
   for (i = 0; i < len; i += 16) {
@@ -92,8 +86,7 @@ void arrayDump(const QString& label, quint32* data, unsigned int len, bool inHex
     for (j = 0; (j < 16) && ((i + j) < len); j++) {
       if (inHex) {
         tmp = QString::number(data[i + j], 16);
-        while (tmp.length() < 8)
-          tmp.prepend("0");
+        while (tmp.length() < 8) tmp.prepend("0");
       } else {
         tmp = QString::number(data[i + j]).rightJustified(10);
       }
@@ -109,8 +102,7 @@ void arrayDump(const QString& label, quint32* data, unsigned int len, bool inHex
   }
 }
 
-void arrayDump(const QString& label, float* data, unsigned int len, bool toAux, bool singleColumn)
-{
+void arrayDump(const QString& label, float* data, unsigned int len, bool toAux, bool singleColumn) {
   unsigned int i, j;
   QString dumpStr, tmp;
   if (!singleColumn) {
@@ -118,8 +110,7 @@ void arrayDump(const QString& label, float* data, unsigned int len, bool toAux, 
       dumpStr = label + " ";
       for (j = 0; (j < 16) && ((i + j) < len); j++) {
         tmp = QString::number(data[i + j], 'E', 9);
-        while (tmp.length() < 8)
-          tmp.prepend(" ");
+        while (tmp.length() < 8) tmp.prepend(" ");
         dumpStr += tmp + " ";
       }
       dumpStr.chop(1);
@@ -145,8 +136,7 @@ void arrayDump(const QString& label, float* data, unsigned int len, bool toAux, 
   }
 }
 
-void arrayDump(const QString& label, double* data, unsigned int len, bool toAux, bool singleColumn)
-{
+void arrayDump(const QString& label, double* data, unsigned int len, bool toAux, bool singleColumn) {
   unsigned int i, j;
   QString dumpStr, tmp;
   if (!singleColumn) {
@@ -154,8 +144,7 @@ void arrayDump(const QString& label, double* data, unsigned int len, bool toAux,
       dumpStr = label + " ";
       for (j = 0; (j < 16) && ((i + j) < len); j++) {
         tmp = QString::number(data[i + j], 'E', 9);
-        while (tmp.length() < 8)
-          tmp.prepend(" ");
+        while (tmp.length() < 8) tmp.prepend(" ");
         dumpStr += tmp + " ";
       }
       dumpStr.chop(1);

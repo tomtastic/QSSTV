@@ -13,16 +13,14 @@ extern bool onlineStatusEnabled;
 extern QString onlineStatusText;
 
 
-namespace Ui
-{
+namespace Ui {
 class operatorConfig;
 }
 
-class operatorConfig : public baseConfig
-{
+class operatorConfig : public baseConfig {
   Q_OBJECT
 
-public:
+ public:
   explicit operatorConfig(QWidget* parent = 0);
   ~operatorConfig();
   void readSettings();
@@ -30,8 +28,8 @@ public:
   void getParams();
   void setParams();
 
-private:
+ private:
   Ui::operatorConfig* ui;
 };
 
-#endif // OPERATORCONFIG_H
+#endif  // OPERATORCONFIG_H

@@ -34,16 +34,15 @@
 
 
 /* Classes ********************************************************************/
-class CEngergyDispersal
-{
-public:
+class CEngergyDispersal {
+ public:
   CEngergyDispersal() {}
   virtual ~CEngergyDispersal() {}
 
   void ProcessData(CVector<_BINARY>* pbiData);
   void Init(int iNewNumInBits, int iNewLengthVSPP);
 
-protected:
+ protected:
   int iNumInBits;
   int iStartIndVSPP;
   int iEndIndVSPP;
@@ -52,4 +51,4 @@ protected:
 };
 
 
-#endif // !defined(ENERGYDISPERSAL_H__3B0BA660_CA63_4344_2B_23453E7A0D31912__INCLUDED_)
+#endif  // !defined(ENERGYDISPERSAL_H__3B0BA660_CA63_4344_2B_23453E7A0D31912__INCLUDED_)

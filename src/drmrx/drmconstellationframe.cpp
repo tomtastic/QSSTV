@@ -17,19 +17,14 @@ extern bool FACAvailable;
 #define CSTRANGE 1.5
 #define CSTSPAN 3.
 
-drmConstellationFrame::drmConstellationFrame(QWidget* parent) : QFrame(parent), ui(new Ui::drmConstellationFrame)
-{
+drmConstellationFrame::drmConstellationFrame(QWidget* parent) : QFrame(parent), ui(new Ui::drmConstellationFrame) {
   ui->setupUi(this);
   lmsc = 0;
 }
 
-drmConstellationFrame::~drmConstellationFrame()
-{
-  delete ui;
-}
+drmConstellationFrame::~drmConstellationFrame() { delete ui; }
 
-void drmConstellationFrame::paintEvent(QPaintEvent* e)
-{
+void drmConstellationFrame::paintEvent(QPaintEvent* e) {
   int i, posx, posy;
   QPainter qpainter(this);
   // qpainter.drawRect (contentsRect());
@@ -47,8 +42,7 @@ void drmConstellationFrame::paintEvent(QPaintEvent* e)
   QFrame::paintEvent(e);
 }
 
-void drmConstellationFrame::setConstellation(econstellation constellation)
-{
+void drmConstellationFrame::setConstellation(econstellation constellation) {
   if (MSCAvailable && constellation == MSC) {
     lmsc = lMSC;
     for (int i = 0; i < lMSC; i++) {
@@ -67,8 +61,7 @@ void drmConstellationFrame::setConstellation(econstellation constellation)
   }
 }
 
-void drmConstellationFrame::clearConstellation()
-{
+void drmConstellationFrame::clearConstellation() {
   lmsc = 0;
   update();
 }

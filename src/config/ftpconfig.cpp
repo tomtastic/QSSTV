@@ -41,8 +41,7 @@ eftpSaveFormat ftpSaveFormat;
 int ftpNumImages;
 bool addExtension;
 
-ftpConfig::ftpConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::ftpConfig)
-{
+ftpConfig::ftpConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::ftpConfig) {
   ui->setupUi(this);
   foreach (QByteArray format, QImageWriter::supportedImageFormats()) {
     QString text = tr("%1").arg(QString(format));
@@ -51,13 +50,9 @@ ftpConfig::ftpConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::ftpConfig
   connect(ui->testFTPPushButton, &QPushButton::clicked, this, &ftpConfig::slotTestFTPPushButton);
 }
 
-ftpConfig::~ftpConfig()
-{
-  delete ui;
-}
+ftpConfig::~ftpConfig() { delete ui; }
 
-void ftpConfig::readSettings()
-{
+void ftpConfig::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("FTPCONFIG");
   enableFTP = qSettings.value("enableFTP", false).toBool();
@@ -76,8 +71,7 @@ void ftpConfig::readSettings()
   setParams();
 }
 
-void ftpConfig::writeSettings()
-{
+void ftpConfig::writeSettings() {
   QSettings qSettings;
   getParams();
   qSettings.beginGroup("FTPCONFIG");
@@ -96,8 +90,7 @@ void ftpConfig::writeSettings()
   qSettings.endGroup();
 }
 
-void ftpConfig::getParams()
-{
+void ftpConfig::getParams() {
   bool enableFTPCopy = enableFTP;
   int ftpPortCopy = ftpPort;
   QString ftpRemoteHostCopy = ftpRemoteHost;
@@ -132,8 +125,7 @@ void ftpConfig::getParams()
     changed = true;
 }
 
-void ftpConfig::setParams()
-{
+void ftpConfig::setParams() {
   setValue(enableFTP, ui->enableFTPCheckBox);
   setValue(ftpPort, ui->ftpPortSpinBox);
   setValue(ftpRemoteHost, ui->remoteHostLineEdit);
@@ -152,8 +144,7 @@ void ftpConfig::setParams()
 }
 
 
-void ftpConfig::slotTestFTPPushButton()
-{
+void ftpConfig::slotTestFTPPushButton() {
   eftpError result;
   ftpFunctions ff;
   QString resultSSTVStr;

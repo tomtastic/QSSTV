@@ -30,11 +30,10 @@
 #include <QtCore>
 #include <QtXml>
 
-class MaiaFault : public QObject
-{
+class MaiaFault : public QObject {
   Q_OBJECT
 
-public:
+ public:
   MaiaFault(int faultCode = 0, QString faultString = QString(), QObject* parent = 0);
   MaiaFault(const MaiaFault& other);
   QString toString();

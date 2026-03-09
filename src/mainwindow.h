@@ -11,16 +11,14 @@ class configDialog;
 class spectrumWidget;
 class ftpThread;
 
-namespace Ui
-{
+namespace Ui {
 class MainWindow;
 }
 
-class mainWindow : public QMainWindow
-{
+class mainWindow : public QMainWindow {
   Q_OBJECT
 
-public:
+ public:
   explicit mainWindow(QWidget* parent = 0);
   ~mainWindow();
   void init();
@@ -30,7 +28,7 @@ public:
   void setSSTVDRMPushButton(bool inDRM);
   spectrumWidget* spectrumFramePtr;
 
-private slots:
+ private slots:
   void slotConfigure();
   void slotSaveWaterfallImage();
   void slotExit();
@@ -60,7 +58,7 @@ private slots:
   void slotTxTestPattern();
 #endif
 
-private:
+ private:
   Ui::MainWindow* ui;
   void closeEvent(QCloseEvent* e);
   void readSettings();
@@ -83,4 +81,4 @@ private:
   QStringList modPassBandList;
 };
 
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H

@@ -37,8 +37,7 @@ int wfFontSize;
 bool wfBold;
 QString sampleString;
 
-waterfallConfig::waterfallConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::waterfallConfig)
-{
+waterfallConfig::waterfallConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::waterfallConfig) {
   ui->setupUi(this);
   connect(ui->fontComboBox, QOverload<int>::of(&QFontComboBox::currentIndexChanged), this,
           &waterfallConfig::slotFontChanged);
@@ -46,14 +45,10 @@ waterfallConfig::waterfallConfig(QWidget* parent) : baseConfig(parent), ui(new U
   connect(ui->boldCheckBox, &QCheckBox::clicked, this, &waterfallConfig::slotFontChanged);
 }
 
-waterfallConfig::~waterfallConfig()
-{
-  delete ui;
-}
+waterfallConfig::~waterfallConfig() { delete ui; }
 
 
-void waterfallConfig::readSettings()
-{
+void waterfallConfig::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("WATERFALL");
   startPicWF = qSettings.value("startPicWF", "START PIC").toString();
@@ -74,8 +69,7 @@ void waterfallConfig::readSettings()
   setParams();
 }
 
-void waterfallConfig::writeSettings()
-{
+void waterfallConfig::writeSettings() {
   QSettings qSettings;
   getParams();
   qSettings.beginGroup("WATERFALL");
@@ -95,8 +89,7 @@ void waterfallConfig::writeSettings()
   qSettings.endGroup();
 }
 
-void waterfallConfig::getParams()
-{
+void waterfallConfig::getParams() {
   getValue(startPicWF, ui->startPicTextEdit);
   getValue(endPicWF, ui->endPicTextEdit);
   getValue(fixWF, ui->fixTextEdit);
@@ -111,8 +104,7 @@ void waterfallConfig::getParams()
   getValue(sampleString, ui->sampleLineEdit);
 }
 
-void waterfallConfig::setParams()
-{
+void waterfallConfig::setParams() {
   setValue(startPicWF, ui->startPicTextEdit);
   setValue(endPicWF, ui->endPicTextEdit);
   setValue(fixWF, ui->fixTextEdit);
@@ -132,8 +124,7 @@ void waterfallConfig::setParams()
   slotFontChanged();
 }
 
-void waterfallConfig::slotFontChanged()
-{
+void waterfallConfig::slotFontChanged() {
   getParams();
   QFont f(wfFont);
   f.setBold(wfBold);

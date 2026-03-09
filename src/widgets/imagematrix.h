@@ -8,27 +8,20 @@
 #include "widgets/imageviewer.h"
 
 
-class imageMatrix : public QWidget
-{
+class imageMatrix : public QWidget {
   Q_OBJECT
 
-public:
+ public:
   explicit imageMatrix(QWidget* parent = 0);
   ~imageMatrix();
   void init(int numRows, int numColumns, QString dir, imageViewer::thumbType tt);
   void setupFiles();
   void changed();
-  QFileInfoList getFileList()
-  {
-    return fileList;
-  }
+  QFileInfoList getFileList() { return fileList; }
   QString getLastFile();
-  void setSortFlag(QDir::SortFlags sf)
-  {
-    sortFlags = sf;
-  }
+  void setSortFlag(QDir::SortFlags sf) { sortFlags = sf; }
 
-private:
+ private:
   void getList();
   void displayFiles();
   void setupLayout();
@@ -53,7 +46,7 @@ private:
   QWidget* parentPtr;
   QDir::SortFlags sortFlags;
 
-private slots:
+ private slots:
   void slotPrev();
   void slotNext();
   void slotBegin();
@@ -61,4 +54,4 @@ private slots:
   void slotLayoutChanged();
 };
 
-#endif // IMAGEMATRIX_H
+#endif  // IMAGEMATRIX_H

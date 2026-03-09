@@ -14,11 +14,11 @@ SSTV Parameter functions
 // #define NUMFAXMODES 3 //!< Number of FAX Modes for RX and TX
 
 
-#define GREENLINE 0 //!< index for green line buffer
-#define BLUELINE 1  //!< index for blue line buffer
-#define REDLINE 2   //!< index for red line buffer
-#define YLINEODD 3  //!< index for intensity line buffer 0
-#define YLINEEVEN 4 //!< index for intensity line buffer 1
+#define GREENLINE 0  //!< index for green line buffer
+#define BLUELINE 1   //!< index for blue line buffer
+#define REDLINE 2    //!< index for red line buffer
+#define YLINEODD 3   //!< index for intensity line buffer 0
+#define YLINEEVEN 4  //!< index for intensity line buffer 1
 #define VIDEOBW 800
 #define MAXLINES 800
 
@@ -84,7 +84,7 @@ enum esstvMode {
   NOTVALID
 };
 
-#define NUMSSTVMODES NOTVALID //!< Number of SSTV Modes for RX and TX
+#define NUMSSTVMODES NOTVALID  //!< Number of SSTV Modes for RX and TX
 #define STARTNARROW MP73N
 #define ENDNARROW MC180N
 
@@ -121,15 +121,15 @@ struct sSSTVParam {
   QString shortName;
   enum esstvMode mode;
   DSPFLOAT imageTime;
-  unsigned int numberOfPixels; // NumberOfPixels per Line
+  unsigned int numberOfPixels;  // NumberOfPixels per Line
   unsigned int numberOfDisplayLines;
-  unsigned int numberOfDataLines; // data lines
+  unsigned int numberOfDataLines;  // data lines
   quint32 VISCode;
-  float sync; // used for rx
+  float sync;  // used for rx
   float fp;
   float bp;
   float blank;
-  float synct; // used for tx
+  float synct;  // used for tx
   float fpt;
   float bpt;
   float blankt;

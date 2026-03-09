@@ -36,21 +36,16 @@ bool confirmDeletion;
 bool confirmClose;
 QString defaultImageFormat;
 
-guiConfig::guiConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::guiConfig)
-{
+guiConfig::guiConfig(QWidget* parent) : baseConfig(parent), ui(new Ui::guiConfig) {
   ui->setupUi(this);
   backGroundColorChanged = false;
   connect(ui->backgroundColorPushButton, &QPushButton::clicked, this, &guiConfig::slotBGColorSelect);
   connect(ui->imageBackgroundColorPushButton, &QPushButton::clicked, this, &guiConfig::slotIBGColorSelect);
 }
 
-guiConfig::~guiConfig()
-{
-  delete ui;
-}
+guiConfig::~guiConfig() { delete ui; }
 
-void guiConfig::readSettings()
-{
+void guiConfig::readSettings() {
   QSettings qSettings;
   qSettings.beginGroup("GUI");
   galleryRows = qSettings.value("galleryRows", 4).toInt();
@@ -66,8 +61,7 @@ void guiConfig::readSettings()
   setParams();
 }
 
-void guiConfig::writeSettings()
-{
+void guiConfig::writeSettings() {
   QSettings qSettings;
   getParams();
   qSettings.beginGroup("GUI");
@@ -85,15 +79,13 @@ void guiConfig::writeSettings()
   qSettings.endGroup();
 }
 
-void guiConfig::getParams()
-{
+void guiConfig::getParams() {
   int galleryRowsCopy = galleryRows;
   int galleryColumnsCopy = galleryColumns;
   getValue(galleryRows, ui->rowsSpinBox);
   getValue(galleryColumns, ui->columnsSpinBox);
   changed = false;
-  if (galleryRowsCopy != galleryRows || galleryColumnsCopy != galleryColumns)
-    changed = true;
+  if (galleryRowsCopy != galleryRows || galleryColumnsCopy != galleryColumns) changed = true;
   getValue(imageStretch, ui->stretchCheckBox);
   getValue(slowCPU, ui->slowCPUCheckBox);
   getValue(lowRes, ui->lowResCheckBox);
@@ -102,8 +94,7 @@ void guiConfig::getParams()
   getValue(confirmClose, ui->confirmCloseCheckBox);
 }
 
-void guiConfig::setParams()
-{
+void guiConfig::setParams() {
   setValue(galleryRows, ui->rowsSpinBox);
   setValue(galleryColumns, ui->columnsSpinBox);
   setValue(imageStretch, ui->stretchCheckBox);
@@ -116,23 +107,20 @@ void guiConfig::setParams()
 }
 
 
-void guiConfig::slotBGColorSelect()
-{
+void guiConfig::slotBGColorSelect() {
   QColor c;
   c = QColorDialog::getColor(backGroundColor, this, "", QColorDialog::ShowAlphaChannel);
   setColorLabel(c, false);
 }
 
-void guiConfig::slotIBGColorSelect()
-{
+void guiConfig::slotIBGColorSelect() {
   QColor c;
   c = QColorDialog::getColor(imageBackGroundColor, this, "", QColorDialog::ShowAlphaChannel);
   setColorLabel(c, true);
 }
 
 
-void guiConfig::setColorLabel(QColor c, bool image)
-{
+void guiConfig::setColorLabel(QColor c, bool image) {
   if (c.isValid()) {
     if (!image) {
       backGroundColorChanged = true;

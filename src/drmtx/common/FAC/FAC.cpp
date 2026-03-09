@@ -36,8 +36,7 @@
 /******************************************************************************\
 * CFACTransmit																   *
 \******************************************************************************/
-void CFACTransmit::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Parameter)
-{
+void CFACTransmit::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Parameter) {
   /* Reset enqueue function */
   (*pbiFACData).ResetBitAccess();
 
@@ -47,94 +46,94 @@ void CFACTransmit::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Parameter)
   /* Identity m 2 bits  */
   /* Manage index of FAC block in super-frame */
   switch (Parameter.iFrameIDTransm) {
-  case 0:
-    /* Assuming AFS is valid (AFS not used here), if AFS is not valid, the
-       parameter must be 3 (11) */
-    (*pbiFACData).Enqueue(3 /* 11 */, 2);
-    break;
+    case 0:
+      /* Assuming AFS is valid (AFS not used here), if AFS is not valid, the
+         parameter must be 3 (11) */
+      (*pbiFACData).Enqueue(3 /* 11 */, 2);
+      break;
 
-  case 1:
-    (*pbiFACData).Enqueue(1 /* 01 */, 2);
-    break;
+    case 1:
+      (*pbiFACData).Enqueue(1 /* 01 */, 2);
+      break;
 
-  case 2:
-    (*pbiFACData).Enqueue(2 /* 10 */, 2);
-    break;
+    case 2:
+      (*pbiFACData).Enqueue(2 /* 10 */, 2);
+      break;
   }
 
   /* Spectrum occupancy for ham use only 1 bit  */
   switch (Parameter.GetSpectrumOccup()) {
-  case SO_0:
-    (*pbiFACData).Enqueue(0 /* 0 */, 1);
-    break;
+    case SO_0:
+      (*pbiFACData).Enqueue(0 /* 0 */, 1);
+      break;
 
-  case SO_1:
-    (*pbiFACData).Enqueue(1 /* 1 */, 1);
-    break;
-  default:
-    (*pbiFACData).Enqueue(0 /* 0 */, 1);
-    break;
+    case SO_1:
+      (*pbiFACData).Enqueue(1 /* 1 */, 1);
+      break;
+    default:
+      (*pbiFACData).Enqueue(0 /* 0 */, 1);
+      break;
   }
 
   /* Interleaver depth flag ham situation 1 bit */
   switch (Parameter.eSymbolInterlMode) {
-  case CParameter::SI_LONG:
-    (*pbiFACData).Enqueue(0 /* 0 */, 1);
-    break;
+    case CParameter::SI_LONG:
+      (*pbiFACData).Enqueue(0 /* 0 */, 1);
+      break;
 
-  case CParameter::SI_SHORT:
-    (*pbiFACData).Enqueue(1 /* 1 */, 1);
-    break;
+    case CParameter::SI_SHORT:
+      (*pbiFACData).Enqueue(1 /* 1 */, 1);
+      break;
   }
 
   /* MSC mode */
   switch (Parameter.eMSCCodingScheme) {
-  case CS_3_SM:
-    (*pbiFACData).Enqueue(0 /* 0 */, 1);
-    break;
+    case CS_3_SM:
+      (*pbiFACData).Enqueue(0 /* 0 */, 1);
+      break;
 
-  case CS_1_SM:
-    (*pbiFACData).Enqueue(1 /* 1 */, 1);
-    break;
+    case CS_1_SM:
+      (*pbiFACData).Enqueue(1 /* 1 */, 1);
+      break;
 
-  case CS_2_SM:
-    (*pbiFACData).Enqueue(1 /* 1 */, 1);
-    break;
-  default:
-    break;
+    case CS_2_SM:
+      (*pbiFACData).Enqueue(1 /* 1 */, 1);
+      break;
+    default:
+      break;
   }
 
   /* Prot Level  1 bit */
   switch (Parameter.MSCPrLe.iPartB) {
-  case 0:
-    (*pbiFACData).Enqueue(0 /* 0 */, 1);
-    break;
+    case 0:
+      (*pbiFACData).Enqueue(0 /* 0 */, 1);
+      break;
 
-  case 1:
-    (*pbiFACData).Enqueue(1 /* 1 */, 1);
-    break;
+    case 1:
+      (*pbiFACData).Enqueue(1 /* 1 */, 1);
+      break;
   }
 
   /* Audio/Data flag */
   switch (Parameter.Service[0].eAudDataFlag) {
-  case CService::SF_AUDIO:
+    case CService::SF_AUDIO:
 
-    (*pbiFACData).Enqueue(0 /* 0 */, 1);
-    (*pbiFACData).Enqueue(3 /* 11 */, 2); // pa0mbo dummy bits SSTV
-    (*pbiFACData).Enqueue(0 /* 0 */, 1);  // pa0mbo  no text
-    break;
+      (*pbiFACData).Enqueue(0 /* 0 */, 1);
+      (*pbiFACData).Enqueue(3 /* 11 */, 2);  // pa0mbo dummy bits SSTV
+      (*pbiFACData).Enqueue(0 /* 0 */, 1);   // pa0mbo  no text
+      break;
 
-  case CService::SF_DATA:
-    (*pbiFACData).Enqueue(1 /* 1 */, 1);
+    case CService::SF_DATA:
+      (*pbiFACData).Enqueue(1 /* 1 */, 1);
 
-    /* Packet Id */
-    (*pbiFACData).Enqueue(static_cast<uint32_t>(Parameter.Service[0].DataParam.iPacketID), 2);
-    /* Extended MSC mode 1 bit */
-    if (Parameter.eMSCCodingScheme == CS_1_SM)
-      (*pbiFACData).Enqueue(1 /* 1 */, 1); // QAM 4
-    else
-      (*pbiFACData).Enqueue(0 /* 0 */, 1); // others
-    break;
+      /* Packet Id */
+      (*pbiFACData).Enqueue(static_cast<uint32_t>(Parameter.Service[0].DataParam.iPacketID), 2);
+      /* Extended MSC mode 1 bit */
+      if (Parameter.eMSCCodingScheme == CS_1_SM)
+        (*pbiFACData).Enqueue(1 /* 1 */, 1);  // QAM 4
+      else
+        (*pbiFACData).Enqueue(0 /* 0 */, 1);  // others
+      break;
   }
 
   {
@@ -173,8 +172,7 @@ void CFACTransmit::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Parameter)
   (*pbiFACData).Enqueue(CRCObject.GetCRC(), 8);
 }
 
-void CFACTransmit::Init(CParameter& Parameter)
-{
+void CFACTransmit::Init(CParameter& Parameter) {
   set<int> actServ;
 
   /* Get active services */
@@ -206,8 +204,7 @@ void CFACTransmit::Init(CParameter& Parameter)
     FACNumRep = iTotNumServices;
     FACRepetition.resize(0);
 
-    for (int i : actServ)
-      FACRepetition.push_back(i);
+    for (int i : actServ) FACRepetition.push_back(i);
   } else {
     /* Special cases according to Table 60 (Service parameter repetition
        patterns for mixtures of audio and data services) */
@@ -314,8 +311,7 @@ void CFACTransmit::Init(CParameter& Parameter)
 /******************************************************************************\
 * CFACReceive																   *
 \******************************************************************************/
-_BOOLEAN CFACReceive::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Parameter)
-{
+_BOOLEAN CFACReceive::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Parameter) {
   /*
     First get new data from incoming data stream, then check if the new
     parameter differs from the old data stored in the receiver. If yes, init
@@ -346,89 +342,89 @@ _BOOLEAN CFACReceive::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Paramet
 
     /* Identity */
     switch ((*pbiFACData).Separate(2)) {
-    case 0: /* 00 */
-      Parameter.iFrameIDReceiv = 0;
-      break;
+      case 0: /* 00 */
+        Parameter.iFrameIDReceiv = 0;
+        break;
 
-    case 1: /* 01 */
-      Parameter.iFrameIDReceiv = 1;
-      break;
+      case 1: /* 01 */
+        Parameter.iFrameIDReceiv = 1;
+        break;
 
-    case 2: /* 10 */
-      Parameter.iFrameIDReceiv = 2;
-      break;
+      case 2: /* 10 */
+        Parameter.iFrameIDReceiv = 2;
+        break;
 
-    case 3: /* 11 */
-      Parameter.iFrameIDReceiv = 0;
-      break;
+      case 3: /* 11 */
+        Parameter.iFrameIDReceiv = 0;
+        break;
     }
 
     /* Spectrum occupancy */
     switch ((*pbiFACData).Separate(4)) {
-    case 0: /* 0000 */
-      Parameter.SetSpectrumOccup(SO_0);
-      break;
+      case 0: /* 0000 */
+        Parameter.SetSpectrumOccup(SO_0);
+        break;
 
-    case 1: /* 0001 */
-      Parameter.SetSpectrumOccup(SO_1);
-      break;
+      case 1: /* 0001 */
+        Parameter.SetSpectrumOccup(SO_1);
+        break;
 
-    case 2: /* 0010 */
-      Parameter.SetSpectrumOccup(SO_2);
-      break;
+      case 2: /* 0010 */
+        Parameter.SetSpectrumOccup(SO_2);
+        break;
 
-    case 3: /* 0011 */
-      Parameter.SetSpectrumOccup(SO_3);
-      break;
+      case 3: /* 0011 */
+        Parameter.SetSpectrumOccup(SO_3);
+        break;
 
-    case 4: /* 0100 */
-      Parameter.SetSpectrumOccup(SO_4);
-      break;
+      case 4: /* 0100 */
+        Parameter.SetSpectrumOccup(SO_4);
+        break;
 
-    case 5: /* 0101 */
-      Parameter.SetSpectrumOccup(SO_5);
-      break;
+      case 5: /* 0101 */
+        Parameter.SetSpectrumOccup(SO_5);
+        break;
     }
 
     /* Interleaver depth flag */
     switch ((*pbiFACData).Separate(1)) {
-    case 0: /* 0 */
-      Parameter.SetInterleaverDepth(CParameter::SI_LONG);
-      break;
+      case 0: /* 0 */
+        Parameter.SetInterleaverDepth(CParameter::SI_LONG);
+        break;
 
-    case 1: /* 1 */
-      Parameter.SetInterleaverDepth(CParameter::SI_SHORT);
-      break;
+      case 1: /* 1 */
+        Parameter.SetInterleaverDepth(CParameter::SI_SHORT);
+        break;
     }
 
     /* MSC mode */
     switch ((*pbiFACData).Separate(2)) {
-    case 0: /* 00 */
-      Parameter.SetMSCCodingScheme(CS_3_SM);
-      break;
+      case 0: /* 00 */
+        Parameter.SetMSCCodingScheme(CS_3_SM);
+        break;
 
-    case 1: /* 01 */
-      Parameter.SetMSCCodingScheme(CS_3_HMMIX);
-      break;
+      case 1: /* 01 */
+        Parameter.SetMSCCodingScheme(CS_3_HMMIX);
+        break;
 
-    case 2: /* 10 */
-      Parameter.SetMSCCodingScheme(CS_3_HMSYM);
-      break;
+      case 2: /* 10 */
+        Parameter.SetMSCCodingScheme(CS_3_HMSYM);
+        break;
 
-    case 3: /* 11 */
-      Parameter.SetMSCCodingScheme(CS_2_SM);
-      break;
+      case 3: /* 11 */
+        Parameter.SetMSCCodingScheme(CS_2_SM);
+        break;
     }
 
     /* SDC mode */
     switch ((*pbiFACData).Separate(1)) {
-    case 0: /* 0 */
-      Parameter.SetSDCCodingScheme(CS_2_SM);
-      break;
+      case 0: /* 0 */
+        Parameter.SetSDCCodingScheme(CS_2_SM);
+        break;
 
-    case 1: /* 1 */
-      Parameter.SetSDCCodingScheme(CS_1_SM);
-      break;
+      case 1: /* 1 */
+        Parameter.SetSDCCodingScheme(CS_1_SM);
+        break;
     }
 
     /* Number of services */
@@ -436,8 +432,7 @@ _BOOLEAN CFACReceive::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Paramet
     int iNumServTabEntry = (*pbiFACData).Separate(4);
     for (int i = 0; i < 5; i++)
       for (int j = 0; j < 5; j++)
-        if (iNumServTabEntry == iTableNumOfServices[i][j])
-          Parameter.SetNumOfServices(i, j);
+        if (iNumServTabEntry == iTableNumOfServices[i][j]) Parameter.SetNumOfServices(i, j);
 
     /* Reconfiguration index (not used, yet) */
     (*pbiFACData).Separate(3);
@@ -459,13 +454,13 @@ _BOOLEAN CFACReceive::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Paramet
 
     /* CA indication */
     switch ((*pbiFACData).Separate(1)) {
-    case 0: /* 0 */
-      Parameter.Service[iTempShortID].eCAIndication = CService::CA_NOT_USED;
-      break;
+      case 0: /* 0 */
+        Parameter.Service[iTempShortID].eCAIndication = CService::CA_NOT_USED;
+        break;
 
-    case 1: /* 1 */
-      Parameter.Service[iTempShortID].eCAIndication = CService::CA_USED;
-      break;
+      case 1: /* 1 */
+        Parameter.Service[iTempShortID].eCAIndication = CService::CA_USED;
+        break;
     }
 
     /* Language */
@@ -473,13 +468,13 @@ _BOOLEAN CFACReceive::FACParam(CVector<_BINARY>* pbiFACData, CParameter& Paramet
 
     /* Audio/Data flag */
     switch ((*pbiFACData).Separate(1)) {
-    case 0: /* 0 */
-      Parameter.SetAudDataFlag(iTempShortID, CService::SF_AUDIO);
-      break;
+      case 0: /* 0 */
+        Parameter.SetAudDataFlag(iTempShortID, CService::SF_AUDIO);
+        break;
 
-    case 1: /* 1 */
-      Parameter.SetAudDataFlag(iTempShortID, CService::SF_DATA);
-      break;
+      case 1: /* 1 */
+        Parameter.SetAudDataFlag(iTempShortID, CService::SF_DATA);
+        break;
     }
 
     /* Service descriptor */

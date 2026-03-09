@@ -27,33 +27,19 @@
 #include <QDebug>
 
 
-template <class T, unsigned int N> class buffer
-{
-public:
-  buffer()
-  {
+template <class T, unsigned int N>
+class buffer {
+ public:
+  buffer() {
     memblock = new T[1 << N];
     reset();
   }
-  ~buffer()
-  {
-    delete[] memblock;
-  }
+  ~buffer() { delete[] memblock; }
 
-  unsigned int count()
-  {
-    return ((writeIndex - readIndex) & ((1 << N) - 1));
-  }
-  unsigned int spaceLeft()
-  {
-    return ((1 << N) - count() - 1);
-  }
-  unsigned int getBufferSize()
-  {
-    return (1 << N);
-  }
-  bool get(T& v)
-  {
+  unsigned int count() { return ((writeIndex - readIndex) & ((1 << N) - 1)); }
+  unsigned int spaceLeft() { return ((1 << N) - count() - 1); }
+  unsigned int getBufferSize() { return (1 << N); }
+  bool get(T& v) {
     mutex.lock();
     if (writeIndex == readIndex) {
       mutex.unlock();
@@ -64,8 +50,7 @@ public:
     mutex.unlock();
     return true;
   }
-  bool get(T* cp, unsigned int len)
-  {
+  bool get(T* cp, unsigned int len) {
     int i;
     mutex.lock();
     if (len > count()) {
@@ -80,8 +65,7 @@ public:
     mutex.unlock();
     return true;
   }
-  bool put(T v)
-  {
+  bool put(T v) {
     mutex.lock();
     if (((writeIndex + 1) & ((1 << N) - 1)) == readIndex) {
       mutex.unlock();
@@ -93,8 +77,7 @@ public:
     return true;
   }
 
-  bool put(T* cp, unsigned int len)
-  {
+  bool put(T* cp, unsigned int len) {
     unsigned int i;
     mutex.lock();
 
@@ -110,7 +93,7 @@ public:
     return true;
   }
 
-  void putNoCheck(T* cp, unsigned int len) // no boundary check performed
+  void putNoCheck(T* cp, unsigned int len)  // no boundary check performed
   {
     mutex.lock();
     memcpy(&memblock[writeIndex], cp, len * sizeof(T));
@@ -119,44 +102,25 @@ public:
     mutex.unlock();
   }
 
-  void reset()
-  {
+  void reset() {
     mutex.lock();
     readIndex = 0;
     writeIndex = 0;
     mutex.unlock();
   }
 
-  void fill(T f)
-  {
+  void fill(T f) {
     mutex.lock();
-    for (int i = 0; i < (1 << N); i++)
-      memblock[i] = f;
+    for (int i = 0; i < (1 << N); i++) memblock[i] = f;
     mutex.unlock();
   }
-  T* readPointer()
-  {
-    return &memblock[readIndex];
-  }
-  T* writePointer()
-  {
-    return &memblock[writeIndex];
-  }
-  T* basePointer()
-  {
-    return memblock;
-  }
+  T* readPointer() { return &memblock[readIndex]; }
+  T* writePointer() { return &memblock[writeIndex]; }
+  T* basePointer() { return memblock; }
 
-  unsigned int getReadIndex()
-  {
-    return readIndex;
-  }
-  unsigned int getWriteIndex()
-  {
-    return writeIndex;
-  }
-  bool skip(unsigned int s)
-  {
+  unsigned int getReadIndex() { return readIndex; }
+  unsigned int getWriteIndex() { return writeIndex; }
+  bool skip(unsigned int s) {
     mutex.lock();
     if (s > count()) {
       mutex.unlock();
@@ -167,8 +131,7 @@ public:
     mutex.unlock();
     return true;
   }
-  bool rewind(unsigned int s)
-  {
+  bool rewind(unsigned int s) {
     mutex.lock();
     if (s > spaceLeft()) {
       mutex.unlock();
@@ -181,8 +144,7 @@ public:
     return true;
   }
   // no check is made if space available
-  bool advance(unsigned int s)
-  {
+  bool advance(unsigned int s) {
     mutex.lock();
     writeIndex += s;
     writeIndex &= ((1 << N) - 1);
@@ -190,27 +152,22 @@ public:
     return true;
   }
 
-  void setReadIndex(unsigned int idx)
-  {
+  void setReadIndex(unsigned int idx) {
     idx &= ((1 << N) - 1);
     readIndex = idx;
   }
 
 
-  T at(unsigned int i)
-  {
+  T at(unsigned int i) {
     i &= ((1 << N) - 1);
     return memblock[i];
   }
-  void copy(T* dst, int len)
-  {
+  void copy(T* dst, int len) {
     mutex.lock();
-    for (int i = 0; i < len; i++)
-      dst[i] = memblock[(readIndex + i) & ((1 << N) - 1)];
+    for (int i = 0; i < len; i++) dst[i] = memblock[(readIndex + i) & ((1 << N) - 1)];
     mutex.unlock();
   }
-  void copyNoCheck(T* dst, int len)
-  {
+  void copyNoCheck(T* dst, int len) {
     mutex.lock();
     memcpy(dst, &memblock[readIndex], len * sizeof(T));
     readIndex += len;
@@ -218,7 +175,7 @@ public:
     mutex.unlock();
   }
 
-private:
+ private:
   T* memblock;
   unsigned int readIndex;
   unsigned int writeIndex;

@@ -26,13 +26,9 @@ struct ssenitivity {
 };
 
 struct ssyncEntry {
-  ssyncEntry()
-  {
-    init();
-  }
+  ssyncEntry() { init(); }
 
-  void init()
-  {
+  void init() {
     start = 0;
     end = 0;
     startVolume = 0;
@@ -43,8 +39,7 @@ struct ssyncEntry {
     lineNumber = 0;
     length = 0;
   }
-  int diffStartEnd()
-  {
+  int diffStartEnd() {
     width = end - start;
     return width;
   }
@@ -60,13 +55,9 @@ struct ssyncEntry {
 };
 
 struct smatchEntry {
-  smatchEntry()
-  {
-    init();
-  }
+  smatchEntry() { init(); }
 
-  smatchEntry(uint fromIdx, uint toIdx, uint lineSpace, double fract, uint endFromSample, uint endToSample)
-  {
+  smatchEntry(uint fromIdx, uint toIdx, uint lineSpace, double fract, uint endFromSample, uint endToSample) {
     from = fromIdx;
     to = toIdx;
     lineSpacing = lineSpace;
@@ -74,8 +65,7 @@ struct smatchEntry {
     endFrom = endFromSample;
     endTo = endToSample;
   }
-  void init()
-  {
+  void init() {
     from = 0;
     to = 0;
     lineSpacing = 0;
@@ -99,10 +89,9 @@ struct sslantXY {
 typedef QList<smatchEntry*> modeMatchList;
 typedef QList<modeMatchList*> modeMatchChain;
 
-class syncProcessor : public QObject
-{
+class syncProcessor : public QObject {
   Q_OBJECT
-public:
+ public:
   //  enum esyncState {SYNCOFF,SYNCUP,SYNCSTART,SYNCON,SYNCDOWN,SYNCEND,SYNCVALID};
   enum esyncState { SYNCOFF, SYNCACTIVE, SYNCVALID };
   enum esyncProcessState {
@@ -119,32 +108,21 @@ public:
   void init();
   void reset();
   void process();
-  esyncProcessState getSyncState(quint32& syncPos)
-  {
+  esyncProcessState getSyncState(quint32& syncPos) {
     syncPos = syncPosition;
     return syncProcesState;
   }
-  esstvMode getMode()
-  {
-    return currentMode;
-  }
+  esstvMode getMode() { return currentMode; }
   void resetRetraceFlag();
-  bool hasNewClock()
-  {
+  bool hasNewClock() {
     bool nc = newClock;
     newClock = false;
     return nc;
   }
   void clear();
   void recalculateMatchArray();
-  DSPFLOAT getNewClock()
-  {
-    return modifiedClock;
-  }
-  void setSyncDetectionEnabled(bool enable)
-  {
-    enableSyncDetection = enable;
-  }
+  DSPFLOAT getNewClock() { return modifiedClock; }
+  void setSyncDetectionEnabled(bool enable) { enableSyncDetection = enable; }
 
 
   quint32 sampleCounter;
@@ -169,14 +147,14 @@ public:
   unsigned int syncStateBuffer[RXSTRIPE];
 #endif
 
-public slots:
+ public slots:
   void slotNewCall(QString call);
   void slotVisCodeDetected(int, uint visSampleCounter);
 
-signals:
+ signals:
   void callReceived(QString);
 
-private:
+ private:
   quint32 maxLineSamples;
   quint16 syncArrayIndex;
   ssyncEntry syncArray[MAXSYNCENTRIES];
@@ -240,4 +218,4 @@ private:
   //  DSPFLOAT syncAvg;
 };
 
-#endif // SYNCPROCESSOR_H
+#endif  // SYNCPROCESSOR_H

@@ -31,8 +31,7 @@
 
 
 /* Implementation *************************************************************/
-int CConvEncoder::Encode(CVector<_DECISION>& vecInputData, CVector<_DECISION>& vecOutputData)
-{
+int CConvEncoder::Encode(CVector<_DECISION>& vecInputData, CVector<_DECISION>& vecOutputData) {
   /* Set output size to zero, increment it each time a new bit is encoded */
   int iOutputCnt = 0;
 
@@ -53,8 +52,7 @@ int CConvEncoder::Encode(CVector<_DECISION>& vecInputData, CVector<_DECISION>& v
        reached and no more bits must be added */
     if (i < iNumInBits) {
       /* Add new bit at the beginning */
-      if (ExtractBit(vecInputData[i]) != 0)
-        byStateShiftReg |= 1;
+      if (ExtractBit(vecInputData[i]) != 0) byStateShiftReg |= 1;
 
 #ifdef USE_MAX_LOG_MAP
       /* Update shift register for soft information. We assume here that
@@ -72,78 +70,78 @@ int CConvEncoder::Encode(CVector<_DECISION>& vecInputData, CVector<_DECISION>& v
        inside the convolution function) */
 #ifdef USE_MAX_LOG_MAP
     switch (veciTablePuncPat[i]) {
-    case PP_TYPE_0001:
-      /* Pattern 0001 */
-      vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 0);
-      break;
+      case PP_TYPE_0001:
+        /* Pattern 0001 */
+        vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 0);
+        break;
 
-    case PP_TYPE_0101:
-      /* Pattern 0101 */
-      vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 0);
+      case PP_TYPE_0101:
+        /* Pattern 0101 */
+        vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 0);
 
-      vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 2);
-      break;
+        vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 2);
+        break;
 
-    case PP_TYPE_0011:
-      /* Pattern 0011 */
-      vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 0);
+      case PP_TYPE_0011:
+        /* Pattern 0011 */
+        vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 0);
 
-      vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 1);
-      break;
+        vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 1);
+        break;
 
-    case PP_TYPE_0111:
-      /* Pattern 0111 */
-      vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 0);
+      case PP_TYPE_0111:
+        /* Pattern 0111 */
+        vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 0);
 
-      vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 1);
+        vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 1);
 
-      vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 2);
-      break;
+        vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 2);
+        break;
 
-    case PP_TYPE_1111:
-      /* Pattern 1111 */
-      vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 0);
+      case PP_TYPE_1111:
+        /* Pattern 1111 */
+        vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 0);
 
-      vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 1);
+        vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 1);
 
-      vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 2);
+        vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 2);
 
-      vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 3);
-      break;
+        vecOutputData[iOutputCnt++] = SoftConvolution(byStateShiftReg, vecStateMem, 3);
+        break;
     }
 #else
     switch (veciTablePuncPat[i]) {
-    case PP_TYPE_0001:
-      /* Pattern 0001 */
-      vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 0);
-      break;
+      case PP_TYPE_0001:
+        /* Pattern 0001 */
+        vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 0);
+        break;
 
-    case PP_TYPE_0101:
-      /* Pattern 0101 */
-      vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 0);
-      vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 2);
-      break;
+      case PP_TYPE_0101:
+        /* Pattern 0101 */
+        vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 0);
+        vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 2);
+        break;
 
-    case PP_TYPE_0011:
-      /* Pattern 0011 */
-      vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 0);
-      vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 1);
-      break;
+      case PP_TYPE_0011:
+        /* Pattern 0011 */
+        vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 0);
+        vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 1);
+        break;
 
-    case PP_TYPE_0111:
-      /* Pattern 0111 */
-      vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 0);
-      vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 1);
-      vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 2);
-      break;
+      case PP_TYPE_0111:
+        /* Pattern 0111 */
+        vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 0);
+        vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 1);
+        vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 2);
+        break;
 
-    case PP_TYPE_1111:
-      /* Pattern 1111 */
-      vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 0);
-      vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 1);
-      vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 2);
-      vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 3);
-      break;
+      case PP_TYPE_1111:
+        /* Pattern 1111 */
+        vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 0);
+        vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 1);
+        vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 2);
+        vecOutputData[iOutputCnt++] = Convolution(byStateShiftReg, 3);
+        break;
     }
 #endif
   }
@@ -154,8 +152,7 @@ int CConvEncoder::Encode(CVector<_DECISION>& vecInputData, CVector<_DECISION>& v
 
 #ifdef USE_MAX_LOG_MAP
 _DECISION CConvEncoder::SoftConvolution(const _BYTE byNewStateShiftReg, CShiftRegister<_DECISION>& vecStateMem,
-                                        const int iGenPolyn)
-{
+                                        const int iGenPolyn) {
   _DECISION decSoftOut;
 
   /* Search for minimum norm value of input soft-informations.
@@ -163,21 +160,21 @@ _DECISION CConvEncoder::SoftConvolution(const _BYTE byNewStateShiftReg, CShiftRe
      the poylnoms stored in "byGeneratorMatrix[]"! When changing the polynoms,
      it has to be changed here, too */
   switch (iGenPolyn) {
-  case 0:
-  case 3:
-    /* oct: 0155 -> 1101101 */
-    decSoftOut = Min(Min(Min(Min(vecStateMem[0], vecStateMem[2]), vecStateMem[3]), vecStateMem[5]), vecStateMem[6]);
-    break;
+    case 0:
+    case 3:
+      /* oct: 0155 -> 1101101 */
+      decSoftOut = Min(Min(Min(Min(vecStateMem[0], vecStateMem[2]), vecStateMem[3]), vecStateMem[5]), vecStateMem[6]);
+      break;
 
-  case 1:
-    /* oct: 0117 -> 1001111 */
-    decSoftOut = Min(Min(Min(Min(vecStateMem[0], vecStateMem[1]), vecStateMem[2]), vecStateMem[3]), vecStateMem[6]);
-    break;
+    case 1:
+      /* oct: 0117 -> 1001111 */
+      decSoftOut = Min(Min(Min(Min(vecStateMem[0], vecStateMem[1]), vecStateMem[2]), vecStateMem[3]), vecStateMem[6]);
+      break;
 
-  case 2:
-    /* oct: 0123 -> 1010011 */
-    decSoftOut = Min(Min(Min(vecStateMem[0], vecStateMem[1]), vecStateMem[4]), vecStateMem[6]);
-    break;
+    case 2:
+      /* oct: 0123 -> 1010011 */
+      decSoftOut = Min(Min(Min(vecStateMem[0], vecStateMem[1]), vecStateMem[4]), vecStateMem[6]);
+      break;
   }
 
   /* Hard decision defines the sign, the norm is defined by the minimum of
@@ -191,8 +188,7 @@ _DECISION CConvEncoder::SoftConvolution(const _BYTE byNewStateShiftReg, CShiftRe
 
 void CConvEncoder::Init(ECodScheme eNewCodingScheme, EChanType eNewChannelType, int iN1, int iN2,
                         int iNewNumInBitsPartA, int iNewNumInBitsPartB, int iPunctPatPartA, int iPunctPatPartB,
-                        int iLevel)
-{
+                        int iLevel) {
   /* Number of bits out is the sum of all protection levels */
   iNumInBits = iNewNumInBitsPartA + iNewNumInBitsPartB;
 

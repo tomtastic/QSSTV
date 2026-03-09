@@ -3,7 +3,7 @@
 #include <QString>
 
 #define MSGTXMAXLEN 2048
-#define MSGPERM 0666 // msg queue permission
+#define MSGPERM 0666  // msg queue permission
 #define MTYPE 88
 
 
@@ -13,9 +13,8 @@ struct smessageBuf {
 };
 
 
-class ipcMessage
-{
-public:
+class ipcMessage {
+ public:
   ipcMessage(int messageKey);
   ~ipcMessage();
   void essage();
@@ -23,11 +22,11 @@ public:
   bool receiveMessage(QString& t);
   bool closeQueue();
 
-private:
+ private:
   smessageBuf msgBuf;
   int key;
   int messageQId, rc;
   int done;
 };
 
-#endif // IPCMESSAGE_H
+#endif  // IPCMESSAGE_H

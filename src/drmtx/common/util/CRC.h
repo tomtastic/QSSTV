@@ -35,9 +35,8 @@
 
 
 /* Classes ********************************************************************/
-class CCRC
-{
-public:
+class CCRC {
+ public:
   CCRC();
   virtual ~CCRC() {}
 
@@ -48,7 +47,7 @@ public:
   uint32_t GetCRC();
   void crc16_bytewise(double checksum[], unsigned char in[], long N);
 
-protected:
+ protected:
   int iDegIndex;
   uint32_t iBitOutPosMask;
 
@@ -57,4 +56,4 @@ protected:
 };
 
 
-#endif // !defined(CRC_H__3B0BA660_CA63_4VASDGLJNAJ2B_23E7A0D31912__INCLUDED_)
+#endif  // !defined(CRC_H__3B0BA660_CA63_4VASDGLJNAJ2B_23E7A0D31912__INCLUDED_)

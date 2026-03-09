@@ -38,20 +38,20 @@
 
 /* Definitions ****************************************************************/
 /* Power definitions for pilots, boosted pilots and data cells (average) */
-#define AV_DATA_CELLS_POWER ((_REAL) 1.0)
-#define AV_PILOT_POWER ((_REAL) 2.0)
-#define AV_BOOSTED_PIL_POWER ((_REAL) 4.0)
+#define AV_DATA_CELLS_POWER ((_REAL)1.0)
+#define AV_PILOT_POWER ((_REAL)2.0)
+#define AV_BOOSTED_PIL_POWER ((_REAL)4.0)
 
 
 /* We define a bit for each flag to allow multiple assignments */
-#define CM_DC 1 /* Bit 0 */ // CM: Carrier Mapping
-#define CM_MSC 2            /* Bit 1 */
-#define CM_SDC 4            /* Bit 2 */
-#define CM_FAC 8            /* Bit 3 */
-#define CM_TI_PI 16         /* Bit 4 */
-#define CM_FRE_PI 32        /* Bit 5 */
-#define CM_SCAT_PI 64       /* Bit 6 */
-#define CM_BOOSTED_PI 128   /* Bit 7 */
+#define CM_DC 1 /* Bit 0 */  // CM: Carrier Mapping
+#define CM_MSC 2             /* Bit 1 */
+#define CM_SDC 4             /* Bit 2 */
+#define CM_FAC 8             /* Bit 3 */
+#define CM_TI_PI 16          /* Bit 4 */
+#define CM_FRE_PI 32         /* Bit 5 */
+#define CM_SCAT_PI 64        /* Bit 6 */
+#define CM_BOOSTED_PI 128    /* Bit 7 */
 
 /* Definitions for checking the cells */
 #define _IsDC(a) ((a) & CM_DC)
@@ -72,9 +72,8 @@
 
 
 /* Classes ********************************************************************/
-class CCellMappingTable
-{
-public:
+class CCellMappingTable {
+ public:
   CCellMappingTable() : iNumSymbolsPerSuperframe(0) {}
   virtual ~CCellMappingTable() {}
 
@@ -125,7 +124,7 @@ public:
   _REAL rAvScatPilPow;   /* Average power of scattered pilots per cell */
   _REAL rAvPilPowPerSym; /* added pa0mbo */
 
-protected:
+ protected:
   /* Internal parameters for MakeTable function --------------------------- */
   struct CScatPilots {
     CScatPilots() : piConst(nullptr), iColSizeWZ(0), piW(nullptr), piZ(nullptr), iQ(0), piGainTable(nullptr) {}
@@ -142,10 +141,10 @@ protected:
   };
 
 
-private:
+ private:
   _COMPLEX Polar2Cart(const _REAL rAbsolute, const int iPhase) const;
   int mod(const int ix, const int iy) const;
 };
 
 
-#endif // !defined(CELLMAPPINGTABLE_H__3B0BA660_CA63_4347A0D31912__INCLUDED_)
+#endif  // !defined(CELLMAPPINGTABLE_H__3B0BA660_CA63_4347A0D31912__INCLUDED_)

@@ -48,8 +48,7 @@ int standardResolution[NUMRES][2] = {
     {160, 120}};
 
 
-cameraDialog::cameraDialog(QWidget* parent) : QDialog(parent), ui(new Ui::cameraDialog)
-{
+cameraDialog::cameraDialog(QWidget* parent) : QDialog(parent), ui(new Ui::cameraDialog) {
   ui->setupUi(this);
   cameraActive = false;
   videoCapturePtr = nullptr;
@@ -68,13 +67,9 @@ cameraDialog::cameraDialog(QWidget* parent) : QDialog(parent), ui(new Ui::camera
   timerID = 0;
 }
 
-cameraDialog::~cameraDialog()
-{
-  delete ui;
-}
+cameraDialog::~cameraDialog() { delete ui; }
 
-int cameraDialog::exec()
-{
+int cameraDialog::exec() {
   if (!restartCapturing(true)) {
     QMessageBox::warning(this, "Capturing", "Unable to start capturing");
     return QDialog::Rejected;
@@ -85,21 +80,17 @@ int cameraDialog::exec()
   deactivateTimer();
   videoCapturePtr->stopStreaming();
   videoCapturePtr->close();
-  if (result == QDialog::Accepted)
-    return true;
+  if (result == QDialog::Accepted) return true;
   return false;
 }
 
 
-void cameraDialog::deactivateTimer()
-{
-  if (timerID)
-    killTimer(timerID);
+void cameraDialog::deactivateTimer() {
+  if (timerID) killTimer(timerID);
   timerID = 0;
 }
 
-void cameraDialog::timerEvent(QTimerEvent*)
-{
+void cameraDialog::timerEvent(QTimerEvent*) {
   int ret;
   ret = videoCapturePtr->getFrame();
   if (ret > 0) {
@@ -115,20 +106,15 @@ void cameraDialog::timerEvent(QTimerEvent*)
 }
 
 
-QImage* cameraDialog::getImage()
-{
-  return videoCapturePtr->getImage();
-}
+QImage* cameraDialog::getImage() { return videoCapturePtr->getImage(); }
 
 
-void cameraDialog::slotSettings()
-{
+void cameraDialog::slotSettings() {
   imageSettings settingsDialog(cameraList.at(ui->devicesComboBox->currentIndex()).deviceName);
   settingsDialog.exec();
 }
 
-void cameraDialog::listCameraDevices()
-{
+void cameraDialog::listCameraDevices() {
   int i;
   cameraList.clear();
   QDir devDir("/dev");
@@ -141,13 +127,11 @@ void cameraDialog::listCameraDevices()
   for (i = 0; i < cameraList.count(); i++) {
     ui->devicesComboBox->addItem(cameraList.at(i).deviceDescription);
   }
-  if (cameraList.count() > 0)
-    setupFormatComboBox(cameraList.at(0));
+  if (cameraList.count() > 0) setupFormatComboBox(cameraList.at(0));
 }
 
 
-void cameraDialog::setupFormatComboBox(scameraDevice cd)
-{
+void cameraDialog::setupFormatComboBox(scameraDevice cd) {
   int i;
   ui->formatsComboBox->blockSignals(true);
   ui->formatsComboBox->clear();
@@ -159,8 +143,7 @@ void cameraDialog::setupFormatComboBox(scameraDevice cd)
   setupSizeComboBox(cd.formats.at(cd.formatIdx));
 }
 
-void cameraDialog::setupSizeComboBox(sformats frmat)
-{
+void cameraDialog::setupSizeComboBox(sformats frmat) {
   int i;
   ui->sizeComboBox->blockSignals(true);
   ui->sizeComboBox->clear();
@@ -172,8 +155,7 @@ void cameraDialog::setupSizeComboBox(sformats frmat)
 }
 
 
-void cameraDialog::getCameraInfo(QStringList devList)
-{
+void cameraDialog::getCameraInfo(QStringList devList) {
   int fd;
   int i;
   bool ok = true;
@@ -189,37 +171,35 @@ void cameraDialog::getCameraInfo(QStringList devList)
     fd = v4l2_open(camDev.toLatin1().data(), O_RDWR, 0);
     if (fd < 0) {
       QString msg = QString("Unable to open file %1\n%2").arg(camDev).arg(strerror(errno));
-      (void) QMessageBox::warning(this, "v4l2ucp: Unable to open file", msg, QMessageBox::Ok, QMessageBox::Ok);
+      (void)QMessageBox::warning(this, "v4l2ucp: Unable to open file", msg, QMessageBox::Ok, QMessageBox::Ok);
       continue;
     }
 
     if (v4l2_ioctl(fd, VIDIOC_QUERYCAP, &cap) == -1) {
       QString msg = QString("%1 is not a V4L2 device").arg(camDev);
-      (void) QMessageBox::warning(this, "Camera selection error", msg, QMessageBox::Ok, QMessageBox::Ok);
+      (void)QMessageBox::warning(this, "Camera selection error", msg, QMessageBox::Ok, QMessageBox::Ok);
       ok = false;
     }
     formats = getFormatList(fd);
     if (ok) {
       if (formats.count() > 0)
-        cameraList.append(scameraDevice(camDev, (const char*) cap.card, (const char*) cap.driver,
-                                        (const char*) cap.bus_info, formats));
+        cameraList.append(
+            scameraDevice(camDev, (const char*)cap.card, (const char*)cap.driver, (const char*)cap.bus_info, formats));
     }
     v4l2_close(fd);
   }
 }
 
-QString cameraDialog::pixelFormatStr(int pixelFormat)
-{
+QString cameraDialog::pixelFormatStr(int pixelFormat) {
   QString t;
-  t = QChar((uchar) (pixelFormat & 0xFF));
-  t += QChar((uchar) ((pixelFormat >> 8) & 0xFF));
-  t += QChar((uchar) ((pixelFormat >> 16) & 0xFF));
-  t += QChar((uchar) ((pixelFormat >> 24) & 0xFF));
+  t = QChar((uchar)(pixelFormat & 0xFF));
+  t += QChar((uchar)((pixelFormat >> 8) & 0xFF));
+  t += QChar((uchar)((pixelFormat >> 16) & 0xFF));
+  t += QChar((uchar)((pixelFormat >> 24) & 0xFF));
   return t;
 }
 
-QList<sformats> cameraDialog::getFormatList(int fd)
-{
+QList<sformats> cameraDialog::getFormatList(int fd) {
   int j, ret;
   unsigned int resx, resy;
   QList<sformats> formatsList;
@@ -242,7 +222,7 @@ QList<sformats> cameraDialog::getFormatList(int fd)
         if (frm.type == V4L2_FRMSIZE_TYPE_DISCRETE) {
           scsList.append(scameraSizes(frm.discrete.width, frm.discrete.height,
                                       QString("%1x%2").arg(frm.discrete.width).arg(frm.discrete.height)));
-        } else // we have a stepwise resolution
+        } else  // we have a stepwise resolution
         {
           // scsList.append(scameraSizes(frm.stepwise.max_width,frm.stepwise.max_height,QString("%1x%2").arg(frm.stepwise.max_width).arg(frm.stepwise.max_height)));
           for (j = 0; j < NUMRES; j++) {
@@ -264,30 +244,25 @@ QList<sformats> cameraDialog::getFormatList(int fd)
 }
 
 
-void cameraDialog::slotDeviceChanged(int idx)
-{
+void cameraDialog::slotDeviceChanged(int idx) {
   setupFormatComboBox(cameraList.at(idx));
   slotFormatChanged(cameraList.at(idx).formatIdx);
 }
 
-void cameraDialog::slotFormatChanged(int idx)
-{
+void cameraDialog::slotFormatChanged(int idx) {
   setupSizeComboBox(cameraList.at(ui->devicesComboBox->currentIndex()).formats.at(idx));
   slotSizeChanged(cameraList.at(ui->devicesComboBox->currentIndex()).formats.at(idx).sizeIdx);
   cameraList[(ui->devicesComboBox->currentIndex())].formatIdx = idx;
 }
 
-void cameraDialog::slotSizeChanged(int idx)
-{
+void cameraDialog::slotSizeChanged(int idx) {
   cameraList[ui->devicesComboBox->currentIndex()].formats[ui->formatsComboBox->currentIndex()].sizeIdx = idx;
   restartCapturing();
 }
 
-bool cameraDialog::restartCapturing(bool first)
-{
+bool cameraDialog::restartCapturing(bool first) {
   int ret;
-  if (!videoCapturePtr)
-    return false;
+  if (!videoCapturePtr) return false;
   if (!first) {
     deactivateTimer();
     videoCapturePtr->stopStreaming();

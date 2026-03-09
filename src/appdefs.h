@@ -30,4 +30,4 @@ typedef unsigned char _BYTE;
 typedef bool _BOOLEAN;
 typedef unsigned char _BINARY;
 
-#endif // APPDEFS_H
+#endif  // APPDEFS_H
