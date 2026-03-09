@@ -23,7 +23,6 @@
 #include "soundbase.h"
 #include "soundconfig.h"
 
-#include "supportfunctions.h"
 #include <unistd.h>
 
 /*

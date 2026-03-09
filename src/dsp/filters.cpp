@@ -1,6 +1,5 @@
 #include "filters.h"
 #include "filter.h"
-#include "appglobal.h"
 
 #include <QDebug>
 
